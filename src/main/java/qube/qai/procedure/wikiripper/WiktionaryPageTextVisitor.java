@@ -19,7 +19,7 @@ import java.util.zip.ZipOutputStream;
  * Created by rainbird on 11/3/15.
  */
 @TextConsumer
-public class WikiPageTextVisitor implements SAXVisitBefore, SAXVisitAfter {
+public class WiktionaryPageTextVisitor implements SAXVisitBefore, SAXVisitAfter {
 
     private boolean debug = true;
 

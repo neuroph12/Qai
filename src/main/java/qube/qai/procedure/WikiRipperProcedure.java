@@ -1,7 +1,8 @@
 package qube.qai.procedure;
 
 import org.milyn.Smooks;
-import qube.qai.procedure.wikiripper.WikiPageTextVisitor;
+import qube.qai.procedure.wikiripper.WiktionaryPageTextVisitor;
+import qube.qai.procedure.wikiripper.WikipediaPageTextVisitor;
 import qube.qai.procedure.wikiripper.WikiPageVisitor;
 
 import javax.xml.transform.stream.StreamSource;
@@ -12,6 +13,8 @@ import java.util.zip.ZipOutputStream;
  * Created by rainbird on 11/3/15.
  */
 public class WikiRipperProcedure {
+
+    private boolean wiktionary = true;
 
     // file to rio the wiki-data from
     private String fileToRipName = "/media/rainbird/ALEPH/wiki-data/enwiktionary-20150413-pages-articles-multistream.xml";
@@ -40,7 +43,12 @@ public class WikiRipperProcedure {
 
             Smooks smooks = new Smooks();
             smooks.addVisitor(new WikiPageVisitor(), "page/title");
-            smooks.addVisitor(new WikiPageTextVisitor(), "page/revision/text");
+
+            if (wiktionary) {
+                smooks.addVisitor(new WiktionaryPageTextVisitor(), "page/revision/text");
+            } else {
+                smooks.addVisitor(new WikipediaPageTextVisitor(), "page/revision/text");
+            }
 
             // now create the output stream
             FileOutputStream outStream = new FileOutputStream(fileToArchiveName);
@@ -71,5 +79,13 @@ public class WikiRipperProcedure {
 
     public void setFileToArchiveName(String fileToArchiveName) {
         this.fileToArchiveName = fileToArchiveName;
+    }
+
+    public boolean isWiktionary() {
+        return wiktionary;
+    }
+
+    public void setWiktionary(boolean wiktionary) {
+        this.wiktionary = wiktionary;
     }
 }
