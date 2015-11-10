@@ -1,5 +1,6 @@
 package qube.qai.procedure;
 
+import com.thoughtworks.xstream.XStream;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -30,31 +31,37 @@ public class WikiArchiveIndexer {
 
     private boolean debug = true;
 
-    public String INDEX_DIRECTORY = "./data/wiktionary/lucene/";
+    public String INDEX_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
 
-    public void indexZipFileEntries(String zipFileName) throws Exception {
+    public String ZIP_FILE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+
+    public void indexZipFileEntries() throws Exception {
 
         //File docs = new File(inputDirectory);
-        ZipFile zipFile = new ZipFile(zipFileName);
+        ZipFile zipFile = new ZipFile(ZIP_FILE);
 
+        // feed the output directory name
         Path path = FileSystems.getDefault().getPath(INDEX_DIRECTORY);
         Directory directory = FSDirectory.open(path);
-        // with version is deprecated Version.LUCENE_4_10_0
+
+        // create the analyzer
         Analyzer analyzer = new StandardAnalyzer();
         analyzer.setVersion(Version.LUCENE_5_3_1);
         IndexWriterConfig conf = new IndexWriterConfig(analyzer);
         IndexWriter writer = new IndexWriter(directory, conf);
         writer.deleteAll();
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(WikiArticle.class);
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+//        JAXBContext jaxbContext = JAXBContext.newInstance(WikiArticle.class);
+//        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+        XStream xStream = new XStream();
 
         Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
         while (zipEntries.hasMoreElements()) {
             ZipEntry zipEntry = zipEntries.nextElement();
 
             InputStream stream = zipFile.getInputStream(zipEntry);
-            WikiArticle wikiPage = (WikiArticle) unmarshaller.unmarshal(stream);
+            WikiArticle wikiPage = (WikiArticle) xStream.fromXML(stream);
             String fileName = zipEntry.getName();
             Document doc = new Document();
             doc.add(new StringField("file", fileName, Field.Store.YES));
@@ -68,6 +75,23 @@ public class WikiArchiveIndexer {
         writer.commit();
         writer.deleteUnusedFiles();
         log(writer.maxDoc() + " documents written");
+    }
+
+
+    public String getINDEX_DIRECTORY() {
+        return INDEX_DIRECTORY;
+    }
+
+    public void setINDEX_DIRECTORY(String INDEX_DIRECTORY) {
+        this.INDEX_DIRECTORY = INDEX_DIRECTORY;
+    }
+
+    public String getZIP_FILE() {
+        return ZIP_FILE;
+    }
+
+    public void setZIP_FILE(String ZIP_FILE) {
+        this.ZIP_FILE = ZIP_FILE;
     }
 
     private void log(String message) {

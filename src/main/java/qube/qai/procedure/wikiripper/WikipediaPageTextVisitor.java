@@ -1,5 +1,6 @@
 package qube.qai.procedure.wikiripper;
 
+import com.thoughtworks.xstream.XStream;
 import org.apache.commons.lang3.StringUtils;
 import org.milyn.SmooksException;
 import org.milyn.container.ExecutionContext;
@@ -21,8 +22,13 @@ import java.util.zip.ZipOutputStream;
 @TextConsumer
 public class WikipediaPageTextVisitor implements SAXVisitBefore, SAXVisitAfter {
 
-    private boolean debug = true;
+    private boolean debug = false;
 
+    private XStream xStream;
+
+    public WikipediaPageTextVisitor() {
+        this.xStream = new XStream();
+    }
 
     public void visitBefore(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
         //log(element.getName().toString() + ":" +element.getText());
@@ -73,14 +79,19 @@ public class WikipediaPageTextVisitor implements SAXVisitBefore, SAXVisitAfter {
             ZipEntry zipEntry = new ZipEntry(zipEntryName);
             zipStream.putNextEntry(zipEntry);
 
-            JAXBContext jaxbContext = JAXBContext.newInstance(WikiArticle.class);
-            jaxbContext.createMarshaller().marshal(wikiPage, zipStream);
+            xStream.toXML(wikiPage, zipStream);
             zipStream.closeEntry();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (JAXBException e) {
-            e.printStackTrace();
         }
+    }
+
+    public boolean isDebug() {
+        return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 
     private void log(String message) {

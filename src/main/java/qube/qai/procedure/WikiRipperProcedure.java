@@ -44,6 +44,8 @@ public class WikiRipperProcedure {
             Smooks smooks = new Smooks();
             smooks.addVisitor(new WikiPageVisitor(), "page/title");
 
+            // for the time being there are only two variants of wiki-parsing
+            // one is for Wiktionary and the other is for Wikipedia
             if (wiktionary) {
                 smooks.addVisitor(new WiktionaryPageTextVisitor(), "page/revision/text");
             } else {
