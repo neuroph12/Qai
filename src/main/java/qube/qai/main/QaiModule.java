@@ -1,6 +1,8 @@
 package qube.qai.main;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
 import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,16 +18,27 @@ public class QaiModule extends AbstractModule {
 
     private boolean debug = true;
 
+    private static String wiktionaryDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
+
+    private static String wiktionaryZipFileName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+
     @Override
     protected void configure() {
 
         logger("Guice initialization called- binding services");
 
         // search service
-        bind(SearchServiceInterface.class).to(WikiSearchService.class);
+        //bind(SearchServiceInterface.class).to(WikiSearchService.class);
 
         // UUIDService
         bind(UUIDServiceInterface.class).to(UUIDService.class);
+    }
+
+    @Provides @Named("Wiktionary_en")
+    SearchServiceInterface provideSearchServiceInterface() {
+        SearchServiceInterface searchService = new WikiSearchService(wiktionaryDirectory, wiktionaryZipFileName);
+
+        return searchService;
     }
 
     private void logger(String message) {
