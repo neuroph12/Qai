@@ -8,6 +8,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="WikiArticle")
 public class WikiArticle {
 
+    private String id;
+
+    private String source;
+
     private String title;
 
     private String content;
@@ -26,5 +30,21 @@ public class WikiArticle {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }
