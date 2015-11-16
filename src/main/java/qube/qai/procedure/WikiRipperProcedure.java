@@ -14,13 +14,15 @@ import java.util.zip.ZipOutputStream;
  */
 public class WikiRipperProcedure {
 
-    private boolean wiktionary = true;
+    private boolean wiktionary = false;
 
-    // file to rio the wiki-data from
-    private String fileToRipName = "/media/rainbird/ALEPH/wiki-data/enwiktionary-20150413-pages-articles-multistream.xml";
+    // file to rip the wiki-data from
+    //private String fileToRipName = "/media/rainbird/ALEPH/wiki-data/enwiktionary-20150413-pages-articles-multistream.xml";
+    private String fileToRipName = "/media/rainbird/ALEPH/wiki-data/enwiki-20150403-pages-articles.xml";
 
     // file to archive the ripped articles at
-    private String fileToArchiveName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    //private String fileToArchiveName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    private String fileToArchiveName = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
 
     // mainly for testing reasons
     public WikiRipperProcedure() {

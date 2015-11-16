@@ -22,6 +22,10 @@ public class QaiModule extends AbstractModule {
 
     private static String wiktionaryZipFileName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
 
+    private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
+
+    private static String wikipediaZipFileName = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+
     @Override
     protected void configure() {
 
@@ -35,8 +39,15 @@ public class QaiModule extends AbstractModule {
     }
 
     @Provides @Named("Wiktionary_en")
-    SearchServiceInterface provideSearchServiceInterface() {
+    SearchServiceInterface provideWiktionarySearchServiceInterface() {
         SearchServiceInterface searchService = new WikiSearchService(wiktionaryDirectory, wiktionaryZipFileName);
+
+        return searchService;
+    }
+
+    @Provides @Named("Wikipedia_en")
+    SearchServiceInterface provideWikipediaSearchServiceInterface() {
+        SearchServiceInterface searchService = new WikiSearchService(wikipediaDirectory, wikipediaZipFileName);
 
         return searchService;
     }

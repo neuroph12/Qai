@@ -61,11 +61,18 @@ public class WikipediaPageTextVisitor implements SAXVisitBefore, SAXVisitAfter {
             return;
         }
 
-        // in order to make sure we have an english word
-        if (!textContent.contains("==English==")) {
-            log("Apparently not an English word- skipping: '" + title + "'");
-            return;
+        // many of the pages are simply redirect pages without content
+        if (textContent.contains("#REDIRECT")) {
+            log("Apparently a redirect page without content");
         }
+
+        // this setting makes sense only for wiktionary
+        // for wikipedia, we comment it out simply
+        // in order to make sure we have an english word
+//        if (!textContent.contains("==English==")) {
+//            log("Apparently not an English word- skipping: '" + title + "'");
+//            return;
+//        }
 
         addPageToStream(executionContext, wikiArticle, title);
     }

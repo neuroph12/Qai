@@ -29,11 +29,13 @@ import java.util.zip.ZipFile;
  */
 public class WikiArchiveIndexer {
 
-    private boolean debug = true;
+    private boolean debug = false;
 
-    public String INDEX_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
+    //public String INDEX_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
+    public String INDEX_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
 
-    public String ZIP_FILE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    //public String ZIP_FILE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    public String ZIP_FILE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
 
     public void indexZipFileEntries() throws Exception {
 
