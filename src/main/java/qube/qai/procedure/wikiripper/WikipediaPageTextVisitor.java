@@ -40,13 +40,22 @@ public class WikipediaPageTextVisitor implements SAXVisitBefore, SAXVisitAfter {
         WikiArticle wikiArticle = (WikiArticle) executionContext.getContext().getAttribute("wikiArticle");
 
         String textContent = element.getTextContent();
+        // many of the pages are simply redirect pages without content
+        if (StringUtils.containsIgnoreCase(textContent, "#REDIRECT")) {
+            log("Apparently a redirect page without content");
+            return;
+        }
 
-        //log(element.getName().toString() + ":" + textContent);
+        // {{disambig}} disambiguation pages are also not necessary, remove them as well
+        if (StringUtils.containsIgnoreCase(textContent, "{{disambig}}")
+                || StringUtils.containsIgnoreCase(textContent, "{{disambiguation}}")) {
+            log("Apparently a disambiguation page without content");
+            return;
+        }
 
         wikiArticle.setContent(textContent);
 
         // after this we will be persisting the whole in the zip file
-        //log("adding page with title: " + wikiPage.getText());
         String title = wikiArticle.getTitle();
 
         // in order to make sure we have a filename
@@ -60,19 +69,6 @@ public class WikipediaPageTextVisitor implements SAXVisitBefore, SAXVisitAfter {
             log("Apparently a directory of sorts: '" + title + "'");
             return;
         }
-
-        // many of the pages are simply redirect pages without content
-        if (textContent.contains("#REDIRECT")) {
-            log("Apparently a redirect page without content");
-        }
-
-        // this setting makes sense only for wiktionary
-        // for wikipedia, we comment it out simply
-        // in order to make sure we have an english word
-//        if (!textContent.contains("==English==")) {
-//            log("Apparently not an English word- skipping: '" + title + "'");
-//            return;
-//        }
 
         addPageToStream(executionContext, wikiArticle, title);
     }
