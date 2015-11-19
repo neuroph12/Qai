@@ -11,7 +11,15 @@ public class TestWikiArchiveIndexer extends TestCase {
 
     private boolean debug = true;
 
-    public void testWikiIndexer() throws Exception {
+    public void testSomething() throws Exception {
+        fail("test not yet implemented");
+    }
+
+    /**
+     * @TODO implement real tests for this
+     * @throws Exception
+     */
+    public void restWikiIndexer() throws Exception {
         WikiArchiveIndexer wikiIndexer = new WikiArchiveIndexer();
 
         File indexDirectory = new File(wikiIndexer.getINDEX_DIRECTORY());

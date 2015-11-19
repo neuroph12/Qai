@@ -11,7 +11,15 @@ public class TestWikiRipperProcedure extends TestCase {
 
     private boolean debug = true;
 
-    public void testWikiRipper() throws Exception {
+    public void testSomething() throws Exception {
+        fail("test not yet implemented");
+    }
+
+    /**
+     * @TODO add real tests for the class
+     * @throws Exception
+     */
+    public void restWikiRipper() throws Exception {
 
         WikiRipperProcedure ripperProcedure = new WikiRipperProcedure();
 

@@ -1,4 +1,4 @@
-package qube.main;
+package qube.qai.main;
 
 import com.google.inject.AbstractModule;
 

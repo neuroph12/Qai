@@ -1,11 +1,7 @@
 package qube.qai.data;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.hazelcast.core.HazelcastInstance;
-import junit.framework.TestCase;
-import qube.main.QaiBaseTestCase;
-import qube.main.QaiTestModule;
+import qube.qai.main.QaiBaseTestCase;
 
 import javax.inject.Inject;
 
