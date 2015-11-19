@@ -58,6 +58,12 @@ public class WikipediaPageTextVisitor implements SAXVisitBefore, SAXVisitAfter {
         // after this we will be persisting the whole in the zip file
         String title = wikiArticle.getTitle();
 
+        // category: pages are also confusing
+        if (StringUtils.containsIgnoreCase(title, "Category:")) {
+            log("'Category:' page, we are skipping those");
+            return;
+        }
+
         // in order to make sure we have a filename
         if (StringUtils.isEmpty(title)) {
             log("No title found for the page- skipping");

@@ -9,7 +9,7 @@ import com.hazelcast.core.HazelcastInstance;
 /**
  * Created by rainbird on 11/9/15.
  */
-public class QaiNode {
+public class QaiServerNode {
 
     private static Injector injector;
 
