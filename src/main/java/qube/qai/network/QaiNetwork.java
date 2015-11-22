@@ -59,6 +59,11 @@ public class QaiNetwork extends ObjectGrph<QaiNetwork.Vertex, QaiNetwork.Edge> i
         return super.backingGrph.getDiameter();
     }
 
+    @Override
+    public String toString() {
+        return super.backingGrph.toString();
+    }
+
     /**
      * a silly method to create a tiny network for playing around
      * @return
