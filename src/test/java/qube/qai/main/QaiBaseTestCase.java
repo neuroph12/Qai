@@ -6,6 +6,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+import qube.qai.network.TestWikiNetwork;
 import qube.qai.persistence.mapstores.TestZipFileMapStore;
 import qube.qai.procedure.TestWikiArchiveIndexer;
 import qube.qai.procedure.TestWikiRipperProcedure;
@@ -16,11 +17,13 @@ import qube.qai.procedure.TestWikiSearch;
  */
 public class QaiBaseTestCase extends TestCase {
 
+    protected Injector injector;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        Injector injector = Guice.createInjector(new QaiTestModule());
+        injector = Guice.createInjector(new QaiTestModule());
         injector.injectMembers(this);
     }
 
@@ -33,12 +36,15 @@ public class QaiBaseTestCase extends TestCase {
         TestSuite suite = new TestSuite("All tests");
 
         // persistence.mapstores
-        suite.addTestSuite(TestZipFileMapStore.class);
+//        suite.addTestSuite(TestZipFileMapStore.class);
+//
+//        // procedure
+//        suite.addTestSuite(TestWikiRipperProcedure.class);
+//        suite.addTestSuite(TestWikiArchiveIndexer.class);
+//        suite.addTestSuite(TestWikiSearch.class);
 
-        // procedure
-        suite.addTestSuite(TestWikiRipperProcedure.class);
-        suite.addTestSuite(TestWikiArchiveIndexer.class);
-        suite.addTestSuite(TestWikiSearch.class);
+        // network
+        suite.addTestSuite(TestWikiNetwork.class);
 
         return suite;
     }

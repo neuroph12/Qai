@@ -28,7 +28,23 @@
         <hibernate.version>4.3.6.Final</hibernate.version>
     </properties>
 
+    <repositories>
+        <!--<repository>-->
+            <!--<id>lhogie.i3s.maven.repo</id>-->
+            <!--<name>Luc Hogie Maven repository</name>-->
+            <!--<url>http://www.i3s.unice.fr/~hogie/maven_repository/</url>-->
+        <!--</repository>-->
+    </repositories>
+
     <dependencies>
+        <!-- GRPH graph-library- added directly as a jar,
+        because maven doesn't download the thing out of some reason -->
+        <!--<dependency>-->
+            <!--<groupId>grph</groupId>-->
+            <!--<artifactId>grph</artifactId>-->
+            <!--<version>1.6</version>-->
+        <!--</dependency>-->
+
         <!-- tika does parsing and lucene does search and indexing -->
         <dependency>
             <groupId>org.apache.tika</groupId>
@@ -152,6 +168,11 @@
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
         </dependency>
     </dependencies>
 </project>
