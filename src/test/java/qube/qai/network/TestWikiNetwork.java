@@ -1,18 +1,12 @@
 package qube.qai.network;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.google.inject.name.Named;
-import grph.oo.ObjectGrph;
-import org.junit.Test;
 import qube.qai.main.QaiBaseTestCase;
-import qube.qai.main.QaiTestModule;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
 import javax.inject.Inject;
 import java.util.Collection;
-import junit.framework.TestCase;
 /**
  * Created by rainbird on 11/21/15.
  */

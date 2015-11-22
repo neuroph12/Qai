@@ -1,7 +1,6 @@
 package qube.qai.network;
 
 import com.google.inject.name.Named;
-
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringUtils;

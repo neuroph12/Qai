@@ -10,8 +10,6 @@ import org.milyn.delivery.sax.SAXVisitBefore;
 import org.milyn.delivery.sax.annotation.TextConsumer;
 import qube.qai.persistence.WikiArticle;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;

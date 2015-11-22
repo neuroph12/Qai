@@ -14,9 +14,6 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import qube.qai.persistence.WikiArticle;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import java.io.File;
 import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;

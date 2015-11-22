@@ -1,9 +1,9 @@
 package qube.qai.procedure;
 
 import org.milyn.Smooks;
-import qube.qai.procedure.wikiripper.WiktionaryPageTextVisitor;
-import qube.qai.procedure.wikiripper.WikipediaPageTextVisitor;
 import qube.qai.procedure.wikiripper.WikiPageVisitor;
+import qube.qai.procedure.wikiripper.WikipediaPageTextVisitor;
+import qube.qai.procedure.wikiripper.WiktionaryPageTextVisitor;
 
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
