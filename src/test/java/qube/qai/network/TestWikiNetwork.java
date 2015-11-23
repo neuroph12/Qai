@@ -2,6 +2,8 @@ package qube.qai.network;
 
 import com.google.inject.name.Named;
 import qube.qai.main.QaiBaseTestCase;
+import qube.qai.network.semantic.SemanticNetwork;
+import qube.qai.network.wiki.WikiNetwork;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -21,6 +23,27 @@ public class TestWikiNetwork extends QaiBaseTestCase {
     @Override
     protected void setUp() throws Exception {
        super.setUp();
+    }
+
+    /**
+     * this is in order to test the semantic network building algorithms
+     * we'll see how long it take to build up a semantic network of
+     * a given text's content.
+     * @throws Exception
+     */
+    public void testSemanticNetwork() throws Exception {
+        Collection<String> results = wikipediaSearchService.searchInputString("test", "title", 1);
+        assertNotNull("there has to be a result for the search", results);
+
+        String filename = results.iterator().next();
+        log("name for the test case: " + filename);
+        WikiArticle wikiArticle = wikipediaSearchService.retrieveDocumentContentFromZipFile(filename);
+        assertNotNull("there has to be a wiki-article", wikiArticle);
+
+        SemanticNetwork semanticNetwork = new SemanticNetwork();
+        semanticNetwork.buildNetwork(wikiArticle);
+
+        logNetwork(semanticNetwork);
     }
 
     /**
@@ -53,24 +76,29 @@ public class TestWikiNetwork extends QaiBaseTestCase {
         logNetwork(network);
     }
 
-    public void testQaiNetwork() throws Exception {
+    /**
+     * basic test really- and checking out the equals method on vertex is actually used
+     * the trick is to implement both hash and equals
+     * @throws Exception
+     */
+    public void restQaiNetwork() throws Exception {
         // this line is recommended by the authors of grph-library
         ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
 
-        QaiNetwork network = QaiNetwork.createTestNetwork();
+        Network network = Network.createTestNetwork();
 
         logNetwork(network);
 
         log(network.toString());
-        Collection<QaiNetwork.Vertex> vertices = network.getVertices();
-        for (QaiNetwork.Vertex vertex : vertices) {
+        Collection<Network.Vertex> vertices = network.getVertices();
+        for (Network.Vertex vertex : vertices) {
             String name = vertex.getName();
-            QaiNetwork.Vertex searchVertex = new QaiNetwork.Vertex(name);
+            Network.Vertex searchVertex = new Network.Vertex(name);
             assertTrue("has to use equals!!!", network.containsVertex(searchVertex));
         }
     }
 
-    private void logNetwork(QaiNetwork network) {
+    private void logNetwork(Network network) {
         log("Network number of vertices: " + network.getNumberOfVertices());
         log("Network number of edges: " + network.getNumberOfEdges());
         log("Network average degree: " + network.getAverageDegree());

@@ -1,9 +1,10 @@
-package qube.qai.network;
+package qube.qai.network.wiki;
 
 import com.google.inject.name.Named;
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringUtils;
+import qube.qai.network.Network;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -16,7 +17,7 @@ import java.util.Vector;
 /**
  * Created by rainbird on 11/21/15.
  */
-public class WikiNetwork extends QaiNetwork {
+public class WikiNetwork extends Network {
 
     private boolean debug = true;
 
@@ -45,7 +46,7 @@ public class WikiNetwork extends QaiNetwork {
         ArrayList<String> existing = new ArrayList<String>();
         ArrayList<String> addedEdges = new ArrayList<String>();
         int count = 1;
-        for (QaiNetwork.Vertex vertex : getVertices()) {
+        for (Network.Vertex vertex : getVertices()) {
 
             log("_________________________________________________________________________________");
             String title = vertex.getName();

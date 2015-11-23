@@ -14,10 +14,10 @@ import java.util.Set;
  * to get a handle on the backingGrph on which the missing algorithms
  * can be called
  */
-public class QaiNetwork extends ObjectGrph<QaiNetwork.Vertex, QaiNetwork.Edge> implements Serializable {
+public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements Serializable {
 
 
-    public QaiNetwork() {
+    public Network() {
         super();
     }
 
@@ -68,8 +68,8 @@ public class QaiNetwork extends ObjectGrph<QaiNetwork.Vertex, QaiNetwork.Edge> i
      * a silly method to create a tiny network for playing around
      * @return
      */
-    public static QaiNetwork createTestNetwork() {
-        QaiNetwork network = new QaiNetwork();
+    public static Network createTestNetwork() {
+        Network network = new Network();
 
         Vertex vienna = new Vertex("vienna");
         network.addVertex(vienna);
@@ -166,30 +166,30 @@ public class QaiNetwork extends ObjectGrph<QaiNetwork.Vertex, QaiNetwork.Edge> i
 
     public static class Edge implements Serializable {
 
-        private QaiNetwork.Vertex from;
+        private Network.Vertex from;
 
-        private QaiNetwork.Vertex to;
+        private Network.Vertex to;
 
         private double weight;
 
-        public Edge(QaiNetwork.Vertex from, QaiNetwork.Vertex to) {
+        public Edge(Network.Vertex from, Network.Vertex to) {
             this.from = from;
             this.to = to;
         }
 
-        public QaiNetwork.Vertex getFrom() {
+        public Network.Vertex getFrom() {
             return from;
         }
 
-        public void setFrom(QaiNetwork.Vertex from) {
+        public void setFrom(Network.Vertex from) {
             this.from = from;
         }
 
-        public QaiNetwork.Vertex getTo() {
+        public Network.Vertex getTo() {
             return to;
         }
 
-        public void setTo(QaiNetwork.Vertex to) {
+        public void setTo(Network.Vertex to) {
             this.to = to;
         }
 
