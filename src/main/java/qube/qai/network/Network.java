@@ -3,6 +3,7 @@ package qube.qai.network;
 import grph.oo.ObjectGrph;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import qube.qai.matrix.Matrix;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -19,6 +20,12 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
 
     public Network() {
         super();
+    }
+
+    public Matrix getAdjacencyMatrix() {
+        Matrix matrix = new Matrix();
+
+        return matrix;
     }
 
     public int getNumberOfVertices() {

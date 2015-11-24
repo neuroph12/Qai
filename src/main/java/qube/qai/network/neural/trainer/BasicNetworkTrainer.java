@@ -22,6 +22,7 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
      */
     public void trainNetwork(Vector input, Vector target) {
 
+        // @TODO optimize this part of the code
         // training the graph consists of propagating the input
         // calculating the error and correcting the coefficients
         // until a targeted error is achieved... or enough iterations are made

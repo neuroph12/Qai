@@ -25,26 +25,7 @@ public class TestWikiNetwork extends QaiBaseTestCase {
        super.setUp();
     }
 
-    /**
-     * this is in order to test the semantic network building algorithms
-     * we'll see how long it take to build up a semantic network of
-     * a given text's content.
-     * @throws Exception
-     */
-    public void testSemanticNetwork() throws Exception {
-        Collection<String> results = wikipediaSearchService.searchInputString("test", "title", 1);
-        assertNotNull("there has to be a result for the search", results);
 
-        String filename = results.iterator().next();
-        log("name for the test case: " + filename);
-        WikiArticle wikiArticle = wikipediaSearchService.retrieveDocumentContentFromZipFile(filename);
-        assertNotNull("there has to be a wiki-article", wikiArticle);
-
-        SemanticNetwork semanticNetwork = new SemanticNetwork();
-        semanticNetwork.buildNetwork(wikiArticle);
-
-        logNetwork(semanticNetwork);
-    }
 
     /**
      * not a test which you want to do very often

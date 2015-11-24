@@ -1,0 +1,14 @@
+package qube.qai.matrix;
+
+import junit.framework.TestCase;
+
+/**
+ * Created by rainbird on 11/22/15.
+ */
+public class TestMatrix extends TestCase {
+
+    public void testMatrix() throws Exception {
+        // @TODO implement the test routine
+        fail("test not implemented");
+    }
+}

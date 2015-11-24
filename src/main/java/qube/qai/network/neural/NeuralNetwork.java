@@ -56,6 +56,7 @@ public class NeuralNetwork extends Network {
      */
     public Vector propagate(Vector input) {
 
+        // @TODO optimize this part of the code
         //  a*s1(t) + b*s1(t)*s2(t) (where t is the input value)
         Vector inSig = (Vector) input.modify(activationFunction);
         Vector temp = (Vector) bias.multiplyElements(inSig);
