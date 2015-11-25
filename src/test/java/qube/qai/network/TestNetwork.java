@@ -18,16 +18,25 @@ public class TestNetwork extends TestCase {
 
     private boolean debug = true;
 
-    public void testNetworkAdjacencyMatrix() throws Exception {
+    public void testNetworkBuildAdjacencyMatrix() throws Exception {
         Network network = Network.createTestNetwork();
 
+        network.buildAdjacencyMatrix();
         Matrix adjacencyMatrix = network.getAdjacencyMatrix();
         assertNotNull(adjacencyMatrix);
 
-        // @TODO probably the most important test of the day- get it implemented
-        fail("rest of the test is not implemented");
+        Collection<Network.Edge> edges = network.getAllEdges();
+        for (Network.Edge edge : edges) {
+            Network.Vertex from = edge.getFrom();
+            Network.Vertex to = edge.getTo();
 
-
+            int indexFrom = network.v2i(from);
+            int indexTo = network.v2i(to);
+            double value = adjacencyMatrix.getMatrix().get(indexFrom, indexTo).doubleValue();
+            assertTrue("has to be a value set", value != 0);
+        }
+        log("all edges found to have values- now stats:");
+        logNetwork(network);
     }
 
     /**

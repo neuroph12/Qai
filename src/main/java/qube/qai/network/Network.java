@@ -4,6 +4,8 @@ import grph.oo.ObjectGrph;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.ojalgo.access.Access2D;
+import org.ojalgo.matrix.BasicMatrix;
+import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.matrix.store.PhysicalStore;
 import org.ojalgo.matrix.store.PrimitiveDenseStore;
 import org.ojalgo.scalar.ComplexNumber;
@@ -28,8 +30,24 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
     }
 
     public void buildAdjacencyMatrix() {
-        // for the moment we don't care about complex matrices
-        //@TODO PrimitiveDenseStore.FACTORY.
+
+        int size = getNumberOfVertices();
+        Access2D.Builder<PrimitiveMatrix> builder = PrimitiveMatrix.getBuilder(size, size);
+
+        for (Edge edge : getAllEdges()) {
+            Vertex from = edge.getFrom();
+            Vertex to = edge.getTo();
+            double value = edge.getWeight();
+            if (value == 0)  {
+                value = 1.0;
+            }
+
+            int indexFrom = v2i(from);
+            int indexTo = v2i(to);
+            builder.set(indexFrom, indexTo, value);
+        }
+
+        adjacencyMatrix = new Matrix(builder.build());
     }
 
     /**
@@ -81,6 +99,8 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
         }
     }
 
+
+
     public Matrix getAdjacencyMatrix() {
         return adjacencyMatrix;
     }
@@ -91,6 +111,26 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
 
     public int getNumberOfEdges() {
         return super.backingGrph.getNumberOfEdges();
+    }
+
+    @Override
+    protected int v2i(Vertex vertex) {
+        return super.v2i(vertex);
+    }
+
+    @Override
+    protected int e2i(Edge edge) {
+        return super.e2i(edge);
+    }
+
+    @Override
+    protected Vertex i2v(int v) {
+        return super.i2v(v);
+    }
+
+    @Override
+    protected Edge i2e(int e) {
+        return super.i2e(e);
     }
 
     @Override
