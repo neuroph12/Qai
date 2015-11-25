@@ -4,11 +4,8 @@ import grph.oo.ObjectGrph;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.ojalgo.access.Access2D;
-import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.matrix.store.PhysicalStore;
-import org.ojalgo.matrix.store.PrimitiveDenseStore;
-import org.ojalgo.scalar.ComplexNumber;
 import qube.qai.matrix.Matrix;
 
 import java.io.Serializable;

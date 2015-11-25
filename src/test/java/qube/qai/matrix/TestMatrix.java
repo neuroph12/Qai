@@ -23,11 +23,9 @@ import org.ojalgo.optimisation.Optimisation;
 import org.ojalgo.optimisation.Variable;
 import org.ojalgo.random.Uniform;
 import org.ojalgo.random.Weibull;
-import org.ojalgo.series.CalendarDateSeries;
 import org.ojalgo.type.CalendarDateUnit;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -54,8 +52,11 @@ public class TestMatrix extends TestCase {
         Array2D<Double> fileArray = BufferArray.make(file, dataList.size(), 2);
         int count = 0;
         for (YahooSymbol.Data data : dataList) {
-//            log("price: " + data.getValue() + " on: " + data.getKey().toString() );
+
             long millis = data.getKey().toTimeInMillis(CalendarDateUnit.CENTURY);
+            String dataContent = "close: " + data.close + " adjustedClose: " + data.adjustedClose
+                    + " high: " + data.high + " low: " + data.low + " volume: " + data.volume;
+            log(dataContent);
             fileArray.set(count, 0, millis);
             fileArray.set(count, 1, data.getValue());
             count++;

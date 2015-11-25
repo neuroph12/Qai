@@ -2,7 +2,6 @@ package qube.qai.network;
 
 import com.google.inject.name.Named;
 import qube.qai.main.QaiBaseTestCase;
-import qube.qai.network.semantic.SemanticNetwork;
 import qube.qai.network.wiki.WikiNetwork;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;

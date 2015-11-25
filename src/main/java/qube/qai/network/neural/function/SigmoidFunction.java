@@ -1,7 +1,5 @@
 package qube.qai.network.neural.function;
 
-import qube.qai.network.neural.function.ActivationFunction;
-
 /**
  * Created by rainbird on 11/23/15.
  */

@@ -6,13 +6,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-import qube.qai.network.TestNeuralNetwork;
 import qube.qai.network.TestSemanticNetwork;
-import qube.qai.network.TestWikiNetwork;
-import qube.qai.persistence.mapstores.TestZipFileMapStore;
-import qube.qai.procedure.TestWikiArchiveIndexer;
-import qube.qai.procedure.TestWikiRipperProcedure;
-import qube.qai.procedure.TestWikiSearch;
 
 /**
  * Created by rainbird on 11/19/15.

@@ -5,15 +5,10 @@ import info.bliki.wiki.model.WikiModel;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
-import opennlp.tools.util.Span;
 import org.apache.commons.lang3.StringUtils;
 import org.ojalgo.access.Access2D;
-import org.ojalgo.matrix.ComplexMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
-import org.ojalgo.matrix.store.ComplexDenseStore;
 import org.ojalgo.matrix.store.PrimitiveDenseStore;
-import org.ojalgo.matrix.transformation.Rotation;
-import org.ojalgo.scalar.ComplexNumber;
 import qube.qai.matrix.Matrix;
 import qube.qai.network.Network;
 import qube.qai.persistence.WikiArticle;
@@ -21,7 +16,6 @@ import qube.qai.persistence.WikiArticle;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashSet;
 
 /**
  * Created by rainbird on 11/22/15.

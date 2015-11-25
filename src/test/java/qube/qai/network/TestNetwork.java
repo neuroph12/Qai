@@ -2,13 +2,8 @@ package qube.qai.network;
 
 
 import junit.framework.TestCase;
-import opennlp.tools.tokenize.Tokenizer;
-import opennlp.tools.tokenize.TokenizerME;
-import opennlp.tools.tokenize.TokenizerModel;
 import qube.qai.matrix.Matrix;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.Collection;
 
 /**

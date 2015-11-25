@@ -23,7 +23,12 @@ public class TestChangepointAdapter extends TestCase {
 
         for (Iterator<DataPoint> it = result.iterator(); it.hasNext(); ) {
             DataPoint point = it.next();
-            log("found: x: " + point.getX() + " y:" + point.getY() + " probability: " + point.getProbability());
+            if (Double.isNaN(point.getX())) {
+                log("found nothing- change point a dude:" + point.getProbability());
+            } else {
+                log("found: x: " + point.getX() + " y:" + point.getY() + " probability: " + point.getProbability());
+            }
+
         }
 
     }

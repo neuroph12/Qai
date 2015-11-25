@@ -1,6 +1,5 @@
 package qube.qai.persistence.mapstores;
 
-import junit.framework.TestCase;
 import qube.qai.main.QaiBaseTestCase;
 
 /**
