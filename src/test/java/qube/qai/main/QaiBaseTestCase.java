@@ -6,6 +6,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+import qube.qai.network.TestNeuralNetwork;
+import qube.qai.network.TestSemanticNetwork;
 import qube.qai.network.TestWikiNetwork;
 import qube.qai.persistence.mapstores.TestZipFileMapStore;
 import qube.qai.procedure.TestWikiArchiveIndexer;
@@ -44,7 +46,9 @@ public class QaiBaseTestCase extends TestCase {
 //        suite.addTestSuite(TestWikiSearch.class);
 
         // network
-        suite.addTestSuite(TestWikiNetwork.class);
+//        suite.addTestSuite(TestWikiNetwork.class);
+        suite.addTestSuite(TestSemanticNetwork.class);
+//        suite.addTestSuite(TestNeuralNetwork.class);
 
         return suite;
     }

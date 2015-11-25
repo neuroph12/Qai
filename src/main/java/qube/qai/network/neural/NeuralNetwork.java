@@ -40,6 +40,15 @@ public class NeuralNetwork extends Network {
     }
 
     /**
+     * Neural-Networks cannot be built from an external model
+     */
+    @Override
+    public void buildFromAdjacencyMatrix() {
+        adjacencyMatrix = weights;
+        super.buildFromAdjacencyMatrix();
+    }
+
+    /**
      * a neural graph in our case, has a bias-vector
      * and a interaction part with the usual weight and all.
      * during the training each part has different algorithms for correction

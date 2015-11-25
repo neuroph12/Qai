@@ -11,6 +11,7 @@ import org.ojalgo.function.aggregator.AggregatorFunction;
 import org.ojalgo.function.aggregator.PrimitiveAggregator;
 import org.ojalgo.machine.JavaType;
 import org.ojalgo.matrix.BasicMatrix;
+import org.ojalgo.matrix.ComplexMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.matrix.store.PhysicalStore;
@@ -156,6 +157,8 @@ public class TestOtherOjAlgoThings extends TestCase {
         final BasicMatrix tmpJ = tmpA.mergeRows(tmpD);
         final BasicMatrix tmpK = tmpJ.selectRows(1, 10, 100, 1000);
         // Sometimes it's practical to only use the factory/builder to create
+
+        ComplexMatrix.FACTORY.makeZero(100, 100);
     }
 
     public void testOtherMatrixThings() throws Exception {

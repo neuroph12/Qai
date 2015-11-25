@@ -25,8 +25,6 @@ public class TestWikiNetwork extends QaiBaseTestCase {
        super.setUp();
     }
 
-
-
     /**
      * not a test which you want to do very often
      * creating network took: 786628 ms
@@ -57,28 +55,6 @@ public class TestWikiNetwork extends QaiBaseTestCase {
         logNetwork(network);
     }
 
-    /**
-     * basic test really- and checking out the equals method on vertex is actually used
-     * the trick is to implement both hash and equals
-     * @throws Exception
-     */
-    public void restQaiNetwork() throws Exception {
-        // this line is recommended by the authors of grph-library
-        ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
-
-        Network network = Network.createTestNetwork();
-
-        logNetwork(network);
-
-        log(network.toString());
-        Collection<Network.Vertex> vertices = network.getVertices();
-        for (Network.Vertex vertex : vertices) {
-            String name = vertex.getName();
-            Network.Vertex searchVertex = new Network.Vertex(name);
-            assertTrue("has to use equals!!!", network.containsVertex(searchVertex));
-        }
-    }
-
     private void logNetwork(Network network) {
         log("Network number of vertices: " + network.getNumberOfVertices());
         log("Network number of edges: " + network.getNumberOfEdges());
@@ -87,7 +63,6 @@ public class TestWikiNetwork extends QaiBaseTestCase {
         log("Network density: " + network.getDensity());
         //log("Network diameter: " + network.getDiameter());
     }
-
 
 //    public void restGRPHNetwork() {
 //        // this line is recommended by the authors of grph-library

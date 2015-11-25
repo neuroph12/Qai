@@ -1,9 +1,20 @@
 package qube.qai.network.semantic;
 
+import info.bliki.wiki.filter.PlainTextConverter;
+import info.bliki.wiki.model.WikiModel;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.Span;
+import org.apache.commons.lang3.StringUtils;
+import org.ojalgo.access.Access2D;
+import org.ojalgo.matrix.ComplexMatrix;
+import org.ojalgo.matrix.PrimitiveMatrix;
+import org.ojalgo.matrix.store.ComplexDenseStore;
+import org.ojalgo.matrix.store.PrimitiveDenseStore;
+import org.ojalgo.matrix.transformation.Rotation;
+import org.ojalgo.scalar.ComplexNumber;
+import qube.qai.matrix.Matrix;
 import qube.qai.network.Network;
 import qube.qai.persistence.WikiArticle;
 
@@ -33,15 +44,104 @@ public class SemanticNetwork extends Network {
         // this unfortunately does not work
         //this = Network.createTestNetwork();
         String wikiContent = wikiArticle.getContent();
-        HashSet<String> wordList = new HashSet<String>();
+        //HashSet<String> wordList = new HashSet<String>();
 
+        WikiModel wikiModel = new WikiModel("${image}", "${title}");
+        String plainText = wikiModel.render(new PlainTextConverter(), wikiContent);
         Tokenizer tokenizer = createTokenizer();
         // i think, we will have to run two passes- one for creating the workd list
         // and the second for creating the adjacency matrix
-        String[] tokens = tokenizer.tokenize(wikiContent);
+        String[] tokens = tokenizer.tokenize(plainText);
 
-        // first loop to
+        // first loop to create the vertices
+        for (String token : tokens) {
+            Vertex vertex = new Vertex(token);
+            if (!getVertices().contains(vertex) && isValidToken(token)) {
+                log("Adding token: '" + token + "' to word list");
+                addVertex(vertex);
+            }
+        }
 
+        int size = getVertices().size();
+        log("final graph will have: " + size + " words");
+        // create the adjacency-matrix
+        // decided against using complex-matrices for semantic-networks
+        // doesn't really make sense in this case
+        int wordCount = 0;
+        int linkCount = 0;
+        PrimitiveDenseStore matrixStore = PrimitiveDenseStore.FACTORY.makeZero(size, size);
+        for (int i = 0; i < tokens.length; i++) {
+
+            String token = tokens[i];
+
+            // skip if this is an illegal token
+            if (!isValidToken(token)) {
+                continue;
+            }
+
+            int nextIndex = i + 1;
+            wordCount++;
+            String nextToken = null;
+            if (nextIndex < tokens.length) {
+                nextToken = tokens[nextIndex];
+            }
+
+            // create the vertices we need to search for
+            Vertex currentVertex = new Vertex(token);
+            int currentTokenIndex = v2i(currentVertex);
+
+            Vertex nextVertex = new Vertex(nextToken);
+            // check if the next token is in graph,
+            // if not simply add edge to self
+            if (!getVertices().contains(nextVertex)) {
+                // the next token is not in word-list
+                // so we add the edge to the vertex itself
+                Number value = matrixStore.get(currentTokenIndex, currentTokenIndex);
+                matrixStore.set(currentTokenIndex, currentTokenIndex, value.doubleValue() + 1);
+            } else {
+                int nextTokenIndex = v2i(nextVertex);
+                Number value = matrixStore.get(currentTokenIndex, nextTokenIndex);
+                matrixStore.set(currentTokenIndex, nextTokenIndex, value.doubleValue() + 1);
+                linkCount++;
+            }
+        }
+
+        log("added all edges to adjacency-matrix total " + wordCount + " words and " + linkCount + " links connecting");
+
+        // we have to normalize the matrix content
+//        double normalization = 1 / wordCount;
+//        matrixStore.multiply(normalization);
+        matrixStore.signum();
+
+        Access2D.Builder<PrimitiveMatrix> builder = PrimitiveMatrix.FACTORY.getBuilder(matrixStore.getRowDim(), matrixStore.getColDim());
+        for (int i = 0; i < matrixStore.getRowDim(); i++) {
+            for (int j = 0; j < matrixStore.getColDim(); j++) {
+                builder.set(i, j, matrixStore.get(i, j));
+            }
+        }
+        // @TODO make a new matrix
+        PrimitiveMatrix matrix = builder.build();
+        this.adjacencyMatrix = new Matrix(matrix);
+
+        buildFromAdjacencyMatrix();
+    }
+
+    private boolean isValidToken(String token) {
+        boolean valid = true;
+
+        if (StringUtils.isBlank(token)) {
+            valid = false;
+        } else if (StringUtils.contains(token, "{")) {
+            valid = false;
+        } else if (StringUtils.contains(token, "}")) {
+            valid = false;
+        } else if (StringUtils.contains(token, "(")) {
+            valid = false;
+        } else if (StringUtils.contains(token, ")")) {
+            valid = false;
+        }
+
+        return valid;
     }
 
     private Tokenizer createTokenizer() {

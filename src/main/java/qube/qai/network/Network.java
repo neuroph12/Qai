@@ -3,6 +3,10 @@ package qube.qai.network;
 import grph.oo.ObjectGrph;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.ojalgo.access.Access2D;
+import org.ojalgo.matrix.store.PhysicalStore;
+import org.ojalgo.matrix.store.PrimitiveDenseStore;
+import org.ojalgo.scalar.ComplexNumber;
 import qube.qai.matrix.Matrix;
 
 import java.io.Serializable;
@@ -17,15 +21,68 @@ import java.util.Set;
  */
 public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements Serializable {
 
+    protected Matrix adjacencyMatrix;
 
     public Network() {
         super();
     }
 
-    public Matrix getAdjacencyMatrix() {
-        Matrix matrix = new Matrix();
+    public void buildAdjacencyMatrix() {
+        // for the moment we don't care about complex matrices
+        //@TODO PrimitiveDenseStore.FACTORY.
+    }
 
-        return matrix;
+    /**
+     * Caution if you are trying to instantiate a Neural-Network this will not work
+     * Neural-Networks cannot be built from an external model
+     * @param adjacencyMatrix
+     */
+    public void buildFromAdjacencyMatrix(Matrix adjacencyMatrix) {
+        this.adjacencyMatrix = adjacencyMatrix;
+        buildFromAdjacencyMatrix();
+    }
+
+    public void buildFromAdjacencyMatrix() {
+        if (adjacencyMatrix == null) {
+            throw new IllegalArgumentException("Adjacency matrix has not been initialized or set, can't construct network.");
+        }
+
+        boolean useVertexIndices = false;
+        if (getVertices() != null) {
+            if (adjacencyMatrix.getMatrix().countColumns() == getVertices().size()) {
+                useVertexIndices = true;
+            }
+        }
+
+        PhysicalStore store = adjacencyMatrix.getMatrix().toPrimitiveStore();
+        for (int i = 0; i < store.countRows(); i++) {
+            for (int j = 0; j < store.countColumns(); j++) {
+                Vertex from = null;
+                Vertex to = null;
+                if (useVertexIndices) {
+                    from = i2v(i);
+                    to = i2v(j);
+                } else {
+                    from = new Vertex("vertex " + i);
+                    to = new Vertex("vertex " + j);
+                }
+                Number value = store.get(i, j);
+                // check if we need to add an edge at all
+                if (value == null || value.doubleValue() == 0) {
+                    continue;
+                }
+                // create the edge
+                Edge edge = new Edge(from, to);
+                edge.setWeight(value.doubleValue());
+                if (!getAllEdges().contains(edge)) {
+                    addUndirectedSimpleEdge(from, edge, to);
+                }
+            }
+        }
+    }
+
+    public Matrix getAdjacencyMatrix() {
+        return adjacencyMatrix;
     }
 
     public int getNumberOfVertices() {
@@ -105,22 +162,22 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
         Vertex copenhagen = new Vertex("copenhagen");
         network.addVertex(copenhagen);
 
-        network.addSimpleEdge(vienna, new Edge(vienna, london), london, false);
-        network.addSimpleEdge(vienna, new Edge(vienna, mersin), mersin, false);
-        network.addSimpleEdge(vienna, new Edge(vienna, bergen), bergen, false);
+        network.addUndirectedSimpleEdge(vienna, new Edge(vienna, london), london);
+        network.addUndirectedSimpleEdge(vienna, new Edge(vienna, mersin), mersin);
+        network.addUndirectedSimpleEdge(vienna, new Edge(vienna, bergen), bergen);
 
-        network.addSimpleEdge(london, new Edge(london, paris), paris, false);
-        network.addSimpleEdge(london, new Edge(london, bergen), bergen, false);
-        network.addSimpleEdge(london, new Edge(london, timbuktu), timbuktu, false);
-        network.addSimpleEdge(london, new Edge(london, helsinki), helsinki, false);
-        network.addSimpleEdge(london, new Edge(london, amsterdam), amsterdam, false);
+        network.addUndirectedSimpleEdge(london, new Edge(london, paris), paris);
+        network.addUndirectedSimpleEdge(london, new Edge(london, bergen), bergen);
+        network.addUndirectedSimpleEdge(london, new Edge(london, timbuktu), timbuktu);
+        network.addUndirectedSimpleEdge(london, new Edge(london, helsinki), helsinki);
+        network.addUndirectedSimpleEdge(london, new Edge(london, amsterdam), amsterdam);
 
-        network.addSimpleEdge(copenhagen, new Edge(copenhagen, amsterdam), amsterdam, false);
-        network.addSimpleEdge(copenhagen, new Edge(copenhagen, helsinki), helsinki, false);
-        network.addSimpleEdge(copenhagen, new Edge(copenhagen, bergen), bergen, false);
+        network.addUndirectedSimpleEdge(copenhagen, new Edge(copenhagen, amsterdam), amsterdam);
+        network.addUndirectedSimpleEdge(copenhagen, new Edge(copenhagen, helsinki), helsinki);
+        network.addUndirectedSimpleEdge(copenhagen, new Edge(copenhagen, bergen), bergen);
 
-        network.addSimpleEdge(bergen, new Edge(bergen, amsterdam), amsterdam, false);
-        network.addSimpleEdge(bergen, new Edge(bergen, timbuktu), timbuktu, false);
+        network.addUndirectedSimpleEdge(bergen, new Edge(bergen, amsterdam), amsterdam);
+        network.addUndirectedSimpleEdge(bergen, new Edge(bergen, timbuktu), timbuktu);
 
         return network;
     }
@@ -177,11 +234,36 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
 
         private Network.Vertex to;
 
-        private double weight;
+        private double weight = 0;
 
         public Edge(Network.Vertex from, Network.Vertex to) {
             this.from = from;
             this.to = to;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof Edge) {
+                Edge other = (Edge) obj;
+                return new EqualsBuilder().
+                        append(from, other.from).
+                        append(to, other.to).
+                        isEquals();
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder()
+                    .append(from)
+                    .append(to)
+                    .toHashCode();
+        }
+
+        public void incrementWeight() {
+            weight++;
         }
 
         public Network.Vertex getFrom() {
