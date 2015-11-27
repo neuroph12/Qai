@@ -1,6 +1,7 @@
 package qube.qai.services;
 
 import qube.qai.persistence.WikiArticle;
+import qube.qai.services.implementation.SearchResult;
 
 import java.util.Collection;
 
@@ -9,7 +10,7 @@ import java.util.Collection;
  */
 public interface SearchServiceInterface {
 
-    public Collection<String> searchInputString(String searchString, String fieldName, int hitsPerPage);
+    public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage);
 
     public WikiArticle retrieveDocumentContentFromZipFile(String fileName);
 }

@@ -22,7 +22,7 @@ public class QaiServerNode {
 
     private boolean debug = true;
 
-    private Injector injector;
+    private static Injector injector;
 
     private String NODE_NAME = "QaiNode";
 
@@ -57,5 +57,9 @@ public class QaiServerNode {
         if (debug) {
             System.out.println(message);
         }
+    }
+
+    public static Injector getInjector() {
+        return injector;
     }
 }

@@ -45,9 +45,9 @@ public class WikiSearchService implements SearchServiceInterface {
             * adapting the code for doing search and returning the contents of
             * the documents which are picked for reading
             */
-        public Collection<String> searchInputString(String searchString, String fieldName, int hitsPerPage) {
+        public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
 
-            Collection<String> fileNames = new ArrayList<String>();
+            Collection<SearchResult> searchResults = new ArrayList<SearchResult>();
             try {
                 Path path = FileSystems.getDefault().getPath(INDEX_DIRECTORY);
                 Directory directory = FSDirectory.open(path);
@@ -62,7 +62,8 @@ public class WikiSearchService implements SearchServiceInterface {
                 ScoreDoc[] hits = collector.topDocs().scoreDocs;
                 for (ScoreDoc hit : hits) {
                     Document doc = reader.document(hit.doc);
-                    fileNames.add(doc.get("file"));
+                    SearchResult result = new SearchResult(doc.get("title"), doc.get("file"), hit.score);
+                    searchResults.add(result);
                     log(doc.get("file") + ": title: " + doc.get("title") + " (" + hit.score + ")");
                 }
             } catch (IOException e) {
@@ -71,7 +72,7 @@ public class WikiSearchService implements SearchServiceInterface {
                 e.printStackTrace();
             }
 
-            return fileNames;
+            return searchResults;
         }
 
         public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {

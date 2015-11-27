@@ -2,6 +2,7 @@ package qube.qai.procedure;
 
 import junit.framework.TestCase;
 import qube.qai.services.SearchServiceInterface;
+import qube.qai.services.implementation.SearchResult;
 import qube.qai.services.implementation.WikiSearchService;
 
 import java.io.File;
@@ -26,7 +27,7 @@ public class TestWikiSearch extends TestCase {
 
         SearchServiceInterface searchService = new WikiSearchService(INDEX_DIRECTORY, ZIP_FILE);
 
-        Collection<String> results = searchService.searchInputString("test", "title", 100);
+        Collection<SearchResult> results = searchService.searchInputString("test", "title", 100);
         assertTrue("no results", results != null && !results.isEmpty());
     }
 }
