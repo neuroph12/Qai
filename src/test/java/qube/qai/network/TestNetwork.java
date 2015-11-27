@@ -61,6 +61,10 @@ public class TestNetwork extends TestCase {
 
         Network.Edge copenhagenHelsinki = new Network.Edge(new Network.Vertex("copenhagen"), new Network.Vertex("helsinki"));
         assertTrue("has to find the edge", network.getAllEdges().contains(copenhagenHelsinki));
+
+        // this edge does not exist- test for negative as well...
+        Network.Edge mersinTimbuktu = new Network.Edge(new Network.Vertex("mersin"), new Network.Vertex("timbuktu"));
+        assertTrue("has to fail to find the edge", !network.getAllEdges().contains(mersinTimbuktu));
     }
 
     private void logNetwork(Network network) {

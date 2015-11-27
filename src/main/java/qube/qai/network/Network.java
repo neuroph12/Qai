@@ -96,8 +96,6 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
         }
     }
 
-
-
     public Matrix getAdjacencyMatrix() {
         return adjacencyMatrix;
     }

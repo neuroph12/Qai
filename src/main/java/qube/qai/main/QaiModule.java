@@ -3,10 +3,23 @@ package qube.qai.main;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.hazelcast.config.Config;
+import com.hazelcast.config.MapConfig;
+import com.hazelcast.config.MapStoreConfig;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.MapLoader;
+import com.hazelcast.core.MapStoreFactory;
+import qube.qai.persistence.StockQuote;
+import qube.qai.persistence.WikiArticle;
+import qube.qai.persistence.mapstores.HqslDBMapStore;
+import qube.qai.persistence.mapstores.ZipFileMapStore;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.UUIDServiceInterface;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.services.implementation.WikiSearchService;
+
+import java.util.Properties;
 
 /**
  * Created by rainbird on 11/9/15.

@@ -1,12 +1,15 @@
 package qube.qai.persistence;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by rainbird on 11/19/15.
  */
 public class StockQuote implements Serializable {
 
+    private String tickerSymbol;
+    private Date date;
     public double adjustedClose;
     public double close;
     public double high;
@@ -17,13 +20,30 @@ public class StockQuote implements Serializable {
     public StockQuote() {
     }
 
-    public StockQuote(double adjustedClose, double close, double high, double low, double open, double volume) {
+    public StockQuote(String tickerSymbol, double adjustedClose, double close, double high, double low, double open, double volume) {
+        this.tickerSymbol = tickerSymbol;
         this.adjustedClose = adjustedClose;
         this.close = close;
         this.high = high;
         this.low = low;
         this.open = open;
         this.volume = volume;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getTickerSymbol() {
+        return tickerSymbol;
+    }
+
+    public void setTickerSymbol(String tickerSymbol) {
+        this.tickerSymbol = tickerSymbol;
     }
 
     public double getAdjustedClose() {

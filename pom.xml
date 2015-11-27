@@ -22,7 +22,7 @@
     <properties>
         <lucene.version>5.3.1</lucene.version>
         <tika.version>1.10</tika.version>
-        <hazelcast.version>3.5.3</hazelcast.version>
+        <hazelcast.version>3.6-EA2</hazelcast.version>
         <guice.version>4.0</guice.version>
         <hsqldb.version>2.3.0</hsqldb.version>
         <hibernate.version>4.3.6.Final</hibernate.version>
@@ -81,7 +81,7 @@
         <!-- Hazelcast for distributed computing -->
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
+            <artifactId>hazelcast-all</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
 
