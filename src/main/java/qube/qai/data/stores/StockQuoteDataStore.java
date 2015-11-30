@@ -2,7 +2,6 @@ package qube.qai.data.stores;
 
 import org.ojalgo.finance.data.YahooSymbol;
 import org.ojalgo.type.CalendarDateUnit;
-import qube.qai.data.DataStore;
 import qube.qai.persistence.StockQuote;
 
 import java.util.ArrayList;

@@ -1,6 +1,7 @@
 package qube.qai.procedure;
 
 import junit.framework.TestCase;
+import qube.qai.procedure.archive.WikiArchiveIndexer;
 
 import java.io.File;
 

@@ -1,4 +1,4 @@
-package qube.qai.procedure;
+package qube.qai.procedure.wikiripper;
 
 import org.milyn.Smooks;
 import qube.qai.procedure.wikiripper.WikiPageVisitor;

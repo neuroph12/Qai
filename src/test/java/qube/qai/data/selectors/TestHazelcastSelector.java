@@ -1,4 +1,4 @@
-package qube.qai.data;
+package qube.qai.data.selectors;
 
 import com.hazelcast.core.HazelcastInstance;
 import qube.qai.main.QaiBaseTestCase;

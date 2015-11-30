@@ -1,4 +1,4 @@
-package qube.qai.data;
+package qube.qai.data.stores;
 
 import junit.framework.TestCase;
 /**

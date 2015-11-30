@@ -17,4 +17,8 @@ public class UUIDService implements UUIDServiceInterface {
     public String createUUIDString() {
         return Generators.timeBasedGenerator().generate().toString();
     }
+
+    public static String uuidString() {
+       return Generators.timeBasedGenerator().generate().toString();
+    }
 }
