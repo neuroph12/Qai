@@ -42,7 +42,8 @@ public class Arguments {
         if (argumentNames.contains(name) && arguments.containsKey(name)) {
             return arguments.get(name);
         } else {
-            throw new IllegalArgumentException("Argument list does not contain: " + name);
+            //throw new IllegalArgumentException("Argument list does not contain: " + name);
+            return null;
         }
     }
 
@@ -91,8 +92,16 @@ public class Arguments {
         StringBuffer buffer = new StringBuffer();
         //buffer.append("uuid: ").append(uuid);
         for (String name : getArgumentNames()) {
-            buffer.append(name).append(": ").append(getSelector(name).getData()).append("\n");
+            buffer.append(name).append(": ");
+            if (getSelector(name) != null) {
+                buffer.append(getSelector(name).getData()).append(", ");
+            } else {
+                buffer.append("null, ");
+            }
         }
+        // remove the last of the ", "
+        buffer.deleteCharAt(buffer.length()-1);
+        buffer.deleteCharAt(buffer.length()-1);
         return buffer.toString();
     }
 }

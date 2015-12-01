@@ -4,11 +4,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
-import qube.qai.procedure.wikiripper.ChainVisitor;
 import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -40,6 +40,7 @@ public abstract class ProcedureChain extends BaseProcedure {
     public ProcedureChain() {
         name = "AbstractProcedure";
         uuid = UUIDService.uuidString();
+        children = new ArrayList<ProcedureChain>();
     }
 
     public ProcedureChain(String name) {
@@ -64,11 +65,15 @@ public abstract class ProcedureChain extends BaseProcedure {
      * @param data
      * @return
      */
-    public Object childrenAccept(ChainVisitor visitor, Object data) {
+    public Object childrenAccept(ProcedureVisitor visitor, Object data) {
         for (ProcedureChain child : children) {
             child.accept(visitor, data);
         }
         return data;
+    }
+
+    public boolean haveChildren() {
+        return !children.isEmpty();
     }
 
     protected Selector createSelector(Object data) {

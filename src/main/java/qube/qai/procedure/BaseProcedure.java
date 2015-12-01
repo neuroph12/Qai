@@ -6,8 +6,6 @@ import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
 import qube.qai.message.MessageListener;
 import qube.qai.message.MessageQueue;
-import qube.qai.procedure.Procedure;
-import qube.qai.procedure.wikiripper.ChainVisitor;
 
 import javax.inject.Inject;
 
@@ -35,7 +33,7 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
 
     protected double progressPercentage;
 
-    protected Selector returnValue;
+//    protected Selector returnValue;
 
     protected Arguments arguments;
 
@@ -45,7 +43,7 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
      * @param data
      * @return
      */
-    public Object accept(ChainVisitor visitor, Object data) {
+    public Object accept(ProcedureVisitor visitor, Object data) {
         return visitor.visit(this, data);
     }
 
@@ -55,7 +53,7 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
      * @param data
      * @return
      */
-    public Object childrenAccept(ChainVisitor visitor, Object data) {
+    public Object childrenAccept(ProcedureVisitor visitor, Object data) {
         // nothing to do, simply return the data
         return data;
     }
@@ -72,6 +70,10 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
     }
 
     public abstract void run();
+
+    public boolean haveChildren() {
+        return false;
+    }
 
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
@@ -109,13 +111,13 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
         this.progressPercentage = progressPercentage;
     }
 
-    public Selector getReturnValue() {
-        return returnValue;
-    }
-
-    public void setReturnValue(Selector returnValue) {
-        this.returnValue = returnValue;
-    }
+//    public Selector getReturnValue() {
+//        return returnValue;
+//    }
+//
+//    public void setReturnValue(Selector returnValue) {
+//        this.returnValue = returnValue;
+//    }
 
     public Arguments getArguments() {
         return arguments;
