@@ -1,5 +1,6 @@
 package qube.qai.procedure.analysis;
 
+import qube.qai.data.Arguments;
 import qube.qai.procedure.ProcedureChain;
 
 /**
@@ -7,7 +8,7 @@ import qube.qai.procedure.ProcedureChain;
  */
 public class TimeSeriesAnalysis extends ProcedureChain {
 
-
+    private static String NAME = "Time-Series Analysis";
     /**
      * this is a procedure to analyze a given time series
      * statistical:
@@ -15,8 +16,13 @@ public class TimeSeriesAnalysis extends ProcedureChain {
      *          result value variance etc.
      * top 10/bottom 10/average entities- prepare those results as charts
      */
-    public TimeSeriesAnalysis(String name) {
-        super(name);
+    public TimeSeriesAnalysis() {
+        super(NAME);
+    }
+
+    @Override
+    public void buildArguments() {
+        arguments = new Arguments(INPUT_TIME_SERIES);
     }
 
     @Override

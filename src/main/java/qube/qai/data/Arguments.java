@@ -16,10 +16,10 @@ public class Arguments {
         arguments = new HashMap<String, Selector>();
     }
 
-    public Arguments(Map<String, Selector> arguments) {
-        this.arguments = arguments;
+    public Arguments(String... names) {
+        this();
+        putNames(names);
     }
-
 //    public void addSelector(String name, Selector selector) {
 //        arguments.put(name, selector);
 //    }
@@ -47,13 +47,33 @@ public class Arguments {
     }
 
     public Set<String> getArgumentNames() {
-        return arguments.keySet();
+        return argumentNames;
     }
 
+    /**
+     * checks whether all of the arguments have already
+     * been assigned a value
+     * @return
+     */
     public boolean isSatisfied() {
-        return arguments.keySet().containsAll(argumentNames);
+        boolean satisfied = false;
+
+        for (String name : getArgumentNames()) {
+            satisfied = hasValue(name);
+            if (!satisfied) {
+                break;
+            }
+        }
+
+        return satisfied;
     }
 
+    /**
+     * checks whether the argument with the given name
+     * has already been assigned a value
+     * @param name
+     * @return
+     */
     public boolean hasValue(String name) {
 
         if (argumentNames.contains(name)) {

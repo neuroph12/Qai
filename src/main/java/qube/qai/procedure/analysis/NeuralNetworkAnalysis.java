@@ -1,6 +1,8 @@
 package qube.qai.procedure.analysis;
 
+import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
+import qube.qai.data.selectors.DataSelector;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.ProcedureChain;
 import qube.qai.procedure.ProcedureFactory;
@@ -12,20 +14,32 @@ import java.util.Collection;
  */
 public class NeuralNetworkAnalysis extends ProcedureChain {
 
+    public static String NAME = "Neural-Network Analysis";
+
     private Selector<Collection<NeuralNetwork>> networkSelector;
 
-    public NeuralNetworkAnalysis(String name) {
-        super(name);
+    public NeuralNetworkAnalysis() {
+        super(NAME);
+    }
+
+    @Override
+    public void buildArguments() {
+        arguments = new Arguments(INPUT_NEURAL_NETWORK);
     }
 
     @Override
     public void run() {
 
         // we are of course assuming the selector is already initialized
+        if (!arguments.isSatisfied()) {
+            throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
+        }
 
+        // and when we are done,we set the return value
+        Selector<Double> result = new DataSelector<Double>(Double.valueOf(0));
+        String argumentName = name + ".result";
+        arguments.setArgument(argumentName, result);
     }
-
-
 
     /**
      * implement a static factory-class so that they can be constructed right
@@ -34,26 +48,26 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
         public ProcedureChain constructProcedure() {
 
             // tha parent procedure
-            NeuralNetworkAnalysis neuralNetworkAnalysis = new NeuralNetworkAnalysis("Neural Network Analysis");
+            NeuralNetworkAnalysis neuralNetworkAnalysis = new NeuralNetworkAnalysis();
 
             // begin with basic-matrix statistics
-            MatrixStatistics matrixStatistics = new MatrixStatistics("Matrix Statistics");
+            MatrixStatistics matrixStatistics = new MatrixStatistics();
             neuralNetworkAnalysis.addChild(matrixStatistics);
 
             // we want to have the statistics of the network which is created
-            NetworkStatistics networkStatistics = new NetworkStatistics("Network Statistics");
+            NetworkStatistics networkStatistics = new NetworkStatistics();
             neuralNetworkAnalysis.addChild(networkStatistics);
 
             // time-series analysis for the generated data
-            TimeSeriesAnalysis timeSeriesAnalysis = new TimeSeriesAnalysis("Time-Series Analysis");
+            TimeSeriesAnalysis timeSeriesAnalysis = new TimeSeriesAnalysis();
             neuralNetworkAnalysis.addChild(timeSeriesAnalysis);
 
             // change-point analysis of the given time series as well
-            ChangePointAnalysis changePointAnalysis = new ChangePointAnalysis("Change Point Analysis");
+            ChangePointAnalysis changePointAnalysis = new ChangePointAnalysis();
             timeSeriesAnalysis.addChild(changePointAnalysis);
 
             // forward propagation which will be producing the data for time-series analysis
-            NeuralNetworkForwardPropagation forwardPropagation = new NeuralNetworkForwardPropagation("Neural-Network Forward Propagation");
+            NeuralNetworkForwardPropagation forwardPropagation = new NeuralNetworkForwardPropagation();
             changePointAnalysis.addChild(forwardPropagation);
 
 

@@ -1,5 +1,6 @@
 package qube.qai.procedure.analysis;
 
+import qube.qai.data.Arguments;
 import qube.qai.procedure.ProcedureChain;
 
 /**
@@ -7,12 +8,18 @@ import qube.qai.procedure.ProcedureChain;
  */
 public class ChangePointAnalysis extends ProcedureChain {
 
+    public static String NAME = "Change-Point Analysis";
+
     /**
      * runs change-point analysis of a given time-series
-     * @param name
      */
-    public ChangePointAnalysis(String name) {
-        super(name);
+    public ChangePointAnalysis() {
+        super(NAME);
+    }
+
+    @Override
+    public void buildArguments() {
+        arguments = new Arguments(INPUT_TIME_SERIES);
     }
 
     @Override

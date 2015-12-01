@@ -4,6 +4,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import qube.qai.services.SearchServiceInterface;
+import qube.qai.services.SelectorFactoryInterface;
+import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.WikiSearchService;
 
 /**
@@ -25,6 +27,13 @@ public class QaiTestModule extends AbstractModule {
 
         // @TODO initialize test configuration based on QaiModule
 
+    }
+
+    @Provides
+    SelectorFactoryInterface provideSelectorFactoryInterface() {
+        SelectorFactoryInterface selectorfactory = new DataSelectorFactory();
+
+        return selectorfactory;
     }
 
     @Provides @Named("Wiktionary_en")

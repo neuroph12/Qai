@@ -3,14 +3,25 @@ package qube.qai.procedure;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import qube.qai.data.Arguments;
+import qube.qai.data.Selector;
+import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.UUIDService;
 
+import javax.inject.Inject;
 import java.util.Collection;
 
 /**
  * Created by rainbird on 11/27/15.
  */
 public abstract class ProcedureChain extends BaseProcedure {
+
+    public static String INPUT_TIME_SERIES = "time-series";
+
+    public static String INPUT_NETWORK = "network";
+
+    public static String INPUT_NEURAL_NETWORK = "neural-network";
+
+    public static String INPUT_MATRIX = "matrix";
 
     protected String uuid;
 
@@ -22,6 +33,9 @@ public abstract class ProcedureChain extends BaseProcedure {
 
     protected Arguments arguments;
 
+    @Inject
+    protected DataSelectorFactory selectorFactory;
+
     public ProcedureChain() {
         name = "AbstractProcedure";
         uuid = UUIDService.uuidString();
@@ -30,6 +44,7 @@ public abstract class ProcedureChain extends BaseProcedure {
     public ProcedureChain(String name) {
         this();
         this.name = name;
+        buildArguments();
     }
 
     public ProcedureChain(String name, ProcedureChain parent) {
@@ -41,6 +56,17 @@ public abstract class ProcedureChain extends BaseProcedure {
         this();
         this.parent = parent;
     }
+
+    protected Selector createSelector(Object data) {
+        return selectorFactory.buildSelector(name, uuid, data);
+    }
+
+    /**
+     * each procesudre knows what inputs and outputs there will
+     * be, and those have to be available in arguments-field
+     * when the procedure is about to be called
+     */
+    public abstract void buildArguments();
 
     /**
      * returns the first child with the name- names are not unique

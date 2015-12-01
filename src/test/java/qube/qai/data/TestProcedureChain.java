@@ -38,12 +38,44 @@ public class TestProcedureChain extends TestCase {
 
     public void testProcedureChain() throws Exception {
 
+        ProcedureChain sumChain = createTestProcedure();
+        sumChain.getArguments().setArgument("x", new DataSelector<Double>(Double.valueOf(2.0)));
+        sumChain.getArguments().setArgument("y", new DataSelector<Double>(Double.valueOf(3.0)));
+
+
+        assertTrue("sum-chain procedure's arguments must be satisfied", sumChain.getArguments().isSatisfied());
+        sumChain.run();
+
+        double sum = (Double) sumChain.getArguments().getSelector("sum").getData();
+        assertTrue("sum has to be five", sum == 5.0);
+    }
+
+    private ProcedureChain createTestProcedure() {
+
         ProcedureChain procedureChain = new ProcedureChain() {
             @Override
             public void run() {
                 log("procedureChain.run()");
+                double x = (Double) arguments.getSelector("x").getData();
+                double y = (Double) arguments.getSelector("y").getData();
+                log("input x: " + x + " and input y: " + y);
+                double sum = x + y;
+                Selector<Double> sumSelector = new DataSelector<Double>(sum);
+                log("return value selector with sum: " + sum);
+                arguments.putNames("sum");
+                arguments.setArgument("sum", sumSelector);
+            }
+
+            @Override
+            public void buildArguments() {
+                arguments = new Arguments();
+                arguments.putNames("x", "y");
             }
         };
+
+        procedureChain.buildArguments();
+
+        return procedureChain;
     }
 
     private void log(String message) {
