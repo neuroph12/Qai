@@ -7,6 +7,7 @@ import qube.qai.data.Selector;
 import qube.qai.message.MessageListener;
 import qube.qai.message.MessageQueue;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.wikiripper.ChainVisitor;
 
 import javax.inject.Inject;
 
@@ -37,6 +38,27 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
     protected Selector returnValue;
 
     protected Arguments arguments;
+
+    /**
+     * Visitor-pattern
+     * @param visitor
+     * @param data
+     * @return
+     */
+    public Object accept(ChainVisitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+
+    /**
+     * Visitor-pattern
+     * @param visitor
+     * @param data
+     * @return
+     */
+    public Object childrenAccept(ChainVisitor visitor, Object data) {
+        // nothing to do, simply return the data
+        return data;
+    }
 
     @Override
     public void onMessage(Message message) {

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
+import qube.qai.procedure.wikiripper.ChainVisitor;
 import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.UUIDService;
 
@@ -55,6 +56,19 @@ public abstract class ProcedureChain extends BaseProcedure {
     public ProcedureChain(ProcedureChain parent) {
         this();
         this.parent = parent;
+    }
+
+    /**
+     * Visitor-pattern
+     * @param visitor
+     * @param data
+     * @return
+     */
+    public Object childrenAccept(ChainVisitor visitor, Object data) {
+        for (ProcedureChain child : children) {
+            child.accept(visitor, data);
+        }
+        return data;
     }
 
     protected Selector createSelector(Object data) {

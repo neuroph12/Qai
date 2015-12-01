@@ -1,6 +1,8 @@
-package qube.qai.data;
+package qube.qai.data.analysis;
 
 import junit.framework.TestCase;
+import qube.qai.data.Arguments;
+import qube.qai.data.Selector;
 import qube.qai.data.selectors.DataSelector;
 import qube.qai.matrix.Matrix;
 import qube.qai.procedure.ProcedureChain;

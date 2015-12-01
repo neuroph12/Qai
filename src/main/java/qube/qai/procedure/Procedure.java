@@ -2,6 +2,7 @@ package qube.qai.procedure;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceAware;
+import qube.qai.procedure.wikiripper.ChainVisitor;
 
 import java.io.Serializable;
 
@@ -13,4 +14,9 @@ public interface Procedure extends Serializable, Runnable, HazelcastInstanceAwar
     public void run();
 
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance);
+
+    public Object accept(ChainVisitor visitor, Object data);
+
+    public Object childrenAccept(ChainVisitor visitor, Object data);
+
 }
