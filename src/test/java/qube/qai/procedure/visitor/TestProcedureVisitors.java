@@ -16,7 +16,7 @@ public class TestProcedureVisitors extends TestCase {
         NeuralNetworkAnalysis networkAnalysis = (NeuralNetworkAnalysis) NeuralNetworkAnalysis.Factory.constructProcedure();
 
         SimpleProcedureVisitor visitor = new SimpleProcedureVisitor();
-        String result = (String) networkAnalysis.childrenAccept(visitor, null);
+        networkAnalysis.accept(visitor, null);
         //assertNotNull("there has to be a result", result);
         log(visitor.toString());
     }

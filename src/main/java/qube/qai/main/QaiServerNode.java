@@ -2,18 +2,9 @@ package qube.qai.main;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.hazelcast.config.Config;
-import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.MapStoreConfig;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.MapLoader;
-import com.hazelcast.core.MapStoreFactory;
-import qube.qai.persistence.StockQuote;
-import qube.qai.persistence.mapstores.HqslDBMapStore;
 
 import javax.inject.Inject;
-import java.util.Properties;
 
 /**
  * Created by rainbird on 11/9/15.

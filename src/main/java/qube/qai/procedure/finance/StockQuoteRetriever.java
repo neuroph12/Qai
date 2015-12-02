@@ -1,8 +1,6 @@
 package qube.qai.procedure.finance;
 
 import qube.qai.data.DataProvider;
-import qube.qai.data.Selector;
-import qube.qai.data.selectors.HazelcastSelector;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.BaseProcedure;
 

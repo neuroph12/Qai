@@ -16,18 +16,18 @@ public class SimpleProcedureVisitor implements ProcedureVisitor {
 
     public Object visit(Procedure chain, Object data) {
 
-        buffer.append("(")
-                .append(chain.getName())
+//        buffer.append("(")
+          buffer.append("'").append(chain.getName()).append("' ");
 //                .append("[").append(chain.getUuid()).append("] (")
-                .append("[").append(chain.getArguments().toString()).append("]")
-                .append(")");
+//                .append(" [").append(chain.getArguments().toString()).append("] ");
+//                .append(")");
 
         if (chain.haveChildren()) {
             buffer.append("(");
             chain.childrenAccept(this, data);
             buffer.append(")");
         }
-
+        //buffer.append(")");
 
         return buffer.toString();
     }

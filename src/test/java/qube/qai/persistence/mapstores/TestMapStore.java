@@ -1,6 +1,5 @@
 package qube.qai.persistence.mapstores;
 
-import net.didion.jwnl.data.Exc;
 import qube.qai.main.QaiBaseTestCase;
 
 /**
