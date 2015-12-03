@@ -2,13 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <!--<parent>-->
-        <!--<artifactId>qoan</artifactId>-->
-        <!--<groupId>qube.qoan</groupId>-->
-        <!--<version>1.0-SNAPSHOT</version>-->
-        <!--<relativePath>../qoan/pom.xml</relativePath>-->
-    <!--</parent>-->
-    <!--<modelVersion>4.0.0</modelVersion>-->
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -26,6 +19,7 @@
         <guice.version>4.0</guice.version>
         <hsqldb.version>2.3.0</hsqldb.version>
         <hibernate.version>4.3.6.Final</hibernate.version>
+        <jdk.version>1.8</jdk.version>
     </properties>
 
     <repositories>
@@ -45,14 +39,14 @@
             <!--<version>1.6</version>-->
         <!--</dependency>-->
 
-        <!-- tika does parsing and lucene does search and indexing -->
+        <!-- Tika does parsing and Lucene does search and indexing -->
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers</artifactId>
             <version>${tika.version}</version>
         </dependency>
 
-        <!-- lucene itself -->
+        <!-- Lucene itself -->
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
@@ -85,7 +79,7 @@
             <version>${hazelcast.version}</version>
         </dependency>
 
-        <!-- a local database for the mapstore -->
+        <!-- HsqlDB for the map-stores -->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
@@ -108,7 +102,7 @@
             <version>1.5.1</version>
         </dependency>
 
-        <!-- jaxpb just doesn't cut it, so we have to see if it works with xstream-->
+        <!-- jaxpb just doesn't cut it, so we serialize to xml with xstream-->
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
@@ -119,7 +113,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.0</version>
+            <version>3.1</version>
         </dependency>
 
         <!-- hibernate...
@@ -176,10 +170,54 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.1</version>
-        </dependency>
+
     </dependencies>
+
+    <!--<build>
+        <finalName>dateutils</finalName>
+        <plugins>
+
+            &lt;!&ndash; download source code in Eclipse, best practice &ndash;&gt;
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>false</downloadJavadocs>
+                </configuration>
+            </plugin>
+
+            &lt;!&ndash; Set a JDK compiler level &ndash;&gt;
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                &lt;!&ndash;<configuration>&ndash;&gt;
+                    &lt;!&ndash;<source>${jdk.version}</source>&ndash;&gt;
+                    &lt;!&ndash;<target>${jdk.version}</target>&ndash;&gt;
+                &lt;!&ndash;</configuration>&ndash;&gt;
+            </plugin>
+
+            &lt;!&ndash; Make this jar executable &ndash;&gt;
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    &lt;!&ndash; DO NOT include log4j.properties file in your Jar &ndash;&gt;
+                    <excludes>
+                        <exclude>**/log4j.properties</exclude>
+                    </excludes>
+                    <archive>
+                        <manifest>
+                            &lt;!&ndash; Jar file entry point &ndash;&gt;
+                            <mainClass>qube.qai.main.QaiServerNode</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>-->
+
 </project>

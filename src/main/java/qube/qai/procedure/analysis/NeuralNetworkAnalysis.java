@@ -16,6 +16,10 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
 
     public static String NAME = "Neural-Network Analysis";
 
+    public static String DESCRIPTION = "Neural-network analysis " +
+            "does a statistical analysis of the weights, " +
+            "their network structure, etc.";
+
     private Selector<Collection<NeuralNetwork>> networkSelector;
 
     public NeuralNetworkAnalysis() {
@@ -24,6 +28,7 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
 
     @Override
     public void buildArguments() {
+        description = DESCRIPTION;
         arguments = new Arguments(INPUT_NEURAL_NETWORK);
     }
 
@@ -54,21 +59,26 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
             MatrixStatistics matrixStatistics = new MatrixStatistics();
             neuralNetworkAnalysis.addChild(matrixStatistics);
 
+
+
             // we want to have the statistics of the network which is created
             NetworkStatistics networkStatistics = new NetworkStatistics();
             neuralNetworkAnalysis.addChild(networkStatistics);
 
-            // time-series analysis for the generated data
-            TimeSeriesAnalysis timeSeriesAnalysis = new TimeSeriesAnalysis();
-            neuralNetworkAnalysis.addChild(timeSeriesAnalysis);
+            // select only some of the results which we have
+            SelectProcedure selectProcedure = new SelectProcedure();
+            neuralNetworkAnalysis.addChild(selectProcedure);
 
             // change-point analysis of the given time series as well
             ChangePointAnalysis changePointAnalysis = new ChangePointAnalysis();
-            timeSeriesAnalysis.addChild(changePointAnalysis);
+            selectProcedure.addChild(changePointAnalysis);
 
+            // time-series analysis for the generated data
+            TimeSeriesAnalysis timeSeriesAnalysis = new TimeSeriesAnalysis();
+            changePointAnalysis.addChild(timeSeriesAnalysis);
             // forward propagation which will be producing the data for time-series analysis
             NeuralNetworkForwardPropagation forwardPropagation = new NeuralNetworkForwardPropagation();
-            changePointAnalysis.addChild(forwardPropagation);
+            timeSeriesAnalysis.addChild(forwardPropagation);
 
 
 

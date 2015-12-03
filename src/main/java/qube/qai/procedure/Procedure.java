@@ -3,6 +3,7 @@ package qube.qai.procedure;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceAware;
 import qube.qai.data.Arguments;
+import qube.qai.user.User;
 
 import java.io.Serializable;
 
@@ -20,6 +21,8 @@ public interface Procedure extends Serializable, Runnable, HazelcastInstanceAwar
     public Object childrenAccept(ProcedureVisitor visitor, Object data);
 
     public boolean haveChildren();
+
+    public User getUser();
 
     public String getName();
 
