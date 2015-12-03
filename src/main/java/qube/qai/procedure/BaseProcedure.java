@@ -5,6 +5,7 @@ import com.hazelcast.core.Message;
 import qube.qai.data.Arguments;
 import qube.qai.message.MessageListener;
 import qube.qai.message.MessageQueue;
+import qube.qai.user.User;
 
 import javax.inject.Inject;
 
@@ -23,6 +24,8 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
     protected MessageQueue messageQueue;
 
     protected HazelcastInstance hazelcastInstance;
+
+    protected User user;
 
     protected String uuid;
 
@@ -76,6 +79,14 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
 
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getUuid() {
