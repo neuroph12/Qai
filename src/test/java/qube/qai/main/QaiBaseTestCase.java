@@ -76,8 +76,10 @@ public class QaiBaseTestCase extends TestCase {
 
         // procedure
         suite.addTestSuite(TestNeuralNetworkAnalysis.class);
-        suite.addTestSuite(TestWikiArchiveIndexer.class);
-        suite.addTestSuite(TestWikiRipperProcedure.class);
+        // @TODO test-data for these test is missing-
+        // in this form they are useless and should not be executed!?!
+//        suite.addTestSuite(TestWikiArchiveIndexer.class);
+//        suite.addTestSuite(TestWikiRipperProcedure.class);
         suite.addTestSuite(TestWikiSearch.class);
 
         // procedure.visitor

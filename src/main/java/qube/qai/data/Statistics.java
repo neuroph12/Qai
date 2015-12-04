@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * Created by rainbird on 12/4/15.
  */
-public class Statistics {
+public class Statistics implements MetricTyped {
 
     private boolean isCalculated;
     private double[] data;

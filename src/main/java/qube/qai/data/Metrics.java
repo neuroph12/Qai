@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Created by rainbird on 12/4/15.
  */
-public class Metrics {
+public class Metrics implements MetricTyped {
 
     private Map<String, Double> metrics;
 
@@ -27,8 +27,11 @@ public class Metrics {
         metrics.put(name, value);
     }
 
-
     public void putValue(String name, Double value) {
         metrics.put(name, value);
+    }
+
+    public Metrics buildMetrics() {
+        return this;
     }
 }

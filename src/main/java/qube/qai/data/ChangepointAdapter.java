@@ -13,8 +13,9 @@ import java.util.Vector;
  */
 public class ChangepointAdapter {
 
-    AnalysisSettings settings;
-    Analysis analysis;
+    // @TODO add a wrapper class for AnalysisSettings as well
+    private AnalysisSettings settings;
+    private Analysis analysis;
 
     public ChangepointAdapter() {
         settings = new AnalysisSettings();
@@ -32,7 +33,10 @@ public class ChangepointAdapter {
 
         for (DataPoint dataPoint : changePoints) {
             // don't add the change-points which are marked as removed
-            if (dataPoint.isRemoved()) {
+            // or which don't have a value
+            if (dataPoint.isRemoved()
+                    || !dataPoint.isValue()
+                    || Double.isNaN(dataPoint.getX())) {
                 continue;
             }
             ChangePoint changePoint = convert(dataPoint);
