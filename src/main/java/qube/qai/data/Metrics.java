@@ -23,6 +23,11 @@ public class Metrics {
         return metrics.get(name);
     }
 
+    public void putValue(String name, double value) {
+        metrics.put(name, value);
+    }
+
+
     public void putValue(String name, Double value) {
         metrics.put(name, value);
     }

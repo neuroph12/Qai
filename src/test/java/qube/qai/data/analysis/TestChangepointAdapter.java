@@ -4,6 +4,7 @@ import istu.samsroad.data.DataPoint;
 import junit.framework.TestCase;
 import qube.qai.data.ChangepointAdapter;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
@@ -20,10 +21,9 @@ public class TestChangepointAdapter extends TestCase {
         ChangepointAdapter changepointAdapter = new ChangepointAdapter();
         double[][] data = createDummyData(1000);
 
-        Vector<DataPoint> result = changepointAdapter.collectChangePoints(data);
+        Collection<ChangepointAdapter.ChangePoint> result = changepointAdapter.collectChangePoints(data);
 
-        for (Iterator<DataPoint> it = result.iterator(); it.hasNext(); ) {
-            DataPoint point = it.next();
+        for (ChangepointAdapter.ChangePoint point : result) {
             if (Double.isNaN(point.getX())) {
                 log("found nothing- change point a dude:" + point.getProbability());
             } else {
