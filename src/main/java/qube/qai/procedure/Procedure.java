@@ -22,6 +22,8 @@ public interface Procedure extends Serializable, Runnable, HazelcastInstanceAwar
 
     public boolean haveChildren();
 
+    public boolean hasExecuted();
+
     public User getUser();
 
     public String getName();

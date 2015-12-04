@@ -1,5 +1,6 @@
 package qube.qai.procedure.wikiripper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.milyn.SmooksException;
 import org.milyn.container.ExecutionContext;
 import org.milyn.delivery.sax.SAXElement;
@@ -30,6 +31,23 @@ public class WikiPageVisitor implements SAXVisitBefore, SAXVisitAfter {
     public void visitAfter(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
 
         String title = element.getTextContent();
+
+        // if this is a "Category:" of something, there will be no content
+        // therefore we skip this page
+        if (StringUtils.containsIgnoreCase(title, "Category:")) {
+            return;
+        }
+
+        // same thing with "Wikisaurus" pages
+        if (StringUtils.containsIgnoreCase(title, "Wikisaurus:")) {
+            return;
+        }
+
+        // same thing with "Disambiguation" pages
+        if (StringUtils.containsIgnoreCase(title, "Disambiguation:")) {
+            return;
+        }
+
         wikiArticle = new WikiArticle();
 
         wikiArticle.setTitle(title);

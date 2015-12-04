@@ -35,7 +35,7 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
 
     protected double progressPercentage;
 
-//    protected Selector returnValue;
+    protected boolean hasExecuted = false;
 
     protected Arguments arguments;
 
@@ -65,6 +65,9 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
         this.arguments = (Arguments) message.getMessageObject();
         try {
             run();
+
+            // after running mark as executed
+            hasExecuted = true;
         } catch (Exception e) {
             messageQueue.sendMessage(uuid, PROCESS_ERROR);
         }
@@ -121,19 +124,19 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
         this.progressPercentage = progressPercentage;
     }
 
-//    public Selector getReturnValue() {
-//        return returnValue;
-//    }
-//
-//    public void setReturnValue(Selector returnValue) {
-//        this.returnValue = returnValue;
-//    }
-
     public Arguments getArguments() {
         return arguments;
     }
 
     public void setArguments(Arguments arguments) {
         this.arguments = arguments;
+    }
+
+    public boolean hasExecuted() {
+        return hasExecuted;
+    }
+
+    public void hasExecuted(boolean hasExecuted) {
+        this.hasExecuted = hasExecuted;
     }
 }

@@ -6,7 +6,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-import qube.qai.data.analysis.TestAnalysisProcedures;
+import qube.qai.procedure.TestAnalysisProcedures;
 import qube.qai.data.analysis.TestChangepointAdapter;
 import qube.qai.data.analysis.TestProcedureChain;
 import qube.qai.data.selectors.TestHazelcastSelector;

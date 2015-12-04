@@ -10,6 +10,8 @@ public class ChangePointAnalysis extends ProcedureChain {
 
     public static String NAME = "Change-Point Analysis";
 
+    public static String DESCRIPTION = "Analysis for finding likely change points in a time-series";
+
     /**
      * runs change-point analysis of a given time-series
      */
@@ -19,6 +21,7 @@ public class ChangePointAnalysis extends ProcedureChain {
 
     @Override
     public void buildArguments() {
+        description = DESCRIPTION;
         arguments = new Arguments(INPUT_TIME_SERIES);
     }
 

@@ -10,6 +10,9 @@ public class MatrixStatistics extends ProcedureChain {
 
     public static String NAME = "Matrix Statistics";
 
+    public static String DESCRIPTION = "Analyses the distribution of the numbers in the matrix, " +
+            "and eigenvalues and eigenvectors, as far as they exist, using eigenvalue decomposition";
+
     /**
      * Runs statistical analysis on the given matrix
      */
@@ -19,6 +22,7 @@ public class MatrixStatistics extends ProcedureChain {
 
     @Override
     public void buildArguments() {
+        description = DESCRIPTION;
         arguments = new Arguments(INPUT_MATRIX);
     }
 

@@ -4,8 +4,10 @@ import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
 import qube.qai.data.selectors.DataSelector;
 import qube.qai.network.neural.NeuralNetwork;
+import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureChain;
 import qube.qai.procedure.ProcedureFactory;
+import qube.qai.procedure.ProcedureVisitor;
 
 import java.util.Collection;
 
@@ -59,8 +61,6 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
             MatrixStatistics matrixStatistics = new MatrixStatistics();
             neuralNetworkAnalysis.addChild(matrixStatistics);
 
-
-
             // we want to have the statistics of the network which is created
             NetworkStatistics networkStatistics = new NetworkStatistics();
             neuralNetworkAnalysis.addChild(networkStatistics);
@@ -85,4 +85,53 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
             return neuralNetworkAnalysis;
         }
     };
+
+    /**
+     * this is in fact an experiment- has though a few
+     * advantages to it, although might seem somewhat
+     * unusual- handle each type which you have in the chain
+     * the way it should be, and still have access to the fields
+     * of the parent-procedure nevertheless
+     */
+    class NeuralNetworkAnalysisVisitor implements ProcedureVisitor {
+        /**
+         * this method is nice and will not be called
+         * @param procedure
+         * @param data
+         * @return
+         */
+        public Object visit(Procedure procedure, Object data) {
+            return null;
+        }
+
+        public Object visit(MatrixStatistics procedure, Object data) {
+
+            return data;
+        }
+
+        public Object visit(NetworkStatistics procedure, Object data) {
+
+            return data;
+        }
+
+        public Object visit(SelectProcedure procedure, Object data) {
+
+            return data;
+        }
+
+        public Object visit(ChangePointAnalysis procedure, Object data) {
+
+            return data;
+        }
+
+        public Object visit(NeuralNetworkForwardPropagation procedure, Object data) {
+
+            return data;
+        }
+
+        public Object visit(TimeSeriesAnalysis procedure, Object data) {
+
+            return data;
+        }
+    }
 }
