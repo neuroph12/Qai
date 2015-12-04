@@ -14,6 +14,8 @@ public class Arguments {
 
     private Set<String> resultNames;
 
+    private Map<String, Object> results;
+
     private Map<String, Selector> arguments;
 
     public Arguments() {
@@ -25,6 +27,26 @@ public class Arguments {
     public Arguments(String... names) {
         this();
         putNames(names);
+    }
+
+    /**
+     * result name must have been configured in advance to take a
+     * result with the name, otherwise the result will be ignored
+     * @param name
+     * @param result
+     */
+    public void addResult(String name, Object result) {
+        if (resultNames.contains(name)) {
+            results.put(name, result);
+        }
+    }
+
+    public boolean hasResult(String name) {
+        Object result = results.get(name);
+        if (result != null) {
+            return true;
+        }
+        return false;
     }
 
     public void putResultNames(String... names) {
