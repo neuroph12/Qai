@@ -7,7 +7,7 @@ import org.ojalgo.function.UnaryFunction;
  */
 public interface ActivationFunction extends UnaryFunction {
 
-    public double invoke(double input);
+    double invoke(double input);
 
-    public Number invoke(Number input);
+    Number invoke(Number input);
 }
