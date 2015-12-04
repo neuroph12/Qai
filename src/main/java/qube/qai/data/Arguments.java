@@ -12,10 +12,13 @@ public class Arguments {
 
     private Set<String> argumentNames;
 
+    private Set<String> resultNames;
+
     private Map<String, Selector> arguments;
 
     public Arguments() {
         argumentNames = new HashSet<String>();
+        resultNames = new HashSet<String>();
         arguments = new HashMap<String, Selector>();
     }
 
@@ -23,9 +26,12 @@ public class Arguments {
         this();
         putNames(names);
     }
-//    public void addSelector(String name, Selector selector) {
-//        arguments.put(name, selector);
-//    }
+
+    public void putResultNames(String... names) {
+        for (String name : names) {
+            resultNames.add(name);
+        }
+    }
 
     public void putNames(String... names) {
         for (String name : names) {
@@ -46,6 +52,7 @@ public class Arguments {
             return arguments.get(name);
         } else {
             //throw new IllegalArgumentException("Argument list does not contain: " + name);
+            // forget about the exception, just return null
             return null;
         }
     }
@@ -54,12 +61,21 @@ public class Arguments {
         return argumentNames;
     }
 
+    public Set<String> getResultNames() {
+        return resultNames;
+    }
+
+    public void setResultNames(Set<String> resultNames) {
+        this.resultNames = resultNames;
+    }
+
     /**
      * checks whether all of the arguments have already
      * been assigned a value
      * @return
      */
     public boolean isSatisfied() {
+
         boolean satisfied = false;
 
         for (String name : getArgumentNames()) {
@@ -92,19 +108,25 @@ public class Arguments {
     @Override
     public String toString() {
 
+        boolean hasArguments = false;
         StringBuffer buffer = new StringBuffer();
         //buffer.append("uuid: ").append(uuid);
         for (String name : getArgumentNames()) {
             buffer.append(name).append(": ");
-            if (getSelector(name) != null) {
+            if (hasValue(name)) {
                 buffer.append(getSelector(name).getData()).append(", ");
             } else {
                 buffer.append("null, ");
             }
+            hasArguments = true;
         }
+
         // remove the last of the ", "
-        buffer.deleteCharAt(buffer.length()-1);
-        buffer.deleteCharAt(buffer.length()-1);
+        if (hasArguments) {
+            buffer.deleteCharAt(buffer.length()-1);
+            buffer.deleteCharAt(buffer.length()-1);
+        }
+
         return buffer.toString();
     }
 }

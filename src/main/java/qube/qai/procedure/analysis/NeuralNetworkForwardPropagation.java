@@ -10,6 +10,9 @@ public class NeuralNetworkForwardPropagation extends ProcedureChain {
 
     public static String NAME = "Neural-Network Forward-Propagation";
 
+    public static String DESCRIPTION = "Calls forward-propagation routine of the " +
+            "given neural-network with a given starting matrix to given number of steps.";
+
     public static String INPUT_START_VECTOR = "start vector";
 
     public static String INPUT_NUMBER_OF_STEPS = "number of iteration steps";
@@ -26,7 +29,9 @@ public class NeuralNetworkForwardPropagation extends ProcedureChain {
 
     @Override
     public void buildArguments() {
+        description = DESCRIPTION;
         arguments = new Arguments(INPUT_NEURAL_NETWORK, INPUT_START_VECTOR, INPUT_NUMBER_OF_STEPS);
+        arguments.putResultNames(TIME_SERIES);
     }
 
     @Override

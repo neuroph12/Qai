@@ -32,6 +32,7 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
     public void buildArguments() {
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_NEURAL_NETWORK);
+        arguments.putResultNames(MATRIX_METRICS, NETWORK_METRICS, TIME_SERIES_METRICS, CHANGE_POINTS);
     }
 
     @Override

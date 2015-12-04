@@ -9,6 +9,10 @@ import qube.qai.procedure.ProcedureChain;
 public class TimeSeriesAnalysis extends ProcedureChain {
 
     private static String NAME = "Time-Series Analysis";
+
+
+
+    private static String DESCRIPTION = "This is a procedure to analyze a given time series.";
     /**
      * this is a procedure to analyze a given time series
      * statistical:
@@ -22,7 +26,9 @@ public class TimeSeriesAnalysis extends ProcedureChain {
 
     @Override
     public void buildArguments() {
+        description = DESCRIPTION;
         arguments = new Arguments(INPUT_TIME_SERIES);
+        arguments.putResultNames(TIME_SERIES_METRICS);
     }
 
     @Override

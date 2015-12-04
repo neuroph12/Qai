@@ -23,6 +23,7 @@ public class ChangePointAnalysis extends ProcedureChain {
     public void buildArguments() {
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_TIME_SERIES);
+        arguments.putResultNames(CHANGE_POINTS);
     }
 
     @Override

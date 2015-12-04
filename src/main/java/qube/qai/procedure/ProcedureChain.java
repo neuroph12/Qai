@@ -24,6 +24,22 @@ public abstract class ProcedureChain extends BaseProcedure {
 
     public static String INPUT_MATRIX = "matrix";
 
+    public static String MATRIX_METRICS = "matrix metrics";
+
+    public static String NETWORK_METRICS = "network metrics";
+
+    public static String TIME_SERIES_METRICS = "time-series metrics";
+
+    public static String FROM = "from";
+
+    public static String CRITERIA = "criteria";
+
+    public static String CHANGE_POINTS = "change points";
+
+    public static String TIME_SERIES = "tine series";
+
+    public static String SELECTED_ITEMS = "selected items";
+
     protected String uuid;
 
     protected String name;
