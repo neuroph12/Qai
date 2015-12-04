@@ -7,5 +7,5 @@ import qube.qai.data.Selector;
  */
 public interface SelectorFactoryInterface<T> {
 
-    public Selector<T> buildSelector(String dataSource, String uuid, T data);
+    Selector<T> buildSelector(String dataSource, String uuid, T data);
 }

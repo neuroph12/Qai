@@ -20,9 +20,15 @@ public class HqslDBMapStore implements MapStore<String, StockQuote> {
 
     private final Connection con;
 
+    /**
+     * @TODO a more generic implementation of the class is required
+     * @TODO and its test, obviously.
+     * this is a very interesting notion for creating a generic
+     * database backed map-store really...
+     */
     public HqslDBMapStore() {
         try {
-            con = DriverManager.getConnection("jdbc:hsqldb:mydatabase", "SA", "");
+            con = DriverManager.getConnection("jdbc:hsqldb:test/mydatabase", "SA", "");
             con.createStatement().executeUpdate(
                     "create table if not exists person (id bigint, name varchar(45))");
         } catch (SQLException e) {

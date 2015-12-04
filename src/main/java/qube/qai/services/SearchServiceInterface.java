@@ -10,7 +10,7 @@ import java.util.Collection;
  */
 public interface SearchServiceInterface {
 
-    public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage);
+    Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage);
 
-    public WikiArticle retrieveDocumentContentFromZipFile(String fileName);
+    WikiArticle retrieveDocumentContentFromZipFile(String fileName);
 }

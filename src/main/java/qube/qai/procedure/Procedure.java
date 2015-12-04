@@ -12,27 +12,27 @@ import java.io.Serializable;
  */
 public interface Procedure extends Serializable, Runnable, HazelcastInstanceAware {
 
-    public void run();
+    void run();
 
-    public void setHazelcastInstance(HazelcastInstance hazelcastInstance);
+    void setHazelcastInstance(HazelcastInstance hazelcastInstance);
 
-    public Object accept(ProcedureVisitor visitor, Object data);
+    Object accept(ProcedureVisitor visitor, Object data);
 
-    public Object childrenAccept(ProcedureVisitor visitor, Object data);
+    Object childrenAccept(ProcedureVisitor visitor, Object data);
 
-    public boolean haveChildren();
+    boolean haveChildren();
 
-    public boolean hasExecuted();
+    boolean hasExecuted();
 
-    public User getUser();
+    User getUser();
 
-    public String getName();
+    String getName();
 
-    public String getUuid();
+    String getUuid();
 
-    public String getDescription();
+    String getDescription();
 
-    public double getProgressPercentage();
+    double getProgressPercentage();
 
-    public Arguments getArguments();
+    Arguments getArguments();
 }

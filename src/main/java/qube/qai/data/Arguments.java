@@ -43,10 +43,7 @@ public class Arguments {
 
     public boolean hasResult(String name) {
         Object result = results.get(name);
-        if (result != null) {
-            return true;
-        }
-        return false;
+        return result != null;
     }
 
     public void putResultNames(String... names) {

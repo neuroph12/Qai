@@ -7,7 +7,7 @@ import java.util.UUID;
  */
 public interface UUIDServiceInterface {
 
-    public UUID createUUID();
+    UUID createUUID();
 
-    public String createUUIDString();
+    String createUUIDString();
 }

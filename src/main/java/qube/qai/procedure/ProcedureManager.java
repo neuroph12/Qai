@@ -31,7 +31,7 @@ public class ProcedureManager extends MessageListener {
 
     private Map<String, ProcedureWithState> procedures;
 
-    private enum ProcedureStates {READY, STARTED, ENDED, ERROR};
+    private enum ProcedureStates {READY, STARTED, ENDED, ERROR}
 
     public static ProcedureManager getInstance() {
         if (procedureManager != null) {

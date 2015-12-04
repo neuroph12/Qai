@@ -5,5 +5,5 @@ package qube.qai.procedure;
  */
 public interface ProcedureVisitor {
 
-    public Object visit(Procedure procedure, Object data);
+    Object visit(Procedure procedure, Object data);
 }

@@ -33,7 +33,7 @@ public class Matrix {
      */
     public Matrix transpose() {
         BasicMatrix result = matrix.transpose();
-        Matrix newInstance = (Matrix) newInstance();
+        Matrix newInstance = newInstance();
         newInstance.setMatrix(result);
 
         return newInstance;
@@ -45,7 +45,7 @@ public class Matrix {
      */
     public Matrix negate() {
         BasicMatrix result = this.matrix.negate();
-        Matrix newInstance = (Matrix) newInstance();
+        Matrix newInstance = newInstance();
         newInstance.setMatrix(result);
 
         return newInstance;
@@ -57,7 +57,7 @@ public class Matrix {
      */
     public Matrix add(Matrix input) {
         BasicMatrix result = this.matrix.add(input.getMatrix());
-        Matrix newInstance = (Matrix) newInstance();
+        Matrix newInstance = newInstance();
         newInstance.setMatrix(result);
 
         return newInstance;
@@ -69,7 +69,7 @@ public class Matrix {
      */
     public Matrix multiplyElements(Matrix input) {
         BasicMatrix result = this.matrix.multiplyElements(input.getMatrix());
-        Matrix newInstance = (Matrix) newInstance();
+        Matrix newInstance = newInstance();
         newInstance.setMatrix(result);
 
         return newInstance;
@@ -81,7 +81,7 @@ public class Matrix {
      */
     public Matrix multiplyRight(Matrix QaiMatrix) {
         BasicMatrix result = matrix.multiply(QaiMatrix.getMatrix());
-        Matrix newInstance = (Matrix) newInstance();
+        Matrix newInstance = newInstance();
         newInstance.setMatrix(result);
 
         return newInstance;
@@ -93,7 +93,7 @@ public class Matrix {
      */
     public Matrix multiplyLeft(Matrix QaiMatrix) {
         BasicMatrix result = matrix.multiplyLeft(QaiMatrix.getMatrix());
-        Matrix newInstance = (Matrix) newInstance();
+        Matrix newInstance = newInstance();
         newInstance.setMatrix(result);
 
         return newInstance;
@@ -105,7 +105,7 @@ public class Matrix {
      */
     public Matrix modify(ActivationFunction function) {
         BasicMatrix result = matrix.modify(function);
-        Matrix newInstance = (Matrix) newInstance();
+        Matrix newInstance = newInstance();
         newInstance.setMatrix(result);
 
         return newInstance;
