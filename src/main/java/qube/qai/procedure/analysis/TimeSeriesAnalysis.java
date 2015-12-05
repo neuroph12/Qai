@@ -8,9 +8,7 @@ import qube.qai.procedure.ProcedureChain;
  */
 public class TimeSeriesAnalysis extends ProcedureChain {
 
-    private static String NAME = "Time-Series Analysis";
-
-
+    public static String NAME = "Time-Series Analysis";
 
     private static String DESCRIPTION = "This is a procedure to analyze a given time series.";
     /**

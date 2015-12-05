@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Created by rainbird on 11/27/15.
  */
-public class Arguments {
+public class Arguments implements MetricTyped{
 
     private Set<String> argumentNames;
 
@@ -122,6 +122,23 @@ public class Arguments {
         }
 
         return false;
+    }
+
+    public Metrics buildMetrics() {
+        Metrics metrics = new Metrics();
+        for (String name : getArgumentNames()) {
+            double value = Double.NaN;
+            if (hasValue(name)) {
+                Object data = getSelector(name).getData();
+                if (data instanceof Number) {
+                    value = ((Number) data).doubleValue();
+                }
+            }
+
+            metrics.putValue(name, value);
+        }
+
+        return metrics;
     }
 
     @Override
