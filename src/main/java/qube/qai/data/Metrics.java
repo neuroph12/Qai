@@ -9,17 +9,17 @@ import java.util.Set;
  */
 public class Metrics implements MetricTyped {
 
-    private Map<String, Double> metrics;
+    private Map<String, Object> metrics;
 
     public Metrics() {
-        metrics = new HashMap<String, Double>();
+        metrics = new HashMap<String, Object>();
     }
 
     public Set<String> getNames() {
         return metrics.keySet();
     }
 
-    public Double getValue(String name) {
+    public Object getValue(String name) {
         return metrics.get(name);
     }
 
@@ -27,7 +27,7 @@ public class Metrics implements MetricTyped {
         metrics.put(name, value);
     }
 
-    public void putValue(String name, Double value) {
+    public void putValue(String name, Object value) {
         metrics.put(name, value);
     }
 
