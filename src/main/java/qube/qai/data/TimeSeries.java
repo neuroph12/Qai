@@ -1,14 +1,12 @@
 package qube.qai.data;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Created by rainbird on 12/4/15.
  */
-public class TimeSeries<T> {
+public class TimeSeries<T extends Number> {
 
     private TreeSet<TimeSeriesEntry> entries;
 
@@ -22,6 +20,26 @@ public class TimeSeries<T> {
 
     public Iterator<T> iterator() {
         return new TimeSeriesIterator<T>();
+    }
+
+    public Date[] toDates() {
+        Date[] dates = new Date[entries.size()];
+        int count = 0;
+        for (TimeSeriesEntry entry : entries) {
+            dates[count] = entry.getDate();
+            count++;
+        }
+        return dates;
+    }
+
+    public T[] toArray() {
+        T[] array = (T[]) Array.newInstance(Number.class, entries.size());
+        int count = 0;
+        for (TimeSeriesEntry entry : entries) {
+            array[count] = entry.getEntry();
+            count++;
+        }
+        return array;
     }
 
     class TimeSeriesIterator<T> implements Iterator<T> {

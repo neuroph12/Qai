@@ -22,6 +22,7 @@ public class Arguments implements MetricTyped{
         argumentNames = new HashSet<String>();
         resultNames = new HashSet<String>();
         arguments = new HashMap<String, Selector>();
+        results = new HashMap<String, Object>();
     }
 
     public Arguments(String... names) {
@@ -39,6 +40,10 @@ public class Arguments implements MetricTyped{
         if (resultNames.contains(name)) {
             results.put(name, result);
         }
+    }
+
+    public Object getResult(String name) {
+        return results.get(name);
     }
 
     public boolean hasResult(String name) {

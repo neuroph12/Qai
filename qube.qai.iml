@@ -78,7 +78,7 @@
     <orderEntry type="library" name="Maven: edu.ucar:netcdf4:4.5.5" level="project" />
     <orderEntry type="library" name="Maven: edu.ucar:cdm:4.5.5" level="project" />
     <orderEntry type="library" name="Maven: edu.ucar:udunits:4.5.5" level="project" />
-    <orderEntry type="library" name="Maven: joda-time:joda-time:2.2" level="project" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.9.1" level="project" />
     <orderEntry type="library" name="Maven: net.jcip:jcip-annotations:1.0" level="project" />
     <orderEntry type="library" name="Maven: edu.ucar:httpservices:4.5.5" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.2.6" level="project" />
@@ -151,6 +151,7 @@
     <orderEntry type="library" name="Maven: javax.persistence:persistence-api:1.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.uuid:java-uuid-generator:3.1.3" level="project" />
     <orderEntry type="library" name="Maven: org.ojalgo:ojalgo:38.2" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-jdk14:1.7.13" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
   </component>
 </module>

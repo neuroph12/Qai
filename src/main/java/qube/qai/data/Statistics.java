@@ -22,6 +22,12 @@ public class Statistics implements MetricTyped {
     private double percentileOf = 50.0D;
     private boolean roundDown = true;
 
+    public Statistics(Object[] data) {
+        this.data = new double[data.length];
+        for (int i = 0; i < data.length; i++) {
+            this.data[i] = ((Number)data[i]).doubleValue();
+        }
+    }
 
     public Statistics(double[] data) {
         this.data = data;

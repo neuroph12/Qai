@@ -26,6 +26,8 @@ public abstract class ProcedureChain extends BaseProcedure {
 
     public static String MATRIX_METRICS = "matrix metrics";
 
+    public static String MATRIX_DATA_METRICS = "matrix data metrics";
+
     public static String NETWORK_METRICS = "network metrics";
 
     public static String TIME_SERIES_METRICS = "time-series metrics";
@@ -39,6 +41,8 @@ public abstract class ProcedureChain extends BaseProcedure {
     public static String TIME_SERIES = "tine series";
 
     public static String SELECTED_ITEMS = "selected items";
+
+    protected boolean debug = true;
 
     protected String uuid;
 

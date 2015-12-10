@@ -1,5 +1,7 @@
 package qube.qai.data;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -33,5 +35,19 @@ public class Metrics implements MetricTyped {
 
     public Metrics buildMetrics() {
         return this;
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuffer buffer = new StringBuffer();
+        for (String name : metrics.keySet()) {
+            buffer.append("[");
+            buffer.append(name).append(": ");
+            Object value = metrics.get(name);
+            buffer.append(value).append("]");
+        }
+
+        return buffer.toString();
     }
 }

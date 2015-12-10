@@ -6,6 +6,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+import qube.qai.matrix.TestTimeSeries;
 import qube.qai.procedure.TestAnalysisProcedures;
 import qube.qai.data.analysis.TestChangepointAdapter;
 import qube.qai.data.analysis.TestProcedureChain;
@@ -64,6 +65,7 @@ public class QaiBaseTestCase extends TestCase {
 
         // matrix
         suite.addTestSuite(TestMatrix.class);
+        suite.addTestSuite(TestTimeSeries.class);
 
         // network
         suite.addTestSuite(TestNetwork.class);
