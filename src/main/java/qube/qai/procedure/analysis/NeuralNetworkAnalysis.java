@@ -1,6 +1,8 @@
 package qube.qai.procedure.analysis;
 
+import grph.report.Metric;
 import qube.qai.data.Arguments;
+import qube.qai.data.Metrics;
 import qube.qai.data.Selector;
 import qube.qai.data.selectors.DataSelector;
 import qube.qai.network.neural.NeuralNetwork;
@@ -32,7 +34,8 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
     public void buildArguments() {
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_NEURAL_NETWORK);
-        arguments.putResultNames(MATRIX_METRICS, NETWORK_METRICS, TIME_SERIES_METRICS, CHANGE_POINTS);
+        // MATRIX_METRICS, TIME_SERIES_METRICS, CHANGE_POINTS
+        arguments.putResultNames(NETWORK_METRICS);
     }
 
     @Override
@@ -43,10 +46,15 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
             throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
         }
 
-        // and when we are done,we set the return value
-        Selector<Double> result = new DataSelector<Double>(Double.valueOf(0));
-        String argumentName = name + ".result";
-        arguments.setArgument(argumentName, result);
+        NeuralNetwork neuralNetwork = (NeuralNetwork) arguments.getSelector(INPUT_NEURAL_NETWORK).getData();
+        if (neuralNetwork == null) {
+            logger.error("Input neural-network has not been initialized properly: null value");
+            return;
+        }
+
+        Metrics networkMetrics = neuralNetwork.buildMetrics();
+        log("adding '" + NETWORK_METRICS + "' and '" + MATRIX_METRICS + "' to return values");
+        arguments.addResult(NETWORK_METRICS, networkMetrics);
     }
 
     /**

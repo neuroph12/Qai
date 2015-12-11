@@ -32,8 +32,7 @@ public class MatrixStatistics extends ProcedureChain {
     public void buildArguments() {
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_MATRIX);
-        arguments.getResultNames().add(MATRIX_METRICS);
-        arguments.getResultNames().add(MATRIX_DATA_METRICS);
+        arguments.putResultNames(MATRIX_METRICS, MATRIX_DATA_METRICS);
     }
 
     @Override
@@ -49,8 +48,10 @@ public class MatrixStatistics extends ProcedureChain {
         List elements = matrix.getMatrix().toListOfElements();
         Statistics stats = new Statistics(elements.toArray());
         Metrics dataMetrics = stats.buildMetrics();
+        Metrics matrixMetrics = matrix.buildMetrics();
+
         log("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");
         arguments.addResult(MATRIX_DATA_METRICS, dataMetrics);
-        arguments.addResult(MATRIX_METRICS, matrix.buildMetrics());
+        arguments.addResult(MATRIX_METRICS, matrixMetrics);
     }
 }

@@ -44,7 +44,7 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
         metrics.putValue("number of vertices", getNumberOfVertices());
         metrics.putValue("number of edges", getNumberOfEdges());
         metrics.putValue("average degree", getAverageDegree());
-        metrics.putValue("clustering coefficient", getClusteringCoefficient());
+        //metrics.putValue("clustering coefficient", getClusteringCoefficient());
         metrics.putValue("density", getDensity());
         metrics.putValue("diameter", getDiameter());
 

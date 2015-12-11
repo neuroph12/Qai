@@ -40,13 +40,14 @@ public class NeuralNetwork extends Network {
     }
 
     /**
+     * @TODO is there a particular reason for this?
      * Neural-Networks cannot be built from an external model
      */
-    @Override
-    public void buildFromAdjacencyMatrix() {
-        adjacencyMatrix = weights;
-        super.buildFromAdjacencyMatrix();
-    }
+//    @Override
+//    public void buildFromAdjacencyMatrix() {
+//        adjacencyMatrix = weights;
+//        super.buildFromAdjacencyMatrix();
+//    }
 
     /**
      * a neural graph in our case, has a bias-vector

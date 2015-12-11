@@ -13,6 +13,7 @@ import qube.qai.data.selectors.DataSelector;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.TestTimeSeries;
 import qube.qai.network.Network;
+import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.analysis.*;
 
 import java.util.Collection;
@@ -32,23 +33,40 @@ public class TestAnalysisProcedures extends TestCase {
      * do the testing for the NeuralNetworkAnalysis class
      * @throws Exception
      */
-    public void restNeuralNetworkAnalysis() throws Exception {
+    public void testNeuralNetworkAnalysis() throws Exception {
 
         NeuralNetworkAnalysis statistics = new NeuralNetworkAnalysis();
 
         Arguments arguments = statistics.getArguments();
         assertNotNull("arguments may not be null", arguments);
 
-        // @TODO test not yet implemented
-        fail("test not complete");
+        Matrix matrix = Matrix.createMatrix(true, 100, 100);
+        NeuralNetwork network = new NeuralNetwork();
+        network.buildFromAdjacencyMatrix(matrix);
 
+        Selector<NeuralNetwork> selector = new DataSelector<NeuralNetwork>(network);
+        statistics.getArguments().setArgument(NeuralNetworkAnalysis.INPUT_NEURAL_NETWORK, selector);
+
+        checkResultsOf(statistics);
+
+        assertTrue("there has to be some results", !statistics.getArguments().getResultNames().isEmpty());
+        log("results:" + statistics.getArguments().getResultNames());
+        for (String name : statistics.getArguments().getResultNames()) {
+            Object result = statistics.getArguments().getResult(name);
+            if (result instanceof Metrics) {
+                log("found metrics: " + name);
+                log(((Metrics)result).toString());
+            } else {
+                log("result: " + result + " value: " + result);
+            }
+        }
     }
 
     /**
      * do the testing for the MatrixAnalysis class
      * @throws Exception
      */
-    public void restMatrixStatistics() throws Exception {
+    public void testMatrixStatistics() throws Exception {
 
         MatrixStatistics statistics = new MatrixStatistics();
 
@@ -113,7 +131,7 @@ public class TestAnalysisProcedures extends TestCase {
      * do the testing for the NeuralNetworkForwardPropagation class
      * @throws Exception
      */
-    public void restTimeSeriesAnalysis() throws Exception {
+    public void testTimeSeriesAnalysis() throws Exception {
 
         TimeSeriesAnalysis statistics = new TimeSeriesAnalysis();
 
@@ -145,7 +163,7 @@ public class TestAnalysisProcedures extends TestCase {
      * do the testing for the NetworkStatistics class
      * @throws Exception
      */
-    public void restNetworkStatistics() throws Exception {
+    public void testNetworkStatistics() throws Exception {
 
         NetworkStatistics statistics = new NetworkStatistics();
 
