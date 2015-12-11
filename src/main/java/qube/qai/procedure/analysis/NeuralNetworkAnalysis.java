@@ -1,10 +1,8 @@
 package qube.qai.procedure.analysis;
 
-import grph.report.Metric;
 import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
 import qube.qai.data.Selector;
-import qube.qai.data.selectors.DataSelector;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureChain;
@@ -34,7 +32,6 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
     public void buildArguments() {
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_NEURAL_NETWORK);
-        // MATRIX_METRICS, TIME_SERIES_METRICS, CHANGE_POINTS
         arguments.putResultNames(NETWORK_METRICS);
     }
 
@@ -55,6 +52,7 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
         Metrics networkMetrics = neuralNetwork.buildMetrics();
         log("adding '" + NETWORK_METRICS + "' and '" + MATRIX_METRICS + "' to return values");
         arguments.addResult(NETWORK_METRICS, networkMetrics);
+
     }
 
     /**
@@ -75,7 +73,7 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
             neuralNetworkAnalysis.addChild(networkStatistics);
 
             // select only some of the results which we have
-            SelectProcedure selectProcedure = new SelectProcedure();
+            SortingPercentilesProcedure selectProcedure = new SortingPercentilesProcedure();
             neuralNetworkAnalysis.addChild(selectProcedure);
 
             // change-point analysis of the given time series as well
@@ -123,7 +121,7 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
             return data;
         }
 
-        public Object visit(SelectProcedure procedure, Object data) {
+        public Object visit(SortingPercentilesProcedure procedure, Object data) {
 
             return data;
         }

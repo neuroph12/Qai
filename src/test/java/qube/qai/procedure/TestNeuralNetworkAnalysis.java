@@ -14,7 +14,8 @@ import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
  */
 public class TestNeuralNetworkAnalysis extends TestCase {
 
-    private boolean debug = true;
+    // code repeated in TestAnalysisProcedures
+    /*private boolean debug = true;
 
     public void testNeuralNetworkAnalysis() throws Exception {
 
@@ -45,12 +46,12 @@ public class TestNeuralNetworkAnalysis extends TestCase {
         }
     }
 
-    /**
+    *//**
      * run the given procedure and check that every
      * result parameter mentioned in the procedure
      * is actually to be found in the arguments
      * @param statistics
-     */
+     *//*
     private void checkResultsOf(ProcedureChain statistics) {
 
         long start = System.currentTimeMillis();
@@ -72,5 +73,5 @@ public class TestNeuralNetworkAnalysis extends TestCase {
             System.out.println(message);
             //logger.info(message);
         }
-    }
+    }*/
 }
