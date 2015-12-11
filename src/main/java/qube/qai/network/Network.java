@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.ojalgo.access.Access2D;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.matrix.store.PhysicalStore;
+import qube.qai.data.MetricTyped;
+import qube.qai.data.Metrics;
 import qube.qai.matrix.Matrix;
 
 import java.io.Serializable;
@@ -18,7 +20,9 @@ import java.util.Set;
  * to get a handle on the backingGrph on which the missing algorithms
  * can be called
  */
-public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements Serializable {
+public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements Serializable, MetricTyped {
+
+    protected boolean makeMatrix = true;
 
     protected Matrix adjacencyMatrix;
 
@@ -26,7 +30,32 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
         super();
     }
 
+    public Metrics buildMetrics() {
+
+        Metrics metrics = null;
+
+        if (makeMatrix) {
+            buildAdjacencyMatrix();
+            metrics = adjacencyMatrix.buildMetrics();
+        } else {
+            metrics = new Metrics();
+        }
+
+        metrics.putValue("number of vertices", getNumberOfVertices());
+        metrics.putValue("number of edges", getNumberOfEdges());
+        metrics.putValue("average degree", getAverageDegree());
+        metrics.putValue("clustering coefficient", getClusteringCoefficient());
+        metrics.putValue("density", getDensity());
+        metrics.putValue("diameter", getDiameter());
+
+        return metrics;
+    }
+
     public void buildAdjacencyMatrix() {
+        // this is when we refuse to create an adjacency matrix
+        if (!makeMatrix) {
+            return;
+        }
 
         int size = getNumberOfVertices();
         Access2D.Builder<PrimitiveMatrix> builder = PrimitiveMatrix.getBuilder(size, size);
@@ -94,6 +123,14 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
                 }
             }
         }
+    }
+
+    public boolean isMakeMatrix() {
+        return makeMatrix;
+    }
+
+    public void setMakeMatrix(boolean makeMatrix) {
+        this.makeMatrix = makeMatrix;
     }
 
     public Matrix getAdjacencyMatrix() {

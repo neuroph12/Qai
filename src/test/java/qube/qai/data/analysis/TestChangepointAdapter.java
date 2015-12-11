@@ -19,7 +19,7 @@ public class TestChangepointAdapter extends TestCase {
     public void testChangePointAdapter() throws Exception {
 
         ChangepointAdapter changepointAdapter = new ChangepointAdapter();
-        double[][] data = createDummyData(1000);
+        double[][] data = createDummyData(10000);
 
         Collection<ChangepointAdapter.ChangePoint> result = changepointAdapter.collectChangePoints(data);
 
@@ -29,7 +29,6 @@ public class TestChangepointAdapter extends TestCase {
             } else {
                 log("found: x: " + point.getX() + " y:" + point.getY() + " probability: " + point.getProbability());
             }
-
         }
 
     }

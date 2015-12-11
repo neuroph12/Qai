@@ -16,8 +16,6 @@ import java.util.List;
  */
 public class MatrixStatistics extends ProcedureChain {
 
-    private Logger logger = LoggerFactory.getLogger("MatrixStatistics");
-
     public static String NAME = "Matrix Statistics";
 
     public static String DESCRIPTION = "Analyses the distribution of the numbers in the matrix, " +
@@ -49,11 +47,9 @@ public class MatrixStatistics extends ProcedureChain {
         }
 
         List elements = matrix.getMatrix().toListOfElements();
-        Statistics matrixStats = new Statistics(elements.toArray());
-        Metrics dataMetrics = matrixStats.buildMetrics();
-        if (debug) {
-            logger.info("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");
-        }
+        Statistics stats = new Statistics(elements.toArray());
+        Metrics dataMetrics = stats.buildMetrics();
+        log("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");
         arguments.addResult(MATRIX_DATA_METRICS, dataMetrics);
         arguments.addResult(MATRIX_METRICS, matrix.buildMetrics());
     }

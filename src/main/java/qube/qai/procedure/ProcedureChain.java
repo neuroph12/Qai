@@ -2,6 +2,8 @@ package qube.qai.procedure;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
 import qube.qai.services.implementation.DataSelectorFactory;
@@ -42,6 +44,8 @@ public abstract class ProcedureChain extends BaseProcedure {
 
     public static String SELECTED_ITEMS = "selected items";
 
+    protected Logger logger = LoggerFactory.getLogger("Procedure Logger");
+
     protected boolean debug = true;
 
     protected String uuid;
@@ -77,6 +81,12 @@ public abstract class ProcedureChain extends BaseProcedure {
     public ProcedureChain(ProcedureChain parent) {
         this();
         this.parent = parent;
+    }
+
+    protected void log(String message) {
+        if (debug) {
+            logger.info(message);
+        }
     }
 
     /**
