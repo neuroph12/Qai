@@ -30,40 +30,6 @@ public class TestAnalysisProcedures extends TestCase {
     Logger logger = LoggerFactory.getLogger("TestAnalysisProcedures");
 
     /**
-     * Moved to TestNeuralNetworkAnalysis class
-     * do the testing for the NeuralNetworkAnalysis class
-     * @throws Exception
-     */
-//    public void testNeuralNetworkAnalysis() throws Exception {
-//
-//        NeuralNetworkAnalysis statistics = new NeuralNetworkAnalysis();
-//
-//        Arguments arguments = statistics.getArguments();
-//        assertNotNull("arguments may not be null", arguments);
-//
-//        Matrix matrix = Matrix.createMatrix(true, 100, 100);
-//        NeuralNetwork network = new NeuralNetwork();
-//        network.buildFromAdjacencyMatrix(matrix);
-//
-//        Selector<NeuralNetwork> selector = new DataSelector<NeuralNetwork>(network);
-//        statistics.getArguments().setArgument(NeuralNetworkAnalysis.INPUT_NEURAL_NETWORK, selector);
-//
-//        checkResultsOf(statistics);
-//
-//        assertTrue("there has to be some results", !statistics.getArguments().getResultNames().isEmpty());
-//        log("results:" + statistics.getArguments().getResultNames());
-//        for (String name : statistics.getArguments().getResultNames()) {
-//            Object result = statistics.getArguments().getResult(name);
-//            if (result instanceof Metrics) {
-//                log("found metrics: " + name);
-//                log(((Metrics)result).toString());
-//            } else {
-//                log("result: " + result + " value: " + result);
-//            }
-//        }
-//    }
-
-    /**
      * do the testing for the MatrixAnalysis class
      * @throws Exception
      */
@@ -194,7 +160,7 @@ public class TestAnalysisProcedures extends TestCase {
      * do the testing for the NeuralNetworkForwardPropagation class
      * @throws Exception
      */
-    public void restNeuralNetworkForwardPropagation() throws Exception {
+    public void testNeuralNetworkForwardPropagation() throws Exception {
 
         NeuralNetworkForwardPropagation statistics = new NeuralNetworkForwardPropagation();
 

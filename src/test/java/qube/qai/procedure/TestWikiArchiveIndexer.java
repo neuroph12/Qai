@@ -13,7 +13,8 @@ public class TestWikiArchiveIndexer extends TestCase {
     private boolean debug = true;
 
     public void testSomething() throws Exception {
-        fail("test not yet implemented");
+        // @TODO a real test should instead be implemented
+        fail("a real test should instead be implemented");
     }
 
     /**

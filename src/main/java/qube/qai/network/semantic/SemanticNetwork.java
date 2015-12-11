@@ -22,7 +22,7 @@ import java.io.InputStream;
  */
 public class SemanticNetwork extends Network {
 
-    private boolean debug = true;
+    private boolean debug = false;
 
     private Tokenizer tokenizer = null;
 
