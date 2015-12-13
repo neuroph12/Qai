@@ -6,6 +6,8 @@ import org.ojalgo.matrix.PrimitiveMatrix;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
+import qube.qai.network.neural.function.ActivationFunction;
+import qube.qai.network.neural.function.DiffSigmoidFunction;
 import qube.qai.network.neural.function.LogitFunction;
 import qube.qai.network.neural.function.SigmoidFunction;
 
@@ -32,14 +34,14 @@ public class TestNeuralNetwork extends TestCase {
         ann.setActivationFunction(new SigmoidFunction());
         ann.setInverseFunction(new LogitFunction());
         // create the bias and weight matrices
-        double[] valuesA = {0.1, 0.1, 0.2};
+        double[] valuesA = {1.0, 1.0, 1.0};
         double[][] valuesB = {{0.1, 0.1, -0.1}, {0.1, 0.2, 0.1}, {0.2, -0.1, 0.6}};
 
         BasicMatrix a = PrimitiveMatrix.FACTORY.columns(valuesA);
         BasicMatrix b = PrimitiveMatrix.FACTORY.columns(valuesB);
 
         BasicMatrix c = b.multiply(a);
-        log(c.toString());
+        log("matrix c- after multiplication: " + c.toString());
 
         Vector bias = Vector.buildFromArray(valuesA);
         ann.setBias(bias);
@@ -53,6 +55,21 @@ public class TestNeuralNetwork extends TestCase {
         Vector result = ann.propagate(input);
 
         log(result.getMatrix().toString());
+    }
+
+    public void testActivationFunction() throws Exception {
+        ActivationFunction sigmoid = new SigmoidFunction();
+        ActivationFunction logit = new LogitFunction();
+        ActivationFunction diffSigmoid = new DiffSigmoidFunction();
+
+        for (int i = 0; i < 1000; i++) {
+            double in = 0.01 * i;
+            double sig = sigmoid.invoke(in);
+            double diff = diffSigmoid.invoke(sig);
+            double inverse = logit.invoke(sig);
+            double delta = Math.abs(Math.abs(in) - Math.abs(inverse));
+            log("number: " + in + " sigmoid: " + sig + " diff: " + diff + " logit: " + inverse + " delta: " + delta);
+        }
     }
 
     /**

@@ -23,10 +23,10 @@ public class TestNeuralNetworkTraining extends TestCase {
         // create the neural-network and add the elements
         NeuralNetwork neuralNetwork = new NeuralNetwork();
         // weight matrix
-        Matrix weights = Matrix.buildFromArray(new double[][] {{0.1, 0.1}, {0.1, 0.1}});
+        Matrix weights = Matrix.buildFromArray(new double[][] {{0.5, 0.5}, {0.5, 0.5}});
         neuralNetwork.setWeights(weights);
         // bias
-        Vector bias = Vector.buildFromArray(new double[]{0.5, 0.5});
+        Vector bias = Vector.buildFromArray(new double[]{0.01, 0.01});
         neuralNetwork.setBias(bias);
         // error
         Vector error = Vector.buildFromArray(new double[]{0.0, 0.0});
@@ -34,16 +34,21 @@ public class TestNeuralNetworkTraining extends TestCase {
 
         BasicNetworkTrainer trainer = new BasicNetworkTrainer(neuralNetwork);
         trainer.trainNetwork(inputOne, targetOne);
+        log("weights:");
+        log(neuralNetwork.getWeights().toString());
+        log("bias");
+        log(neuralNetwork.getBias().toString());
         log("error:");
-        log(neuralNetwork.getError());
+        log(neuralNetwork.getError().toString());
     }
 
     private void initInputPatterns() {
-        inputOne = Vector.buildFromArray(new double[]{10.0, 10.0});
-        targetOne = Vector.buildFromArray(new double[]{1.0, 0.0});
+        inputOne = Vector.buildFromArray(new double[]{1.0, 1.0});
+        targetOne = Vector.buildFromArray(new double[]{1.0, 1.0});
     }
 
-    private void log(Vector vector) {
+    // made this to toString() method in Vector
+    /*private void log(Vector vector) {
 
         boolean areChildren = false;
         StringBuffer buffer = new StringBuffer("(");
@@ -60,7 +65,7 @@ public class TestNeuralNetworkTraining extends TestCase {
         }
         buffer.append(")");
         log(buffer.toString());
-    }
+    }*/
 
     private void log(String message) {
         if (debug) {

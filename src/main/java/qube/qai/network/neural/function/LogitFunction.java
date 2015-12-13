@@ -12,7 +12,7 @@ public class LogitFunction implements ActivationFunction {
      */
     public double invoke(double input) {
 
-        return Math.log(input/(1-input));
+        return Math.log(input) - Math.log(1-input);
     }
 
     public Number invoke(Number input) {

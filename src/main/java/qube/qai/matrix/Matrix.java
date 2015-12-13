@@ -30,6 +30,9 @@ public class Matrix implements MetricTyped {
     }
 
     public List<? extends Number> getElementsAsList() {
+        if (matrix == null) {
+            return null;
+        }
         return matrix.toListOfElements();
     }
 
@@ -71,6 +74,12 @@ public class Matrix implements MetricTyped {
         Matrix matrix = new Matrix(basicMatrix);
 
         return matrix;
+    }
+
+    public static Matrix buildFromList(List<? extends Number> list) {
+        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+        BasicMatrix matrix = factory.rows(list);
+        return new Matrix(matrix);
     }
 
     public static Matrix buildFromArray(double[][] array) {
@@ -141,6 +150,14 @@ public class Matrix implements MetricTyped {
         BasicMatrix result = matrix.modify(function);
         Matrix newInstance = new Matrix(result);
         return newInstance;
+    }
+
+    @Override
+    public String toString() {
+        if (matrix != null) {
+            return matrix.toString();
+        }
+        return super.toString();
     }
 
     public BasicMatrix getMatrix() {
