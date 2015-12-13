@@ -1,6 +1,8 @@
 package qube.qai.network;
 
 import com.google.inject.name.Named;
+import grph.oo.ObjectGrph;
+import grph.oo.ObjectPath;
 import qube.qai.main.QaiBaseTestCase;
 import qube.qai.network.wiki.WikiNetwork;
 import qube.qai.persistence.WikiArticle;
@@ -9,6 +11,8 @@ import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.Set;
+
 /**
  * Created by rainbird on 11/21/15.
  */
@@ -33,7 +37,7 @@ public class TestWikiNetwork extends QaiBaseTestCase {
      * Network experiment average degree: 8.428428449973634
      * @throws Exception
      */
-    public void restWikiNetwork() throws Exception {
+    public void testWikiNetwork() throws Exception {
 
         Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
         assertNotNull("there has to be a result for the search", results);
@@ -64,34 +68,38 @@ public class TestWikiNetwork extends QaiBaseTestCase {
         //log("Network diameter: " + network.getDiameter());
     }
 
-//    public void restGRPHNetwork() {
-//        // this line is recommended by the authors of grph-library
-//        ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
-//
-//        ObjectGrph graph = new ObjectGrph<String, String>();
-//        //IntSet vertices = graph.getVertices();
-//        String[] vertices = {"paris", "london", "vienna", "luxemburg", "varsaw", };
-//
-//        for (String vertex : vertices) {
-//            graph.addVertex(vertex);
-//        }
-//
-//        graph.addSimpleEdge("paris", "paris-vienna", "vienna", false);
-//        graph.addSimpleEdge("london", "london-vienna", "vienna", false);
-//        graph.addSimpleEdge("paris", "paris-luxemburg", "luxemburg", false);
-//        graph.addSimpleEdge("paris", "paris-varsaw", "varsaw", false);
-//        graph.addSimpleEdge("vienna", "vienna-luxemburg", "luxemburg", false);
-//        graph.addSimpleEdge("vienna", "vienna-varsaw", "varsaw", false);
-//        graph.addSimpleEdge("varsaw", "varsaw-luxemburg", "luxemburg", false);
-//
-//        Collection<String> viennaEdges = graph.getIncidentEdges("vienna");
-//        log("vienna's edges:");
-//        for (String edge : viennaEdges) {
-//            log(edge);
-//        }
-//
-//        //graph.getD;
-//    }
+    public void testGRPHNetwork() {
+        // this line is recommended by the authors of grph-library
+        ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
+
+        ObjectGrph graph = new ObjectGrph<String, String>();
+        //IntSet vertices = graph.getVertices();
+        String[] vertices = {"paris", "london", "vienna", "luxemburg", "varsaw", };
+
+        for (String vertex : vertices) {
+            graph.addVertex(vertex);
+        }
+
+        graph.addSimpleEdge("paris", "paris-vienna", "vienna", false);
+        graph.addSimpleEdge("london", "london-vienna", "vienna", false);
+        graph.addSimpleEdge("paris", "paris-luxemburg", "luxemburg", false);
+        graph.addSimpleEdge("paris", "paris-varsaw", "varsaw", false);
+        graph.addSimpleEdge("vienna", "vienna-luxemburg", "luxemburg", false);
+        graph.addSimpleEdge("vienna", "vienna-varsaw", "varsaw", false);
+        graph.addSimpleEdge("varsaw", "varsaw-luxemburg", "luxemburg", false);
+
+        Collection<String> viennaEdges = graph.getIncidentEdges("vienna");
+        log("vienna's edges:");
+        for (String edge : viennaEdges) {
+            log(edge);
+        }
+
+        Set<ObjectPath> allPaths = graph.getAllPaths();
+        for (ObjectPath path : allPaths) {
+            log("path: " + path.toString());
+        }
+
+    }
 
     private void log(String message) {
         if (debug) {

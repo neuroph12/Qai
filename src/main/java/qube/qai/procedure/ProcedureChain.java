@@ -38,6 +38,8 @@ public abstract class ProcedureChain extends BaseProcedure {
 
     public static String CRITERIA = "criteria";
 
+    public static String AVERAGE_TIME_SERIES = "Average time-series";
+
     public static String CHANGE_POINTS = "change points";
 
     public static String TIME_SERIES = "tine series";

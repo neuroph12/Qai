@@ -16,6 +16,10 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
 
     private NeuralNetwork neuralNetwork;
 
+    public BasicNetworkTrainer(NeuralNetwork neuralNetwork) {
+        this.neuralNetwork = neuralNetwork;
+    }
+
     /**
      * @param input
      * @param target
@@ -30,7 +34,7 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
 
         Vector passError = (Vector) result.negate().add(target);
         Matrix delta = neuralNetwork.getWeights().
-                multiplyLeft(input.modify(neuralNetwork.getDiffActivationFunction())).
+                multiply(input.modify(neuralNetwork.getDiffActivationFunction())).
                 multiplyElements(passError);
 
         // first correct the weights in the builder with Widrow-Hoff factors
@@ -75,5 +79,13 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
             neuralNetwork.getError().setMatrix(PrimitiveMatrix.FACTORY.makeZero(passError.getMatrix().countRows(), passError.getMatrix().countColumns()));
         }
         neuralNetwork.setError((Vector) neuralNetwork.getError().add(passError.multiplyElements(passError)));
+    }
+
+    public NeuralNetwork getNeuralNetwork() {
+        return neuralNetwork;
+    }
+
+    public void setNeuralNetwork(NeuralNetwork neuralNetwork) {
+        this.neuralNetwork = neuralNetwork;
     }
 }

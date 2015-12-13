@@ -7,6 +7,8 @@ import qube.qai.data.MetricTyped;
 import qube.qai.data.Metrics;
 import qube.qai.network.neural.function.ActivationFunction;
 
+import java.util.List;
+
 /**
  * Created by rainbird on 11/22/15.
  * base class for the
@@ -18,13 +20,17 @@ public class Matrix implements MetricTyped {
      * at this point the decision seems to be in favor of ojAlgo
      */
 
-    private BasicMatrix matrix;
+    protected BasicMatrix matrix;
 
     public Matrix() {
     }
 
     public Matrix(BasicMatrix matrix) {
         this.matrix = matrix;
+    }
+
+    public List<? extends Number> getElementsAsList() {
+        return matrix.toListOfElements();
     }
 
     /**
@@ -67,8 +73,14 @@ public class Matrix implements MetricTyped {
         return matrix;
     }
 
+    public static Matrix buildFromArray(double[][] array) {
+        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+        BasicMatrix columns = factory.columns(array);
+        Matrix matrix = new Matrix(columns);
+        return matrix;
+    }
+
     /**
-     * @TODO consider method's return value
      * @return
      */
     public Matrix transpose() {
@@ -78,7 +90,6 @@ public class Matrix implements MetricTyped {
     }
 
     /**
-     * @TODO consider method's return value
      * @return
      */
     public Matrix negate() {
@@ -88,7 +99,6 @@ public class Matrix implements MetricTyped {
     }
 
     /**
-     * @TODO consider method's return value
      * @return
      */
     public Matrix add(Matrix input) {
@@ -98,7 +108,6 @@ public class Matrix implements MetricTyped {
     }
 
     /**
-     * @TODO consider method's return value
      * @return
      */
     public Matrix multiplyElements(Matrix input) {
@@ -108,17 +117,15 @@ public class Matrix implements MetricTyped {
     }
 
     /**
-     * @TODO consider method's return value
      * @return
      */
-    public Matrix multiplyRight(Matrix QaiMatrix) {
+    public Matrix multiply(Matrix QaiMatrix) {
         BasicMatrix result = matrix.multiply(QaiMatrix.getMatrix());
         Matrix newInstance = new Matrix(result);
         return newInstance;
     }
 
     /**
-     * @TODO consider method's return value
      * @return
      */
     public Matrix multiplyLeft(Matrix QaiMatrix) {
@@ -128,7 +135,6 @@ public class Matrix implements MetricTyped {
     }
 
     /**
-     * @TODO consider method's return value
      * @return
      */
     public Matrix modify(ActivationFunction function) {

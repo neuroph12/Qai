@@ -7,22 +7,20 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 import qube.qai.matrix.TestTimeSeries;
+import qube.qai.network.*;
 import qube.qai.procedure.TestAnalysisProcedures;
 import qube.qai.data.analysis.TestChangepointAdapter;
 import qube.qai.data.analysis.TestProcedureChain;
 import qube.qai.data.selectors.TestHazelcastSelector;
 import qube.qai.data.stores.TestDataStore;
 import qube.qai.matrix.TestMatrix;
-import qube.qai.network.TestNetwork;
-import qube.qai.network.TestNeuralNetwork;
-import qube.qai.network.TestSemanticNetwork;
-import qube.qai.network.TestWikiNetwork;
 import qube.qai.persistence.mapstores.TestMapStore;
 import qube.qai.procedure.TestNeuralNetworkAnalysis;
 import qube.qai.procedure.TestWikiArchiveIndexer;
 import qube.qai.procedure.TestWikiRipperProcedure;
 import qube.qai.procedure.TestWikiSearch;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
+import qube.qai.services.implementation.TestUUIDGenerator;
 
 /**
  * Created by rainbird on 11/19/15.
@@ -49,7 +47,7 @@ public class QaiBaseTestCase extends TestCase {
      * when this suite is in use
      * @return
      */
-    /*public static Test suite() {
+    public static Test suite() {
         TestSuite suite = new TestSuite("All tests");
 
         // data.analysis
@@ -59,6 +57,9 @@ public class QaiBaseTestCase extends TestCase {
 
         // data.selectors
         suite.addTestSuite(TestHazelcastSelector.class);
+
+        // services.implementation
+        suite.addTestSuite(TestUUIDGenerator.class);
 
         // data.stores
         suite.addTestSuite(TestDataStore.class);
@@ -70,6 +71,7 @@ public class QaiBaseTestCase extends TestCase {
         // network
         suite.addTestSuite(TestNetwork.class);
         suite.addTestSuite(TestNeuralNetwork.class);
+        suite.addTestSuite(TestNeuralNetworkTraining.class);
         suite.addTestSuite(TestSemanticNetwork.class);
         suite.addTestSuite(TestWikiNetwork.class);
 
@@ -88,7 +90,7 @@ public class QaiBaseTestCase extends TestCase {
         suite.addTestSuite(TestProcedureVisitors.class);
 
         return suite;
-    }*/
+    }
 
 
 }

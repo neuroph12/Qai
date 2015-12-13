@@ -1,6 +1,9 @@
 package qube.qai.procedure.analysis;
 
 import qube.qai.data.Arguments;
+import qube.qai.data.TimeSeries;
+import qube.qai.matrix.Vector;
+import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.ProcedureChain;
 
 /**
@@ -40,5 +43,17 @@ public class NeuralNetworkForwardPropagation extends ProcedureChain {
         if (!arguments.isSatisfied()) {
             throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
         }
+
+        NeuralNetwork neuralNetwork = (NeuralNetwork) arguments.getSelector(INPUT_NEURAL_NETWORK).getData();
+        TimeSeries timeSeries = (TimeSeries) arguments.getSelector(INPUT_START_VECTOR).getData();
+        int numberOfIterations = (Integer) arguments.getSelector(INPUT_NUMBER_OF_STEPS).getData();
+
+        Vector in = new Vector();
+        for (int i = 0; i < numberOfIterations; i++) {
+            Vector out = neuralNetwork.propagate(in);
+            in = out;
+        }
+
+
     }
 }

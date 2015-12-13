@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.ojalgo.access.Access2D;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.matrix.store.PhysicalStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.data.MetricTyped;
 import qube.qai.data.Metrics;
 import qube.qai.matrix.Matrix;
@@ -21,6 +23,8 @@ import java.util.Set;
  * can be called
  */
 public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements Serializable, MetricTyped {
+
+    private Logger logger = LoggerFactory.getLogger("Network");
 
     protected boolean makeMatrix = true;
 
@@ -43,10 +47,30 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
 
         metrics.putValue("number of vertices", getNumberOfVertices());
         metrics.putValue("number of edges", getNumberOfEdges());
-        metrics.putValue("average degree", getAverageDegree());
-        //metrics.putValue("clustering coefficient", getClusteringCoefficient());
-        metrics.putValue("density", getDensity());
-        //metrics.putValue("diameter", getDiameter());
+
+        // unfortunately not all of the properties are to be found in all graphs
+        // those which don't make sense- usually these below, throw exceptions
+        // and therefore ignored in the metrics of the graph (or network)
+        try {
+            metrics.putValue("average degree", getAverageDegree());
+        } catch (Exception e) {
+            logger.error("error while calculating 'average degree': " + e.getMessage());
+        }
+        try {
+            metrics.putValue("clustering coefficient", getClusteringCoefficient());
+        } catch (Exception e) {
+            logger.error("error while calculating 'clustering coefficient': " + e.getMessage());
+        }
+        try {
+            metrics.putValue("density", getDensity());
+        } catch (Exception e) {
+            logger.error("error while calculating 'density': " + e.getMessage());
+        }
+        try {
+            metrics.putValue("diameter", getDiameter());
+        } catch (Exception e) {
+            logger.error("error while calculating 'diameter': " + e.getMessage());
+        }
 
         return metrics;
     }

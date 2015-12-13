@@ -3,10 +3,7 @@ package qube.qai.procedure;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.Arguments;
-import qube.qai.data.Metrics;
-import qube.qai.data.Selector;
-import qube.qai.data.TimeSeries;
+import qube.qai.data.*;
 import qube.qai.data.selectors.DataSelector;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.TestTimeSeries;
@@ -14,8 +11,7 @@ import qube.qai.network.Network;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.analysis.*;
 
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 import org.joda.time.DateTime;
 
@@ -190,32 +186,65 @@ public class TestAnalysisProcedures extends TestCase {
      * do the testing for the NeuralNetworkForwardPropagation class
      * @throws Exception
      */
-    public void restNeuralNetworkForwardPropagation() throws Exception {
+    public void testNeuralNetworkForwardPropagation() throws Exception {
 
         NeuralNetworkForwardPropagation statistics = new NeuralNetworkForwardPropagation();
 
         Arguments arguments = statistics.getArguments();
         assertNotNull("arguments may not be null", arguments);
 
-        // @TODO test not yet implemented
-        fail("test not complete");
+
     }
 
     /**
-     * do the testing for the SelectProcedure class
-     * @TODO this one is really a very tricky one, at this point i don't have any ideas
+     * do the testing for the SortingPercentilesProcedure class
      * @throws Exception
      */
-    public void restSelectProcedure() throws Exception {
+    public void testSortingPercentilesProcedure() throws Exception {
 
-        //
         SortingPercentilesProcedure statistics = new SortingPercentilesProcedure();
 
         Arguments arguments = statistics.getArguments();
         assertNotNull("arguments may not be null", arguments);
 
-        // @TODO test not yet implemented
-        fail("test not complete");
+        // generate time series, say, 100 of them and let the thing sort them out
+        int number = 100;
+        Date startDate = DateTime.parse("2015-1-1").toDate();
+        Date endDate = DateTime.now().toDate();
+
+        Map<String, Selector> timeSeriesMap = new HashMap<String, Selector>();
+        for (int i = 0; i < number; i++) {
+            TimeSeries<Double> timeSeries = TestTimeSeries.createTimeSeries(startDate, endDate);
+            Selector<TimeSeries> selector = new DataSelector<TimeSeries>(timeSeries);
+            String name = "entity_" + i;
+            timeSeriesMap.put(name, selector);
+        }
+
+        Selector<Map> collectionSelector = new DataSelector<Map>(timeSeriesMap);
+        statistics.getArguments().setArgument(SortingPercentilesProcedure.FROM, collectionSelector);
+
+        // @TODO is this really required in the latest form of the class and what it does?!?
+        Selector<String> criteria = new DataSelector<String>("criteria");
+        statistics.getArguments().setArgument(SortingPercentilesProcedure.CRITERIA, criteria);
+
+        checkResultsOf(statistics);
+
+        assertTrue("there has to be some results", !statistics.getArguments().getResultNames().isEmpty());
+        log("results:" + statistics.getArguments().getResultNames());
+        for (String name : statistics.getArguments().getResultNames()) {
+            Object result = statistics.getArguments().getResult(name);
+            int rank = 1;
+            if (result instanceof Map) {
+                Map<String, Statistics> statisticsMap = (Map<String, Statistics>) result;
+                for (String key : statisticsMap.keySet()) {
+                    Statistics stats = statisticsMap.get(key);
+                    log("stats: " + key + " average: " + stats.getAverage() + " with rank: " + rank);
+                    rank++;
+                }
+            } else if (result instanceof TimeSeries) {
+                log("The average time series: " + ((TimeSeries)result).toArray());
+            }
+        }
     }
 
     /**

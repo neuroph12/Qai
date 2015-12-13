@@ -1,6 +1,5 @@
 package qube.qai.network;
 
-import com.fasterxml.uuid.Generators;
 import junit.framework.TestCase;
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
@@ -11,7 +10,6 @@ import qube.qai.network.neural.function.LogitFunction;
 import qube.qai.network.neural.function.SigmoidFunction;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * Created by rainbird on 11/23/15.
@@ -34,28 +32,24 @@ public class TestNeuralNetwork extends TestCase {
         ann.setActivationFunction(new SigmoidFunction());
         ann.setInverseFunction(new LogitFunction());
         // create the bias and weight matrices
-        double[][] valuesA = {{0.1}, {0.1}, {0.2}};
-        double[][] valuesB = {{0.1,0.1,-0.1}, {0.1,0.2,0.1}, {0.2,-0.1,0.6}};
+        double[] valuesA = {0.1, 0.1, 0.2};
+        double[][] valuesB = {{0.1, 0.1, -0.1}, {0.1, 0.2, 0.1}, {0.2, -0.1, 0.6}};
 
         BasicMatrix a = PrimitiveMatrix.FACTORY.columns(valuesA);
         BasicMatrix b = PrimitiveMatrix.FACTORY.columns(valuesB);
 
-        BasicMatrix c = b.multiplyLeft(a);
+        BasicMatrix c = b.multiply(a);
+        log(c.toString());
 
-        //log(c.toString());
-
-        Vector bias = new Vector();
-        bias.setMatrix(a);
+        Vector bias = Vector.buildFromArray(valuesA);
         ann.setBias(bias);
 
         Matrix weights = new Matrix();
         weights.setMatrix(b);
         ann.setWeights(weights);
 
-        double[][] in = {{311},{189},{273}};
-        BasicMatrix d = PrimitiveMatrix.FACTORY.columns(in);
-        Vector input = new Vector();
-        input.setMatrix(d);
+        double[] in = {311, 189, 273};
+        Vector input = Vector.buildFromArray(in);
         Vector result = ann.propagate(input);
 
         log(result.getMatrix().toString());
@@ -65,7 +59,7 @@ public class TestNeuralNetwork extends TestCase {
      * this is for running the training routine
      * with something easy- XOR is pretty much easiest what you get
      */
-    public void testXOR() throws Exception {
+    /*public void testXOR() throws Exception {
 //        double[][] inputPatterns  = {{1,1}, {1,0}, {0,1}, {0,0}};
 //        double[][] outputPatterns = {{0,0}, {1,0}, {1,0}, {0,0}};
 
@@ -83,9 +77,9 @@ public class TestNeuralNetwork extends TestCase {
         outputPatterns.add(new Double[][]{{0.0},{0.0}});
 
         // we first make a NeuralNetworkNode
-        NeuralNetwork ann = new NeuralNetwork();
-        ann.setActivationFunction(new SigmoidFunction());
-        ann.setInverseFunction(new LogitFunction());
+        NeuralNetwork neuralNetwork = new NeuralNetwork();
+        neuralNetwork.setActivationFunction(new SigmoidFunction());
+        neuralNetwork.setInverseFunction(new LogitFunction());
         // create the bias and weight matrices
         double[][] valuesA = {{0.1},{0.1}};
         double[][] valuesB = {{0.1,0.1}, {0.1,0.1}};
@@ -95,11 +89,11 @@ public class TestNeuralNetwork extends TestCase {
 
         Vector bias = new Vector();
         bias.setMatrix(a);
-        ann.setBias(bias);
+        neuralNetwork.setBias(bias);
 
         Matrix weights = new Matrix();
         weights.setMatrix(b);
-        ann.setWeights(weights);
+        neuralNetwork.setWeights(weights);
 
         Vector input = new Vector();
         Vector target = new Vector();
@@ -107,17 +101,17 @@ public class TestNeuralNetwork extends TestCase {
             for (int j = 0; j < inputPatterns.size(); j++) {
                 input.setMatrix(PrimitiveMatrix.FACTORY.columns(inputPatterns.get(j)));
                 target.setMatrix(PrimitiveMatrix.FACTORY.columns(outputPatterns.get(j)));
-                //ann.trainNetwork(input, target);
+                //neuralNetwork.trainNetwork(input, target);
             }
-            log("pass: " + i + " error: " + ann.getError().getMatrix().toString());
+            log("pass: " + i + " error: " + neuralNetwork.getError().getMatrix().toString());
         }
-    }
+    }*/
 
     /*
     depending on how you generate the UUID you have different fields which are accessible
     this test is in order to demonstrate the differences
      */
-    public void testUUIDGenerators() throws Exception {
+    /*public void testUUIDGenerators() throws Exception {
 
         int numerOfUUIDsToGenerate = 1;
 
@@ -149,7 +143,7 @@ public class TestNeuralNetwork extends TestCase {
             //log("clock sequence:" + uuid.clockSequence());
             //log("node: " + uuid.node());
         }
-    }
+    }*/
 
     protected void log(String message) {
         if (debug) {

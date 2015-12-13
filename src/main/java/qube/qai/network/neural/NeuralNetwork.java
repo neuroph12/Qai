@@ -32,32 +32,26 @@ public class NeuralNetwork extends Network {
 
     private String description;
 
-    public NeuralNetwork() {
-        activationFunction = new SigmoidFunction();
-        inverseFunction = new LogitFunction();
-        diffActivationFunction = new DiffSigmoidFunction();
-        error = new Vector();
-    }
-
     /**
-     * @TODO is there a particular reason for this?
-     * Neural-Networks cannot be built from an external model
-     */
-//    @Override
-//    public void buildFromAdjacencyMatrix() {
-//        adjacencyMatrix = weights;
-//        super.buildFromAdjacencyMatrix();
-//    }
-
-    /**
-     * a neural graph in our case, has a bias-vector
+     * a neural-network in our case, has a bias-vector
      * and a interaction part with the usual weight and all.
      * during the training each part has different algorithms for correction
      * and that has to be considered.
      * in our case, the neural-networks have always the same number of output nodes as input
      * because training is mainly for optimizing the coefficients of the Lotka-Volterra system
      */
+    public NeuralNetwork() {
+        activationFunction = new SigmoidFunction();
+        inverseFunction = new LogitFunction();
+        diffActivationFunction = new DiffSigmoidFunction();
+        error = new Vector();
+        bias = new Vector();
+    }
 
+    public NeuralNetwork(Matrix weights) {
+        this();
+        this.weights = weights;
+    }
 
     /**
      * forward propagation of the graph
@@ -71,7 +65,7 @@ public class NeuralNetwork extends Network {
         Vector inSig = (Vector) input.modify(activationFunction);
         Vector temp = (Vector) bias.multiplyElements(inSig);
 
-        Matrix delta = weights.multiplyLeft(inSig).add(temp).modify(inverseFunction);
+        Matrix delta = weights.multiply(inSig).add(temp).modify(inverseFunction);
 
         log("delta: " + delta.getMatrix().toString());
 
