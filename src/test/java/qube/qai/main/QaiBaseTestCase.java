@@ -17,7 +17,7 @@ import qube.qai.network.TestNetwork;
 import qube.qai.network.TestNeuralNetwork;
 import qube.qai.network.TestSemanticNetwork;
 import qube.qai.network.TestWikiNetwork;
-import qube.qai.network.trainer.TestNeuralNetworkTraining;
+import qube.qai.network.neural.trainer.TestNeuralNetworkTraining;
 import qube.qai.persistence.mapstores.TestMapStore;
 import qube.qai.procedure.TestAnalysisProcedures;
 import qube.qai.procedure.TestProcedureChain;

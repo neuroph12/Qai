@@ -1,10 +1,9 @@
-package qube.qai.network.trainer;
+package qube.qai.network.neural.trainer;
 
 import junit.framework.TestCase;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
-import qube.qai.network.neural.trainer.BasicNetworkTrainer;
 
 /**
  * Created by rainbird on 12/13/15.
