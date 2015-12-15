@@ -20,7 +20,6 @@ import qube.qai.network.TestWikiNetwork;
 import qube.qai.network.trainer.TestNeuralNetworkTraining;
 import qube.qai.persistence.mapstores.TestMapStore;
 import qube.qai.procedure.TestAnalysisProcedures;
-import qube.qai.procedure.TestNeuralNetworkAnalysis;
 import qube.qai.procedure.TestProcedureChain;
 import qube.qai.procedure.TestWikiSearch;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
@@ -87,7 +86,6 @@ public class QaiBaseTestCase extends TestCase {
         suite.addTestSuite(TestMapStore.class);
 
         // procedure
-        suite.addTestSuite(TestNeuralNetworkAnalysis.class);
         // @TODO test-data for these test is missing-
         // in this form they are useless and should not be executed!?!
 //        suite.addTestSuite(TestWikiArchiveIndexer.class);
