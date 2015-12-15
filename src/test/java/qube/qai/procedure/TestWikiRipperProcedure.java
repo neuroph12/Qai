@@ -1,6 +1,8 @@
 package qube.qai.procedure;
 
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
 import java.io.File;
@@ -9,6 +11,8 @@ import java.io.File;
  * Created by rainbird on 11/3/15.
  */
 public class TestWikiRipperProcedure extends TestCase {
+
+    private Logger logger = LoggerFactory.getLogger("TestWikiRipperProcedure");
 
     private boolean debug = true;
 

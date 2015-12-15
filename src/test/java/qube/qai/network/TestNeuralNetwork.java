@@ -3,6 +3,8 @@ package qube.qai.network;
 import junit.framework.TestCase;
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
  * Created by rainbird on 11/23/15.
  */
 public class TestNeuralNetwork extends TestCase {
+
+    private Logger logger = LoggerFactory.getLogger("TestNeuralNetwork");
 
     private int EPOCH = 10000;
 
@@ -35,29 +39,39 @@ public class TestNeuralNetwork extends TestCase {
         ann.setInverseFunction(new LogitFunction());
         // create the bias and weight matrices
         double[] valuesA = {1.0, 1.0, 1.0};
-        double[][] valuesB = {{0.1, 0.1, -0.1}, {0.1, 0.2, 0.1}, {0.2, -0.1, 0.6}};
+        double[][] valuesB = {{0.1, 0.4, 0.2},
+                              {0.4, 0.1, -0.1},
+                              {0.2, -0.1, 0.1}};
 
         BasicMatrix a = PrimitiveMatrix.FACTORY.columns(valuesA);
-        BasicMatrix b = PrimitiveMatrix.FACTORY.columns(valuesB);
+        BasicMatrix b = PrimitiveMatrix.FACTORY.rows(valuesB);
 
         BasicMatrix c = b.multiply(a);
         log("matrix c- after multiplication: " + c.toString());
 
         Vector bias = Vector.buildFromArray(valuesA);
         ann.setBias(bias);
+        log("bias: " + bias.toString());
 
         Matrix weights = new Matrix();
         weights.setMatrix(b);
+        log("weights: " + weights.toString());
         ann.setWeights(weights);
 
-        double[] in = {311, 189, 273};
+        double[] in = {30.11, -17.89, 273.2};
         Vector input = Vector.buildFromArray(in);
-        Vector result = ann.propagate(input);
+        int numberIterations = 10;
+        for (int i = 1; i < numberIterations; i++) {
+            Vector result = ann.propagate(input);
+            log("iteration step: " + i);
+            log("input: " + input.toString());
+            log("result: " + result.getMatrix().toString());
+            input = result;
+        }
 
-        log(result.getMatrix().toString());
     }
 
-    public void testActivationFunction() throws Exception {
+    public void restActivationFunction() throws Exception {
         ActivationFunction sigmoid = new SigmoidFunction();
         ActivationFunction logit = new LogitFunction();
         ActivationFunction diffSigmoid = new DiffSigmoidFunction();
@@ -164,7 +178,8 @@ public class TestNeuralNetwork extends TestCase {
 
     protected void log(String message) {
         if (debug) {
-            System.out.println(message);
+            //System.out.println(message);
+            logger.debug(message);
         }
     }
 }

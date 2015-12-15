@@ -6,18 +6,19 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-import qube.qai.matrix.TestTimeSeries;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import qube.qai.data.TestTimeSeries;
 import qube.qai.network.*;
+import qube.qai.network.trainer.TestNeuralNetworkTraining;
 import qube.qai.procedure.TestAnalysisProcedures;
 import qube.qai.data.analysis.TestChangepointAdapter;
-import qube.qai.data.analysis.TestProcedureChain;
+import qube.qai.procedure.TestProcedureChain;
 import qube.qai.data.selectors.TestHazelcastSelector;
 import qube.qai.data.stores.TestDataStore;
 import qube.qai.matrix.TestMatrix;
 import qube.qai.persistence.mapstores.TestMapStore;
 import qube.qai.procedure.TestNeuralNetworkAnalysis;
-import qube.qai.procedure.TestWikiArchiveIndexer;
-import qube.qai.procedure.TestWikiRipperProcedure;
 import qube.qai.procedure.TestWikiSearch;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
 import qube.qai.services.implementation.TestUUIDGenerator;
@@ -26,6 +27,10 @@ import qube.qai.services.implementation.TestUUIDGenerator;
  * Created by rainbird on 11/19/15.
  */
 public class QaiBaseTestCase extends TestCase {
+
+    protected Logger logger = LoggerFactory.getLogger("QaiTest");
+
+    protected boolean debug = true;
 
     protected Injector injector;
 

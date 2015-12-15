@@ -17,6 +17,10 @@ public class TestWikiSearch extends TestCase {
 
     public String ZIP_FILE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
 
+    /**
+     * @TOOD this test needs improvement- start with injecting the constants
+     * @throws Exception
+     */
     public void testSearch() throws Exception {
 
         File indexDiretpory = new File(INDEX_DIRECTORY);

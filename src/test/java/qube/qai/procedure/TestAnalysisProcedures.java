@@ -4,9 +4,10 @@ import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.*;
+import qube.qai.data.analysis.Statistics;
 import qube.qai.data.selectors.DataSelector;
 import qube.qai.matrix.Matrix;
-import qube.qai.matrix.TestTimeSeries;
+import qube.qai.data.TestTimeSeries;
 import qube.qai.network.Network;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.analysis.*;
@@ -20,8 +21,9 @@ import org.joda.time.DateTime;
  */
 public class TestAnalysisProcedures extends TestCase {
 
-    private boolean debug = true;
     Logger logger = LoggerFactory.getLogger("TestAnalysisProcedures");
+
+    private boolean debug = true;
 
     /**
      * do the testing for the MatrixAnalysis class

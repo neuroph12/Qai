@@ -2,6 +2,8 @@ package qube.qai.network;
 
 
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.matrix.Matrix;
 
 import java.util.Collection;
@@ -10,6 +12,8 @@ import java.util.Collection;
  * Created by rainbird on 11/24/15.
  */
 public class TestNetwork extends TestCase {
+
+    private Logger logger = LoggerFactory.getLogger("TestNetwork");
 
     private boolean debug = true;
 

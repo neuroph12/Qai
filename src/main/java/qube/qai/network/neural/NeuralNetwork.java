@@ -59,14 +59,12 @@ public class NeuralNetwork extends Network {
      * @return
      */
     public Vector propagate(Vector input) {
-        // @TODO make sure this is interpreted right
-        //   s(b*in) * w(i,j)*s(t)*s(t) (where t is the input value)
-        Vector inActivate = (Vector) bias.multiplyElements(input).modify(activationFunction);
-        // s-inv(s(b(i)*in(i)) x w(i,j))
-        Matrix delta = weights.multiply(inActivate).modify(inverseFunction);
-        Vector deltaVector = Vector.buildFromList(delta.getElementsAsList());
 
-        return deltaVector;
+        // s-1[ b_i x w_ij x s(in)_i ]
+        Vector inActivate = input.modify(activationFunction);
+        Vector delta = inActivate.multiplyLeft(weights).multiplyElements(bias).modify(inverseFunction);
+
+        return delta;
     }
 
 

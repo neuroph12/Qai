@@ -1,10 +1,7 @@
 package qube.qai.procedure.analysis;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
-import qube.qai.data.Selector;
 import qube.qai.data.Statistics;
 import qube.qai.matrix.Matrix;
 import qube.qai.procedure.ProcedureChain;

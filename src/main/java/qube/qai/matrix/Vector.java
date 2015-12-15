@@ -52,42 +52,42 @@ public class Vector extends Matrix {
     }
 
     @Override
-    public Matrix negate() {
+    public Vector negate() {
         BasicMatrix result = matrix.negate();
         Vector newInstance = new Vector(result);
         return newInstance;
     }
 
     @Override
-    public Matrix add(Matrix input) {
+    public Vector add(Matrix input) {
         BasicMatrix result = matrix.add(input.getMatrix());
         Vector newInstance = new Vector(result);
         return newInstance;
     }
 
     @Override
-    public Matrix multiplyElements(Matrix input) {
+    public Vector multiplyElements(Matrix input) {
         BasicMatrix result = matrix.multiplyElements(input.getMatrix());
         Vector newInstance = new Vector(result);
         return newInstance;
     }
 
     @Override
-    public Matrix multiply(Matrix QaiMatrix) {
+    public Vector multiply(Matrix QaiMatrix) {
         BasicMatrix result = matrix.multiply(QaiMatrix.getMatrix());
         Vector newInstance = new Vector(result);
         return newInstance;
     }
 
     @Override
-    public Matrix multiplyLeft(Matrix QaiMatrix) {
+    public Vector multiplyLeft(Matrix QaiMatrix) {
         BasicMatrix result = matrix.multiplyLeft(QaiMatrix.getMatrix());
         Vector newInstance = new Vector(result);
         return newInstance;
     }
 
     @Override
-    public Matrix modify(ActivationFunction function) {
+    public Vector modify(ActivationFunction function) {
         BasicMatrix result =  matrix.modify(function);
         Vector newInstance = new Vector(result);
         return newInstance;

@@ -1,4 +1,4 @@
-package qube.qai.data.analysis;
+package qube.qai.procedure;
 
 import junit.framework.TestCase;
 import qube.qai.data.Arguments;

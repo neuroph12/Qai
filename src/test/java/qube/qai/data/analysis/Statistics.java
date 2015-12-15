@@ -1,4 +1,7 @@
-package qube.qai.data;
+package qube.qai.data.analysis;
+
+import qube.qai.data.MetricTyped;
+import qube.qai.data.Metrics;
 
 import java.util.Arrays;
 

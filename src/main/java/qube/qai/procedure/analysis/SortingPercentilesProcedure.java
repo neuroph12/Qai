@@ -5,7 +5,6 @@ import qube.qai.data.Selector;
 import qube.qai.data.Statistics;
 import qube.qai.data.TimeSeries;
 import qube.qai.procedure.ProcedureChain;
-import sun.font.FontRunIterator;
 
 import java.util.*;
 

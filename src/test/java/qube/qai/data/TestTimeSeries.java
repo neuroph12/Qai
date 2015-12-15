@@ -1,4 +1,4 @@
-package qube.qai.matrix;
+package qube.qai.data;
 
 import junit.framework.TestCase;
 import org.joda.time.DateTime;
@@ -55,7 +55,7 @@ public class TestTimeSeries extends TestCase {
     private void log(String message) {
         if (debug) {
             //System.out.println(message);
-            logger.info(message);
+            logger.debug(message);
         }
     }
 }

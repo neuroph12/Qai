@@ -18,8 +18,6 @@ import java.util.Set;
  */
 public class TestWikiNetwork extends QaiBaseTestCase {
 
-    private boolean debug = true;
-
     @Inject @Named("Wiktionary_en")
     private SearchServiceInterface wikipediaSearchService;
 
@@ -103,7 +101,8 @@ public class TestWikiNetwork extends QaiBaseTestCase {
 
     private void log(String message) {
         if (debug) {
-            System.out.println(message);
+            //System.out.println(message);
+            logger.debug(message);
         }
     }
 }

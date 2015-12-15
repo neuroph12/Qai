@@ -1,4 +1,4 @@
-package qube.qai.network;
+package qube.qai.network.trainer;
 
 import junit.framework.TestCase;
 import qube.qai.matrix.Matrix;
@@ -23,28 +23,38 @@ public class TestNeuralNetworkTraining extends TestCase {
         // create the neural-network and add the elements
         NeuralNetwork neuralNetwork = new NeuralNetwork();
         // weight matrix
-        Matrix weights = Matrix.buildFromArray(new double[][] {{0.5, 0.5}, {0.5, 0.5}});
+        Matrix weights = Matrix.buildFromArray(new double[][] {{0.1, 0.1}, {0.1, 0.1}});
         neuralNetwork.setWeights(weights);
         // bias
-        Vector bias = Vector.buildFromArray(new double[]{0.01, 0.01});
+        Vector bias = Vector.buildFromArray(new double[]{1.0, 1.0});
         neuralNetwork.setBias(bias);
         // error
         Vector error = Vector.buildFromArray(new double[]{0.0, 0.0});
         neuralNetwork.setError(error);
 
         BasicNetworkTrainer trainer = new BasicNetworkTrainer(neuralNetwork);
-        trainer.trainNetwork(inputOne, targetOne);
-        log("weights:");
-        log(neuralNetwork.getWeights().toString());
-        log("bias");
-        log(neuralNetwork.getBias().toString());
-        log("error:");
-        log(neuralNetwork.getError().toString());
+        int iterationSteps = 3;
+        long start = System.currentTimeMillis();
+        for (int i = 1; i <= iterationSteps; i++) {
+            log("iteration step: " + i);
+            trainer.trainNetwork(inputOne, targetOne);
+            log("input: " + inputOne.toString());
+            log("target: " + targetOne.toString());
+            log("result: " + trainer.getResult().toString());
+            log("weights:");
+            log(neuralNetwork.getWeights().toString());
+            log("bias");
+            log(neuralNetwork.getBias().toString());
+            log("error:");
+            log(neuralNetwork.getError().toString());
+        }
+        long duration = System.currentTimeMillis() - start;
+        log(iterationSteps + " iteration steps took " + duration + " ms.");
     }
 
     private void initInputPatterns() {
-        inputOne = Vector.buildFromArray(new double[]{1.0, 1.0});
-        targetOne = Vector.buildFromArray(new double[]{1.0, 1.0});
+        inputOne = Vector.buildFromArray(new double[]{110.0, -80.0});
+        targetOne = Vector.buildFromArray(new double[]{121.0, -89.0});
     }
 
     // made this to toString() method in Vector

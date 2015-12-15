@@ -1,4 +1,4 @@
-package qube.qai.data;
+package qube.qai.data.analysis;
 
 import istu.samsroad.Analysis;
 import istu.samsroad.AnalysisSettings;

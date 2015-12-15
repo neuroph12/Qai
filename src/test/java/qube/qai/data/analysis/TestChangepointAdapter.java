@@ -1,13 +1,9 @@
 package qube.qai.data.analysis;
 
-import istu.samsroad.data.DataPoint;
 import junit.framework.TestCase;
-import qube.qai.data.ChangepointAdapter;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Random;
-import java.util.Vector;
 
 /**
  * Created by rainbird on 11/25/15.
