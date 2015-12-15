@@ -2,7 +2,6 @@ package qube.qai.matrix;
 
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
-import qube.qai.data.Metrics;
 import qube.qai.data.TimeSeries;
 import qube.qai.network.neural.function.ActivationFunction;
 

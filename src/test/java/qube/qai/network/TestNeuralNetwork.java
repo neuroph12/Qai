@@ -13,8 +13,6 @@ import qube.qai.network.neural.function.DiffSigmoidFunction;
 import qube.qai.network.neural.function.LogitFunction;
 import qube.qai.network.neural.function.SigmoidFunction;
 
-import java.util.ArrayList;
-
 /**
  * Created by rainbird on 11/23/15.
  */

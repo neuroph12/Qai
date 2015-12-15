@@ -6,13 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
+import qube.qai.data.analysis.Statistics;
 import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
-
 /**
  * Created by rainbird on 11/27/15.
  */

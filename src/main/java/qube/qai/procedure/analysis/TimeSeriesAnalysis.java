@@ -2,7 +2,7 @@ package qube.qai.procedure.analysis;
 
 import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
-import qube.qai.data.Statistics;
+import qube.qai.data.analysis.Statistics;
 import qube.qai.data.TimeSeries;
 import qube.qai.procedure.ProcedureChain;
 

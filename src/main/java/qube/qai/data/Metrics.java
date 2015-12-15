@@ -1,7 +1,5 @@
 package qube.qai.data;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;

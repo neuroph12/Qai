@@ -1,20 +1,21 @@
 package qube.qai.procedure;
 
 import junit.framework.TestCase;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.*;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.data.selectors.DataSelector;
 import qube.qai.matrix.Matrix;
-import qube.qai.data.TestTimeSeries;
 import qube.qai.network.Network;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.analysis.*;
 
-import java.util.*;
-
-import org.joda.time.DateTime;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by rainbird on 11/30/15.

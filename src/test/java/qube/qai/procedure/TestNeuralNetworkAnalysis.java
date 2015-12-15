@@ -1,13 +1,6 @@
 package qube.qai.procedure;
 
 import junit.framework.TestCase;
-import qube.qai.data.Arguments;
-import qube.qai.data.Metrics;
-import qube.qai.data.Selector;
-import qube.qai.data.selectors.DataSelector;
-import qube.qai.matrix.Matrix;
-import qube.qai.network.neural.NeuralNetwork;
-import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
 
 /**
  * Created by rainbird on 11/28/15.

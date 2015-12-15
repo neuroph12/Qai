@@ -2,11 +2,14 @@ package qube.qai.procedure.analysis;
 
 import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
-import qube.qai.data.Statistics;
 import qube.qai.data.TimeSeries;
+import qube.qai.data.analysis.Statistics;
 import qube.qai.procedure.ProcedureChain;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by rainbird on 12/2/15.
