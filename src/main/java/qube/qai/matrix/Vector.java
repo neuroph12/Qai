@@ -43,6 +43,8 @@ public class Vector extends Matrix {
         return vector;
     }
 
+
+
     @Override
     public Vector transpose() {
         BasicMatrix result = matrix.transpose();

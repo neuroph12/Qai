@@ -7,8 +7,7 @@ import org.ojalgo.random.RandomNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Created by rainbird on 12/10/15.
@@ -34,6 +33,19 @@ public class TestTimeSeries extends TestCase {
             log("on date: " + dates[i] + " value: " + values[i].doubleValue());
         }
 
+    }
+
+    public static List<Date> createDates(Date start, Date end) {
+        List<Date> dates = new ArrayList<Date>();
+        DateTime startDate = new DateTime(start);
+        DateTime endDate = new DateTime(end);
+        DateTime tmp = startDate;
+        while(tmp.isBefore(endDate) || tmp.equals(endDate)) {
+            dates.add(tmp.toDate());
+            tmp = tmp.plusDays(1);
+        }
+
+        return dates;
     }
 
     public static TimeSeries<Double> createTimeSeries(Date start, Date end) {

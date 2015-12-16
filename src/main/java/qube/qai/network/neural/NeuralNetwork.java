@@ -1,5 +1,12 @@
 package qube.qai.network.neural;
 
+import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.layers.BasicLayer;
+import org.ojalgo.access.Access2D;
+import org.ojalgo.matrix.BasicMatrix;
+import org.ojalgo.matrix.PrimitiveMatrix;
+import org.ojalgo.matrix.store.MatrixStore;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
 import qube.qai.network.Network;
@@ -16,24 +23,14 @@ public class NeuralNetwork extends Network {
 
     protected boolean debug = true;
 
-    private Vector error;
+    protected int size;
 
-    private Vector bias;
-
-    protected Matrix weights;
-
-    private ActivationFunction activationFunction;
-
-    private ActivationFunction inverseFunction;
-
-    private ActivationFunction diffActivationFunction;
-
-    private NeuralNetworkTrainer networkTrainer;
+    protected BasicNetwork network;
 
     private String description;
 
     /**
-     * a neural-network in our case, has a bias-vector
+     * a neural-network in our case, does not have a bias
      * and a interaction part with the usual weight and all.
      * during the training each part has different algorithms for correction
      * and that has to be considered.
@@ -41,16 +38,19 @@ public class NeuralNetwork extends Network {
      * because training is mainly for optimizing the coefficients of the Lotka-Volterra system
      */
     public NeuralNetwork() {
-        activationFunction = new SigmoidFunction();
-        inverseFunction = new LogitFunction();
-        diffActivationFunction = new DiffSigmoidFunction();
-        error = new Vector();
-        bias = new Vector();
+    }
+
+    public NeuralNetwork(int size) {
+        this.size = size;
+        network = new BasicNetwork();
+        network.addLayer(new BasicLayer(null, false, size));
+        network.addLayer(new BasicLayer(new ActivationSigmoid(), false, size));
+        network.getStructure().finalizeStructure();
+        network.reset();
     }
 
     public NeuralNetwork(Matrix weights) {
-        this();
-        this.weights = weights;
+        this.adjacencyMatrix = weights;
     }
 
     /**
@@ -60,11 +60,18 @@ public class NeuralNetwork extends Network {
      */
     public Vector propagate(Vector input) {
 
-        // s-1[ b_i x w_ij x s(in)_i ]
-        Vector inActivate = input.modify(activationFunction);
-        Vector delta = inActivate.multiplyLeft(weights).multiplyElements(bias).modify(inverseFunction);
+        double[] arrayIn = input.toArray();
+        double[] arrayOut = new double[arrayIn.length];
+        network.compute(arrayIn, arrayOut);
 
-        return delta;
+        Vector result = Vector.buildFromArray(arrayOut);
+        return result;
+    }
+
+    public double[] propagate(double[] input) {
+        double[] output = new double[input.length];
+        network.compute(input, output);
+        return output;
     }
 
 
@@ -74,59 +81,35 @@ public class NeuralNetwork extends Network {
         }
     }
 
-    public Vector getError() {
-        return error;
+    public BasicNetwork getNetwork() {
+        return network;
     }
 
-    public Vector getBias() {
-        return bias;
+    @Override
+    public void buildAdjacencyMatrix() {
+
+        int arrayLength = network.encodedArrayLength();
+        double[] array = new double[arrayLength];
+        network.encodeToArray(array);
+
+        Access2D.Builder<PrimitiveMatrix> builder = PrimitiveMatrix.FACTORY.getBuilder(size, size);
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                int index = i*size+j;
+                builder.set(i, j, array[index]);
+            }
+        }
+
+        adjacencyMatrix = new Matrix(builder.build());
     }
 
-    public void setBias(Vector bias) {
-        this.bias = bias;
-    }
+    public void buildFromAdjacencyMatrix() {
+        size = (int) adjacencyMatrix.getMatrix().countRows();
+        network = new BasicNetwork();
+        network.addLayer(new BasicLayer(null, false, size));
+        network.addLayer(new BasicLayer(new ActivationSigmoid(), false, size));
+        network.getStructure().finalizeStructure();
 
-    public Matrix getWeights() {
-        return weights;
-    }
-
-    public void setWeights(Matrix weights) {
-        this.weights = weights;
-    }
-
-    public ActivationFunction getActivationFunction() {
-        return activationFunction;
-    }
-
-    public void setActivationFunction(ActivationFunction activationFunction) {
-        this.activationFunction = activationFunction;
-    }
-
-    public ActivationFunction getInverseFunction() {
-        return inverseFunction;
-    }
-
-    public void setInverseFunction(ActivationFunction inverseFunction) {
-        this.inverseFunction = inverseFunction;
-    }
-
-    public ActivationFunction getDiffActivationFunction() {
-        return diffActivationFunction;
-    }
-
-    public void setDiffActivationFunction(ActivationFunction diffActivationFunction) {
-        this.diffActivationFunction = diffActivationFunction;
-    }
-
-    public void setError(Vector error) {
-        this.error = error;
-    }
-
-    public NeuralNetworkTrainer getNetworkTrainer() {
-        return networkTrainer;
-    }
-
-    public void setNetworkTrainer(NeuralNetworkTrainer networkTrainer) {
-        this.networkTrainer = networkTrainer;
+        network.decodeFromArray(adjacencyMatrix.toArray());
     }
 }

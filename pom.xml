@@ -39,6 +39,19 @@
             <!--<version>1.6</version>-->
         <!--</dependency>-->
 
+        <!--<dependency>-->
+            <!--<groupId>org.deeplearning4j</groupId>-->
+            <!--<artifactId>deeplearning4j-core</artifactId>-->
+            <!--<version>0.4-rc3.7</version>-->
+        <!--</dependency>-->
+
+        <!-- Encog for neural-network implementation -->
+        <dependency>
+            <groupId>org.encog</groupId>
+            <artifactId>encog-core</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
         <!-- Tika does parsing and Lucene does search and indexing -->
         <dependency>
             <groupId>org.apache.tika</groupId>

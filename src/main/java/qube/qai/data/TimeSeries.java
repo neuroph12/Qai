@@ -21,6 +21,17 @@ public class TimeSeries<T extends Number> {
         entries.add(new TimeSeriesEntry(date, value));
     }
 
+    public T getValue(Date date) {
+        T value = null;
+        for (TimeSeriesEntry entry : entries) {
+            if (date.equals(entry.date)) {
+                value = entry.entry;
+                break;
+            }
+        }
+        return value;
+    }
+
     public Iterator<T> iterator() {
         return new TimeSeriesIterator<T>();
     }

@@ -7,6 +7,7 @@ import qube.qai.data.MetricTyped;
 import qube.qai.data.Metrics;
 import qube.qai.network.neural.function.ActivationFunction;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -34,6 +35,25 @@ public class Matrix implements MetricTyped {
             return null;
         }
         return matrix.toListOfElements();
+    }
+
+    /**
+     * returns the contents of the matrix as a double-array
+     * @return
+     */
+    public double[] toArray() {
+        List<? extends Number> elements = toListOfElements();
+        if (elements == null) {
+            return null;
+        }
+
+        double[] array = new double[elements.size()];
+        for (int i = 0; i < elements.size(); i++) {
+            Number number = elements.get(i);
+            array[i] = number.doubleValue();
+        }
+
+        return array;
     }
 
     /**
@@ -87,6 +107,13 @@ public class Matrix implements MetricTyped {
         BasicMatrix columns = factory.columns(array);
         Matrix matrix = new Matrix(columns);
         return matrix;
+    }
+
+    public List<? extends Number> toListOfElements() {
+        if (matrix != null) {
+            return matrix.toListOfElements();
+        }
+        return null;
     }
 
     /**
