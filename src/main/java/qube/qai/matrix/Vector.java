@@ -3,7 +3,6 @@ package qube.qai.matrix;
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import qube.qai.data.TimeSeries;
-import qube.qai.network.neural.function.ActivationFunction;
 
 import java.util.List;
 
@@ -83,13 +82,6 @@ public class Vector extends Matrix {
     @Override
     public Vector multiplyLeft(Matrix QaiMatrix) {
         BasicMatrix result = matrix.multiplyLeft(QaiMatrix.getMatrix());
-        Vector newInstance = new Vector(result);
-        return newInstance;
-    }
-
-    @Override
-    public Vector modify(ActivationFunction function) {
-        BasicMatrix result =  matrix.modify(function);
         Vector newInstance = new Vector(result);
         return newInstance;
     }

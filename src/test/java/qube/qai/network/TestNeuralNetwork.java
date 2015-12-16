@@ -3,36 +3,18 @@ package qube.qai.network;
 import junit.framework.TestCase;
 import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationSigmoid;
-import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLDataSet;
-import org.encog.ml.train.strategy.RequiredImprovementStrategy;
-import org.encog.neural.data.NeuralData;
-import org.encog.neural.data.NeuralDataPair;
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.layers.Layer;
-import org.encog.neural.networks.structure.NeuralStructure;
-import org.encog.neural.networks.training.Train;
-import org.encog.neural.networks.training.lma.LevenbergMarquardtTraining;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
-import org.ojalgo.matrix.BasicMatrix;
-import org.ojalgo.matrix.PrimitiveMatrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
-import qube.qai.network.neural.function.ActivationFunction;
-import qube.qai.network.neural.function.DiffSigmoidFunction;
-import qube.qai.network.neural.function.LogitFunction;
-import qube.qai.network.neural.function.SigmoidFunction;
-
-import java.util.Collection;
 
 /**
  * Created by rainbird on 11/23/15.
@@ -105,6 +87,9 @@ public class TestNeuralNetwork extends TestCase {
         }
     }*/
 
+    /**
+     * in this test the created the network to compare the results with encog
+     */
     public void testNeuralNetwork() {
         // decided to use something called Encog-
         // the thing looks to be pretty complete

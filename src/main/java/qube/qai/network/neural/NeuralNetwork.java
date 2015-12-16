@@ -4,17 +4,10 @@ import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.ojalgo.access.Access2D;
-import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
-import org.ojalgo.matrix.store.MatrixStore;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
 import qube.qai.network.Network;
-import qube.qai.network.neural.function.ActivationFunction;
-import qube.qai.network.neural.function.DiffSigmoidFunction;
-import qube.qai.network.neural.function.LogitFunction;
-import qube.qai.network.neural.function.SigmoidFunction;
-import qube.qai.network.neural.trainer.NeuralNetworkTrainer;
 
 /**
  * Created by rainbird on 11/23/15.

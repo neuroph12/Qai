@@ -5,9 +5,7 @@ import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.random.Normal;
 import qube.qai.data.MetricTyped;
 import qube.qai.data.Metrics;
-import qube.qai.network.neural.function.ActivationFunction;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -165,15 +163,6 @@ public class Matrix implements MetricTyped {
      */
     public Matrix multiplyLeft(Matrix QaiMatrix) {
         BasicMatrix result = matrix.multiplyLeft(QaiMatrix.getMatrix());
-        Matrix newInstance = new Matrix(result);
-        return newInstance;
-    }
-
-    /**
-     * @return
-     */
-    public Matrix modify(ActivationFunction function) {
-        BasicMatrix result = matrix.modify(function);
         Matrix newInstance = new Matrix(result);
         return newInstance;
     }
