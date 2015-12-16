@@ -40,6 +40,11 @@ public class NeuralNetwork extends Network {
     public NeuralNetwork() {
     }
 
+    /**
+     * this network will be assigned its values when the
+     * actual training occurs
+     * @param size
+     */
     public NeuralNetwork(int size) {
         this.size = size;
         network = new BasicNetwork();
@@ -49,9 +54,14 @@ public class NeuralNetwork extends Network {
         network.reset();
     }
 
+    /**
+     * this network will build the both the neural network
+     * using the given adjacency-matrix, and the grph-network
+     * again using the same adjacency-matrix
+     * @param weights
+     */
     public NeuralNetwork(Matrix weights) {
         this.adjacencyMatrix = weights;
-        this.size = (int) adjacencyMatrix.getMatrix().countRows();
         // this might seem strange,
         // but this way, both grph and encog networks are both set to the same thing
         this.buildFromAdjacencyMatrix();
@@ -78,7 +88,6 @@ public class NeuralNetwork extends Network {
         network.compute(input, output);
         return output;
     }
-
 
     protected void log(String message) {
         if (debug) {
@@ -109,6 +118,7 @@ public class NeuralNetwork extends Network {
     }
 
     public void buildFromAdjacencyMatrix() {
+
         size = (int) adjacencyMatrix.getMatrix().countRows();
         network = new BasicNetwork();
         network.addLayer(new BasicLayer(null, false, size));

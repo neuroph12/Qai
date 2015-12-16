@@ -78,7 +78,6 @@ public class WikiNetwork extends Network {
                 Vertex linkTo = new Vertex(link);
                 //log("vertex: '" + title + "' adding edge to: '" + link + "'");
                 if (!containsVertex(linkTo)) {
-
                     addVertex(linkTo);
                     addedEdges.add(link);
                 }
@@ -104,8 +103,6 @@ public class WikiNetwork extends Network {
             existing.clear();
             count++;
         }
-
-
     }
 
     private WikiModel createModel(WikiArticle wikiArticle) {

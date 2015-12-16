@@ -61,6 +61,7 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
             epoch++;
             if (epoch >= MAXIMUM_EPOCH) {
                 logger.info("Maximum number of iterations have been arrived- stopping training");
+                break;
             }
         } while(train.getError() > ERROR_TOLERANCE);
 
@@ -87,7 +88,7 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
         }
     }
 
-    public Map<Date, double[]> spliceToDates(List<Date> dates, Map<String, TimeSeries> timeSeriesMap) {
+    public static Map<Date, double[]> spliceToDates(List<Date> dates, Map<String, TimeSeries> timeSeriesMap) {
         Map<Date, double[]> dataSet = new TreeMap<Date, double[]>();
         for (Date date : dates) {
             double[] daily = new double[timeSeriesMap.size()];

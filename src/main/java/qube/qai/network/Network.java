@@ -28,6 +28,10 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
 
     protected boolean makeMatrix = true;
 
+    protected boolean pruneWeakLinks = true;
+
+    protected double PRUNE_TRESHOLD = 0.1;
+
     protected Matrix adjacencyMatrix;
 
     public Network() {
@@ -142,6 +146,12 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
                 if (value == null || value.doubleValue() == 0) {
                     continue;
                 }
+
+                // prune weak links
+                if (pruneWeakLinks && value.doubleValue() < PRUNE_TRESHOLD) {
+                    continue;
+                }
+
                 // create the edge
                 Edge edge = new Edge(from, to);
                 edge.setWeight(value.doubleValue());
@@ -220,6 +230,22 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
 
     public double getDiameter() {
         return super.backingGrph.getDiameter();
+    }
+
+    public double getPRUNE_TRESHOLD() {
+        return PRUNE_TRESHOLD;
+    }
+
+    public void setPRUNE_TRESHOLD(double PRUNE_TRESHOLD) {
+        this.PRUNE_TRESHOLD = PRUNE_TRESHOLD;
+    }
+
+    public boolean isPruneWeakLinks() {
+        return pruneWeakLinks;
+    }
+
+    public void setPruneWeakLinks(boolean pruneWeakLinks) {
+        this.pruneWeakLinks = pruneWeakLinks;
     }
 
     @Override
