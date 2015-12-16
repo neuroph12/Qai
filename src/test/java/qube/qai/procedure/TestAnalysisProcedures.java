@@ -2,20 +2,20 @@ package qube.qai.procedure;
 
 import junit.framework.TestCase;
 import org.joda.time.DateTime;
+import org.ojalgo.random.Normal;
+import org.ojalgo.random.RandomNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.*;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.data.selectors.DataSelector;
 import qube.qai.matrix.Matrix;
+import qube.qai.matrix.Vector;
 import qube.qai.network.Network;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.analysis.*;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by rainbird on 11/30/15.
@@ -134,7 +134,6 @@ public class TestAnalysisProcedures extends TestCase {
         Arguments arguments = statistics.getArguments();
         assertNotNull("arguments may not be null", arguments);
 
-        Matrix matrix = Matrix.createMatrix(true, 100, 100);
         Network network = Network.createTestNetwork();
         Selector<Network> selector = new DataSelector<Network>(network);
         statistics.getArguments().setArgument(NetworkStatistics.INPUT_NETWORK, selector);
@@ -195,8 +194,60 @@ public class TestAnalysisProcedures extends TestCase {
         Arguments arguments = statistics.getArguments();
         assertNotNull("arguments may not be null", arguments);
 
-        // @TODO complete test
-        fail("test incomplete");
+        int size = 10;
+        Matrix matrix = Matrix.createMatrix(true, size, size);
+        NeuralNetwork neuralNetwork = new NeuralNetwork(matrix);
+        Selector<NeuralNetwork> networkSelector = new DataSelector<NeuralNetwork>(neuralNetwork);
+        arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_NEURAL_NETWORK, networkSelector);
+
+        double[] firstDay = new double[size];
+        RandomNumber generator = new Normal(0.5, 0.1);
+        for (int i = 0; i < firstDay.length; i++) {
+            firstDay[i] = generator.doubleValue();
+        }
+        Vector startVector = Vector.buildFromArray(firstDay);
+        Selector<Vector> startVectorSelector = new DataSelector<Vector>(startVector);
+        arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_START_VECTOR, startVectorSelector);
+
+        List<String> names = new ArrayList<String>();
+        String[] nameStrings = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eightth", "nineth", "tenth"};
+        for (String n : nameStrings) {
+            names.add(n);
+        }
+        Selector<List> namesSelector = new DataSelector<List>(names);
+        arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_NAMES, namesSelector);
+
+        Date startDate = DateTime.parse("2015-1-1").toDate();
+        Date endDate = DateTime.parse("2015-1-10").toDate();
+
+        List<Date> dates = TestTimeSeries.createDates(startDate, endDate);;
+        Selector<List> stepsSelector = new DataSelector<List>(dates);
+        arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_DATES_FOR_STEPS, stepsSelector);
+
+        checkResultsOf(statistics);
+
+        assertTrue("there has to be some results", !statistics.getArguments().getResultNames().isEmpty());
+        log("results:" + statistics.getArguments().getResultNames());
+        Map<String, TimeSeries> timeSeriesMap = (Map<String, TimeSeries>) arguments.getResult(NeuralNetworkForwardPropagation.MAP_OF_TIME_SERIES);
+        assertNotNull("time series map cannot be null", timeSeriesMap);
+
+        for (String name : names) {
+            TimeSeries timeSeries = timeSeriesMap.get(name);
+            assertNotNull("time series for: " + name + " may not be null", timeSeries);
+            log("time-series for: " + name + ": (" + t2String(timeSeries) + ")");
+        }
+    }
+
+    private String t2String(TimeSeries series) {
+        StringBuffer buffer = new StringBuffer();
+        for (Iterator<Number> it = series.iterator(); it.hasNext(); ) {
+            Number number = it.next();
+            buffer.append(number.doubleValue());
+            buffer.append(",");
+        }
+
+        buffer.deleteCharAt(buffer.length()-1);
+        return buffer.toString();
     }
 
     /**

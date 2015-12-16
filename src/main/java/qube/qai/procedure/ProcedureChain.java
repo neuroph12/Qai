@@ -42,9 +42,11 @@ public abstract class ProcedureChain extends BaseProcedure {
 
     public static String CHANGE_POINTS = "change points";
 
-    public static String TIME_SERIES = "tine series";
+    public static String MAP_OF_TIME_SERIES = "time series map";
 
-    public static String SELECTED_ITEMS = "selected items";
+    public static String SORTED_ITEMS = "sorted items";
+
+    public static String INPUT_NAMES = "input names";
 
     protected Logger logger = LoggerFactory.getLogger("Procedure Logger");
 

@@ -30,7 +30,7 @@ public class SortingPercentilesProcedure extends ProcedureChain {
     public void buildArguments() {
         description = DESCRIPTION;
         arguments = new Arguments(FROM, CRITERIA);
-        arguments.putResultNames(SELECTED_ITEMS, AVERAGE_TIME_SERIES);
+        arguments.putResultNames(SORTED_ITEMS, AVERAGE_TIME_SERIES);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class SortingPercentilesProcedure extends ProcedureChain {
         Map<String, Statistics> sortedTimeSeries = new TreeMap<String, Statistics>(new MapSorter(statisticsMap));
         sortedTimeSeries.putAll(statisticsMap);
         // and add the results to the arguments
-        arguments.addResult(SELECTED_ITEMS, sortedTimeSeries);
+        arguments.addResult(SORTED_ITEMS, sortedTimeSeries);
         arguments.addResult(AVERAGE_TIME_SERIES, averageSeries);
     }
 

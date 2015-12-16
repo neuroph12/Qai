@@ -6,6 +6,8 @@ import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.ProcedureChain;
 
+import java.util.*;
+
 /**
  * Created by rainbird on 11/28/15.
  */
@@ -18,7 +20,7 @@ public class NeuralNetworkForwardPropagation extends ProcedureChain {
 
     public static String INPUT_START_VECTOR = "start vector";
 
-    public static String INPUT_NUMBER_OF_STEPS = "number of iteration steps";
+    public static String INPUT_DATES_FOR_STEPS = "dates for iteration steps";
 
     /**
      * this takes a neural-network and runs forward-propagation
@@ -33,8 +35,8 @@ public class NeuralNetworkForwardPropagation extends ProcedureChain {
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(INPUT_NEURAL_NETWORK, INPUT_START_VECTOR, INPUT_NUMBER_OF_STEPS);
-        arguments.putResultNames(TIME_SERIES);
+        arguments = new Arguments(INPUT_NEURAL_NETWORK, INPUT_START_VECTOR, INPUT_NAMES, INPUT_DATES_FOR_STEPS);
+        arguments.putResultNames(MAP_OF_TIME_SERIES);
     }
 
     @Override
@@ -45,15 +47,31 @@ public class NeuralNetworkForwardPropagation extends ProcedureChain {
         }
 
         NeuralNetwork neuralNetwork = (NeuralNetwork) arguments.getSelector(INPUT_NEURAL_NETWORK).getData();
-        TimeSeries timeSeries = (TimeSeries) arguments.getSelector(INPUT_START_VECTOR).getData();
-        int numberOfIterations = (Integer) arguments.getSelector(INPUT_NUMBER_OF_STEPS).getData();
+        Vector inputVector = (Vector) arguments.getSelector(INPUT_START_VECTOR).getData();
+        List<String> names = (List<String>) arguments.getSelector(INPUT_NAMES).getData();
+        List<Date> dates = (List<Date>) arguments.getSelector(INPUT_DATES_FOR_STEPS).getData();
 
-        Vector in = new Vector();
-        for (int i = 0; i < numberOfIterations; i++) {
+        // the time-series generated should be assigned to the named entities they represent
+        Map<String, TimeSeries> timeSeriesMap = new HashMap<String, TimeSeries>();
+        Vector in = inputVector;
+        for (int i = 0; i < dates.size(); i++) {
+            // generate day's output
             Vector out = neuralNetwork.propagate(in);
+            double[] outArray = out.toArray();
+            // append the result in each entity's time-series
+            for (int j = 0; j < outArray.length; j++) {
+                String key = names.get(j);
+                TimeSeries timeSeries = timeSeriesMap.get(key);
+                if (timeSeries == null) {
+                    timeSeries = new TimeSeries();
+                    timeSeriesMap.put(key, timeSeries);
+                }
+                timeSeries.add(dates.get(i), outArray[j]);
+            }
             in = out;
         }
 
+        arguments.addResult(MAP_OF_TIME_SERIES, timeSeriesMap);
 
     }
 }
