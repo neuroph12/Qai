@@ -70,7 +70,6 @@ public class Matrix implements MetricTyped {
         metrics.putValue("infinity norm", matrix.getInfinityNorm().doubleValue());
         metrics.putValue("eigenvalues", matrix.getEigenvalues());
 
-
         return metrics;
     }
 

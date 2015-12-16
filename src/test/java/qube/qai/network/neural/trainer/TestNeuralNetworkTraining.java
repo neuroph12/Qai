@@ -38,10 +38,10 @@ public class TestNeuralNetworkTraining extends TestCase {
         List<Date> dates = createDates();
         Map<Date, double[]> dataSet = trainer.spliceToDates(dates, timeSeriesMap);
         // create the network and train the thing- remember this is 10 random entities
-        MLDataSet trainingSet = trainer.createTrainingSet(dates, dataSet);
+        trainer.createTrainingSet(dates, dataSet);
 
-        trainer.trainNetwork(trainingSet);
-        for(MLDataPair pair: trainingSet ) {
+        trainer.trainNetwork();
+        for(MLDataPair pair: trainer.getTrainingSet()) {
             double[] output = network.propagate(pair.getInput().getData());
             for (int i = 0; i < output.length; i++) {
                 log("entity name: " + names[i]);
@@ -74,21 +74,6 @@ public class TestNeuralNetworkTraining extends TestCase {
             timeSeriesMap.put(name, timeSeries);
         }
         return timeSeriesMap;
-    }
-
-    private String arrayAsString(double[] array) {
-        StringBuffer buffer = new StringBuffer("(");
-        boolean more = false;
-        for (int i = 0; i < array.length; i++) {
-            buffer.append(array[i]).append(", ");
-            more = true;
-        }
-        if (more) {
-            buffer.deleteCharAt(buffer.length()-1);
-            buffer.deleteCharAt(buffer.length()-1);
-        }
-        buffer.append(")");
-        return buffer.toString();
     }
 
     private void log(String message) {

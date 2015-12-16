@@ -51,6 +51,11 @@ public class NeuralNetwork extends Network {
 
     public NeuralNetwork(Matrix weights) {
         this.adjacencyMatrix = weights;
+        this.size = (int) adjacencyMatrix.getMatrix().countRows();
+        // this might seem strange,
+        // but this way, both grph and encog networks are both set to the same thing
+        this.buildFromAdjacencyMatrix();
+        super.buildFromAdjacencyMatrix();
     }
 
     /**

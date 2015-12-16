@@ -84,7 +84,10 @@ public class WikiNetwork extends Network {
                 }
 
                 existing.add(link);
-                addSimpleEdge(vertex, new Edge(vertex, linkTo), linkTo, false);
+                Edge edge = new Edge(vertex, linkTo);
+                if (!getAllEdges().contains(edge)) {
+                    addSimpleEdge(vertex, edge, linkTo, false);
+                }
 
                 linkCount++;
 

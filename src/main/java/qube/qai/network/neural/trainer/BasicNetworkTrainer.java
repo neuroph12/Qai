@@ -1,5 +1,6 @@
 package qube.qai.network.neural.trainer;
 
+import org.encog.Encog;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
@@ -29,19 +30,31 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
 
     private double MAXIMUM_EPOCH = 10000;
 
-    private NeuralNetwork neuralNetwork;
-
     private NeuralNetwork network;
+
+    private ResilientPropagation train;
+
+    private MLDataSet trainingSet;
 
     private long epoch;
 
     public BasicNetworkTrainer(NeuralNetwork neuralNetwork) {
-        this.neuralNetwork = neuralNetwork;
+        this.network = neuralNetwork;
     }
 
-    public void trainNetwork(MLDataSet trainingSet) {
+    public void trainNetwork() {
+
+        if (network == null || network.getNetwork() == null) {
+            throw new IllegalArgumentException("No network set to train");
+        }
+
+        if (trainingSet == null) {
+            throw new IllegalArgumentException("No training set created set to train the network with");
+        }
+
         epoch = 1;
-        ResilientPropagation train = new ResilientPropagation(network.getNetwork(), trainingSet);
+        train = new ResilientPropagation(network.getNetwork(), trainingSet);
+
         do {
             train.iteration();
             logger.info("Epoch #" + epoch + " Error:" + train.getError());
@@ -50,11 +63,18 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
                 logger.info("Maximum number of iterations have been arrived- stopping training");
             }
         } while(train.getError() > ERROR_TOLERANCE);
+
         train.finishTraining();
+
+        // i don't know, is this really necessary...
+        // well, can't really harm, i guess.
+        Encog.getInstance().shutdown();
     }
 
-    public MLDataSet createTrainingSet(List<Date> dates, Map<Date, double[]> dataSet) {
-        MLDataSet trainingSet = new BasicMLDataSet();
+    public void createTrainingSet(List<Date> dates, Map<Date, double[]> dataSet) {
+
+        trainingSet = new BasicMLDataSet();
+
         for (int i = 0; i < dates.size(); i++) {
             Date current = dates.get(i);
             if (i + 1 < dates.size()) {
@@ -65,8 +85,6 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
                 trainingSet.add(datapair);
             }
         }
-
-        return trainingSet;
     }
 
     public Map<Date, double[]> spliceToDates(List<Date> dates, Map<String, TimeSeries> timeSeriesMap) {
@@ -87,11 +105,42 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
     }
 
     public NeuralNetwork getNeuralNetwork() {
-        return neuralNetwork;
+        return network;
     }
 
     public void setNeuralNetwork(NeuralNetwork neuralNetwork) {
-        this.neuralNetwork = neuralNetwork;
+        this.network = neuralNetwork;
     }
 
+    public MLDataSet getTrainingSet() {
+        return trainingSet;
+    }
+
+    public void setTrainingSet(MLDataSet trainingSet) {
+        this.trainingSet = trainingSet;
+    }
+
+    public long getEpoch() {
+        return epoch;
+    }
+
+    public void setEpoch(long epoch) {
+        this.epoch = epoch;
+    }
+
+    public double getERROR_TOLERANCE() {
+        return ERROR_TOLERANCE;
+    }
+
+    public void setERROR_TOLERANCE(double ERROR_TOLERANCE) {
+        this.ERROR_TOLERANCE = ERROR_TOLERANCE;
+    }
+
+    public double getMAXIMUM_EPOCH() {
+        return MAXIMUM_EPOCH;
+    }
+
+    public void setMAXIMUM_EPOCH(double MAXIMUM_EPOCH) {
+        this.MAXIMUM_EPOCH = MAXIMUM_EPOCH;
+    }
 }

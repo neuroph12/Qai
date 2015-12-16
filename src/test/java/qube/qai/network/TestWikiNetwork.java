@@ -35,7 +35,7 @@ public class TestWikiNetwork extends QaiBaseTestCase {
      * Network experiment average degree: 8.428428449973634
      * @throws Exception
      */
-    public void testWikiNetwork() throws Exception {
+    public void restWikiNetwork() throws Exception {
 
         Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
         assertNotNull("there has to be a result for the search", results);

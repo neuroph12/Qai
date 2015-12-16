@@ -164,8 +164,7 @@ public class TestAnalysisProcedures extends TestCase {
         assertNotNull("arguments may not be null", arguments);
 
         Matrix matrix = Matrix.createMatrix(true, 100, 100);
-        NeuralNetwork network = new NeuralNetwork();
-        network.buildFromAdjacencyMatrix(matrix);
+        NeuralNetwork network = new NeuralNetwork(matrix);
 
         Selector<NeuralNetwork> selector = new DataSelector<NeuralNetwork>(network);
         statistics.getArguments().setArgument(NeuralNetworkAnalysis.INPUT_NEURAL_NETWORK, selector);
@@ -196,7 +195,8 @@ public class TestAnalysisProcedures extends TestCase {
         Arguments arguments = statistics.getArguments();
         assertNotNull("arguments may not be null", arguments);
 
-
+        // @TODO complete test
+        fail("test incomplete");
     }
 
     /**

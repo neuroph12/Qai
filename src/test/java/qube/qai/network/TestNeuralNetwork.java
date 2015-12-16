@@ -105,17 +105,7 @@ public class TestNeuralNetwork extends TestCase {
         }
     }*/
 
-    public void restNeuralNetworkUsage() throws Exception {
-
-        // this is more or less how we will be using the thing, after all
-        // for our purposes, there is only one type of neural-network
-        // which is a boltzmann-engine, more or less.
-        // one way will be to propagate as in example below
-        // another will be in training with a set and returning the
-        // weights, so that those can be inspected
-    }
-
-    public void restNeuralNetwork() {
+    public void testNeuralNetwork() {
         // decided to use something called Encog-
         // the thing looks to be pretty complete
         double XOR_INPUT[][] = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } };
@@ -134,7 +124,7 @@ public class TestNeuralNetwork extends TestCase {
         log("matrix created: " + matrix.toString());
         NeuralNetwork neuralNetwork = new NeuralNetwork(matrix);
         // this is in order to test the method- later make this call automatic
-        neuralNetwork.buildFromAdjacencyMatrix();
+        //neuralNetwork.buildFromAdjacencyMatrix();
 
         for (int i = 0; i < XOR_INPUT.length; i++) {
             Vector inVector = Vector.buildFromArray(XOR_INPUT[i]);
@@ -229,7 +219,7 @@ public class TestNeuralNetwork extends TestCase {
     }
 
     /**
-     * this is in order to make some experiments with the library dl4j (deep-learning for java, i suppose)
+     * this is in order to make some experiments with the library encog
      */
     public void restEncog_1() throws Exception {
         // decided to use something called Encog-

@@ -39,7 +39,9 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
         Metrics metrics = null;
 
         if (makeMatrix) {
-            buildAdjacencyMatrix();
+            if (adjacencyMatrix == null) {
+                buildAdjacencyMatrix();
+            }
             metrics = adjacencyMatrix.buildMetrics();
         } else {
             metrics = new Metrics();
@@ -111,6 +113,7 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
     }
 
     public void buildFromAdjacencyMatrix() {
+
         if (adjacencyMatrix == null) {
             throw new IllegalArgumentException("Adjacency matrix has not been initialized or set, can't construct network.");
         }
