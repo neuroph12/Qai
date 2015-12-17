@@ -2,7 +2,7 @@ package qube.qai.procedure.analysis;
 
 import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
-import qube.qai.data.TimeSeries;
+import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.procedure.ProcedureChain;
 
@@ -30,11 +30,11 @@ public class SortingPercentilesProcedure extends ProcedureChain {
     public void buildArguments() {
         description = DESCRIPTION;
         arguments = new Arguments(FROM, CRITERIA);
-        arguments.putResultNames(SORTED_ITEMS, AVERAGE_TIME_SERIES);
+        arguments.putResultNames(SORTED_ITEMS, AVERAGE_TIME_SEQUENCE);
     }
 
     @Override
-    public void run() {
+    public void execute() {
 
         // we are of course assuming the selector is already initialized
         if (!arguments.isSatisfied()) {
@@ -52,14 +52,14 @@ public class SortingPercentilesProcedure extends ProcedureChain {
 
             logger.info("Now calculating the statistics of: " + name + " the " + count + "th entry");
 
-            TimeSeries timeSeries = (TimeSeries) timeSeriesMap.get(name).getData();
-            Number[] values = timeSeries.toArray();
+            TimeSequence timeSequence = (TimeSequence) timeSeriesMap.get(name).getData();
+            Number[] values = timeSequence.toArray();
 
             // keep copy of the first items to be used later
             // and add the slots in the first kept array on the later round
             if (count == 0) {
-                dates = timeSeries.toDates();
-                averages = timeSeries.toArray();
+                dates = timeSequence.toDates();
+                averages = timeSequence.toArray();
             } else {
                 for (int i = 0; i < values.length; i++) {
                     averages[i] = averages[i].doubleValue() + values[i].doubleValue();
@@ -75,7 +75,7 @@ public class SortingPercentilesProcedure extends ProcedureChain {
         }
 
         // now divide each element with the number of time-series to find their average
-        TimeSeries<Double> averageSeries = new TimeSeries<Double>();
+        TimeSequence<Double> averageSeries = new TimeSequence<Double>();
         double factor = timeSeriesMap.size();
         for (int i = 0; i < averages.length; i++) {
             averages[i] = averages[i].doubleValue() / factor;
@@ -89,7 +89,7 @@ public class SortingPercentilesProcedure extends ProcedureChain {
         sortedTimeSeries.putAll(statisticsMap);
         // and add the results to the arguments
         arguments.addResult(SORTED_ITEMS, sortedTimeSeries);
-        arguments.addResult(AVERAGE_TIME_SERIES, averageSeries);
+        arguments.addResult(AVERAGE_TIME_SEQUENCE, averageSeries);
     }
 
     /**

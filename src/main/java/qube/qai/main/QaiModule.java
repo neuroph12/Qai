@@ -3,17 +3,20 @@ package qube.qai.main;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import qube.qai.services.ProcedureSource;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.SelectorFactoryInterface;
 import qube.qai.services.UUIDServiceInterface;
-import qube.qai.services.implementation.DataSelectorFactory;
-import qube.qai.services.implementation.UUIDService;
-import qube.qai.services.implementation.WikiSearchService;
+import qube.qai.services.implementation.*;
 
 /**
  * Created by rainbird on 11/9/15.
  */
 public class QaiModule extends AbstractModule {
+
+    private Logger logger = LoggerFactory.getLogger("Qai-Module");
 
     private boolean debug = true;
 
@@ -35,6 +38,14 @@ public class QaiModule extends AbstractModule {
 
         // UUIDService
         bind(UUIDServiceInterface.class).to(UUIDService.class);
+
+        // ProcedureSource
+        //bind(ProcedureSource.class).to(CachedProcedureSourceService.class);
+    }
+
+    @Provides
+    ProcedureSource provideProcedureSourceInterface() {
+        return CachedProcedureSourceService.getInstance();
     }
 
     @Provides
@@ -61,7 +72,8 @@ public class QaiModule extends AbstractModule {
 
     private void logger(String message) {
         if (debug) {
-            System.out.println(message);
+            //System.out.println(message);
+            logger.info(message);
         }
     }
 }

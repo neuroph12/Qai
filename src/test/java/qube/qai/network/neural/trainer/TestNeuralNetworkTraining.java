@@ -1,22 +1,11 @@
 package qube.qai.network.neural.trainer;
 
 import junit.framework.TestCase;
-import org.encog.engine.network.activation.ActivationSigmoid;
-import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
-import org.encog.ml.data.MLDataSet;
-import org.encog.ml.data.basic.BasicMLData;
-import org.encog.ml.data.basic.BasicMLDataPair;
-import org.encog.ml.data.basic.BasicMLDataSet;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.joda.time.DateTime;
 import qube.qai.data.TestTimeSeries;
-import qube.qai.data.TimeSeries;
-import qube.qai.data.analysis.Statistics;
+import qube.qai.data.TimeSequence;
 import qube.qai.matrix.Matrix;
-import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
 
 import java.util.*;
@@ -30,7 +19,7 @@ public class TestNeuralNetworkTraining extends TestCase {
 
     public void testNetworkTraining() throws Exception {
         String[] names = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "nineth", "tenth"};
-        Map<String, TimeSeries> timeSeriesMap = createTimeSeriesMap(names);
+        Map<String, TimeSequence> timeSeriesMap = createTimeSeriesMap(names);
         assertNotNull(timeSeriesMap);
 
         NeuralNetwork network = new NeuralNetwork(names.length);
@@ -62,16 +51,16 @@ public class TestNeuralNetworkTraining extends TestCase {
     private List<Date> createDates() {
         Date start = DateTime.parse("2015-1-1").toDate();
         Date end = DateTime.parse("2015-12-31").toDate();
-        return TestTimeSeries.createDates(start, end);
+        return TimeSequence.createDates(start, end);
     }
 
-    private Map<String, TimeSeries> createTimeSeriesMap(String... names) {
-        Map<String, TimeSeries> timeSeriesMap = new HashMap<String, TimeSeries>();
+    private Map<String, TimeSequence> createTimeSeriesMap(String... names) {
+        Map<String, TimeSequence> timeSeriesMap = new HashMap<String, TimeSequence>();
         for (String name : names) {
             Date start = DateTime.parse("2015-1-1").toDate();
             Date end = DateTime.parse("2015-12-31").toDate();
-            TimeSeries timeSeries = TestTimeSeries.createTimeSeries(start, end);
-            timeSeriesMap.put(name, timeSeries);
+            TimeSequence timeSequence = TimeSequence.createTimeSeries(start, end);
+            timeSeriesMap.put(name, timeSequence);
         }
         return timeSeriesMap;
     }

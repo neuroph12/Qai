@@ -74,7 +74,12 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
         messageQueue.sendMessage(uuid, END_OF_PROCESS);
     }
 
-    public abstract void run();
+    public final void run() {
+        execute();
+        hasExecuted  = true;
+    }
+
+    public abstract void execute();
 
     public boolean haveChildren() {
         return false;

@@ -89,6 +89,7 @@ public class TestNeuralNetwork extends TestCase {
 
     /**
      * in this test the created the network to compare the results with encog
+     * tests the build-routine really
      */
     public void testNeuralNetwork() {
         // decided to use something called Encog-
@@ -103,6 +104,7 @@ public class TestNeuralNetwork extends TestCase {
         network.getStructure().finalizeStructure();
         network.reset();
 
+        // weights copied from reasonably well-trained network doing the same thing
         double[] weights = {-0.07436579220019145, 0.04068370154784863, -0.6118178821788891, -1.3482376121640667};
         double[][] weightArray = {{-0.07436579220019145, 0.04068370154784863}, {-0.6118178821788891, -1.3482376121640667}};
         Matrix matrix = Matrix.buildFromArray(weightArray);
@@ -357,8 +359,8 @@ public class TestNeuralNetwork extends TestCase {
 
     protected void log(String message) {
         if (debug) {
-            System.out.println(message);
-            //logger.debug(message);
+            //System.out.println(message);
+            logger.info(message);
         }
     }
 }

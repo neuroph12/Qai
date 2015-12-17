@@ -1,7 +1,7 @@
 package qube.qai.procedure.analysis;
 
 import qube.qai.data.Arguments;
-import qube.qai.data.TimeSeries;
+import qube.qai.data.TimeSequence;
 import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.ProcedureChain;
@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class NeuralNetworkForwardPropagation extends ProcedureChain {
 
-    public static String NAME = "Neural-Network Forward-Propagation";
+    public static String NAME = "Neural-network forward-propagation";
 
     public static String DESCRIPTION = "Calls forward-propagation routine of the " +
             "given neural-network with a given starting matrix to given number of steps.";
@@ -36,11 +36,11 @@ public class NeuralNetworkForwardPropagation extends ProcedureChain {
     public void buildArguments() {
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_NEURAL_NETWORK, INPUT_START_VECTOR, INPUT_NAMES, INPUT_DATES_FOR_STEPS);
-        arguments.putResultNames(MAP_OF_TIME_SERIES);
+        arguments.putResultNames(MAP_OF_TIME_SEQUENCE);
     }
 
     @Override
-    public void run() {
+    public void execute() {
 
         if (!arguments.isSatisfied()) {
             throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
@@ -52,7 +52,7 @@ public class NeuralNetworkForwardPropagation extends ProcedureChain {
         List<Date> dates = (List<Date>) arguments.getSelector(INPUT_DATES_FOR_STEPS).getData();
 
         // the time-series generated should be assigned to the named entities they represent
-        Map<String, TimeSeries> timeSeriesMap = new HashMap<String, TimeSeries>();
+        Map<String, TimeSequence> timeSeriesMap = new HashMap<String, TimeSequence>();
         Vector in = inputVector;
         for (int i = 0; i < dates.size(); i++) {
             // generate day's output
@@ -61,17 +61,17 @@ public class NeuralNetworkForwardPropagation extends ProcedureChain {
             // append the result in each entity's time-series
             for (int j = 0; j < outArray.length; j++) {
                 String key = names.get(j);
-                TimeSeries timeSeries = timeSeriesMap.get(key);
-                if (timeSeries == null) {
-                    timeSeries = new TimeSeries();
-                    timeSeriesMap.put(key, timeSeries);
+                TimeSequence timeSequence = timeSeriesMap.get(key);
+                if (timeSequence == null) {
+                    timeSequence = new TimeSequence();
+                    timeSeriesMap.put(key, timeSequence);
                 }
-                timeSeries.add(dates.get(i), outArray[j]);
+                timeSequence.add(dates.get(i), outArray[j]);
             }
             in = out;
         }
 
-        arguments.addResult(MAP_OF_TIME_SERIES, timeSeriesMap);
+        arguments.addResult(MAP_OF_TIME_SEQUENCE, timeSeriesMap);
 
     }
 }

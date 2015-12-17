@@ -17,7 +17,7 @@ public class StockQuoteRetriever extends BaseProcedure {
     private DataProvider provider;
 
     @Override
-    public void run() {
+    public void execute() {
         Collection<StockQuote> returnValue = new ArrayList<StockQuote>();
 
         //

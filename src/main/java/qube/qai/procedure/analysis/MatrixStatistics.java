@@ -33,7 +33,7 @@ public class MatrixStatistics extends ProcedureChain {
     }
 
     @Override
-    public void run() {
+    public void execute() {
 
         // first get the selector
         Matrix matrix = (Matrix) arguments.getSelector(INPUT_MATRIX).getData();

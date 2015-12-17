@@ -18,7 +18,7 @@ import java.util.Collection;
  */
 public abstract class ProcedureChain extends BaseProcedure {
 
-    public static String INPUT_TIME_SERIES = "time-series";
+    public static String INPUT_TIME_SEQUENCE = "time-sequence";
 
     public static String INPUT_NETWORK = "network";
 
@@ -32,17 +32,17 @@ public abstract class ProcedureChain extends BaseProcedure {
 
     public static String NETWORK_METRICS = "network metrics";
 
-    public static String TIME_SERIES_METRICS = "time-series metrics";
+    public static String TIME_SEQUENCE_METRICS = "time-sequence metrics";
 
     public static String FROM = "from";
 
     public static String CRITERIA = "criteria";
 
-    public static String AVERAGE_TIME_SERIES = "Average time-series";
+    public static String AVERAGE_TIME_SEQUENCE = "average time-sequence";
 
     public static String CHANGE_POINTS = "change points";
 
-    public static String MAP_OF_TIME_SERIES = "time series map";
+    public static String MAP_OF_TIME_SEQUENCE = "time-sequence map";
 
     public static String SORTED_ITEMS = "sorted items";
 

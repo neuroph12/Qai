@@ -3,15 +3,23 @@ package qube.qai.main;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import qube.qai.services.ProcedureSource;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.SelectorFactoryInterface;
+import qube.qai.services.UUIDServiceInterface;
 import qube.qai.services.implementation.DataSelectorFactory;
+import qube.qai.services.implementation.ProcedureSourceService;
+import qube.qai.services.implementation.UUIDService;
 import qube.qai.services.implementation.WikiSearchService;
 
 /**
  * Created by rainbird on 11/19/15.
  */
 public class QaiTestModule extends AbstractModule {
+
+    private Logger logger = LoggerFactory.getLogger("Qai-Module");
 
     private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
 
@@ -25,7 +33,11 @@ public class QaiTestModule extends AbstractModule {
     @Override
     protected void configure() {
 
-        // @TODO initialize test configuration based on QaiModule
+        // UUIDService
+        bind(UUIDServiceInterface.class).to(UUIDService.class);
+
+        // ProcedureSource
+        bind(ProcedureSource.class).to(ProcedureSourceService.class);
 
     }
 

@@ -2,7 +2,7 @@ package qube.qai.matrix;
 
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
-import qube.qai.data.TimeSeries;
+import qube.qai.data.TimeSequence;
 
 import java.util.List;
 
@@ -18,10 +18,10 @@ public class Vector extends Matrix {
         super(matrix);
     }
 
-    public static Vector buildFromTimeSeries(TimeSeries timeSeries) {
+    public static Vector buildFromTimeSeries(TimeSequence timeSequence) {
 
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
-        BasicMatrix column = factory.columns(timeSeries.toArray());
+        BasicMatrix column = factory.columns(timeSequence.toArray());
         Vector vector = new Vector(column);
 
         return vector;

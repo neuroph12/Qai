@@ -1,7 +1,7 @@
 package qube.qai.procedure.analysis;
 
 import qube.qai.data.Arguments;
-import qube.qai.data.TimeSeries;
+import qube.qai.data.TimeSequence;
 import qube.qai.procedure.ProcedureChain;
 
 import java.io.Serializable;
@@ -29,26 +29,26 @@ public class ChangePointAnalysis extends ProcedureChain {
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(INPUT_TIME_SERIES);
+        arguments = new Arguments(INPUT_TIME_SEQUENCE);
         arguments.putResultNames(CHANGE_POINTS);
     }
 
     @Override
-    public void run() {
+    public void execute() {
 
         if (!arguments.isSatisfied()) {
             throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
         }
 
         // first get the selector
-        TimeSeries timeSeries = (TimeSeries) arguments.getSelector(INPUT_TIME_SERIES).getData();
-        if (timeSeries == null) {
+        TimeSequence timeSequence = (TimeSequence) arguments.getSelector(INPUT_TIME_SEQUENCE).getData();
+        if (timeSequence == null) {
             logger.error("Input time-series has not been initialized properly: null value");
         }
 
         ChangepointAdapter changepointAdapter = new ChangepointAdapter();
-        Date[] dates = timeSeries.toDates();
-        Number[] rawData = timeSeries.toArray();
+        Date[] dates = timeSequence.toDates();
+        Number[] rawData = timeSequence.toArray();
         double[][] data = new double[rawData.length][2];
         for (int i = 0; i < rawData.length; i++) {
             data[i][0] = i;

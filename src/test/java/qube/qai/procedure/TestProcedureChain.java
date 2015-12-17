@@ -55,7 +55,7 @@ public class TestProcedureChain extends TestCase {
 
         ProcedureChain procedureChain = new ProcedureChain() {
             @Override
-            public void run() {
+            public void execute() {
                 log("procedureChain.run()");
                 double x = (Double) arguments.getSelector("x").getData();
                 double y = (Double) arguments.getSelector("y").getData();

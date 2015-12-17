@@ -20,48 +20,48 @@ public class TestTimeSeries extends TestCase {
     public void testTimeSeries() throws Exception {
         Date startDate = DateTime.parse("2015-1-1").toDate();
         Date endDate = DateTime.now().toDate();
-        TimeSeries<Double> timeSeries = createTimeSeries(startDate, endDate);
+        TimeSequence<Double> timeSequence = TimeSequence.createTimeSeries(startDate, endDate);
 
         int count = 0;
-        for (Iterator<Double> iterator = timeSeries.iterator(); iterator.hasNext(); count++) {
+        for (Iterator<Double> iterator = timeSequence.iterator(); iterator.hasNext(); count++) {
             log("next entry: " + iterator.next());
         }
 
-        Number[] values = timeSeries.toArray();
-        Date[] dates = timeSeries.toDates();
+        Number[] values = timeSequence.toArray();
+        Date[] dates = timeSequence.toDates();
         for (int i = 0; i < values.length; i++) {
             log("on date: " + dates[i] + " value: " + values[i].doubleValue());
         }
 
     }
 
-    public static List<Date> createDates(Date start, Date end) {
-        List<Date> dates = new ArrayList<Date>();
-        DateTime startDate = new DateTime(start);
-        DateTime endDate = new DateTime(end);
-        DateTime tmp = startDate;
-        while(tmp.isBefore(endDate) || tmp.equals(endDate)) {
-            dates.add(tmp.toDate());
-            tmp = tmp.plusDays(1);
-        }
+//    public static List<Date> createDates(Date start, Date end) {
+//        List<Date> dates = new ArrayList<Date>();
+//        DateTime startDate = new DateTime(start);
+//        DateTime endDate = new DateTime(end);
+//        DateTime tmp = startDate;
+//        while(tmp.isBefore(endDate) || tmp.equals(endDate)) {
+//            dates.add(tmp.toDate());
+//            tmp = tmp.plusDays(1);
+//        }
+//
+//        return dates;
+//    }
 
-        return dates;
-    }
-
-    public static TimeSeries<Double> createTimeSeries(Date start, Date end) {
-        TimeSeries timeSeries = new TimeSeries();
-        DateTime startDate = new DateTime(start);
-        DateTime endDate = new DateTime(end);
-
-        RandomNumber generator = new Normal(0.5, 0.1);
-
-        DateTime tmp = startDate;
-        while(tmp.isBefore(endDate) || tmp.equals(endDate)) {
-            timeSeries.add(tmp.toDate(), generator.doubleValue());
-            tmp = tmp.plusDays(1);
-        }
-        return timeSeries;
-    }
+//    public static TimeSequence<Double> createTimeSeries(Date start, Date end) {
+//        TimeSequence timeSequence = new TimeSequence();
+//        DateTime startDate = new DateTime(start);
+//        DateTime endDate = new DateTime(end);
+//
+//        RandomNumber generator = new Normal(0.5, 0.1);
+//
+//        DateTime tmp = startDate;
+//        while(tmp.isBefore(endDate) || tmp.equals(endDate)) {
+//            timeSequence.add(tmp.toDate(), generator.doubleValue());
+//            tmp = tmp.plusDays(1);
+//        }
+//        return timeSequence;
+//    }
 
     private void log(String message) {
         if (debug) {

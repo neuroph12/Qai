@@ -30,7 +30,7 @@ public class NetworkStatistics extends ProcedureChain {
     }
 
     @Override
-    public void run() {
+    public void execute() {
 
         if (!arguments.isSatisfied()) {
             throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");

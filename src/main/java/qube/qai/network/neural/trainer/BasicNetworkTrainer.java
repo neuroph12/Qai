@@ -8,13 +8,9 @@ import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
-import org.ojalgo.access.Access2D;
-import org.ojalgo.matrix.BasicMatrix;
-import org.ojalgo.matrix.PrimitiveMatrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.TimeSeries;
-import qube.qai.matrix.Vector;
+import qube.qai.data.TimeSequence;
 import qube.qai.network.neural.NeuralNetwork;
 
 import java.util.*;
@@ -88,15 +84,15 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
         }
     }
 
-    public static Map<Date, double[]> spliceToDates(List<Date> dates, Map<String, TimeSeries> timeSeriesMap) {
+    public static Map<Date, double[]> spliceToDates(List<Date> dates, Map<String, TimeSequence> timeSeriesMap) {
         Map<Date, double[]> dataSet = new TreeMap<Date, double[]>();
         for (Date date : dates) {
             double[] daily = new double[timeSeriesMap.size()];
             int i = 0;
             for (String name : timeSeriesMap.keySet()) {
-                TimeSeries timeSeries = timeSeriesMap.get(name);
+                TimeSequence timeSequence = timeSeriesMap.get(name);
                 // this is date's value for each name
-                daily[i] = timeSeries.getValue(date).doubleValue();
+                daily[i] = timeSequence.getValue(date).doubleValue();
                 dataSet.put(date, daily);
                 i++;
             }

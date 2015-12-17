@@ -37,7 +37,7 @@ public class WikiArchiveIndexer extends BaseProcedure {
     public String ZIP_FILE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
 
     @Override
-    public void run() {
+    public void execute() {
         this.INDEX_DIRECTORY = (String) arguments.getSelector("INDEX_DIRECTORY").getData();
         this.ZIP_FILE = (String) arguments.getSelector("ZIP_FILE").getData();
         indexZipFileEntries();

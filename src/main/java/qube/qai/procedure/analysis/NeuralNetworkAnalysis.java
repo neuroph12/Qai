@@ -36,7 +36,7 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
     }
 
     @Override
-    public void run() {
+    public void execute() {
 
         // we are of course assuming the selector is already initialized
         if (!arguments.isSatisfied()) {
@@ -81,11 +81,11 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
             selectProcedure.addChild(changePointAnalysis);
 
             // time-series analysis for the generated data
-            TimeSeriesAnalysis timeSeriesAnalysis = new TimeSeriesAnalysis();
-            changePointAnalysis.addChild(timeSeriesAnalysis);
+            TimeSequenceAnalysis timeSequenceAnalysis = new TimeSequenceAnalysis();
+            changePointAnalysis.addChild(timeSequenceAnalysis);
             // forward propagation which will be producing the data for time-series analysis
             NeuralNetworkForwardPropagation forwardPropagation = new NeuralNetworkForwardPropagation();
-            timeSeriesAnalysis.addChild(forwardPropagation);
+            timeSequenceAnalysis.addChild(forwardPropagation);
 
 
 
@@ -136,7 +136,7 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
             return data;
         }
 
-        public Object visit(TimeSeriesAnalysis procedure, Object data) {
+        public Object visit(TimeSequenceAnalysis procedure, Object data) {
 
             return data;
         }
