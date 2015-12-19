@@ -2,37 +2,52 @@ package qube.qai.matrix;
 
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
+import org.ojalgo.matrix.store.PhysicalStore;
 import org.ojalgo.random.Normal;
 import qube.qai.data.MetricTyped;
 import qube.qai.data.Metrics;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by rainbird on 11/22/15.
  * base class for the
  */
-public class Matrix implements MetricTyped {
+public class Matrix implements Serializable, MetricTyped {
 
     /**
      * matrix nodes are mainly for wrapping whatever matrix-library is to be used
      * at this point the decision seems to be in favor of ojAlgo
      */
+    protected int rows;
 
-    protected BasicMatrix matrix;
+    protected int columns;
+
+    protected double[][] values;
 
     public Matrix() {
     }
 
     public Matrix(BasicMatrix matrix) {
-        this.matrix = matrix;
+        rows = (int) matrix.countRows();
+        columns = (int) matrix.countColumns();
+        values = new double[rows][columns];
+        PhysicalStore<Double> primitive = matrix.toPrimitiveStore();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                values[i][j] = primitive.get(i, j);
+            }
+
+        }
+        //this.matrix = matrix;
     }
 
     public List<? extends Number> getElementsAsList() {
-        if (matrix == null) {
+        if (values == null) {
             return null;
         }
-        return matrix.toListOfElements();
+        return matrix().toListOfElements();
     }
 
     /**
@@ -60,6 +75,7 @@ public class Matrix implements MetricTyped {
 
     public Metrics buildMetrics() {
 
+        BasicMatrix matrix = matrix();
         Metrics metrics = new Metrics();
         metrics.putValue("rank", matrix.getRank());
         metrics.putValue("rows", matrix.countRows());
@@ -99,16 +115,21 @@ public class Matrix implements MetricTyped {
         return new Matrix(matrix);
     }
 
+    private static BasicMatrix build(double[][] array) {
+        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+        return factory.columns(array);
+    }
+
     public static Matrix buildFromArray(double[][] array) {
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
-        BasicMatrix columns = factory.columns(array);
+        BasicMatrix columns = build(array);
         Matrix matrix = new Matrix(columns);
         return matrix;
     }
 
     public List<? extends Number> toListOfElements() {
-        if (matrix != null) {
-            return matrix.toListOfElements();
+        if (values != null) {
+            return matrix().toListOfElements();
         }
         return null;
     }
@@ -117,69 +138,67 @@ public class Matrix implements MetricTyped {
      * @return
      */
     public Matrix transpose() {
-        BasicMatrix result = matrix.transpose();
-        Matrix newInstance = new Matrix(result);
-        return newInstance;
+        BasicMatrix result = matrix().transpose();
+        return new Matrix(result);
     }
 
     /**
      * @return
      */
     public Matrix negate() {
-        BasicMatrix result = this.matrix.negate();
-        Matrix newInstance = new Matrix(result);
-        return newInstance;
+        BasicMatrix result = matrix().negate();
+        return new Matrix(result);
     }
 
     /**
      * @return
      */
     public Matrix add(Matrix input) {
-        BasicMatrix result = this.matrix.add(input.getMatrix());
-        Matrix newInstance = new Matrix(result);
-        return newInstance;
+        BasicMatrix result = matrix().add(input.getMatrix());
+        return new Matrix(result);
     }
 
     /**
      * @return
      */
     public Matrix multiplyElements(Matrix input) {
-        BasicMatrix result = this.matrix.multiplyElements(input.getMatrix());
-        Matrix newInstance = new Matrix(result);
-        return newInstance;
+        BasicMatrix result = matrix().multiplyElements(input.getMatrix());
+        return new Matrix(result);
     }
 
     /**
      * @return
      */
     public Matrix multiply(Matrix QaiMatrix) {
-        BasicMatrix result = matrix.multiply(QaiMatrix.getMatrix());
-        Matrix newInstance = new Matrix(result);
-        return newInstance;
+        BasicMatrix result = matrix().multiply(QaiMatrix.getMatrix());
+        return new Matrix(result);
     }
 
     /**
      * @return
      */
     public Matrix multiplyLeft(Matrix QaiMatrix) {
-        BasicMatrix result = matrix.multiplyLeft(QaiMatrix.getMatrix());
-        Matrix newInstance = new Matrix(result);
-        return newInstance;
+        BasicMatrix result = matrix().multiplyLeft(QaiMatrix.getMatrix());
+        return new Matrix(result);
     }
 
     @Override
     public String toString() {
-        if (matrix != null) {
-            return matrix.toString();
+        if (values != null) {
+            return matrix().toString();
         }
         return super.toString();
     }
 
-    public BasicMatrix getMatrix() {
-        return matrix;
+    private BasicMatrix matrix() {
+        return build(values);
     }
 
-    public void setMatrix(BasicMatrix matrix) {
-        this.matrix = matrix;
+    public BasicMatrix getMatrix() {
+        return matrix();
     }
+
+//    public void setMatrix(BasicMatrix matrix) {
+//        this.matrix = matrix;
+//    }
 }

@@ -4,13 +4,14 @@ import org.joda.time.DateTime;
 import org.ojalgo.random.Normal;
 import org.ojalgo.random.RandomNumber;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.*;
 
 /**
  * Created by rainbird on 12/4/15.
  */
-public class TimeSequence<T extends Number> {
+public class TimeSequence<T extends Number> implements Serializable {
 
     private TreeSet<TimeSequenceEntry> entries;
 
@@ -57,7 +58,7 @@ public class TimeSequence<T extends Number> {
         return array;
     }
 
-    class TimeSeriesIterator<T> implements Iterator<T> {
+    class TimeSeriesIterator<T> implements Serializable, Iterator<T> {
 
         private Iterator<TimeSequenceEntry> iterator;
 
@@ -74,7 +75,7 @@ public class TimeSequence<T extends Number> {
         }
     }
 
-    class TimeSequenceEntry {
+    class TimeSequenceEntry implements Serializable {
 
         Date date;
         T entry;
@@ -101,7 +102,7 @@ public class TimeSequence<T extends Number> {
         }
     }
 
-    class DateComparator implements Comparator<TimeSequenceEntry> {
+    class DateComparator implements Serializable, Comparator<TimeSequenceEntry> {
 
         public int compare(TimeSequenceEntry o1, TimeSequenceEntry o2) {
             return o1.date.compareTo(o2.date);

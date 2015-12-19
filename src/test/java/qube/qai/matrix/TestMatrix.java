@@ -150,7 +150,7 @@ public class TestMatrix extends TestCase {
 
     }
 
-    public void restOjAlgoDietProblem() throws Exception {
+    public void testOjAlgoDietProblem() throws Exception {
         BasicLogger.debug();
         BasicLogger.debug("TheDietProblem");
         BasicLogger.debug(OjAlgoUtils.getTitle());
@@ -210,7 +210,7 @@ public class TestMatrix extends TestCase {
 
     }
 
-    public void restBasicMatrixUsage() throws Exception {
+    public void testBasicMatrixUsage() throws Exception {
         final BasicMatrix.Factory<PrimitiveMatrix> tmpFactory = PrimitiveMatrix.FACTORY;
         // A MatrixFactory has 13 different methods that return BasicMatrix instances.
 

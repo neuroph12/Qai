@@ -2,6 +2,7 @@ package qube.qai.matrix;
 
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
+import org.ojalgo.matrix.store.PhysicalStore;
 import qube.qai.data.TimeSequence;
 
 import java.util.List;
@@ -18,10 +19,15 @@ public class Vector extends Matrix {
         super(matrix);
     }
 
+    @Override
+    public double[] toArray() {
+        return values[0];
+    }
+
     public static Vector buildFromTimeSeries(TimeSequence timeSequence) {
 
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
-        BasicMatrix column = factory.columns(timeSequence.toArray());
+        BasicMatrix column = factory.rows(timeSequence.toArray());
         Vector vector = new Vector(column);
 
         return vector;
@@ -29,61 +35,58 @@ public class Vector extends Matrix {
 
     public static Vector buildFromList(List<? extends Number> list) {
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
-        BasicMatrix matrix = factory.columns(list);
+        BasicMatrix matrix = factory.rows(list);
         return new Vector(matrix);
     }
 
     public static Vector buildFromArray(double[] array) {
 
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
-        BasicMatrix column = factory.columns(array);
+        BasicMatrix column = factory.rows(array);
         Vector vector = new Vector(column);
 
         return vector;
     }
 
-
+    private BasicMatrix vector() {
+        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+        return factory.rows(values);
+    }
 
     @Override
     public Vector transpose() {
-        BasicMatrix result = matrix.transpose();
-        Vector newInstance = new Vector(result);
-        return newInstance;
+        BasicMatrix result = vector().transpose();
+        return new Vector(result);
     }
 
     @Override
     public Vector negate() {
-        BasicMatrix result = matrix.negate();
-        Vector newInstance = new Vector(result);
-        return newInstance;
+        BasicMatrix result = vector().negate();
+        return new Vector(result);
     }
 
     @Override
     public Vector add(Matrix input) {
-        BasicMatrix result = matrix.add(input.getMatrix());
-        Vector newInstance = new Vector(result);
-        return newInstance;
+        BasicMatrix result = vector().add(input.getMatrix());
+        return new Vector(result);
     }
 
     @Override
     public Vector multiplyElements(Matrix input) {
-        BasicMatrix result = matrix.multiplyElements(input.getMatrix());
-        Vector newInstance = new Vector(result);
-        return newInstance;
+        BasicMatrix result = vector().multiplyElements(input.getMatrix());
+        return new Vector(result);
     }
 
     @Override
     public Vector multiply(Matrix QaiMatrix) {
-        BasicMatrix result = matrix.multiply(QaiMatrix.getMatrix());
-        Vector newInstance = new Vector(result);
-        return newInstance;
+        BasicMatrix result = vector().multiply(QaiMatrix.getMatrix());
+        return new Vector(result);
     }
 
     @Override
     public Vector multiplyLeft(Matrix QaiMatrix) {
-        BasicMatrix result = matrix.multiplyLeft(QaiMatrix.getMatrix());
-        Vector newInstance = new Vector(result);
-        return newInstance;
+        BasicMatrix result = vector().multiplyLeft(QaiMatrix.getMatrix());
+        return new Vector(result);
     }
 
     @Override
@@ -110,8 +113,8 @@ public class Vector extends Matrix {
         return super.getMatrix();
     }
 
-    @Override
-    public void setMatrix(BasicMatrix matrix) {
-        super.setMatrix(matrix);
-    }
+//    @Override
+//    public void setMatrix(BasicMatrix matrix) {
+//        super.setMatrix(matrix);
+//    }
 }

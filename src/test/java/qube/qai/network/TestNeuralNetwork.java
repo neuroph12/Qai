@@ -132,7 +132,7 @@ public class TestNeuralNetwork extends TestCase {
 
     }
 
-    public void testEncog_2() throws Exception {
+    public void restEncog_2() throws Exception {
         // decided to use something called Encog-
         // the thing looks to be pretty complete
         double XOR_INPUT[][] = { { 0.0, 0.0, 0.0 },

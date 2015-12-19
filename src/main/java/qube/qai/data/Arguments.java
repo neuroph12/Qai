@@ -1,5 +1,6 @@
 package qube.qai.data;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.Set;
 /**
  * Created by rainbird on 11/27/15.
  */
-public class Arguments implements MetricTyped{
+public class Arguments implements Serializable, MetricTyped {
 
     private Set<String> argumentNames;
 

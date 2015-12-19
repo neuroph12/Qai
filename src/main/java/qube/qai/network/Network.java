@@ -4,13 +4,16 @@ import grph.oo.ObjectGrph;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.ojalgo.access.Access2D;
+import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.matrix.store.PhysicalStore;
+import org.ojalgo.matrix.store.PrimitiveDenseStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.MetricTyped;
 import qube.qai.data.Metrics;
 import qube.qai.matrix.Matrix;
+import ucar.units.Factor;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -88,7 +91,9 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
         }
 
         int size = getNumberOfVertices();
-        Access2D.Builder<PrimitiveMatrix> builder = PrimitiveMatrix.getBuilder(size, size);
+        BasicMatrix.Factory<PrimitiveMatrix> tmpFactory = PrimitiveMatrix.FACTORY;
+        Access2D.Builder<PrimitiveMatrix> builder = tmpFactory.getBuilder(size, size);
+        builder.fillAll(0.0);
 
         for (Edge edge : getAllEdges()) {
             Vertex from = edge.getFrom();
