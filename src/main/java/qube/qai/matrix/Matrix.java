@@ -26,6 +26,8 @@ public class Matrix implements Serializable, MetricTyped {
 
     protected double[][] values;
 
+    private static BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+
     public Matrix() {
     }
 
@@ -41,6 +43,10 @@ public class Matrix implements Serializable, MetricTyped {
 
         }
         //this.matrix = matrix;
+    }
+
+    public double getValueAt(int row, int column) {
+        return values[row][column];
     }
 
     public List<? extends Number> getElementsAsList() {
@@ -100,31 +106,24 @@ public class Matrix implements Serializable, MetricTyped {
 
         BasicMatrix basicMatrix;
         if (filled) {
-            basicMatrix = PrimitiveMatrix.FACTORY.makeFilled(rows, columns, new Normal(0.5, 10));
+            basicMatrix = factory.makeFilled(rows, columns, new Normal(0.5, 10));
         } else {
-            basicMatrix = PrimitiveMatrix.FACTORY.makeZero(rows, columns);
+            basicMatrix = factory.makeZero(rows, columns);
         }
-        Matrix matrix = new Matrix(basicMatrix);
-
-        return matrix;
+        return new Matrix(basicMatrix);
     }
 
     public static Matrix buildFromList(List<? extends Number> list) {
-        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
-        BasicMatrix matrix = factory.rows(list);
+        BasicMatrix matrix = factory.columns(list);
         return new Matrix(matrix);
     }
 
     private static BasicMatrix build(double[][] array) {
-        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
         return factory.columns(array);
     }
 
     public static Matrix buildFromArray(double[][] array) {
-        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
-        BasicMatrix columns = build(array);
-        Matrix matrix = new Matrix(columns);
-        return matrix;
+        return new Matrix(build(array));
     }
 
     public List<? extends Number> toListOfElements() {
@@ -198,7 +197,4 @@ public class Matrix implements Serializable, MetricTyped {
         return matrix();
     }
 
-//    public void setMatrix(BasicMatrix matrix) {
-//        this.matrix = matrix;
-//    }
 }

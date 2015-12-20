@@ -105,7 +105,8 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
 
             int indexFrom = v2i(from);
             int indexTo = v2i(to);
-            builder.set(indexFrom, indexTo, value);
+            //builder.set(indexFrom, indexTo, value);
+            builder.set(indexTo, indexFrom, value);
         }
 
         adjacencyMatrix = new Matrix(builder.build());

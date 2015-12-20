@@ -68,11 +68,10 @@ public class NeuralNetwork extends Network {
      */
     public Vector propagate(Vector input) {
 
-        double[] arrayIn = input.toArray();
-        double[] arrayOut = new double[arrayIn.length];
-        network.compute(arrayIn, arrayOut);
+        double[] in = input.toArray();
+        double[] out = propagate(in);
 
-        Vector result = Vector.buildFromArray(arrayOut);
+        Vector result = Vector.buildFromArray(out);
         return result;
     }
 
@@ -102,7 +101,7 @@ public class NeuralNetwork extends Network {
         Access2D.Builder<PrimitiveMatrix> builder = PrimitiveMatrix.FACTORY.getBuilder(size, size);
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                int index = i*size+j;
+                int index = j * size + i;
                 builder.set(i, j, array[index]);
             }
         }
@@ -118,6 +117,14 @@ public class NeuralNetwork extends Network {
         network.addLayer(new BasicLayer(new ActivationSigmoid(), false, size));
         network.getStructure().finalizeStructure();
 
-        network.decodeFromArray(adjacencyMatrix.toArray());
+        double[] flatArray = new double[size*size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                int index = j * size + i;
+                flatArray[index] = adjacencyMatrix.getValueAt(i, j);
+            }
+        }
+
+        network.decodeFromArray(flatArray);
     }
 }

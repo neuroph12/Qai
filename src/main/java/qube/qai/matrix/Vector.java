@@ -19,31 +19,31 @@ public class Vector extends Matrix {
         super(matrix);
     }
 
-    @Override
+    /*@Override
     public double[] toArray() {
-        return values[0];
-    }
+        return values[columns];
+    }*/
 
     public static Vector buildFromTimeSeries(TimeSequence timeSequence) {
 
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
-        BasicMatrix column = factory.rows(timeSequence.toArray());
-        Vector vector = new Vector(column);
+        BasicMatrix matrix = factory.columns(timeSequence.toArray());
+        Vector vector = new Vector(matrix);
 
         return vector;
     }
 
     public static Vector buildFromList(List<? extends Number> list) {
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
-        BasicMatrix matrix = factory.rows(list);
+        BasicMatrix matrix = factory.columns(list);
         return new Vector(matrix);
     }
 
     public static Vector buildFromArray(double[] array) {
 
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
-        BasicMatrix column = factory.rows(array);
-        Vector vector = new Vector(column);
+        BasicMatrix matrix = factory.columns(array);
+        Vector vector = new Vector(matrix);
 
         return vector;
     }
@@ -78,14 +78,14 @@ public class Vector extends Matrix {
     }
 
     @Override
-    public Vector multiply(Matrix QaiMatrix) {
-        BasicMatrix result = vector().multiply(QaiMatrix.getMatrix());
+    public Vector multiply(Matrix matrix) {
+        BasicMatrix result = vector().multiply(matrix.getMatrix());
         return new Vector(result);
     }
 
     @Override
-    public Vector multiplyLeft(Matrix QaiMatrix) {
-        BasicMatrix result = vector().multiplyLeft(QaiMatrix.getMatrix());
+    public Vector multiplyLeft(Matrix matrix) {
+        BasicMatrix result = vector().multiplyLeft(matrix.getMatrix());
         return new Vector(result);
     }
 
@@ -113,8 +113,4 @@ public class Vector extends Matrix {
         return super.getMatrix();
     }
 
-//    @Override
-//    public void setMatrix(BasicMatrix matrix) {
-//        super.setMatrix(matrix);
-//    }
 }
