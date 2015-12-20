@@ -49,14 +49,14 @@ public class NeuralNetwork extends Network {
 
     /**
      * this network will build the both the neural network
-     * using the given adjacency-matrix, and the grph-network
+     * using the given adjacency-matrix, and the graph-network
      * again using the same adjacency-matrix
      * @param weights
      */
     public NeuralNetwork(Matrix weights) {
         this.adjacencyMatrix = weights;
         // this might seem strange,
-        // but this way, both grph and encog networks are both set to the same thing
+        // but this way, both graph and encog networks are both set to the same thing
         this.buildFromAdjacencyMatrix();
         super.buildFromAdjacencyMatrix();
     }

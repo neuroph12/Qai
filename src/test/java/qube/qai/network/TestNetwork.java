@@ -17,6 +17,28 @@ public class TestNetwork extends TestCase {
 
     private boolean debug = true;
 
+    public void testNetworkSerialization() throws Exception {
+
+        Network network = Network.createTestNetwork();
+        //Graph graph = network.getGraph();
+        String serialString = Graph.serialString(network);
+        log("Serial string of graph: " + serialString);
+
+        Network createdNetwork = Graph.fromSerialString(serialString);
+        assertNotNull("network may not be null", createdNetwork);
+
+        String serialStringCopy = Graph.serialString(createdNetwork);
+        log("created graph serial: " + serialStringCopy);
+
+        boolean containsAllEdges = createdNetwork.getAllEdges().containsAll(network.getAllEdges());
+        log("all edges have to be contained: " + containsAllEdges);
+        assertTrue("all edges have to be contained", containsAllEdges);
+        boolean containsAllVertices = createdNetwork.getVertices().containsAll(network.getVertices());
+        log("all vertices have to be contained: " + containsAllVertices);
+        assertTrue("all vertices have to be contained", containsAllVertices);
+
+    }
+
     public void testNetworkBuildAdjacencyMatrix() throws Exception {
         Network network = Network.createTestNetwork();
 
@@ -44,7 +66,7 @@ public class TestNetwork extends TestCase {
      * @throws Exception
      */
     public void testNetworkVerticesAndEdges() throws Exception {
-        // this line is recommended by the authors of grph-library
+        // this line is recommended by the authors of graph-library
         ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
 
         Network network = Network.createTestNetwork();

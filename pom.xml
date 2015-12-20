@@ -34,8 +34,8 @@
         <!-- GRPH graph-library- added directly as a jar,
         because maven doesn't download the thing out of some reason -->
         <!--<dependency>-->
-            <!--<groupId>grph</groupId>-->
-            <!--<artifactId>grph</artifactId>-->
+            <!--<groupId>graph</groupId>-->
+            <!--<artifactId>graph</artifactId>-->
             <!--<version>1.6</version>-->
         <!--</dependency>-->
 

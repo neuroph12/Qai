@@ -67,7 +67,7 @@ public class TestWikiNetwork extends QaiBaseTestCase {
     }
 
     public void testGRPHNetwork() {
-        // this line is recommended by the authors of grph-library
+        // this line is recommended by the authors of graph-library
         ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
 
         ObjectGrph graph = new ObjectGrph<String, String>();

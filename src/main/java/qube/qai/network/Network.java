@@ -1,19 +1,18 @@
 package qube.qai.network;
 
-import grph.oo.ObjectGrph;
+import grph.Grph;
+import grph.in_memory.InMemoryGrph;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.ojalgo.access.Access2D;
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.matrix.store.PhysicalStore;
-import org.ojalgo.matrix.store.PrimitiveDenseStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.MetricTyped;
 import qube.qai.data.Metrics;
 import qube.qai.matrix.Matrix;
-import ucar.units.Factor;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -25,7 +24,7 @@ import java.util.Set;
  * to get a handle on the backingGrph on which the missing algorithms
  * can be called
  */
-public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements Serializable, MetricTyped {
+public class Network implements Serializable, MetricTyped {
 
     private Logger logger = LoggerFactory.getLogger("Network");
 
@@ -37,8 +36,27 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
 
     protected Matrix adjacencyMatrix;
 
+    private String serialGraph;
+
+    protected Graph graph;
+
     public Network() {
-        super();
+        this.graph = new Graph();
+    }
+
+    public Network(Graph graph) {
+        this.graph = graph;
+    }
+
+    private Graph grph() {
+        serialGraph = graph.getBackingGrph().toGrphText();
+        Grph g = new InMemoryGrph();
+
+        return graph;
+    }
+
+    public Graph getGraph() {
+        return graph;
     }
 
     public Metrics buildMetrics() {
@@ -162,7 +180,7 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
                 Edge edge = new Edge(from, to);
                 edge.setWeight(value.doubleValue());
                 if (!getAllEdges().contains(edge)) {
-                    addUndirectedSimpleEdge(from, edge, to);
+                    graph.addUndirectedSimpleEdge(from, edge, to);
                 }
             }
         }
@@ -181,61 +199,55 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
     }
 
     public int getNumberOfVertices() {
-        return super.backingGrph.getNumberOfVertices();
+        return graph.getBackingGrph().getNumberOfVertices();
     }
 
     public int getNumberOfEdges() {
-        return super.backingGrph.getNumberOfEdges();
+        return grph().getBackingGrph().getNumberOfEdges();
     }
 
-    @Override
     protected int v2i(Vertex vertex) {
-        return super.v2i(vertex);
+        return grph().v2i(vertex);
     }
 
-    @Override
     protected int e2i(Edge edge) {
-        return super.e2i(edge);
+        return grph().e2i(edge);
     }
 
-    @Override
     protected Vertex i2v(int v) {
-        return super.i2v(v);
+        return grph().i2v(v);
     }
 
-    @Override
     protected Edge i2e(int e) {
-        return super.i2e(e);
+        return grph().i2e(e);
     }
 
-    @Override
     public Collection<Vertex> getVertices() {
-        return super.getVertices();
+        return grph().getVertices();
     }
 
-    @Override
     public Set<Edge> getIncidentEdges(Vertex vertex) {
-        return super.getIncidentEdges(vertex);
+        return grph().getIncidentEdges(vertex);
     }
 
     public Collection<Edge> getAllEdges() {
-        return super.getEdges();
+        return grph().getEdges();
     }
 
     public double getAverageDegree() {
-        return super.backingGrph.getAverageDegree();
+        return grph().getBackingGrph().getAverageDegree();
     }
 
     public double getClusteringCoefficient() {
-        return super.backingGrph.getClusteringCoefficient();
+        return grph().getBackingGrph().getClusteringCoefficient();
     }
 
     public double getDensity() {
-        return super.backingGrph.getDensity();
+        return grph().getBackingGrph().getDensity();
     }
 
     public double getDiameter() {
-        return super.backingGrph.getDiameter();
+        return grph().getBackingGrph().getDiameter();
     }
 
     public double getPRUNE_TRESHOLD() {
@@ -256,7 +268,35 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
 
     @Override
     public String toString() {
-        return super.backingGrph.toString();
+        return grph().getBackingGrph().toString();
+    }
+
+    public void addVertex(Vertex vertex) {
+        grph().addVertex(vertex);
+    }
+
+    public void removeVertex(Vertex vertex) {
+        grph().removeVertex(vertex);
+    }
+
+    public boolean containsVertex(Vertex vertex) {
+        return grph().containsVertex(vertex);
+    }
+
+    public void addSimpleEdge(Vertex from, Edge edge, Vertex to) {
+        grph().addUndirectedSimpleEdge(from, edge, to);
+    }
+
+    public String getSerialGraph() {
+        return serialGraph;
+    }
+
+    public void setSerialGraph(String serialGraph) {
+        this.serialGraph = serialGraph;
+    }
+
+    public void setGraph(Graph graph) {
+        this.graph = graph;
     }
 
     /**
@@ -293,22 +333,22 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
         Vertex copenhagen = new Vertex("copenhagen");
         network.addVertex(copenhagen);
 
-        network.addUndirectedSimpleEdge(vienna, new Edge(vienna, london), london);
-        network.addUndirectedSimpleEdge(vienna, new Edge(vienna, mersin), mersin);
-        network.addUndirectedSimpleEdge(vienna, new Edge(vienna, bergen), bergen);
+        network.addSimpleEdge(vienna, new Edge(vienna, london), london);
+        network.addSimpleEdge(vienna, new Edge(vienna, mersin), mersin);
+        network.addSimpleEdge(vienna, new Edge(vienna, bergen), bergen);
 
-        network.addUndirectedSimpleEdge(london, new Edge(london, paris), paris);
-        network.addUndirectedSimpleEdge(london, new Edge(london, bergen), bergen);
-        network.addUndirectedSimpleEdge(london, new Edge(london, timbuktu), timbuktu);
-        network.addUndirectedSimpleEdge(london, new Edge(london, helsinki), helsinki);
-        network.addUndirectedSimpleEdge(london, new Edge(london, amsterdam), amsterdam);
+        network.addSimpleEdge(london, new Edge(london, paris), paris);
+        network.addSimpleEdge(london, new Edge(london, bergen), bergen);
+        network.addSimpleEdge(london, new Edge(london, timbuktu), timbuktu);
+        network.addSimpleEdge(london, new Edge(london, helsinki), helsinki);
+        network.addSimpleEdge(london, new Edge(london, amsterdam), amsterdam);
 
-        network.addUndirectedSimpleEdge(copenhagen, new Edge(copenhagen, amsterdam), amsterdam);
-        network.addUndirectedSimpleEdge(copenhagen, new Edge(copenhagen, helsinki), helsinki);
-        network.addUndirectedSimpleEdge(copenhagen, new Edge(copenhagen, bergen), bergen);
+        network.addSimpleEdge(copenhagen, new Edge(copenhagen, amsterdam), amsterdam);
+        network.addSimpleEdge(copenhagen, new Edge(copenhagen, helsinki), helsinki);
+        network.addSimpleEdge(copenhagen, new Edge(copenhagen, bergen), bergen);
 
-        network.addUndirectedSimpleEdge(bergen, new Edge(bergen, amsterdam), amsterdam);
-        network.addUndirectedSimpleEdge(bergen, new Edge(bergen, timbuktu), timbuktu);
+        network.addSimpleEdge(bergen, new Edge(bergen, amsterdam), amsterdam);
+        network.addSimpleEdge(bergen, new Edge(bergen, timbuktu), timbuktu);
 
         return network;
     }
@@ -368,8 +408,13 @@ public class Network extends ObjectGrph<Network.Vertex, Network.Edge> implements
         private double weight = 0;
 
         public Edge(Network.Vertex from, Network.Vertex to) {
+            this(from, to, 1.0);
+        }
+
+        public Edge(Vertex from, Vertex to, double weight) {
             this.from = from;
             this.to = to;
+            this.weight = weight;
         }
 
         @Override

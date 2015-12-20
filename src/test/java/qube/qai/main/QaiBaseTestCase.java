@@ -54,7 +54,7 @@ public class QaiBaseTestCase extends TestCase {
      * when this suite is in use
      * @return
      */
-    public static Test suite() {
+    /*public static Test suite() {
         TestSuite suite = new TestSuite("All tests");
 
         // data.analysis
@@ -96,6 +96,6 @@ public class QaiBaseTestCase extends TestCase {
         suite.addTestSuite(TestProcedureVisitors.class);
 
         return suite;
-    }
+    }*/
 
 }
