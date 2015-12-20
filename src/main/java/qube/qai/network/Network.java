@@ -1,7 +1,5 @@
 package qube.qai.network;
 
-import grph.Grph;
-import grph.in_memory.InMemoryGrph;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.ojalgo.access.Access2D;
@@ -38,25 +36,20 @@ public class Network implements Serializable, MetricTyped {
 
     private String serialGraph;
 
-    protected Graph graph;
+    //protected Graph graph;
 
     public Network() {
-        this.graph = new Graph();
+        //this.graph = new Graph();
     }
 
     public Network(Graph graph) {
-        this.graph = graph;
+        this.serialGraph = Graph.serialString(graph);
     }
 
-    private Graph grph() {
-        serialGraph = graph.getBackingGrph().toGrphText();
-        Grph g = new InMemoryGrph();
 
-        return graph;
-    }
 
     public Graph getGraph() {
-        return graph;
+        return graph();
     }
 
     public Metrics buildMetrics() {
@@ -113,7 +106,7 @@ public class Network implements Serializable, MetricTyped {
         Access2D.Builder<PrimitiveMatrix> builder = tmpFactory.getBuilder(size, size);
         builder.fillAll(0.0);
 
-        for (Edge edge : getAllEdges()) {
+        for (Edge edge : getEdges()) {
             Vertex from = edge.getFrom();
             Vertex to = edge.getTo();
             double value = edge.getWeight();
@@ -179,11 +172,16 @@ public class Network implements Serializable, MetricTyped {
                 // create the edge
                 Edge edge = new Edge(from, to);
                 edge.setWeight(value.doubleValue());
-                if (!getAllEdges().contains(edge)) {
-                    graph.addUndirectedSimpleEdge(from, edge, to);
+                if (!getEdges().contains(edge)) {
+                    graph().addUndirectedSimpleEdge(from, edge, to);
                 }
             }
         }
+    }
+
+    private Graph graph() {
+        Graph graph = Graph.fromSerialString(serialGraph);
+        return graph;
     }
 
     public boolean isMakeMatrix() {
@@ -199,55 +197,55 @@ public class Network implements Serializable, MetricTyped {
     }
 
     public int getNumberOfVertices() {
-        return graph.getBackingGrph().getNumberOfVertices();
+        return graph().getBackingGrph().getNumberOfVertices();
     }
 
     public int getNumberOfEdges() {
-        return grph().getBackingGrph().getNumberOfEdges();
+        return graph().getBackingGrph().getNumberOfEdges();
     }
 
     protected int v2i(Vertex vertex) {
-        return grph().v2i(vertex);
+        return graph().v2i(vertex);
     }
 
     protected int e2i(Edge edge) {
-        return grph().e2i(edge);
+        return graph().e2i(edge);
     }
 
     protected Vertex i2v(int v) {
-        return grph().i2v(v);
+        return graph().i2v(v);
     }
 
     protected Edge i2e(int e) {
-        return grph().i2e(e);
+        return graph().i2e(e);
     }
 
     public Collection<Vertex> getVertices() {
-        return grph().getVertices();
+        return graph().getVertices();
     }
 
     public Set<Edge> getIncidentEdges(Vertex vertex) {
-        return grph().getIncidentEdges(vertex);
+        return graph().getIncidentEdges(vertex);
     }
 
-    public Collection<Edge> getAllEdges() {
-        return grph().getEdges();
+    public Collection<Edge> getEdges() {
+        return graph().getEdges();
     }
 
     public double getAverageDegree() {
-        return grph().getBackingGrph().getAverageDegree();
+        return graph().getBackingGrph().getAverageDegree();
     }
 
     public double getClusteringCoefficient() {
-        return grph().getBackingGrph().getClusteringCoefficient();
+        return graph().getBackingGrph().getClusteringCoefficient();
     }
 
     public double getDensity() {
-        return grph().getBackingGrph().getDensity();
+        return graph().getBackingGrph().getDensity();
     }
 
     public double getDiameter() {
-        return grph().getBackingGrph().getDiameter();
+        return graph().getBackingGrph().getDiameter();
     }
 
     public double getPRUNE_TRESHOLD() {
@@ -268,23 +266,23 @@ public class Network implements Serializable, MetricTyped {
 
     @Override
     public String toString() {
-        return grph().getBackingGrph().toString();
+        return graph().getBackingGrph().toString();
     }
 
     public void addVertex(Vertex vertex) {
-        grph().addVertex(vertex);
+        graph().addVertex(vertex);
     }
 
     public void removeVertex(Vertex vertex) {
-        grph().removeVertex(vertex);
+        graph().removeVertex(vertex);
     }
 
     public boolean containsVertex(Vertex vertex) {
-        return grph().containsVertex(vertex);
+        return graph().containsVertex(vertex);
     }
 
     public void addSimpleEdge(Vertex from, Edge edge, Vertex to) {
-        grph().addUndirectedSimpleEdge(from, edge, to);
+        graph().addUndirectedSimpleEdge(from, edge, to);
     }
 
     public String getSerialGraph() {
@@ -296,7 +294,7 @@ public class Network implements Serializable, MetricTyped {
     }
 
     public void setGraph(Graph graph) {
-        this.graph = graph;
+        this.serialGraph = Graph.serialString(graph);
     }
 
     /**
@@ -407,10 +405,21 @@ public class Network implements Serializable, MetricTyped {
 
         private double weight = 0;
 
+        /**
+         * create an edge between the given vertices with weight 1.0
+         * @param from
+         * @param to
+         */
         public Edge(Network.Vertex from, Network.Vertex to) {
             this(from, to, 1.0);
         }
 
+        /**
+         * create an edge between vertices with given weight
+         * @param from
+         * @param to
+         * @param weight
+         */
         public Edge(Vertex from, Vertex to, double weight) {
             this.from = from;
             this.to = to;

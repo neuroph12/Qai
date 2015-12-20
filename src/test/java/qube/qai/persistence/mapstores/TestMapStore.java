@@ -74,6 +74,7 @@ public class TestMapStore extends QaiBaseTestCase {
         Iterable<String> keys = mapStore.loadAllKeys();
         for (String uuid : uuidList) {
             if (procedures.containsKey(uuid)) {
+                logger.info("uuid " + uuid + " was not found on the list of keys which are available on map-store");
                 continue;
             }
             Procedure procedure = procedures.get(uuid);
@@ -85,7 +86,7 @@ public class TestMapStore extends QaiBaseTestCase {
         for (String uuid : uuidList) {
             logger.info("loading procedure with uuid: " + uuid);
             Procedure procedure = mapStore.load(uuid);
-            //assertNotNull("procedure cannot be null", procedure);
+            assertNotNull("procedure cannot be null", procedure);
             if (procedure == null) {
                 logger.info("loading procedure with uuid: " + uuid + " has failed");
             } else {

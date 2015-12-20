@@ -24,16 +24,16 @@ public class TestNetwork extends TestCase {
         String serialString = Graph.serialString(network);
         log("Serial string of graph: " + serialString);
 
-        Network createdNetwork = Graph.fromSerialString(serialString);
-        assertNotNull("network may not be null", createdNetwork);
+        Graph graph = Graph.fromSerialString(serialString);
+        assertNotNull("network may not be null", graph);
 
-        String serialStringCopy = Graph.serialString(createdNetwork);
+        String serialStringCopy = Graph.serialString(graph);
         log("created graph serial: " + serialStringCopy);
 
-        boolean containsAllEdges = createdNetwork.getAllEdges().containsAll(network.getAllEdges());
+        boolean containsAllEdges = graph.getEdges().containsAll(network.getEdges());
         log("all edges have to be contained: " + containsAllEdges);
         assertTrue("all edges have to be contained", containsAllEdges);
-        boolean containsAllVertices = createdNetwork.getVertices().containsAll(network.getVertices());
+        boolean containsAllVertices = graph.getVertices().containsAll(network.getVertices());
         log("all vertices have to be contained: " + containsAllVertices);
         assertTrue("all vertices have to be contained", containsAllVertices);
 
@@ -46,7 +46,7 @@ public class TestNetwork extends TestCase {
         Matrix adjacencyMatrix = network.getAdjacencyMatrix();
         assertNotNull(adjacencyMatrix);
 
-        Collection<Network.Edge> edges = network.getAllEdges();
+        Collection<Network.Edge> edges = network.getEdges();
         for (Network.Edge edge : edges) {
             Network.Vertex from = edge.getFrom();
             Network.Vertex to = edge.getTo();
@@ -83,14 +83,14 @@ public class TestNetwork extends TestCase {
 
         // now check that the edges are working right
         Network.Edge viennaLondon = new Network.Edge(new Network.Vertex("vienna"), new Network.Vertex("london"));
-        assertTrue("has to find the edge", network.getAllEdges().contains(viennaLondon));
+        assertTrue("has to find the edge", network.getEdges().contains(viennaLondon));
 
         Network.Edge copenhagenHelsinki = new Network.Edge(new Network.Vertex("copenhagen"), new Network.Vertex("helsinki"));
-        assertTrue("has to find the edge", network.getAllEdges().contains(copenhagenHelsinki));
+        assertTrue("has to find the edge", network.getEdges().contains(copenhagenHelsinki));
 
         // this edge does not exist- test for negative as well...
         Network.Edge mersinTimbuktu = new Network.Edge(new Network.Vertex("mersin"), new Network.Vertex("timbuktu"));
-        assertTrue("has to fail to find the edge", !network.getAllEdges().contains(mersinTimbuktu));
+        assertTrue("has to fail to find the edge", !network.getEdges().contains(mersinTimbuktu));
     }
 
     private void logNetwork(Network network) {
