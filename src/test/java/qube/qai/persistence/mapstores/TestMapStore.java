@@ -25,10 +25,11 @@ public class TestMapStore extends QaiBaseTestCase {
      */
     /*public void testZipFileMapStore() throws Exception {
 
-        ZipFileMapStore mapStore = new ZipFileMapStore(testZipFile);
+        // @TODO this is to be implemented and tested right
+        TarballMapStore mapStore = new TarballMapStore(testZipFile);
         Iterable<String> names = mapStore.loadAllKeys();
         for (String name : names) {
-            logger.info("als in zip file: '" + name + "'");
+            logger.info("as in zip file: '" + name + "'");
         }
 
         // while we are at it, we can experiment with tar-balls
@@ -46,7 +47,8 @@ public class TestMapStore extends QaiBaseTestCase {
      * @throws Exception
      */
     public void testHsqlDBMapStore() throws Exception {
-        // @TODO implement the test to read files from a zip-file
+
+        // the fields in class will have to be injected
         HqslDBMapStore mapStore = new HqslDBMapStore();
         injector.injectMembers(mapStore);
 
@@ -72,6 +74,10 @@ public class TestMapStore extends QaiBaseTestCase {
             assertTrue("entities have to be equal", cachedEntity.equals(storedEntity));
         }
 
+        // when we are done we delete the things as well, just to keep things managable
+        for (String uuid : entityMap.keySet()) {
+            mapStore.delete(uuid);
+        }
     }
 
     private StockEntity createEntity(String name) {
@@ -89,7 +95,7 @@ public class TestMapStore extends QaiBaseTestCase {
      * no hassles because of serializable
      * @throws Exception
      */
-    public void restDirectorymapStore() throws Exception {
+    public void testDirectorymapStore() throws Exception {
 
         // begin with creating the thing
         DirectoryMapStore mapStore = new DirectoryMapStore(testDirectory);
@@ -134,10 +140,6 @@ public class TestMapStore extends QaiBaseTestCase {
             logger.info("deleting procedure with uuid: " + uuid);
             mapStore.delete(uuid);
         }
-
-        // as last check we ask for what is left- has to be an empty list
-//        Iterable<String> keys = mapStore.loadAllKeys();
-//        assertTrue(!keys.iterator().hasNext());
     }
 
 }

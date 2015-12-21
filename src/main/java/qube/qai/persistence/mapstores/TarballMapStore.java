@@ -3,10 +3,7 @@ package qube.qai.persistence.mapstores;
 import com.hazelcast.core.MapStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.persistence.WikiArticle;
-import qube.qai.procedure.Procedure;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -16,9 +13,9 @@ import java.util.zip.ZipFile;
 /**
  * Created by rainbird on 11/19/15.
  */
-public class ZipFileMapStore implements MapStore<String, Object> {
+public class TarballMapStore implements MapStore<String, Object> {
 
-    private static Logger logger = LoggerFactory.getLogger("ZipFileMapStore");
+    private static Logger logger = LoggerFactory.getLogger("TarballMapStore");
 
     private boolean debug;
 
@@ -29,13 +26,13 @@ public class ZipFileMapStore implements MapStore<String, Object> {
 
     private ZipFile zipFile;
 
-    public ZipFileMapStore() {
+    public TarballMapStore() {
         // whatever you need to do here
         this.debug = true;
 
     }
 
-    public ZipFileMapStore(String filename) {
+    public TarballMapStore(String filename) {
         this();
         this.filename = filename;
         init();
