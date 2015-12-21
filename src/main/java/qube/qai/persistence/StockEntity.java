@@ -1,14 +1,21 @@
 package qube.qai.persistence;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import qube.qai.services.implementation.UUIDService;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by rainbird on 11/19/15.
  */
+@Entity
 public class StockEntity implements Serializable {
 
-    private String uuidString;
+    @Id
+    private String uuid;
 
     private String tickerSymbol;
 
@@ -24,12 +31,33 @@ public class StockEntity implements Serializable {
 
     private Date dateFirstAdded;
 
-    public String getUuidString() {
-        return uuidString;
+    public StockEntity() {
+        this.uuid = UUIDService.uuidString();
     }
 
-    public void setUuidString(String uuidString) {
-        this.uuidString = uuidString;
+    public StockEntity(String tickerSymbol,
+                       String security,
+                       String secFilings,
+                       String gicsSector,
+                       String gicsSubIndustry,
+                       String address,
+                       Date dateFirstAdded) {
+        this();
+        this.tickerSymbol = tickerSymbol;
+        this.security = security;
+        this.secFilings = secFilings;
+        this.gicsSector = gicsSector;
+        this.gicsSubIndustry = gicsSubIndustry;
+        this.address = address;
+        this.dateFirstAdded = dateFirstAdded;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getTickerSymbol() {
@@ -86,5 +114,19 @@ public class StockEntity implements Serializable {
 
     public void setDateFirstAdded(Date dateFirstAdded) {
         this.dateFirstAdded = dateFirstAdded;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof StockEntity) {
+            StockEntity other = (StockEntity) obj;
+            return uuid.equals(other.uuid);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return uuid.hashCode();
     }
 }

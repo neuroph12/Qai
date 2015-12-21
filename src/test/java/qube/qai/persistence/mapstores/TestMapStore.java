@@ -1,14 +1,12 @@
 package qube.qai.persistence.mapstores;
 
 import qube.qai.main.QaiBaseTestCase;
+import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSource;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by rainbird on 11/19/15.
@@ -19,19 +17,26 @@ public class TestMapStore extends QaiBaseTestCase {
     private ProcedureSource procedureSource;
 
     private String testDirectory = "./test/procedures/";
-/*
-    public void testZipFileMapStore() throws Exception {
 
-        ZipFileMapStore mapStore = new ZipFileMapStore();
+    private String testZipFile = "/media/rainbird/ALEPH/wiki-data/enwiki-20121104-local-media-1.tar";
+
+    /**
+     * this is mainly to test how reading from the tarballs will be
+     */
+    /*public void testZipFileMapStore() throws Exception {
+
+        ZipFileMapStore mapStore = new ZipFileMapStore(testZipFile);
+        Iterable<String> names = mapStore.loadAllKeys();
+        for (String name : names) {
+            logger.info("als in zip file: '" + name + "'");
+        }
 
         // while we are at it, we can experiment with tar-balls
         // which are supposed to be the wikipedia resource dumps
         // the images and all, i guess...
 
 
-    }
-*/
-
+    }*/
 
     /**
      * in this case, we will be storing the Stock-Quotes in HsqlDb
@@ -40,13 +45,43 @@ public class TestMapStore extends QaiBaseTestCase {
      * so that they can be collected with sql-statements as well, if need be
      * @throws Exception
      */
-    /*public void testHsqlDBMapStore() throws Exception {
+    public void testHsqlDBMapStore() throws Exception {
         // @TODO implement the test to read files from a zip-file
         HqslDBMapStore mapStore = new HqslDBMapStore();
+        injector.injectMembers(mapStore);
 
-        fail("test not yet implemented!!!");
-    }*/
+        int number = 100;
+        Map<String, StockEntity> entityMap = new HashMap<String, StockEntity>();
+        for (int i = 0; i < number; i++) {
+            String name = "entity(" + i + ")";
+            StockEntity entity = createEntity(name);
+            String uuid = entity.getUuid();
+            mapStore.store(uuid, entity);
+            entityMap.put(uuid, entity);
+        }
 
+        // in this case the map-store should be returning all keys
+        Iterable<String> storedKeys = mapStore.loadAllKeys();
+        assertNotNull("stored keys may not be null", storedKeys);
+
+        // now read them back from database
+        for (String uuid : entityMap.keySet()) {
+            StockEntity cachedEntity = entityMap.get(uuid);
+            StockEntity storedEntity = mapStore.load(uuid);
+            assertNotNull("there has to be an entity", storedEntity);
+            assertTrue("entities have to be equal", cachedEntity.equals(storedEntity));
+        }
+
+    }
+
+    private StockEntity createEntity(String name) {
+        StockEntity entity = new StockEntity();
+        entity.setAddress("address " + name);
+        entity.setGicsSector("gics sector " + name);
+        entity.setGicsSubIndustry("subindustry " + name);
+        entity.setSecurity("security " + name);
+        return entity;
+    }
 
     /**
      * in this case we will be storing away the procedures on
@@ -54,7 +89,7 @@ public class TestMapStore extends QaiBaseTestCase {
      * no hassles because of serializable
      * @throws Exception
      */
-    public void testDirectorymapStore() throws Exception {
+    public void restDirectorymapStore() throws Exception {
 
         // begin with creating the thing
         DirectoryMapStore mapStore = new DirectoryMapStore(testDirectory);

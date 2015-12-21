@@ -9,6 +9,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStoreFactory;
+import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.persistence.mapstores.HqslDBMapStore;
 
@@ -38,16 +39,15 @@ public class QaiServerModule extends AbstractModule {
 
         Config config = new Config(NODE_NAME);
 
-        MapConfig stockQuoteConfig = config.getMapConfig("STOCK_QUOTES");
+        MapConfig stockQuoteConfig = config.getMapConfig("STOCK_ENTITIES");
         MapStoreConfig stockQuoteMapstoreConfig = stockQuoteConfig.getMapStoreConfig();
         if (stockQuoteConfig == null) {
-            System.out.println("mapStoreConfig is null... creating one for: STOCK_QUOTES");
+            System.out.println("mapStoreConfig is null... creating one for: STOCK_ENTITIES");
 
             stockQuoteMapstoreConfig = new MapStoreConfig();
-            stockQuoteMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockQuote>() {
-
-                public MapLoader<String, StockQuote> newMapStore(String mapName, Properties properties) {
-                    if ("STOCK_QUOTES".equals(mapName)) {
+            stockQuoteMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
+                public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
+                    if ("STOCK_ENTITIES".equals(mapName)) {
                         return new HqslDBMapStore();
                     } else {
                         return null;

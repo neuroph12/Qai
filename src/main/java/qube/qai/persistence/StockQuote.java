@@ -1,13 +1,20 @@
 package qube.qai.persistence;
 
+import qube.qai.services.implementation.UUIDService;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by rainbird on 11/19/15.
  */
+@Entity
 public class StockQuote implements Serializable {
 
+    @Id
+    private String uuid;
     private String tickerSymbol;
     private Date date;
     public double adjustedClose;
@@ -18,9 +25,11 @@ public class StockQuote implements Serializable {
     public double volume;
 
     public StockQuote() {
+        this.uuid = UUIDService.uuidString();
     }
 
     public StockQuote(String tickerSymbol, double adjustedClose, double close, double high, double low, double open, double volume) {
+        this();
         this.tickerSymbol = tickerSymbol;
         this.adjustedClose = adjustedClose;
         this.close = close;

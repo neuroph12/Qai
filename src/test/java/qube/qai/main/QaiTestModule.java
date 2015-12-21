@@ -2,9 +2,19 @@ package qube.qai.main;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+import com.hazelcast.config.Config;
+import com.hazelcast.config.MapConfig;
+import com.hazelcast.config.MapStoreConfig;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.MapLoader;
+import com.hazelcast.core.MapStoreFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.mapstores.HqslDBMapStore;
 import qube.qai.services.ProcedureSource;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.SelectorFactoryInterface;
@@ -14,12 +24,23 @@ import qube.qai.services.implementation.ProcedureSourceService;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.services.implementation.WikiSearchService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 /**
  * Created by rainbird on 11/19/15.
  */
 public class QaiTestModule extends AbstractModule {
 
     private Logger logger = LoggerFactory.getLogger("Qai-Module");
+
+    private static String NODE_NAME = "QaiTestNode";
+
+    private HazelcastInstance hazelcastInstance;
 
     private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
 
@@ -29,6 +50,7 @@ public class QaiTestModule extends AbstractModule {
 
     private static String wiktionaryZipFileName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
 
+    private static final ThreadLocal<EntityManager> ENTITY_MANAGER_CACHE = new ThreadLocal<EntityManager>();
 
     @Override
     protected void configure() {
@@ -40,6 +62,72 @@ public class QaiTestModule extends AbstractModule {
         bind(ProcedureSource.class).to(ProcedureSourceService.class);
 
     }
+
+    @Provides @Singleton
+    public EntityManagerFactory provideEntityManagerFactory() {
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+        properties.put("hibernate.connection.url", "jdbc:hsqldb:test/stockQuotes");
+        properties.put("hibernate.connection.username", "sa");
+        properties.put("hibernate.connection.password", "");
+        properties.put("hibernate.connection.pool_size", "1");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+        properties.put("hibernate.hbm2ddl.auto", "create");
+
+        properties.put("current_session_context_class", "org.hibernate.context.ManagedSessionContext");
+        properties.put("hibernate.cache.use_second_level_cache", "false");
+        properties.put("hibernate.cache.use_query_cache", "false");
+        properties.put("cache.provider_class", "org.hibernate.cache.NoCacheProvider");
+        properties.put("show_sql", "true");
+
+        return Persistence.createEntityManagerFactory("db-manager", properties);
+    }
+
+    @Provides
+    public EntityManager provideEntityManager(EntityManagerFactory entityManagerFactory) {
+        EntityManager entityManager = ENTITY_MANAGER_CACHE.get();
+        if (entityManager == null) {
+            ENTITY_MANAGER_CACHE.set(entityManager = entityManagerFactory.createEntityManager());
+        }
+        return entityManager;
+    }
+/*
+    @Provides
+    HazelcastInstance provideHazelcastInstance() {
+
+
+        if (hazelcastInstance != null) {
+            return hazelcastInstance;
+        }
+
+        Config config = new Config(NODE_NAME);
+
+        MapConfig stockQuoteConfig = config.getMapConfig("STOCK_ENTITIES");
+        MapStoreConfig stockQuoteMapstoreConfig = stockQuoteConfig.getMapStoreConfig();
+        if (stockQuoteConfig == null) {
+            System.out.println("mapStoreConfig is null... creating one for: STOCK_ENTITIES");
+
+            stockQuoteMapstoreConfig = new MapStoreConfig();
+            stockQuoteMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
+                public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
+                    if ("STOCK_ENTITIES".equals(mapName)) {
+                        return new HqslDBMapStore();
+                    } else {
+                        return null;
+                    }
+                }
+            });
+
+            stockQuoteConfig.setMapStoreConfig(stockQuoteMapstoreConfig);
+        }
+
+        // map-store for Wikipedia_en
+
+
+        hazelcastInstance = Hazelcast.newHazelcastInstance(config);
+        return hazelcastInstance;
+    }
+*/
 
     @Provides
     SelectorFactoryInterface provideSelectorFactoryInterface() {
