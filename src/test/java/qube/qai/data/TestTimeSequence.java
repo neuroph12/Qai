@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Created by rainbird on 12/10/15.
  */
-public class TestTimeSeries extends TestCase {
+public class TestTimeSequence extends TestCase {
 
     private boolean debug = true;
     Logger logger = LoggerFactory.getLogger("TestTimeSeries");

@@ -1,6 +1,5 @@
 package qube.qai.network;
 
-import bsh.StringUtil;
 import grph.Grph;
 import grph.oo.ObjectGrph;
 import org.apache.commons.lang3.StringUtils;
@@ -39,11 +38,11 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
         return super.i2e(e);
     }
 
-    public String serialString() {
+    public String encode() {
         return getBackingGrph().toGrphText();
     }
 
-    public static String serialString(Graph graph) {
+    public static String encode(Graph graph) {
         StringBuffer buffer = new StringBuffer(verticesOpen);
 
         for (Network.Vertex vertex : graph.getVertices()) {
@@ -72,13 +71,13 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
         return buffer.toString();
     }
 
-    public static String serialString(Network network) {
+    public static String encode(Network network) {
         StringBuffer buffer = new StringBuffer(verticesOpen);
         Graph graph = network.getGraph();
-        return serialString(graph);
+        return encode(graph);
     }
 
-    public static Graph fromSerialString(String serialString) {
+    public static Graph decode(String serialString) {
 
         Graph graph = new Graph();
 

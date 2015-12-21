@@ -5,7 +5,6 @@ import com.hazelcast.core.IMap;
 import org.apache.commons.lang3.StringUtils;
 import qube.qai.main.QaiBaseTestCase;
 import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSource;
 import qube.qai.services.UUIDServiceInterface;
@@ -42,7 +41,7 @@ public class TestHazelcastMaps extends QaiBaseTestCase {
         List<String> uuidList = new ArrayList<String>();
         for (int i = 0; i < number; i++) {
             String name = "entity(" + i + ")";
-            StockEntity entity = TestMapStore.createEntity(name);
+            StockEntity entity = TestMapStores.createEntity(name);
             String uuid = entity.getUuid();
             stockEntities.put(uuid, entity);
             uuidList.add(uuid);

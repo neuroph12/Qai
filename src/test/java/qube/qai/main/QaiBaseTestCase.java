@@ -2,28 +2,10 @@ package qube.qai.main;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.TestTimeSeries;
-import qube.qai.data.analysis.TestChangepointAdapter;
-import qube.qai.data.selectors.TestHazelcastSelector;
-import qube.qai.data.stores.TestDataStore;
-import qube.qai.matrix.TestMatrix;
-import qube.qai.network.TestNetwork;
-import qube.qai.network.TestNeuralNetwork;
-import qube.qai.network.TestSemanticNetwork;
-import qube.qai.network.TestWikiNetwork;
-import qube.qai.network.neural.trainer.TestNeuralNetworkTraining;
-import qube.qai.persistence.mapstores.TestMapStore;
-import qube.qai.procedure.TestAnalysisProcedures;
-import qube.qai.procedure.TestProcedureChain;
-import qube.qai.procedure.TestWikiSearch;
-import qube.qai.procedure.visitor.TestProcedureVisitors;
-import qube.qai.services.implementation.TestUUIDGenerator;
 
 /**
  * Created by rainbird on 11/19/15.

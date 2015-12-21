@@ -21,13 +21,13 @@ public class TestNetwork extends TestCase {
 
         Network network = Network.createTestNetwork();
         //Graph graph = network.getGraph();
-        String serialString = Graph.serialString(network);
+        String serialString = Graph.encode(network);
         log("Serial string of graph: " + serialString);
 
-        Graph graph = Graph.fromSerialString(serialString);
+        Graph graph = Graph.decode(serialString);
         assertNotNull("network may not be null", graph);
 
-        String serialStringCopy = Graph.serialString(graph);
+        String serialStringCopy = Graph.encode(graph);
         log("created graph serial: " + serialStringCopy);
 
         boolean containsAllEdges = graph.getEdges().containsAll(network.getEdges());

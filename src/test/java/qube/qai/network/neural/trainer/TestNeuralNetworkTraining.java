@@ -3,7 +3,6 @@ package qube.qai.network.neural.trainer;
 import junit.framework.TestCase;
 import org.encog.ml.data.MLDataPair;
 import org.joda.time.DateTime;
-import qube.qai.data.TestTimeSeries;
 import qube.qai.data.TimeSequence;
 import qube.qai.matrix.Matrix;
 import qube.qai.network.neural.NeuralNetwork;

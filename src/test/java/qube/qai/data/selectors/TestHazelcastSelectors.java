@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import qube.qai.data.Selector;
 import qube.qai.main.QaiBaseTestCase;
 import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.mapstores.TestMapStore;
+import qube.qai.persistence.mapstores.TestMapStores;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSource;
 import qube.qai.services.UUIDServiceInterface;
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by rainbird on 11/19/15.
  */
-public class TestHazelcastSelector extends QaiBaseTestCase {
+public class TestHazelcastSelectors extends QaiBaseTestCase {
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -41,7 +41,7 @@ public class TestHazelcastSelector extends QaiBaseTestCase {
         Collection<Selector> selectors = new ArrayList<Selector>();
         for (int i = 0; i < number; i++) {
             String name = "entity(" + i + ")";
-            StockEntity entity = TestMapStore.createEntity(name);
+            StockEntity entity = TestMapStores.createEntity(name);
             String uuid = entity.getUuid();
             stockEntities.put(uuid, entity);
             Selector<StockEntity> selector = new HazelcastSelector<StockEntity>(STOCK_SOURCE, uuid);
@@ -81,5 +81,9 @@ public class TestHazelcastSelector extends QaiBaseTestCase {
             Procedure procedure = (Procedure) selector.getData();
             assertNotNull("there has to be a procedure", procedure);
         }
+    }
+
+    public void testHazelcastWikiArticles() throws Exception {
+        fail("test not yet implemented");
     }
 }

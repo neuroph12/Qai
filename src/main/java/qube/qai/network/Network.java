@@ -43,7 +43,7 @@ public class Network implements Serializable, MetricTyped {
     }
 
     public Network(Graph graph) {
-        this.serialGraph = Graph.serialString(graph);
+        this.serialGraph = Graph.encode(graph);
     }
 
 
@@ -180,7 +180,7 @@ public class Network implements Serializable, MetricTyped {
     }
 
     private Graph graph() {
-        Graph graph = Graph.fromSerialString(serialGraph);
+        Graph graph = Graph.decode(serialGraph);
         return graph;
     }
 
@@ -294,7 +294,7 @@ public class Network implements Serializable, MetricTyped {
     }
 
     public void setGraph(Graph graph) {
-        this.serialGraph = Graph.serialString(graph);
+        this.serialGraph = Graph.encode(graph);
     }
 
     /**

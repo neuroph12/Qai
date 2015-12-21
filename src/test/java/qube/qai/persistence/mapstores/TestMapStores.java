@@ -11,19 +11,20 @@ import java.util.*;
 /**
  * Created by rainbird on 11/19/15.
  */
-public class TestMapStore extends QaiBaseTestCase {
+public class TestMapStores extends QaiBaseTestCase {
 
     @Inject
     private ProcedureSource procedureSource;
 
     private String testDirectory = "./test/procedures/";
 
-    private String testZipFile = "/media/rainbird/ALEPH/wiki-data/enwiki-20121104-local-media-1.tar";
-
     /**
      * this is mainly to test how reading from the tarballs will be
      */
-    /*public void testZipFileMapStore() throws Exception {
+    /*
+    private String testZipFile = "/media/rainbird/ALEPH/wiki-data/enwiki-20121104-local-media-1.tar";
+
+    public void testZipFileMapStore() throws Exception {
 
         // @TODO this is to be implemented and tested right
         TarballMapStore mapStore = new TarballMapStore(testZipFile);
@@ -36,6 +37,19 @@ public class TestMapStore extends QaiBaseTestCase {
         // which are supposed to be the wikipedia resource dumps
         // the images and all, i guess...
     }*/
+
+    public void testWikiArticleMapStore() throws Exception {
+
+        WikiArticleMapStore mapStore = new WikiArticleMapStore();
+        fail("implementation missing");
+    }
+
+    public void testWikiTarballMapStore() throws Exception {
+
+        WikiTarballMapStore mapStore = new WikiTarballMapStore();
+
+        fail("implementation missing");
+    }
 
     /**
      * in this case, we will be storing the Stock-Quotes in HsqlDb
@@ -94,7 +108,7 @@ public class TestMapStore extends QaiBaseTestCase {
      * no hassles because of serializable
      * @throws Exception
      */
-    public void testDirectorymapStore() throws Exception {
+    public void testDirectoryMapStore() throws Exception {
 
         // begin with creating the thing
         DirectoryMapStore mapStore = new DirectoryMapStore(testDirectory);
