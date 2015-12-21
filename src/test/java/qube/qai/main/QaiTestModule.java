@@ -3,7 +3,6 @@ package qube.qai.main;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.Config;
@@ -26,6 +25,7 @@ import qube.qai.services.implementation.ProcedureSourceService;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.services.implementation.WikiSearchService;
 
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -52,6 +52,8 @@ public class QaiTestModule extends AbstractModule {
 
     private static String wiktionaryZipFileName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
 
+    private static String STOCK_QUOTES_DIRECTORY = "test/stockquotes/";
+
     private static final ThreadLocal<EntityManager> ENTITY_MANAGER_CACHE = new ThreadLocal<EntityManager>();
 
     @Override
@@ -69,7 +71,7 @@ public class QaiTestModule extends AbstractModule {
     public EntityManagerFactory provideEntityManagerFactory() {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
-        properties.put("hibernate.connection.url", "jdbc:hsqldb:test/stockQuotes");
+        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + STOCK_QUOTES_DIRECTORY);
         properties.put("hibernate.connection.username", "sa");
         properties.put("hibernate.connection.password", "");
         properties.put("hibernate.connection.pool_size", "1");

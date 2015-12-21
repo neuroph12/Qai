@@ -2,9 +2,13 @@ package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import org.apache.commons.lang3.StringUtils;
 import qube.qai.main.QaiBaseTestCase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
+import qube.qai.procedure.Procedure;
+import qube.qai.services.ProcedureSource;
+import qube.qai.services.UUIDServiceInterface;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -16,15 +20,23 @@ import java.util.List;
 public class TestHazelcastMaps extends QaiBaseTestCase {
 
     @Inject
-    private HazelcastInstance hazelcastInstance;
+    private ProcedureSource procedureSource;
 
-    public void testHazelcastInstance() throws Exception {
+    @Inject
+    private UUIDServiceInterface uuidService;
+
+    private static String STOCK_ENTITIES = "STOCK_ENTITIES";
+    private static String PROCEDURES = "PROCEDURES";
+
+    public void testHazelcastStockEntities() throws Exception {
+
+        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
 
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
 
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
-        IMap<String,StockEntity> stockEntities = hazelcastInstance.getMap("STOCK_ENTITIES");
+        IMap<String,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_ENTITIES);
         assertNotNull("there has to be a map", stockEntities);
         int number = 100;
         List<String> uuidList = new ArrayList<String>();
@@ -50,5 +62,36 @@ public class TestHazelcastMaps extends QaiBaseTestCase {
 
     }
 
+    public void testHazelcastProcedures() throws Exception {
+
+        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
+
+        assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
+
+        IMap<String,Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURES);
+        String[] procedureNames = procedureSource.getProcedureNames();
+
+        // first get a hold of the procedures
+        List<String> uuidList = new ArrayList<String>();
+        for (String name : procedureNames) {
+            Procedure procedure = procedureSource.getProcedureWithName(name);
+            String uuid = procedure.getUuid();
+            if (StringUtils.isBlank(uuid)) {
+                uuid = uuidService.createUUIDString();
+                procedure.setUuid(uuid);
+            }
+            procedureMap.put(uuid, procedure);
+            uuidList.add(uuid);
+        }
+
+        for (String uuid : uuidList) {
+            assertTrue("we just put this one 'ere", procedureMap.containsKey(uuid));
+        }
+
+        for (String uuid : uuidList) {
+            Procedure procedure = procedureMap.get(uuid);
+            assertNotNull("procedure should not be null", procedure);
+        }
+    }
 
 }

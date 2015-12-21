@@ -36,7 +36,10 @@ public class WikiSearchService implements SearchServiceInterface {
 
         public String ZIP_FILE_NAME;
 
-        public WikiSearchService(String indexDirectory, String zipFileName) {
+    public WikiSearchService() {
+    }
+
+    public WikiSearchService(String indexDirectory, String zipFileName) {
             this.INDEX_DIRECTORY = indexDirectory;
             this.ZIP_FILE_NAME = zipFileName;
         }

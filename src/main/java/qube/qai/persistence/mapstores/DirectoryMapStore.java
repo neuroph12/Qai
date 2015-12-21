@@ -16,8 +16,6 @@ public class DirectoryMapStore implements MapStore<String, Procedure> {
 
     private Logger logger = LoggerFactory.getLogger("DirectoryMapStore");
 
-    //private XStream xstream = new XStream();
-
     private String directory;
 
     public DirectoryMapStore() {
@@ -105,6 +103,9 @@ public class DirectoryMapStore implements MapStore<String, Procedure> {
         List<String> filenames = new ArrayList<String>();
         File file = new File(directory);
         String[] names = file.list();
+        if (names == null) {
+            return filenames;
+        }
         for (String name : names) {
             filenames.add(name);
         }

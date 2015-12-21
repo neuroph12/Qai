@@ -33,6 +33,8 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
 
     protected String description;
 
+    protected long duration;
+
     protected double progressPercentage;
 
     protected boolean hasExecuted = false;
@@ -75,7 +77,9 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
     }
 
     public final void run() {
+        long start = System.currentTimeMillis();
         execute();
+        duration = System.currentTimeMillis() - start;
         hasExecuted  = true;
     }
 

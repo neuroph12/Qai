@@ -30,6 +30,8 @@ public interface Procedure extends Serializable, Runnable, HazelcastInstanceAwar
 
     String getUuid();
 
+    void setUuid(String uuid);
+
     String getDescription();
 
     double getProgressPercentage();

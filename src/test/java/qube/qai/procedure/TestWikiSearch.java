@@ -1,21 +1,23 @@
 package qube.qai.procedure;
 
 import junit.framework.TestCase;
+import qube.qai.main.QaiBaseTestCase;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.services.implementation.WikiSearchService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.File;
 import java.util.Collection;
 
 /**
  * Created by rainbird on 11/11/15.
  */
-public class TestWikiSearch extends TestCase {
+public class TestWikiSearch extends QaiBaseTestCase {
 
-    public String INDEX_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
-
-    public String ZIP_FILE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    @Inject @Named("Wiktionary_en")
+    private SearchServiceInterface searchService;
 
     /**
      * @TOOD this test needs improvement- start with injecting the constants
@@ -23,15 +25,15 @@ public class TestWikiSearch extends TestCase {
      */
     public void testSearch() throws Exception {
 
-        File indexDiretpory = new File(INDEX_DIRECTORY);
-        assertTrue("index directory not found", indexDiretpory.exists());
+        // do some searching and display results...
+        String[] searchList = {"test", "mouse", "silly"};
+        for (String search : searchList) {
+            Collection<SearchResult> results = searchService.searchInputString(search, "title", 100);
+            assertTrue("no results", results != null && !results.isEmpty());
+            for (SearchResult result : results) {
+                logger.info("searching: '" + search + "' resulted: '" + result.getTitle() + "' with " + result.getRelevance() + "% relevance");
+            }
+        }
 
-        File zipFile = new File(ZIP_FILE);
-        assertTrue("zip file not found", zipFile.exists());
-
-        SearchServiceInterface searchService = new WikiSearchService(INDEX_DIRECTORY, ZIP_FILE);
-
-        Collection<SearchResult> results = searchService.searchInputString("test", "title", 100);
-        assertTrue("no results", results != null && !results.isEmpty());
     }
 }
