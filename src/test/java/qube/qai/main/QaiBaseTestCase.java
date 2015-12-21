@@ -84,6 +84,7 @@ public class QaiBaseTestCase extends TestCase {
 
         // persistence.mapstores
         suite.addTestSuite(TestMapStore.class);
+        suite.addTestSuite(TestHazelcastMaps.class);
 
         // procedure
         suite.addTestSuite(TestWikiArchiveIndexer.class);

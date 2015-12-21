@@ -7,27 +7,27 @@ import com.hazelcast.core.HazelcastInstance;
 import javax.inject.Inject;
 
 /**
- * Created by rainbird on 11/9/15.
+ * Created by rainbird on 12/21/15.
  */
-public class QaiServerNode {
+public class QaiTestNode {
 
     private boolean debug = true;
 
     private static Injector injector;
 
-    private String NODE_NAME = "QaiNode";
+    private String NODE_NAME = "QaiTestNode";
 
     @Inject
     private HazelcastInstance hazelcastInstance;
 
-    public QaiServerNode() {
+    public QaiTestNode() {
     }
 
     protected void startServices() {
         // injector knows all
         // Server configuration lies in QaiServerModule
         // other Qai dependent services and things lie in QaiModule
-        injector = Guice.createInjector(new QaiServerModule(), new QaiModule());
+        injector = Guice.createInjector(new QaiTestServerModule(), new QaiTestModule());
         injector.injectMembers(this);
 
         // the whole configuration takes place in guice
@@ -40,8 +40,8 @@ public class QaiServerNode {
     public static void main(String[] params) {
 
         // instantiate the node and start its services
-        QaiServerNode qaiServerNode = new QaiServerNode();
-        qaiServerNode.startServices();
+        QaiNode qaiNode = new QaiNode();
+        qaiNode.startServices();
     }
 
     private void log(String message) {
@@ -53,4 +53,5 @@ public class QaiServerNode {
     public static Injector getInjector() {
         return injector;
     }
+
 }

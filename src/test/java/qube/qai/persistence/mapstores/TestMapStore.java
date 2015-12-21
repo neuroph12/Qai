@@ -35,8 +35,6 @@ public class TestMapStore extends QaiBaseTestCase {
         // while we are at it, we can experiment with tar-balls
         // which are supposed to be the wikipedia resource dumps
         // the images and all, i guess...
-
-
     }*/
 
     /**
@@ -80,12 +78,13 @@ public class TestMapStore extends QaiBaseTestCase {
         }
     }
 
-    private StockEntity createEntity(String name) {
+    public static StockEntity createEntity(String name) {
         StockEntity entity = new StockEntity();
-        entity.setAddress("address " + name);
-        entity.setGicsSector("gics sector " + name);
-        entity.setGicsSubIndustry("subindustry " + name);
-        entity.setSecurity("security " + name);
+        entity.setName(name);
+        entity.setAddress("address of " + name);
+        entity.setGicsSector("gicsSector of " + name);
+        entity.setGicsSubIndustry("gicsSubIndustry of " + name);
+        entity.setSecurity("security of " + name);
         return entity;
     }
 

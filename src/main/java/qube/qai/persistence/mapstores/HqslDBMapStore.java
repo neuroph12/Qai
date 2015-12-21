@@ -26,44 +26,18 @@ public class HqslDBMapStore implements MapStore<String, StockEntity> {
 
     private boolean debug = true;
 
-    // varchar(45) was the original- changed that to string
-    private String filename;
-    private String createTable = "create table if not exists StockQuote " +
-            "(uuid String, " +
-            "tickerSymbol String, " +
-            "security String, " +
-            "secFilings String," +
-            "gicsSector String," +
-            "gicsSubIndustry String," +
-            "address String," +
-            "dateFristAdded Date)";
-    //private final Connection con;
-
     @Inject
     protected EntityManager entityManager;
+
     /**
      * @TODO a more generic implementation of the class is required
      * @TODO and its test, obviously.
      * this is a very interesting notion for creating a generic
      * database backed map-store really...
      */
-    public HqslDBMapStore() {
-//        String connString = "jdbc:hsqldb:" + filename;
-//        try {
-//            con = DriverManager.getConnection(connString, "SA", "");
-//            con.createStatement().executeUpdate(createTable);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-    }
+    public HqslDBMapStore() { }
 
     public void store(String key, StockEntity value) {
-//        try {
-//            String statement = ""; //format("insert into person values(%s,'%s')", key, value.name)
-//            con.createStatement().executeUpdate(statement);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
         entityManager.persist(value);
     }
 
@@ -86,19 +60,6 @@ public class HqslDBMapStore implements MapStore<String, StockEntity> {
     }
 
     public StockEntity load(String key) {
-//        try {
-//            String statement = ""; // format("select name from person where id =%s", key)
-//            ResultSet resultSet = con.createStatement().executeQuery(statement);
-//            try {
-//                if (!resultSet.next()) return null;
-//                String name = resultSet.getString(1);
-//                return new StockEntity();
-//            } finally {
-//                resultSet.close();
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
         StockEntity entity = entityManager.find(StockEntity.class, key);
         return entity;
     }

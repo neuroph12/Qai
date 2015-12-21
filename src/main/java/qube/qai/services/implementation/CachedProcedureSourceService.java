@@ -37,8 +37,8 @@ public class CachedProcedureSourceService implements ProcedureSource {
         for (String name : procedureNames) {
             Procedure procedure = sourceService.getProcedureWithName(name);
             if (!procedure.hasExecuted()) {
-                logger.info("procedure: " + name + " is running as part of initialization...");
-                procedure.run();
+                //logger.info("procedure: " + name + " is running as part of initialization...");
+                //procedure.run();
             }
             procedureMap.put(name, procedure);
         }

@@ -17,6 +17,8 @@ public class StockEntity implements Serializable {
     @Id
     private String uuid;
 
+    private String name;
+
     private String tickerSymbol;
 
     private String security;
@@ -35,7 +37,8 @@ public class StockEntity implements Serializable {
         this.uuid = UUIDService.uuidString();
     }
 
-    public StockEntity(String tickerSymbol,
+    public StockEntity(String name,
+                       String tickerSymbol,
                        String security,
                        String secFilings,
                        String gicsSector,
@@ -43,6 +46,7 @@ public class StockEntity implements Serializable {
                        String address,
                        Date dateFirstAdded) {
         this();
+        this.name = name;
         this.tickerSymbol = tickerSymbol;
         this.security = security;
         this.secFilings = secFilings;
@@ -58,6 +62,14 @@ public class StockEntity implements Serializable {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getTickerSymbol() {

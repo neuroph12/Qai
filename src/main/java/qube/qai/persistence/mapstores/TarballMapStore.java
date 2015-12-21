@@ -26,6 +26,9 @@ public class TarballMapStore implements MapStore<String, Object> {
 
     private ZipFile zipFile;
 
+    /**
+     * this class is mainly for retrieving the resources from wiki-tarballs
+     */
     public TarballMapStore() {
         // whatever you need to do here
         this.debug = true;
