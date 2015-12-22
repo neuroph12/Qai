@@ -13,7 +13,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import qube.qai.persistence.WikiArticle;
-import qube.qai.procedure.BaseProcedure;
+import qube.qai.procedure.Procedure;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +26,7 @@ import java.util.zip.ZipFile;
 /**
  * Created by rainbird on 11/3/15.
  */
-public class WikiArchiveIndexer extends BaseProcedure {
+public class WikiArchiveIndexer extends Procedure {
 
     private boolean debug = false;
 
@@ -87,6 +87,10 @@ public class WikiArchiveIndexer extends BaseProcedure {
         }
     }
 
+    @Override
+    public void buildArguments() {
+
+    }
 
     public String getINDEX_DIRECTORY() {
         return INDEX_DIRECTORY;

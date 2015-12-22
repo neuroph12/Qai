@@ -70,6 +70,10 @@ public class DirectoryMapStore implements MapStore<String, Procedure> {
         try {
             String filename = directory + key;
             File file = new File(filename);
+            if (!file.exists()) {
+                logger.error("procedure: " + key + " not found, returning null");
+                return null;
+            }
             InputStream fin = new FileInputStream(file);
             ObjectInputStream inStream = new ObjectInputStream(fin);
             procedure = (Procedure) inStream.readObject();

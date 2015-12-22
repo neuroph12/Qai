@@ -4,11 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
-import qube.qai.data.analysis.Statistics;
 import qube.qai.services.implementation.DataSelectorFactory;
-import qube.qai.services.implementation.UUIDService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -16,7 +13,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 11/27/15.
  */
-public abstract class ProcedureChain extends BaseProcedure {
+public abstract class ProcedureChain extends Procedure {
 
     public static String INPUT_TIME_SEQUENCE = "time-sequence";
 
@@ -52,29 +49,18 @@ public abstract class ProcedureChain extends BaseProcedure {
 
     protected boolean debug = true;
 
-    protected String uuid;
+    protected Procedure parent;
 
-    protected String name;
-
-    protected ProcedureChain parent;
-
-    protected Collection<ProcedureChain> children;
-
-    protected Arguments arguments;
-
-    @Inject
-    protected DataSelectorFactory selectorFactory;
+    protected Collection<Procedure> children;
 
     public ProcedureChain() {
-        name = "AbstractProcedure";
-        uuid = UUIDService.uuidString();
-        children = new ArrayList<ProcedureChain>();
+        super();
+        children = new ArrayList<Procedure>();
     }
 
     public ProcedureChain(String name) {
-        this();
-        this.name = name;
-        buildArguments();
+        super(name);
+        children = new ArrayList<Procedure>();
     }
 
     public ProcedureChain(String name, ProcedureChain parent) {
@@ -94,7 +80,7 @@ public abstract class ProcedureChain extends BaseProcedure {
      * @return
      */
     public Object childrenAccept(ProcedureVisitor visitor, Object data) {
-        for (ProcedureChain child : children) {
+        for (Procedure child : children) {
             child.accept(visitor, data);
         }
         return data;
@@ -104,26 +90,15 @@ public abstract class ProcedureChain extends BaseProcedure {
         return !children.isEmpty();
     }
 
-    protected Selector createSelector(Object data) {
-        return selectorFactory.buildSelector(name, uuid, data);
-    }
-
-    /**
-     * each procesudre knows what inputs and outputs there will
-     * be, and those have to be available in arguments-field
-     * when the procedure is about to be called
-     */
-    public abstract void buildArguments();
-
     /**
      * returns the first child with the name- names are not unique
      * if you need the unique child, use uuid instead
      * @param name
      * @return
      */
-    public ProcedureChain getChild(String name) {
-        ProcedureChain child = null;
-        for (ProcedureChain ch : children) {
+    public Procedure getChild(String name) {
+        Procedure child = null;
+        for (Procedure ch : children) {
             if (name.equals(ch.name)) {
                 child = ch;
                 break;
@@ -137,9 +112,9 @@ public abstract class ProcedureChain extends BaseProcedure {
      * @param uuid
      * @return
      */
-    public ProcedureChain getChildWithUUID(String uuid) {
-        ProcedureChain child = null;
-        for (ProcedureChain ch : children) {
+    public Procedure getChildWithUUID(String uuid) {
+        Procedure child = null;
+        for (Procedure ch : children) {
             if (uuid.equals(ch.uuid)) {
                 child = ch;
                 break;
@@ -148,70 +123,28 @@ public abstract class ProcedureChain extends BaseProcedure {
         return child;
     }
 
-    public void addChild(ProcedureChain child) {
+    public void addChild(Procedure child) {
         child.setParent(this);
         children.add(child);
     }
 
     @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(uuid.hashCode());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof ProcedureChain) {
-            ProcedureChain other = (ProcedureChain) obj;
-            new EqualsBuilder().append(uuid, other.uuid).isEquals();
-        }
-        return false;
-    }
-
-
-
-    @Override
-    public String getUuid() {
-        return uuid;
-    }
-
-    @Override
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public Arguments getArguments() {
-        return arguments;
-    }
-
-    @Override
-    public void setArguments(Arguments arguments) {
-        this.arguments = arguments;
-    }
-
-    public ProcedureChain getParent() {
+    public Procedure getParent() {
         return parent;
     }
 
-    public void setParent(ProcedureChain parent) {
+    @Override
+    public void setParent(Procedure parent) {
         this.parent = parent;
     }
 
-    public Collection<ProcedureChain> getChildren() {
+    @Override
+    public Collection<Procedure> getChildren() {
         return children;
     }
 
-    public void setChildren(Collection<ProcedureChain> children) {
+    @Override
+    public void setChildren(Collection<Procedure> children) {
         this.children = children;
     }
 }

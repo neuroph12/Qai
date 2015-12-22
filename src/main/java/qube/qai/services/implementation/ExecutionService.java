@@ -3,11 +3,8 @@ package qube.qai.services.implementation;
 import com.hazelcast.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.message.MessageQueueInterface;
-import qube.qai.procedure.BaseProcedure;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ExecutionServiceInterface;
-import qube.qai.services.UUIDServiceInterface;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -23,14 +20,12 @@ public class ExecutionService implements ExecutionServiceInterface {
     public static final String SERVICE_NAME = "QaiExecutorService";
 
     @Inject
-    private UUIDServiceInterface uuidService;
-
-    @Inject
     private HazelcastInstance hazelcastInstance;
 
-    private Map<String, ProcedureState> procedures = new HashMap<String, ProcedureState>();
+    private Map<String, ProcedureState> procedures;
 
     public ExecutionService() {
+        this.procedures = new HashMap<String, ProcedureState>();
     }
 
     public void submitProcedure(Procedure procedure) {
@@ -38,11 +33,18 @@ public class ExecutionService implements ExecutionServiceInterface {
         // before we submit we note down the
         String uuid = procedure.getUuid();
         if (uuid == null) {
-            uuid = uuidService.createUUIDString();
+            uuid = UUIDService.uuidString();
             procedure.setUuid(uuid);
+            logger.error("procedure without uuid- assigning new: " + uuid);
         }
 
         ProcedureState state = new ProcedureState(STATE.RUNNING);
+
+        // out of some reason the map-store is asked to load the thing- and can't
+        // this is therefore in order to try that out and see what happens if the procedure
+        // has actually been added to the map... maybe then an update?
+//        IMap<String,Procedure> procedureIMap = hazelcastInstance.getMap("PROCEDURES");
+//        procedureIMap.put(uuid, procedure);
 
         ITopic itopic = hazelcastInstance.getTopic(uuid);
         itopic.addMessageListener(state);
@@ -71,11 +73,11 @@ public class ExecutionService implements ExecutionServiceInterface {
 
         public void onMessage(Message message) {
             String content = (String) message.getMessageObject();
-            if (BaseProcedure.PROCESS_ENDED.equals(content)) {
+            if (Procedure.PROCESS_ENDED.equals(content)) {
                 state = STATE.COMPLETE;
-            } else if (BaseProcedure.PROCESS_INTERRUPTED.equals(content)) {
+            } else if (Procedure.PROCESS_INTERRUPTED.equals(content)) {
                 state = STATE.INTERRUPTED;
-            } else if (BaseProcedure.PROCESS_ERROR.equals(content)) {
+            } else if (Procedure.PROCESS_ERROR.equals(content)) {
                 state = STATE.ERROR;
             }
             logger.info("message received: " + content);

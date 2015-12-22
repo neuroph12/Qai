@@ -2,7 +2,7 @@ package qube.qai.procedure.finance;
 
 import qube.qai.data.DataProvider;
 import qube.qai.persistence.StockQuote;
-import qube.qai.procedure.BaseProcedure;
+import qube.qai.procedure.Procedure;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 11/19/15.
  */
-public class StockQuoteRetriever extends BaseProcedure {
+public class StockQuoteRetriever extends Procedure {
 
     @Inject
     private DataProvider provider;
@@ -21,5 +21,10 @@ public class StockQuoteRetriever extends BaseProcedure {
         Collection<StockQuote> returnValue = new ArrayList<StockQuote>();
 
         //
+    }
+
+    @Override
+    public void buildArguments() {
+
     }
 }

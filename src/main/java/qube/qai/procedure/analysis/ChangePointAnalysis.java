@@ -70,6 +70,9 @@ public class ChangePointAnalysis extends ProcedureChain {
         arguments.addResult(CHANGE_POINTS, markers);
     }
 
+    /**
+     * marker class to separate the periods
+     */
     public static class ChangePointMarker implements Serializable {
         private int index;
         private double value;
