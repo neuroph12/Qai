@@ -19,6 +19,7 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
     private static String verticesClose = "]";
     private static String edgesOpen = "edges:{";
     private static String edgesClose = "}";
+    private static String edgeSeperate = "§";
 
     private boolean directed = false;
 
@@ -68,14 +69,15 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
             buffer.append(edge.getTo().getName());
             buffer.append("|");
             buffer.append(edge.getWeight());
-            buffer.append(")§");
+            buffer.append(")");
+            buffer.append(edgeSeperate);
             edgeCount++;
         }
         // remove last one
         buffer.deleteCharAt(buffer.length()-1);
         buffer.append(edgesClose);
 
-        logger.info("encoded graph with #vertex: " + vertexCount + " #edges: " + edgeCount);
+        logger.debug("encoded graph with #vertex: " + vertexCount + " #edges: " + edgeCount);
 
         return buffer.toString();
     }
@@ -123,7 +125,7 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
 
         // create the edges
         String edgesPart = StringUtils.substringBetween(serialString, edgesOpen, edgesClose);
-        String[] edgeTokens = StringUtils.split(edgesPart, "§");
+        String[] edgeTokens = StringUtils.split(edgesPart, edgeSeperate);
         if (edgeTokens != null) {
             for (int i = 0; i < edgeTokens.length; i++) {
                 String edgeToken = edgeTokens[i];
@@ -157,7 +159,7 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
             }
         }
 
-        logger.info("decoded graph with #vertex: " + vertexCount + " #edge: " + edgeCount);
+        logger.debug("decoded graph with #vertex: " + vertexCount + " #edge: " + edgeCount);
 
         return graph;
     }

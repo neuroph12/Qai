@@ -173,7 +173,7 @@ public class Network implements Serializable, MetricTyped {
             }
         }
         String message = "creating network from adjacency matrix completed #vertices:" + size + " #edges: " + added + " #skipped:" + skips + " #pruned: " + pruned;
-        logger.info(message);
+        logger.debug(message);
 
         record(graph);
     }

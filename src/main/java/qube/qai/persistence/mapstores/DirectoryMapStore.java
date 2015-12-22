@@ -86,13 +86,10 @@ public class DirectoryMapStore implements MapStore<String, Procedure> {
     public Map<String, Procedure> loadAll(Collection<String> keys) {
 
         Map<String, Procedure> procedures = new HashMap<String, Procedure>();
-        File file = new File(directory);
-        String[] filenames = file.list();
-        for (int i = 0; i < filenames.length; i++) {
-            String name = filenames[i];
-            Procedure procedure = load(name);
+        for (String key : keys) {
+            Procedure procedure = load(key);
             if (procedure != null) {
-                procedures.put(name, procedure);
+                procedures.put(key, procedure);
             }
         }
 
