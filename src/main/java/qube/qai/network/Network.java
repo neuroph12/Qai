@@ -34,19 +34,18 @@ public class Network implements Serializable, MetricTyped {
 
     protected Matrix adjacencyMatrix;
 
-    private String serialGraph;
+    private String encodedGraph;
 
-    //protected Graph graph;
+    // normally we use
+    protected boolean directed = false;
 
     public Network() {
         //this.graph = new Graph();
     }
 
     public Network(Graph graph) {
-        this.serialGraph = Graph.encode(graph);
+        this.encodedGraph = Graph.encode(graph);
     }
-
-
 
     public Graph getGraph() {
         return graph();
@@ -71,7 +70,7 @@ public class Network implements Serializable, MetricTyped {
         // unfortunately not all of the properties are to be found in all graphs
         // those which don't make sense- usually these below, throw exceptions
         // and therefore ignored in the metrics of the graph (or network)
-        try {
+        /*try {
             metrics.putValue("average degree", getAverageDegree());
         } catch (Exception e) {
             logger.error("error while calculating 'average degree': " + e.getMessage());
@@ -90,7 +89,7 @@ public class Network implements Serializable, MetricTyped {
             metrics.putValue("diameter", getDiameter());
         } catch (Exception e) {
             logger.error("error while calculating 'diameter': " + e.getMessage());
-        }
+        }*/
 
         return metrics;
     }
@@ -102,9 +101,7 @@ public class Network implements Serializable, MetricTyped {
         }
 
         int size = getNumberOfVertices();
-        BasicMatrix.Factory<PrimitiveMatrix> tmpFactory = PrimitiveMatrix.FACTORY;
-        Access2D.Builder<PrimitiveMatrix> builder = tmpFactory.getBuilder(size, size);
-        builder.fillAll(0.0);
+        adjacencyMatrix = new Matrix(size, size);
 
         for (Edge edge : getEdges()) {
             Vertex from = edge.getFrom();
@@ -117,10 +114,8 @@ public class Network implements Serializable, MetricTyped {
             int indexFrom = v2i(from);
             int indexTo = v2i(to);
             //builder.set(indexFrom, indexTo, value);
-            builder.set(indexTo, indexFrom, value);
+            adjacencyMatrix.setValueAt(indexTo, indexFrom, value);
         }
-
-        adjacencyMatrix = new Matrix(builder.build());
     }
 
     /**
@@ -139,49 +134,56 @@ public class Network implements Serializable, MetricTyped {
             throw new IllegalArgumentException("Adjacency matrix has not been initialized or set, can't construct network.");
         }
 
-        boolean useVertexIndices = false;
-        if (getVertices() != null) {
-            if (adjacencyMatrix.getMatrix().countColumns() == getVertices().size()) {
-                useVertexIndices = true;
+        Graph graph = graph();
+        graph.setDirected(true);
+        int size = adjacencyMatrix.getColumns();
+        // we first insert the vertices if the underlying graph doesn't have the vertices first
+        if (graph.getVertices() != null && size != graph.getVertices().size()) {
+            for (int i = 0; i < adjacencyMatrix.getColumns(); i++) {
+                Vertex vertex = new Vertex("vertex " + i);
+                graph.addVertex(vertex);
             }
         }
-
-        PhysicalStore store = adjacencyMatrix.getMatrix().toPrimitiveStore();
-        for (int i = 0; i < store.countRows(); i++) {
-            for (int j = 0; j < store.countColumns(); j++) {
-                Vertex from = null;
-                Vertex to = null;
-                if (useVertexIndices) {
-                    from = i2v(i);
-                    to = i2v(j);
-                } else {
-                    from = new Vertex("vertex " + i);
-                    to = new Vertex("vertex " + j);
-                }
-                Number value = store.get(i, j);
+        int added = 0;
+        int skips = 0;
+        int pruned = 0;
+        for (int i = 0; i < adjacencyMatrix.getRows(); i++) {
+            for (int j = 0; j < adjacencyMatrix.getColumns(); j++) {
+                Number value = adjacencyMatrix.getValueAt(i, j);
                 // check if we need to add an edge at all
                 if (value == null || value.doubleValue() == 0) {
+                    skips++;
                     continue;
                 }
-
                 // prune weak links
                 if (pruneWeakLinks && value.doubleValue() < PRUNE_TRESHOLD) {
+                    pruned++;
                     continue;
                 }
-
+                //
+                Vertex from = graph.i2v(i);
+                Vertex to = graph.i2v(j);
                 // create the edge
                 Edge edge = new Edge(from, to);
-                edge.setWeight(value.doubleValue());
-                if (!getEdges().contains(edge)) {
-                    graph().addUndirectedSimpleEdge(from, edge, to);
+                if (!graph.containsEdge(edge)) {
+                    edge.setWeight(value.doubleValue());
+                    graph.addDirectedSimpleEdge(from, edge, to);
+                    added++;
                 }
             }
         }
+        String message = "creating network from adjacency matrix completed #vertices:" + size + " #edges: " + added + " #skipped:" + skips + " #pruned: " + pruned;
+        logger.info(message);
+
+        record(graph);
     }
 
-    private Graph graph() {
-        Graph graph = Graph.decode(serialGraph);
-        return graph;
+    protected Graph graph() {
+        return Graph.decode(encodedGraph);
+    }
+
+    protected void record(Graph graph) {
+        encodedGraph = Graph.encode(graph);
     }
 
     public boolean isMakeMatrix() {
@@ -197,11 +199,11 @@ public class Network implements Serializable, MetricTyped {
     }
 
     public int getNumberOfVertices() {
-        return graph().getBackingGrph().getNumberOfVertices();
+        return graph().getVertices().size();
     }
 
     public int getNumberOfEdges() {
-        return graph().getBackingGrph().getNumberOfEdges();
+        return graph().getEdges().size();
     }
 
     protected int v2i(Vertex vertex) {
@@ -285,16 +287,24 @@ public class Network implements Serializable, MetricTyped {
         graph().addUndirectedSimpleEdge(from, edge, to);
     }
 
-    public String getSerialGraph() {
-        return serialGraph;
+    public String getEncodedGraph() {
+        return encodedGraph;
     }
 
-    public void setSerialGraph(String serialGraph) {
-        this.serialGraph = serialGraph;
+    public void setEncodedGraph(String encodedGraph) {
+        this.encodedGraph = encodedGraph;
     }
 
     public void setGraph(Graph graph) {
-        this.serialGraph = Graph.encode(graph);
+        this.encodedGraph = Graph.encode(graph);
+    }
+
+    public boolean isDirected() {
+        return directed;
+    }
+
+    public void setDirected(boolean directed) {
+        this.directed = directed;
     }
 
     /**
@@ -303,50 +313,53 @@ public class Network implements Serializable, MetricTyped {
      */
     public static Network createTestNetwork() {
         Network network = new Network();
+        Graph graph = new Graph();
 
         Vertex vienna = new Vertex("vienna");
-        network.addVertex(vienna);
+        graph.addVertex(vienna);
 
         Vertex london = new Vertex("london");
-        network.addVertex(london);
+        graph.addVertex(london);
 
         Vertex paris = new Vertex("paris");
-        network.addVertex(paris);
+        graph.addVertex(paris);
 
         Vertex bergen = new Vertex("bergen");
-        network.addVertex(bergen);
+        graph.addVertex(bergen);
 
         Vertex timbuktu = new Vertex("timbuktu");
-        network.addVertex(timbuktu);
+        graph.addVertex(timbuktu);
 
         Vertex mersin = new Vertex("mersin");
-        network.addVertex(mersin);
+        graph.addVertex(mersin);
 
         Vertex helsinki = new Vertex("helsinki");
-        network.addVertex(helsinki);
+        graph.addVertex(helsinki);
 
         Vertex amsterdam = new Vertex("amsterdam");
-        network.addVertex(amsterdam);
+        graph.addVertex(amsterdam);
 
         Vertex copenhagen = new Vertex("copenhagen");
-        network.addVertex(copenhagen);
+        graph.addVertex(copenhagen);
 
-        network.addSimpleEdge(vienna, new Edge(vienna, london), london);
-        network.addSimpleEdge(vienna, new Edge(vienna, mersin), mersin);
-        network.addSimpleEdge(vienna, new Edge(vienna, bergen), bergen);
+        graph.addUndirectedSimpleEdge(vienna, new Edge(vienna, london), london);
+        graph.addUndirectedSimpleEdge(vienna, new Edge(vienna, mersin), mersin);
+        graph.addUndirectedSimpleEdge(vienna, new Edge(vienna, bergen), bergen);
 
-        network.addSimpleEdge(london, new Edge(london, paris), paris);
-        network.addSimpleEdge(london, new Edge(london, bergen), bergen);
-        network.addSimpleEdge(london, new Edge(london, timbuktu), timbuktu);
-        network.addSimpleEdge(london, new Edge(london, helsinki), helsinki);
-        network.addSimpleEdge(london, new Edge(london, amsterdam), amsterdam);
+        graph.addUndirectedSimpleEdge(london, new Edge(london, paris), paris);
+        graph.addUndirectedSimpleEdge(london, new Edge(london, bergen), bergen);
+        graph.addUndirectedSimpleEdge(london, new Edge(london, timbuktu), timbuktu);
+        graph.addUndirectedSimpleEdge(london, new Edge(london, helsinki), helsinki);
+        graph.addUndirectedSimpleEdge(london, new Edge(london, amsterdam), amsterdam);
 
-        network.addSimpleEdge(copenhagen, new Edge(copenhagen, amsterdam), amsterdam);
-        network.addSimpleEdge(copenhagen, new Edge(copenhagen, helsinki), helsinki);
-        network.addSimpleEdge(copenhagen, new Edge(copenhagen, bergen), bergen);
+        graph.addUndirectedSimpleEdge(copenhagen, new Edge(copenhagen, amsterdam), amsterdam);
+        graph.addUndirectedSimpleEdge(copenhagen, new Edge(copenhagen, helsinki), helsinki);
+        graph.addUndirectedSimpleEdge(copenhagen, new Edge(copenhagen, bergen), bergen);
 
-        network.addSimpleEdge(bergen, new Edge(bergen, amsterdam), amsterdam);
-        network.addSimpleEdge(bergen, new Edge(bergen, timbuktu), timbuktu);
+        graph.addUndirectedSimpleEdge(bergen, new Edge(bergen, amsterdam), amsterdam);
+        graph.addUndirectedSimpleEdge(bergen, new Edge(bergen, timbuktu), timbuktu);
+
+        network.setGraph(graph);
 
         return network;
     }

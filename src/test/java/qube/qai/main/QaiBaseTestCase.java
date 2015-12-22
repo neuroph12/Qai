@@ -2,10 +2,27 @@ package qube.qai.main;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.data.TestTimeSequence;
+import qube.qai.data.analysis.TestChangepointAdapter;
+import qube.qai.data.selectors.TestHazelcastSelectors;
+import qube.qai.data.stores.TestDataStore;
+import qube.qai.matrix.TestMatrix;
+import qube.qai.network.TestNetwork;
+import qube.qai.network.TestNeuralNetwork;
+import qube.qai.network.TestSemanticNetwork;
+import qube.qai.network.TestWikiNetwork;
+import qube.qai.network.neural.trainer.TestNeuralNetworkTraining;
+import qube.qai.persistence.mapstores.TestHazelcastMaps;
+import qube.qai.persistence.mapstores.TestMapStores;
+import qube.qai.procedure.*;
+import qube.qai.procedure.visitor.TestProcedureVisitors;
+import qube.qai.services.implementation.TestUUIDGenerator;
 
 /**
  * Created by rainbird on 11/19/15.
@@ -36,47 +53,47 @@ public class QaiBaseTestCase extends TestCase {
      * when this suite is in use
      * @return
      */
-    /*public static Test suite() {
-        TestSuite suite = new TestSuite("All tests");
-
-        // data.analysis
-        suite.addTestSuite(TestAnalysisProcedures.class);
-        suite.addTestSuite(TestChangepointAdapter.class);
-        suite.addTestSuite(TestProcedureChain.class);
-
-        // data.selectors
-        suite.addTestSuite(TestHazelcastSelector.class);
-
-        // services.implementation
-        suite.addTestSuite(TestUUIDGenerator.class);
-
-        // data.stores
-        suite.addTestSuite(TestDataStore.class);
-
-        // matrix
-        suite.addTestSuite(TestMatrix.class);
-        suite.addTestSuite(TestTimeSeries.class);
-
-        // network
-        suite.addTestSuite(TestNetwork.class);
-        suite.addTestSuite(TestNeuralNetwork.class);
-        suite.addTestSuite(TestNeuralNetworkTraining.class);
-        suite.addTestSuite(TestSemanticNetwork.class);
-        suite.addTestSuite(TestWikiNetwork.class);
-
-        // persistence.mapstores
-        suite.addTestSuite(TestMapStore.class);
-        suite.addTestSuite(TestHazelcastMaps.class);
-
-        // procedure
-        suite.addTestSuite(TestWikiArchiveIndexer.class);
+//    public static Test suite() {
+//        TestSuite suite = new TestSuite("All tests");
+//
+//        // data.analysis
+//        suite.addTestSuite(TestAnalysisProcedures.class);
+//        suite.addTestSuite(TestChangepointAdapter.class);
+//        suite.addTestSuite(TestProcedureChain.class);
+//
+//        // data.selectors
+//        suite.addTestSuite(TestHazelcastSelectors.class);
+//
+//        // services.implementation
+//        suite.addTestSuite(TestUUIDGenerator.class);
+//
+//        // data.stores
+//        suite.addTestSuite(TestDataStore.class);
+//
+//        // matrix
+//        suite.addTestSuite(TestMatrix.class);
+//        suite.addTestSuite(TestTimeSequence.class);
+//
+//        // network
+//        suite.addTestSuite(TestNetwork.class);
+//        suite.addTestSuite(TestNeuralNetwork.class);
+//        suite.addTestSuite(TestNeuralNetworkTraining.class);
+//        suite.addTestSuite(TestSemanticNetwork.class);
+//        suite.addTestSuite(TestWikiNetwork.class);
+//
+//        // persistence.mapstores
+//        suite.addTestSuite(TestMapStores.class);
+//        suite.addTestSuite(TestHazelcastMaps.class);
+//
+//        // procedure
+//        suite.addTestSuite(TestWikiArchiveIndexer.class);
 //        suite.addTestSuite(TestWikiRipperProcedure.class);
-        suite.addTestSuite(TestWikiSearch.class);
-
-        // procedure.visitor
-        suite.addTestSuite(TestProcedureVisitors.class);
-
-        return suite;
-    }*/
+//        suite.addTestSuite(TestWikiSearch.class);
+//
+//        // procedure.visitor
+//        suite.addTestSuite(TestProcedureVisitors.class);
+//
+//        return suite;
+//    }
 
 }

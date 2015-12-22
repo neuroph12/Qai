@@ -19,6 +19,8 @@ import qube.qai.persistence.mapstores.HqslDBMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.procedure.Procedure;
 
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import java.util.Properties;
 
 /**
@@ -46,6 +48,9 @@ public class QaiServerModule extends AbstractModule {
 
     private HazelcastInstance hazelcastInstance;
 
+    @Inject
+    private EntityManager entityManager;
+
     @Override
     protected void configure() {
         // for the moment nothing to do here
@@ -64,24 +69,24 @@ public class QaiServerModule extends AbstractModule {
          * here we add the map-store for Stock-entities which is
          * in this case the HsqlDBMapStore
          */
-//        MapConfig stockEntitiesConfig = config.getMapConfig(STOCK_ENTITIES);
-//        MapStoreConfig stockEntitiesMapstoreConfig = stockEntitiesConfig.getMapStoreConfig();
-//        if (stockEntitiesMapstoreConfig == null) {
-//            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
-//            stockEntitiesMapstoreConfig = new MapStoreConfig();
-//
-//        }
-//        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
-//            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
-//                if (STOCK_ENTITIES.equals(mapName)) {
-//                    return new HqslDBMapStore();
-//                } else {
-//                    return null;
-//                }
-//            }
-//        });
-//        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
-//        stockEntitiesConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
+        MapConfig stockEntitiesConfig = config.getMapConfig(STOCK_ENTITIES);
+        MapStoreConfig stockEntitiesMapstoreConfig = stockEntitiesConfig.getMapStoreConfig();
+        if (stockEntitiesMapstoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
+            stockEntitiesMapstoreConfig = new MapStoreConfig();
+
+        }
+        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
+            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
+                if (STOCK_ENTITIES.equals(mapName)) {
+                    return new HqslDBMapStore(entityManager);
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
+        stockEntitiesConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
 
         /**
          * here we add the map-store for Procedures which is
@@ -129,23 +134,23 @@ public class QaiServerModule extends AbstractModule {
         /**
          * wiktionary-article map-store
          */
-//        MapConfig wiktionaryConfig = config.getMapConfig(WIKTIONARY);
-//        MapStoreConfig wiktionaryMapstoreConfig = wiktionaryConfig.getMapStoreConfig();
-//        if (wiktionaryMapstoreConfig == null) {
-//            logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY);
-//            wiktionaryMapstoreConfig = new MapStoreConfig();
-//        }
-//        wiktionaryMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
-//            public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
-//                if (WIKTIONARY.equals(mapName)) {
-//                    return new WikiArticleMapStore(WIKTIONARY_ARCHIVE);
-//                } else {
-//                    return null;
-//                }
-//            }
-//        });
-//        logger.info("adding mapstore configuration for " + WIKIPEDIA_ARCHIVE);
-//        wiktionaryConfig.setMapStoreConfig(wiktionaryMapstoreConfig);
+        MapConfig wiktionaryConfig = config.getMapConfig(WIKTIONARY);
+        MapStoreConfig wiktionaryMapstoreConfig = wiktionaryConfig.getMapStoreConfig();
+        if (wiktionaryMapstoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY);
+            wiktionaryMapstoreConfig = new MapStoreConfig();
+        }
+        wiktionaryMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
+            public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
+                if (WIKTIONARY.equals(mapName)) {
+                    return new WikiArticleMapStore(WIKTIONARY_ARCHIVE);
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + WIKIPEDIA_ARCHIVE);
+        wiktionaryConfig.setMapStoreConfig(wiktionaryMapstoreConfig);
 
         // now we are ready to get an instance
         hazelcastInstance = Hazelcast.newHazelcastInstance(config);

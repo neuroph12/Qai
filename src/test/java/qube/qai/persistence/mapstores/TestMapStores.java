@@ -35,7 +35,6 @@ public class TestMapStores extends QaiBaseTestCase {
 
     public void testZipFileMapStore() throws Exception {
 
-        // @TODO this is to be implemented and tested right
         TarballMapStore mapStore = new TarballMapStore(testZipFile);
         Iterable<String> names = mapStore.loadAllKeys();
         for (String name : names) {
@@ -69,8 +68,6 @@ public class TestMapStores extends QaiBaseTestCase {
         }
 
     }
-
-
 
     /**
      * in this case, we will be storing the Stock-Quotes in HsqlDb

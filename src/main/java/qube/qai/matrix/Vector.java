@@ -19,11 +19,6 @@ public class Vector extends Matrix {
         super(matrix);
     }
 
-    /*@Override
-    public double[] toArray() {
-        return values[columns];
-    }*/
-
     public static Vector buildFromTimeSeries(TimeSequence timeSequence) {
 
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
@@ -51,42 +46,6 @@ public class Vector extends Matrix {
     private BasicMatrix vector() {
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
         return factory.rows(values);
-    }
-
-    @Override
-    public Vector transpose() {
-        BasicMatrix result = vector().transpose();
-        return new Vector(result);
-    }
-
-    @Override
-    public Vector negate() {
-        BasicMatrix result = vector().negate();
-        return new Vector(result);
-    }
-
-    @Override
-    public Vector add(Matrix input) {
-        BasicMatrix result = vector().add(input.getMatrix());
-        return new Vector(result);
-    }
-
-    @Override
-    public Vector multiplyElements(Matrix input) {
-        BasicMatrix result = vector().multiplyElements(input.getMatrix());
-        return new Vector(result);
-    }
-
-    @Override
-    public Vector multiply(Matrix matrix) {
-        BasicMatrix result = vector().multiply(matrix.getMatrix());
-        return new Vector(result);
-    }
-
-    @Override
-    public Vector multiplyLeft(Matrix matrix) {
-        BasicMatrix result = vector().multiplyLeft(matrix.getMatrix());
-        return new Vector(result);
     }
 
     @Override

@@ -30,14 +30,18 @@ public class TestHazelcastMaps extends QaiBaseTestCase {
     private UUIDServiceInterface uuidService;
 
     @Inject @Named("Wikipedia_en")
-    private SearchServiceInterface searchService;
+    private SearchServiceInterface wikipediaSearch;
+
+    @Inject @Named("Wiktionary_en")
+    private SearchServiceInterface wiktionarySearch;
 
     private static String STOCK_ENTITIES = "STOCK_ENTITIES";
     private static String PROCEDURES = "PROCEDURES";
     private static String WIKIPEDIA = "WIKIPEDIA_EN";
+    private static String WIKTIONARY = "WIKTIONARY_EN";
 
+    public void testHazelcastWikipediaArticles() throws Exception {
 
-    public void testHazelcastWikiArticles() throws Exception {
         String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock market"};
 
         HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
@@ -47,14 +51,32 @@ public class TestHazelcastMaps extends QaiBaseTestCase {
         IMap<String,WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKIPEDIA);
         // again- we first do the search and demand the article
         for (String name : someWikiArticles) {
-            Collection<SearchResult> results = searchService.searchInputString(name, "title", 100);
+            Collection<SearchResult> results = wikipediaSearch.searchInputString(name, "title", 100);
             SearchResult result = results.iterator().next();
             WikiArticle wikiArticle = wikiArticles.get(result.getFilename());
             assertNotNull("there has to be an article", wikiArticle);
         }
     }
 
-    public void restHazelcastStockEntities() throws Exception {
+    public void testHazelcastWiktionaryArticles() throws Exception {
+
+        String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock market"};
+
+        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
+        assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
+        logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
+
+        IMap<String,WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKTIONARY);
+        // again- we first do the search and demand the article
+        for (String name : someWikiArticles) {
+            Collection<SearchResult> results = wiktionarySearch.searchInputString(name, "title", 100);
+            SearchResult result = results.iterator().next();
+            WikiArticle wikiArticle = wikiArticles.get(result.getFilename());
+            assertNotNull("there has to be an article", wikiArticle);
+        }
+    }
+
+    public void testHazelcastStockEntities() throws Exception {
 
         HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);

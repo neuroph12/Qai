@@ -9,7 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.ojalgo.access.Access2D;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.matrix.store.PrimitiveDenseStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.matrix.Matrix;
+import qube.qai.network.Graph;
 import qube.qai.network.Network;
 import qube.qai.persistence.WikiArticle;
 
@@ -22,9 +25,9 @@ import java.io.InputStream;
  */
 public class SemanticNetwork extends Network {
 
-    private boolean debug = false;
+    private static Logger logger = LoggerFactory.getLogger("SemanticNetwork");
 
-    private Tokenizer tokenizer = null;
+    private boolean debug = false;
 
     /**
      * the routine which does the actual construction
@@ -35,89 +38,84 @@ public class SemanticNetwork extends Network {
      * @param wikiArticle
      */
     public void buildNetwork(WikiArticle wikiArticle) {
-        // this unfortunately does not work
-        //this = Network.createTestNetwork();
-        String wikiContent = wikiArticle.getContent();
-        //HashSet<String> wordList = new HashSet<String>();
 
+        Graph graph = graph();
+        String wikiContent = wikiArticle.getContent();
         WikiModel wikiModel = new WikiModel("${image}", "${title}");
         String plainText = wikiModel.render(new PlainTextConverter(), wikiContent);
         Tokenizer tokenizer = createTokenizer();
-        // i think, we will have to run two passes- one for creating the workd list
+
+        // i think, we will have to run two passes- one for creating graph
         // and the second for creating the adjacency matrix
+        int added = 0;
+        int increments = 0;
         String[] tokens = tokenizer.tokenize(plainText);
-
-        // first loop to create the vertices
-        for (String token : tokens) {
-            Vertex vertex = new Vertex(token);
-            if (!getVertices().contains(vertex) && isValidToken(token)) {
-                log("Adding token: '" + token + "' to word list");
-                addVertex(vertex);
-            }
-        }
-
-        int size = getVertices().size();
-        log("final graph will have: " + size + " words");
-        // create the adjacency-matrix
-        // decided against using complex-matrices for semantic-networks
-        // doesn't really make sense in this case
-        int wordCount = 0;
-        int linkCount = 0;
-        PrimitiveDenseStore matrixStore = PrimitiveDenseStore.FACTORY.makeZero(size, size);
         for (int i = 0; i < tokens.length; i++) {
+            String current = tokens[i];
+            String next = null;
+            if (i + 1 < tokens.length) {
+                next = tokens[i+1];
+            }
 
-            String token = tokens[i];
-
-            // skip if this is an illegal token
-            if (!isValidToken(token)) {
+            // now we have current and next tokens
+            // check if they are valid
+            if (!isValidToken(current)) {
                 continue;
             }
 
-            int nextIndex = i + 1;
-            wordCount++;
-            String nextToken = null;
-            if (nextIndex < tokens.length) {
-                nextToken = tokens[nextIndex];
+            // check if the token already has been added
+            Vertex currentVertex = new Vertex(current);
+            if (!graph.containsVertex(currentVertex)) {
+                graph.addVertex(currentVertex);
             }
 
-            // create the vertices we need to search for
-            Vertex currentVertex = new Vertex(token);
-            int currentTokenIndex = v2i(currentVertex);
+            // now the second token, if not valid we are done
+            if (!isValidToken(next)) {
+                continue;
+            }
 
-            Vertex nextVertex = new Vertex(nextToken);
-            // check if the next token is in graph,
-            // if not simply add edge to self
-            if (!getVertices().contains(nextVertex)) {
-                // the next token is not in word-list
-                // so we add the edge to the vertex itself
-                Number value = matrixStore.get(currentTokenIndex, currentTokenIndex);
-                matrixStore.set(currentTokenIndex, currentTokenIndex, value.doubleValue() + 1);
+            // now check if the token has already been added
+            Vertex nextVertex = new Vertex(next);
+            if (!graph.containsVertex(nextVertex)) {
+                graph.addVertex(nextVertex);
+            }
+
+            // now see if there is already an edge between them
+            Edge edge = new Edge(currentVertex, nextVertex);
+            if (graph.containsEdge(edge)) {
+                int index = graph.e2i(edge);
+                Edge e = graph.i2e(index);
+                e.incrementWeight();
+                increments++;
             } else {
-                int nextTokenIndex = v2i(nextVertex);
-                Number value = matrixStore.get(currentTokenIndex, nextTokenIndex);
-                matrixStore.set(currentTokenIndex, nextTokenIndex, value.doubleValue() + 1);
-                linkCount++;
+                graph.addDirectedSimpleEdge(currentVertex, edge, nextVertex);
+                added++;
             }
         }
 
-        log("added all edges to adjacency-matrix total " + wordCount + " words and " + linkCount + " links connecting");
-
-        // we have to normalize the matrix content
-//        double normalization = 1 / wordCount;
-//        matrixStore.multiply(normalization);
-        matrixStore.signum();
-
-        Access2D.Builder<PrimitiveMatrix> builder = PrimitiveMatrix.FACTORY.getBuilder(matrixStore.getRowDim(), matrixStore.getColDim());
-        for (int i = 0; i < matrixStore.getRowDim(); i++) {
-            for (int j = 0; j < matrixStore.getColDim(); j++) {
-                builder.set(i, j, matrixStore.get(i, j));
+        // and now the second pass- we create the adjacency matrix
+        int size = graph.getVertices().size();
+        int edgeCount = 0;
+        adjacencyMatrix = new Matrix(size, size);
+        for (Edge edge : graph.getEdges()) {
+            int fromIndex = graph.v2i(edge.getFrom());
+            int toIndex = graph.v2i(edge.getTo());
+            double weight = edge.getWeight();
+            if (Double.isNaN(weight)
+                    || Double.isInfinite(weight)
+                    || weight == 0) {
+                weight = 1.0;
             }
+            adjacencyMatrix.setValueAt(fromIndex, toIndex, weight);
+            edgeCount++;
         }
-        // @TODO make a new matrix
-        PrimitiveMatrix matrix = builder.build();
-        this.adjacencyMatrix = new Matrix(matrix);
 
-        buildFromAdjacencyMatrix();
+        String message = "building semantic network ended #vertex: " + size + " #edges in adjacency matrix: " + edgeCount
+                + " added edges: " + added + " incremented edges: " + increments;
+        logger.info(message);
+        // record the changes, and we are done
+        record(graph);
+
     }
 
     private boolean isValidToken(String token) {
@@ -125,13 +123,9 @@ public class SemanticNetwork extends Network {
 
         if (StringUtils.isBlank(token)) {
             valid = false;
-        } else if (StringUtils.contains(token, "{")) {
+        } else if (StringUtils.containsAny(token, '{', '}', '(', ')')) {
             valid = false;
-        } else if (StringUtils.contains(token, "}")) {
-            valid = false;
-        } else if (StringUtils.contains(token, "(")) {
-            valid = false;
-        } else if (StringUtils.contains(token, ")")) {
+        } else if (!StringUtils.isAsciiPrintable(token)) {
             valid = false;
         }
 
@@ -140,13 +134,9 @@ public class SemanticNetwork extends Network {
 
     private Tokenizer createTokenizer() {
 
-        // rather than having the try-block in if curls...
-        if (tokenizer != null) {
-            return tokenizer;
-        }
-
+        Tokenizer tokenizer = null;
         try {
-            InputStream modelIn = new FileInputStream("/home/rainbird/projects/work/qai/src/main/resources/opennlp/en-token.bin");
+            InputStream modelIn = getClass().getResourceAsStream("/opennlp/en-token.bin");
             TokenizerModel tokenizerModel = new TokenizerModel(modelIn);
             tokenizer = new TokenizerME(tokenizerModel);
         } catch (IOException e) {
@@ -156,9 +146,4 @@ public class SemanticNetwork extends Network {
         return tokenizer;
     }
 
-    private void log(String message) {
-        if (debug) {
-            System.out.println(message);
-        }
-    }
 }

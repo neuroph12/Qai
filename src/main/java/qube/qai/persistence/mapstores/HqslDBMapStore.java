@@ -30,12 +30,15 @@ public class HqslDBMapStore implements MapStore<String, StockEntity> {
     protected EntityManager entityManager;
 
     /**
-     * @TODO a more generic implementation of the class is required
-     * @TODO and its test, obviously.
      * this is a very interesting notion for creating a generic
      * database backed map-store really...
      */
-    public HqslDBMapStore() { }
+    public HqslDBMapStore() {
+    }
+
+    public HqslDBMapStore(EntityManager manager) {
+        this.entityManager = manager;
+    }
 
     public void store(String key, StockEntity value) {
         entityManager.persist(value);

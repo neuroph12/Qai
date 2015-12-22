@@ -128,23 +128,23 @@ public class QaiTestServerModule extends AbstractModule {
         /**
          * wiktionary-article map-store
          */
-//        MapConfig wiktionaryConfig = config.getMapConfig(WIKTIONARY);
-//        MapStoreConfig wiktionaryMapstoreConfig = wiktionaryConfig.getMapStoreConfig();
-//        if (wiktionaryMapstoreConfig == null) {
-//            logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY);
-//            wiktionaryMapstoreConfig = new MapStoreConfig();
-//        }
-//        wiktionaryMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
-//            public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
-//                if (WIKTIONARY.equals(mapName)) {
-//                    return new WikiArticleMapStore(WIKTIONARY_ARCHIVE);
-//                } else {
-//                    return null;
-//                }
-//            }
-//        });
-//        logger.info("adding mapstore configuration for " + WIKIPEDIA_ARCHIVE);
-//        wiktionaryConfig.setMapStoreConfig(wiktionaryMapstoreConfig);
+        MapConfig wiktionaryConfig = config.getMapConfig(WIKTIONARY);
+        MapStoreConfig wiktionaryMapstoreConfig = wiktionaryConfig.getMapStoreConfig();
+        if (wiktionaryMapstoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY);
+            wiktionaryMapstoreConfig = new MapStoreConfig();
+        }
+        wiktionaryMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
+            public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
+                if (WIKTIONARY.equals(mapName)) {
+                    return new WikiArticleMapStore(WIKTIONARY_ARCHIVE);
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + WIKIPEDIA_ARCHIVE);
+        wiktionaryConfig.setMapStoreConfig(wiktionaryMapstoreConfig);
 
         // now we are ready to get an instance
         hazelcastInstance = Hazelcast.newHazelcastInstance(config);

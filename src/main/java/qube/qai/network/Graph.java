@@ -13,44 +13,50 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
 
     private static Logger logger = LoggerFactory.getLogger("Graph");
 
+    private static String directedOpen = "<directed=";
+    private static String directedClose = ">";
     private static String verticesOpen = "vertices:[";
     private static String verticesClose = "]";
     private static String edgesOpen = "edges:{";
     private static String edgesClose = "}";
 
+    private boolean directed = false;
+
     public Grph getBackingGrph() {
         return backingGrph;
     }
 
-    protected int v2i(Network.Vertex vertex) {
+    public int v2i(Network.Vertex vertex) {
         return super.v2i(vertex);
     }
 
-    protected int e2i(Network.Edge edge) {
+    public int e2i(Network.Edge edge) {
         return super.e2i(edge);
     }
 
-    protected Network.Vertex i2v(int v) {
+    public Network.Vertex i2v(int v) {
         return super.i2v(v);
     }
 
-    protected Network.Edge i2e(int e) {
+    public Network.Edge i2e(int e) {
         return super.i2e(e);
     }
 
-    public String encode() {
-        return getBackingGrph().toGrphText();
-    }
-
     public static String encode(Graph graph) {
-        StringBuffer buffer = new StringBuffer(verticesOpen);
 
+        int vertexCount = 0;
+        int edgeCount = 0;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(directedOpen);
+        buffer.append(graph.isDirected());
+        buffer.append(directedClose);
+        buffer.append(verticesOpen);
         for (Network.Vertex vertex : graph.getVertices()) {
             buffer.append(vertex.getName());
-            buffer.append(", ");
+            buffer.append("|");
+            vertexCount++;
         }
-        // remove last two
-        buffer.deleteCharAt(buffer.length()-1);
+        // remove last one
         buffer.deleteCharAt(buffer.length()-1);
         buffer.append(verticesClose);
 
@@ -62,37 +68,47 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
             buffer.append(edge.getTo().getName());
             buffer.append("|");
             buffer.append(edge.getWeight());
-            buffer.append("), ");
+            buffer.append(")§");
+            edgeCount++;
         }
-        buffer.deleteCharAt(buffer.length()-1);
+        // remove last one
         buffer.deleteCharAt(buffer.length()-1);
         buffer.append(edgesClose);
+
+        logger.info("encoded graph with #vertex: " + vertexCount + " #edges: " + edgeCount);
 
         return buffer.toString();
     }
 
     public static String encode(Network network) {
-        StringBuffer buffer = new StringBuffer(verticesOpen);
         Graph graph = network.getGraph();
         return encode(graph);
     }
 
     public static Graph decode(String serialString) {
 
+        int vertexCount = 0;
+        int edgeCount = 0;
+        int skips = 0;
         Graph graph = new Graph();
 
         // check if there is anything to read at all
         if (StringUtils.isBlank(serialString)) {
-            //logger.info("Cannot parse an empty string- returning an empty graph");
+            logger.info("Cannot parse an empty string- returning an empty graph");
             return graph;
         }
 
         // rip the edges and vertices parts
-        String vertexPart = StringUtils.substringBetween(serialString, verticesOpen, verticesClose);
-        String edgesPart = StringUtils.substringBetween(serialString, edgesOpen, edgesClose);
+        String directedPart = StringUtils.substringBetween(serialString, directedOpen, directedClose);
+        if ("true".equals(directedPart)) {
+            graph.setDirected(true);
+        } else {
+            graph.setDirected(false);
+        }
 
         // create the vertices
-        String[] vertexTokens = StringUtils.split(vertexPart, ",");
+        String vertexPart = StringUtils.substringBetween(serialString, verticesOpen, verticesClose);
+        String[] vertexTokens = StringUtils.split(vertexPart, "|");
         if (vertexTokens != null) {
             for (int i = 0; i < vertexTokens.length; i++) {
                 // remove the empty parts of string- this is quite important
@@ -100,12 +116,14 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
                 Network.Vertex vertex = new Network.Vertex(name);
                 if (!graph.getVertices().contains(vertex)) {
                     graph.addVertex(vertex);
+                    vertexCount++;
                 }
             }
         }
 
         // create the edges
-        String[] edgeTokens = StringUtils.split(edgesPart, ",");
+        String edgesPart = StringUtils.substringBetween(serialString, edgesOpen, edgesClose);
+        String[] edgeTokens = StringUtils.split(edgesPart, "§");
         if (edgeTokens != null) {
             for (int i = 0; i < edgeTokens.length; i++) {
                 String edgeToken = edgeTokens[i];
@@ -113,17 +131,42 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
                 edgeToken = StringUtils.remove(edgeToken, ")");
 
                 String[] innerTokens = StringUtils.split(edgeToken, "|");
+                if (innerTokens == null || innerTokens.length != 3) {
+                    skips++;
+                    logger.error("couldn't split: '" + edgeToken + "' token... skipping");
+                    continue;
+                }
                 String fromToken = innerTokens[0].trim();
                 String toToken = innerTokens[1].trim();
-                double weight = Double.parseDouble(innerTokens[2]);
+                double weight = 0;
+                try {
+                    weight = Double.parseDouble(innerTokens[2]);
+                } catch (NumberFormatException e) {
+                    logger.error("un-parsable token: " + innerTokens[2]);
+                }
 
                 Network.Vertex from = new Network.Vertex(fromToken);
                 Network.Vertex to = new Network.Vertex(toToken);
                 Network.Edge edge = new Network.Edge(from, to, weight);
-                graph.addUndirectedSimpleEdge(from, edge, to);
+                if (graph.isDirected()) {
+                    graph.addUndirectedSimpleEdge(from, edge, to);
+                } else {
+                    graph.addDirectedSimpleEdge(from, edge, to);
+                }
+                edgeCount++;
             }
         }
 
+        logger.info("decoded graph with #vertex: " + vertexCount + " #edge: " + edgeCount);
+
         return graph;
+    }
+
+    public boolean isDirected() {
+        return directed;
+    }
+
+    public void setDirected(boolean directed) {
+        this.directed = directed;
     }
 }

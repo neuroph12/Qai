@@ -31,6 +31,12 @@ public class Matrix implements Serializable, MetricTyped {
     public Matrix() {
     }
 
+    public Matrix(int rows, int columns) {
+        this.rows = rows;
+        this.columns = columns;
+        this.values = new double[rows][columns];
+    }
+
     public Matrix(BasicMatrix matrix) {
         rows = (int) matrix.countRows();
         columns = (int) matrix.countColumns();
@@ -49,6 +55,10 @@ public class Matrix implements Serializable, MetricTyped {
         return values[row][column];
     }
 
+    public void setValueAt(int row, int column, double value) {
+        values[row][column] = value;
+    }
+
     public List<? extends Number> getElementsAsList() {
         if (values == null) {
             return null;
@@ -61,7 +71,7 @@ public class Matrix implements Serializable, MetricTyped {
      * @return
      */
     public double[] toArray() {
-        List<? extends Number> elements = toListOfElements();
+        List<? extends Number> elements = matrix().toListOfElements();
         if (elements == null) {
             return null;
         }
@@ -133,54 +143,6 @@ public class Matrix implements Serializable, MetricTyped {
         return null;
     }
 
-    /**
-     * @return
-     */
-    public Matrix transpose() {
-        BasicMatrix result = matrix().transpose();
-        return new Matrix(result);
-    }
-
-    /**
-     * @return
-     */
-    public Matrix negate() {
-        BasicMatrix result = matrix().negate();
-        return new Matrix(result);
-    }
-
-    /**
-     * @return
-     */
-    public Matrix add(Matrix input) {
-        BasicMatrix result = matrix().add(input.getMatrix());
-        return new Matrix(result);
-    }
-
-    /**
-     * @return
-     */
-    public Matrix multiplyElements(Matrix input) {
-        BasicMatrix result = matrix().multiplyElements(input.getMatrix());
-        return new Matrix(result);
-    }
-
-    /**
-     * @return
-     */
-    public Matrix multiply(Matrix QaiMatrix) {
-        BasicMatrix result = matrix().multiply(QaiMatrix.getMatrix());
-        return new Matrix(result);
-    }
-
-    /**
-     * @return
-     */
-    public Matrix multiplyLeft(Matrix QaiMatrix) {
-        BasicMatrix result = matrix().multiplyLeft(QaiMatrix.getMatrix());
-        return new Matrix(result);
-    }
-
     @Override
     public String toString() {
         if (values != null) {
@@ -197,4 +159,19 @@ public class Matrix implements Serializable, MetricTyped {
         return matrix();
     }
 
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
+    public void setColumns(int columns) {
+        this.columns = columns;
+    }
 }
