@@ -4,7 +4,7 @@ import qube.qai.main.QaiBaseTestCase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
-import qube.qai.services.ProcedureSource;
+import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 
@@ -18,7 +18,7 @@ import java.util.*;
 public class TestMapStores extends QaiBaseTestCase {
 
     @Inject
-    private ProcedureSource procedureSource;
+    private ProcedureSourceInterface procedureSource;
 
     @Inject @Named("Wikipedia_en")
     private SearchServiceInterface searchService;

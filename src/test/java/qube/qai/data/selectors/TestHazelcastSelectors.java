@@ -9,7 +9,7 @@ import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.persistence.mapstores.TestMapStores;
 import qube.qai.procedure.Procedure;
-import qube.qai.services.ProcedureSource;
+import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.UUIDServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -29,7 +29,7 @@ public class TestHazelcastSelectors extends QaiBaseTestCase {
     private HazelcastInstance hazelcastInstance;
 
     @Inject
-    private ProcedureSource procedureSource;
+    private ProcedureSourceInterface procedureSource;
 
     @Inject
     private UUIDServiceInterface uuidService;

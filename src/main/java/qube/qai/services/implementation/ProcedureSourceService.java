@@ -13,14 +13,14 @@ import qube.qai.network.Network;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.analysis.*;
-import qube.qai.services.ProcedureSource;
+import qube.qai.services.ProcedureSourceInterface;
 
 import java.util.*;
 
 /**
  * Created by rainbird on 12/16/15.
  */
-public class ProcedureSourceService implements ProcedureSource {
+public class ProcedureSourceService implements ProcedureSourceInterface {
 
     private int number = 100;
     private int size = 10;

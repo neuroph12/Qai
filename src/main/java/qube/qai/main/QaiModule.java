@@ -45,7 +45,7 @@ public class QaiModule extends AbstractModule {
         bind(UUIDServiceInterface.class).to(UUIDService.class);
 
         // executorService
-        bind(ExecutionServiceInterface.class).to(ExecutionService.class);
+        bind(ProcedureRunnerInterface.class).to(ProcedureRunner.class);
 
         bind(MessageQueueInterface.class).to(MessageQueue.class);
 
@@ -56,7 +56,7 @@ public class QaiModule extends AbstractModule {
      * @return
      */
     @Provides
-    ProcedureSource provideProcedureSourceInterface() {
+    ProcedureSourceInterface provideProcedureSourceInterface() {
         return CachedProcedureSourceService.getInstance();
     }
 

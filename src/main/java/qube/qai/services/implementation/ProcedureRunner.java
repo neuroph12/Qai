@@ -4,27 +4,29 @@ import com.hazelcast.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
-import qube.qai.services.ExecutionServiceInterface;
+import qube.qai.services.ProcedureRunnerInterface;
 
 import javax.inject.Inject;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by rainbird on 12/22/15.
  */
-public class ExecutionService implements ExecutionServiceInterface {
+public class ProcedureRunner implements ProcedureRunnerInterface {
 
     private static Logger logger = LoggerFactory.getLogger("ExecutionService");
 
-    public static final String SERVICE_NAME = "QaiExecutorService";
+    public static final String SERVICE_NAME = "ProcedureRunnerService";
 
     @Inject
     private HazelcastInstance hazelcastInstance;
 
     private Map<String, ProcedureState> procedures;
 
-    public ExecutionService() {
+    public ProcedureRunner() {
         this.procedures = new HashMap<String, ProcedureState>();
     }
 
@@ -39,19 +41,16 @@ public class ExecutionService implements ExecutionServiceInterface {
         }
 
         ProcedureState state = new ProcedureState(STATE.RUNNING);
-
-        // out of some reason the map-store is asked to load the thing- and can't
-        // this is therefore in order to try that out and see what happens if the procedure
-        // has actually been added to the map... maybe then an update?
-//        IMap<String,Procedure> procedureIMap = hazelcastInstance.getMap("PROCEDURES");
-//        procedureIMap.put(uuid, procedure);
-
         ITopic itopic = hazelcastInstance.getTopic(uuid);
         itopic.addMessageListener(state);
         procedures.put(uuid, state);
 
         IExecutorService executor = hazelcastInstance.getExecutorService(SERVICE_NAME);
         executor.submit(procedure);
+    }
+
+    public Set<String> getStartedProcedures() {
+        return procedures.keySet();
     }
 
     public STATE queryState(String uuid) {

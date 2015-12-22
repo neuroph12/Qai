@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.analysis.*;
-import qube.qai.services.ProcedureSource;
+import qube.qai.services.ProcedureSourceInterface;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by rainbird on 12/16/15.
  */
-public class CachedProcedureSourceService implements ProcedureSource {
+public class CachedProcedureSourceService implements ProcedureSourceInterface {
 
     private Logger logger = LoggerFactory.getLogger("CachedProcedureSourceService");
 

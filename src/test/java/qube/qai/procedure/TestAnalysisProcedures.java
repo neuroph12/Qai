@@ -6,7 +6,7 @@ import qube.qai.data.*;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.main.QaiBaseTestCase;
 import qube.qai.procedure.analysis.*;
-import qube.qai.services.ProcedureSource;
+import qube.qai.services.ProcedureSourceInterface;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -19,7 +19,7 @@ public class TestAnalysisProcedures extends QaiBaseTestCase {
     Logger logger = LoggerFactory.getLogger("TestAnalysisProcedures");
 
     @Inject
-    private ProcedureSource procedureSource;
+    private ProcedureSourceInterface procedureSource;
 
     private boolean debug = true;
 

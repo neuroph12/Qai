@@ -5,19 +5,11 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
-import com.hazelcast.config.Config;
-import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.MapStoreConfig;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.MapLoader;
-import com.hazelcast.core.MapStoreFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.message.MessageQueue;
 import qube.qai.message.MessageQueueInterface;
-import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.mapstores.HqslDBMapStore;
 import qube.qai.services.*;
 import qube.qai.services.implementation.*;
 
@@ -27,7 +19,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * Created by rainbird on 11/19/15.
@@ -59,10 +50,10 @@ public class QaiTestModule extends AbstractModule {
         bind(UUIDServiceInterface.class).to(UUIDService.class);
 
         // ProcedureSource
-        bind(ProcedureSource.class).to(ProcedureSourceService.class);
+        bind(ProcedureSourceInterface.class).to(ProcedureSourceService.class);
 
         // executorService
-        bind(ExecutionServiceInterface.class).to(ExecutionService.class);
+        bind(ProcedureRunnerInterface.class).to(ProcedureRunner.class);
 
         // messageQueue
         bind(MessageQueueInterface.class).to(MessageQueue.class);
