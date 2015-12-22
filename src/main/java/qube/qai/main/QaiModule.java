@@ -6,10 +6,9 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.services.ProcedureSource;
-import qube.qai.services.SearchServiceInterface;
-import qube.qai.services.SelectorFactoryInterface;
-import qube.qai.services.UUIDServiceInterface;
+import qube.qai.message.MessageQueue;
+import qube.qai.message.MessageQueueInterface;
+import qube.qai.services.*;
 import qube.qai.services.implementation.*;
 
 import javax.persistence.EntityManager;
@@ -44,6 +43,11 @@ public class QaiModule extends AbstractModule {
 
         // UUIDService
         bind(UUIDServiceInterface.class).to(UUIDService.class);
+
+        // executorService
+        bind(ExecutionServiceInterface.class).to(ExecutionService.class);
+
+        bind(MessageQueueInterface.class).to(MessageQueue.class);
 
     }
 

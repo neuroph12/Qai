@@ -1,10 +1,12 @@
 package qube.qai.procedure;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.Message;
+import com.hazelcast.core.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.data.Arguments;
 import qube.qai.message.MessageListener;
 import qube.qai.message.MessageQueue;
+import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.User;
 
 import javax.inject.Inject;
@@ -12,18 +14,19 @@ import javax.inject.Inject;
 /**
  * Created by rainbird on 11/27/15.
  */
-public abstract class BaseProcedure extends MessageListener implements Procedure {
+public abstract class BaseProcedure implements Procedure, HazelcastInstanceAware {
 
-    public static String END_OF_PROCESS = "Process has been ended";
+    protected static Logger logger = LoggerFactory.getLogger("Procedure");
 
-    public static String PROCESS_INTERRUPTED = "Process has been interrupted";
+    public static final String PROCEDURES = "PROCEDURES";
 
-    public static String PROCESS_ERROR = "Process has been terminated with runtime errors";
+    public final static String PROCESS_ENDED = "PROCESS_ENDED";
 
-    @Inject
-    protected MessageQueue messageQueue;
+    public final static String PROCESS_INTERRUPTED = "PROCESS_INTERRUPTED";
 
-    protected HazelcastInstance hazelcastInstance;
+    public final static String PROCESS_ERROR = "PROCESS_ERROR";
+
+    protected transient HazelcastInstance hazelcastInstance;
 
     protected User user;
 
@@ -40,6 +43,10 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
     protected boolean hasExecuted = false;
 
     protected Arguments arguments;
+
+    public BaseProcedure() {
+        uuid = UUIDService.uuidString();
+    }
 
     /**
      * Visitor-pattern
@@ -62,25 +69,43 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
         return data;
     }
 
-    @Override
-    public void onMessage(Message message) {
-        this.arguments = (Arguments) message.getMessageObject();
-        try {
-            run();
-
-            // after running mark as executed
-            hasExecuted = true;
-        } catch (Exception e) {
-            messageQueue.sendMessage(uuid, PROCESS_ERROR);
-        }
-        messageQueue.sendMessage(uuid, END_OF_PROCESS);
-    }
-
     public final void run() {
         long start = System.currentTimeMillis();
+        logger.info("Procedure " + getName() + " has been started");
         execute();
         duration = System.currentTimeMillis() - start;
         hasExecuted  = true;
+        logger.info("Procedure " + getName() + " has been ended normally in " + duration + "ms");
+        sendMessageOK();
+
+        // and the hat-trick now
+        if (hazelcastInstance != null) {
+            IMap procedures = hazelcastInstance.getMap(PROCEDURES);
+            procedures.put(uuid, this);
+        }
+
+    }
+
+    private void sendMessage(String message) {
+        if (hazelcastInstance != null) {
+            ITopic itopic = hazelcastInstance.getTopic(uuid);
+            itopic.publish(message);
+            logger.info("message has been successfully sent: " + message);
+        } else {
+            logger.error("no hazelcast-instance to send ok message to");
+        }
+    }
+
+    protected void sendMessageOK() {
+        sendMessage(PROCESS_ENDED);
+    }
+
+    protected void sendMessageError(String message) {
+        sendMessage(PROCESS_ERROR);
+    }
+
+    protected void sendMessageInterrupted() {
+        sendMessage(PROCESS_INTERRUPTED);
     }
 
     public abstract void execute();
@@ -148,4 +173,5 @@ public abstract class BaseProcedure extends MessageListener implements Procedure
     public void hasExecuted(boolean hasExecuted) {
         this.hasExecuted = hasExecuted;
     }
+
 }

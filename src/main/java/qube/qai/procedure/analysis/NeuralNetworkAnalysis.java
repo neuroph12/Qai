@@ -50,7 +50,7 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
         }
 
         Metrics networkMetrics = neuralNetwork.buildMetrics();
-        log("adding '" + NETWORK_METRICS + "' and '" + MATRIX_METRICS + "' to return values");
+        logger.info("adding '" + NETWORK_METRICS + "' and '" + MATRIX_METRICS + "' to return values");
         arguments.addResult(NETWORK_METRICS, networkMetrics);
 
     }

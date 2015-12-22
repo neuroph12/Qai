@@ -87,12 +87,6 @@ public abstract class ProcedureChain extends BaseProcedure {
         this.parent = parent;
     }
 
-    protected void log(String message) {
-        if (debug) {
-            logger.info(message);
-        }
-    }
-
     /**
      * Visitor-pattern
      * @param visitor

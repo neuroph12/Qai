@@ -48,7 +48,7 @@ public class TimeSequenceAnalysis extends ProcedureChain {
         Number[] data = timeSequence.toArray();
         Statistics stats = new Statistics(data);
         Metrics metrics = stats.buildMetrics();
-        log("adding '" + TIME_SEQUENCE_METRICS + "' to return values");
+        logger.info("adding '" + TIME_SEQUENCE_METRICS + "' to return values");
         arguments.addResult(TIME_SEQUENCE_METRICS, metrics);
     }
 }

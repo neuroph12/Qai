@@ -47,7 +47,7 @@ public class MatrixStatistics extends ProcedureChain {
         Metrics dataMetrics = stats.buildMetrics();
         Metrics matrixMetrics = matrix.buildMetrics();
 
-        log("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");
+        logger.info("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");
         arguments.addResult(MATRIX_DATA_METRICS, dataMetrics);
         arguments.addResult(MATRIX_METRICS, matrixMetrics);
     }

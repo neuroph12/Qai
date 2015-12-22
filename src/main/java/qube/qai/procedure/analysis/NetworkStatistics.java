@@ -43,7 +43,7 @@ public class NetworkStatistics extends ProcedureChain {
         }
 
         Metrics metrics = network.buildMetrics();
-        log("adding " + NETWORK_METRICS + " to return values");
+        logger.info("adding " + NETWORK_METRICS + " to return values");
         arguments.addResult(NETWORK_METRICS, metrics);
     }
 }

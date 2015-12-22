@@ -4,47 +4,56 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import qube.qai.services.ExecutionServiceInterface;
 
+import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by rainbird on 11/27/15.
  */
-public class MessageQueue {
+public class MessageQueue implements MessageQueueInterface {
 
+    private static Logger logger = LoggerFactory.getLogger("MessageQueue");
+
+    @Inject
     private HazelcastInstance hazelcastInstance;
 
     private Set<String> topics = new HashSet<String>();
 
-    private static MessageQueue mesasageQueue;
+    public MessageQueue() {
+    }
 
-    public static MessageQueue getInstance() {
-        if (mesasageQueue != null) {
-            return mesasageQueue;
-        }
-
-        mesasageQueue = new MessageQueue();
-        return mesasageQueue;
+    @Inject
+    public MessageQueue(HazelcastInstance hazelcastInstance) {
+        this.hazelcastInstance = hazelcastInstance;
     }
 
     public void sendMessage(String topic, String message) {
-        if (!topics.contains(topic)) {
-
-        }
-        ITopic itopic = hazelcastInstance.getTopic(topic);
-        itopic.addMessageListener(new MessageListener() {
-            public void onMessage(Message message) {
-                Object messageObject = message.getMessageObject();
-            }
-        });
+        sendMessage(topic, message, null);
     }
 
-    public void addListener(qube.qai.message.MessageListener listener) {
-        if (!topics.contains(listener.getUUID())) {
-            topics.add(listener.getUUID());
+    public void sendMessage(String topic, String message, String signal) {
+
+        ITopic itopic = hazelcastInstance.getTopic(topic);
+        if (!topics.contains(topic)) {
+            topics.add(topic);
         }
-        hazelcastInstance.getTopic(listener.getUUID()).addMessageListener(listener);
+        if (signal != null) itopic.publish(signal);
+        itopic.publish(message);
+    }
+
+    public void addListener(String topic, MessageListener listener) {
+        createTopic(topic);
+        ITopic itopic = hazelcastInstance.getTopic(topic);
+        if (itopic != null) {
+            itopic.addMessageListener(listener);
+        } else {
+            logger.error("no topic for the topic?!?");
+        }
 
     }
 
@@ -58,6 +67,4 @@ public class MessageQueue {
         return topics;
     }
 
-    private MessageQueue() {
-    }
 }

@@ -66,7 +66,7 @@ public class ChangePointAnalysis extends ProcedureChain {
             markers.add(marker);
         }
 
-        log("adding '" + CHANGE_POINTS + "' to return values");
+        logger.info("adding '" + CHANGE_POINTS + "' to return values");
         arguments.addResult(CHANGE_POINTS, markers);
     }
 

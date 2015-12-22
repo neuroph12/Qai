@@ -63,24 +63,24 @@ public class QaiTestServerModule extends AbstractModule {
          * here we add the map-store for Stock-entities which is
          * in this case the HsqlDBMapStore
          */
-//        MapConfig stockEntitiesConfig = config.getMapConfig(STOCK_ENTITIES);
-//        MapStoreConfig stockEntitiesMapstoreConfig = stockEntitiesConfig.getMapStoreConfig();
-//        if (stockEntitiesMapstoreConfig == null) {
-//            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
-//            stockEntitiesMapstoreConfig = new MapStoreConfig();
-//
-//        }
-//        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
-//            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
-//                if (STOCK_ENTITIES.equals(mapName)) {
-//                    return new HqslDBMapStore();
-//                } else {
-//                    return null;
-//                }
-//            }
-//        });
-//        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
-//        stockEntitiesConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
+        MapConfig stockEntitiesConfig = config.getMapConfig(STOCK_ENTITIES);
+        MapStoreConfig stockEntitiesMapstoreConfig = stockEntitiesConfig.getMapStoreConfig();
+        if (stockEntitiesMapstoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
+            stockEntitiesMapstoreConfig = new MapStoreConfig();
+
+        }
+        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
+            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
+                if (STOCK_ENTITIES.equals(mapName)) {
+                    return new HqslDBMapStore();
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
+        stockEntitiesConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
 
         /**
          * here we add the map-store for Procedures which is

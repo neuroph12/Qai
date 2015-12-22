@@ -50,7 +50,7 @@ public class SortingPercentilesProcedure extends ProcedureChain {
         // now do the actual Statistics calculation for each entry
         for (String name : timeSeriesMap.keySet()) {
 
-            logger.info("Now calculating the statistics of: " + name + " the " + count + "th entry");
+            logger.debug("Now calculating the statistics of: " + name + " the " + count + "th entry");
 
             TimeSequence timeSequence = (TimeSequence) timeSeriesMap.get(name).getData();
             Number[] values = timeSequence.toArray();

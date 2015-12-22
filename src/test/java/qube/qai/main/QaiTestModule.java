@@ -14,16 +14,12 @@ import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStoreFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.message.MessageQueue;
+import qube.qai.message.MessageQueueInterface;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.mapstores.HqslDBMapStore;
-import qube.qai.services.ProcedureSource;
-import qube.qai.services.SearchServiceInterface;
-import qube.qai.services.SelectorFactoryInterface;
-import qube.qai.services.UUIDServiceInterface;
-import qube.qai.services.implementation.DataSelectorFactory;
-import qube.qai.services.implementation.ProcedureSourceService;
-import qube.qai.services.implementation.UUIDService;
-import qube.qai.services.implementation.WikiSearchService;
+import qube.qai.services.*;
+import qube.qai.services.implementation.*;
 
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -65,6 +61,11 @@ public class QaiTestModule extends AbstractModule {
         // ProcedureSource
         bind(ProcedureSource.class).to(ProcedureSourceService.class);
 
+        // executorService
+        bind(ExecutionServiceInterface.class).to(ExecutionService.class);
+
+        // messageQueue
+        bind(MessageQueueInterface.class).to(MessageQueue.class);
     }
 
     @Provides @Singleton
