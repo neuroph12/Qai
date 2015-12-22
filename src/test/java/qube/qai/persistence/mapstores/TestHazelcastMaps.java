@@ -5,12 +5,17 @@ import com.hazelcast.core.IMap;
 import org.apache.commons.lang3.StringUtils;
 import qube.qai.main.QaiBaseTestCase;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSource;
+import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.UUIDServiceInterface;
+import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,15 +29,35 @@ public class TestHazelcastMaps extends QaiBaseTestCase {
     @Inject
     private UUIDServiceInterface uuidService;
 
+    @Inject @Named("Wikipedia_en")
+    private SearchServiceInterface searchService;
+
     private static String STOCK_ENTITIES = "STOCK_ENTITIES";
     private static String PROCEDURES = "PROCEDURES";
+    private static String WIKIPEDIA = "WIKIPEDIA_EN";
 
-    public void testHazelcastStockEntities() throws Exception {
+
+    public void testHazelcastWikiArticles() throws Exception {
+        String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock market"};
 
         HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
-
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
+        logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
+        IMap<String,WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKIPEDIA);
+        // again- we first do the search and demand the article
+        for (String name : someWikiArticles) {
+            Collection<SearchResult> results = searchService.searchInputString(name, "title", 100);
+            SearchResult result = results.iterator().next();
+            WikiArticle wikiArticle = wikiArticles.get(result.getFilename());
+            assertNotNull("there has to be an article", wikiArticle);
+        }
+    }
+
+    public void restHazelcastStockEntities() throws Exception {
+
+        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
+        assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
         IMap<String,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_ENTITIES);
@@ -61,11 +86,11 @@ public class TestHazelcastMaps extends QaiBaseTestCase {
 
     }
 
-    public void testHazelcastProcedures() throws Exception {
+    public void restHazelcastProcedures() throws Exception {
 
         HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
-
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
+        logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
         IMap<String,Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURES);
         String[] procedureNames = procedureSource.getProcedureNames();

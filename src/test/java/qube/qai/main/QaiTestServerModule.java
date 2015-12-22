@@ -10,7 +10,11 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStoreFactory;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.WikiArticle;
+import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.HqslDBMapStore;
+import qube.qai.persistence.mapstores.WikiArticleMapStore;
+import qube.qai.procedure.Procedure;
 
 import java.util.Properties;
 
@@ -22,6 +26,18 @@ public class QaiTestServerModule extends AbstractModule {
     public static String NODE_NAME = "QaiTestNode";
 
     public static String STOCK_ENTITIES = "STOCK_ENTITIES";
+
+    private static final String PROCEDURES = "PROCEDURES";
+
+    private static final String PROCEDURE_BASE_DRIECTORY = "data/procedures/";
+
+    private static String WIKIPEDIA = "WIKIPEDIA_EN";
+
+    private static String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+
+    private static String WIKTIONARY = "WIKTIONARY_EN";
+
+    private static String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
 
     private HazelcastInstance hazelcastInstance;
 
@@ -59,24 +75,72 @@ public class QaiTestServerModule extends AbstractModule {
             stockEntityConfig.setMapStoreConfig(stockQuoteMapstoreConfig);
         }
 
-        // map-store for Wikipedia_en
-        /*MapConfig wikipediaConfig = config.getMapConfig("WIKI.*");
-        MapStoreConfig wikipediaMapStoreConfig = wikipediaConfig.getMapStoreConfig();
-        if (wikipediaMapStoreConfig == null) {
-            wikipediaMapStoreConfig.setFactoryImplementation( new MapStoreFactory<String, WikiArticle>() {
+        /**
+         * here we add the map-store for Procedures which is
+         * in this case DirectoryMapStore
+         */
+        MapConfig procedureConfig = config.getMapConfig(PROCEDURES);
+        MapStoreConfig procedureMapstoreConfig = procedureConfig.getMapStoreConfig();
+        if (procedureMapstoreConfig == null) {
+            System.out.println("mapStoreConfig is null... creating one for: " + PROCEDURES);
 
-                public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties ) {
-                    if ("WIKIPEDIA_EN".equals(mapName)) {
-                        return new ZipFileMapStore();
-                    } else if ("WIKTIONARY_EN".equals(mapName)) {
-                        return new ZipFileMapStore();
+            procedureMapstoreConfig = new MapStoreConfig();
+            procedureMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
+                public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
+                    if (PROCEDURES.equals(mapName)) {
+                        return new DirectoryMapStore(PROCEDURE_BASE_DRIECTORY);
                     } else {
                         return null;
                     }
                 }
             });
-            wikipediaConfig.setMapStoreConfig(wikipediaMapStoreConfig);
-        }*/
+
+            procedureConfig.setMapStoreConfig(procedureMapstoreConfig);
+        }
+
+        /**
+         * wikipedia-article map-store
+         */
+        MapConfig wikiConfig = config.getMapConfig(WIKIPEDIA);
+        MapStoreConfig wikiMapstoreConfig = wikiConfig.getMapStoreConfig();
+        if (wikiMapstoreConfig == null) {
+            System.out.println("mapStoreConfig is null... creating one for: " + WIKIPEDIA);
+
+            wikiMapstoreConfig = new MapStoreConfig();
+            wikiMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
+                public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
+                    if (PROCEDURES.equals(mapName)) {
+                        return new WikiArticleMapStore(WIKIPEDIA_ARCHIVE);
+                    } else {
+                        return null;
+                    }
+                }
+            });
+
+            wikiConfig.setMapStoreConfig(wikiMapstoreConfig);
+        }
+
+        /**
+         * wikitionary-article map-store
+         */
+        MapConfig wiktionaryConfig = config.getMapConfig(WIKTIONARY);
+        MapStoreConfig wiktionaryMapstoreConfig = wiktionaryConfig.getMapStoreConfig();
+        if (wiktionaryMapstoreConfig == null) {
+            System.out.println("mapStoreConfig is null... creating one for: " + WIKTIONARY);
+
+            wiktionaryMapstoreConfig = new MapStoreConfig();
+            wiktionaryMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
+                public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
+                    if (PROCEDURES.equals(mapName)) {
+                        return new WikiArticleMapStore(WIKTIONARY_ARCHIVE);
+                    } else {
+                        return null;
+                    }
+                }
+            });
+
+            wiktionaryConfig.setMapStoreConfig(wiktionaryMapstoreConfig);
+        }
 
         hazelcastInstance = Hazelcast.newHazelcastInstance(config);
         return hazelcastInstance;

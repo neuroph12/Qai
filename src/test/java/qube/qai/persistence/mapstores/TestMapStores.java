@@ -2,10 +2,14 @@ package qube.qai.persistence.mapstores;
 
 import qube.qai.main.QaiBaseTestCase;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSource;
+import qube.qai.services.SearchServiceInterface;
+import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.*;
 
 /**
@@ -16,7 +20,12 @@ public class TestMapStores extends QaiBaseTestCase {
     @Inject
     private ProcedureSource procedureSource;
 
+    @Inject @Named("Wikipedia_en")
+    private SearchServiceInterface searchService;
+
     private String testDirectory = "./test/procedures/";
+
+    private String testWikiArchive = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
 
     /**
      * this is mainly to test how reading from the tarballs will be
@@ -37,19 +46,31 @@ public class TestMapStores extends QaiBaseTestCase {
         // which are supposed to be the wikipedia resource dumps
         // the images and all, i guess...
     }*/
-
-    public void testWikiArticleMapStore() throws Exception {
-
-        WikiArticleMapStore mapStore = new WikiArticleMapStore();
-        fail("implementation missing");
-    }
-
-    public void testWikiTarballMapStore() throws Exception {
+    // @TODO these two are every similar- i should perhaps delete one of them
+    /*public void testWikiTarballMapStore() throws Exception {
 
         WikiTarballMapStore mapStore = new WikiTarballMapStore();
 
         fail("implementation missing");
+    }*/
+
+    public void testWikiArticleMapStore() throws Exception {
+
+        // well, this is all there is to it really...
+        String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock market"};
+
+        WikiArticleMapStore mapStore = new WikiArticleMapStore(testWikiArchive);
+        for (String name : someWikiArticles) {
+            Collection<SearchResult> results = searchService.searchInputString(name, "title", 100);
+            SearchResult result = results.iterator().next();
+            logger.info("searching result: " + result.getTitle() + " with " + result.getRelevance() + " %relevance");
+            WikiArticle article = mapStore.load(result.getFilename());
+            assertNotNull("there has to be something", article);
+        }
+
     }
+
+
 
     /**
      * in this case, we will be storing the Stock-Quotes in HsqlDb
@@ -90,16 +111,6 @@ public class TestMapStores extends QaiBaseTestCase {
         for (String uuid : entityMap.keySet()) {
             mapStore.delete(uuid);
         }
-    }
-
-    public static StockEntity createEntity(String name) {
-        StockEntity entity = new StockEntity();
-        entity.setName(name);
-        entity.setAddress("address of " + name);
-        entity.setGicsSector("gicsSector of " + name);
-        entity.setGicsSubIndustry("gicsSubIndustry of " + name);
-        entity.setSecurity("security of " + name);
-        return entity;
     }
 
     /**
@@ -155,4 +166,18 @@ public class TestMapStores extends QaiBaseTestCase {
         }
     }
 
+    /**
+     * creates a silly StockEntity
+     * @param name
+     * @return
+     */
+    public static StockEntity createEntity(String name) {
+        StockEntity entity = new StockEntity();
+        entity.setName(name);
+        entity.setAddress("address of " + name);
+        entity.setGicsSector("gicsSector of " + name);
+        entity.setGicsSubIndustry("gicsSubIndustry of " + name);
+        entity.setSecurity("security of " + name);
+        return entity;
+    }
 }
