@@ -3,6 +3,8 @@ package qube.qai.main;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hazelcast.core.HazelcastInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
@@ -10,6 +12,8 @@ import javax.inject.Inject;
  * Created by rainbird on 12/21/15.
  */
 public class QaiTestNode {
+
+    private static Logger logger = LoggerFactory.getLogger("QaiTestNode");
 
     private boolean debug = true;
 
@@ -33,7 +37,7 @@ public class QaiTestNode {
         // the whole configuration takes place in guice
         // and the main instance is then distributed via injection
         String instanceName = hazelcastInstance.getName();
-        log(instanceName + " has been started");
+        logger.info("hazelcastInstance with name: '" + instanceName + "' has been started");
 
     }
 
@@ -42,12 +46,6 @@ public class QaiTestNode {
         // instantiate the node and start its services
         QaiNode qaiNode = new QaiNode();
         qaiNode.startServices();
-    }
-
-    private void log(String message) {
-        if (debug) {
-            System.out.println(message);
-        }
     }
 
     public static Injector getInjector() {

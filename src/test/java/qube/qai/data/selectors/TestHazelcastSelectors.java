@@ -33,7 +33,7 @@ public class TestHazelcastSelectors extends QaiBaseTestCase {
     private String STOCK_SOURCE = "STOCK_ENTITIES";
     private String PROCEDURE_SOURCE = "PROCEDURES";
 
-    public void restHazelcastStockEntities() throws Exception {
+    public void testHazelcastStockEntities() throws Exception {
 
         IMap<String,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_SOURCE);
 

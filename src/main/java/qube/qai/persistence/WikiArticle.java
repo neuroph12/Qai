@@ -1,12 +1,12 @@
 package qube.qai.persistence;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  * Created by rainbird on 11/3/15.
  */
-@XmlRootElement(name="WikiArticle")
-public class WikiArticle {
+public class WikiArticle implements Serializable {
 
     private String id;
 

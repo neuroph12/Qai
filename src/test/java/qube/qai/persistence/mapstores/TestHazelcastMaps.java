@@ -86,7 +86,7 @@ public class TestHazelcastMaps extends QaiBaseTestCase {
 
     }
 
-    public void restHazelcastProcedures() throws Exception {
+    public void testHazelcastProcedures() throws Exception {
 
         HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);

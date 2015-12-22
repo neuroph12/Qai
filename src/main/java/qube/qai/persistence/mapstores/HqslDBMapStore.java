@@ -74,7 +74,10 @@ public class HqslDBMapStore implements MapStore<String, StockEntity> {
     }
 
     public Iterable<String> loadAllKeys() {
-        List<String> resultList = entityManager.createQuery("select uuid from StockQuote").getResultList();
+        List<String> resultList = null;
+        if (entityManager != null) {
+            resultList = entityManager.createQuery("select uuid from StockQuote").getResultList();
+        }
         return resultList;
     }
 }
