@@ -115,6 +115,13 @@
             <version>1.5.1</version>
         </dependency>
 
+        <!-- jSoup for html-parsing -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.8.3</version>
+        </dependency>
+
         <!-- jaxpb just doesn't cut it, so we serialize to xml with xstream-->
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
