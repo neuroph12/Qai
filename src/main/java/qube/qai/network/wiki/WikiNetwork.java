@@ -94,8 +94,6 @@ public class WikiNetwork extends Network {
             log("added " + linkCount + " edges to '" + title + "' with " + skipCount + " skips.");
             log("added edges to: " + existing.toString());
             log("added vertices: " + addedEdges.toString());
-
-
             // don't forget to set the article and model to null so that it can be retrieved at the start of the loop
             article = null;
             wikiModel = null;

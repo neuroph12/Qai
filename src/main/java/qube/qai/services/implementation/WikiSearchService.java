@@ -85,6 +85,9 @@ public class WikiSearchService implements SearchServiceInterface {
             try {
                 ZipFile zipFile = new ZipFile(ZIP_FILE_NAME);
                 ZipEntry zipEntry = zipFile.getEntry(fileName);
+                if (zipEntry == null) {
+                    return null;
+                }
                 InputStream stream = zipFile.getInputStream(zipEntry);
 
                 XStream xStream = new XStream();

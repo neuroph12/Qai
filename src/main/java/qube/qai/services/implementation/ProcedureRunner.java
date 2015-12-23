@@ -7,6 +7,7 @@ import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureRunnerInterface;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Set;
 /**
  * Created by rainbird on 12/22/15.
  */
+@Singleton
 public class ProcedureRunner implements ProcedureRunnerInterface {
 
     private static Logger logger = LoggerFactory.getLogger("ExecutionService");
