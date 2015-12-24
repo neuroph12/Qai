@@ -1,9 +1,12 @@
-package qube.qai.network;
+package qube.qai.network.semantic;
 
 
 import com.google.inject.name.Named;
 import qube.qai.data.Metrics;
+import qube.qai.data.Selector;
+import qube.qai.data.selectors.DataSelector;
 import qube.qai.main.QaiTestBase;
+import qube.qai.network.Network;
 import qube.qai.network.semantic.SemanticNetwork;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
@@ -15,7 +18,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 11/24/15.
  */
-public class TestSemanticNetwork extends QaiTestBase {
+public class TestSemanticNetworkBuilder extends QaiTestBase {
 
     @Inject
     @Named("Wiktionary_en")
@@ -41,8 +44,9 @@ public class TestSemanticNetwork extends QaiTestBase {
         WikiArticle wikiArticle = wikipediaSearchService.retrieveDocumentContentFromZipFile(filename);
         assertNotNull("there has to be a wiki-article", wikiArticle);
 
-        SemanticNetwork semanticNetwork = new SemanticNetwork();
-        semanticNetwork.buildNetwork(wikiArticle);
+        SemanticNetworkBuilder builder = new SemanticNetworkBuilder();
+        Selector<WikiArticle> selector = new DataSelector<WikiArticle>(wikiArticle);
+        SemanticNetwork semanticNetwork = (SemanticNetwork) builder.buildNetwork(selector);
 
         logNetwork(semanticNetwork);
     }
@@ -59,9 +63,10 @@ public class TestSemanticNetwork extends QaiTestBase {
         WikiArticle wikiArticle = wikipediaSearchService.retrieveDocumentContentFromZipFile(filename);
         assertNotNull("there has to be a wiki-article", wikiArticle);
 
-        SemanticNetwork semanticNetwork = new SemanticNetwork();
-        semanticNetwork.buildNetwork(wikiArticle);
-
+        SemanticNetworkBuilder builder = new SemanticNetworkBuilder();
+        Selector<WikiArticle> selector = new DataSelector<WikiArticle>(wikiArticle);
+        SemanticNetwork semanticNetwork = (SemanticNetwork) builder.buildNetwork(selector);
+        semanticNetwork.buildAdjacencyMatrix();
         logNetwork(semanticNetwork);
 
         // now we try to build another network from the adjacency matrix

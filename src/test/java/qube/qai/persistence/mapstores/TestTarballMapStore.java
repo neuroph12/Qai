@@ -26,7 +26,7 @@ public class TestTarballMapStore extends QaiTestBase {
     private static String tarballsBaseDirectory = "/media/rainbird/ALEPH/wiki-data/";
     private static String wiktionaryTarballFile = "enwiktionary-20121104-local-media-1.tar";
     private static String wikipediaTarballFile = "enwiki-20121104-local-media-1.tar";
-    // [[File:...|thumb|...]]
+    // [[File:...|thumb|...]] is how you define an image in wiki-format
     private static String wikiFileFormatStart = "[[File:";
     private static String wikiFileFormatEnd = "|";
     private String darwinPage = "Charles Darwin.xml";
