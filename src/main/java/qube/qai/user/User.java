@@ -5,6 +5,8 @@ package qube.qai.user;
  */
 public class User {
 
+    private String userName;
+
     /**
      * this class is supposed to be representing the
      * Qoan-users in order to regulate their rights and all
@@ -12,4 +14,12 @@ public class User {
      * will be implemented when the user rights and all
      * are to be decided
      */
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }

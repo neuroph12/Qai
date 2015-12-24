@@ -30,11 +30,13 @@ public class QaiModule extends AbstractModule {
 
     private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
 
+    private static String wikipediaResources = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
+
     private static String wikipediaZipFileName = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
 
-    private static String STOCK_QUOTES_DIRECTORY = "data/stockquotes/";
+    private static String stockQuotesDirectory = "data/stockquotes/";
 
-    private static final ThreadLocal<EntityManager> ENTITY_MANAGER_CACHE = new ThreadLocal<EntityManager>();
+    private static final ThreadLocal<EntityManager> entityManagerCache = new ThreadLocal<EntityManager>();
 
     @Override
     protected void configure() {
@@ -104,7 +106,7 @@ public class QaiModule extends AbstractModule {
     public EntityManagerFactory provideEntityManagerFactory() {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
-        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + STOCK_QUOTES_DIRECTORY);
+        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + stockQuotesDirectory);
         properties.put("hibernate.connection.username", "sa");
         properties.put("hibernate.connection.password", "");
         properties.put("hibernate.connection.pool_size", "1");
@@ -122,9 +124,9 @@ public class QaiModule extends AbstractModule {
 
     @Provides
     public EntityManager provideEntityManager(EntityManagerFactory entityManagerFactory) {
-        EntityManager entityManager = ENTITY_MANAGER_CACHE.get();
+        EntityManager entityManager = entityManagerCache.get();
         if (entityManager == null) {
-            ENTITY_MANAGER_CACHE.set(entityManager = entityManagerFactory.createEntityManager());
+            entityManagerCache.set(entityManager = entityManagerFactory.createEntityManager());
         }
         return entityManager;
     }
