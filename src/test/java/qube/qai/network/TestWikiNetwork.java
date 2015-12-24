@@ -3,7 +3,7 @@ package qube.qai.network;
 import com.google.inject.name.Named;
 import grph.oo.ObjectGrph;
 import grph.oo.ObjectPath;
-import qube.qai.main.QaiBaseTestCase;
+import qube.qai.main.QaiTestBase;
 import qube.qai.network.wiki.WikiNetwork;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * Created by rainbird on 11/21/15.
  */
-public class TestWikiNetwork extends QaiBaseTestCase {
+public class TestWikiNetwork extends QaiTestBase {
 
     @Inject @Named("Wiktionary_en")
     private SearchServiceInterface wikipediaSearchService;

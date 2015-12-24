@@ -4,7 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import org.apache.commons.lang3.StringUtils;
 import qube.qai.data.Selector;
-import qube.qai.main.QaiBaseTestCase;
+import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.persistence.mapstores.TestMapStores;
@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by rainbird on 11/19/15.
  */
-public class TestHazelcastSelectors extends QaiBaseTestCase {
+public class TestHazelcastSelectors extends QaiTestBase {
 
     @Inject
     private HazelcastInstance hazelcastInstance;

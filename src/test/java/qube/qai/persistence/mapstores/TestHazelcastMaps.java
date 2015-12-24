@@ -3,7 +3,7 @@ package qube.qai.persistence.mapstores;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import org.apache.commons.lang3.StringUtils;
-import qube.qai.main.QaiBaseTestCase;
+import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by rainbird on 12/21/15.
  */
-public class TestHazelcastMaps extends QaiBaseTestCase {
+public class TestHazelcastMaps extends QaiTestBase {
 
     @Inject
     private ProcedureSourceInterface procedureSource;

@@ -129,11 +129,17 @@
             <version>1.4.8</version>
         </dependency>
 
-        <!-- especially string utilities -->
+        <!-- especially string and compression utilities -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.10</version>
         </dependency>
 
         <!-- hibernate...

@@ -1,6 +1,6 @@
 package qube.qai.persistence.mapstores;
 
-import qube.qai.main.QaiBaseTestCase;
+import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * Created by rainbird on 11/19/15.
  */
-public class TestMapStores extends QaiBaseTestCase {
+public class TestMapStores extends QaiTestBase {
 
     @Inject
     private ProcedureSourceInterface procedureSource;

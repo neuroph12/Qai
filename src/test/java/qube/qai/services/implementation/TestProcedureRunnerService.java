@@ -3,7 +3,7 @@ package qube.qai.services.implementation;
 import com.hazelcast.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.main.QaiBaseTestCase;
+import qube.qai.main.QaiTestBase;
 import qube.qai.message.MessageListener;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.analysis.MatrixStatistics;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by rainbird on 12/22/15.
  */
-public class TestProcedureRunnerService extends QaiBaseTestCase {
+public class TestProcedureRunnerService extends QaiTestBase {
 
     private Logger logger = LoggerFactory.getLogger("TestExecutionService");
 

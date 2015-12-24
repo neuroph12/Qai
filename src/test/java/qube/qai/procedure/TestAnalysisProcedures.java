@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.*;
 import qube.qai.data.analysis.Statistics;
-import qube.qai.main.QaiBaseTestCase;
+import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.analysis.*;
 import qube.qai.services.ProcedureSourceInterface;
 
@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Created by rainbird on 11/30/15.
  */
-public class TestAnalysisProcedures extends QaiBaseTestCase {
+public class TestAnalysisProcedures extends QaiTestBase {
 
     Logger logger = LoggerFactory.getLogger("TestAnalysisProcedures");
 

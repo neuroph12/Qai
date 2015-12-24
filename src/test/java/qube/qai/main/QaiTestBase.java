@@ -18,8 +18,10 @@ import qube.qai.network.TestNeuralNetwork;
 import qube.qai.network.TestSemanticNetwork;
 import qube.qai.network.TestWikiNetwork;
 import qube.qai.network.neural.trainer.TestNeuralNetworkTraining;
+import qube.qai.parsers.TestWikiIntegration;
 import qube.qai.persistence.mapstores.TestHazelcastMaps;
 import qube.qai.persistence.mapstores.TestMapStores;
+import qube.qai.persistence.mapstores.TestTarballMapStore;
 import qube.qai.procedure.*;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
 import qube.qai.services.implementation.TestProcedureRunnerService;
@@ -28,7 +30,7 @@ import qube.qai.services.implementation.TestUUIDGenerator;
 /**
  * Created by rainbird on 11/19/15.
  */
-public class QaiBaseTestCase extends TestCase {
+public class QaiTestBase extends TestCase {
 
     protected Logger logger = LoggerFactory.getLogger("QaiTest");
 
@@ -45,7 +47,7 @@ public class QaiBaseTestCase extends TestCase {
     }
 
     public static void main(String[] params) {
-        String[] tests = {QaiBaseTestCase.class.getName()};
+        String[] tests = {QaiTestBase.class.getName()};
         TestRunner.main(tests);
     }
 
@@ -54,7 +56,7 @@ public class QaiBaseTestCase extends TestCase {
      * when this suite is in use
      * @return
      */
-    public static Test suite() {
+    /*public static Test suite() {
         TestSuite suite = new TestSuite("All tests");
 
         // data.analysis
@@ -83,9 +85,13 @@ public class QaiBaseTestCase extends TestCase {
         suite.addTestSuite(TestSemanticNetwork.class);
         suite.addTestSuite(TestWikiNetwork.class);
 
+        // parsers
+        suite.addTestSuite(TestWikiIntegration.class);
+
         // persistence.mapstores
         suite.addTestSuite(TestMapStores.class);
         suite.addTestSuite(TestHazelcastMaps.class);
+        suite.addTestSuite(TestTarballMapStore.class);
 
         // procedure
         suite.addTestSuite(TestWikiArchiveIndexer.class);
@@ -96,6 +102,6 @@ public class QaiBaseTestCase extends TestCase {
         suite.addTestSuite(TestProcedureVisitors.class);
 
         return suite;
-    }
+    }*/
 
 }

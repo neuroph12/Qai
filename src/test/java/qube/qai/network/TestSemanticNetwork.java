@@ -3,8 +3,7 @@ package qube.qai.network;
 
 import com.google.inject.name.Named;
 import qube.qai.data.Metrics;
-import qube.qai.main.QaiBaseTestCase;
-import qube.qai.matrix.Matrix;
+import qube.qai.main.QaiTestBase;
 import qube.qai.network.semantic.SemanticNetwork;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
@@ -16,7 +15,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 11/24/15.
  */
-public class TestSemanticNetwork extends QaiBaseTestCase {
+public class TestSemanticNetwork extends QaiTestBase {
 
     @Inject
     @Named("Wiktionary_en")

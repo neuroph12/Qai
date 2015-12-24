@@ -1,20 +1,17 @@
 package qube.qai.procedure;
 
-import junit.framework.TestCase;
-import qube.qai.main.QaiBaseTestCase;
+import qube.qai.main.QaiTestBase;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
-import qube.qai.services.implementation.WikiSearchService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.File;
 import java.util.Collection;
 
 /**
  * Created by rainbird on 11/11/15.
  */
-public class TestWikiSearch extends QaiBaseTestCase {
+public class TestWikiSearch extends QaiTestBase {
 
     @Inject @Named("Wiktionary_en")
     private SearchServiceInterface searchService;
