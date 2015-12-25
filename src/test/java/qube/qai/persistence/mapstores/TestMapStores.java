@@ -28,31 +28,9 @@ public class TestMapStores extends QaiTestBase {
     private String testWikiArchive = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
 
     /**
-     * this is mainly to test how reading from the tarballs will be
+     * test wiki-article map-store
+     * @throws Exception
      */
-    /*
-    private String testZipFile = "/media/rainbird/ALEPH/wiki-data/enwiki-20121104-local-media-1.tar";
-
-    public void testZipFileMapStore() throws Exception {
-
-        TarballMapStore mapStore = new TarballMapStore(testZipFile);
-        Iterable<String> names = mapStore.loadAllKeys();
-        for (String name : names) {
-            logger.info("as in zip file: '" + name + "'");
-        }
-
-        // while we are at it, we can experiment with tar-balls
-        // which are supposed to be the wikipedia resource dumps
-        // the images and all, i guess...
-    }*/
-    // @TODO these two are every similar- i should perhaps delete one of them
-    /*public void testWikiTarballMapStore() throws Exception {
-
-        WikiTarballMapStore mapStore = new WikiTarballMapStore();
-
-        fail("implementation missing");
-    }*/
-
     public void testWikiArticleMapStore() throws Exception {
 
         // well, this is all there is to it really...

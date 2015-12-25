@@ -12,6 +12,8 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 
@@ -28,13 +30,19 @@ import java.util.zip.ZipFile;
  */
 public class WikiArchiveIndexer extends Procedure {
 
-    private boolean debug = false;
+    private Logger logger = LoggerFactory.getLogger("WikiArchiveIndexer");
+
+    public static String FIELD_FILE = "file";
+    public static String FIELD_TITLE = "title";
+    public static String FIELD_CONTENT = "content";
 
     //public String INDEX_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
     public String INDEX_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
 
     //public String ZIP_FILE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
     public String ZIP_FILE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+
+    private long indexedFileCount = 0;
 
     @Override
     public void execute() {
@@ -62,26 +70,29 @@ public class WikiArchiveIndexer extends Procedure {
 
             XStream xStream = new XStream();
             progressPercentage = 0;
+            indexedFileCount = 0;
             Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
             while (zipEntries.hasMoreElements()) {
-                ZipEntry zipEntry = zipEntries.nextElement();
 
+                ZipEntry zipEntry = zipEntries.nextElement();
                 InputStream stream = zipFile.getInputStream(zipEntry);
                 WikiArticle wikiPage = (WikiArticle) xStream.fromXML(stream);
                 String fileName = zipEntry.getName();
+                logger.debug("Indexing zip-entry: " + fileName);
+
                 Document doc = new Document();
-                doc.add(new StringField("file", fileName, Field.Store.YES));
-
-                log("Indexing zip-entry: " + fileName);
-
-                doc.add(new TextField("title", wikiPage.getTitle(), Field.Store.YES));
-                doc.add(new TextField("content", wikiPage.getContent(), Field.Store.NO));
+                doc.add(new StringField(FIELD_FILE, fileName, Field.Store.YES));
+                doc.add(new TextField(FIELD_TITLE, wikiPage.getTitle(), Field.Store.YES));
+                doc.add(new TextField(FIELD_CONTENT, wikiPage.getContent(), Field.Store.NO));
                 writer.addDocument(doc);
                 progressPercentage++;
+                indexedFileCount++;
             }
+
             writer.commit();
             writer.deleteUnusedFiles();
-            log(writer.maxDoc() + " documents written");
+            logger.debug(writer.maxDoc() + " documents written");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -108,9 +119,7 @@ public class WikiArchiveIndexer extends Procedure {
         this.ZIP_FILE = ZIP_FILE;
     }
 
-    private void log(String message) {
-        if (debug) {
-            System.out.println(message);
-        }
+    public long getIndexedFileCount() {
+        return indexedFileCount;
     }
 }

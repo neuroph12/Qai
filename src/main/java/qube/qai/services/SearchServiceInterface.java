@@ -12,5 +12,6 @@ public interface SearchServiceInterface {
 
     Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage);
 
+    // @TODO remove the method from the interface
     WikiArticle retrieveDocumentContentFromZipFile(String fileName);
 }

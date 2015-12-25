@@ -1,6 +1,5 @@
 package qube.qai.services.implementation;
 
-import com.thoughtworks.xstream.XStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -13,61 +12,56 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 /**
- * Created by rainbird on 11/9/15.
+ * Created by rainbird on 12/25/15.
  */
-public class WikiSearchService implements SearchServiceInterface {
+public class DirectorySearchService implements SearchServiceInterface {
 
-    private boolean debug = true;
+    private Logger logger = LoggerFactory.getLogger("DirectorySearchService");
 
-    public String INDEX_DIRECTORY;
+    public static String FIELD_FILE = "file";
 
-    public String ZIP_FILE_NAME;
+    public static String FIELD_NAME = "name";
 
-    public WikiSearchService() {
+    private String indexDirectory;
+
+    public DirectorySearchService() {
     }
 
-    public WikiSearchService(String indexDirectory, String zipFileName) {
-        this.INDEX_DIRECTORY = indexDirectory;
-        this.ZIP_FILE_NAME = zipFileName;
+    public DirectorySearchService(String indexDirectory) {
+        this.indexDirectory = indexDirectory;
     }
 
-    /* Sample application for searching an index
-     * adapting the code for doing search and returning the contents of
-     * the documents which are picked for reading
-    */
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
-
         Collection<SearchResult> searchResults = new ArrayList<SearchResult>();
         try {
-            Path path = FileSystems.getDefault().getPath(INDEX_DIRECTORY);
+            Path path = FileSystems.getDefault().getPath(indexDirectory);
             Directory directory = FSDirectory.open(path);
             // Build a Query object
-            Query query = new QueryParser(fieldName, new StandardAnalyzer()).parse(searchString);
+            Query query = new QueryParser(FIELD_NAME, new StandardAnalyzer()).parse(searchString);
 
             IndexReader reader = DirectoryReader.open(directory);
             IndexSearcher searcher = new IndexSearcher(reader);
             TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
             searcher.search(query, collector);
-            log("total hits: " + collector.getTotalHits());
+            logger.info("total hits: " + collector.getTotalHits());
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc hit : hits) {
                 Document doc = reader.document(hit.doc);
-                SearchResult result = new SearchResult(doc.get("title"), doc.get("file"), hit.score);
+                SearchResult result = new SearchResult(doc.get(FIELD_NAME), doc.get(FIELD_FILE), hit.score);
                 searchResults.add(result);
-                log(doc.get("file") + ": title: " + doc.get("title") + " (" + hit.score + ")");
+                logger.info(doc.get(FIELD_FILE)  + " (" + hit.score + ")");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,29 +73,14 @@ public class WikiSearchService implements SearchServiceInterface {
     }
 
     public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
-
-        WikiArticle wikiArticle = null;
-
-        try {
-            ZipFile zipFile = new ZipFile(ZIP_FILE_NAME);
-            ZipEntry zipEntry = zipFile.getEntry(fileName);
-            if (zipEntry == null) {
-                return null;
-            }
-            InputStream stream = zipFile.getInputStream(zipEntry);
-
-            XStream xStream = new XStream();
-            wikiArticle = (WikiArticle) xStream.fromXML(stream);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return wikiArticle;
+        return null;
     }
 
-    private void log(String message) {
-        if (debug) {
-            System.out.println(message);
-        }
+    public String getIndexDirectory() {
+        return indexDirectory;
+    }
+
+    public void setIndexDirectory(String indexDirectory) {
+        this.indexDirectory = indexDirectory;
     }
 }
