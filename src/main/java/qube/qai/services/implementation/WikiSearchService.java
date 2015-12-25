@@ -13,6 +13,8 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -30,8 +32,7 @@ import java.util.zip.ZipFile;
  */
 public class WikiSearchService implements SearchServiceInterface {
 
-    private boolean debug = true;
-
+    private Logger logger = LoggerFactory.getLogger("WikiSearchService");
     public String INDEX_DIRECTORY;
 
     public String ZIP_FILE_NAME;
@@ -61,13 +62,13 @@ public class WikiSearchService implements SearchServiceInterface {
             IndexSearcher searcher = new IndexSearcher(reader);
             TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
             searcher.search(query, collector);
-            log("total hits: " + collector.getTotalHits());
+            logger.debug("total hits: " + collector.getTotalHits());
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc hit : hits) {
                 Document doc = reader.document(hit.doc);
                 SearchResult result = new SearchResult(doc.get("title"), doc.get("file"), hit.score);
                 searchResults.add(result);
-                log(doc.get("file") + ": title: " + doc.get("title") + " (" + hit.score + ")");
+                logger.debug(doc.get("file") + ": title: " + doc.get("title") + " (" + hit.score + ")");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -99,9 +100,4 @@ public class WikiSearchService implements SearchServiceInterface {
         return wikiArticle;
     }
 
-    private void log(String message) {
-        if (debug) {
-            System.out.println(message);
-        }
-    }
 }

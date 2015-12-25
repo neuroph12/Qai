@@ -97,6 +97,9 @@ public class DirectoryIndexer extends Procedure {
     private void indexFilesIn(File directory, IndexWriter writer) throws IOException {
 
         File[] files = directory.listFiles();
+        if (files == null) {
+            return;
+        }
 
         for (File file : files) {
 

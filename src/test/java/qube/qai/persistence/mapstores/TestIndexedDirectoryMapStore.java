@@ -19,16 +19,12 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
 
     private static Logger logger = LoggerFactory.getLogger("TestTarballMapStore");
 
-    private static String wikiArticleName = "";
-    private static String tarballsBaseDirectory = "/media/rainbird/ALEPH/wiki-data/";
-    private static String wiktionaryTarballFile = "enwiktionary-20121104-local-media-1.tar";
-    private static String wikipediaTarballFile = "enwiki-20121104-local-media-1.tar";
+    private static String wikiArticleName = "Charles Darwin.xml";
     private static String wikipediaResourceDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
     private static String wikipediaResourceIndexDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
     // [[File:...|thumb|...]] is how you define an image in wiki-format
     private static String wikiFileFormatStart = "[[File:";
     private static String wikiFileFormatEnd = "|";
-    private String darwinPage = "Charles Darwin.xml";
 
     @Inject
     @Named("Wikipedia_en")
@@ -43,7 +39,8 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
         DirectorySearchService directorySearchService = new DirectorySearchService(wikipediaResourceIndexDirectory);
         IndexedDirectoryMapStore mapStore = new IndexedDirectoryMapStore(wikipediaResourceDirectory, wikipediaResourceIndexDirectory);
         mapStore.setSearchService(directorySearchService);
-        WikiArticle article = searchService.retrieveDocumentContentFromZipFile(darwinPage);
+
+        WikiArticle article = searchService.retrieveDocumentContentFromZipFile(wikiArticleName);
         assertNotNull("seriously?!?", article);
 
         //log(article.getContent());
@@ -52,6 +49,7 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
             logger.info("we are good- found some resources to look for");
         } else {
             logger.info("no file reference in this article- nothing to search for");
+            fail("pick a wiki-article with some images in it for crying out loud!?!");
         }
 
         int foundCount = 0;
@@ -64,16 +62,16 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
             if (result == null) {
                 notFoundCount++;
                 logger.info("file: '" + key + "' could not be found");
+                // some of the resources seem to be missing really... out of some reason
+                // fail("resource file: " + key + "must be there");
             } else {
                 foundCount++;
-                logger.info("file: '" + key + "' is OK");
+                logger.info("file: '" + key + "' is OK. actual filename: " + result.getAbsolutePath());
+                assertTrue("the file should be really there as well", result.exists());
             }
         }
 
         logger.info("at the end of the search found: " + foundCount + " and not found: " + notFoundCount);
     }
 
-    private void log(String message) {
-        System.out.println(message);
-    }
 }

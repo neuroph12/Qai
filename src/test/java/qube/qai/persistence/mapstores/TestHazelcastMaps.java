@@ -2,6 +2,7 @@ package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import net.didion.jwnl.data.Exc;
 import org.apache.commons.lang3.StringUtils;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
@@ -14,6 +15,7 @@ import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,6 +41,24 @@ public class TestHazelcastMaps extends QaiTestBase {
     private static String PROCEDURES = "PROCEDURES";
     private static String WIKIPEDIA = "WIKIPEDIA_EN";
     private static String WIKTIONARY = "WIKTIONARY_EN";
+    private static String WIKIPEDIA_RESOURCES = "WIKIPEDIA_RESOURCES";
+    private static String WIKTIONARY_RESOURCES = "WIKTIONARY_RESOURCES";
+    private static String[] wikipediaFilesToSearch = {"€2_commemorative_coin_Greece_2007_TOR.jpg",
+            "3D_Hot_Rally_boxart.PNG",
+            "1_on_1.jpg",
+            "5Five-regular.jpg",
+            "3_Group_badge.jpg",
+            "3-D_Docking_Mission.png",
+            "50_Foot_Wave_-_50_Foot_Wave_EP.jpg",
+            "50_Years_of_Comparative_Wealth_E.P._cover.jpg",
+            "8th_Weapons_Squadron.jpg",
+            "Whutcha_Want.jpg"};
+
+    private static String[] wiktionaryFilesToSearch = {"YR's_scripts.PNG",
+            "Wiktionary-favicon-en-colored.png",
+            "ipa-rendering-ff.png",
+            "Wiktionary-favicon-en.png",
+            "Writing_star.svg"};
 
     public void testHazelcastWikipediaArticles() throws Exception {
 
@@ -140,4 +160,29 @@ public class TestHazelcastMaps extends QaiTestBase {
         }
     }
 
+    public void testWikipediaResources() throws Exception {
+        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
+        assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
+        logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
+
+        IMap<String,File> wikipediaResources = hazelcastInstance.getMap(WIKIPEDIA_RESOURCES);
+        for (String filename : wikipediaFilesToSearch) {
+            logger.info("now searching: " + filename);
+            File found = wikipediaResources.get(filename);
+            assertNotNull("has to be there something", found);
+        }
+    }
+
+    public void testWiktionaryResources() throws Exception {
+        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
+        assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
+        logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
+
+        IMap<String,File> wiktionaryResources = hazelcastInstance.getMap(WIKTIONARY_RESOURCES);
+        for (String filename : wiktionaryFilesToSearch) {
+            logger.info("now searching: " + filename);
+            File found = wiktionaryResources.get(filename);
+            assertNotNull("has to be there something", found);
+        }
+    }
 }
