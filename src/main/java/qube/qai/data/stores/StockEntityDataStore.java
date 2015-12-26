@@ -97,7 +97,11 @@ public class StockEntityDataStore implements DataStore {
 
         if (headerTitles.length > 0 &&
                 headerTitles[0].equalsIgnoreCase(fieldName)) {
-            entity.setTickerSymbol(fieldValue);
+            // the symbols come in {{exchange|ticker
+            String exchange = StringUtils.substringBetween(fieldValue, "{{", "|");
+            String ticker = StringUtils.substringBetween(fieldValue, "|", "}}");
+            entity.setTickerSymbol(ticker);
+            entity.setTradedIn(exchange);
         } else if (headerTitles.length > 1 &&
                 headerTitles[1].equalsIgnoreCase(fieldName)) {
             entity.setSecurity(fieldValue);

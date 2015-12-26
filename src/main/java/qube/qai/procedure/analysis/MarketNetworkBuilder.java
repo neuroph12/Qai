@@ -34,8 +34,20 @@ public class MarketNetworkBuilder extends ProcedureChain implements NetworkBuild
         super(NAME);
     }
 
+    private BasicNetworkTrainer trainer;
+
+    /**
+     * calls execute method to train the network
+     * and returns result of that
+     * @param source
+     * @return
+     */
     public Network buildNetwork(Selector source) {
-        return null;
+
+        arguments.setArgument(INPUT_STOCK_ENTITY_COLLECTION, source);
+        execute();
+
+        return (Network) getArguments().getResult(TRAINED_NEURAL_NETWORK);
     }
 
     @Inject
@@ -46,38 +58,39 @@ public class MarketNetworkBuilder extends ProcedureChain implements NetworkBuild
 
         Selector<Collection> selector = arguments.getSelector(INPUT_STOCK_ENTITY_COLLECTION);
         Collection<StockEntity> entities = selector.getData();
-        HashMap<String, Collection> entityData = new HashMap<String, Collection>();
+        HashMap<String, Collection> trainingData = new HashMap<String, Collection>();
         NeuralNetwork network = new NeuralNetwork(entities.size());
         for (StockEntity entity : entities) {
-            correctTickerSymbol(entity);
             Network.Vertex vertex = new Network.Vertex(entity.getTickerSymbol());
             // while we are at it we collect the data here as well
             Collection<StockQuote> quotes = stockQuoteDataStore.retrieveQuotesFor(entity.getTickerSymbol());
             // if there are no available quotes, skip it and remove from list
             if (quotes != null || !quotes.isEmpty()) {
                 network.addVertex(vertex);
-                entityData.put(entity.getTickerSymbol(), quotes);
+                trainingData.put(entity.getTickerSymbol(), quotes);
             }
         }
 
         // well, here goes nothing
-        BasicNetworkTrainer trainer = new BasicNetworkTrainer(network);
-        // etc...
+        trainer = new BasicNetworkTrainer(network);
+        trainer.createTrainingSet(trainingData);
+        trainer.trainNetwork();
 
+        arguments.addResult(TRAINED_NEURAL_NETWORK, network);
     }
 
     /**
      * tickerSymbol is something like {{tradedIn|symbol}}
-     * @param entity
+     * @param
      * @return
      */
-    private void correctTickerSymbol(StockEntity entity) {
-        String tradedIn = StringUtils.substringBetween(entity.getTickerSymbol(), "{{", "|");
-        String ticker = StringUtils.substringBetween(entity.getTickerSymbol(), "|", "}}");
-
-        entity.setTickerSymbol(ticker);
-        entity.setTradedIn(tradedIn);
-    }
+//    private void correctTickerSymbol(StockEntity entity) {
+//        String tradedIn = StringUtils.substringBetween(entity.getTickerSymbol(), "{{", "|");
+//        String ticker = StringUtils.substringBetween(entity.getTickerSymbol(), "|", "}}");
+//
+//        entity.setTickerSymbol(ticker);
+//        entity.setTradedIn(tradedIn);
+//    }
 
     @Override
     public void buildArguments() {
@@ -87,5 +100,9 @@ public class MarketNetworkBuilder extends ProcedureChain implements NetworkBuild
                 AVERAGE_TIME_SEQUENCE,
                 CHANGE_POINTS,
                 TRAINED_NEURAL_NETWORK);
+    }
+
+    public BasicNetworkTrainer getTrainer() {
+        return trainer;
     }
 }

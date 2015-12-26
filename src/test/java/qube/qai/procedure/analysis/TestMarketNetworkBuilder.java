@@ -1,5 +1,6 @@
 package qube.qai.procedure.analysis;
 
+import org.encog.ml.data.MLDataPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.Selector;
@@ -7,6 +8,7 @@ import qube.qai.data.selectors.DataSelector;
 import qube.qai.data.stores.StockEntityDataStore;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.Network;
+import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.persistence.StockEntity;
 
 import java.util.*;
@@ -24,6 +26,8 @@ public class TestMarketNetworkBuilder extends QaiTestBase {
      */
     public void testMarketBuilder() throws Exception {
 
+        int numberOfEntities = 10;
+        String[] names = new String[numberOfEntities];
         StockEntityDataStore dataStore = new StockEntityDataStore();
         injector.injectMembers(dataStore);
 
@@ -32,26 +36,54 @@ public class TestMarketNetworkBuilder extends QaiTestBase {
         // now we have the list of entities with which we want to build
         // the network for, we can simply pick, say 100 of them
         // and make a trial go with the thing
-        Collection<StockEntity> workingSet = pickRandomFrom(10, entityList);
-        Selector<Collection> selector = new DataSelector<Collection>();
+        Collection<StockEntity> workingSet = pickRandomFrom(numberOfEntities, entityList, names);
+        logger.info("picked entities: " + array2String(names));
+
+        Selector<Collection> selector = new DataSelector<Collection>(workingSet);
         MarketNetworkBuilder networkBuilder = new MarketNetworkBuilder();
         injector.injectMembers(networkBuilder);
-        Network network = networkBuilder.buildNetwork(selector);
-        assertNotNull("duh", network);
-        //assert...
+        NeuralNetwork network = (NeuralNetwork) networkBuilder.buildNetwork(selector);
+        assertNotNull("duh!", network);
+
+         network.getVertices();
+
+        // ok now we take a look at the results
+        for(MLDataPair pair: networkBuilder.getTrainer().getTrainingSet()) {
+            double[] output = network.propagate(pair.getInput().getData());
+            for (int i = 0; i < output.length; i++) {
+                logger.info("entity name: " + names[i]);
+                logger.info("input: " + pair.getInput().getData(i));
+                logger.info("output: " + output[i]);
+                logger.info("ideal: " + pair.getIdeal().getData(i));
+            }
+        }
+
+
     }
 
-    private Collection<StockEntity> pickRandomFrom(int number, Collection<StockEntity> original) {
+    private String array2String(String[] names) {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < names.length; i++) {
+            buffer.append(names[i]).append(" ");
+        }
+        return buffer.toString();
+    }
+
+    private Collection<StockEntity> pickRandomFrom(int number, Collection<StockEntity> original, String[] names) {
         Set<StockEntity> picked = new HashSet<StockEntity>();
         Random random = new Random();
-        for (int i = 0; i <= number; i++) {
+        int addCount = 0;
+        while (picked.size() < number) {
             int pick = random.nextInt(original.size());
             Iterator<StockEntity> it = original.iterator();
-            for (int j = 0; j <= pick; j++) {
+            for (int j = 0; it.hasNext(); j++) {
                 StockEntity entity = it.next();
                 if (j == pick) {
-                    picked.add(entity);
-                    break;
+                    if (picked.add(entity)) {
+                        names[addCount] = entity.getTickerSymbol();
+                        addCount++;
+                        break;
+                    }
                 }
             }
         }

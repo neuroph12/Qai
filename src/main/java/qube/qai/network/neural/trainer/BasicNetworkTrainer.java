@@ -25,7 +25,7 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
 
     private Logger logger = LoggerFactory.getLogger("BasicNetworkTrainer");
 
-    private double ERROR_TOLERANCE = 0.2;
+    private double ERROR_TOLERANCE = 0.3;
 
     private double MAXIMUM_EPOCH = 10000;
 
@@ -56,7 +56,7 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
 
         do {
             train.iteration();
-            logger.info("Epoch #" + epoch + " Error:" + train.getError());
+            logger.debug("Epoch #" + epoch + " Error:" + train.getError());
             epoch++;
             if (epoch >= MAXIMUM_EPOCH) {
                 logger.info("Maximum number of iterations have been arrived- stopping training");
