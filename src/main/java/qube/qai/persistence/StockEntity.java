@@ -33,6 +33,8 @@ public class StockEntity implements Serializable {
 
     private Date dateFirstAdded;
 
+    private String CIK;
+
     public StockEntity() {
         this.uuid = UUIDService.uuidString();
     }
@@ -126,6 +128,14 @@ public class StockEntity implements Serializable {
 
     public void setDateFirstAdded(Date dateFirstAdded) {
         this.dateFirstAdded = dateFirstAdded;
+    }
+
+    public String getCIK() {
+        return CIK;
+    }
+
+    public void setCIK(String CIK) {
+        this.CIK = CIK;
     }
 
     @Override

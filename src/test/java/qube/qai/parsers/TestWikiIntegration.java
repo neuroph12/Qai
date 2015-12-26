@@ -36,15 +36,18 @@ public class TestWikiIntegration extends QaiTestBase {
         String html = wiki.wikiToHtml(snp500.getContent());
         String[][] data = wiki.stripTableData(html);
         assertNotNull("really?!?", data);
+        assertTrue("don't believe everything you see", data.length > 0 && data[0].length > 0);
 
-//        for (int i = 0; i < data.length; i++) {
-//            StringBuffer buffer = new StringBuffer();
-//            for (int j = 0; j < data[i].length; j++) {
-//                buffer.append(data[i][j]);
-//                buffer.append("|"); // why not
-//            }
-//            log(buffer.toString());
-//        }
+        for (int i = 0; i < data.length; i++) {
+            log("currently reading" + data[i][0]);
+            StringBuffer buffer = new StringBuffer();
+            for (int j = 0; j < data[i].length; j++) {
+                buffer.append(data[i][j]);
+                buffer.append("|"); // why not
+            }
+            log(buffer.toString());
+        }
+
     }
 
     public void testStripHeader() {

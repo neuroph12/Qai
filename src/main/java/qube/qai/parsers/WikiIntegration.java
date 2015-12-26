@@ -11,7 +11,10 @@ import org.slf4j.LoggerFactory;
 import qube.qai.persistence.WikiArticle;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by rainbird on 12/24/15.
@@ -131,27 +134,48 @@ public class WikiIntegration {
         Element table = doc.select("table.wikitable").first();
         Elements rows = table.select("tr");
 
-        // in order to initialize
-        int rowCount = rows.size();
-        int columnCount = 0;
-        for (int i = 0; i < rowCount; i++) {
+        String[] header = stripHeader(html);
+        ArrayList<RowData> tableData = new ArrayList<RowData>();
+        for (int i = 0; i < rows.size(); i++) {
             Element row = rows.get(i);
-            Elements columns = row.select("td");
-            columnCount = columns.size();
-            break;
-        }
-
-        String[][] data = new String[rowCount][columnCount];
-
-        for (int i = 0; i < rowCount; i++) {
-            Element row = rows.get(i);
-            Elements cols = row.select("td");
-            for (int j = 0; j < columnCount; j++) {
+            Elements cols = row.children();
+            RowData rowDat = new RowData(header);
+            for (int j = 0; j < cols.size(); j++) {
                 Element td = cols.get(j);
-                data[i][j] = td.text();
+                rowDat.addValue(j, td.text());
+            }
+            tableData.add(rowDat);
+        }
+        // copy the whole thing to return array
+        String[][] data = new String[tableData.size()][header.length];
+        for (int i = 0; i < data.length; i++) {
+            RowData row = tableData.get(i);
+            String[] values = row.rowData();
+            for (int j = 0; j < data[i].length; j++) {
+                data[i][j] = values[j];
             }
         }
-
         return data;
+    }
+
+    static class RowData {
+        String[] header;
+        Map<String, String> values = new HashMap<String, String>();
+
+        RowData(String[] header) {
+            this.header = header;
+        }
+
+        void addValue(int i, String value) {
+            values.put(header[i], value);
+        }
+
+        String[] rowData() {
+            String[] row = new String[header.length];
+            for (int i = 0; i < header.length; i++) {
+                row[i] = values.get(header[i]);
+            }
+            return row;
+        }
     }
 }

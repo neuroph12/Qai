@@ -12,6 +12,7 @@ import qube.qai.data.TestTimeSequence;
 import qube.qai.data.analysis.TestChangepointAdapter;
 import qube.qai.data.selectors.TestHazelcastSelectors;
 import qube.qai.data.stores.TestDataStore;
+import qube.qai.data.stores.TestStockEntityDataStore;
 import qube.qai.matrix.TestMatrix;
 import qube.qai.network.TestNetwork;
 import qube.qai.network.TestNeuralNetwork;
@@ -75,6 +76,7 @@ public class QaiTestBase extends TestCase {
 //
 //        // data.stores
 //        suite.addTestSuite(TestDataStore.class);
+//        suite.addTestSuite(TestStockEntityDataStore.class);
 //
 //        // matrix
 //        suite.addTestSuite(TestMatrix.class);
@@ -102,6 +104,7 @@ public class QaiTestBase extends TestCase {
 //
 //        // procedure.analysis
 //        suite.addTestSuite(TestAnalysisProcedures.class);
+//        suite.addTestSuite(TestMarketNetworkBuilder.class);
 //        suite.addTestSuite(TestMarketNetworkBuilder.class);
 //
 //        // procedure.archive

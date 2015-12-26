@@ -16,6 +16,6 @@ public class TestMarketNetworkBuilder extends QaiTestBase {
      * this is almost the moment of truth we have been waiting for...
      */
     public void testMarketBuilder() throws Exception {
-
+            fail("work in progress");
     }
 }

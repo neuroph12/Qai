@@ -1,6 +1,8 @@
 package qube.qai.data.stores;
 
 import info.bliki.wiki.model.WikiModel;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.parsers.WikiIntegration;
@@ -12,6 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -22,7 +25,12 @@ public class StockEntityDataStore implements DataStore {
     private Logger logger = LoggerFactory.getLogger("StockEntityDataStore");
 
     private String stockListingPage = "Lists of companies by stock exchange listing.xml";
-    private String SnP500Page = "List of S&P 500 companies.xml";
+
+
+    String[] headerTitles = {"Ticker symbol", "Security",
+            "SEC filings", "GICS", "GICS Sub Industry",
+            "Address of Headquarters", "Date first added", "CIK"};
+
 
     @Inject
     @Named("Wikipedia_en")
@@ -61,8 +69,63 @@ public class StockEntityDataStore implements DataStore {
     public Collection<StockEntity> fetchEntitesOf(String marketListingName) {
 
         Collection<StockEntity> entities = new ArrayList<StockEntity>();
+        WikiArticle article = searchService.retrieveDocumentContentFromZipFile(marketListingName);
+        if (article == null) {
+            throw new RuntimeException("Listing: " + marketListingName + " could not be found, can't go on");
+        }
+        String html = WikiIntegration.wikiToHtml(article);
+        String[] header = WikiIntegration.stripHeader(html);
+        String[][] data = WikiIntegration.stripTableData(html);
 
+        for (int i = 0; i < data.length; i++) {
+            // this might seem strange but if have no informaiton whatte field is
+            // we can also not associate with fields
+            StockEntity entity = new StockEntity();
+            for (int j = 0; j < data[i].length; j++) {
+                String fieldName = header[j];
+                String fieldValue = data[i][j];
+                assignValueToEntity(entity, fieldName, fieldValue);
+            }
+            entities.add(entity);
+        }
 
         return entities;
+    }
+    // "Ticker symbol", "Security","SEC filings", "GICS", "GICS Sub Industry","Address of Headquarters", "Date first added", "CIK"
+    private void assignValueToEntity(StockEntity entity, String fieldName, String fieldValue) {
+
+        if (headerTitles.length > 0 &&
+                headerTitles[0].equalsIgnoreCase(fieldName)) {
+            entity.setTickerSymbol(fieldValue);
+        } else if (headerTitles.length > 1 &&
+                headerTitles[1].equalsIgnoreCase(fieldName)) {
+            entity.setSecurity(fieldValue);
+        } else if (headerTitles.length > 2 &&
+                headerTitles[2].equalsIgnoreCase(fieldName)) {
+            entity.setSecFilings(fieldValue);
+        } else if (headerTitles.length > 3 &&
+                headerTitles[3].equalsIgnoreCase(fieldName)) {
+            entity.setGicsSector(fieldValue);
+        } else if (headerTitles.length > 4 &&
+                headerTitles[4].equalsIgnoreCase(fieldName)) {
+            entity.setGicsSubIndustry(fieldValue);
+        } else if (headerTitles.length > 5
+                && headerTitles[5].equalsIgnoreCase(fieldName)) {
+            entity.setAddress(fieldValue);
+        } else if (headerTitles.length > 6 &&
+                headerTitles[6].equalsIgnoreCase(fieldName)) {
+            // this field is not necessarily filled
+            if (StringUtils.isNotBlank(fieldValue)) {
+                try {
+                    Date date = DateTime.parse(fieldValue).toDate();
+                    entity.setDateFirstAdded(date);
+                } catch (Exception e) {
+                    logger.error("failed parsing date entry: " + fieldValue);
+                }
+            }
+        } else if (headerTitles.length > 7
+                && headerTitles[7].equalsIgnoreCase(fieldName)) {
+            entity.setCIK(fieldValue);
+        }
     }
 }

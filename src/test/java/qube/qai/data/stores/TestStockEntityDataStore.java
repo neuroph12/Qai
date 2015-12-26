@@ -1,6 +1,7 @@
 package qube.qai.data.stores;
 
 import qube.qai.main.QaiTestBase;
+import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -18,6 +19,8 @@ public class TestStockEntityDataStore extends QaiTestBase {
     @Named("Wikipedia_en")
     private SearchServiceInterface searchService;
 
+    private String SnP500Page = "List of S&P 500 companies.xml";
+
     /**
      * this is about the stock entity data store
      * the data store fetches its data from
@@ -26,7 +29,7 @@ public class TestStockEntityDataStore extends QaiTestBase {
      * be worked later... perhaps we can actually
      * work all those hundreds of listings some day...
      */
-    public void testStockEntityDataStore() throws Exception {
+    public void restStockEntityDataStore() throws Exception {
 
         StockEntityDataStore dataStore = new StockEntityDataStore();
 
@@ -48,11 +51,37 @@ public class TestStockEntityDataStore extends QaiTestBase {
             }
             //assertNotNull("this is what we want to see", article);
         }
-        logger.info("we have altogether " + marketListings.size() + " lsitings available");
+        logger.info("we have altogether " + marketListings.size() + " listings available");
         logger.info("of which " + missing.size() + " items are missing, out of some reason");
         for (String name : missing) {
             logger.info(name + " is missing");
         }
+    }
+
+    public void testFetchEntitesOf() {
+
+        StockEntityDataStore dataStore = new StockEntityDataStore();
+        injector.injectMembers(dataStore);
+
+        Collection<StockEntity> entities = dataStore.fetchEntitesOf(SnP500Page);
+        assertNotNull("well, of course", entities);
+        assertTrue("there has to be something", !entities.isEmpty());
+
+        for (StockEntity entity : entities) {
+            logger.info("found: " + entitiy2String(entity));
+        }
+    }
+
+    private String entitiy2String(StockEntity entity) {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Ticker symbol: ").append(entity.getTickerSymbol());
+        buffer.append(" Security: ").append(entity.getSecurity());
+        buffer.append(" GICS: ").append(entity.getGicsSector());
+        buffer.append(" GICS Sub Industry: ").append(entity.getGicsSubIndustry());
+        buffer.append(" Address of Headquarters: ").append(entity.getAddress());
+        buffer.append(" Date first added: ").append(entity.getDateFirstAdded());
+        buffer.append(" CIK: ").append(entity.getCIK());
+        return buffer.toString();
     }
 
 }
