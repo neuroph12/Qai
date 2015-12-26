@@ -11,9 +11,12 @@ import org.encog.neural.networks.training.propagation.resilient.ResilientPropaga
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.TimeSequence;
+import qube.qai.matrix.*;
 import qube.qai.network.neural.NeuralNetwork;
+import qube.qai.persistence.StockQuote;
 
 import java.util.*;
+import java.util.Vector;
 
 /**
  * Created by rainbird on 11/23/15.
@@ -68,6 +71,14 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
         Encog.getInstance().shutdown();
     }
 
+    public void createTrainingSet(Map<String, Collection> trainingData) {
+
+        List<Date> dates = new ArrayList<Date>();
+        Map<Date, double[]> dataSet = spliceToDates(trainingData, dates);
+        createTrainingSet(dates, dataSet);
+
+    }
+
     public void createTrainingSet(List<Date> dates, Map<Date, double[]> dataSet) {
 
         trainingSet = new BasicMLDataSet();
@@ -82,6 +93,61 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
                 trainingSet.add(datapair);
             }
         }
+    }
+
+    /**
+     * splices the data to dates and double-arrays
+     * @param map the map with data
+     * @param dateList an empty list which will be filled by the routine
+     * @return
+     */
+    public static Map<Date, double[]> spliceToDates(Map<String, Collection> map, List<Date> dateList) {
+        Map<Date, double[]> dataSet = new TreeMap<Date, double[]>();
+
+        // begin with collecting dates
+        HashSet<Date> dates = new HashSet<Date>();
+        for (String name : map.keySet()) {
+            Collection<StockQuote> quotes = map.get(name);
+            // we are hoping that date.equals works right
+            // and even if all the dates are not same, we want to
+            // cover those which do have the same dates
+            for (StockQuote quote : quotes) {
+                if (dates.add(quote.getDate())) {
+                    dateList.add(quote.getDate());
+                }
+            }
+        }
+
+        // prepare the keys with the names of entities- their order may not be different!!!
+        Vector<String> names = new Vector<String>();
+        for (String name : map.keySet()) {
+            names.add(name);
+        }
+
+        // now we have the dates and we need arrays of doubles
+        for (Date date : dates) {
+            double[] dailyAverages = new double[names.size()];
+            for (int i = 0; i < names.size(); i++) {
+                Collection<StockQuote> quotes = map.get(names.get(i));
+                StockQuote dailyQuote = null;
+                for (StockQuote quote : quotes) {
+                    if (quote.equals(date)) {
+                        dailyQuote = quote;
+                        break;
+                    }
+                }
+                if (dailyQuote != null) {
+                    dailyAverages[i] = dailyQuote.getAdjustedClose();
+                } else {
+                    dailyAverages[i] = 0.0;
+                }
+            }
+            // and finally add the thing to the map
+            dataSet.put(date, dailyAverages);
+        }
+
+
+        return dataSet;
     }
 
     public static Map<Date, double[]> spliceToDates(List<Date> dates, Map<String, TimeSequence> timeSeriesMap) {

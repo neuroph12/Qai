@@ -35,6 +35,8 @@ public class StockEntity implements Serializable {
 
     private String CIK;
 
+    private String tradedIn;
+
     public StockEntity() {
         this.uuid = UUIDService.uuidString();
     }
@@ -136,6 +138,14 @@ public class StockEntity implements Serializable {
 
     public void setCIK(String CIK) {
         this.CIK = CIK;
+    }
+
+    public String getTradedIn() {
+        return tradedIn;
+    }
+
+    public void setTradedIn(String tradedIn) {
+        this.tradedIn = tradedIn;
     }
 
     @Override

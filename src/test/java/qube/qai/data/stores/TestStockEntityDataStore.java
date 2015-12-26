@@ -66,11 +66,15 @@ public class TestStockEntityDataStore extends QaiTestBase {
         Collection<StockEntity> entities = dataStore.fetchEntitesOf(SnP500Page);
         assertNotNull("well, of course", entities);
         assertTrue("there has to be something", !entities.isEmpty());
-
+        int entityCount = 0;
         for (StockEntity entity : entities) {
             logger.info("found: " + entitiy2String(entity));
+            entityCount++;
         }
+
+        logger.info("altogether " + entityCount + " entities in list... should be 500 exactly really");
     }
+
 
     private String entitiy2String(StockEntity entity) {
         StringBuffer buffer = new StringBuffer();

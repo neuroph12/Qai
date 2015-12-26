@@ -8,6 +8,7 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.HazelcastInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.message.MessageQueue;
 import qube.qai.message.MessageQueueInterface;
 import qube.qai.services.*;
@@ -57,6 +58,12 @@ public class QaiTestModule extends AbstractModule {
 
         // messageQueue
         bind(MessageQueueInterface.class).to(MessageQueue.class);
+    }
+
+    @Provides
+    public StockQuoteDataStore provideStockQuoteDataStore() {
+        StockQuoteDataStore dataStore = new StockQuoteDataStore();
+        return dataStore;
     }
 
     @Provides @Singleton

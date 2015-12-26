@@ -77,7 +77,8 @@ public class StockEntityDataStore implements DataStore {
         String[] header = WikiIntegration.stripHeader(html);
         String[][] data = WikiIntegration.stripTableData(html);
 
-        for (int i = 0; i < data.length; i++) {
+        // start at the first index in order to skip the header line
+        for (int i = 1; i < data.length; i++) {
             // this might seem strange but if have no informaiton whatte field is
             // we can also not associate with fields
             StockEntity entity = new StockEntity();

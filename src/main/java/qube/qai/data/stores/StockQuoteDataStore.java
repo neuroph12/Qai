@@ -2,6 +2,7 @@ package qube.qai.data.stores;
 
 import org.ojalgo.finance.data.YahooSymbol;
 import org.ojalgo.type.CalendarDateUnit;
+import qube.qai.data.TimeSequence;
 import qube.qai.persistence.StockQuote;
 
 import java.util.ArrayList;
@@ -45,4 +46,5 @@ public class StockQuoteDataStore implements DataStore {
 
         return quotes;
     }
+
 }

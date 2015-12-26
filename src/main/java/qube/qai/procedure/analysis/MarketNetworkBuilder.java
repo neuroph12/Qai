@@ -1,12 +1,21 @@
 package qube.qai.procedure.analysis;
 
+import org.apache.commons.lang.StringUtils;
 import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
+import qube.qai.data.TimeSequence;
+import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
+import qube.qai.network.neural.NeuralNetwork;
+import qube.qai.network.neural.trainer.BasicNetworkTrainer;
+import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.ProcedureChain;
 
+import javax.inject.Inject;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * Created by rainbird on 12/25/15.
@@ -29,11 +38,45 @@ public class MarketNetworkBuilder extends ProcedureChain implements NetworkBuild
         return null;
     }
 
+    @Inject
+    private StockQuoteDataStore stockQuoteDataStore;
+
     @Override
     public void execute() {
 
-        Selector<Collection> stockEntities = arguments.getSelector(INPUT_STOCK_ENTITY_COLLECTION);
+        Selector<Collection> selector = arguments.getSelector(INPUT_STOCK_ENTITY_COLLECTION);
+        Collection<StockEntity> entities = selector.getData();
+        HashMap<String, Collection> entityData = new HashMap<String, Collection>();
+        NeuralNetwork network = new NeuralNetwork(entities.size());
+        for (StockEntity entity : entities) {
+            correctTickerSymbol(entity);
+            Network.Vertex vertex = new Network.Vertex(entity.getTickerSymbol());
+            // while we are at it we collect the data here as well
+            Collection<StockQuote> quotes = stockQuoteDataStore.retrieveQuotesFor(entity.getTickerSymbol());
+            // if there are no available quotes, skip it and remove from list
+            if (quotes != null || !quotes.isEmpty()) {
+                network.addVertex(vertex);
+                entityData.put(entity.getTickerSymbol(), quotes);
+            }
+        }
 
+        // well, here goes nothing
+        BasicNetworkTrainer trainer = new BasicNetworkTrainer(network);
+        // etc...
+
+    }
+
+    /**
+     * tickerSymbol is something like {{tradedIn|symbol}}
+     * @param entity
+     * @return
+     */
+    private void correctTickerSymbol(StockEntity entity) {
+        String tradedIn = StringUtils.substringBetween(entity.getTickerSymbol(), "{{", "|");
+        String ticker = StringUtils.substringBetween(entity.getTickerSymbol(), "|", "}}");
+
+        entity.setTickerSymbol(ticker);
+        entity.setTradedIn(tradedIn);
     }
 
     @Override
