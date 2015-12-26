@@ -35,7 +35,7 @@ public class WikiIntegration {
      * @param html
      * @return
      */
-    public String[] stripHeader(String html) {
+    public static String[] stripHeader(String html) {
 
         //<div style="page-break-inside: avoid;">
         //<table class="wikitable sortable">
@@ -126,7 +126,7 @@ public class WikiIntegration {
      * @param html
      * @return
      */
-    public String[][] stripTableData(String html) {
+    public static String[][] stripTableData(String html) {
         Document doc = Jsoup.parse(html);
         Element table = doc.select("table.wikitable").first();
         Elements rows = table.select("tr");

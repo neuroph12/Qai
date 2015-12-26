@@ -12,6 +12,6 @@ public interface SearchServiceInterface {
 
     Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage);
 
-    // @TODO remove the method from the interface
+    @Deprecated // @TODO remove this method, it is useful only for tests at this point
     WikiArticle retrieveDocumentContentFromZipFile(String fileName);
 }

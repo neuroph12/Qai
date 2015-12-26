@@ -11,6 +11,7 @@ import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
 import qube.qai.network.Network;
 import qube.qai.network.neural.NeuralNetwork;
+import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.analysis.*;
 import qube.qai.services.ProcedureSourceInterface;
@@ -33,7 +34,9 @@ public class ProcedureSourceService implements ProcedureSourceInterface {
             NeuralNetworkAnalysis.NAME,
             NeuralNetworkForwardPropagation.NAME,
             SortingPercentilesProcedure.NAME,
-            TimeSequenceAnalysis.NAME };
+            TimeSequenceAnalysis.NAME,
+            MarketNetworkBuilder.NAME
+    };
 
     public Procedure getProcedureWithName(String name) {
 
@@ -138,6 +141,15 @@ public class ProcedureSourceService implements ProcedureSourceInterface {
             Selector<TimeSequence> selector = new DataSelector<TimeSequence>(timeSequence);
 
             procedure.getArguments().setArgument(TimeSequenceAnalysis.INPUT_TIME_SEQUENCE, selector);
+
+        } else if (MarketNetworkBuilder.NAME.equals(name)) {
+
+            procedure = new MarketNetworkBuilder();
+
+            Collection<StockEntity> stockEntities = new ArrayList<StockEntity>();
+            Selector<Collection> selector = new DataSelector<Collection>(stockEntities);
+
+            procedure.getArguments().setArgument(MarketNetworkBuilder.INPUT_STOCK_ENTITY_COLLECTION, selector);
 
         }
 
