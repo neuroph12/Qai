@@ -1,9 +1,7 @@
 package qube.qai.procedure.analysis;
 
-import org.apache.commons.lang.StringUtils;
 import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
-import qube.qai.data.TimeSequence;
 import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
@@ -12,7 +10,6 @@ import qube.qai.network.neural.trainer.BasicNetworkTrainer;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureChain;
 import qube.qai.procedure.ProcedureDecorator;
 
 import javax.inject.Inject;

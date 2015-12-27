@@ -5,7 +5,6 @@ import qube.qai.data.Selector;
 import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureChain;
 import qube.qai.procedure.ProcedureDecorator;
 
 import java.util.Comparator;

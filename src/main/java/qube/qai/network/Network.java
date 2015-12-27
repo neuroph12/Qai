@@ -8,6 +8,8 @@ import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.matrix.store.PhysicalStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.data.AcceptsVisitors;
+import qube.qai.data.DataVisitor;
 import qube.qai.data.MetricTyped;
 import qube.qai.data.Metrics;
 import qube.qai.matrix.Matrix;
@@ -22,7 +24,7 @@ import java.util.Set;
  * to get a handle on the backingGrph on which the missing algorithms
  * can be called
  */
-public class Network implements Serializable, MetricTyped {
+public class Network implements Serializable, MetricTyped, AcceptsVisitors {
 
     private Logger logger = LoggerFactory.getLogger("Network");
 
@@ -36,7 +38,7 @@ public class Network implements Serializable, MetricTyped {
 
     private String encodedGraph;
 
-    // normally we use
+    // normally we use non-directed graphs
     protected boolean directed = false;
 
     public Network() {
@@ -49,6 +51,10 @@ public class Network implements Serializable, MetricTyped {
 
     public Graph getGraph() {
         return graph();
+    }
+
+    public Object accept(DataVisitor visitor, Object data) {
+        return visitor.visit(this, data);
     }
 
     public Metrics buildMetrics() {

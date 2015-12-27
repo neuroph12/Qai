@@ -1,14 +1,17 @@
 package qube.qai.procedure;
 
-import com.hazelcast.core.*;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.HazelcastInstanceAware;
+import com.hazelcast.core.IMap;
+import com.hazelcast.core.ITopic;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.Arguments;
+import qube.qai.data.DataVisitor;
 import qube.qai.data.Selector;
-import qube.qai.message.MessageListener;
-import qube.qai.message.MessageQueue;
 import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.User;
@@ -20,7 +23,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 11/27/15.
  */
-public abstract class Procedure implements Serializable, Runnable, HazelcastInstanceAware {
+public abstract class Procedure implements Serializable, Runnable, HazelcastInstanceAware, AcceptsVisitors {
 
     protected static Logger logger = LoggerFactory.getLogger("Procedure");
 
@@ -69,35 +72,21 @@ public abstract class Procedure implements Serializable, Runnable, HazelcastInst
     public abstract void execute();
 
     /**
+     * hook for visitors
+     */
+    public Object accept(DataVisitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+
+    /**
      * each procesudre knows what inputs and outputs there will
      * be, and those have to be available in arguments-field
      * when the procedure is about to be called
      */
     public abstract void buildArguments();
 
-    /**
-     * Visitor-pattern
-     * @param visitor
-     * @param data
-     * @return
-     */
-    public Object accept(ProcedureVisitor visitor, Object data) {
-        return visitor.visit(this, data);
-    }
-
     protected Selector createSelector(Object data) {
         return selectorFactory.buildSelector(name, uuid, data);
-    }
-
-    /**
-     * Visitor-pattern
-     * @param visitor
-     * @param data
-     * @return
-     */
-    public Object childrenAccept(ProcedureVisitor visitor, Object data) {
-        // nothing to do, simply return the data
-        return data;
     }
 
     public final void run() {
@@ -105,7 +94,7 @@ public abstract class Procedure implements Serializable, Runnable, HazelcastInst
         logger.info("Procedure " + getName() + " has been started, uuid: " + uuid);
         execute();
         duration = System.currentTimeMillis() - start;
-        hasExecuted  = true;
+        hasExecuted = true;
         logger.info("Procedure " + getName() + " has been ended normally in " + duration + "ms");
         sendMessageOK();
 
@@ -143,7 +132,6 @@ public abstract class Procedure implements Serializable, Runnable, HazelcastInst
     }
 
 
-
     public boolean haveChildren() {
         return false;
     }
@@ -154,13 +142,13 @@ public abstract class Procedure implements Serializable, Runnable, HazelcastInst
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(uuid.hashCode());
+        return uuid.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ProcedureChain) {
-            ProcedureChain other = (ProcedureChain) obj;
+        if (obj instanceof Procedure) {
+            Procedure other = (Procedure) obj;
             new EqualsBuilder().append(uuid, other.uuid).isEquals();
         }
         return false;

@@ -36,11 +36,12 @@ public class CachedProcedureSourceService implements ProcedureSourceInterface {
         ProcedureSourceService sourceService = new ProcedureSourceService();
         for (String name : procedureNames) {
             Procedure procedure = sourceService.getProcedureWithName(name);
-            if (!procedure.hasExecuted()) {
+            if (procedure != null && !procedure.hasExecuted()) {
                 //logger.info("procedure: " + name + " is running as part of initialization...");
                 //procedure.run();
+                procedureMap.put(name, procedure);
             }
-            procedureMap.put(name, procedure);
+
         }
     }
 

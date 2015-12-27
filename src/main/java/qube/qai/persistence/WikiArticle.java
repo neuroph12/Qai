@@ -1,12 +1,15 @@
 package qube.qai.persistence;
 
+import qube.qai.data.AcceptsVisitors;
+import qube.qai.data.DataVisitor;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
  * Created by rainbird on 11/3/15.
  */
-public class WikiArticle implements Serializable {
+public class WikiArticle implements Serializable, AcceptsVisitors {
 
     private String id;
 
@@ -15,6 +18,10 @@ public class WikiArticle implements Serializable {
     private String title;
 
     private String content;
+
+    public Object accept(DataVisitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
 
     public String getTitle() {
         return title;

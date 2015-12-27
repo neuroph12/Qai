@@ -1,5 +1,7 @@
 package qube.qai.persistence;
 
+import qube.qai.data.AcceptsVisitors;
+import qube.qai.data.DataVisitor;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.Entity;
@@ -11,7 +13,7 @@ import java.util.Date;
  * Created by rainbird on 11/19/15.
  */
 @Entity
-public class StockQuote implements Serializable {
+public class StockQuote implements Serializable, AcceptsVisitors {
 
     @Id
     private String uuid;
@@ -37,6 +39,10 @@ public class StockQuote implements Serializable {
         this.low = low;
         this.open = open;
         this.volume = volume;
+    }
+
+    public Object accept(DataVisitor visitor, Object data) {
+        return visitor.visit(this, data);
     }
 
     public Date getDate() {

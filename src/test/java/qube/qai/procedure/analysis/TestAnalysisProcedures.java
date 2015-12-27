@@ -6,8 +6,6 @@ import qube.qai.data.*;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureChain;
-import qube.qai.procedure.analysis.*;
 import qube.qai.services.ProcedureSourceInterface;
 
 import javax.inject.Inject;

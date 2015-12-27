@@ -1,6 +1,11 @@
 package qube.qai.procedure.visitor;
 
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import qube.qai.procedure.SelectionProcedure;
+import qube.qai.procedure.analysis.MatrixStatistics;
+import qube.qai.procedure.analysis.NetworkStatistics;
 import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
 
 /**
@@ -8,23 +13,28 @@ import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
  */
 public class TestProcedureVisitors extends TestCase {
 
+    private Logger logger = LoggerFactory.getLogger("TestProcedureVisitors");
+
     private boolean debug = true;
 
     public void testSimpleProcedureVisitor() throws Exception {
 
         // test the simple visitor on network analysis
-        NeuralNetworkAnalysis networkAnalysis = (NeuralNetworkAnalysis) NeuralNetworkAnalysis.Factory.constructProcedure();
+        SelectionProcedure selection = new SelectionProcedure();
+        MatrixStatistics matrix = new MatrixStatistics(selection);
+        NetworkStatistics network = new NetworkStatistics(matrix);
+        NeuralNetworkAnalysis neural = new NeuralNetworkAnalysis(network);
 
         SimpleProcedureVisitor visitor = new SimpleProcedureVisitor();
-        networkAnalysis.accept(visitor, null);
+        Object result = neural.accept(visitor, null);
         //assertNotNull("there has to be a result", result);
-        log(visitor.toString());
+        logger.info(visitor.toString());
     }
 
-    private void log(String message) {
-        if (debug) {
-            System.out.println(message);
-        }
-    }
+//    private void log(String message) {
+//        if (debug) {
+//            System.out.println(message);
+//        }
+//    }
 
 }

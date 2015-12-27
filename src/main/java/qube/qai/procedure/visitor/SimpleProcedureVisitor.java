@@ -1,12 +1,16 @@
 package qube.qai.procedure.visitor;
 
+import qube.qai.data.DataVisitor;
+import qube.qai.network.Network;
+import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockQuote;
+import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureVisitor;
 
 /**
  * Created by rainbird on 12/1/15.
  */
-public class SimpleProcedureVisitor implements ProcedureVisitor {
+public class SimpleProcedureVisitor implements DataVisitor {
 
     private StringBuffer buffer;
 
@@ -14,22 +18,29 @@ public class SimpleProcedureVisitor implements ProcedureVisitor {
         buffer = new StringBuffer();
     }
 
-    public Object visit(Procedure chain, Object data) {
+    public Object visit(StockEntity visitee, Object data) {
+        buffer.append("currently visiting: ").append(visitee.getName()).append(" with uuid: ").append(visitee.getUuid()).append("\n");
+        return data;
+    }
 
-//        buffer.append("(")
-          buffer.append("'").append(chain.getName()).append("' ");
-//                .append("[").append(chain.getUuid()).append("] (")
-//                .append(" [").append(chain.getArguments().toString()).append("] ");
-//                .append(")");
+    public Object visit(StockQuote visitee, Object data) {
+        buffer.append("currently visiting: ").append(visitee.getTickerSymbol()).append("\n");
+        return data;
+    }
 
-        if (chain.haveChildren()) {
-            buffer.append("(");
-            chain.childrenAccept(this, data);
-            buffer.append(")");
-        }
-        //buffer.append(")");
+    public Object visit(WikiArticle visitee, Object data) {
+        buffer.append("currently visiting: ").append(visitee.getTitle()).append("\n");
+        return data;
+    }
 
-        return buffer.toString();
+    public Object visit(Network visitee, Object data) {
+        buffer.append("currently visiting some Network of sorts: ").append(visitee.getClass().getSimpleName()).append("\n");
+        return data;
+    }
+
+    public Object visit(Procedure visitee, Object data) {
+        buffer.append("currently visiting: ").append(visitee.getName()).append("\n");
+        return data;
     }
 
     @Override

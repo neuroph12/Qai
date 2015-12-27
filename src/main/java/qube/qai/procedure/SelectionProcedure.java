@@ -7,13 +7,15 @@ import qube.qai.data.Arguments;
  */
 public class SelectionProcedure extends Procedure {
 
+    public static String NAME = "Selection Procedure";
+
     /**
      * this is mainly to pass the children the argument
      * represents user preparing, or choosing a certain
      * input for the children to process
      */
     public SelectionProcedure() {
-        super();
+        super(NAME);
     }
 
     @Override

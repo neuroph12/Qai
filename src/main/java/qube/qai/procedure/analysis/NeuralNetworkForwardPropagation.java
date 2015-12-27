@@ -5,7 +5,6 @@ import qube.qai.data.TimeSequence;
 import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureChain;
 import qube.qai.procedure.ProcedureDecorator;
 
 import java.util.*;

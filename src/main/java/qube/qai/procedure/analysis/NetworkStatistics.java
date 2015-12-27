@@ -4,7 +4,6 @@ import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
 import qube.qai.network.Network;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureChain;
 import qube.qai.procedure.ProcedureDecorator;
 
 /**
