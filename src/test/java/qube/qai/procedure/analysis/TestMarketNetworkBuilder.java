@@ -10,6 +10,7 @@ import qube.qai.main.QaiTestBase;
 import qube.qai.network.Network;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.persistence.StockEntity;
+import qube.qai.procedure.SimpleProcedure;
 
 import java.util.*;
 
@@ -40,23 +41,24 @@ public class TestMarketNetworkBuilder extends QaiTestBase {
         logger.info("picked entities: " + array2String(names));
 
         Selector<Collection> selector = new DataSelector<Collection>(workingSet);
-        MarketNetworkBuilder networkBuilder = new MarketNetworkBuilder();
+        SimpleProcedure procedure = new SimpleProcedure();
+        MarketNetworkBuilder networkBuilder = new MarketNetworkBuilder(procedure);
         injector.injectMembers(networkBuilder);
         NeuralNetwork network = (NeuralNetwork) networkBuilder.buildNetwork(selector);
         assertNotNull("duh!", network);
 
-         network.getVertices();
+        network.getVertices();
 
         // ok now we take a look at the results
-        for(MLDataPair pair: networkBuilder.getTrainer().getTrainingSet()) {
-            double[] output = network.propagate(pair.getInput().getData());
-            for (int i = 0; i < output.length; i++) {
-                logger.info("entity name: " + names[i]);
-                logger.info("input: " + pair.getInput().getData(i));
-                logger.info("output: " + output[i]);
-                logger.info("ideal: " + pair.getIdeal().getData(i));
-            }
-        }
+//        for(MLDataPair pair: networkBuilder.getTrainer().getTrainingSet()) {
+//            double[] output = network.propagate(pair.getInput().getData());
+//            for (int i = 0; i < output.length; i++) {
+//                logger.info("entity name: " + names[i]);
+//                logger.info("input: " + pair.getInput().getData(i));
+//                logger.info("output: " + output[i]);
+//                logger.info("ideal: " + pair.getIdeal().getData(i));
+//            }
+//        }
 
 
     }

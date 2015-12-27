@@ -3,12 +3,14 @@ package qube.qai.procedure.analysis;
 import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
 import qube.qai.network.Network;
+import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureChain;
+import qube.qai.procedure.ProcedureDecorator;
 
 /**
  * Created by rainbird on 11/29/15.
  */
-public class NetworkStatistics extends ProcedureChain {
+public class NetworkStatistics extends ProcedureDecorator {
 
     public static String NAME = "Network Statistics";
 
@@ -18,12 +20,13 @@ public class NetworkStatistics extends ProcedureChain {
      * builds a network from a given matrix and displays
      * the network along with its statistical properties.
      */
-    public NetworkStatistics() {
-        super(NAME);
+    public NetworkStatistics(Procedure procedure) {
+        super(procedure);
     }
 
     @Override
     public void buildArguments() {
+        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_NETWORK);
         arguments.putResultNames(NETWORK_METRICS);
@@ -32,8 +35,10 @@ public class NetworkStatistics extends ProcedureChain {
     @Override
     public void execute() {
 
+        toDecorate.execute();
+
         if (!arguments.isSatisfied()) {
-            throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
+            arguments = arguments.mergeArguments(toDecorate.getArguments());
         }
 
         Network network = (Network) arguments.getSelector(INPUT_NETWORK).getData();

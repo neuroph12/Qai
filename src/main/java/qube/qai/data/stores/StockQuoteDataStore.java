@@ -2,6 +2,8 @@ package qube.qai.data.stores;
 
 import org.ojalgo.finance.data.YahooSymbol;
 import org.ojalgo.type.CalendarDateUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.data.TimeSequence;
 import qube.qai.persistence.StockQuote;
 
@@ -15,6 +17,8 @@ import java.util.HashMap;
  */
 public class StockQuoteDataStore implements DataStore {
 
+    private Logger logger = LoggerFactory.getLogger("StockQuoteDataStore");
+
     private HashMap<String, YahooSymbol> provided;
 
     public StockQuoteDataStore() {
@@ -22,6 +26,8 @@ public class StockQuoteDataStore implements DataStore {
     }
 
     public Collection<StockQuote> retrieveQuotesFor(String quoteName) {
+
+        Collection<StockQuote> quotes = new ArrayList<StockQuote>();
         YahooSymbol symbol;
         if (provided.containsKey(quoteName)) {
             symbol = provided.get(quoteName);
@@ -30,21 +36,24 @@ public class StockQuoteDataStore implements DataStore {
             provided.put(quoteName, symbol);
         }
 
-        Collection<StockQuote> quotes = new ArrayList<StockQuote>();
-        for (YahooSymbol.Data data : symbol.getHistoricalPrices()) {
-            StockQuote quote = new StockQuote(quoteName,
-                    data.adjustedClose,
-                    data.close,
-                    data.high,
-                    data.low,
-                    data.open,
-                    data.volume);
-            Date date = new Date(data.getKey().toTimeInMillis(CalendarDateUnit.DAY));
-            quote.setDate(date);
-            quotes.add(quote);
+        try {
+            for (YahooSymbol.Data data : symbol.getHistoricalPrices()) {
+                StockQuote quote = new StockQuote(quoteName,
+                        data.adjustedClose,
+                        data.close,
+                        data.high,
+                        data.low,
+                        data.open,
+                        data.volume);
+                Date date = new Date(data.getKey().toTimeInMillis(CalendarDateUnit.DAY));
+                quote.setDate(date);
+                quotes.add(quote);
+            }
+        } catch (Exception e) {
+            logger.error("Ticker symbol: '" + quoteName + "' does not exist");
+        } finally {
+            return quotes;
         }
-
-        return quotes;
     }
 
 }

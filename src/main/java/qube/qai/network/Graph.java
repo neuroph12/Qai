@@ -96,7 +96,7 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
 
         // check if there is anything to read at all
         if (StringUtils.isBlank(serialString)) {
-            logger.info("Cannot parse an empty string- returning an empty graph");
+            logger.debug("Cannot parse an empty string- returning an empty graph");
             return graph;
         }
 

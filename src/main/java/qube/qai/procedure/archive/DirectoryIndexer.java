@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import qube.qai.data.Arguments;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.SimpleProcedure;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +27,8 @@ import java.nio.file.Path;
 /**
  * Created by rainbird on 12/25/15.
  */
-public class DirectoryIndexer extends Procedure {
+public class DirectoryIndexer extends ProcedureDecorator {
+
 
     private Logger logger = LoggerFactory.getLogger("DirectoryIndexer");
 
@@ -47,12 +50,12 @@ public class DirectoryIndexer extends Procedure {
     private String directoryToIndex;
     public String indexDirectory;
 
-    public DirectoryIndexer() {
-        super(NAME);
+    public DirectoryIndexer(Procedure procedure) {
+        super(procedure);
     }
 
     public DirectoryIndexer(String directoryToIndex, String indexDirectory) {
-        super(NAME);
+        super(new SimpleProcedure());
         this.directoryToIndex = directoryToIndex;
         this.indexDirectory = indexDirectory;
     }

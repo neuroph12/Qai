@@ -2,6 +2,7 @@ package qube.qai.procedure.analysis;
 
 import qube.qai.data.Arguments;
 import qube.qai.data.TimeSequence;
+import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureChain;
 
 import java.io.Serializable;
@@ -9,11 +10,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import qube.qai.data.analysis.ChangepointAdapter;
+import qube.qai.procedure.ProcedureDecorator;
+
+import javax.print.attribute.standard.MediaSize;
 
 /**
  * Created by rainbird on 11/28/15.
  */
-public class ChangePointAnalysis extends ProcedureChain {
+public class ChangePointAnalysis extends ProcedureDecorator {
 
     public static String NAME = "Change-Point Analysis";
 
@@ -22,12 +26,14 @@ public class ChangePointAnalysis extends ProcedureChain {
     /**
      * runs change-point analysis of a given time-series
      */
-    public ChangePointAnalysis() {
-        super(NAME);
+    public ChangePointAnalysis(Procedure procedure) {
+        super(procedure);
     }
+
 
     @Override
     public void buildArguments() {
+        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_TIME_SEQUENCE);
         arguments.putResultNames(CHANGE_POINTS);
@@ -36,8 +42,10 @@ public class ChangePointAnalysis extends ProcedureChain {
     @Override
     public void execute() {
 
+        toDecorate.execute();
+
         if (!arguments.isSatisfied()) {
-            throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
+            arguments = arguments.mergeArguments(toDecorate.getArguments());
         }
 
         // first get the selector

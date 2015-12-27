@@ -51,7 +51,7 @@ public class QaiTestModule extends AbstractModule {
         bind(UUIDServiceInterface.class).to(UUIDService.class);
 
         // ProcedureSource
-        bind(ProcedureSourceInterface.class).to(ProcedureSourceService.class);
+        bind(ProcedureSourceInterface.class).to(TestProcedureSourceService.class);
 
         // executorService
         bind(ProcedureRunnerInterface.class).to(ProcedureRunner.class);

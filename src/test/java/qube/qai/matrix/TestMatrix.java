@@ -41,7 +41,7 @@ public class TestMatrix extends TestCase {
 
     private boolean debug = true;
 
-    public void testOjAlgoFinance() throws Exception {
+    public void restOjAlgoFinance() throws Exception {
 
         YahooSymbol goog = new YahooSymbol("GOOG");
 
@@ -150,7 +150,7 @@ public class TestMatrix extends TestCase {
 
     }
 
-    public void testOjAlgoDietProblem() throws Exception {
+    public void restOjAlgoDietProblem() throws Exception {
         BasicLogger.debug();
         BasicLogger.debug("TheDietProblem");
         BasicLogger.debug(OjAlgoUtils.getTitle());

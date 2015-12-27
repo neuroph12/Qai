@@ -4,7 +4,9 @@ import qube.qai.data.Arguments;
 import qube.qai.data.Selector;
 import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.Statistics;
+import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureChain;
+import qube.qai.procedure.ProcedureDecorator;
 
 import java.util.Comparator;
 import java.util.Date;
@@ -14,7 +16,7 @@ import java.util.TreeMap;
 /**
  * Created by rainbird on 12/2/15.
  */
-public class SortingPercentilesProcedure extends ProcedureChain {
+public class SortingPercentilesProcedure extends ProcedureDecorator {
 
     public static String NAME = "Sorting Percentiles Procedure";
 
@@ -22,12 +24,13 @@ public class SortingPercentilesProcedure extends ProcedureChain {
             "but for the beginning, it will be taking time-series, and sorting them in order of their mean" +
             "values. top and bottom ten and the mean will be the results.";
 
-    public SortingPercentilesProcedure() {
-        super(NAME);
+    public SortingPercentilesProcedure(Procedure procedure) {
+        super(procedure);
     }
 
     @Override
     public void buildArguments() {
+        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(FROM, CRITERIA);
         arguments.putResultNames(SORTED_ITEMS, AVERAGE_TIME_SEQUENCE);
@@ -35,6 +38,8 @@ public class SortingPercentilesProcedure extends ProcedureChain {
 
     @Override
     public void execute() {
+
+        toDecorate.execute();
 
         // we are of course assuming the selector is already initialized
         if (!arguments.isSatisfied()) {

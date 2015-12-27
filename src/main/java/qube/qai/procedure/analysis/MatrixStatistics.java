@@ -4,14 +4,16 @@ import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.matrix.Matrix;
+import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureChain;
+import qube.qai.procedure.ProcedureDecorator;
 
 import java.util.List;
 
 /**
  * Created by rainbird on 11/28/15.
  */
-public class MatrixStatistics extends ProcedureChain {
+public class MatrixStatistics extends ProcedureDecorator {
 
     public static String NAME = "Matrix Statistics";
 
@@ -21,12 +23,13 @@ public class MatrixStatistics extends ProcedureChain {
     /**
      * Runs statistical analysis on the given matrix
      */
-    public MatrixStatistics() {
-        super(NAME);
+    public MatrixStatistics(Procedure procedure) {
+        super(procedure);
     }
 
     @Override
     public void buildArguments() {
+        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_MATRIX);
         arguments.putResultNames(MATRIX_METRICS, MATRIX_DATA_METRICS);
@@ -34,6 +37,12 @@ public class MatrixStatistics extends ProcedureChain {
 
     @Override
     public void execute() {
+
+        toDecorate.execute();
+
+        if (!arguments.isSatisfied()) {
+            arguments = arguments.mergeArguments(toDecorate.getArguments());
+        }
 
         // first get the selector
         Matrix matrix = (Matrix) arguments.getSelector(INPUT_MATRIX).getData();

@@ -11,7 +11,9 @@ import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.network.neural.trainer.BasicNetworkTrainer;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
+import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureChain;
+import qube.qai.procedure.ProcedureDecorator;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -20,7 +22,7 @@ import java.util.HashMap;
 /**
  * Created by rainbird on 12/25/15.
  */
-public class MarketNetworkBuilder extends ProcedureChain implements NetworkBuilder {
+public class MarketNetworkBuilder extends ProcedureDecorator implements NetworkBuilder {
 
     public static String NAME = "Market Network Builder";
 
@@ -30,8 +32,8 @@ public class MarketNetworkBuilder extends ProcedureChain implements NetworkBuild
 
     public static String TRAINED_NEURAL_NETWORK = "trained neural network";
 
-    public MarketNetworkBuilder() {
-        super(NAME);
+    public MarketNetworkBuilder(Procedure procedure) {
+        super(procedure);
     }
 
     private BasicNetworkTrainer trainer;
@@ -94,6 +96,7 @@ public class MarketNetworkBuilder extends ProcedureChain implements NetworkBuild
 
     @Override
     public void buildArguments() {
+        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_STOCK_ENTITY_COLLECTION);
         arguments.putResultNames(NETWORK_METRICS,

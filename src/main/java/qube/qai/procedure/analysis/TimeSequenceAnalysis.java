@@ -4,12 +4,16 @@ import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.data.TimeSequence;
+import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureChain;
+import qube.qai.procedure.ProcedureDecorator;
+
+import javax.print.attribute.standard.MediaSize;
 
 /**
  * Created by rainbird on 11/28/15.
  */
-public class TimeSequenceAnalysis extends ProcedureChain {
+public class TimeSequenceAnalysis extends ProcedureDecorator {
 
     public static String NAME = "Time-Sequence Analysis";
 
@@ -21,12 +25,13 @@ public class TimeSequenceAnalysis extends ProcedureChain {
      *          result value variance etc.
      * top 10/bottom 10/average entities- prepare those results as charts
      */
-    public TimeSequenceAnalysis() {
-        super(NAME);
+    public TimeSequenceAnalysis(Procedure procedure) {
+        super(procedure);
     }
 
     @Override
     public void buildArguments() {
+        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_TIME_SEQUENCE);
         arguments.putResultNames(TIME_SEQUENCE_METRICS);
@@ -35,8 +40,10 @@ public class TimeSequenceAnalysis extends ProcedureChain {
     @Override
     public void execute() {
 
+        toDecorate.execute();
+
         if (!arguments.isSatisfied()) {
-            throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
+            arguments = arguments.mergeArguments(toDecorate.getArguments());
         }
 
         // first get the selector

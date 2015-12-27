@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import qube.qai.data.*;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.main.QaiTestBase;
+import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureChain;
 import qube.qai.procedure.analysis.*;
 import qube.qai.services.ProcedureSourceInterface;
@@ -132,7 +133,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
     /**
      * do the testing for neural-network analysis
      */
-    public void testNeuralNetworkAnalysis() throws Exception {
+    public void restNeuralNetworkAnalysis() throws Exception {
 
         NeuralNetworkAnalysis statistics = (NeuralNetworkAnalysis) procedureSource.getProcedureWithName(NeuralNetworkAnalysis.NAME);
 
@@ -241,7 +242,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
      * is actually to be found in the arguments
      * @param statistics
      */
-    private void checkResultsOf(ProcedureChain statistics) {
+    private void checkResultsOf(Procedure statistics) {
 
         long start = System.currentTimeMillis();
 

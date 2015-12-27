@@ -5,5 +5,5 @@ package qube.qai.procedure;
  */
 public interface ProcedureFactory {
 
-    ProcedureChain constructProcedure();
+    Procedure constructProcedure();
 }

@@ -4,14 +4,16 @@ import qube.qai.data.Arguments;
 import qube.qai.data.TimeSequence;
 import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
+import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureChain;
+import qube.qai.procedure.ProcedureDecorator;
 
 import java.util.*;
 
 /**
  * Created by rainbird on 11/28/15.
  */
-public class NeuralNetworkForwardPropagation extends ProcedureChain {
+public class NeuralNetworkForwardPropagation extends ProcedureDecorator {
 
     public static String NAME = "Neural-network forward-propagation";
 
@@ -28,12 +30,13 @@ public class NeuralNetworkForwardPropagation extends ProcedureChain {
      * and making those available for other processes, or
      * for anyone interested
      */
-    public NeuralNetworkForwardPropagation() {
-        super(NAME);
+    public NeuralNetworkForwardPropagation(Procedure procedure) {
+        super(procedure);
     }
 
     @Override
     public void buildArguments() {
+        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_NEURAL_NETWORK, INPUT_START_VECTOR, INPUT_NAMES, INPUT_DATES_FOR_STEPS);
         arguments.putResultNames(MAP_OF_TIME_SEQUENCE);
@@ -42,8 +45,10 @@ public class NeuralNetworkForwardPropagation extends ProcedureChain {
     @Override
     public void execute() {
 
+        toDecorate.execute();
+
         if (!arguments.isSatisfied()) {
-            throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
+            arguments = arguments.mergeArguments(toDecorate.getArguments());
         }
 
         NeuralNetwork neuralNetwork = (NeuralNetwork) arguments.getSelector(INPUT_NEURAL_NETWORK).getData();

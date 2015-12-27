@@ -14,8 +14,10 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.data.Arguments;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureDecorator;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,37 +30,54 @@ import java.util.zip.ZipFile;
 /**
  * Created by rainbird on 11/3/15.
  */
-public class WikiArchiveIndexer extends Procedure {
+public class WikiArchiveIndexer extends ProcedureDecorator {
 
     private Logger logger = LoggerFactory.getLogger("WikiArchiveIndexer");
 
+
+    public static String NAME = "WikiArchiveIndexer";
+    public static String DESCRIPTION = "Indexes the wiki articles which are in the given archive file to the target index directory";
     public static String FIELD_FILE = "file";
     public static String FIELD_TITLE = "title";
     public static String FIELD_CONTENT = "content";
 
-    //public String INDEX_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
-    public String INDEX_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
+    public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
+    public static String INPUT_INDEX_DIRECTORY = "INDEX_DIRECTORY";
 
-    //public String ZIP_FILE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
-    public String ZIP_FILE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    //public String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
+    //public String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
+    private String indexDirectory;
+    //public String targetFilename = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    //public String targetFilename = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    public String targetFilename;
 
     private long indexedFileCount = 0;
 
+    public WikiArchiveIndexer(Procedure toDecorate) {
+        super(toDecorate);
+    }
+
     @Override
     public void execute() {
-        this.INDEX_DIRECTORY = (String) arguments.getSelector("INDEX_DIRECTORY").getData();
-        this.ZIP_FILE = (String) arguments.getSelector("ZIP_FILE").getData();
+
+        toDecorate.execute();
+
+        if (!arguments.isSatisfied()) {
+            arguments = arguments.mergeArguments(toDecorate.getArguments());
+        }
+
+        indexDirectory = (String) arguments.getSelector(INPUT_INDEX_DIRECTORY).getData();
+        targetFilename = (String) arguments.getSelector(INPUT_TARGET_FILENAME).getData();
         indexZipFileEntries();
     }
 
     public void indexZipFileEntries() {
 
-        //File docs = new File(inputDirectory);
         try {
-            ZipFile zipFile = new ZipFile(ZIP_FILE);
+            ZipFile zipFile = new ZipFile(targetFilename);
 
             // feed the output directory name
-            Path path = FileSystems.getDefault().getPath(INDEX_DIRECTORY);
+            Path path = FileSystems.getDefault().getPath(indexDirectory);
             Directory directory = FSDirectory.open(path);
 
             // create the analyzer
@@ -100,23 +119,26 @@ public class WikiArchiveIndexer extends Procedure {
 
     @Override
     public void buildArguments() {
-
+        name = NAME;
+        description = DESCRIPTION;
+        arguments = new Arguments(INPUT_TARGET_FILENAME, INPUT_INDEX_DIRECTORY);
+        // arguments.putResultNames(); // no need to return a name for the indexed directory?
     }
 
-    public String getINDEX_DIRECTORY() {
-        return INDEX_DIRECTORY;
+    public String getIndexDirectory() {
+        return indexDirectory;
     }
 
-    public void setINDEX_DIRECTORY(String INDEX_DIRECTORY) {
-        this.INDEX_DIRECTORY = INDEX_DIRECTORY;
+    public void setIndexDirectory(String indexDirectory) {
+        this.indexDirectory = indexDirectory;
     }
 
-    public String getZIP_FILE() {
-        return ZIP_FILE;
+    public String getTargetFilename() {
+        return targetFilename;
     }
 
-    public void setZIP_FILE(String ZIP_FILE) {
-        this.ZIP_FILE = ZIP_FILE;
+    public void setTargetFilename(String targetFilename) {
+        this.targetFilename = targetFilename;
     }
 
     public long getIndexedFileCount() {

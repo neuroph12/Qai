@@ -1,8 +1,9 @@
 package qube.qai.data;
 
+import org.apache.poi.ss.formula.functions.T;
+
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,24 +12,38 @@ import java.util.Set;
  */
 public class Arguments implements Serializable, MetricTyped {
 
-    private Set<String> argumentNames;
-
-    private Set<String> resultNames;
-
     private Map<String, Object> results;
 
     private Map<String, Selector> arguments;
 
     public Arguments() {
-        argumentNames = new HashSet<String>();
-        resultNames = new HashSet<String>();
         arguments = new HashMap<String, Selector>();
         results = new HashMap<String, Object>();
     }
 
     public Arguments(String... names) {
         this();
-        putNames(names);
+        putArgumentNames(names);
+    }
+
+    public Arguments mergeArguments(Arguments toMerge) {
+
+        for (String name : toMerge.getArgumentNames()) {
+            arguments.put(name, toMerge.getArgument(name));
+        }
+
+        for (String name : toMerge.getResultNames()) {
+            putResultNames(name);
+        }
+
+        return this;
+    }
+
+    public Selector<T> getArgument(String name) {
+        if (arguments.containsKey(name)) {
+            return arguments.get(name);
+        }
+        return null;
     }
 
     /**
@@ -38,9 +53,7 @@ public class Arguments implements Serializable, MetricTyped {
      * @param result
      */
     public void addResult(String name, Object result) {
-        if (resultNames.contains(name)) {
-            results.put(name, result);
-        }
+        results.put(name, result);
     }
 
     public Object getResult(String name) {
@@ -54,44 +67,30 @@ public class Arguments implements Serializable, MetricTyped {
 
     public void putResultNames(String... names) {
         for (String name : names) {
-            resultNames.add(name);
+            results.put(name, null);
         }
     }
 
-    public void putNames(String... names) {
+    public void putArgumentNames(String... names) {
         for (String name : names) {
-            argumentNames.add(name);
+            arguments.put(name, null);
         }
     }
 
     public void setArgument(String name, Selector value) {
-        if (argumentNames.contains(name)) {
-            arguments.put(name, value);
-        } else {
-            throw new IllegalArgumentException("Argument list does not contain: " + name);
-        }
+        arguments.put(name, value);
     }
 
     public Selector getSelector(String name) {
-        if (argumentNames.contains(name) && arguments.containsKey(name)) {
-            return arguments.get(name);
-        } else {
-            //throw new IllegalArgumentException("Argument list does not contain: " + name);
-            // forget about the exception, just return null
-            return null;
-        }
+        return arguments.get(name);
     }
 
     public Set<String> getArgumentNames() {
-        return argumentNames;
+        return arguments.keySet();
     }
 
     public Set<String> getResultNames() {
-        return resultNames;
-    }
-
-    public void setResultNames(Set<String> resultNames) {
-        this.resultNames = resultNames;
+        return results.keySet();
     }
 
     /**
@@ -104,7 +103,7 @@ public class Arguments implements Serializable, MetricTyped {
         boolean satisfied = false;
 
         for (String name : getArgumentNames()) {
-            satisfied = hasValue(name);
+            satisfied = hasArgumentValue(name);
             if (!satisfied) {
                 break;
             }
@@ -119,14 +118,10 @@ public class Arguments implements Serializable, MetricTyped {
      * @param name
      * @return
      */
-    public boolean hasValue(String name) {
-
-        if (argumentNames.contains(name)) {
-            if (arguments.get(name) != null) {
-                return true;
-            }
+    public boolean hasArgumentValue(String name) {
+        if (arguments.get(name) != null) {
+            return true;
         }
-
         return false;
     }
 
@@ -134,7 +129,7 @@ public class Arguments implements Serializable, MetricTyped {
         Metrics metrics = new Metrics();
         for (String name : getArgumentNames()) {
             double value = Double.NaN;
-            if (hasValue(name)) {
+            if (hasArgumentValue(name)) {
                 Object data = getSelector(name).getData();
                 if (data instanceof Number) {
                     value = ((Number) data).doubleValue();
@@ -155,7 +150,7 @@ public class Arguments implements Serializable, MetricTyped {
         //buffer.append("uuid: ").append(uuid);
         for (String name : getArgumentNames()) {
             buffer.append(name).append(": ");
-            if (hasValue(name)) {
+            if (hasArgumentValue(name)) {
                 buffer.append(getSelector(name).getData()).append(", ");
             } else {
                 buffer.append("null, ");

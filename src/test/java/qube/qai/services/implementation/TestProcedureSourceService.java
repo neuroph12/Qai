@@ -20,26 +20,11 @@ import qube.qai.services.ProcedureSourceInterface;
 import java.util.*;
 
 /**
- * Created by rainbird on 12/16/15.
+ * Created by rainbird on 12/27/15.
  */
-public class ProcedureSourceService implements ProcedureSourceInterface {
+public class TestProcedureSourceService implements ProcedureSourceInterface {
 
-    /**
-     * @TODO implement the methods
-     */
-
-
-
-
-    public Procedure getProcedureWithName(String name) {
-        return null;
-    }
-
-    public String[] getProcedureNames() {
-        return new String[0];
-    }
-
-    /*private int number = 100;
+    private int number = 100;
     private int size = 10;
     private String startDate = "2000-1-1";
     private String endDate = "2000-12-31";
@@ -175,5 +160,5 @@ public class ProcedureSourceService implements ProcedureSourceInterface {
 
     public String[] getProcedureNames() {
         return procedureNames;
-    }*/
+    }
 }

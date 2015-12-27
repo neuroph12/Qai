@@ -29,7 +29,7 @@ public class TestStockEntityDataStore extends QaiTestBase {
      * be worked later... perhaps we can actually
      * work all those hundreds of listings some day...
      */
-    public void restStockEntityDataStore() throws Exception {
+    public void testStockEntityDataStore() throws Exception {
 
         StockEntityDataStore dataStore = new StockEntityDataStore();
 

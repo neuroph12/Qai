@@ -21,7 +21,7 @@ public class TestProcedureChain extends TestCase {
 
         Arguments arguments = new Arguments();
 
-        arguments.putNames(inputMatrix, variance, mean);
+        arguments.putArgumentNames(inputMatrix, variance, mean);
 
         DataSelector<Matrix> matrixSelector = new DataSelector<Matrix>(new Matrix());
         arguments.setArgument("input matrix", matrixSelector);
@@ -31,10 +31,10 @@ public class TestProcedureChain extends TestCase {
         log(arguments.toString());
 
         assertTrue("all arguments must be satisfied", arguments.isSatisfied());
-        assertTrue("input matrix is satisfied", arguments.hasValue(inputMatrix));
-        assertTrue("variance has to be satisfied", arguments.hasValue(variance));
-        assertTrue("mean has to be satisfied", arguments.hasValue(mean));
-        assertTrue("invariance does not exist", !arguments.hasValue("invariance"));
+        assertTrue("input matrix is satisfied", arguments.hasArgumentValue(inputMatrix));
+        assertTrue("variance has to be satisfied", arguments.hasArgumentValue(variance));
+        assertTrue("mean has to be satisfied", arguments.hasArgumentValue(mean));
+        assertTrue("invariance does not exist", !arguments.hasArgumentValue("invariance"));
     }
 
     public void testProcedureChain() throws Exception {
@@ -63,14 +63,14 @@ public class TestProcedureChain extends TestCase {
                 double sum = x + y;
                 Selector<Double> sumSelector = new DataSelector<Double>(sum);
                 log("return value selector with sum: " + sum);
-                arguments.putNames("sum");
+                arguments.putArgumentNames("sum");
                 arguments.setArgument("sum", sumSelector);
             }
 
             @Override
             public void buildArguments() {
                 arguments = new Arguments();
-                arguments.putNames("x", "y");
+                arguments.putArgumentNames("x", "y");
             }
         };
 

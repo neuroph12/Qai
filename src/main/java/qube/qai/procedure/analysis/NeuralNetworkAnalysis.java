@@ -4,17 +4,14 @@ import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
 import qube.qai.data.Selector;
 import qube.qai.network.neural.NeuralNetwork;
-import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureChain;
-import qube.qai.procedure.ProcedureFactory;
-import qube.qai.procedure.ProcedureVisitor;
+import qube.qai.procedure.*;
 
 import java.util.Collection;
 
 /**
  * Created by rainbird on 11/28/15.
  */
-public class NeuralNetworkAnalysis extends ProcedureChain {
+public class NeuralNetworkAnalysis extends ProcedureDecorator {
 
     public static String NAME = "Neural-Network Analysis";
 
@@ -24,12 +21,13 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
 
     private Selector<Collection<NeuralNetwork>> networkSelector;
 
-    public NeuralNetworkAnalysis() {
-        super(NAME);
+    public NeuralNetworkAnalysis(Procedure procedure) {
+        super(procedure);
     }
 
     @Override
     public void buildArguments() {
+        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_NEURAL_NETWORK);
         arguments.putResultNames(NETWORK_METRICS);
@@ -38,9 +36,11 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
     @Override
     public void execute() {
 
+        toDecorate.execute();
+
         // we are of course assuming the selector is already initialized
         if (!arguments.isSatisfied()) {
-            throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
+            arguments = arguments.mergeArguments(toDecorate.getArguments());
         }
 
         NeuralNetwork neuralNetwork = (NeuralNetwork) arguments.getSelector(INPUT_NEURAL_NETWORK).getData();
@@ -59,33 +59,34 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
      * implement a static factory-class so that they can be constructed right
      */
     public static ProcedureFactory Factory = new ProcedureFactory() {
-        public ProcedureChain constructProcedure() {
+        public Procedure constructProcedure() {
 
-            // tha parent procedure
-            NeuralNetworkAnalysis neuralNetworkAnalysis = new NeuralNetworkAnalysis();
+            // tha toDecorate procedure
+            SelectionProcedure procedure = new SelectionProcedure();
+            NeuralNetworkAnalysis neuralNetworkAnalysis = new NeuralNetworkAnalysis(procedure);
 
-            // begin with basic-matrix statistics
-            MatrixStatistics matrixStatistics = new MatrixStatistics();
-            neuralNetworkAnalysis.addChild(matrixStatistics);
-
-            // we want to have the statistics of the network which is created
-            NetworkStatistics networkStatistics = new NetworkStatistics();
-            neuralNetworkAnalysis.addChild(networkStatistics);
-
-            // select only some of the results which we have
-            SortingPercentilesProcedure selectProcedure = new SortingPercentilesProcedure();
-            neuralNetworkAnalysis.addChild(selectProcedure);
-
-            // change-point analysis of the given time series as well
-            ChangePointAnalysis changePointAnalysis = new ChangePointAnalysis();
-            selectProcedure.addChild(changePointAnalysis);
-
-            // time-series analysis for the generated data
-            TimeSequenceAnalysis timeSequenceAnalysis = new TimeSequenceAnalysis();
-            changePointAnalysis.addChild(timeSequenceAnalysis);
-            // forward propagation which will be producing the data for time-series analysis
-            NeuralNetworkForwardPropagation forwardPropagation = new NeuralNetworkForwardPropagation();
-            timeSequenceAnalysis.addChild(forwardPropagation);
+//            // begin with basic-matrix statistics
+//            MatrixStatistics matrixStatistics = new MatrixStatistics();
+//            neuralNetworkAnalysis.addChild(matrixStatistics);
+//
+//            // we want to have the statistics of the network which is created
+//            NetworkStatistics networkStatistics = new NetworkStatistics();
+//            neuralNetworkAnalysis.addChild(networkStatistics);
+//
+//            // select only some of the results which we have
+//            SortingPercentilesProcedure selectProcedure = new SortingPercentilesProcedure();
+//            neuralNetworkAnalysis.addChild(selectProcedure);
+//
+//            // change-point analysis of the given time series as well
+//            ChangePointAnalysis changePointAnalysis = new ChangePointAnalysis();
+//            selectProcedure.addChild(changePointAnalysis);
+//
+//            // time-series analysis for the generated data
+//            TimeSequenceAnalysis timeSequenceAnalysis = new TimeSequenceAnalysis();
+//            changePointAnalysis.addChild(timeSequenceAnalysis);
+//            // forward propagation which will be producing the data for time-series analysis
+//            NeuralNetworkForwardPropagation forwardPropagation = new NeuralNetworkForwardPropagation();
+//            timeSequenceAnalysis.addChild(forwardPropagation);
 
 
 
@@ -98,7 +99,7 @@ public class NeuralNetworkAnalysis extends ProcedureChain {
      * advantages to it, although might seem somewhat
      * unusual- handle each type which you have in the chain
      * the way it should be, and still have access to the fields
-     * of the parent-procedure nevertheless
+     * of the toDecorate-procedure nevertheless
      */
     class NeuralNetworkAnalysisVisitor implements ProcedureVisitor {
         /**
