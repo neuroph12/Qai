@@ -79,7 +79,7 @@ public abstract class Procedure implements Serializable, Runnable, HazelcastInst
     }
 
     /**
-     * each procesudre knows what inputs and outputs there will
+     * each procedure knows what inputs and outputs there will
      * be, and those have to be available in arguments-field
      * when the procedure is about to be called
      */

@@ -1,5 +1,6 @@
 package qube.qai.procedure.analysis;
 
+import org.apache.lucene.store.SleepingLockWrapper;
 import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
 import qube.qai.data.Selector;
@@ -59,10 +60,12 @@ public class NeuralNetworkAnalysis extends ProcedureDecorator {
      * implement a static factory-class so that they can be constructed right
      */
     public static ProcedureFactory Factory = new ProcedureFactory() {
-        public Procedure constructProcedure() {
 
-            // tha toDecorate procedure
-            SelectionProcedure selection = new SelectionProcedure();
+        public Procedure constructProcedure(SelectionProcedure selection) {
+
+            if (selection == null) {
+                selection = new SelectionProcedure();
+            }
             MatrixStatistics matrix = new MatrixStatistics(selection);
             NetworkStatistics network = new NetworkStatistics(matrix);
             NeuralNetworkAnalysis neural = new NeuralNetworkAnalysis(network);
