@@ -2,7 +2,6 @@ package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import net.didion.jwnl.data.Exc;
 import org.apache.commons.lang3.StringUtils;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
@@ -107,9 +106,9 @@ public class TestHazelcastMaps extends QaiTestBase {
         int number = 100;
         List<String> uuidList = new ArrayList<String>();
         for (int i = 0; i < number; i++) {
-            String name = "entity(" + i + ")";
+            String name = "e" + i + "x";
             StockEntity entity = TestMapStores.createEntity(name);
-            String uuid = entity.getUuid();
+            String uuid = entity.getIdKey();
             stockEntities.put(uuid, entity);
             uuidList.add(uuid);
         }

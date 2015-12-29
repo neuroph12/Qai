@@ -4,8 +4,11 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.data.stores.DataStore;
+import qube.qai.data.stores.StockEntityDataStore;
 import qube.qai.message.MessageQueue;
 import qube.qai.message.MessageQueueInterface;
 import qube.qai.services.*;
@@ -50,6 +53,9 @@ public class QaiModule extends AbstractModule {
         bind(ProcedureRunnerInterface.class).to(ProcedureRunner.class);
 
         bind(MessageQueueInterface.class).to(MessageQueue.class);
+
+        // stockEntityDataStore
+        bind(DataStore.class).annotatedWith(Names.named("StockEntities")).to(StockEntityDataStore.class);
 
     }
 

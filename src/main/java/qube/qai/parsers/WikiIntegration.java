@@ -136,7 +136,8 @@ public class WikiIntegration {
 
         String[] header = stripHeader(html);
         ArrayList<RowData> tableData = new ArrayList<RowData>();
-        for (int i = 0; i < rows.size(); i++) {
+        // start from the 1st row to skip header
+        for (int i = 1; i < rows.size(); i++) {
             Element row = rows.get(i);
             Elements cols = row.children();
             RowData rowDat = new RowData(header);

@@ -1,6 +1,5 @@
 package qube.qai.persistence;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 import qube.qai.services.implementation.UUIDService;
@@ -17,7 +16,7 @@ import java.util.Date;
 public class StockEntity implements Serializable, AcceptsVisitors {
 
     @Id
-    private String uuid;
+    private String idKey;
 
     private String name;
 
@@ -40,7 +39,7 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     private String tradedIn;
 
     public StockEntity() {
-        this.uuid = UUIDService.uuidString();
+        this.idKey = UUIDService.uuidString();
     }
 
     public StockEntity(String name,
@@ -66,12 +65,12 @@ public class StockEntity implements Serializable, AcceptsVisitors {
         return visitor.visit(this, data);
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getIdKey() {
+        return idKey;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setIdKey(String idKey) {
+        this.idKey = idKey;
     }
 
     public String getName() {
@@ -158,13 +157,13 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     public boolean equals(Object obj) {
         if (obj instanceof StockEntity) {
             StockEntity other = (StockEntity) obj;
-            return uuid.equals(other.uuid);
+            return idKey.equals(other.idKey);
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        return idKey.hashCode();
     }
 }

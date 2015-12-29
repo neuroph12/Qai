@@ -65,7 +65,7 @@ public class TestMapStores extends QaiTestBase {
         for (int i = 0; i < number; i++) {
             String name = "entity(" + i + ")";
             StockEntity entity = createEntity(name);
-            String uuid = entity.getUuid();
+            String uuid = entity.getIdKey();
             mapStore.store(uuid, entity);
             entityMap.put(uuid, entity);
         }
@@ -153,6 +153,9 @@ public class TestMapStores extends QaiTestBase {
         entity.setGicsSector("gicsSector of " + name);
         entity.setGicsSubIndustry("gicsSubIndustry of " + name);
         entity.setSecurity("security of " + name);
+        entity.setTradedIn("vsex");
+        entity.setTickerSymbol(name);
+        entity.setIdKey("vstex|" + name);
         return entity;
     }
 }

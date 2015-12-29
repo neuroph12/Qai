@@ -50,17 +50,24 @@ public class TestMarketNetworkBuilder extends QaiTestBase {
         network.getVertices();
 
         // ok now we take a look at the results
-//        for(MLDataPair pair: networkBuilder.getTrainer().getTrainingSet()) {
-//            double[] output = network.propagate(pair.getInput().getData());
-//            for (int i = 0; i < output.length; i++) {
-//                logger.info("entity name: " + names[i]);
-//                logger.info("input: " + pair.getInput().getData(i));
-//                logger.info("output: " + output[i]);
-//                logger.info("ideal: " + pair.getIdeal().getData(i));
-//            }
-//        }
-
-
+        int displayCount = 0;
+        int maxCount = 10;
+        for(MLDataPair pair: networkBuilder.getTrainer().getTrainingSet()) {
+            double[] output = network.propagate(pair.getInput().getData());
+            StringBuffer buffer = new StringBuffer();
+            for (int i = 0; i < output.length; i++) {
+                buffer.append("entity name: " + names[i]);
+                buffer.append(" input: " + pair.getInput().getData(i));
+                buffer.append(" output: " + output[i]);
+                buffer.append(" ideal: " + pair.getIdeal().getData(i));
+                buffer.append("\n");
+            }
+            logger.info(buffer.toString());
+            if (displayCount >= maxCount) {
+                break;
+            }
+            displayCount++;
+        }
     }
 
     private String array2String(String[] names) {

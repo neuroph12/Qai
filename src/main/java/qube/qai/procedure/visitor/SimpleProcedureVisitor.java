@@ -19,7 +19,7 @@ public class SimpleProcedureVisitor implements DataVisitor {
     }
 
     public Object visit(StockEntity visitee, Object data) {
-        buffer.append("currently visiting: ").append(visitee.getName()).append(" with uuid: ").append(visitee.getUuid()).append("\n");
+        buffer.append("currently visiting: ").append(visitee.getName()).append(" with idKey: ").append(visitee.getIdKey()).append("\n");
         return data;
     }
 
