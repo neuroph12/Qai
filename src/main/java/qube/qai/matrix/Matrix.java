@@ -116,7 +116,7 @@ public class Matrix implements Serializable, MetricTyped {
 
         BasicMatrix basicMatrix;
         if (filled) {
-            basicMatrix = factory.makeFilled(rows, columns, new Normal(0.5, 10));
+            basicMatrix = factory.makeRandom(rows, columns, new Normal(0.5, 10));
         } else {
             basicMatrix = factory.makeZero(rows, columns);
         }
