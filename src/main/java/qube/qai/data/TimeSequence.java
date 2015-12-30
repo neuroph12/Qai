@@ -7,7 +7,6 @@ import org.ojalgo.random.RandomNumber;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Created by rainbird on 12/4/15.
@@ -79,9 +78,6 @@ public class TimeSequence<T extends Number> implements Serializable {
             iterator.remove();
         }
 
-        public void forEachRemaining(Consumer<? super T> action) {
-            //iterator.forEachRemaining(action);
-        }
     }
 
     class TimeSequenceEntry implements Serializable {
