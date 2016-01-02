@@ -60,7 +60,7 @@ public class TestParsingExperiments extends QaiTestBase {
         Tokenizer tokenizer = createTokenizer();
         String[] tokens = tokenizer.tokenize(snpPage.getContent());
 
-        InputStream modelIn = getClass().getResourceAsStream("/opennlp/en-ner-organization.bin");
+        InputStream modelIn = getClass().getResourceAsStream("/opennlp/en/en-ner-organization.bin");
         TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
         modelIn.close();
 
@@ -90,7 +90,7 @@ public class TestParsingExperiments extends QaiTestBase {
         Tokenizer tokenizer = createTokenizer();
         String[] tokens = tokenizer.tokenize(pythagorasArticle.getContent());
 
-        InputStream modelIn = getClass().getResourceAsStream("/opennlp/en-pos-maxent.bin");
+        InputStream modelIn = getClass().getResourceAsStream("/opennlp/en/en-pos-maxent.bin");
         POSModel model = new POSModel(modelIn);
         POSTaggerME tagger = new POSTaggerME(model);
         String[] tags = tagger.tag(tokens);
@@ -111,7 +111,7 @@ public class TestParsingExperiments extends QaiTestBase {
         Tokenizer tokenizer = createTokenizer();
         String[] tokens = tokenizer.tokenize(darwinArticle.getContent());
 
-        InputStream modelIn = getClass().getResourceAsStream("/opennlp/en-ner-person.bin");
+        InputStream modelIn = getClass().getResourceAsStream("/opennlp/en/en-ner-person.bin");
         TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
         modelIn.close();
 
@@ -142,7 +142,7 @@ public class TestParsingExperiments extends QaiTestBase {
         // this is how you create the trained sentence detection model
         // to be honest, i don't understand what is meant with the model in this case
         // for example...
-        InputStream modelIn = getClass().getResourceAsStream("/opennlp/en-sent.bin");
+        InputStream modelIn = getClass().getResourceAsStream("/opennlp/en/en-sent.bin");
         SentenceModel model = new SentenceModel(modelIn);
         modelIn.close();
 
@@ -248,7 +248,7 @@ public class TestParsingExperiments extends QaiTestBase {
         Tokenizer tokenizer = null;
         try {
             // /opennlp/en-ner-organization.bin
-            InputStream modelIn = getClass().getResourceAsStream("/opennlp/en-token.bin");
+            InputStream modelIn = getClass().getResourceAsStream("/opennlp/en/en-token.bin");
             TokenizerModel tokenizerModel = new TokenizerModel(modelIn);
             tokenizer = new TokenizerME(tokenizerModel);
         } catch (IOException e) {

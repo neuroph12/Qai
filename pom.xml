@@ -103,6 +103,13 @@
             <version>${lucene.version}</version>
         </dependency>
 
+        <!-- apache open-nlp -->
+        <dependency>
+            <groupId>org.apache.opennlp</groupId>
+            <artifactId>opennlp-tools</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+
         <!-- Guice is pretty important after all -->
         <dependency>
             <groupId>com.google.inject</groupId>
