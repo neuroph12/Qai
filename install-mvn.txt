@@ -17,3 +17,7 @@ when done with installing the whole- and compiling etc. in order to run Qoan-ser
 mvn exec:java -Dexec.mainClass="qube.qoan.server.WebServer"
 or Qai-node
 mvn exec:java -Dexec.mainClass="qube.qai.main.QaiNode"
+
+// these are for getting the latest copy of the whole
+git pull rainbird@192.168.1.2:/home/rainbird/projects/work/qai
+git pull rainbird@192.168.1.2:/home/rainbird/projects/work/qoan
