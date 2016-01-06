@@ -37,6 +37,10 @@ public class WiktionaryPageTextVisitor implements SAXVisitBefore, SAXVisitAfter 
 
         WikiArticle wikiArticle = (WikiArticle) executionContext.getContext().getAttribute("wikiArticle");
 
+        if (wikiArticle == null) {
+            return;
+        }
+
         String textContent = element.getTextContent();
 
         //log(element.getName().toString() + ":" + textContent);
@@ -54,16 +58,16 @@ public class WiktionaryPageTextVisitor implements SAXVisitBefore, SAXVisitAfter 
         }
 
         // in order to avoid directories and Wikisaurus entries
-        if (title.contains("/") || title.contains("Wikisaurus:")) {
-            log("Apparently a directory of sorts: '" + title + "'");
-            return;
-        }
+//        if (title.contains("/") || title.contains("Wikisaurus:")) {
+//            log("Apparently a directory of sorts: '" + title + "'");
+//            return;
+//        }
 
         // in order to make sure we have an english word
-        if (!textContent.contains("==English==")) {
-            log("Apparently not an English word- skipping: '" + title + "'");
-            return;
-        }
+//        if (!textContent.contains("==English==")) {
+//            log("Apparently not an English word- skipping: '" + title + "'");
+//            return;
+//        }
 
         addPageToStream(executionContext, wikiArticle, title);
     }

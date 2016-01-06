@@ -43,6 +43,11 @@ public class WikiPageVisitor implements SAXVisitBefore, SAXVisitAfter {
             return;
         }
 
+        // same thing with "MediaWiki" pages
+        if (StringUtils.containsIgnoreCase(title, "MediaWiki:")) {
+            return;
+        }
+
         // same thing with "Disambiguation" pages
         if (StringUtils.containsIgnoreCase(title, "Disambiguation:")) {
             return;

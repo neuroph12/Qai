@@ -12,3 +12,8 @@ mvn install:install-file -Dfile=./lib/bliki-core-3.0.19.jar -DgroupId=info.bliki
 mvn install:install-file -Dfile=./lib/bliki-pdf-3.0.19.jar -DgroupId=info.bliki -DartifactId=bliki.pdf -Dversion=3.0.19 -Dpackaging=jar
 mvn install:install-file -Dfile=./lib/grph-1.6.29-big.jar -DgroupId=grph -DartifactId=grph.all -Dversion=1.6.29 -Dpackaging=jar
 mvn install:install-file -Dfile=./lib/samsroad-1.0.jar -DgroupId=qube.samsroad -DartifactId=samsroad -Dversion=1.0 -Dpackaging=jar
+
+when done with installing the whole- and compiling etc. in order to run Qoan-server
+mvn exec:java -Dexec.mainClass="qube.qoan.server.WebServer"
+or Qai-node
+mvn exec:java -Dexec.mainClass="qube.qai.main.QaiNode"

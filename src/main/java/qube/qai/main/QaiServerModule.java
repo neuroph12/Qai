@@ -2,6 +2,8 @@ package qube.qai.main;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MapStoreConfig;
@@ -19,7 +21,11 @@ import qube.qai.persistence.mapstores.HqslDBMapStore;
 import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.procedure.Procedure;
+import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
+import qube.qai.services.implementation.DistributedSearchListener;
+import qube.qai.services.implementation.DistributedSearchService;
+import qube.qai.services.implementation.WikiSearchService;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -45,6 +51,8 @@ public class QaiServerModule extends AbstractModule {
 
     public static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
 
+    public static final String WIKIPEDIA_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
+
     public static final String WIKIPEDIA_RESOURCES = "WIKIPEDIA_RESOURCES";
 
     public static final String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
@@ -54,6 +62,8 @@ public class QaiServerModule extends AbstractModule {
     public static final String WIKTIONARY = "WIKTIONARY_EN";
 
     public static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+
+    public static final String WIKTIONARY_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
 
     public static final String WIKTIONARY_RESOURCES = "WIKTIONARY_RESOURCES";
 
@@ -69,6 +79,64 @@ public class QaiServerModule extends AbstractModule {
     @Override
     protected void configure() {
         // for the moment nothing to do here
+    }
+
+    /**
+     * WiktionarySearchService
+     * returns the distributed search service for wiktionary
+     * and starts the listener service which will broker the requests
+     * @return
+     */
+    @Provides @Named("Wiktionary_en") @Singleton
+    DistributedSearchListener provideWiktionarySearchListener() {
+        SearchServiceInterface basicSearchService = new WikiSearchService(WIKTIONARY_DIRECTORY, WIKTIONARY_ARCHIVE);
+
+        DistributedSearchListener searchListener = new DistributedSearchListener("Wiktionary_en");
+        searchListener.setSearchService(basicSearchService);
+        searchListener.setHazelcastInstance(hazelcastInstance);
+        searchListener.initialize();
+
+        return searchListener;
+    }
+
+    /**
+     * WikipediaSearchService
+     * returns the distributed search service for wikipedia
+     * and starts the listener service which will broker the requests
+     * @return
+     */
+    @Provides @Named("Wikipedia_en") @Singleton
+    DistributedSearchListener provideWikipediaSearchListener() {
+        SearchServiceInterface basicSearchService = new WikiSearchService(WIKIPEDIA_DIRECTORY, WIKIPEDIA_ARCHIVE);
+
+        DistributedSearchListener searchListener = new DistributedSearchListener("Wikipedia_en");
+        searchListener.setSearchService(basicSearchService);
+        searchListener.setHazelcastInstance(hazelcastInstance);
+        searchListener.initialize();
+
+        return searchListener;
+    }
+
+    /**
+     * WiktionarySearchService
+     * @return
+     */
+    @Provides @Named("Wiktionary_en")
+    SearchServiceInterface provideWiktionarySearchServiceInterface() {
+        SearchServiceInterface searchService = new WikiSearchService(WIKTIONARY_DIRECTORY, WIKTIONARY_ARCHIVE);
+
+        return searchService;
+    }
+
+    /**
+     * WikipediaSearchService
+     * @return
+     */
+    @Provides @Named("Wikipedia_en")
+    SearchServiceInterface provideWikipediaSearchServiceInterface() {
+        SearchServiceInterface searchService = new WikiSearchService(WIKIPEDIA_DIRECTORY, WIKIPEDIA_ARCHIVE);
+
+        return searchService;
     }
 
     @Provides

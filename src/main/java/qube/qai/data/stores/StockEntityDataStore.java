@@ -48,16 +48,16 @@ public class StockEntityDataStore implements DataStore {
     public Collection<String> getMarketListings() {
 
         Collection<String> entityListings = new ArrayList<String>();
-        WikiArticle marketListins = searchService.retrieveDocumentContentFromZipFile(stockListingPage);
-        String html = WikiIntegration.wikiToHtml(marketListins.getContent());
-        StringBuilder builder = new StringBuilder();
-        WikiModel model = WikiIntegration.createModel(marketListins, builder);
-
-        Set<String> links =  model.getLinks();
-        for (String link : links) {
-            logger.info(link);
-            entityListings.add(link);
-        }
+//        WikiArticle marketListins = searchService.retrieveDocumentContentFromZipFile(stockListingPage);
+//        String html = WikiIntegration.wikiToHtml(marketListins.getContent());
+//        StringBuilder builder = new StringBuilder();
+//        WikiModel model = WikiIntegration.createModel(marketListins, builder);
+//
+//        Set<String> links =  model.getLinks();
+//        for (String link : links) {
+//            logger.info(link);
+//            entityListings.add(link);
+//        }
 
         return entityListings;
     }

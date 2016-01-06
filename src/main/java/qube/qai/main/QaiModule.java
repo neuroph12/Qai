@@ -81,27 +81,7 @@ public class QaiModule extends AbstractModule {
         return selectorfactory;
     }
 
-    /**
-     * WiktionarySearchService
-     * @return
-     */
-    @Provides @Named("Wiktionary_en")
-    SearchServiceInterface provideWiktionarySearchServiceInterface() {
-        SearchServiceInterface searchService = new WikiSearchService(wiktionaryDirectory, wiktionaryZipFileName);
 
-        return searchService;
-    }
-
-    /**
-     * WikipediaSearchService
-     * @return
-     */
-    @Provides @Named("Wikipedia_en")
-    SearchServiceInterface provideWikipediaSearchServiceInterface() {
-        SearchServiceInterface searchService = new WikiSearchService(wikipediaDirectory, wikipediaZipFileName);
-
-        return searchService;
-    }
 
     /**
      * EntityManagerFactory is used in HsqlDBMapStores

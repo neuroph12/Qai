@@ -112,6 +112,7 @@ public class QaiTestBase extends TestCase {
 //        // services.implementation
 //        suite.addTestSuite(TestUUIDGenerator.class);
 //        suite.addTestSuite(TestProcedureRunnerService.class);
+//        suite.addTestSuite(TestDistributedSearchService.class);
 //
 //        return suite;
 //    }

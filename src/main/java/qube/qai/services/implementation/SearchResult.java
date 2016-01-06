@@ -1,9 +1,11 @@
 package qube.qai.services.implementation;
 
+import java.io.Serializable;
+
 /**
  * Created by rainbird on 11/27/15.
  */
-public class SearchResult {
+public class SearchResult implements Serializable {
 
     private String title;
 

@@ -24,7 +24,7 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
 
     private boolean debug = true;
 
-    public void testWikiIndexer() throws Exception {
+    public void restWikiIndexer() throws Exception {
 
         WikiRipperProcedure ripperProcedure = TestWikiRipperProcedure.createTestWikiRipper();
         injector.injectMembers(ripperProcedure);
@@ -42,6 +42,39 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
         File indexDirectory = new File(dummyIndexDirectory);
         assertTrue("index directory not found", indexDirectory.exists());
 
+    }
+
+    public void testWikiRipAndIndex() throws Exception {
+
+//        String wikiToRip = "/media/rainbird/ALEPH/wiki-data/dewiki-20151226-pages-articles.xml";
+//        String archiveToCreate = "/media/rainbird/ALEPH/wiki-archives/wikipedia_de.zip";
+//        String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_de.index";
+
+        String wikiToRip = "/media/rainbird/ALEPH/wiki-data/dewiktionary-20151226-pages-articles.xml";
+        String archiveToCreate = "/media/rainbird/ALEPH/wiki-archives/wiktionary_de.zip";
+        String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_de.index";
+
+        WikiRipperProcedure ripperProcedure = new WikiRipperProcedure();
+        Selector<String> fileanmeSelector = new DataSelector<String>(wikiToRip);
+        Selector<String> archiveNameSelector = new DataSelector<String>(archiveToCreate);
+        Selector<Boolean> isWiktionarySelector = new DataSelector<Boolean>(Boolean.TRUE);
+        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_FILENAME, fileanmeSelector);
+        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_TARGET_FILENAME, archiveNameSelector);
+        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_IS_WIKTIONARY, isWiktionarySelector);
+
+        WikiArchiveIndexer indexerProcedure = new WikiArchiveIndexer(ripperProcedure);
+        Selector<String> selector = new DataSelector<String>(indexDirectory);
+        indexerProcedure.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selector);
+
+        long start = System.currentTimeMillis();
+        log("ripping: " + wikiToRip);
+        ripperProcedure.execute();
+        long duration = System.currentTimeMillis() - start;
+        start = System.currentTimeMillis();
+        log("ripping finished, took: " + duration + "ms. now indexing...");
+        indexerProcedure.execute();
+        duration = System.currentTimeMillis() - start;
+        log("indexing finished, took " + duration + "ms");
     }
 
     private void log(String message) {

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>qube.qai</groupId>
+    <artifactId>qai</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>qai</name>
+
+    <properties>
+        <lucene.version>5.3.1</lucene.version>
+        <tika.version>1.10</tika.version>
+        <hazelcast.version>3.5.4</hazelcast.version>
+        <guice.version>4.0</guice.version>
+        <hsqldb.version>2.3.0</hsqldb.version>
+        <hibernate.version>4.3.6.Final</hibernate.version>
+        <jdk.version>1.8</jdk.version>
+    </properties>
+
+    <repositories>
+        <!--<repository>-->
+            <!--<id>lhogie.i3s.maven.repo</id>-->
+            <!--<name>Luc Hogie Maven repository</name>-->
+            <!--<url>http://www.i3s.unice.fr/~hogie/maven_repository/</url>-->
+        <!--</repository>-->
+    </repositories>
+
+    <dependencies>
+        <!-- GRPH graph-library- added directly as a jar,
+        because maven doesn't download the thing out of some reason -->
+        <!--<dependency>-->
+            <!--<groupId>graph</groupId>-->
+            <!--<artifactId>graph</artifactId>-->
+            <!--<version>1.6</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.deeplearning4j</groupId>-->
+            <!--<artifactId>deeplearning4j-core</artifactId>-->
+            <!--<version>0.4-rc3.7</version>-->
+        <!--</dependency>-->
+
+        <!-- Encog for neural-network implementation -->
+        <dependency>
+            <groupId>org.encog</groupId>
+            <artifactId>encog-core</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
+        <!-- Tika does parsing and Lucene does search and indexing -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers</artifactId>
+            <version>${tika.version}</version>
+        </dependency>
+
+        <!-- Lucene itself -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+
+        <!-- Guice is pretty important after all -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+
+        <!-- Hazelcast for distributed computing -->
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-all</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+
+        <!-- HsqlDB for the map-stores -->
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>${hsqldb.version}</version>
+        </dependency>
+
+        <!-- a really cool parser-framework.
+        forget about parser generators, just program the parser as if it were a BNF -->
+        <dependency>
+            <groupId>jparsec</groupId>
+            <artifactId>jparsec</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+        <!-- smooks seems to be a very cool xml-transformer framework
+        in use for transforming the huge xml-files which come with the wikipedia and wiktionary -->
+        <dependency>
+            <groupId>org.milyn</groupId>
+            <artifactId>milyn-smooks-all</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+
+        <!-- jSoup for html-parsing -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.8.3</version>
+        </dependency>
+
+        <!-- jaxpb just doesn't cut it, so we serialize to xml with xstream-->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.8</version>
+        </dependency>
+
+        <!-- especially string and compression utilities -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.10</version>
+        </dependency>
+
+        <!-- hibernate...
+        well, there is no use for the thing for the moment, but i think it might come -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-annotations</artifactId>
+            <version>3.5.6-Final</version>
+        </dependency>
+
+        <!-- JPA- its implementation lies with hibernate -->
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
+        <!-- UUID-generator -->
+        <dependency>
+            <groupId>com.fasterxml.uuid</groupId>
+            <artifactId>java-uuid-generator</artifactId>
+            <version>3.1.3</version>
+        </dependency>
+
+        <!-- ojalgo for matrix things -->
+        <dependency>
+            <groupId>org.ojalgo</groupId>
+            <artifactId>ojalgo</artifactId>
+            <version>38.2</version>
+        </dependency>
+
+        <!-- slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.13</version>
+        </dependency>
+
+        <!-- joda-time -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.1</version>
+        </dependency>
+
+        <!-- jUnit for the tests -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>
