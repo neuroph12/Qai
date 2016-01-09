@@ -33,15 +33,17 @@ public class QaiTestServerModule extends AbstractModule {
 
     private static final String PROCEDURES = "PROCEDURES";
 
-    private static final String PROCEDURE_BASE_DRIECTORY = "data/procedures/";
+    private static final String PROCEDURE_BASE_DRIECTORY = "test/data/procedures/";
 
     private static final String WIKIPEDIA = "WIKIPEDIA_EN";
 
-    private static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    //private static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    private static final String WIKIPEDIA_ARCHIVE = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
 
     private static final String WIKTIONARY = "WIKTIONARY_EN";
 
-    private static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    //private static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    private static final String WIKTIONARY_ARCHIVE = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
 
     private HazelcastInstance hazelcastInstance;
 
