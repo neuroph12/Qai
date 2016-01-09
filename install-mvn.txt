@@ -43,8 +43,8 @@ and these are the files which need to be installed in order to get the whole thi
 unfortunately, i don't know any other way how maven can be made to use jar-libraries... it is after all a very stupid convention to have
 everything to come from maven-repository
 
-mvn install:install-file -Dfile=./lib/bliki-core-3.0.19.jar -DgroupId=info.bliki -DartifactId=bliki.core -Dversion=3.0.19 -Dpackaging=jar
-mvn install:install-file -Dfile=./lib/bliki-pdf-3.0.19.jar -DgroupId=info.bliki -DartifactId=bliki.pdf -Dversion=3.0.19 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/bliki-core-3.0.19.jar -DgroupId=info.bliki -DartifactId=bliki-core -Dversion=3.0.19 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/bliki-pdf-3.0.19.jar -DgroupId=info.bliki -DartifactId=bliki-pdf -Dversion=3.0.19 -Dpackaging=jar
 mvn install:install-file -Dfile=./lib/grph-1.6.29-big.jar -DgroupId=grph -DartifactId=grph.all -Dversion=1.6.29 -Dpackaging=jar
 mvn install:install-file -Dfile=./lib/samsroad-1.0.jar -DgroupId=qube.samsroad -DartifactId=samsroad -Dversion=1.0 -Dpackaging=jar
 

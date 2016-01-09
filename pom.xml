@@ -25,14 +25,28 @@
     <repositories>
          <repository>
         <id>central</id>
-        <url>http://192.168.1.4:8081/artifactory/libs-release</url>
+        <url>http://192.168.1.4:8081/artifactory/libs-release-local</url>
         <snapshots>
             <enabled>false</enabled>
         </snapshots>
     </repository>
     <repository>
         <id>snapshots</id>
-        <url>http://192.168.1.4:8081/artifactory/libs-snapshot</url>
+        <url>http://192.168.1.4:8081/artifactory/libs-snapshot-local</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+    </repository>
+    <repository>
+        <id>release</id>
+        <url>http://192.168.1.4:8081/artifactory/ext-release-local</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+    </repository>
+    <repository>
+        <id>local-lib</id>
+        <url>http://192.168.1.4:8081/artifactory/libs-release-local</url>
         <releases>
             <enabled>false</enabled>
         </releases>
@@ -60,8 +74,8 @@
         <!-- GRPH graph-library- added directly as a jar,
         because maven doesn't download the thing out of some reason -->
         <dependency>
-            <groupId>graph</groupId>
-            <artifactId>graph.all</artifactId>
+            <groupId>grph</groupId>
+            <artifactId>grph.all</artifactId>
             <version>1.6.29</version>
         </dependency>
 
@@ -72,14 +86,14 @@
         </dependency>
 		
 		<dependency>
-            <groupId>info.bliki</groupId>
-            <artifactId>bliki.core</artifactId>
+            <groupId>info.bliki.wiki</groupId>
+            <artifactId>bliki-core</artifactId>
             <version>3.0.19</version>
         </dependency>
 
 		<dependency>
-            <groupId>info.bliki</groupId>
-            <artifactId>bliki.pdf</artifactId>
+            <groupId>info.bliki.pdf</groupId>
+            <artifactId>bliki-pdf</artifactId>
             <version>3.0.19</version>
         </dependency>
 
