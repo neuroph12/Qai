@@ -92,7 +92,7 @@
         </dependency>
 
 		<dependency>
-            <groupId>info.bliki</groupId>
+            <groupId>info.bliki.pdf</groupId>
             <artifactId>bliki-pdf</artifactId>
             <version>3.0.19</version>
         </dependency>
