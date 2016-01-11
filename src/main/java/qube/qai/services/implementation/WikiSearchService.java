@@ -55,6 +55,9 @@ public class WikiSearchService implements SearchServiceInterface {
         Collection<SearchResult> searchResults = new ArrayList<SearchResult>();
         try {
             File file = new File(INDEX_DIRECTORY);
+            if (!file.exists() || !file.isDirectory()) {
+                throw new RuntimeException("Directory: " + INDEX_DIRECTORY + " either does not exist, or is not a directory!");
+            }
             Directory directory = FSDirectory.open(file.toPath(), NoLockFactory.INSTANCE);
 
             // Build a Query object

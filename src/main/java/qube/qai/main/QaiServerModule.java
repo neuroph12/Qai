@@ -39,7 +39,7 @@ import java.util.Properties;
 /**
  * Created by rainbird on 11/26/15.
  */
-@BindConfig(value = "qube/qai/main/config_deploy", syntax = Syntax.PROPERTIES)
+@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
 public class QaiServerModule extends AbstractModule {
 
     private static Logger logger = LoggerFactory.getLogger("QaiServerModule");
