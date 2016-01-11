@@ -32,17 +32,17 @@ public class QaiTestModule extends AbstractModule {
 
     private HazelcastInstance hazelcastInstance;
 
-    //private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
-    private static String wikipediaDirectory = "/media/pi/BET/wiki-archives/wikipedia_en.index";
+    private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
+    //private static String wikipediaDirectory = "/media/pi/BET/wiki-archives/wikipedia_en.index";
 
-    //private static String wikipediaZipFileName = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
-    private static String wikipediaZipFileName = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
+    private static String wikipediaZipFileName = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    //private static String wikipediaZipFileName = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
 
-    //private static String wiktionaryDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
-    private static String wiktionaryDirectory = "/media/pi/BET/wiki-archives/wiktionary_en.index";
+    private static String wiktionaryDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
+    //private static String wiktionaryDirectory = "/media/pi/BET/wiki-archives/wiktionary_en.index";
 
-    //private static String wiktionaryZipFileName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
-    private static String wiktionaryZipFileName = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
+    private static String wiktionaryZipFileName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    //private static String wiktionaryZipFileName = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
 
     private static String STOCK_QUOTES_DIRECTORY = "test/stockquotes/";
 

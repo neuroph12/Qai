@@ -42,7 +42,7 @@ public class QaiNode {
         injector = Guice.createInjector(qaiServer, qaiModule);
 
         // this is crazy but might just work...
-        injector.injectMembers(qaiServer);
+        //injector.injectMembers(qaiServer);
 
         injector.injectMembers(this);
 

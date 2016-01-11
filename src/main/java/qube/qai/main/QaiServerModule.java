@@ -11,6 +11,10 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStoreFactory;
+import net.jmob.guice.conf.core.BindConfig;
+import net.jmob.guice.conf.core.ConfigurationModule;
+import net.jmob.guice.conf.core.InjectConfig;
+import net.jmob.guice.conf.core.Syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.StockEntity;
@@ -35,6 +39,7 @@ import java.util.Properties;
 /**
  * Created by rainbird on 11/26/15.
  */
+@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
 public class QaiServerModule extends AbstractModule {
 
     private static Logger logger = LoggerFactory.getLogger("QaiServerModule");
@@ -49,34 +54,50 @@ public class QaiServerModule extends AbstractModule {
 
     public static final String WIKIPEDIA = "WIKIPEDIA_EN";
 
-    public static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    @InjectConfig(value = "WIKIPEDIA_ARCHIVE")
+    public String WIKIPEDIA_ARCHIVE;
+    //public static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
     //public static final String WIKIPEDIA_ARCHIVE = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
 
-    public static final String WIKIPEDIA_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
+    @InjectConfig(value = "WIKIPEDIA_DIRECTORY")
+    public String WIKIPEDIA_DIRECTORY;
+    //public static final String WIKIPEDIA_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
     //public static final String WIKIPEDIA_DIRECTORY = "/media/pi/BET/wiki-archives/wikipedia_en.index";
 
     public static final String WIKIPEDIA_RESOURCES = "WIKIPEDIA_RESOURCES";
 
-    public static final String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
+    @InjectConfig(value = "WIKIPEDIA_RESOURCE_DIRECTORY")
+    public String WIKIPEDIA_RESOURCE_DIRECTORY;
+    //public static final String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
     //public static final String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/pi/BET/wiki-archives/wikipedia_en.resources";
 
-    public static final String WIKIPEDIA_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
+    @InjectConfig(value = "WIKIPEDIA_RESOURCE_INDEX")
+    public String WIKIPEDIA_RESOURCE_INDEX;
+    //public static final String WIKIPEDIA_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
     //public static final String WIKIPEDIA_RESOURCE_INDEX = "/media/pi/BET/wiki-archives/wikipedia_en.resources.index";
 
     public static final String WIKTIONARY = "WIKTIONARY_EN";
 
-    public static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    @InjectConfig(value = "WIKTIONARY_ARCHIVE")
+    public String WIKTIONARY_ARCHIVE;
+    //public static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
     //public static final String WIKTIONARY_ARCHIVE = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
 
-    public static final String WIKTIONARY_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
+    @InjectConfig("WIKTIONARY_DIRECTORY")
+    public String WIKTIONARY_DIRECTORY;
+    //public static final String WIKTIONARY_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
     //public static final String WIKTIONARY_DIRECTORY = "/media/pi/BET/wiki-archives/wiktionary_en.index";
 
     public static final String WIKTIONARY_RESOURCES = "WIKTIONARY_RESOURCES";
 
-    public static final String WIKTIONARY_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources";
+    @InjectConfig(value = "WIKTIONARY_RESOURCE_DIRECTORY")
+    public String WIKTIONARY_RESOURCE_DIRECTORY;
+    //public static final String WIKTIONARY_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources";
     //public static final String WIKTIONARY_RESOURCE_DIRECTORY = "/media/pi/BET/wiki-archives/wiktionary_en.resources";
 
-    public static final String WIKTIONARY_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources.index";
+    @InjectConfig(value = "WIKTIONARY_RESOURCE_INDEX")
+    public String WIKTIONARY_RESOURCE_INDEX;
+    //public static final String WIKTIONARY_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources.index";
     //public static final String WIKTIONARY_RESOURCE_INDEX = "/media/pi/BET/wiki-archives/wiktionary_en.resources.index";
 
     private HazelcastInstance hazelcastInstance;
@@ -84,9 +105,15 @@ public class QaiServerModule extends AbstractModule {
     @Inject
     private EntityManager entityManager;
 
+    public QaiServerModule() {
+
+    }
+
     @Override
     protected void configure() {
-        // for the moment nothing to do here
+        // load the given configuration for
+        install(ConfigurationModule.create());
+        requestInjection(this);
     }
 
     /**
@@ -154,13 +181,13 @@ public class QaiServerModule extends AbstractModule {
             return hazelcastInstance;
         }
 
-        Config config = new Config(NODE_NAME);
+        Config hazelcastConfig = new Config(NODE_NAME);
 
         /**
          * here we add the map-store for Stock-entities which is
          * in this case the HsqlDBMapStore
          */
-        MapConfig stockEntitiesConfig = config.getMapConfig(STOCK_ENTITIES);
+        MapConfig stockEntitiesConfig = hazelcastConfig.getMapConfig(STOCK_ENTITIES);
         MapStoreConfig stockEntitiesMapstoreConfig = stockEntitiesConfig.getMapStoreConfig();
         if (stockEntitiesMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
@@ -183,7 +210,7 @@ public class QaiServerModule extends AbstractModule {
          * here we add the map-store for Procedures which is
          * in this case DirectoryMapStore
          */
-        MapConfig procedureConfig = config.getMapConfig(PROCEDURES);
+        MapConfig procedureConfig = hazelcastConfig.getMapConfig(PROCEDURES);
         MapStoreConfig procedureMapstoreConfig = procedureConfig.getMapStoreConfig();
         if (procedureMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + PROCEDURES);
@@ -204,7 +231,7 @@ public class QaiServerModule extends AbstractModule {
         /**
          * wikipedia-article map-store
          */
-        MapConfig wikipediaConfig = config.getMapConfig(WIKIPEDIA);
+        MapConfig wikipediaConfig = hazelcastConfig.getMapConfig(WIKIPEDIA);
         MapStoreConfig wikipediaMapstoreConfig = wikipediaConfig.getMapStoreConfig();
         if (wikipediaMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA);
@@ -225,7 +252,7 @@ public class QaiServerModule extends AbstractModule {
         /**
          * wikipedia resources
          */
-        MapConfig wikipediaResourceConfig = config.getMapConfig(WIKIPEDIA_RESOURCES);
+        MapConfig wikipediaResourceConfig = hazelcastConfig.getMapConfig(WIKIPEDIA_RESOURCES);
         MapStoreConfig wikiResourceMapstoreConfig = wikipediaResourceConfig.getMapStoreConfig();
         if (wikiResourceMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA_RESOURCES);
@@ -249,7 +276,7 @@ public class QaiServerModule extends AbstractModule {
         /**
          * wiktionary-article map-store
          */
-        MapConfig wiktionaryConfig = config.getMapConfig(WIKTIONARY);
+        MapConfig wiktionaryConfig = hazelcastConfig.getMapConfig(WIKTIONARY);
         MapStoreConfig wiktionaryMapstoreConfig = wiktionaryConfig.getMapStoreConfig();
         if (wiktionaryMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY);
@@ -270,7 +297,7 @@ public class QaiServerModule extends AbstractModule {
         /**
          * wiktionary resources
          */
-        MapConfig wiktionaryResourceConfig = config.getMapConfig(WIKTIONARY_RESOURCES);
+        MapConfig wiktionaryResourceConfig = hazelcastConfig.getMapConfig(WIKTIONARY_RESOURCES);
         MapStoreConfig wiktionaryResourceMapstoreConfig = wiktionaryResourceConfig.getMapStoreConfig();
         if (wiktionaryResourceMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY_RESOURCES);
@@ -292,7 +319,7 @@ public class QaiServerModule extends AbstractModule {
         wiktionaryResourceConfig.setMapStoreConfig(wiktionaryResourceMapstoreConfig);
 
         // now we are ready to get an instance
-        hazelcastInstance = Hazelcast.newHazelcastInstance(config);
+        hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);
         return hazelcastInstance;
     }
 }

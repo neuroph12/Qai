@@ -18,9 +18,9 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
 
     private Logger logger = LoggerFactory.getLogger("TestWikiArchiever");
 
-    private String dummyWikiFileName = "/home/rainbird/projects/work/qai/test/testWiki.xml";
-    private String dummyWikiArchiveName = "/home/rainbird/projects/work/qai/test/testWiki.zip";
-    private String dummyIndexDirectory = "/home/rainbird/projects/work/qai/test/testWiki.index";
+    private String dummyWikiFileName = "/home/rainbird/projects/work/qube.qai/test/testWiki.xml";
+    private String dummyWikiArchiveName = "/home/rainbird/projects/work/qube.qai/test/testWiki.zip";
+    private String dummyIndexDirectory = "/home/rainbird/projects/work/qube.qai/test/testWiki.index";
 
     private boolean debug = true;
 

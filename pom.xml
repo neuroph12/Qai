@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
 
-    <name>qai</name>
+    <name>qube.qai</name>
 
     <properties>
         <lucene.version>5.3.1</lucene.version>
@@ -23,34 +23,34 @@
     </properties>
 
     <repositories>
-         <repository>
-        <id>central</id>
-        <url>http://192.168.1.4:8081/artifactory/libs-release-local</url>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-    </repository>
-    <repository>
-        <id>snapshots</id>
-        <url>http://192.168.1.4:8081/artifactory/libs-snapshot-local</url>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-    </repository>
-    <repository>
-        <id>release</id>
-        <url>http://192.168.1.4:8081/artifactory/ext-release-local</url>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-    </repository>
-    <repository>
-        <id>local-lib</id>
-        <url>http://192.168.1.4:8081/artifactory/libs-release-local</url>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-    </repository>
+        <!--<repository>-->
+            <!--<id>central</id>-->
+            <!--<url>http://192.168.1.4:8081/artifactory/libs-release-local</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>snapshots</id>-->
+            <!--<url>http://192.168.1.4:8081/artifactory/libs-snapshot-local</url>-->
+            <!--<releases>-->
+                <!--<enabled>false</enabled>-->
+            <!--</releases>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>release</id>-->
+            <!--<url>http://192.168.1.4:8081/artifactory/ext-release-local</url>-->
+            <!--<releases>-->
+                <!--<enabled>false</enabled>-->
+            <!--</releases>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>local-lib</id>-->
+            <!--<url>http://192.168.1.4:8081/artifactory/libs-release-local</url>-->
+            <!--<releases>-->
+                <!--<enabled>false</enabled>-->
+            <!--</releases>-->
+        <!--</repository>-->
     </repositories>
 
 	<pluginRepositories>
@@ -149,6 +149,13 @@
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>${guice.version}</version>
+        </dependency>
+
+        <!-- Guice-config for using external configurations -->
+        <dependency>
+            <groupId>net.jmob</groupId>
+            <artifactId>guice.conf</artifactId>
+            <version>1.2.0</version>
         </dependency>
 
         <!-- Hazelcast for distributed computing -->

@@ -11,17 +11,18 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.zip.ZipEntry;
@@ -53,8 +54,9 @@ public class WikiSearchService implements SearchServiceInterface {
 
         Collection<SearchResult> searchResults = new ArrayList<SearchResult>();
         try {
-            Path path = FileSystems.getDefault().getPath(INDEX_DIRECTORY);
-            Directory directory = FSDirectory.open(path);
+            File file = new File(INDEX_DIRECTORY);
+            Directory directory = FSDirectory.open(file.toPath(), NoLockFactory.INSTANCE);
+
             // Build a Query object
             Query query = new QueryParser(fieldName, new StandardAnalyzer()).parse(searchString);
 
@@ -98,6 +100,67 @@ public class WikiSearchService implements SearchServiceInterface {
             e.printStackTrace();
         }
         return wikiArticle;
+    }
+
+    class AbsoluteDirectory extends Directory {
+
+        private File file;
+        private LockFactory factory;
+        public AbsoluteDirectory(File file, LockFactory factory) {
+            this.file = file;
+            this.factory = factory;
+        }
+
+        @Override
+        public String[] listAll() throws IOException {
+            return file.list();
+        }
+
+        @Override
+        public void deleteFile(String name) throws IOException {
+            File[] allFiles = file.listFiles();
+            for (int i = 0; i < allFiles.length; i++) {
+                if (allFiles[i].getName().equals(name)) {
+                    allFiles[i].delete();
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public long fileLength(String name) throws IOException {
+            return 0;
+        }
+
+        @Override
+        public IndexOutput createOutput(String name, IOContext context) throws IOException {
+            return null;
+        }
+
+        @Override
+        public void sync(Collection<String> names) throws IOException {
+
+        }
+
+        @Override
+        public void renameFile(String source, String dest) throws IOException {
+
+        }
+
+        @Override
+        public IndexInput openInput(String name, IOContext context) throws IOException {
+            return null;
+        }
+
+        @Override
+        public Lock obtainLock(String name) throws IOException {
+            return factory.obtainLock(null, name);
+        }
+
+        @Override
+        public void close() throws IOException {
+
+        }
     }
 
 }

@@ -18,8 +18,8 @@ public class TestWikiRipperProcedure extends TestCase {
 
     private boolean debug = true;
 
-    private static String dummyWikiFileName = "/home/rainbird/projects/work/qai/test/testWiki.xml";
-    private static String dummyWikiArchiveName = "/home/rainbird/projects/work/qai/test/testWiki.zip";
+    private static String dummyWikiFileName = "/home/rainbird/projects/work/qube.qai/test/testWiki.xml";
+    private static String dummyWikiArchiveName = "/home/rainbird/projects/work/qube.qai/test/testWiki.zip";
 
     /**
      * @throws Exception
