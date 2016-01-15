@@ -102,8 +102,8 @@ public class TestProcedureRunnerService extends QaiTestBase {
                 IMap<String, Procedure> procedures = hazelcastInstance.getMap("PROCEDURES");
                 Procedure procedure = procedures.get(uuid);
                 // @TODO this is a point, you know...
-//                assertNotNull("if actually done, there has to be a procedure", procedure);
-//                assertTrue("procedure state must be right", procedure.hasExecuted());
+                assertNotNull("if actually done, there has to be a procedure", procedure);
+                assertTrue("procedure state must be right", procedure.hasExecuted());
                 procedureCount++;
             }
         }
