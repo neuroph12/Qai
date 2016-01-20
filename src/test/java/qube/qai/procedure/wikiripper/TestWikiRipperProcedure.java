@@ -1,4 +1,4 @@
-package qube.qai.procedure;
+package qube.qai.procedure.wikiripper;
 
 import junit.framework.TestCase;
 import org.slf4j.Logger;
@@ -18,8 +18,8 @@ public class TestWikiRipperProcedure extends TestCase {
 
     private boolean debug = true;
 
-    private static String dummyWikiFileName = "/home/rainbird/projects/work/qube.qai/test/testWiki.xml";
-    private static String dummyWikiArchiveName = "/home/rainbird/projects/work/qube.qai/test/testWiki.zip";
+    private static String dummyWikiFileName = "/home/rainbird/projects/work/qai/test/testWiki.xml";
+    private static String dummyWikiArchiveName = "/home/rainbird/projects/work/qai/test/testWiki.zip";
 
     /**
      * @throws Exception
@@ -44,7 +44,7 @@ public class TestWikiRipperProcedure extends TestCase {
         assertTrue("output file must be there", archiveZip.exists());
 
         // we are done- just delete the file
-        archiveZip.deleteOnExit();
+        //archiveZip.deleteOnExit();
     }
 
     public static WikiRipperProcedure createTestWikiRipper() {

@@ -48,7 +48,8 @@ public class ProcedureRunner implements ProcedureRunnerInterface {
         procedures.put(uuid, state);
 
         IExecutorService executor = hazelcastInstance.getExecutorService(SERVICE_NAME);
-        executor.submit(procedure);
+        executor.execute(procedure);
+
     }
 
     public Set<String> getStartedProcedures() {

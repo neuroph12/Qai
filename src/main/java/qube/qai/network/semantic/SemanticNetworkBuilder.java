@@ -25,6 +25,8 @@ public class SemanticNetworkBuilder implements NetworkBuilder {
 
     private static Logger logger = LoggerFactory.getLogger("SemanticNetworkBuilder");
 
+    private String opennlp_module_en = "/opennlp/en/en-token.bin";
+
     public Network buildNetwork(Selector selector) {
 
         WikiArticle wikiArticle = (WikiArticle) selector.getData();
@@ -100,9 +102,9 @@ public class SemanticNetworkBuilder implements NetworkBuilder {
 //            edgeCount++;
 //        }
 //
-//        String message = "building semantic network ended #vertex: " + size + " #edges in adjacency matrix: " + edgeCount
-//                + " added edges: " + added + " incremented edges: " + increments;
-//        logger.info(message);
+        String message = "building semantic network ended #vertex: " + added + " #edges in adjacency matrix: " + increments
+                + " added edges: " + added + " incremented edges: " + increments;
+        logger.debug(message);
 //        // record the changes, and we are done
 //        record(graph);
 
@@ -128,7 +130,7 @@ public class SemanticNetworkBuilder implements NetworkBuilder {
 
         Tokenizer tokenizer = null;
         try {
-            InputStream modelIn = getClass().getResourceAsStream("/opennlp/en-token.bin");
+            InputStream modelIn = getClass().getResourceAsStream(opennlp_module_en);
             TokenizerModel tokenizerModel = new TokenizerModel(modelIn);
             tokenizer = new TokenizerME(tokenizerModel);
         } catch (IOException e) {

@@ -23,15 +23,14 @@ import qube.qai.parsers.TestWikiIntegration;
 import qube.qai.persistence.mapstores.TestHazelcastMaps;
 import qube.qai.persistence.mapstores.TestIndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.TestMapStores;
-import qube.qai.procedure.TestWikiArchiveIndexer;
-import qube.qai.procedure.TestWikiRipperProcedure;
 import qube.qai.procedure.TestWikiSearch;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
 import qube.qai.procedure.archive.TestDirectoryIndexer;
+import qube.qai.procedure.archive.TestWikiArchiveIndexer;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
-import qube.qai.services.implementation.TestProcedureRunnerService;
-import qube.qai.services.implementation.TestUUIDGenerator;
+import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
+import qube.qai.services.implementation.*;
 
 /**
  * Created by rainbird on 11/19/15.

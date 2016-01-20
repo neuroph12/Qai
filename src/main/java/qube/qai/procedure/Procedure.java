@@ -38,6 +38,7 @@ public abstract class Procedure implements Serializable, Runnable, HazelcastInst
     @Inject
     protected transient DataSelectorFactory selectorFactory;
 
+    @Inject
     protected transient HazelcastInstance hazelcastInstance;
 
     protected User user;

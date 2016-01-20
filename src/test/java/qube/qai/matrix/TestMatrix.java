@@ -209,7 +209,7 @@ public class TestMatrix extends TestCase {
 
     }*/
 
-   /* public void testBasicMatrixUsage() throws Exception {
+   public void testBasicMatrixUsage() throws Exception {
         final BasicMatrix.Factory<PrimitiveMatrix> tmpFactory = PrimitiveMatrix.FACTORY;
         // A MatrixFactory has 13 different methods that return BasicMatrix instances.
 
@@ -219,7 +219,7 @@ public class TestMatrix extends TestCase {
         // When you create a matrix with random elements you can specify their distribution.
 
         final BasicMatrix tmpC = tmpB.multiplyLeft(tmpA);
-        final BasicMatrix tmpD = tmpA.multiply(tmpB);
+        final BasicMatrix tmpD = tmpA.multiplyRight(tmpB);
         // ojAlgo differentiates between multiplying from the left and from the right.
         // The matrices C and D will be equal, but the code executed to calculate them are different.
         // The second alternative, resulting in D, will be MUCH faster!
@@ -265,7 +265,7 @@ public class TestMatrix extends TestCase {
         ComplexMatrix.FACTORY.makeZero(100, 100);
     }
 
-    public void restOtherMatrixThings() throws Exception {
+    /*public void restOtherMatrixThings() throws Exception {
         final PhysicalStore.Factory<Double, PrimitiveDenseStore> tmpFactory = PrimitiveDenseStore.FACTORY;
 
         final PrimitiveDenseStore tmpA = tmpFactory.makeEye(5000, 300);
@@ -318,11 +318,11 @@ public class TestMatrix extends TestCase {
 
         final MatrixStore<Double> tmpG = tmpA.builder().right(tmpD).row(1, 10, 100, 1000).build();
         // And of course you can do it in one movement. The matrices K and G are equal.
-    }
+    }*/
 
     private void log(String message) {
         if (debug) {
             System.out.println(message);
         }
-    }*/
+    }
 }

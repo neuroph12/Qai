@@ -39,6 +39,7 @@ public class DirectoryMapStore implements MapStore<String, Procedure> {
             ObjectOutput out = new ObjectOutputStream(fos);
             out.writeObject(value);
             out.close();
+            logger.info("stored procedure with uuid: " + key);
         } catch (IOException e) {
             logger.error("error while writing " + key + " " + e.getMessage());
         }

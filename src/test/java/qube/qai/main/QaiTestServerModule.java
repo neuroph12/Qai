@@ -33,17 +33,17 @@ public class QaiTestServerModule extends AbstractModule {
 
     private static final String PROCEDURES = "PROCEDURES";
 
-    private static final String PROCEDURE_BASE_DRIECTORY = "test/data/procedures/";
+    private static final String PROCEDURE_BASE_DIRECTORY = "test/data/procedures/";
 
     private static final String WIKIPEDIA = "WIKIPEDIA_EN";
 
-    //private static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
-    private static final String WIKIPEDIA_ARCHIVE = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
+    private static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    //private static final String WIKIPEDIA_ARCHIVE = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
 
     private static final String WIKTIONARY = "WIKTIONARY_EN";
 
-    //private static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
-    private static final String WIKTIONARY_ARCHIVE = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
+    private static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    //private static final String WIKTIONARY_ARCHIVE = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
 
     private HazelcastInstance hazelcastInstance;
 
@@ -97,7 +97,7 @@ public class QaiTestServerModule extends AbstractModule {
         procedureMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
             public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
                 if (PROCEDURES.equals(mapName)) {
-                    return new DirectoryMapStore(PROCEDURE_BASE_DRIECTORY);
+                    return new DirectoryMapStore(PROCEDURE_BASE_DIRECTORY);
                 } else {
                     return null;
                 }

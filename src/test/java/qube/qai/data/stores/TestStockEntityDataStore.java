@@ -44,7 +44,7 @@ public class TestStockEntityDataStore extends QaiTestBase {
         Collection<String> missing = new ArrayList<String>();
         for (String name : marketListings) {
             String articleName = name + ".xml";
-            logger.info("retrieving: " + name + " with assumeed filename: " + articleName);
+            logger.info("retrieving: " + name + " with assumed filename: " + articleName);
             WikiArticle article = searchService.retrieveDocumentContentFromZipFile(articleName);
             if (article == null) {
                 missing.add(name);

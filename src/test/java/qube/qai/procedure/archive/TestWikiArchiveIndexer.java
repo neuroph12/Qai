@@ -1,12 +1,11 @@
-package qube.qai.procedure;
+package qube.qai.procedure.archive;
 
-import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.Selector;
 import qube.qai.data.selectors.DataSelector;
 import qube.qai.main.QaiTestBase;
-import qube.qai.procedure.archive.WikiArchiveIndexer;
+import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
 import java.io.File;
@@ -18,13 +17,13 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
 
     private Logger logger = LoggerFactory.getLogger("TestWikiArchiever");
 
-    private String dummyWikiFileName = "/home/rainbird/projects/work/qube.qai/test/testWiki.xml";
-    private String dummyWikiArchiveName = "/home/rainbird/projects/work/qube.qai/test/testWiki.zip";
-    private String dummyIndexDirectory = "/home/rainbird/projects/work/qube.qai/test/testWiki.index";
+    private String dummyWikiFileName = "/home/rainbird/projects/work/qai/test/testWiki.xml";
+    private String dummyWikiArchiveName = "/home/rainbird/projects/work/qai/test/testWiki.zip";
+    private String dummyIndexDirectory = "/home/rainbird/projects/work/qai/test/testWiki.index";
 
     private boolean debug = true;
 
-    public void restWikiIndexer() throws Exception {
+    public void testWikiIndexer() throws Exception {
 
         WikiRipperProcedure ripperProcedure = TestWikiRipperProcedure.createTestWikiRipper();
         injector.injectMembers(ripperProcedure);
@@ -44,7 +43,7 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
 
     }
 
-    public void testWikiRipAndIndex() throws Exception {
+    public void restWikiRipAndIndex() throws Exception {
 
 //        String wikiToRip = "/media/rainbird/ALEPH/wiki-data/dewiki-20151226-pages-articles.xml";
 //        String archiveToCreate = "/media/rainbird/ALEPH/wiki-archives/wikipedia_de.zip";
