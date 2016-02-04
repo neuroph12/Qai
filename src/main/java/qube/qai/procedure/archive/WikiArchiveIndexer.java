@@ -40,6 +40,10 @@ public class WikiArchiveIndexer extends ProcedureDecorator {
     public static String FIELD_FILE = "file";
     public static String FIELD_TITLE = "title";
     public static String FIELD_CONTENT = "content";
+    public static String FIELD_PERSON = "person";
+    public static String FIELD_LOCATION = "location";
+    public static String FIELD_DATE = "date";
+    public static String FIELD_ORGANIZATION = "organization";
 
     public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
     public static String INPUT_INDEX_DIRECTORY = "INDEX_DIRECTORY";
@@ -49,7 +53,16 @@ public class WikiArchiveIndexer extends ProcedureDecorator {
     private String indexDirectory;
     //public String targetFilename = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
     //public String targetFilename = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+
     public String targetFilename;
+
+    public boolean analysePerson = false;
+
+    public boolean analyseLocation = false;
+
+    public boolean analyseDate = false;
+
+    public boolean analyseOrganization = false;
 
     private long indexedFileCount = 0;
 
@@ -101,8 +114,29 @@ public class WikiArchiveIndexer extends ProcedureDecorator {
 
                 Document doc = new Document();
                 doc.add(new StringField(FIELD_FILE, fileName, Field.Store.YES));
-                doc.add(new TextField(FIELD_TITLE, wikiPage.getTitle(), Field.Store.YES));
+                doc.add(new StringField(FIELD_TITLE, wikiPage.getTitle(), Field.Store.YES));
                 doc.add(new TextField(FIELD_CONTENT, wikiPage.getContent(), Field.Store.NO));
+
+                if (analysePerson) {
+                    logger.debug("Analysing person: " + fileName);
+                    analysePerson(wikiPage, doc);
+                }
+
+                if (analyseDate) {
+                    logger.debug("Analysing date: " + fileName);
+                    analyseDate(wikiPage, doc);
+                }
+
+                if (analyseLocation) {
+                    logger.debug("Analysing location: " + fileName);
+                    analyseLocation(wikiPage, doc);
+                }
+
+                if (analyseOrganization) {
+                    logger.debug("Analysing organization: " + fileName);
+                    analyseOrganization(wikiPage, doc);
+                }
+
                 writer.addDocument(doc);
                 progressPercentage++;
                 indexedFileCount++;
@@ -115,6 +149,22 @@ public class WikiArchiveIndexer extends ProcedureDecorator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void analysePerson(WikiArticle article, Document document) {
+
+    }
+
+    private void analyseDate(WikiArticle article, Document document) {
+
+    }
+
+    private void analyseLocation(WikiArticle article, Document document) {
+
+    }
+
+    private void analyseOrganization(WikiArticle article, Document document) {
+
     }
 
     @Override
@@ -143,5 +193,37 @@ public class WikiArchiveIndexer extends ProcedureDecorator {
 
     public long getIndexedFileCount() {
         return indexedFileCount;
+    }
+
+    public boolean isAnalysePerson() {
+        return analysePerson;
+    }
+
+    public void setAnalysePerson(boolean analysePerson) {
+        this.analysePerson = analysePerson;
+    }
+
+    public boolean isAnalyseLocation() {
+        return analyseLocation;
+    }
+
+    public void setAnalyseLocation(boolean analyseLocation) {
+        this.analyseLocation = analyseLocation;
+    }
+
+    public boolean isAnalyseDate() {
+        return analyseDate;
+    }
+
+    public void setAnalyseDate(boolean analyseDate) {
+        this.analyseDate = analyseDate;
+    }
+
+    public boolean isAnalyseOrganization() {
+        return analyseOrganization;
+    }
+
+    public void setAnalyseOrganization(boolean analyseOrganization) {
+        this.analyseOrganization = analyseOrganization;
     }
 }

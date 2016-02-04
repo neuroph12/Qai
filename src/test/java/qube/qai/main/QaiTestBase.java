@@ -56,6 +56,13 @@ public class QaiTestBase extends TestCase {
         TestRunner.main(tests);
     }
 
+    protected void log(String message) {
+        if (debug) {
+            //System.out.println(message);
+            logger.info(message);
+        }
+    }
+
     /**
      * so that all of the tests are actually called
      * when this suite is in use

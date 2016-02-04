@@ -39,8 +39,8 @@ import java.util.Properties;
 /**
  * Created by rainbird on 11/26/15.
  */
-//@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
-@BindConfig(value = "qube/qai/main/config_deploy", syntax = Syntax.PROPERTIES)
+@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
+//@BindConfig(value = "qube/qai/main/config_deploy", syntax = Syntax.PROPERTIES)
 public class QaiServerModule extends AbstractModule {
 
     private static Logger logger = LoggerFactory.getLogger("QaiServerModule");
@@ -51,7 +51,8 @@ public class QaiServerModule extends AbstractModule {
 
     public static final String PROCEDURES = "PROCEDURES";
 
-    public static final String PROCEDURE_BASE_DRIECTORY = "data/procedures/";
+    @InjectConfig(value = "PROCEDURE_BASE_DIRECTORY")
+    public String PROCEDURE_BASE_DIRECTORY;
 
     public static final String WIKIPEDIA = "WIKIPEDIA_EN";
 
@@ -220,7 +221,7 @@ public class QaiServerModule extends AbstractModule {
         procedureMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
             public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
                 if (PROCEDURES.equals(mapName)) {
-                    return new DirectoryMapStore(PROCEDURE_BASE_DRIECTORY);
+                    return new DirectoryMapStore(PROCEDURE_BASE_DIRECTORY);
                 } else {
                     return null;
                 }

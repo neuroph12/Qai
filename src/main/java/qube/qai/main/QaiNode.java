@@ -3,6 +3,10 @@ package qube.qai.main;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hazelcast.core.HazelcastInstance;
+import net.jmob.guice.conf.core.BindConfig;
+import net.jmob.guice.conf.core.ConfigurationModule;
+import net.jmob.guice.conf.core.InjectConfig;
+import net.jmob.guice.conf.core.Syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.services.implementation.DistributedSearchListener;
@@ -21,6 +25,9 @@ public class QaiNode {
 
     private String NODE_NAME = "QaiNode";
 
+    @InjectConfig(value = "PERSISTENCE_BASE")
+    public String PERSISTENCE_BASE;
+
     @Inject
     private HazelcastInstance hazelcastInstance;
 
@@ -32,6 +39,7 @@ public class QaiNode {
 
     public QaiNode() {
     }
+
 
     protected void startServices() {
         // injector knows all

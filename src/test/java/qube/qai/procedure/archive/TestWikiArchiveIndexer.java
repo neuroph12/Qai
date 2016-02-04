@@ -43,6 +43,8 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
 
     }
 
+
+
     public void restWikiRipAndIndex() throws Exception {
 
 //        String wikiToRip = "/media/rainbird/ALEPH/wiki-data/dewiki-20151226-pages-articles.xml";
@@ -76,10 +78,4 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
         log("indexing finished, took " + duration + "ms");
     }
 
-    private void log(String message) {
-        if (debug) {
-            //System.out.println(message);
-            logger.debug(message);
-        }
-    }
 }

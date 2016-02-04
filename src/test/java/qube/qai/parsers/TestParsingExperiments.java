@@ -29,8 +29,6 @@ import java.util.Set;
  */
 public class TestParsingExperiments extends QaiTestBase {
 
-    private static Logger logger = LoggerFactory.getLogger("TestParsingExperiments");
-
     private String stockListingPage = "Lists of companies by stock exchange listing.xml";
 
     private String SnP500Page = "List of S&P 500 companies.xml";
@@ -52,7 +50,7 @@ public class TestParsingExperiments extends QaiTestBase {
      * which is specialized for company names.
      * @throws Exception
      */
-    public void testSnP500() throws Exception {
+    public void restSnP500() throws Exception {
 
         WikiArticle snpPage = searchService.retrieveDocumentContentFromZipFile(SnP500Page);
         assertNotNull("oh, come on!!!", snpPage);
@@ -75,14 +73,14 @@ public class TestParsingExperiments extends QaiTestBase {
                 buffer.append(tokens[i]);
                 buffer.append(" ");
             }
-            logger.info("found name: '" + buffer.toString() + "'");
+            log("found name: '" + buffer.toString() + "'");
         }
     }
 
     /**
      * POS-part of speech analysis experiment
      */
-    public void testPOS() throws Exception {
+    public void restPOS() throws Exception {
 
         WikiArticle pythagorasArticle = searchService.retrieveDocumentContentFromZipFile(pythagorasTheorem);
         assertNotNull("oh come on!!!", pythagorasArticle);
@@ -95,7 +93,7 @@ public class TestParsingExperiments extends QaiTestBase {
         POSTaggerME tagger = new POSTaggerME(model);
         String[] tags = tagger.tag(tokens);
         for (int i = 0; i < tags.length; i++) {
-            logger.info("token: '" + tokens[i] + "' tag: '" + tags[i] + "'");
+            log("token: '" + tokens[i] + "' tag: '" + tags[i] + "'");
         }
 
     }
@@ -108,17 +106,20 @@ public class TestParsingExperiments extends QaiTestBase {
         WikiArticle darwinArticle = searchService.retrieveDocumentContentFromZipFile(darwinPage);
         assertNotNull("oh come on!!!", darwinArticle);
 
-        Tokenizer tokenizer = createTokenizer();
+        //InputStream modelIn = getClass().getResourceAsStream("/opennlp/en/en-token.bin");
+        InputStream modelIn = getClass().getResourceAsStream("/opennlp/en/en-sent.bin");
+        TokenizerModel tokenizerModel = new TokenizerModel(modelIn);
+        Tokenizer tokenizer = new TokenizerME(tokenizerModel);
         String[] tokens = tokenizer.tokenize(darwinArticle.getContent());
 
-        InputStream modelIn = getClass().getResourceAsStream("/opennlp/en/en-ner-person.bin");
-        TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
+        InputStream modelName = getClass().getResourceAsStream("/opennlp/en/en-ner-person.bin");
+        TokenNameFinderModel model = new TokenNameFinderModel(modelName);
         modelIn.close();
 
         NameFinderME nameFinder = new NameFinderME(model);
         Span[] names = nameFinder.find(tokens);
         for (Span span : names) {
-            logger.info("found name-span: '" + span.toString() + "'");
+            log("found name-span: '" + span.toString() + "'");
             int start = span.getStart();
             int end = span.getEnd();
             StringBuffer buffer = new StringBuffer();
@@ -126,14 +127,14 @@ public class TestParsingExperiments extends QaiTestBase {
                 buffer.append(tokens[i]);
                 buffer.append(" ");
             }
-            logger.info("found name: '" + buffer.toString() + "'");
+            log("found name: '" + buffer.toString() + "'");
         }
     }
 
     /**
      * this is for trying out how sentence detection works
      */
-    public void testSenteceDetection() throws Exception {
+    public void restSenteceDetection() throws Exception {
 
         // load first the article we want to try the things out
         WikiArticle mouseArticle = searchService.retrieveDocumentContentFromZipFile(mousePage);
@@ -149,9 +150,9 @@ public class TestParsingExperiments extends QaiTestBase {
         // when mode is loaded, we get on to the sentence-detector itself
         SentenceDetectorME sentenceDetector = new SentenceDetectorME(model);
         String sentences[] = sentenceDetector.sentDetect(mouseArticle.getContent());
-        logger.info("here it goes: '" + mouseArticle.getTitle() + "' in sentences");
+        log("here it goes: '" + mouseArticle.getTitle() + "' in sentences");
         for (String sentence : sentences) {
-            logger.info(sentence);
+            log(sentence);
         }
     }
 
@@ -160,19 +161,19 @@ public class TestParsingExperiments extends QaiTestBase {
      * converted to stock-quotes
      * @throws Exception
      */
-    public void testWikiTableParser() throws Exception {
+    public void restWikiTableParser() throws Exception {
 
         // in any case, this is the page we are interested in
         WikiArticle wikiArticle = searchService.retrieveDocumentContentFromZipFile(stockListingPage);
         assertNotNull("if this list cannot be found this would be a very short test indeed", wikiArticle);
 
         String articleContent = wikiArticle.getContent();
-        logger.info("original content: " + articleContent);
+        log("original content: " + articleContent);
         StringBuilder builder = new StringBuilder();
         WikiModel wikiModel = WikiIntegration.createModel(wikiArticle.getContent(), builder);
         Set<String> links = wikiModel.getLinks();
         if (links == null) {
-            logger.error("there is something terribly wrong- no links, using bliki instead...");
+            log("there is something terribly wrong- no links, using bliki instead...");
             fail("parsing a html-text which consists only of links, finding none... fail");
         }
         assertTrue("check that we indeed have links in there", !links.isEmpty());
@@ -181,7 +182,7 @@ public class TestParsingExperiments extends QaiTestBase {
         WikiArticle linkArticle = null;
         for (String link : links) {
             String filename = convertToFilename(link);
-            logger.info("retrieving the link: '" + link + "' with filename: " + filename);
+            log("retrieving the link: '" + link + "' with filename: " + filename);
             linkArticle = searchService.retrieveDocumentContentFromZipFile(filename);
 
             // for the moment being, let's say it's ok that file not found
@@ -195,36 +196,23 @@ public class TestParsingExperiments extends QaiTestBase {
         }
 
         if (linkArticle == null) {
-            logger.error("could not get hold of any of the articles referenced- this too is fail, i guess");
+            log("could not get hold of any of the articles referenced- this too is fail, i guess");
             fail("could not get hold of any of the articles referenced- this too is fail, i guess");
         }
 
         // at last we have a content we can play around with
         String linkContent = linkArticle.getContent();
-        logger.info("original article content: " + linkContent);
+        log("original article content: " + linkContent);
 
         //WikiIntegration wikiRipper = createRipper(linkArticle);
         String linkHtml = WikiIntegration.wikiToHtml(linkContent);
-        logger.info("generated text: " + linkHtml);
+        log("generated text: " + linkHtml);
     }
 
     private String convertToFilename(String link) {
         //String filename = StringUtils.replace(link, " ", "_");
         return link + ".xml";
     }
-
-//    private WikiIntegration createRipper(WikiArticle article) {
-//        WikiIntegration wikiRipper = new WikiIntegration("${image}", "${title}");
-//
-//        try {
-//            StringBuilder bufferOut = new StringBuilder();
-//            WikiModel.toText(wikiRipper, new HTMLConverter(), article.getContent(), bufferOut, false, false);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return wikiRipper;
-//    }
 
     private WikiModel createModel(WikiArticle wikiArticle) {
         WikiModel wikiModel = new WikiModel("${image}", "${title}");

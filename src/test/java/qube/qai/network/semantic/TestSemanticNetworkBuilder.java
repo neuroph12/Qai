@@ -96,10 +96,4 @@ public class TestSemanticNetworkBuilder extends QaiTestBase {
         //log("Network diameter: " + network.getDiameter());
     }
 
-    private void log(String message) {
-        if (debug) {
-            System.out.println(message);
-            //logger.info(message);
-        }
-    }
 }

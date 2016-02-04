@@ -104,7 +104,8 @@ public class TestWikiIntegration extends QaiTestBase {
      * and getting this test done requires a lot of reading
      * @param message
      */
-    private void log(String message) {
+    @Override
+    protected void log(String message) {
         System.out.println(message);
     }
 

@@ -265,11 +265,4 @@ public class TestAnalysisProcedures extends QaiTestBase {
         }
     }
 
-    private void log(String message) {
-        if (debug) {
-            System.out.println(message);
-            //logger.info(message);
-        }
-    }
-
 }

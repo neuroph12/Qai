@@ -5,6 +5,10 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
+import net.jmob.guice.conf.core.BindConfig;
+import net.jmob.guice.conf.core.ConfigurationModule;
+import net.jmob.guice.conf.core.InjectConfig;
+import net.jmob.guice.conf.core.Syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.stores.DataStore;
@@ -23,19 +27,24 @@ import java.util.Map;
 /**
  * Created by rainbird on 11/9/15.
  */
+@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
+//@BindConfig(value = "qube/qai/main/config_deploy", syntax = Syntax.PROPERTIES)
 public class QaiModule extends AbstractModule {
 
     private Logger logger = LoggerFactory.getLogger("Qai-Module");
 
-    private static String wiktionaryDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
+//    private static String wiktionaryDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
+//
+//    private static String wiktionaryZipFileName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+//
+//    private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
+//
+//    private static String wikipediaResources = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
+//
+//    private static String wikipediaZipFileName = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
 
-    private static String wiktionaryZipFileName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
-
-    private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
-
-    private static String wikipediaResources = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
-
-    private static String wikipediaZipFileName = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    @InjectConfig(value = "PERSISTENCE_BASE")
+    public String PERSISTENCE_BASE;
 
     private static String stockQuotesDirectory = "data/stockquotes/";
 
@@ -46,6 +55,9 @@ public class QaiModule extends AbstractModule {
 
         logger.info("Guice initialization called- binding services");
 
+        // load the given configuration for
+        install(ConfigurationModule.create());
+        requestInjection(this);
         // UUIDService
         bind(UUIDServiceInterface.class).to(UUIDService.class);
 
@@ -85,14 +97,14 @@ public class QaiModule extends AbstractModule {
 
     /**
      * EntityManagerFactory is used in HsqlDBMapStores
-     * and only there... StockEntities
+     * and only there... StockEntities, RDFTriples and StockQuotes
      * @return
      */
     @Provides @Singleton
     public EntityManagerFactory provideEntityManagerFactory() {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
-        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + stockQuotesDirectory);
+        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE);
         properties.put("hibernate.connection.username", "sa");
         properties.put("hibernate.connection.password", "");
         properties.put("hibernate.connection.pool_size", "1");

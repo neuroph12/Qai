@@ -33,7 +33,11 @@ public class QaiTestServerModule extends AbstractModule {
 
     private static final String PROCEDURES = "PROCEDURES";
 
-    private static final String PROCEDURE_BASE_DIRECTORY = "test/data/procedures/";
+    //private static final String PROCEDURE_BASE_DIRECTORY = "test/data/procedures/";
+
+    private String PERSISTENCE_BASE = "/media/rainbird/ALEPH/qai-persistence.db";
+    // private String PERSISTENCE_BASE = "/media/pi/BET/qai-persistence.db";
+
 
     private static final String WIKIPEDIA = "WIKIPEDIA_EN";
 
@@ -97,7 +101,7 @@ public class QaiTestServerModule extends AbstractModule {
         procedureMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
             public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
                 if (PROCEDURES.equals(mapName)) {
-                    return new DirectoryMapStore(PROCEDURE_BASE_DIRECTORY);
+                    return new DirectoryMapStore(PERSISTENCE_BASE);
                 } else {
                     return null;
                 }
