@@ -6,6 +6,10 @@ import com.google.inject.Singleton;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.HazelcastInstance;
+import net.jmob.guice.conf.core.BindConfig;
+import net.jmob.guice.conf.core.ConfigurationModule;
+import net.jmob.guice.conf.core.InjectConfig;
+import net.jmob.guice.conf.core.Syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.stores.StockQuoteDataStore;
@@ -24,6 +28,7 @@ import java.util.Map;
 /**
  * Created by rainbird on 11/19/15.
  */
+@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
 public class QaiTestModule extends AbstractModule {
 
     private Logger logger = LoggerFactory.getLogger("QaiTestModule");
@@ -46,10 +51,19 @@ public class QaiTestModule extends AbstractModule {
 
     private static String STOCK_QUOTES_DIRECTORY = "test/stockquotes/";
 
+    @InjectConfig(value = "PERSISTENCE_BASE")
+    public String PERSISTENCE_BASE;
+
     private static final ThreadLocal<EntityManager> ENTITY_MANAGER_CACHE = new ThreadLocal<EntityManager>();
 
     @Override
     protected void configure() {
+
+        logger.info("Guice initialization called- binding services");
+
+        // load the given configuration for
+        install(ConfigurationModule.create());
+        requestInjection(this);
 
         // UUIDService
         bind(UUIDServiceInterface.class).to(UUIDService.class);
@@ -70,11 +84,16 @@ public class QaiTestModule extends AbstractModule {
         return dataStore;
     }
 
-    @Provides @Singleton
-    public EntityManagerFactory provideEntityManagerFactory() {
+    /**
+     * EntityManagerFactory is used in HsqlDBMapStores
+     * and only there... StockEntities and StockQuotes
+     * @return
+     */
+    @Provides @Singleton @Named("STOCKS_DB")
+    public EntityManagerFactory provideStocksDBEntityManagerFactory() {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
-        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + STOCK_QUOTES_DIRECTORY);
+        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE);
         properties.put("hibernate.connection.username", "sa");
         properties.put("hibernate.connection.password", "");
         properties.put("hibernate.connection.pool_size", "1");
@@ -87,7 +106,57 @@ public class QaiTestModule extends AbstractModule {
         properties.put("cache.provider_class", "org.hibernate.cache.NoCacheProvider");
         properties.put("show_sql", "true");
 
-        return Persistence.createEntityManagerFactory("db-manager", properties);
+        return Persistence.createEntityManagerFactory("stocks", properties);
+    }
+
+    /**
+     * EntityManagerFactory is used in HsqlDBMapStores
+     * and only there... RDFTriples from Persondata_en.ttl
+     * @return
+     */
+    @Provides @Singleton @Named("PERSONDATA_EN")
+    public EntityManagerFactory providePersondataEnEntityManagerFactory() {
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE + "persondata_en/");
+        properties.put("hibernate.connection.username", "sa");
+        properties.put("hibernate.connection.password", "");
+        properties.put("hibernate.connection.pool_size", "1");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+        properties.put("hibernate.hbm2ddl.auto", "create");
+
+        properties.put("current_session_context_class", "org.hibernate.context.ManagedSessionContext");
+        properties.put("hibernate.cache.use_second_level_cache", "false");
+        properties.put("hibernate.cache.use_query_cache", "false");
+        properties.put("cache.provider_class", "org.hibernate.cache.NoCacheProvider");
+        properties.put("show_sql", "true");
+
+        return Persistence.createEntityManagerFactory("persondata", properties);
+    }
+
+    /**
+     * EntityManagerFactory is used in HsqlDBMapStores
+     * and only there... RDFTriples from DbPedia_en.ttl
+     * @return
+     */
+    @Provides @Singleton @Named("DBPEDIA_EN")
+    public EntityManagerFactory provideDbPediaEnEntityManagerFactory() {
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE + "/dbpedia_en/");
+        properties.put("hibernate.connection.username", "sa");
+        properties.put("hibernate.connection.password", "");
+        properties.put("hibernate.connection.pool_size", "1");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+        properties.put("hibernate.hbm2ddl.auto", "create");
+
+        properties.put("current_session_context_class", "org.hibernate.context.ManagedSessionContext");
+        properties.put("hibernate.cache.use_second_level_cache", "false");
+        properties.put("hibernate.cache.use_query_cache", "false");
+        properties.put("cache.provider_class", "org.hibernate.cache.NoCacheProvider");
+        properties.put("show_sql", "true");
+
+        return Persistence.createEntityManagerFactory("dbpedia", properties);
     }
 
     @Provides

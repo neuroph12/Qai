@@ -46,7 +46,7 @@ public class QaiModule extends AbstractModule {
     @InjectConfig(value = "PERSISTENCE_BASE")
     public String PERSISTENCE_BASE;
 
-    private static String stockQuotesDirectory = "data/stockquotes/";
+    //private static String stockQuotesDirectory = "data/stockquotes/";
 
     private static final ThreadLocal<EntityManager> entityManagerCache = new ThreadLocal<EntityManager>();
 
@@ -58,6 +58,7 @@ public class QaiModule extends AbstractModule {
         // load the given configuration for
         install(ConfigurationModule.create());
         requestInjection(this);
+
         // UUIDService
         bind(UUIDServiceInterface.class).to(UUIDService.class);
 
@@ -93,15 +94,13 @@ public class QaiModule extends AbstractModule {
         return selectorfactory;
     }
 
-
-
     /**
      * EntityManagerFactory is used in HsqlDBMapStores
      * and only there... StockEntities, RDFTriples and StockQuotes
      * @return
      */
-    @Provides @Singleton
-    public EntityManagerFactory provideEntityManagerFactory() {
+    @Provides @Singleton //@Named("STOCKS_DB")
+    public EntityManagerFactory provideStocksDBEntityManagerFactory() {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
         properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE);
@@ -119,6 +118,46 @@ public class QaiModule extends AbstractModule {
 
         return Persistence.createEntityManagerFactory("db-manager", properties);
     }
+
+//    @Provides @Singleton @Named("PERSONDATA_EN")
+//    public EntityManagerFactory providePersondataEnEntityManagerFactory() {
+//        Map<String, String> properties = new HashMap<String, String>();
+//        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+//        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE + "persondata_en/");
+//        properties.put("hibernate.connection.username", "sa");
+//        properties.put("hibernate.connection.password", "");
+//        properties.put("hibernate.connection.pool_size", "1");
+//        properties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+//        properties.put("hibernate.hbm2ddl.auto", "create");
+//
+//        properties.put("current_session_context_class", "org.hibernate.context.ManagedSessionContext");
+//        properties.put("hibernate.cache.use_second_level_cache", "false");
+//        properties.put("hibernate.cache.use_query_cache", "false");
+//        properties.put("cache.provider_class", "org.hibernate.cache.NoCacheProvider");
+//        properties.put("show_sql", "true");
+//
+//        return Persistence.createEntityManagerFactory("persondata_en", properties);
+//    }
+
+//    @Provides @Singleton @Named("DBPEDIA_EN")
+//    public EntityManagerFactory provideDbPediaEnEntityManagerFactory() {
+//        Map<String, String> properties = new HashMap<String, String>();
+//        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+//        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE + "/dbpedia_en/");
+//        properties.put("hibernate.connection.username", "sa");
+//        properties.put("hibernate.connection.password", "");
+//        properties.put("hibernate.connection.pool_size", "1");
+//        properties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+//        properties.put("hibernate.hbm2ddl.auto", "create");
+//
+//        properties.put("current_session_context_class", "org.hibernate.context.ManagedSessionContext");
+//        properties.put("hibernate.cache.use_second_level_cache", "false");
+//        properties.put("hibernate.cache.use_query_cache", "false");
+//        properties.put("cache.provider_class", "org.hibernate.cache.NoCacheProvider");
+//        properties.put("show_sql", "true");
+//
+//        return Persistence.createEntityManagerFactory("dbpedia_en", properties);
+//    }
 
     @Provides
     public EntityManager provideEntityManager(EntityManagerFactory entityManagerFactory) {

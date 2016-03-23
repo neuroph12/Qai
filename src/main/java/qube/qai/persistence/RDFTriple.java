@@ -14,10 +14,6 @@ public class RDFTriple implements Serializable{
     @Id
     private RDFKey id;
 
-//    private String subject;
-//
-//    private String predicate;
-
     private String object;
 
     public RDFTriple() {
