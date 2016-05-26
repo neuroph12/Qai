@@ -99,25 +99,25 @@ public class QaiModule extends AbstractModule {
      * and only there... StockEntities, RDFTriples and StockQuotes
      * @return
      */
-    @Provides @Singleton //@Named("STOCKS_DB")
-    public EntityManagerFactory provideStocksDBEntityManagerFactory() {
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
-        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE);
-        properties.put("hibernate.connection.username", "sa");
-        properties.put("hibernate.connection.password", "");
-        properties.put("hibernate.connection.pool_size", "1");
-        properties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-        properties.put("hibernate.hbm2ddl.auto", "create");
-
-        properties.put("current_session_context_class", "org.hibernate.context.ManagedSessionContext");
-        properties.put("hibernate.cache.use_second_level_cache", "false");
-        properties.put("hibernate.cache.use_query_cache", "false");
-        properties.put("cache.provider_class", "org.hibernate.cache.NoCacheProvider");
-        properties.put("show_sql", "true");
-
-        return Persistence.createEntityManagerFactory("db-manager", properties);
-    }
+//    @Provides @Singleton @Named("STOCKS")
+//    public EntityManagerFactory provideStocksDBEntityManagerFactory() {
+//        Map<String, String> properties = new HashMap<String, String>();
+//        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+//        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE);
+//        properties.put("hibernate.connection.username", "sa");
+//        properties.put("hibernate.connection.password", "");
+//        properties.put("hibernate.connection.pool_size", "1");
+//        properties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+//        properties.put("hibernate.hbm2ddl.auto", "create");
+//
+//        properties.put("current_session_context_class", "org.hibernate.context.ManagedSessionContext");
+//        properties.put("hibernate.cache.use_second_level_cache", "false");
+//        properties.put("hibernate.cache.use_query_cache", "false");
+//        properties.put("cache.provider_class", "org.hibernate.cache.NoCacheProvider");
+//        properties.put("show_sql", "true");
+//
+//        return Persistence.createEntityManagerFactory("STOCKS", properties);
+//    }
 
 //    @Provides @Singleton @Named("PERSONDATA_EN")
 //    public EntityManagerFactory providePersondataEnEntityManagerFactory() {
@@ -159,12 +159,12 @@ public class QaiModule extends AbstractModule {
 //        return Persistence.createEntityManagerFactory("dbpedia_en", properties);
 //    }
 
-    @Provides
-    public EntityManager provideEntityManager(EntityManagerFactory entityManagerFactory) {
-        EntityManager entityManager = entityManagerCache.get();
-        if (entityManager == null) {
-            entityManagerCache.set(entityManager = entityManagerFactory.createEntityManager());
-        }
-        return entityManager;
-    }
+//    @Provides
+//    public EntityManager provideEntityManager(EntityManagerFactory entityManagerFactory) {
+//        EntityManager entityManager = entityManagerCache.get();
+//        if (entityManager == null) {
+//            entityManagerCache.set(entityManager = entityManagerFactory.createEntityManager());
+//        }
+//        return entityManager;
+//    }
 }

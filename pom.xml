@@ -85,12 +85,14 @@
             <version>1.0</version>
         </dependency>
 		
-		<dependency>
+		<!-- bliki for wiki-parsing -->
+        <dependency>
             <groupId>info.bliki.wiki</groupId>
             <artifactId>bliki-core</artifactId>
             <version>3.0.19</version>
         </dependency>
 
+        <!-- for converting wiki-entries to pdf-format -->
 		<dependency>
             <groupId>info.bliki.pdf</groupId>
             <artifactId>bliki-pdf</artifactId>
@@ -148,6 +150,13 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+
+        <!-- Guice-persist for JPA integration -->
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-persist</artifactId>
             <version>${guice.version}</version>
         </dependency>
 
@@ -215,8 +224,7 @@
             <version>1.10</version>
         </dependency>
 
-        <!-- hibernate...
-        well, there is no use for the thing for the moment, but i think it might come -->
+        <!-- hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>

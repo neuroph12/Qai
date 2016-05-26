@@ -20,9 +20,9 @@ import java.util.Map;
 /**
  * Created by rainbird on 11/26/15.
  */
-public class HqslDBMapStore implements MapStore<String, StockEntity> {
+public class StockEntityMapStore implements MapStore<String, StockEntity> {
 
-    private static Logger logger = LoggerFactory.getLogger("HsqlDBMapStore");
+    private static Logger logger = LoggerFactory.getLogger("StockEntityMapStore");
 
     private boolean debug = true;
 
@@ -33,10 +33,10 @@ public class HqslDBMapStore implements MapStore<String, StockEntity> {
      * this is a very interesting notion for creating a generic
      * database backed map-store really...
      */
-    public HqslDBMapStore() {
+    public StockEntityMapStore() {
     }
 
-    public HqslDBMapStore(EntityManager manager) {
+    public StockEntityMapStore(EntityManager manager) {
         this.entityManager = manager;
     }
 

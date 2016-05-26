@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.persistence.mapstores.DirectoryMapStore;
-import qube.qai.persistence.mapstores.HqslDBMapStore;
+import qube.qai.persistence.mapstores.StockEntityMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.procedure.Procedure;
 
@@ -79,7 +79,7 @@ public class QaiTestServerModule extends AbstractModule {
         stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
             public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
                 if (STOCK_ENTITIES.equals(mapName)) {
-                    return new HqslDBMapStore();
+                    return new StockEntityMapStore();
                 } else {
                     return null;
                 }

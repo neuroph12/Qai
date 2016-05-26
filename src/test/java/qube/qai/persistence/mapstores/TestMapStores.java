@@ -57,7 +57,7 @@ public class TestMapStores extends QaiTestBase {
     public void testHsqlDBMapStore() throws Exception {
 
         // the fields in class will have to be injected
-        HqslDBMapStore mapStore = new HqslDBMapStore();
+        StockEntityMapStore mapStore = new StockEntityMapStore();
         injector.injectMembers(mapStore);
 
         int number = 100;

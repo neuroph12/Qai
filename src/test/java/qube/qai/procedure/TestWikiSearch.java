@@ -17,7 +17,7 @@ public class TestWikiSearch extends QaiTestBase {
     private SearchServiceInterface searchService;
 
     /**
-     * @TOOD this test needs improvement- start with injecting the constants
+     * @TODO this test needs improvement- start with injecting the constants
      * @throws Exception
      */
     public void testSearch() throws Exception {

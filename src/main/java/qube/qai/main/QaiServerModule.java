@@ -17,22 +17,16 @@ import net.jmob.guice.conf.core.InjectConfig;
 import net.jmob.guice.conf.core.Syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockQuote;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.persistence.mapstores.DirectoryMapStore;
-import qube.qai.persistence.mapstores.HqslDBMapStore;
 import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
 import qube.qai.services.implementation.DistributedSearchListener;
-import qube.qai.services.implementation.DistributedSearchService;
 import qube.qai.services.implementation.WikiSearchService;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import java.io.File;
 import java.util.Properties;
 
@@ -47,7 +41,7 @@ public class QaiServerModule extends AbstractModule {
 
     public static final String NODE_NAME = "QaiNode";
 
-    public static final String STOCK_ENTITIES = "STOCK_ENTITIES";
+    //public static final String STOCK_ENTITIES = "STOCK_ENTITIES";
 
     public static final String PROCEDURES = "PROCEDURES";
 
@@ -104,8 +98,8 @@ public class QaiServerModule extends AbstractModule {
 
     private HazelcastInstance hazelcastInstance;
 
-    @Inject
-    private EntityManager entityManager;
+//    @Inject @Named("STOCKS")
+//    private EntityManager entityManager;
 
     public QaiServerModule() {
 
@@ -189,24 +183,24 @@ public class QaiServerModule extends AbstractModule {
          * here we add the map-store for Stock-entities which is
          * in this case the HsqlDBMapStore
          */
-        MapConfig stockEntitiesConfig = hazelcastConfig.getMapConfig(STOCK_ENTITIES);
-        MapStoreConfig stockEntitiesMapstoreConfig = stockEntitiesConfig.getMapStoreConfig();
-        if (stockEntitiesMapstoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
-            stockEntitiesMapstoreConfig = new MapStoreConfig();
-
-        }
-        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
-            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
-                if (STOCK_ENTITIES.equals(mapName)) {
-                    return new HqslDBMapStore(entityManager);
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
-        stockEntitiesConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
+//        MapConfig stockEntitiesConfig = hazelcastConfig.getMapConfig(STOCK_ENTITIES);
+//        MapStoreConfig stockEntitiesMapstoreConfig = stockEntitiesConfig.getMapStoreConfig();
+//        if (stockEntitiesMapstoreConfig == null) {
+//            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
+//            stockEntitiesMapstoreConfig = new MapStoreConfig();
+//
+//        }
+//        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
+//            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
+//                if (STOCK_ENTITIES.equals(mapName)) {
+//                    return new HqslDBMapStore(entityManager);
+//                } else {
+//                    return null;
+//                }
+//            }
+//        });
+//        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
+//        stockEntitiesConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
 
         /**
          * here we add the map-store for Procedures which is

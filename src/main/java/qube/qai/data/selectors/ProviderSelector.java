@@ -1,6 +1,6 @@
 package qube.qai.data.selectors;
 
-import qube.qai.data.DataProvider;
+import qube.qai.data.SelectorProvider;
 
 import javax.inject.Inject;
 
@@ -10,7 +10,7 @@ import javax.inject.Inject;
 public class ProviderSelector {
 
     @Inject
-    private DataProvider provider;
+    private SelectorProvider provider;
 
     /**
      * a selector which employs a DataProvider to retrieve

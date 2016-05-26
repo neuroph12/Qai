@@ -38,15 +38,16 @@ public class StockQuoteDataStore implements DataStore {
 
         try {
             for (YahooSymbol.Data data : symbol.getHistoricalPrices()) {
+                Date date = new Date(data.getKey().toTimeInMillis(CalendarDateUnit.DAY));
                 StockQuote quote = new StockQuote(quoteName,
+                        date,
                         data.adjustedClose,
                         data.close,
                         data.high,
                         data.low,
                         data.open,
                         data.volume);
-                Date date = new Date(data.getKey().toTimeInMillis(CalendarDateUnit.DAY));
-                quote.setDate(date);
+
                 quotes.add(quote);
             }
         } catch (Exception e) {

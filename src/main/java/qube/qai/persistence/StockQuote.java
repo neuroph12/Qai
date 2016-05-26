@@ -16,23 +16,42 @@ import java.util.Date;
 public class StockQuote implements Serializable, AcceptsVisitors {
 
     @Id
-    private String uuid;
-    private String tickerSymbol;
-    private Date date;
+    private QuoteId id;
+
+//    private String tickerSymbol;
+//
+//    private Date date;
+
     public double adjustedClose;
+
     public double close;
+
     public double high;
+
     public double low;
+
     public double open;
+
     public double volume;
 
     public StockQuote() {
-        this.uuid = UUIDService.uuidString();
     }
 
-    public StockQuote(String tickerSymbol, double adjustedClose, double close, double high, double low, double open, double volume) {
-        this();
-        this.tickerSymbol = tickerSymbol;
+    public StockQuote(String tickerSymbol, Date date, double adjustedClose, double close, double high, double low, double open, double volume) {
+        this.id = new QuoteId(tickerSymbol, date);
+        this.adjustedClose = adjustedClose;
+        this.close = close;
+        this.high = high;
+        this.low = low;
+        this.open = open;
+        this.volume = volume;
+    }
+
+    public StockQuote(QuoteId quoteId, double adjustedClose, double close, double high, double low, double open, double volume) {
+        if (quoteId == null) {
+            quoteId = new QuoteId();
+        }
+        this.id = quoteId;
         this.adjustedClose = adjustedClose;
         this.close = close;
         this.high = high;
@@ -46,19 +65,19 @@ public class StockQuote implements Serializable, AcceptsVisitors {
     }
 
     public Date getDate() {
-        return date;
+        return id.getDate();
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.id.setDate(date);
     }
 
     public String getTickerSymbol() {
-        return tickerSymbol;
+        return id.getTickerSymbol();
     }
 
     public void setTickerSymbol(String tickerSymbol) {
-        this.tickerSymbol = tickerSymbol;
+        this.id.setTickerSymbol(tickerSymbol);
     }
 
     public double getAdjustedClose() {
@@ -107,5 +126,13 @@ public class StockQuote implements Serializable, AcceptsVisitors {
 
     public void setVolume(double volume) {
         this.volume = volume;
+    }
+
+    public QuoteId getId() {
+        return id;
+    }
+
+    public void setId(QuoteId id) {
+        this.id = id;
     }
 }

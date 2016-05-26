@@ -1,6 +1,6 @@
 package qube.qai.procedure.finance;
 
-import qube.qai.data.DataProvider;
+import qube.qai.data.SelectorProvider;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 
@@ -14,7 +14,7 @@ import java.util.Collection;
 public class StockQuoteRetriever extends Procedure {
 
     @Inject
-    private DataProvider provider;
+    private SelectorProvider provider;
 
     @Override
     public void execute() {

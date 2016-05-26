@@ -20,9 +20,7 @@ import qube.qai.network.TestWikiNetwork;
 import qube.qai.network.neural.trainer.TestNeuralNetworkTraining;
 import qube.qai.network.semantic.TestSemanticNetworkBuilder;
 import qube.qai.parsers.TestWikiIntegration;
-import qube.qai.persistence.mapstores.TestHazelcastMaps;
-import qube.qai.persistence.mapstores.TestIndexedDirectoryMapStore;
-import qube.qai.persistence.mapstores.TestMapStores;
+import qube.qai.persistence.mapstores.*;
 import qube.qai.procedure.TestWikiSearch;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
@@ -62,69 +60,5 @@ public class QaiTestBase extends TestCase {
             logger.info(message);
         }
     }
-
-    /**
-     * so that all of the tests are actually called
-     * when this suite is in use
-     * @return
-     */
-//    public static Test suite() {
-//        TestSuite suite = new TestSuite("All tests");
-//
-//        // data.analysis
-//        suite.addTestSuite(TestChangepointAdapter.class);
-//
-//        // data.selectors
-//        suite.addTestSuite(TestHazelcastSelectors.class);
-//
-//        // data.stores
-//        suite.addTestSuite(TestStockQuoteDataStore.class);
-//        suite.addTestSuite(TestStockEntityDataStore.class);
-//
-//        // matrix
-//        suite.addTestSuite(TestMatrix.class);
-//        suite.addTestSuite(TestTimeSequence.class);
-//
-//        // network
-//        suite.addTestSuite(TestNetwork.class);
-//        suite.addTestSuite(TestNeuralNetwork.class);
-//        suite.addTestSuite(TestNeuralNetworkTraining.class);
-//        suite.addTestSuite(TestSemanticNetworkBuilder.class);
-//        suite.addTestSuite(TestWikiNetwork.class);
-//
-//        // parsers
-//        suite.addTestSuite(TestWikiIntegration.class);
-//
-//        // persistence.mapstores
-//        suite.addTestSuite(TestMapStores.class);
-//        suite.addTestSuite(TestHazelcastMaps.class);
-//        suite.addTestSuite(TestIndexedDirectoryMapStore.class);
-//
-//        // procedure
-//        suite.addTestSuite(TestWikiArchiveIndexer.class);
-//        suite.addTestSuite(TestWikiRipperProcedure.class);
-//        suite.addTestSuite(TestWikiSearch.class);
-//
-//        // procedure.analysis
-//        suite.addTestSuite(TestAnalysisProcedures.class);
-//        suite.addTestSuite(TestMarketNetworkBuilder.class);
-//
-//        // procedure.archive
-//        suite.addTestSuite(TestDirectoryIndexer.class);
-//
-//        // procedure.visitor
-//        suite.addTestSuite(TestProcedureVisitors.class);
-//
-//        // services.implementation
-//        suite.addTestSuite(TestUUIDGenerator.class);
-//        suite.addTestSuite(TestProcedureRunnerService.class);
-//        suite.addTestSuite(TestDistributedSearchService.class);
-//        suite.addTestSuite(TestDistributedProcedureRunnerService.class);
-//        suite.addTestSuite(TestYouNMeNAllDistributed.class);
-//        suite.addTestSuite(TestHowFairAreMarketsDistributed.class);
-//        suite.addTestSuite(TestTextTranslationDistributed.class);
-//
-//        return suite;
-//    }
 
 }
