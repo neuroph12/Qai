@@ -16,23 +16,27 @@ public class TestRdfTripleFileMapStore extends QaiTestBase {
         PersistService service = injector.getInstance(PersistService.class);
         service.start();
 
-
-
         RdfTripleFileMapStore mapStore = new RdfTripleFileMapStore();
+        mapStore.setRdfTurtleFile("persondata_en.ttl");
         injector.injectMembers(mapStore);
 
-        fail("test not yet implemented ");
+        mapStore.createFileTable();
+
+        assertTrue("attaching file failed- an exception must have occurred ", true);
     }
 
-//    public void testDbPediaRdfTripleMapStore() throws Exception {
-//
-//        this.injector = injector.createChildInjector(new JpaPersistModule("DBPEDIA"));
-//        PersistService service = injector.getInstance(PersistService.class);
-//        service.start();
-//
-//        RdfTripleFileMapStore mapStore = new RdfTripleFileMapStore();
-//        injector.injectMembers(mapStore);
-//
-//        fail("test not yet implemented ");
-//    }
+    public void testDbPediaRdfTripleMapStore() throws Exception {
+
+        this.injector = injector.createChildInjector(new JpaPersistModule("DBPEDIA"));
+        PersistService service = injector.getInstance(PersistService.class);
+        service.start();
+
+        RdfTripleFileMapStore mapStore = new RdfTripleFileMapStore();
+        mapStore.setRdfTurtleFile("dbpedia_en.ttl");
+        injector.injectMembers(mapStore);
+
+        mapStore.createFileTable();
+
+        assertTrue("attaching file failed- an exception must have occurred ", true);
+    }
 }

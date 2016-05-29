@@ -17,7 +17,7 @@
         <tika.version>1.10</tika.version>
         <hazelcast.version>3.5.4</hazelcast.version>
         <guice.version>4.0</guice.version>
-        <hsqldb.version>2.3.0</hsqldb.version>
+        <hsqldb.version>2.3.4</hsqldb.version>
         <hibernate.version>4.3.6.Final</hibernate.version>
         <jdk.version>1.8</jdk.version>
     </properties>

@@ -9,6 +9,7 @@ import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.QuoteId;
 import qube.qai.persistence.StockQuote;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -16,16 +17,6 @@ import java.util.Map;
  * Created by rainbird on 5/15/16.
  */
 public class TestStockQuoteMapStore extends QaiTestBase {
-
-    //private Injector injector;
-
-//    @Override
-//    protected void setUp() throws Exception {
-//
-//        //injector = Guice.createInjector(new JpaPersistModule("STOCKS"));
-//
-//
-//    }
 
     public void testStockQuoteMapStore() throws Exception {
 
@@ -44,7 +35,11 @@ public class TestStockQuoteMapStore extends QaiTestBase {
     }
 
     private Collection<QuoteId> createKeys() {
-        return null;
+        Collection<QuoteId> keys = new ArrayList<>();
+
+
+
+        return keys;
     }
 }
 
