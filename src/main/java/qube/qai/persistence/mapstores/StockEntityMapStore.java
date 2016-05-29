@@ -79,7 +79,7 @@ public class StockEntityMapStore implements MapStore<String, StockEntity> {
     public Iterable<String> loadAllKeys() {
         List<String> resultList = null;
         if (entityManager != null) {
-            resultList = entityManager.createQuery("select uuid from StockQuote").getResultList();
+            resultList = entityManager.createQuery("SELECT entity.uuid FROM StockEntity entity").getResultList();
         }
         return resultList;
     }

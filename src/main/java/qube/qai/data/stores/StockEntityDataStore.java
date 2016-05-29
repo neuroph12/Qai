@@ -1,6 +1,5 @@
 package qube.qai.data.stores;
 
-import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Created by rainbird on 12/26/15.
@@ -100,7 +98,7 @@ public class StockEntityDataStore implements DataStore {
             // the symbols come in {{exchange|ticker}} form
             String exchange = StringUtils.substringBetween(fieldValue, "{{", "|");
             String ticker = StringUtils.substringBetween(fieldValue, "|", "}}");
-            entity.setIdKey(exchange + "|" + ticker); // in fact just we broke before
+            entity.setUuid(exchange + "|" + ticker); // in fact just we broke before
             entity.setTickerSymbol(ticker);
             entity.setTradedIn(exchange);
         } else if (headerTitles.length > 1 &&

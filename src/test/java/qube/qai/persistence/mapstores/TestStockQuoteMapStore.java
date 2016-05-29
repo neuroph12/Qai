@@ -1,10 +1,7 @@
 package qube.qai.persistence.mapstores;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
-import junit.framework.TestCase;
 import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.QuoteId;

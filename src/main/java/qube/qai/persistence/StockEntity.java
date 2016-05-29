@@ -4,6 +4,7 @@ import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 import qube.qai.services.implementation.UUIDService;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -16,30 +17,41 @@ import java.util.Date;
 public class StockEntity implements Serializable, AcceptsVisitors {
 
     @Id
-    private String idKey;
+    @Column(name = "uuid", nullable = false)
+    private String uuid;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "tickerSymbol")
     private String tickerSymbol;
 
+    @Column(name = "security")
     private String security;
 
+    @Column(name = "secFilings")
     private String secFilings;
 
+    @Column(name = "gicsSector")
     private String gicsSector;
 
+    @Column(name = "gicsSubIndustry")
     private String gicsSubIndustry;
 
+    @Column(name = "address")
     private String address;
 
+    @Column(name = "dateFirstAdded")
     private Date dateFirstAdded;
 
+    @Column(name = "CIK")
     private String CIK;
 
+    @Column(name = "tradedIn")
     private String tradedIn;
 
     public StockEntity() {
-        this.idKey = UUIDService.uuidString();
+        this.uuid = UUIDService.uuidString();
     }
 
     public StockEntity(String name,
@@ -65,12 +77,12 @@ public class StockEntity implements Serializable, AcceptsVisitors {
         return visitor.visit(this, data);
     }
 
-    public String getIdKey() {
-        return idKey;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setIdKey(String idKey) {
-        this.idKey = idKey;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getName() {
@@ -157,13 +169,13 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     public boolean equals(Object obj) {
         if (obj instanceof StockEntity) {
             StockEntity other = (StockEntity) obj;
-            return idKey.equals(other.idKey);
+            return uuid.equals(other.uuid);
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return idKey.hashCode();
+        return uuid.hashCode();
     }
 }

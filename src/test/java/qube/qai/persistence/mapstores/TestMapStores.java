@@ -1,5 +1,7 @@
 package qube.qai.persistence.mapstores;
 
+import com.google.inject.persist.PersistService;
+import com.google.inject.persist.jpa.JpaPersistModule;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
@@ -54,7 +56,11 @@ public class TestMapStores extends QaiTestBase {
      * so that they can be collected with sql-statements as well, if need be
      * @throws Exception
      */
-    public void testHsqlDBMapStore() throws Exception {
+    public void testStockEntityMapStore() throws Exception {
+
+        this.injector = injector.createChildInjector(new JpaPersistModule("STOCKS"));
+        PersistService service = injector.getInstance(PersistService.class);
+        service.start();
 
         // the fields in class will have to be injected
         StockEntityMapStore mapStore = new StockEntityMapStore();
@@ -65,7 +71,7 @@ public class TestMapStores extends QaiTestBase {
         for (int i = 0; i < number; i++) {
             String name = "entity(" + i + ")";
             StockEntity entity = createEntity(name);
-            String uuid = entity.getIdKey();
+            String uuid = entity.getUuid();
             mapStore.store(uuid, entity);
             entityMap.put(uuid, entity);
         }
@@ -155,7 +161,7 @@ public class TestMapStores extends QaiTestBase {
         entity.setSecurity("security of " + name);
         entity.setTradedIn("vsex");
         entity.setTickerSymbol(name);
-        entity.setIdKey("vstex|" + name);
+        entity.setUuid("vstex|" + name);
         return entity;
     }
 }

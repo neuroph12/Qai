@@ -108,7 +108,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         for (int i = 0; i < number; i++) {
             String name = "e" + i + "x";
             StockEntity entity = TestMapStores.createEntity(name);
-            String uuid = entity.getIdKey();
+            String uuid = entity.getUuid();
             stockEntities.put(uuid, entity);
             uuidList.add(uuid);
         }

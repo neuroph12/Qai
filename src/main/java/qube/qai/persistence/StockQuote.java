@@ -36,6 +36,7 @@ public class StockQuote implements Serializable, AcceptsVisitors {
     public double volume;
 
     public StockQuote() {
+        this.id = new QuoteId();
     }
 
     public StockQuote(String tickerSymbol, Date date, double adjustedClose, double close, double high, double low, double open, double volume) {
