@@ -19,12 +19,18 @@ public class RdfTripleFileMapStore implements MapStore<RDFTriple.RDFKey, RDFTrip
 
     private String tableName = "RdfTripleSet";
 
+    // the database is defined with its path on file-system
+    // once the database base directory is so defined, you can either
+    // attach files which are in the directory
+    // or alternatively you can set
+    // textdb.allow_full_path=true OR java -Dtextdb.allow_full_path=true
+    // so that the complete path can be entered for attaching files
     //private String rdfTurtleFile = "/media/rainbird/ALEPH/qai-persistence.db/dbperson_en/persondata_en.ttl";
     private String rdfTurtleFile; // = "persondata_en.ttl";
 
     private String createStatement = "CREATE TEXT TABLE IF NOT EXISTS " + tableName + " (subject VARCHAR(256), predicate VARCHAR(256), object VARCHAR(256)) ";
 
-    private String assignFileStatement = "SET TABLE " + tableName + " SOURCE \"" + rdfTurtleFile + "\""; // ";fs=\\space;vs=\\space\"";
+    private String assignFileStatement = "SET TABLE " + tableName + " SOURCE \"" + rdfTurtleFile + ";fs=\\space;vs=\\space\"";
 
     @Inject
     private EntityManager entityManager;

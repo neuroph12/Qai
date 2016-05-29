@@ -32,8 +32,8 @@ public class TestStockQuoteDataStore extends TestCase {
 
         // thisone does not exist check that the return value is empty
         Collection<StockQuote> quotes = dataStore.retrieveQuotesFor(dummy);
-        assertNotNull("we expect an emty array", quotes);
-        assertNotNull("we expect an emty array", quotes.isEmpty());
+        assertNotNull("we expect an empty array", quotes);
+        assertTrue("we expect an empty array", quotes.isEmpty());
     }
 
 

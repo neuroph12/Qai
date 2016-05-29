@@ -57,4 +57,8 @@ public class StockQuoteDataStore implements DataStore {
         }
     }
 
+    public boolean isProvided(String tickerSymbol) {
+        return provided.containsKey(tickerSymbol);
+    }
+
 }

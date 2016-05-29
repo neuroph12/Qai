@@ -4,8 +4,7 @@ import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 import qube.qai.services.implementation.UUIDService;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,23 +14,25 @@ import java.util.Date;
 @Entity
 public class StockQuote implements Serializable, AcceptsVisitors {
 
-    @Id
+    @EmbeddedId
     private QuoteId id;
 
-//    private String tickerSymbol;
-//
-//    private Date date;
-
+    @Column(name = "adjustedClose")
     public double adjustedClose;
 
+    @Column(name = "close")
     public double close;
 
+    @Column(name = "high")
     public double high;
 
+    @Column(name = "low")
     public double low;
 
+    @Column(name = "open")
     public double open;
 
+    @Column(name = "volume")
     public double volume;
 
     public StockQuote() {

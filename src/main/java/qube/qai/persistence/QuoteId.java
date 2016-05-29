@@ -1,15 +1,20 @@
 package qube.qai.persistence;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by rainbird on 5/15/16.
  */
+@Embeddable
 public class QuoteId implements Serializable {
 
+    @Column(name = "tickerSymbol", nullable = false)
     private String tickerSymbol;
 
+    @Column(name = "quoteDate", nullable = false)
     private Date date;
 
     public QuoteId() {
