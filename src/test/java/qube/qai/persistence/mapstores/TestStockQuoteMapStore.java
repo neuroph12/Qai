@@ -1,5 +1,6 @@
 package qube.qai.persistence.mapstores;
 
+import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import qube.qai.data.stores.StockQuoteDataStore;
@@ -7,6 +8,7 @@ import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.QuoteId;
 import qube.qai.persistence.StockQuote;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -17,14 +19,21 @@ import java.util.Map;
  */
 public class TestStockQuoteMapStore extends QaiTestBase {
 
+    @Inject
+    private StockQuoteMapStore mapStore;
+
+    public void restSilly() {
+        assertTrue(true);
+    }
+
     public void testStockQuoteMapStore() throws Exception {
 
-        this.injector = injector.createChildInjector(new JpaPersistModule("STOCKS"));
-        PersistService service = injector.getInstance(PersistService.class);
-        service.start();
-
-        StockQuoteMapStore mapStore = new StockQuoteMapStore();
-        injector.injectMembers(mapStore);
+//        Injector childInjector = injector.createChildInjector(new JpaPersistModule("STOCKS"));
+//        PersistService service = childInjector.getInstance(PersistService.class);
+//        service.start();
+//
+//        StockQuoteMapStore mapStore = new StockQuoteMapStore();
+        injector.injectMembers(this);
 
         Collection<QuoteId> keys = createKeys();
         assertNotNull(keys);

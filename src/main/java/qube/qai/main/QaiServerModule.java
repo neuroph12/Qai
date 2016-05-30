@@ -1,9 +1,9 @@
 package qube.qai.main;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import com.google.inject.name.Named;
+import com.google.inject.persist.PersistService;
+import com.google.inject.persist.jpa.JpaPersistModule;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MapStoreConfig;
@@ -17,10 +17,8 @@ import net.jmob.guice.conf.core.InjectConfig;
 import net.jmob.guice.conf.core.Syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.persistence.WikiArticle;
-import qube.qai.persistence.mapstores.DirectoryMapStore;
-import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
-import qube.qai.persistence.mapstores.WikiArticleMapStore;
+import qube.qai.persistence.*;
+import qube.qai.persistence.mapstores.*;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
@@ -41,7 +39,9 @@ public class QaiServerModule extends AbstractModule {
 
     public static final String NODE_NAME = "QaiNode";
 
-    //public static final String STOCK_ENTITIES = "STOCK_ENTITIES";
+    public static final String STOCK_ENTITIES = "STOCK_ENTITIES";
+
+    private static final String STOCK_QUOTES = "STOCK_QUOTES";
 
     public static final String PROCEDURES = "PROCEDURES";
 
@@ -96,10 +96,52 @@ public class QaiServerModule extends AbstractModule {
     //public static final String WIKTIONARY_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources.index";
     //public static final String WIKTIONARY_RESOURCE_INDEX = "/media/pi/BET/wiki-archives/wiktionary_en.resources.index";
 
+    @InjectConfig(value = "CREATE_STOCK_ENTITIES")
+    public String CREATE_STOCK_ENTITIES;
+
+    @InjectConfig(value = "CREATE_STOCK_QUOTES")
+    public String CREATE_STOCK_QUOTES;
+
+    @InjectConfig(value = "CREATE_PROCEDURES")
+    public String CREATE_PROCEDURES;
+
+    @InjectConfig(value = "CREATE_WIKIPEDIA")
+    public String CREATE_WIKIPEDIA;
+
+    @InjectConfig(value = "CREATE_WIKIPEDIA_RESOURCES")
+    public String CREATE_WIKIPEDIA_RESOURCES;
+
+    @InjectConfig(value = "CREATE_WIKTIONARY")
+    public String CREATE_WIKTIONARY;
+
+    @InjectConfig(value = "CREATE_WIKTIONARY_RESOURCES")
+    public String CREATE_WIKTIONARY_RESOURCES;
+
+    @InjectConfig(value = "CREATE_DBPEDIA")
+    public String CREATE_DBPEDIA;
+
+    @InjectConfig(value = "CREATE_DBPERSON")
+    public String CREATE_DBPERSON;
+
+    public static final String DBPEDIA = "DBPEDIA";
+
+    public static final String DBPERSON = "DBPERSON";
+
     private HazelcastInstance hazelcastInstance;
 
-//    @Inject @Named("STOCKS")
-//    private EntityManager entityManager;
+    private StockEntityMapStore stockEntityMapStore;
+
+    private StockQuoteMapStore stockQuoteMapStore;
+
+    private RdfTripleFileMapStore dbpediaMapStore;
+
+    private RdfTripleFileMapStore dbpersonMapStore;
+
+    private Injector jpaStocksInjector;
+
+    private Injector jpaDBPediaInjector;
+
+    private Injector jpaDBPersonInjector;
 
     public QaiServerModule() {
 
@@ -179,127 +221,133 @@ public class QaiServerModule extends AbstractModule {
 
         Config hazelcastConfig = new Config(NODE_NAME);
 
-        /**
-         * here we add the map-store for Stock-entities which is
-         * in this case the HsqlDBMapStore
-         */
-//        MapConfig stockEntitiesConfig = hazelcastConfig.getMapConfig(STOCK_ENTITIES);
-//        MapStoreConfig stockEntitiesMapstoreConfig = stockEntitiesConfig.getMapStoreConfig();
-//        if (stockEntitiesMapstoreConfig == null) {
-//            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
-//            stockEntitiesMapstoreConfig = new MapStoreConfig();
-//
-//        }
-//        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
-//            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
-//                if (STOCK_ENTITIES.equals(mapName)) {
-//                    return new HqslDBMapStore(entityManager);
-//                } else {
-//                    return null;
-//                }
-//            }
-//        });
-//        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
-//        stockEntitiesConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
-
-        /**
-         * here we add the map-store for Procedures which is
-         * in this case DirectoryMapStore
-         */
-        MapConfig procedureConfig = hazelcastConfig.getMapConfig(PROCEDURES);
-        MapStoreConfig procedureMapstoreConfig = procedureConfig.getMapStoreConfig();
-        if (procedureMapstoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + PROCEDURES);
-            procedureMapstoreConfig = new MapStoreConfig();
+        if (jpaStocksInjector == null) {
+            jpaStocksInjector = Guice.createInjector(new JpaPersistModule("STOCKS"));
+            PersistService service = jpaStocksInjector.getInstance(PersistService.class);
+            service.start();
         }
-        procedureMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
-            public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
-                if (PROCEDURES.equals(mapName)) {
-                    return new DirectoryMapStore(PROCEDURE_BASE_DIRECTORY);
+
+        // create Stock_Entities map-store
+        if ("true".equals(CREATE_STOCK_ENTITIES)) {
+            createStockEntitiesConfig(hazelcastConfig);
+        }
+
+        // create StockQuotes map-store
+        if ("true".equals(CREATE_STOCK_QUOTES)) {
+            createStockQuotesConfig(hazelcastConfig);
+        }
+
+        // create Procedures map-store
+        if ("true".equals(CREATE_PROCEDURES)) {
+            createProceduresConfig(hazelcastConfig);
+        }
+
+        // create Wikipedia map-store
+        if ("true".equals(CREATE_WIKIPEDIA)) {
+            createWikipediaConfig(hazelcastConfig);
+        }
+
+        // create Wikipedia-Resources map-store
+        if ("true".equals(CREATE_WIKIPEDIA_RESOURCES)) {
+            createWikipediaResourcesConfig(hazelcastConfig);
+        }
+
+        // create Wiktionary map-store
+        if ("true".equals(CREATE_WIKTIONARY)) {
+            createWiktionaryConfig(hazelcastConfig);
+        }
+
+        // create Wiktionary-Resources map-store
+        if ("true".equals(CREATE_WIKTIONARY_RESOURCES)) {
+            createWiktionaryResourceConfig(hazelcastConfig);
+        }
+
+        // create DBPedia map-store
+        if ("true".equals(CREATE_DBPEDIA)) {
+            if (jpaDBPediaInjector == null) {
+                jpaDBPediaInjector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
+                PersistService service = jpaDBPediaInjector.getInstance(PersistService.class);
+                service.start();
+            }
+            createDBPediaConfig(hazelcastConfig);
+        }
+
+        // create DBPerson map-store
+        if ("true".equals(CREATE_DBPERSON)) {
+            if (jpaDBPersonInjector == null) {
+                jpaDBPersonInjector = Guice.createInjector(new JpaPersistModule("DBPERSON"));
+                PersistService service = jpaDBPersonInjector.getInstance(PersistService.class);
+                service.start();
+            }
+            createDBPersonConfig(hazelcastConfig);
+        }
+
+        // now we are ready to get an instance
+        hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);
+        return hazelcastInstance;
+    }
+
+    /**
+     * DBPedia map-store
+     */
+    private void createDBPediaConfig(Config hazelcastConfig) {
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPEDIA);
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+        if (mapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + DBPEDIA);
+            mapStoreConfig = new MapStoreConfig();
+        }
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<RDFTriple.RDFKey, RDFTriple>() {
+            public MapLoader<RDFTriple.RDFKey, RDFTriple> newMapStore(String mapName, Properties properties) {
+                if (DBPEDIA.equals(mapName)) {
+                    dbpediaMapStore = new RdfTripleFileMapStore();
+                    jpaDBPediaInjector.injectMembers(dbpediaMapStore);
+                    return dbpediaMapStore;
                 } else {
                     return null;
                 }
             }
         });
-        logger.info("adding mapstore configuration for " + PROCEDURES);
-        procedureConfig.setMapStoreConfig(procedureMapstoreConfig);
+        logger.info("adding mapstore configuration for " + DBPEDIA);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
 
-        /**
-         * wikipedia-article map-store
-         */
-        MapConfig wikipediaConfig = hazelcastConfig.getMapConfig(WIKIPEDIA);
-        MapStoreConfig wikipediaMapstoreConfig = wikipediaConfig.getMapStoreConfig();
-        if (wikipediaMapstoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA);
-            wikipediaMapstoreConfig = new MapStoreConfig();
+    /**
+     * DBPerson map-store
+     */
+    private void createDBPersonConfig(Config hazelcastConfig) {
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPERSON);
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+        if (mapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + DBPERSON);
+            mapStoreConfig = new MapStoreConfig();
         }
-        wikipediaMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
-            public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
-                if (WIKIPEDIA.equals(mapName)) {
-                    return new WikiArticleMapStore(WIKIPEDIA_ARCHIVE);
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<RDFTriple.RDFKey, RDFTriple>() {
+            public MapLoader<RDFTriple.RDFKey, RDFTriple> newMapStore(String mapName, Properties properties) {
+                if (DBPERSON.equals(mapName)) {
+                    dbpersonMapStore = new RdfTripleFileMapStore();
+                    jpaDBPersonInjector.injectMembers(dbpersonMapStore);
+                    return dbpediaMapStore;
                 } else {
                     return null;
                 }
             }
         });
-        logger.info("adding mapstore configuration for " + WIKIPEDIA);
-        wikipediaConfig.setMapStoreConfig(wikipediaMapstoreConfig);
+        logger.info("adding mapstore configuration for " + DBPERSON);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
 
-        /**
-         * wikipedia resources
-         */
-        MapConfig wikipediaResourceConfig = hazelcastConfig.getMapConfig(WIKIPEDIA_RESOURCES);
-        MapStoreConfig wikiResourceMapstoreConfig = wikipediaResourceConfig.getMapStoreConfig();
-        if (wikiResourceMapstoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA_RESOURCES);
-            wikiResourceMapstoreConfig = new MapStoreConfig();
-        }
-        wikiResourceMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, File>() {
-            public MapLoader<String, File> newMapStore(String mapName, Properties properties) {
-                if (WIKIPEDIA_RESOURCES.equals(mapName)) {
-                    IndexedDirectoryMapStore store = new IndexedDirectoryMapStore(WIKIPEDIA_RESOURCE_DIRECTORY, WIKIPEDIA_RESOURCE_INDEX);
-                    DirectorySearchService directorySearchService = new DirectorySearchService(WIKIPEDIA_RESOURCE_INDEX);
-                    store.setSearchService(directorySearchService);
-                    return store;
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + WIKIPEDIA_RESOURCES);
-        wikipediaResourceConfig.setMapStoreConfig(wikiResourceMapstoreConfig);
-
-        /**
-         * wiktionary-article map-store
-         */
-        MapConfig wiktionaryConfig = hazelcastConfig.getMapConfig(WIKTIONARY);
-        MapStoreConfig wiktionaryMapstoreConfig = wiktionaryConfig.getMapStoreConfig();
-        if (wiktionaryMapstoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY);
-            wiktionaryMapstoreConfig = new MapStoreConfig();
-        }
-        wiktionaryMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
-            public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
-                if (WIKTIONARY.equals(mapName)) {
-                    return new WikiArticleMapStore(WIKTIONARY_ARCHIVE);
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + WIKTIONARY);
-        wiktionaryConfig.setMapStoreConfig(wiktionaryMapstoreConfig);
-
-        /**
-         * wiktionary resources
-         */
-        MapConfig wiktionaryResourceConfig = hazelcastConfig.getMapConfig(WIKTIONARY_RESOURCES);
-        MapStoreConfig wiktionaryResourceMapstoreConfig = wiktionaryResourceConfig.getMapStoreConfig();
-        if (wiktionaryResourceMapstoreConfig == null) {
+    /**
+     * wiktionary resources
+     */
+    private void createWiktionaryResourceConfig(Config hazelcastConfig) {
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(WIKTIONARY_RESOURCES);
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+        if (mapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY_RESOURCES);
-            wiktionaryResourceMapstoreConfig = new MapStoreConfig();
+            mapStoreConfig = new MapStoreConfig();
         }
-        wiktionaryResourceMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, File>() {
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, File>() {
             public MapLoader<String, File> newMapStore(String mapName, Properties properties) {
                 if (WIKTIONARY_RESOURCES.equals(mapName)) {
                     IndexedDirectoryMapStore store = new IndexedDirectoryMapStore(WIKTIONARY_RESOURCE_DIRECTORY, WIKTIONARY_RESOURCE_INDEX);
@@ -312,10 +360,162 @@ public class QaiServerModule extends AbstractModule {
             }
         });
         logger.info("adding mapstore configuration for " + WIKTIONARY_RESOURCES);
-        wiktionaryResourceConfig.setMapStoreConfig(wiktionaryResourceMapstoreConfig);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
 
-        // now we are ready to get an instance
-        hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);
-        return hazelcastInstance;
+    /**
+     * wiktionary-article map-store
+     */
+    private void createWiktionaryConfig(Config hazelcastConfig) {
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(WIKTIONARY);
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+        if (mapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY);
+            mapStoreConfig = new MapStoreConfig();
+        }
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
+            public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
+                if (WIKTIONARY.equals(mapName)) {
+                    return new WikiArticleMapStore(WIKTIONARY_ARCHIVE);
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + WIKTIONARY);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
+
+    /**
+     * wikipedia resources
+     */
+    private void createWikipediaResourcesConfig(Config hazelcastConfig) {
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(WIKIPEDIA_RESOURCES);
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+        if (mapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA_RESOURCES);
+            mapStoreConfig = new MapStoreConfig();
+        }
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, File>() {
+            public MapLoader<String, File> newMapStore(String mapName, Properties properties) {
+                if (WIKIPEDIA_RESOURCES.equals(mapName)) {
+                    IndexedDirectoryMapStore store = new IndexedDirectoryMapStore(WIKIPEDIA_RESOURCE_DIRECTORY, WIKIPEDIA_RESOURCE_INDEX);
+                    DirectorySearchService directorySearchService = new DirectorySearchService(WIKIPEDIA_RESOURCE_INDEX);
+                    store.setSearchService(directorySearchService);
+                    return store;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + WIKIPEDIA_RESOURCES);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
+
+    /**
+     * wikipedia-article map-store
+     */
+    private void createWikipediaConfig(Config hazelcastConfig) {
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(WIKIPEDIA);
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+        if (mapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA);
+            mapStoreConfig = new MapStoreConfig();
+        }
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
+            public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
+                if (WIKIPEDIA.equals(mapName)) {
+                    return new WikiArticleMapStore(WIKIPEDIA_ARCHIVE);
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + WIKIPEDIA);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
+
+    /**
+     * here we add the map-store for Procedures which is
+     * in this case DirectoryMapStore
+     */
+    private void createProceduresConfig(Config hazelcastConfig) {
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(PROCEDURES);
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+        if (mapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + PROCEDURES);
+            mapStoreConfig = new MapStoreConfig();
+        }
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
+            public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
+                if (PROCEDURES.equals(mapName)) {
+                    return new DirectoryMapStore(PROCEDURE_BASE_DIRECTORY);
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + PROCEDURES);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
+
+    /**
+     * here we add the map-store for Stock-quotes which is
+     * in this case the HsqlDBMapStore
+     */
+    private void createStockQuotesConfig(Config hazelcastConfig) {
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(STOCK_QUOTES);
+        MapStoreConfig mapStoreConfig = mapConfig .getMapStoreConfig();
+        if (mapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + STOCK_QUOTES);
+            mapStoreConfig = new MapStoreConfig();
+
+        }
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<QuoteId, StockQuote>() {
+            public MapLoader<QuoteId, StockQuote> newMapStore(String mapName, Properties properties) {
+                if (STOCK_QUOTES.equals(mapName)) {
+                    if (stockQuoteMapStore == null) {
+                        stockQuoteMapStore = new StockQuoteMapStore();
+                        jpaStocksInjector.injectMembers(stockQuoteMapStore);
+                    }
+
+                    return stockQuoteMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + STOCK_QUOTES);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
+
+    /**
+     * here we add the map-store for Stock-entities which is
+     * in this case the HsqlDBMapStore
+     */
+    private void createStockEntitiesConfig(Config hazelcastConfig) {
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(STOCK_ENTITIES);
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+        if (mapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
+            mapStoreConfig = new MapStoreConfig();
+
+        }
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
+            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
+                if (STOCK_ENTITIES.equals(mapName)) {
+                    if (stockEntityMapStore == null) {
+                        stockEntityMapStore = new StockEntityMapStore();
+                        jpaStocksInjector.injectMembers(stockEntityMapStore);
+                    }
+
+                    return stockEntityMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
     }
 }

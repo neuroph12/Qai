@@ -1,7 +1,11 @@
 package qube.qai.main;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.persist.PersistService;
+import com.google.inject.persist.jpa.JpaPersistModule;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MapStoreConfig;
@@ -11,10 +15,13 @@ import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStoreFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.persistence.QuoteId;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockQuote;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.StockEntityMapStore;
+import qube.qai.persistence.mapstores.StockQuoteMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.procedure.Procedure;
 
@@ -31,13 +38,12 @@ public class QaiTestServerModule extends AbstractModule {
 
     private static final String STOCK_ENTITIES = "STOCK_ENTITIES";
 
-    private static final String PROCEDURES = "PROCEDURES";
+    private static final String STOCK_QUOTES = "STOCK_QUOTES";
 
-    //private static final String PROCEDURE_BASE_DIRECTORY = "test/data/procedures/";
+    private static final String PROCEDURES = "PROCEDURES";
 
     private String PERSISTENCE_BASE = "/media/rainbird/ALEPH/qai-persistence.db";
     // private String PERSISTENCE_BASE = "/media/pi/BET/qai-persistence.db";
-
 
     private static final String WIKIPEDIA = "WIKIPEDIA_EN";
 
@@ -51,9 +57,18 @@ public class QaiTestServerModule extends AbstractModule {
 
     private HazelcastInstance hazelcastInstance;
 
+    private StockEntityMapStore stockEntityMapStore;
+
+    private StockQuoteMapStore stockQuoteMapStore;
+
+    private Injector childInjector;
+
     @Override
     protected void configure() {
-        // for the moment nothing to do here
+
+        bind(StockEntityMapStore.class).toInstance(stockEntityMapStore);
+
+        bind(StockQuoteMapStore.class).toInstance(stockQuoteMapStore);
     }
 
     @Provides
@@ -64,6 +79,12 @@ public class QaiTestServerModule extends AbstractModule {
         }
 
         Config config = new Config(NODE_NAME);
+
+        if (childInjector == null) {
+            childInjector = Guice.createInjector(new JpaPersistModule("STOCKS"));
+            PersistService service = childInjector.getInstance(PersistService.class);
+            service.start();
+        }
 
         /**
          * here we add the map-store for Stock-entities which is
@@ -79,7 +100,12 @@ public class QaiTestServerModule extends AbstractModule {
         stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
             public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
                 if (STOCK_ENTITIES.equals(mapName)) {
-                    return new StockEntityMapStore();
+                    if (stockEntityMapStore == null) {
+                        stockEntityMapStore = new StockEntityMapStore();
+                        childInjector.injectMembers(stockEntityMapStore);
+                    }
+
+                    return stockEntityMapStore;
                 } else {
                     return null;
                 }
@@ -87,6 +113,34 @@ public class QaiTestServerModule extends AbstractModule {
         });
         logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
         stockEntitiesConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
+
+        /**
+         * here we add the map-store for Stock-quotes which is
+         * in this case the HsqlDBMapStore
+         */
+        MapConfig stockQuotesConfig = config.getMapConfig(STOCK_QUOTES);
+        MapStoreConfig stockQuotesMapstoreConfig = stockQuotesConfig .getMapStoreConfig();
+        if (stockQuotesMapstoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + STOCK_QUOTES);
+            stockQuotesMapstoreConfig = new MapStoreConfig();
+
+        }
+        stockQuotesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<QuoteId, StockQuote>() {
+            public MapLoader<QuoteId, StockQuote> newMapStore(String mapName, Properties properties) {
+                if (STOCK_QUOTES.equals(mapName)) {
+                    if (stockQuoteMapStore == null) {
+                        stockQuoteMapStore = new StockQuoteMapStore();
+                        childInjector.injectMembers(stockQuoteMapStore);
+                    }
+
+                    return stockQuoteMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + STOCK_QUOTES);
+        stockQuotesConfig.setMapStoreConfig(stockQuotesMapstoreConfig);
 
         /**
          * here we add the map-store for Procedures which is
