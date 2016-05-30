@@ -13,62 +13,26 @@
     <name>qube.qai</name>
 
     <properties>
-        <lucene.version>5.3.1</lucene.version>
-        <tika.version>1.10</tika.version>
-        <hazelcast.version>3.5.4</hazelcast.version>
+        <lucene.version>6.0.1</lucene.version>
+        <tika.version>1.13</tika.version>
+        <hazelcast.version>3.6.3</hazelcast.version>
         <guice.version>4.0</guice.version>
+        <guice-conf.version>1.2.0</guice-conf.version>
         <hsqldb.version>2.3.4</hsqldb.version>
         <hibernate.version>4.3.6.Final</hibernate.version>
+        <hibernate-annotations.version>3.5.6-Final</hibernate-annotations.version>
         <jdk.version>1.8</jdk.version>
+        <ojalgo.version>39.0</ojalgo.version>
+        <bliki.version>3.0.19</bliki.version>
+        <encog.version>3.3.0</encog.version>
+        <opennlp.version>1.6.0</opennlp.version>
+        <jparsec.version>2.2.1</jparsec.version>
+        <xstream.version>1.4.9</xstream.version>
+        <milyn-smooks.version>1.6</milyn-smooks.version>
+        <jsoup.version>1.9.2</jsoup.version>
+        <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
+        <apache-commons-compress.version>1.11</apache-commons-compress.version>
     </properties>
-
-    <repositories>
-        <!--<repository>-->
-            <!--<id>central</id>-->
-            <!--<url>http://192.168.1.4:8081/artifactory/libs-release-local</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
-        <!--<repository>-->
-            <!--<id>snapshots</id>-->
-            <!--<url>http://192.168.1.4:8081/artifactory/libs-snapshot-local</url>-->
-            <!--<releases>-->
-                <!--<enabled>false</enabled>-->
-            <!--</releases>-->
-        <!--</repository>-->
-        <!--<repository>-->
-            <!--<id>release</id>-->
-            <!--<url>http://192.168.1.4:8081/artifactory/ext-release-local</url>-->
-            <!--<releases>-->
-                <!--<enabled>false</enabled>-->
-            <!--</releases>-->
-        <!--</repository>-->
-        <!--<repository>-->
-            <!--<id>local-lib</id>-->
-            <!--<url>http://192.168.1.4:8081/artifactory/libs-release-local</url>-->
-            <!--<releases>-->
-                <!--<enabled>false</enabled>-->
-            <!--</releases>-->
-        <!--</repository>-->
-    </repositories>
-
-	<pluginRepositories>
-	    <pluginRepository>
-	        <id>central</id>
-	        <url>http://192.168.1.4:8081/artifactory/plugins-release</url>
-	        <snapshots>
-	            <enabled>false</enabled>
-	        </snapshots>
-	    </pluginRepository>
-	    <pluginRepository>
-	        <id>snapshots</id>
-	        <url>http://192.168.1.4:8081/artifactory/plugins-snapshot</url>
-	        <releases>
-	            <enabled>false</enabled>
-	        </releases>
-	    </pluginRepository>
-	</pluginRepositories>
 
     <dependencies>
         <!-- GRPH graph-library- added directly as a jar,
@@ -89,28 +53,28 @@
         <dependency>
             <groupId>info.bliki.wiki</groupId>
             <artifactId>bliki-core</artifactId>
-            <version>3.0.19</version>
+            <version>${bliki.version}</version>
         </dependency>
 
         <!-- for converting wiki-entries to pdf-format -->
 		<dependency>
             <groupId>info.bliki.pdf</groupId>
             <artifactId>bliki-pdf</artifactId>
-            <version>3.0.19</version>
+            <version>${bliki.version}</version>
         </dependency>
 
         <!-- Encog for neural-network implementation -->
         <dependency>
             <groupId>org.encog</groupId>
             <artifactId>encog-core</artifactId>
-            <version>3.3.0</version>
+            <version>${encog.version}</version>
         </dependency>
 
         <!-- ojalgo for matrix things -->
         <dependency>
             <groupId>org.ojalgo</groupId>
             <artifactId>ojalgo</artifactId>
-            <version>37.1.1</version>
+            <version>${ojalgo.version}</version>
         </dependency>
 
          <!-- Tika does parsing and Lucene does search and indexing -->
@@ -143,7 +107,7 @@
         <dependency>
             <groupId>org.apache.opennlp</groupId>
             <artifactId>opennlp-tools</artifactId>
-            <version>1.6.0</version>
+            <version>${opennlp.version}</version>
         </dependency>
 
         <!-- Guice is pretty important after all -->
@@ -164,7 +128,7 @@
         <dependency>
             <groupId>net.jmob</groupId>
             <artifactId>guice.conf</artifactId>
-            <version>1.2.0</version>
+            <version>${guice-conf.version}</version>
         </dependency>
 
         <!-- Hazelcast for distributed computing -->
@@ -184,9 +148,9 @@
         <!-- a really cool parser-framework.
         forget about parser generators, just program the parser as if it were a BNF -->
         <dependency>
-            <groupId>jparsec</groupId>
+            <groupId>org.jparsec</groupId>
             <artifactId>jparsec</artifactId>
-            <version>2.0.1</version>
+            <version>${jparsec.version}</version>
         </dependency>
 
         <!-- smooks seems to be a very cool xml-transformer framework
@@ -194,34 +158,34 @@
         <dependency>
             <groupId>org.milyn</groupId>
             <artifactId>milyn-smooks-all</artifactId>
-            <version>1.5.1</version>
+            <version>${milyn-smooks.version}</version>
         </dependency>
 
         <!-- jSoup for html-parsing -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.8.3</version>
+            <version>${jsoup.version}</version>
         </dependency>
 
         <!-- jaxpb just doesn't cut it, so we serialize to xml with xstream-->
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
-            <version>1.4.8</version>
+            <version>${xstream.version}</version>
         </dependency>
 
         <!-- especially string and compression utilities -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.1</version>
+            <version>${apache-commons-lang3.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.10</version>
+            <version>${apache-commons-compress.version}</version>
         </dependency>
 
         <!-- hibernate -->
@@ -246,7 +210,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-annotations</artifactId>
-            <version>3.5.6-Final</version>
+            <version>${hibernate-annotations.version}</version>
         </dependency>
 
         <!-- JPA- its implementation lies with hibernate -->
@@ -308,5 +272,53 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <!--<repository>-->
+        <!--<id>central</id>-->
+        <!--<url>http://192.168.1.4:8081/artifactory/libs-release-local</url>-->
+        <!--<snapshots>-->
+        <!--<enabled>false</enabled>-->
+        <!--</snapshots>-->
+        <!--</repository>-->
+        <!--<repository>-->
+        <!--<id>snapshots</id>-->
+        <!--<url>http://192.168.1.4:8081/artifactory/libs-snapshot-local</url>-->
+        <!--<releases>-->
+        <!--<enabled>false</enabled>-->
+        <!--</releases>-->
+        <!--</repository>-->
+        <!--<repository>-->
+        <!--<id>release</id>-->
+        <!--<url>http://192.168.1.4:8081/artifactory/ext-release-local</url>-->
+        <!--<releases>-->
+        <!--<enabled>false</enabled>-->
+        <!--</releases>-->
+        <!--</repository>-->
+        <!--<repository>-->
+        <!--<id>local-lib</id>-->
+        <!--<url>http://192.168.1.4:8081/artifactory/libs-release-local</url>-->
+        <!--<releases>-->
+        <!--<enabled>false</enabled>-->
+        <!--</releases>-->
+        <!--</repository>-->
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <url>http://192.168.1.4:8081/artifactory/plugins-release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>snapshots</id>
+            <url>http://192.168.1.4:8081/artifactory/plugins-snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
