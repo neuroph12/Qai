@@ -165,10 +165,10 @@ public class WikiSearchService implements SearchServiceInterface {
 
         }
 
-        @Override
-        public IndexOutput createTempOutput(String s, String s1, IOContext ioContext) throws IOException {
-            return null;
-        }
+//        @Override
+//        public IndexOutput createTempOutput(String s, String s1, IOContext ioContext) throws IOException {
+//            return null;
+//        }
     }
 
 }

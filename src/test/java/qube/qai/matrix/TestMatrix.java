@@ -215,11 +215,11 @@ public class TestMatrix extends TestCase {
 
         final BasicMatrix tmpA = tmpFactory.makeEye(5000, 300);
         // Internally this creates an "eye-structure" - not a large array...
-        final BasicMatrix tmpB = tmpFactory.makeRandom(300, 2, new Weibull(5.0, 2.0));
+        final BasicMatrix tmpB = tmpFactory.makeFilled(300, 2, new Weibull(5.0, 2.0));
         // When you create a matrix with random elements you can specify their distribution.
 
         final BasicMatrix tmpC = tmpB.multiplyLeft(tmpA);
-        final BasicMatrix tmpD = tmpA.multiplyRight(tmpB);
+        final BasicMatrix tmpD = tmpA.multiply(tmpB);
         // ojAlgo differentiates between multiplying from the left and from the right.
         // The matrices C and D will be equal, but the code executed to calculate them are different.
         // The second alternative, resulting in D, will be MUCH faster!
