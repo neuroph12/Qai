@@ -1,10 +1,13 @@
 package qube.qai.persistence.mapstores;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
+import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.data.stores.StockQuoteDataStore;
-import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.QuoteId;
 import qube.qai.persistence.StockQuote;
 
@@ -17,7 +20,9 @@ import java.util.Map;
 /**
  * Created by rainbird on 5/15/16.
  */
-public class TestStockQuoteMapStore extends QaiTestBase {
+public class TestStockQuoteMapStore extends TestCase {
+
+    protected Logger logger = LoggerFactory.getLogger("TestStockQuoteMapStore");
 
     @Inject
     private StockQuoteMapStore mapStore;
@@ -28,11 +33,10 @@ public class TestStockQuoteMapStore extends QaiTestBase {
 
     public void testStockQuoteMapStore() throws Exception {
 
-//        Injector childInjector = injector.createChildInjector(new JpaPersistModule("STOCKS"));
-//        PersistService service = childInjector.getInstance(PersistService.class);
-//        service.start();
-//
-//        StockQuoteMapStore mapStore = new StockQuoteMapStore();
+        Injector injector = Guice.createInjector(new JpaPersistModule("STOCKS"));
+        PersistService service = injector.getInstance(PersistService.class);
+        service.start();
+
         injector.injectMembers(this);
 
         Collection<QuoteId> keys = createKeys();

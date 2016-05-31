@@ -2,6 +2,7 @@ package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.MapStore;
 import org.apache.commons.lang3.StringUtils;
+import qube.qai.persistence.RDFId;
 import qube.qai.persistence.RDFTriple;
 
 import javax.inject.Inject;
@@ -15,7 +16,7 @@ import java.util.Map;
 /**
  * Created by rainbird on 5/24/16.
  */
-public class RdfTripleFileMapStore implements MapStore<RDFTriple.RDFKey, RDFTriple> {
+public class RdfTripleFileMapStore implements MapStore<RDFId, RDFTriple> {
 
     private String tableName = "RdfTripleSet";
 
@@ -28,7 +29,9 @@ public class RdfTripleFileMapStore implements MapStore<RDFTriple.RDFKey, RDFTrip
     //private String rdfTurtleFile = "/media/rainbird/ALEPH/qai-persistence.db/dbperson_en/persondata_en.ttl";
     private String rdfTurtleFile; // = "persondata_en.ttl";
 
-    private String createStatement = "CREATE TEXT TABLE IF NOT EXISTS " + tableName + " (subject VARCHAR(256), predicate VARCHAR(256), object VARCHAR(256)) ";
+    private String createStatement = "CREATE TEXT TABLE IF NOT EXISTS " + tableName
+            + " (subject VARCHAR(256) , predicate VARCHAR(256) NOT NULL, "
+            + "object VARCHAR(256), PRIMARY KEY (predicate, subject)) ";
 
     private String assignFileStatement = "SET TABLE " + tableName + " SOURCE \"" + rdfTurtleFile + ";fs=\\space;vs=\\space\"";
 
@@ -64,9 +67,8 @@ public class RdfTripleFileMapStore implements MapStore<RDFTriple.RDFKey, RDFTrip
         transaction = entityManager.getTransaction();
         transaction.begin();
 
-        String statement = createStatement;
-        Query query = entityManager.createNativeQuery(statement, Boolean.class);
-        int retval = query.executeUpdate();
+        Query createQuery = entityManager.createNativeQuery(createStatement);
+        int retval = createQuery.executeUpdate();
         if (retval >= 0) {
             isTableExists = true;
         }
@@ -85,14 +87,6 @@ public class RdfTripleFileMapStore implements MapStore<RDFTriple.RDFKey, RDFTrip
             throw new IllegalArgumentException("Something has gone wrong with table creation- skipping attaching data.");
         }
 
-        // make sure that the file exists and is accessible
-//        File dataFile = new File(rdfTurtleFile);
-//        if (!dataFile.exists()
-//                || !dataFile.canRead()
-//                || !dataFile.canWrite()) {
-//            throw new RuntimeException("File is not accessible");
-//        }
-
         Query query = entityManager.createNativeQuery(assignFileStatement);
         int retval = query.executeUpdate();
         if (retval >= 0 && transaction != null && transaction.isActive()) {
@@ -102,37 +96,38 @@ public class RdfTripleFileMapStore implements MapStore<RDFTriple.RDFKey, RDFTrip
     }
 
     @Override
-    public void store(RDFTriple.RDFKey key, RDFTriple value) {
+    public void store(RDFId key, RDFTriple value) {
 
     }
 
     @Override
-    public void storeAll(Map<RDFTriple.RDFKey, RDFTriple> map) {
+    public void storeAll(Map<RDFId, RDFTriple> map) {
 
     }
 
     @Override
-    public void delete(RDFTriple.RDFKey key) {
+    public void delete(RDFId key) {
 
     }
 
     @Override
-    public void deleteAll(Collection<RDFTriple.RDFKey> keys) {
+    public void deleteAll(Collection<RDFId> keys) {
 
     }
 
     @Override
-    public RDFTriple load(RDFTriple.RDFKey key) {
+    public RDFTriple load(RDFId key) {
+        RDFTriple triple = entityManager.find(RDFTriple.class, key);
+        return triple;
+    }
+
+    @Override
+    public Map<RDFId, RDFTriple> loadAll(Collection<RDFId> keys) {
         return null;
     }
 
     @Override
-    public Map<RDFTriple.RDFKey, RDFTriple> loadAll(Collection<RDFTriple.RDFKey> keys) {
-        return null;
-    }
-
-    @Override
-    public Iterable<RDFTriple.RDFKey> loadAllKeys() {
+    public Iterable<RDFId> loadAllKeys() {
         return null;
     }
 

@@ -297,8 +297,8 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + DBPEDIA);
             mapStoreConfig = new MapStoreConfig();
         }
-        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<RDFTriple.RDFKey, RDFTriple>() {
-            public MapLoader<RDFTriple.RDFKey, RDFTriple> newMapStore(String mapName, Properties properties) {
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<RDFId, RDFTriple>() {
+            public MapLoader<RDFId, RDFTriple> newMapStore(String mapName, Properties properties) {
                 if (DBPEDIA.equals(mapName)) {
                     dbpediaMapStore = new RdfTripleFileMapStore();
                     jpaDBPediaInjector.injectMembers(dbpediaMapStore);
@@ -322,8 +322,8 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + DBPERSON);
             mapStoreConfig = new MapStoreConfig();
         }
-        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<RDFTriple.RDFKey, RDFTriple>() {
-            public MapLoader<RDFTriple.RDFKey, RDFTriple> newMapStore(String mapName, Properties properties) {
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<RDFId, RDFTriple>() {
+            public MapLoader<RDFId, RDFTriple> newMapStore(String mapName, Properties properties) {
                 if (DBPERSON.equals(mapName)) {
                     dbpersonMapStore = new RdfTripleFileMapStore();
                     jpaDBPersonInjector.injectMembers(dbpersonMapStore);

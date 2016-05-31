@@ -22,6 +22,8 @@
         <hsqldb.version>2.3.4</hsqldb.version>
         <hibernate.version>4.3.6.Final</hibernate.version>
         <hibernate-annotations.version>3.5.6-Final</hibernate-annotations.version>
+        <hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
+        <!--<javax.persistence.version>1.0.2</javax.persistence.version>-->
         <jdk.version>1.8</jdk.version>
         <ojalgo.version>39.0</ojalgo.version>
         <bliki.version>3.0.19</bliki.version>
@@ -160,6 +162,12 @@
             <groupId>org.milyn</groupId>
             <artifactId>milyn-smooks-all</artifactId>
             <version>${milyn-smooks.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.persistence</groupId>
+                    <artifactId>persistence-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- jSoup for html-parsing -->
@@ -192,34 +200,15 @@
         <!-- hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>1.0.0.Final</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-annotations</artifactId>
-            <version>${hibernate-annotations.version}</version>
-        </dependency>
-
-        <!-- JPA- its implementation lies with hibernate -->
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-            <version>1.0.2</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.hibernate.javax.persistence</groupId>-->
+            <!--<artifactId>hibernate-jpa-2.1-api</artifactId>-->
+            <!--<version>${hibernate-jpa.version}</version>-->
+        <!--</dependency>-->
 
         <!-- UUID-generator -->
         <dependency>
@@ -229,11 +218,11 @@
         </dependency>
 
         <!-- slf4j -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.13</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-jdk14</artifactId>-->
+            <!--<version>1.7.13</version>-->
+        <!--</dependency>-->
 
         <!-- joda-time -->
         <dependency>
