@@ -129,6 +129,12 @@
     <orderEntry type="library" name="Maven: org.hsqldb:hsqldb:2.3.4" level="project" />
     <orderEntry type="library" name="Maven: org.jparsec:jparsec:2.2.1" level="project" />
     <orderEntry type="library" name="Maven: cglib:cglib-nodep:2.1_3" level="project" />
+    <orderEntry type="library" name="Maven: org.openrdf.sesame:sesame-rio-turtle:4.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openrdf.sesame:sesame-model:4.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openrdf.sesame:sesame-util:4.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openrdf.sesame:sesame-rio-api:4.1.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.openrdf.sesame:sesame-rio-datatypes:4.1.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.openrdf.sesame:sesame-rio-languages:4.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.milyn:milyn-smooks-all:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.milyn:milyn-commons:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.20" level="project" />

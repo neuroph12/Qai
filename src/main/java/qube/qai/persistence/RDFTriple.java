@@ -1,5 +1,7 @@
 package qube.qai.persistence;
 
+import qube.qai.services.implementation.UUIDService;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -11,41 +13,43 @@ import java.io.Serializable;
 public class RDFTriple implements Serializable{
 
     @Id
-    private RDFId id;
+    @Column(name = "uuid")
+    private String uuid;
+
+    @Column(name = "subject")
+    private String subject;
+
+    @Column(name = "predicate")
+    private String predicate;
 
     @Column(name = "object")
     private String object;
 
     public RDFTriple() {
+        this.uuid = UUIDService.uuidString();
     }
 
     public RDFTriple(String subject, String predicate, String object) {
-        this.id = new RDFId(subject, predicate);
+        this();
+        this.subject = subject;
+        this.predicate = predicate;
         this.object = object;
     }
 
-    public RDFId getId() {
-        return id;
-    }
-
-    public void setId(RDFId id) {
-        this.id = id;
-    }
-
     public String getSubject() {
-        return id.getSubject();
+        return subject;
     }
 
     public void setSubject(String subject) {
-        this.id.setSubject(subject);
+        this.subject = subject;
     }
 
     public String getPredicate() {
-        return id.getPredicate();
+        return predicate;
     }
 
     public void setPredicate(String predicate) {
-        this.id.setPredicate(predicate);
+        this.predicate = predicate;
     }
 
     public String getObject() {
@@ -56,5 +60,11 @@ public class RDFTriple implements Serializable{
         this.object = object;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
 
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 }

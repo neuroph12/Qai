@@ -19,9 +19,9 @@ public class RDFId implements Serializable {
     public RDFId() {
     }
 
-    public RDFId(String subject, String predicate) {
+    public RDFId(String subject, String predicat) {
         this.subject = subject;
-        this.predicate = predicate;
+        this.predicate = predicat;
     }
 
     public String getSubject() {

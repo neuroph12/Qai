@@ -262,25 +262,25 @@ public class QaiServerModule extends AbstractModule {
             createWiktionaryResourceConfig(hazelcastConfig);
         }
 
-        // create DBPedia map-store
-        if ("true".equals(CREATE_DBPEDIA)) {
-            if (jpaDBPediaInjector == null) {
-                jpaDBPediaInjector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
-                PersistService service = jpaDBPediaInjector.getInstance(PersistService.class);
-                service.start();
-            }
-            createDBPediaConfig(hazelcastConfig);
-        }
-
-        // create DBPerson map-store
-        if ("true".equals(CREATE_DBPERSON)) {
-            if (jpaDBPersonInjector == null) {
-                jpaDBPersonInjector = Guice.createInjector(new JpaPersistModule("DBPERSON"));
-                PersistService service = jpaDBPersonInjector.getInstance(PersistService.class);
-                service.start();
-            }
-            createDBPersonConfig(hazelcastConfig);
-        }
+//        // create DBPedia map-store
+//        if ("true".equals(CREATE_DBPEDIA)) {
+//            if (jpaDBPediaInjector == null) {
+//                jpaDBPediaInjector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
+//                PersistService service = jpaDBPediaInjector.getInstance(PersistService.class);
+//                service.start();
+//            }
+//            createDBPediaConfig(hazelcastConfig);
+//        }
+//
+//        // create DBPerson map-store
+//        if ("true".equals(CREATE_DBPERSON)) {
+//            if (jpaDBPersonInjector == null) {
+//                jpaDBPersonInjector = Guice.createInjector(new JpaPersistModule("DBPERSON"));
+//                PersistService service = jpaDBPersonInjector.getInstance(PersistService.class);
+//                service.start();
+//            }
+//            createDBPersonConfig(hazelcastConfig);
+//        }
 
         // now we are ready to get an instance
         hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);
@@ -290,52 +290,52 @@ public class QaiServerModule extends AbstractModule {
     /**
      * DBPedia map-store
      */
-    private void createDBPediaConfig(Config hazelcastConfig) {
-        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPEDIA);
-        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
-        if (mapStoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + DBPEDIA);
-            mapStoreConfig = new MapStoreConfig();
-        }
-        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<RDFId, RDFTriple>() {
-            public MapLoader<RDFId, RDFTriple> newMapStore(String mapName, Properties properties) {
-                if (DBPEDIA.equals(mapName)) {
-                    dbpediaMapStore = new RdfTripleFileMapStore();
-                    jpaDBPediaInjector.injectMembers(dbpediaMapStore);
-                    return dbpediaMapStore;
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + DBPEDIA);
-        mapConfig.setMapStoreConfig(mapStoreConfig);
-    }
+//    private void createDBPediaConfig(Config hazelcastConfig) {
+//        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPEDIA);
+//        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+//        if (mapStoreConfig == null) {
+//            logger.info("mapStoreConfig is null... creating one for: " + DBPEDIA);
+//            mapStoreConfig = new MapStoreConfig();
+//        }
+//        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<RDFId, RDFTriple>() {
+//            public MapLoader<RDFId, RDFTriple> newMapStore(String mapName, Properties properties) {
+//                if (DBPEDIA.equals(mapName)) {
+//                    dbpediaMapStore = new RdfTripleFileMapStore();
+//                    jpaDBPediaInjector.injectMembers(dbpediaMapStore);
+//                    return dbpediaMapStore;
+//                } else {
+//                    return null;
+//                }
+//            }
+//        });
+//        logger.info("adding mapstore configuration for " + DBPEDIA);
+//        mapConfig.setMapStoreConfig(mapStoreConfig);
+//    }
 
     /**
      * DBPerson map-store
      */
-    private void createDBPersonConfig(Config hazelcastConfig) {
-        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPERSON);
-        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
-        if (mapStoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + DBPERSON);
-            mapStoreConfig = new MapStoreConfig();
-        }
-        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<RDFId, RDFTriple>() {
-            public MapLoader<RDFId, RDFTriple> newMapStore(String mapName, Properties properties) {
-                if (DBPERSON.equals(mapName)) {
-                    dbpersonMapStore = new RdfTripleFileMapStore();
-                    jpaDBPersonInjector.injectMembers(dbpersonMapStore);
-                    return dbpediaMapStore;
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + DBPERSON);
-        mapConfig.setMapStoreConfig(mapStoreConfig);
-    }
+//    private void createDBPersonConfig(Config hazelcastConfig) {
+//        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPERSON);
+//        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+//        if (mapStoreConfig == null) {
+//            logger.info("mapStoreConfig is null... creating one for: " + DBPERSON);
+//            mapStoreConfig = new MapStoreConfig();
+//        }
+//        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<RDFId, RDFTriple>() {
+//            public MapLoader<RDFId, RDFTriple> newMapStore(String mapName, Properties properties) {
+//                if (DBPERSON.equals(mapName)) {
+//                    dbpersonMapStore = new RdfTripleFileMapStore();
+//                    jpaDBPersonInjector.injectMembers(dbpersonMapStore);
+//                    return dbpediaMapStore;
+//                } else {
+//                    return null;
+//                }
+//            }
+//        });
+//        logger.info("adding mapstore configuration for " + DBPERSON);
+//        mapConfig.setMapStoreConfig(mapStoreConfig);
+//    }
 
     /**
      * wiktionary resources
