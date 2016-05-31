@@ -233,44 +233,40 @@ public class QaiServerModule extends AbstractModule {
         }
 
         // create StockQuotes map-store
-        if ("true".equals(CREATE_STOCK_QUOTES)) {
+        if ("true".equalsIgnoreCase(CREATE_STOCK_QUOTES)) {
             createStockQuotesConfig(hazelcastConfig);
         }
 
         // create Procedures map-store
-        if ("true".equals(CREATE_PROCEDURES)) {
+        if ("true".equalsIgnoreCase(CREATE_PROCEDURES)) {
             createProceduresConfig(hazelcastConfig);
         }
 
         // create Wikipedia map-store
-        if ("true".equals(CREATE_WIKIPEDIA)) {
+        if ("true".equalsIgnoreCase(CREATE_WIKIPEDIA)) {
             createWikipediaConfig(hazelcastConfig);
         }
 
         // create Wikipedia-Resources map-store
-        if ("true".equals(CREATE_WIKIPEDIA_RESOURCES)) {
+        if ("true".equalsIgnoreCase(CREATE_WIKIPEDIA_RESOURCES)) {
             createWikipediaResourcesConfig(hazelcastConfig);
         }
 
         // create Wiktionary map-store
-        if ("true".equals(CREATE_WIKTIONARY)) {
+        if ("true".equalsIgnoreCase(CREATE_WIKTIONARY)) {
             createWiktionaryConfig(hazelcastConfig);
         }
 
         // create Wiktionary-Resources map-store
-        if ("true".equals(CREATE_WIKTIONARY_RESOURCES)) {
+        if ("true".equalsIgnoreCase(CREATE_WIKTIONARY_RESOURCES)) {
             createWiktionaryResourceConfig(hazelcastConfig);
         }
 
-//        // create DBPedia map-store
-//        if ("true".equals(CREATE_DBPEDIA)) {
-//            if (jpaDBPediaInjector == null) {
-//                jpaDBPediaInjector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
-//                PersistService service = jpaDBPediaInjector.getInstance(PersistService.class);
-//                service.start();
-//            }
-//            createDBPediaConfig(hazelcastConfig);
-//        }
+        // create DBPedia map-store
+        if ("true".equalsIgnoreCase(CREATE_DBPEDIA)) {
+
+            createDBPediaConfig(hazelcastConfig);
+        }
 //
 //        // create DBPerson map-store
 //        if ("true".equals(CREATE_DBPERSON)) {
@@ -290,30 +286,38 @@ public class QaiServerModule extends AbstractModule {
     /**
      * DBPedia map-store
      */
-//    private void createDBPediaConfig(Config hazelcastConfig) {
-//        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPEDIA);
-//        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
-//        if (mapStoreConfig == null) {
-//            logger.info("mapStoreConfig is null... creating one for: " + DBPEDIA);
-//            mapStoreConfig = new MapStoreConfig();
-//        }
-//        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<RDFId, RDFTriple>() {
-//            public MapLoader<RDFId, RDFTriple> newMapStore(String mapName, Properties properties) {
-//                if (DBPEDIA.equals(mapName)) {
-//                    dbpediaMapStore = new RdfTripleFileMapStore();
-//                    jpaDBPediaInjector.injectMembers(dbpediaMapStore);
-//                    return dbpediaMapStore;
-//                } else {
-//                    return null;
-//                }
-//            }
-//        });
-//        logger.info("adding mapstore configuration for " + DBPEDIA);
-//        mapConfig.setMapStoreConfig(mapStoreConfig);
-//    }
+    private void createDBPediaConfig(Config hazelcastConfig) {
+        // first create injector for jpa-module
+        if (jpaDBPediaInjector == null) {
+            jpaDBPediaInjector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
+            PersistService service = jpaDBPediaInjector.getInstance(PersistService.class);
+            service.start();
+        }
+
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPEDIA);
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+        if (mapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + DBPEDIA);
+            mapStoreConfig = new MapStoreConfig();
+        }
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, RDFTriple>() {
+            public MapLoader<String, RDFTriple> newMapStore(String mapName, Properties properties) {
+                if (DBPEDIA.equals(mapName)) {
+                    dbpediaMapStore = new RdfTripleFileMapStore();
+                    jpaDBPediaInjector.injectMembers(dbpediaMapStore);
+                    return dbpediaMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + DBPEDIA);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
 
     /**
      * DBPerson map-store
+     * this is probably obsolete as the whole information is also to be found in dbpedia as well
      */
 //    private void createDBPersonConfig(Config hazelcastConfig) {
 //        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPERSON);
@@ -499,7 +503,6 @@ public class QaiServerModule extends AbstractModule {
         if (mapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
             mapStoreConfig = new MapStoreConfig();
-
         }
         mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
             public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {

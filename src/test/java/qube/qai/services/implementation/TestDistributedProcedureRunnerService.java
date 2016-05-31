@@ -10,5 +10,6 @@ public class TestDistributedProcedureRunnerService extends QaiTestBase {
     public void testDistributedProcedures() throws Exception {
 
         // oh this will be fun :-)
+        fail("test is not yet implemented");
     }
 }

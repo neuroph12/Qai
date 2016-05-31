@@ -27,9 +27,7 @@ public class TestStockQuoteMapStore extends TestCase {
     @Inject
     private StockQuoteMapStore mapStore;
 
-    public void restSilly() {
-        assertTrue(true);
-    }
+    private String[] names = {"HRS", "GGP", "CI", "LMT", "TAP"};
 
     public void testStockQuoteMapStore() throws Exception {
 
@@ -39,34 +37,37 @@ public class TestStockQuoteMapStore extends TestCase {
 
         injector.injectMembers(this);
 
-        Collection<QuoteId> keys = createKeys();
-        assertNotNull(keys);
+        for (int i = 0; i < names.length; i++) {
+            Collection<QuoteId> keys = createKeys(names[i]);
+            assertNotNull(keys);
 
-        int count = 0;
-        for (Iterator<QuoteId> it = keys.iterator(); it.hasNext(); ) {
-            QuoteId key = it.next();
-            StockQuote quote = mapStore.load(key);
-            assertNotNull("Quote shoud not be null", quote);
-            String message = "Quote: " + quote.getTickerSymbol()
-                    + " date: " + quote.getId().getDate()
-                    + " adj-close: " + quote.getAdjustedClose();
-            logger.info(message);
-            count++;
+            int count = 0;
+            for (Iterator<QuoteId> it = keys.iterator(); it.hasNext(); ) {
+                QuoteId key = it.next();
+                StockQuote quote = mapStore.load(key);
+                assertNotNull("Quote shoud not be null", quote);
+                String message = "Quote: " + quote.getTickerSymbol()
+                        + " date: " + quote.getId().getDate()
+                        + " adj-close: " + quote.getAdjustedClose();
+                logger.info(message);
+                count++;
+            }
+
+            logger.info("found: " + keys.size() + " listed: " + count);
+
+            Map<QuoteId, StockQuote> result = mapStore.loadAll(keys);
+            assertNotNull(result);
+
         }
-
-        logger.info("found: " + keys.size() + " listed: " + count);
-
-        Map<QuoteId, StockQuote> result = mapStore.loadAll(keys);
-        assertNotNull(result);
 
 
     }
 
-    private Collection<QuoteId> createKeys() {
+    private Collection<QuoteId> createKeys(String name) {
         Collection<QuoteId> keys = new ArrayList<>();
 
         StockQuoteDataStore dataStore = new StockQuoteDataStore();
-        Collection<StockQuote> quotes = dataStore.retrieveQuotesFor("HRS");
+        Collection<StockQuote> quotes = dataStore.retrieveQuotesFor(name);
 
         for (StockQuote quote : quotes) {
             QuoteId id = quote.getId();
