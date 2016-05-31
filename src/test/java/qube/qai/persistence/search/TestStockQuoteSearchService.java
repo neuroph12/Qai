@@ -30,8 +30,15 @@ public class TestStockQuoteSearchService extends TestCase {
         for (int i = 0; i < names.length; i++) {
             Collection<SearchResult> results = searchService.searchInputString(names[i], "tickerSymbol", 100);
             assertNotNull(results);
-            assertTrue(results.size() == 100);
-
+            assertTrue(results.size() > 0);
+            log("found " + results.size() + " quotes for the entity: " + names[i]);
+            for (SearchResult result : results) {
+                log("found: " + result.getFilename());
+            }
         }
+    }
+
+    private void log(String message) {
+        System.out.println(message);
     }
 }

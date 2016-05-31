@@ -28,12 +28,12 @@ public class StockQuoteSearchService implements SearchServiceInterface {
         String queryString = "SELECT q FROM StockQuote q";
 
         if ("TICKERSYMBOL".equalsIgnoreCase(fieldName)) {
-            queryString += " WHERE q.tickerSymbol = '" + searchString + "'";
+            queryString += " WHERE q.id.tickerSymbol = '" + searchString + "'";
         } else if ("QUOTEDATE".equals(fieldName)) {
-            queryString += " WHERE q.quoteDate = " + searchString;
+            queryString += " WHERE q.id.quoteDate = " + searchString;
         } else {
             String[] parts = org.apache.commons.lang3.StringUtils.split(searchString, '|');
-            queryString += " WHERE q.tickerSymbol = '" + parts[0] + "' AND q.quoteDate = " + parts[1];
+            queryString += " WHERE q.id.tickerSymbol = '" + parts[0] + "' AND q.id.quoteDate = " + parts[1];
         }
 
         Query query = manager.createQuery(queryString);
@@ -45,12 +45,12 @@ public class StockQuoteSearchService implements SearchServiceInterface {
             SearchResult result = new SearchResult(searchString, idString, 1.0);
             results.add(result);
             count++;
-            if (hitsPerPage > 0 && hitsPerPage >= count) {
+            if (hitsPerPage > 0 && count >= hitsPerPage) {
                 break;
             }
         }
 
-        return null;
+        return results;
     }
 
     @Override

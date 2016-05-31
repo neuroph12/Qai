@@ -38,7 +38,11 @@ public class StockQuoteMapStore implements MapStore<QuoteId, StockQuote> {
 
     @Override
     public void store(QuoteId key, StockQuote value) {
+        if (!entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+        }
         entityManager.persist(value);
+        entityManager.getTransaction().commit();
     }
 
     @Override
