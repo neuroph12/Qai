@@ -15,10 +15,7 @@ import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStoreFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.persistence.QuoteId;
-import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockQuote;
-import qube.qai.persistence.WikiArticle;
+import qube.qai.persistence.*;
 import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.StockEntityMapStore;
 import qube.qai.persistence.mapstores.StockQuoteMapStore;
@@ -97,8 +94,8 @@ public class QaiTestServerModule extends AbstractModule {
             stockEntitiesMapstoreConfig = new MapStoreConfig();
 
         }
-        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
-            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
+        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<StockEntityId, StockEntity>() {
+            public MapLoader<StockEntityId, StockEntity> newMapStore(String mapName, Properties properties) {
                 if (STOCK_ENTITIES.equals(mapName)) {
                     if (stockEntityMapStore == null) {
                         stockEntityMapStore = new StockEntityMapStore();

@@ -6,8 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 import qube.qai.data.Selector;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockEntityId;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.persistence.mapstores.TestMapStores;
+import qube.qai.persistence.mapstores.TestStockEntityMapStore;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
@@ -51,16 +53,16 @@ public class TestHazelcastSelectors extends QaiTestBase {
      */
     public void testHazelcastStockEntities() throws Exception {
 
-        IMap<String,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_SOURCE);
+        IMap<StockEntityId,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_SOURCE);
 
         int number = 100;
         Collection<Selector> selectors = new ArrayList<Selector>();
         for (int i = 0; i < number; i++) {
             String name = "entity(" + i + ")";
-            StockEntity entity = TestMapStores.createEntity(name);
-            String uuid = entity.getUuid();
+            StockEntity entity = TestStockEntityMapStore.createEntity(name);
+            StockEntityId uuid = entity.getId();
             stockEntities.put(uuid, entity);
-            Selector<StockEntity> selector = new HazelcastSelector<StockEntity>(STOCK_SOURCE, uuid);
+            Selector<StockEntity> selector = new HazelcastSelector<StockEntity>(STOCK_SOURCE, uuid.toString());
             selectors.add(selector);
         }
 

@@ -4,6 +4,7 @@ import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockEntityId;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSourceInterface;
@@ -47,51 +48,6 @@ public class TestMapStores extends QaiTestBase {
             assertNotNull("there has to be something", article);
         }
 
-    }
-
-    /**
-     * in this case, we will be storing the Stock-Quotes in HsqlDb
-     * i am not sure i really want to keep a copy of them, to be honest
-     * but for completeness' sake, i will be storing them away in HsqlDb
-     * so that they can be collected with sql-statements as well, if need be
-     * @throws Exception
-     */
-    public void testStockEntityMapStore() throws Exception {
-
-        this.injector = injector.createChildInjector(new JpaPersistModule("STOCKS"));
-        PersistService service = injector.getInstance(PersistService.class);
-        service.start();
-
-        // the fields in class will have to be injected
-        StockEntityMapStore mapStore = new StockEntityMapStore();
-        injector.injectMembers(mapStore);
-
-        int number = 100;
-        Map<String, StockEntity> entityMap = new HashMap<String, StockEntity>();
-        for (int i = 0; i < number; i++) {
-            String name = "entity(" + i + ")";
-            StockEntity entity = createEntity(name);
-            String uuid = entity.getUuid();
-            mapStore.store(uuid, entity);
-            entityMap.put(uuid, entity);
-        }
-
-        // in this case the map-store should be returning all keys
-        Iterable<String> storedKeys = mapStore.loadAllKeys();
-        assertNotNull("stored keys may not be null", storedKeys);
-
-        // now read them back from database
-        for (String uuid : entityMap.keySet()) {
-            StockEntity cachedEntity = entityMap.get(uuid);
-            StockEntity storedEntity = mapStore.load(uuid);
-            assertNotNull("there has to be an entity", storedEntity);
-            assertTrue("entities have to be equal", cachedEntity.equals(storedEntity));
-        }
-
-        // when we are done we delete the things as well, just to keep things managable
-        for (String uuid : entityMap.keySet()) {
-            mapStore.delete(uuid);
-        }
     }
 
     /**
@@ -147,21 +103,5 @@ public class TestMapStores extends QaiTestBase {
         }
     }
 
-    /**
-     * creates a silly StockEntity
-     * @param name
-     * @return
-     */
-    public static StockEntity createEntity(String name) {
-        StockEntity entity = new StockEntity();
-        entity.setName(name);
-        entity.setAddress("address of " + name);
-        entity.setGicsSector("gicsSector of " + name);
-        entity.setGicsSubIndustry("gicsSubIndustry of " + name);
-        entity.setSecurity("security of " + name);
-        entity.setTradedIn("vsex");
-        entity.setTickerSymbol(name);
-        entity.setUuid("vstex|" + name);
-        return entity;
-    }
+
 }

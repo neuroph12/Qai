@@ -27,11 +27,12 @@ public class TestStockQuoteMapStore extends TestCase {
     @Inject
     private StockQuoteMapStore mapStore;
 
-    private String[] names = {"HRS", "GGP", "CI", "LMT", "TAP"};
+    //private String[] names = {"HRS", "GGP", "CI", "LMT", "TAP"};
+    private String[] names = {"HRS"};
 
     public void testStockQuoteMapStore() throws Exception {
 
-        Injector injector = Guice.createInjector(new JpaPersistModule("STOCKS"));
+        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
         PersistService service = injector.getInstance(PersistService.class);
         service.start();
 
@@ -59,7 +60,6 @@ public class TestStockQuoteMapStore extends TestCase {
             assertNotNull(result);
 
         }
-
 
     }
 

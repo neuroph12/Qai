@@ -5,6 +5,7 @@ import qube.qai.data.DataVisitor;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -16,15 +17,11 @@ import java.util.Date;
 @Entity
 public class StockEntity implements Serializable, AcceptsVisitors {
 
-    @Id
-    @Column(name = "uuid", nullable = false)
-    private String uuid;
+    @EmbeddedId
+    private StockEntityId id;
 
     @Column(name = "name")
     private String name;
-
-    @Column(name = "tickerSymbol")
-    private String tickerSymbol;
 
     @Column(name = "security")
     private String security;
@@ -47,42 +44,20 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     @Column(name = "CIK")
     private String CIK;
 
-    @Column(name = "tradedIn")
-    private String tradedIn;
-
     public StockEntity() {
-        this.uuid = UUIDService.uuidString();
-    }
-
-    public StockEntity(String name,
-                       String tickerSymbol,
-                       String security,
-                       String secFilings,
-                       String gicsSector,
-                       String gicsSubIndustry,
-                       String address,
-                       Date dateFirstAdded) {
-        this();
-        this.name = name;
-        this.tickerSymbol = tickerSymbol;
-        this.security = security;
-        this.secFilings = secFilings;
-        this.gicsSector = gicsSector;
-        this.gicsSubIndustry = gicsSubIndustry;
-        this.address = address;
-        this.dateFirstAdded = dateFirstAdded;
+        this.id = new StockEntityId();
     }
 
     public Object accept(DataVisitor visitor, Object data) {
         return visitor.visit(this, data);
     }
 
-    public String getUuid() {
-        return uuid;
+    public StockEntityId getId() {
+        return id;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setId(StockEntityId id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -94,11 +69,19 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     }
 
     public String getTickerSymbol() {
-        return tickerSymbol;
+        return id.getTickerSymbol();
     }
 
     public void setTickerSymbol(String tickerSymbol) {
-        this.tickerSymbol = tickerSymbol;
+        this.id.setTickerSymbol(tickerSymbol);
+    }
+
+    public String getTradedIn() {
+        return id.getTradedIn();
+    }
+
+    public void setTradedIn(String tradedIn) {
+        id.setTradedIn(tradedIn);
     }
 
     public String getSecurity() {
@@ -157,25 +140,17 @@ public class StockEntity implements Serializable, AcceptsVisitors {
         this.CIK = CIK;
     }
 
-    public String getTradedIn() {
-        return tradedIn;
-    }
-
-    public void setTradedIn(String tradedIn) {
-        this.tradedIn = tradedIn;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof StockEntity) {
             StockEntity other = (StockEntity) obj;
-            return uuid.equals(other.uuid);
+            return id.equals(other.id);
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        return id.hashCode();
     }
 }

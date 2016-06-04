@@ -19,6 +19,8 @@ import qube.qai.network.neural.trainer.TestNeuralNetworkTraining;
 import qube.qai.network.semantic.TestSemanticNetworkBuilder;
 import qube.qai.parsers.TestWikiIntegration;
 import qube.qai.persistence.mapstores.*;
+import qube.qai.persistence.search.TestRDFTripleSearchService;
+import qube.qai.persistence.search.TestStockQuoteSearchService;
 import qube.qai.procedure.TestWikiSearch;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
@@ -78,6 +80,11 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestIndexedDirectoryMapStore.class);
         suite.addTestSuite(TestStockQuoteMapStore.class);
         suite.addTestSuite(TestRdfTripleFileMapStore.class);
+        suite.addTestSuite(TestStockEntityMapStore.class);
+
+        // persistence.search
+        suite.addTestSuite(TestStockQuoteSearchService.class);
+        suite.addTestSuite(TestRDFTripleSearchService.class);
 
         // procedure
         suite.addTestSuite(TestWikiArchiveIndexer.class);

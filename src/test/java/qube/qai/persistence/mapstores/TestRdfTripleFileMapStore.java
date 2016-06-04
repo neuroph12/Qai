@@ -39,7 +39,7 @@ public class TestRdfTripleFileMapStore extends TestCase {
             {"http://dbpedia.org/resource/Aristotle", "http://dbpedia.org/ontology/deathYear"}};
 
     public void testSomethingElse() throws Exception {
-        Injector injector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
+        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_DBPEDIA"));
         PersistService service = injector.getInstance(PersistService.class);
         service.start();
 
@@ -53,8 +53,8 @@ public class TestRdfTripleFileMapStore extends TestCase {
         }
     }
 
-    public void restForInsertingTurtle() throws Exception {
-        Injector injector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
+    public void testForInsertingTurtle() throws Exception {
+        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_DBPEDIA"));
         PersistService service = injector.getInstance(PersistService.class);
         service.start();
 

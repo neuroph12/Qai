@@ -1,11 +1,14 @@
 package qube.qai.data.stores;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.parsers.WikiIntegration;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockEntityId;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -30,9 +33,13 @@ public class StockEntityDataStore implements DataStore {
             "Address of Headquarters", "Date first added", "CIK"};
 
 
+//    @Inject
+//    @Named("Wikipedia_en")
+//    private SearchServiceInterface searchService;
+
     @Inject
-    @Named("Wikipedia_en")
-    private SearchServiceInterface searchService;
+    private HazelcastInstance hazelcastInstance;
+
 
     /**
      * practically the Lists of companies by stock exchange listing
@@ -66,8 +73,12 @@ public class StockEntityDataStore implements DataStore {
      */
     public Collection<StockEntity> fetchEntitesOf(String marketListingName) {
 
+        IMap<String,WikiArticle> wikiMap = hazelcastInstance.getMap("WIKIPEDIA");
+        IMap<StockEntityId,StockEntity> stockMap = hazelcastInstance.getMap("STOCK_ENTITIES");
+
         Collection<StockEntity> entities = new ArrayList<StockEntity>();
-        WikiArticle article = searchService.retrieveDocumentContentFromZipFile(marketListingName);
+        //WikiArticle article = searchService.retrieveDocumentContentFromZipFile(marketListingName);
+        WikiArticle article = wikiMap.get(marketListingName);
         if (article == null) {
             throw new RuntimeException("Listing: " + marketListingName + " could not be found, can't go on");
         }
@@ -86,10 +97,13 @@ public class StockEntityDataStore implements DataStore {
                 assignValueToEntity(entity, fieldName, fieldValue);
             }
             entities.add(entity);
+            stockMap.put(entity.getId(), entity);
         }
 
         return entities;
     }
+
+
     // "Ticker symbol", "Security","SEC filings", "GICS", "GICS Sub Industry","Address of Headquarters", "Date first added", "CIK"
     private void assignValueToEntity(StockEntity entity, String fieldName, String fieldValue) {
 
@@ -98,7 +112,7 @@ public class StockEntityDataStore implements DataStore {
             // the symbols come in {{exchange|ticker}} form
             String exchange = StringUtils.substringBetween(fieldValue, "{{", "|");
             String ticker = StringUtils.substringBetween(fieldValue, "|", "}}");
-            entity.setUuid(exchange + "|" + ticker); // in fact just we broke before
+            //entity.setUuid(exchange + "|" + ticker); // in fact just we broke before
             entity.setTickerSymbol(ticker);
             entity.setTradedIn(exchange);
         } else if (headerTitles.length > 1 &&
