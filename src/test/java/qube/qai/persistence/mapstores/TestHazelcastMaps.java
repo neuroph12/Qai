@@ -110,7 +110,9 @@ public class TestHazelcastMaps extends QaiTestBase {
             String name = "e" + i + "x";
             StockEntity entity = TestStockEntityMapStore.createEntity(name);
             StockEntityId id = entity.getId();
-            stockEntities.put(id, entity);
+            if (!stockEntities.containsKey(id)) {
+                stockEntities.put(id, entity);
+            }
             idList.add(id);
         }
 

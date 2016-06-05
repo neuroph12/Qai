@@ -33,9 +33,9 @@ public class StockEntityDataStore implements DataStore {
             "Address of Headquarters", "Date first added", "CIK"};
 
 
-//    @Inject
-//    @Named("Wikipedia_en")
-//    private SearchServiceInterface searchService;
+    @Inject
+    @Named("Wikipedia_en")
+    private SearchServiceInterface searchService;
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -77,8 +77,8 @@ public class StockEntityDataStore implements DataStore {
         IMap<StockEntityId,StockEntity> stockMap = hazelcastInstance.getMap("STOCK_ENTITIES");
 
         Collection<StockEntity> entities = new ArrayList<StockEntity>();
-        //WikiArticle article = searchService.retrieveDocumentContentFromZipFile(marketListingName);
-        WikiArticle article = wikiMap.get(marketListingName);
+        WikiArticle article = searchService.retrieveDocumentContentFromZipFile(marketListingName);
+        //WikiArticle article = wikiMap.get(marketListingName);
         if (article == null) {
             throw new RuntimeException("Listing: " + marketListingName + " could not be found, can't go on");
         }
@@ -97,7 +97,9 @@ public class StockEntityDataStore implements DataStore {
                 assignValueToEntity(entity, fieldName, fieldValue);
             }
             entities.add(entity);
-            stockMap.put(entity.getId(), entity);
+            if (!stockMap.containsKey(entity.getId())) {
+                stockMap.put(entity.getId(), entity);
+            }
         }
 
         return entities;

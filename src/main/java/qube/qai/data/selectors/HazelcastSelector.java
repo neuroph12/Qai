@@ -16,12 +16,20 @@ public class HazelcastSelector<T> implements Selector, HazelcastInstanceAware {
 
     private String uuid;
 
+    private Object idObject;
+
     @Inject
     private HazelcastInstance hazelcastInstance;
 
     public HazelcastSelector(HazelcastInstance hazelcastInstance, String dataSource, String uuid) {
         this.dataSource = dataSource;
         this.uuid = uuid;
+        this.hazelcastInstance = hazelcastInstance;
+    }
+
+    public HazelcastSelector(String dataSource, Object idObject) {
+        this.dataSource = dataSource;
+        this.idObject = idObject;
         this.hazelcastInstance = hazelcastInstance;
     }
 
@@ -34,7 +42,11 @@ public class HazelcastSelector<T> implements Selector, HazelcastInstanceAware {
 
         IMap<String, T> map = hazelcastInstance.getMap(dataSource);
 
-        return map.get(uuid);
+        if (uuid != null) {
+            return map.get(uuid);
+        } else {
+            return map.get(idObject);
+        }
     }
 
     public String getDataSource() {
@@ -51,6 +63,14 @@ public class HazelcastSelector<T> implements Selector, HazelcastInstanceAware {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public Object getIdObject() {
+        return idObject;
+    }
+
+    public void setIdObject(Object idObject) {
+        this.idObject = idObject;
     }
 
     public HazelcastInstance getHazelcastInstance() {

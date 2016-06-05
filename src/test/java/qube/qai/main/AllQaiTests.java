@@ -78,12 +78,12 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestMapStores.class);
         suite.addTestSuite(TestHazelcastMaps.class);
         suite.addTestSuite(TestIndexedDirectoryMapStore.class);
-        suite.addTestSuite(TestStockQuoteMapStore.class);
+//        suite.addTestSuite(TestStockQuoteMapStore.class);
         suite.addTestSuite(TestRdfTripleFileMapStore.class);
         suite.addTestSuite(TestStockEntityMapStore.class);
 
         // persistence.search
-        suite.addTestSuite(TestStockQuoteSearchService.class);
+//        suite.addTestSuite(TestStockQuoteSearchService.class);
         suite.addTestSuite(TestRDFTripleSearchService.class);
 
         // procedure

@@ -31,6 +31,8 @@ public class TestRdfTripleFileMapStore extends TestCase {
 
     private EntityManager manager;
 
+    private Injector injector;
+
     protected Logger logger = LoggerFactory.getLogger("TestRdfTripleFileMapStore");
 
     private String[][] rdfids = {{"http://dbpedia.org/resource/Aristotle", "http://dbpedia.org/ontology/region"},
@@ -38,12 +40,17 @@ public class TestRdfTripleFileMapStore extends TestCase {
             {"http://dbpedia.org/resource/Autism", "http://dbpedia.org/ontology/emedicineTopic"},
             {"http://dbpedia.org/resource/Aristotle", "http://dbpedia.org/ontology/deathYear"}};
 
-    public void testSomethingElse() throws Exception {
-        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_DBPEDIA"));
+    @Override
+    protected void setUp() throws Exception {
+        injector = Guice.createInjector(new JpaPersistModule("TEST_DBPEDIA"));
         PersistService service = injector.getInstance(PersistService.class);
         service.start();
 
         manager = injector.getInstance(EntityManager.class);
+
+    }
+
+    public void bestSomethingElse() throws Exception {
 
         Query query = manager.createQuery("SELECT t FROM RDFTriple t", RDFTriple.class);
         List<RDFTriple> triples = query.getResultList();
@@ -53,12 +60,7 @@ public class TestRdfTripleFileMapStore extends TestCase {
         }
     }
 
-    public void testForInsertingTurtle() throws Exception {
-        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_DBPEDIA"));
-        PersistService service = injector.getInstance(PersistService.class);
-        service.start();
-
-        manager = injector.getInstance(EntityManager.class);
+    public void bestForInsertingTurtle() throws Exception {
 
         manager.getTransaction().begin();
 
@@ -118,11 +120,7 @@ public class TestRdfTripleFileMapStore extends TestCase {
             }
     }
 
-    public void bestDbPediaRdfTripleMapStore() throws Exception {
-
-        Injector injector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
-        PersistService service = injector.getInstance(PersistService.class);
-        service.start();
+    public void testDbPediaRdfTripleMapStore() throws Exception {
 
         final RdfTripleFileMapStore mapStore = new RdfTripleFileMapStore();
         injector.injectMembers(mapStore);

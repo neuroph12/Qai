@@ -61,8 +61,10 @@ public class TestHazelcastSelectors extends QaiTestBase {
             String name = "entity(" + i + ")";
             StockEntity entity = TestStockEntityMapStore.createEntity(name);
             StockEntityId uuid = entity.getId();
-            stockEntities.put(uuid, entity);
-            Selector<StockEntity> selector = new HazelcastSelector<StockEntity>(STOCK_SOURCE, uuid.toString());
+            if (!stockEntities.containsKey(uuid)) {
+                stockEntities.put(uuid, entity);
+            }
+            Selector<StockEntity> selector = new HazelcastSelector<StockEntity>(STOCK_SOURCE, uuid);
             selectors.add(selector);
         }
 
