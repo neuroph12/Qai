@@ -105,7 +105,6 @@ public class StockEntityDataStore implements DataStore {
         return entities;
     }
 
-
     // "Ticker symbol", "Security","SEC filings", "GICS", "GICS Sub Industry","Address of Headquarters", "Date first added", "CIK"
     private void assignValueToEntity(StockEntity entity, String fieldName, String fieldValue) {
 

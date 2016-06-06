@@ -2,7 +2,6 @@ package qube.qai.persistence;
 
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
-import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -67,11 +66,11 @@ public class StockQuote implements Serializable, AcceptsVisitors {
     }
 
     public Date getDate() {
-        return id.getDate();
+        return id.getQuoetDate();
     }
 
     public void setDate(Date date) {
-        this.id.setDate(date);
+        this.id.setQuoetDate(date);
     }
 
     public String getTickerSymbol() {

@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.name.Named;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import com.hazelcast.config.Config;
@@ -20,7 +21,10 @@ import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.StockEntityMapStore;
 import qube.qai.persistence.mapstores.StockQuoteMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
+import qube.qai.persistence.search.RDFTriplesSearchService;
+import qube.qai.persistence.search.StockQuoteSearchService;
 import qube.qai.procedure.Procedure;
+import qube.qai.services.SearchServiceInterface;
 
 import java.util.Properties;
 
@@ -68,6 +72,45 @@ public class QaiTestServerModule extends AbstractModule {
         bind(StockQuoteMapStore.class).toInstance(stockQuoteMapStore);
     }
 
+    /**
+     * StockQuotesSearchService
+     * @return
+     */
+    @Provides @Named("Stock_Quotes")
+    SearchServiceInterface provideStockQuoteSearchService() {
+
+        // create an injector for initializing JPA-Module & start the service
+        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
+        PersistService persistService = injector.getInstance(PersistService.class);
+        persistService.start();
+
+        StockQuoteSearchService searchService = new StockQuoteSearchService();
+        injector.injectMembers(searchService);
+
+        return  searchService;
+    }
+
+    /**
+     * RdfTripleSearchService
+     * @return
+     */
+    @Provides @Named("Dbpedia_en")
+    SearchServiceInterface provideDbpediaSearchService() {
+
+        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_DBPEDIA"));
+        PersistService service = injector.getInstance(PersistService.class);
+        service.start();
+
+        RDFTriplesSearchService searchService = new RDFTriplesSearchService();
+        injector.injectMembers(searchService);
+        return searchService;
+    }
+
+    /**
+     * @TODO refoactir this mess!!!
+     * this is more or less where everything happens
+     * @return
+     */
     @Provides
     HazelcastInstance provideHazelcastInstance() {
 

@@ -20,11 +20,7 @@ public class DistributedSearchListener implements MessageListener {
 
     private SearchServiceInterface searchService;
 
-    private String topicName = "Wikipedia_en";
-
-//    public DistributedSearchListener(String topicName) {
-//        this.topicName = topicName;
-//    }
+    private String topicName; // = "Wikipedia_en";
 
     public DistributedSearchListener(String topicName) {
         this.topicName = topicName;

@@ -26,9 +26,8 @@ public class StockEntityId implements Serializable {
         if (parts.length != 2) {
             throw new IllegalArgumentException("not a valid id-definition: " + combinedId);
         }
-
-        this.tickerSymbol = parts[0];
-        this.tradedIn = parts[1];
+        this.tradedIn = parts[0];
+        this.tickerSymbol = parts[1];
     }
 
     public StockEntityId(String tickerSymbol, String tradedIn) {
@@ -73,6 +72,6 @@ public class StockEntityId implements Serializable {
 
     @Override
     public String toString() {
-        return tickerSymbol + "|" + tradedIn;
+        return tradedIn + "|" + tickerSymbol;
     }
 }

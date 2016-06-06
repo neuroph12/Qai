@@ -20,7 +20,6 @@ import qube.qai.network.semantic.TestSemanticNetworkBuilder;
 import qube.qai.parsers.TestWikiIntegration;
 import qube.qai.persistence.mapstores.*;
 import qube.qai.persistence.search.TestRDFTripleSearchService;
-import qube.qai.persistence.search.TestStockQuoteSearchService;
 import qube.qai.procedure.TestWikiSearch;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
@@ -104,7 +103,7 @@ public class AllQaiTests extends TestCase {
         // services.implementation
         suite.addTestSuite(TestUUIDGenerator.class);
         suite.addTestSuite(TestProcedureRunnerService.class);
-        suite.addTestSuite(TestDistributedSearchService.class);
+        suite.addTestSuite(TestDistributedSearchServices.class);
         suite.addTestSuite(TestDistributedProcedureRunnerService.class);
         suite.addTestSuite(TestYouNMeNAllDistributed.class);
         suite.addTestSuite(TestHowFairAreMarketsDistributed.class);

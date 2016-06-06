@@ -36,6 +36,8 @@ public class StockQuoteSearchService implements SearchServiceInterface {
             queryString += " WHERE q.id.tickerSymbol = '" + parts[0] + "' AND q.id.quoteDate = " + parts[1];
         }
 
+        //queryString += " ORDER BY q.id.quoteDate ASC";
+
         Query query = manager.createQuery(queryString);
         List<StockQuote> quotes = query.getResultList();
         Collection<SearchResult> results = new ArrayList<>();

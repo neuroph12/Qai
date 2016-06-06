@@ -76,7 +76,7 @@ public class TestMatrix extends TestCase {
         BasicLogger.debug();
         BasicLogger.debug("ArrayBasics");
         BasicLogger.debug(OjAlgoUtils.getTitle());
-        BasicLogger.debug(OjAlgoUtils.getDate());
+        BasicLogger.debug(OjAlgoUtils.getQuoetDate());
         BasicLogger.debug();
 
         // The file pathname - previously existing or not
@@ -153,7 +153,7 @@ public class TestMatrix extends TestCase {
         BasicLogger.debug();
         BasicLogger.debug("TheDietProblem");
         BasicLogger.debug(OjAlgoUtils.getTitle());
-        BasicLogger.debug(OjAlgoUtils.getDate());
+        BasicLogger.debug(OjAlgoUtils.getQuoetDate());
         BasicLogger.debug();
 
         // Create variables expressing servings of each of the considered foods

@@ -15,14 +15,14 @@ public class QuoteId implements Serializable {
     private String tickerSymbol;
 
     @Column(name = "quoteDate", nullable = false)
-    private Date date;
+    private Date quoetDate;
 
     public QuoteId() {
     }
 
     public QuoteId(String tickerSymbol, Date date) {
         this.tickerSymbol = tickerSymbol;
-        this.date = date;
+        this.quoetDate = date;
     }
 
     public String getTickerSymbol() {
@@ -33,12 +33,12 @@ public class QuoteId implements Serializable {
         this.tickerSymbol = tickerSymbol;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getQuoetDate() {
+        return quoetDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setQuoetDate(Date quoetDate) {
+        this.quoetDate = quoetDate;
     }
 
     @Override
@@ -50,14 +50,14 @@ public class QuoteId implements Serializable {
 
         if (getTickerSymbol() != null ? !getTickerSymbol().equals(quoteId.getTickerSymbol()) : quoteId.getTickerSymbol() != null)
             return false;
-        return getDate() != null ? getDate().equals(quoteId.getDate()) : quoteId.getDate() == null;
+        return getQuoetDate() != null ? getQuoetDate().equals(quoteId.getQuoetDate()) : quoteId.getQuoetDate() == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = getTickerSymbol() != null ? getTickerSymbol().hashCode() : 0;
-        result = 31 * result + (getDate() != null ? getDate().hashCode() : 0);
+        result = 31 * result + (getQuoetDate() != null ? getQuoetDate().hashCode() : 0);
         return result;
     }
 }

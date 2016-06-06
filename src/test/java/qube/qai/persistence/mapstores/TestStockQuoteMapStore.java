@@ -48,7 +48,7 @@ public class TestStockQuoteMapStore extends TestCase {
                 StockQuote quote = mapStore.load(key);
                 assertNotNull("Quote shoud not be null", quote);
                 String message = "Quote: " + quote.getTickerSymbol()
-                        + " date: " + quote.getId().getDate()
+                        + " date: " + quote.getId().getQuoetDate()
                         + " adj-close: " + quote.getAdjustedClose();
                 logger.info(message);
                 count++;

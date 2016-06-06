@@ -1,7 +1,6 @@
 package qube.qai.main;
 
 import com.google.inject.*;
-import com.google.inject.name.Named;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import com.hazelcast.config.Config;
@@ -19,12 +18,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.*;
 import qube.qai.persistence.mapstores.*;
+import qube.qai.persistence.search.RDFTriplesSearchService;
+import qube.qai.persistence.search.StockQuoteSearchService;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
 import qube.qai.services.implementation.DistributedSearchListener;
 import qube.qai.services.implementation.WikiSearchService;
 
+import javax.inject.Named;
 import java.io.File;
 import java.util.Properties;
 
@@ -191,13 +193,51 @@ public class QaiServerModule extends AbstractModule {
     }
 
     /**
+     * DbpediaSearchService
+     * returns the distributed search service for wikipedia
+     * and starts the listener service which will broker the requests
+     * @return
+     */
+    @Provides @Named("Dbpedia_en") @Singleton
+    DistributedSearchListener provideDbpediaSearchListener() {
+
+        SearchServiceInterface searchService = provideDbpediaSearchService();
+
+        DistributedSearchListener searchListener = new DistributedSearchListener("Dbpedia_en");
+        searchListener.setSearchService(searchService);
+        searchListener.setHazelcastInstance(hazelcastInstance);
+        searchListener.initialize();
+
+        return searchListener;
+    }
+
+    /**
+     * StockQuotesSearchService
+     * returns the distributed search service for wikipedia
+     * and starts the listener service which will broker the requests
+     * @return
+     */
+    @Provides @Named("Stock_Quotes") @Singleton
+    DistributedSearchListener provideStockQuotesSearchListener() {
+
+        SearchServiceInterface searchService = provideStockQuoteSearchService();
+
+        DistributedSearchListener searchListener = new DistributedSearchListener("Stock_Quotes");
+        searchListener.setSearchService(searchService);
+        searchListener.setHazelcastInstance(hazelcastInstance);
+        searchListener.initialize();
+
+        return searchListener;
+    }
+
+    /**
      * WiktionarySearchService
      * @return
      */
     @Provides @Named("Wiktionary_en")
-    SearchServiceInterface provideWiktionarySearchServiceInterface() {
-        SearchServiceInterface searchService = new WikiSearchService(WIKTIONARY_DIRECTORY, WIKTIONARY_ARCHIVE);
+    SearchServiceInterface provideWiktionarySearchService() {
 
+        SearchServiceInterface searchService = new WikiSearchService(WIKTIONARY_DIRECTORY, WIKTIONARY_ARCHIVE);
         return searchService;
     }
 
@@ -206,9 +246,43 @@ public class QaiServerModule extends AbstractModule {
      * @return
      */
     @Provides @Named("Wikipedia_en")
-    SearchServiceInterface provideWikipediaSearchServiceInterface() {
-        SearchServiceInterface searchService = new WikiSearchService(WIKIPEDIA_DIRECTORY, WIKIPEDIA_ARCHIVE);
+    SearchServiceInterface provideWikipediaSearchService() {
 
+        SearchServiceInterface searchService = new WikiSearchService(WIKIPEDIA_DIRECTORY, WIKIPEDIA_ARCHIVE);
+        return searchService;
+    }
+
+    /**
+     * StockQuotesSearchService
+     * @return
+     */
+    @Provides @Named("Stock_Quotes")
+    SearchServiceInterface provideStockQuoteSearchService() {
+
+        // create an injector for initializing JPA-Module & start the service
+        Injector injector = Guice.createInjector(new JpaPersistModule("STOCKS"));
+        PersistService persistService = injector.getInstance(PersistService.class);
+        persistService.start();
+
+        StockQuoteSearchService searchService = new StockQuoteSearchService();
+        injector.injectMembers(searchService);
+
+        return  searchService;
+    }
+
+    /**
+     * RdfTripleSearchService
+     * @return
+     */
+    @Provides @Named("Dbpedia_en")
+    SearchServiceInterface provideDbpediaSearchService() {
+
+        Injector injector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
+        PersistService service = injector.getInstance(PersistService.class);
+        service.start();
+
+        RDFTriplesSearchService searchService = new RDFTriplesSearchService();
+        injector.injectMembers(searchService);
         return searchService;
     }
 

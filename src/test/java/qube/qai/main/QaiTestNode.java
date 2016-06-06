@@ -31,8 +31,8 @@ public class QaiTestNode {
         // injector knows all
         // Server configuration lies in QaiServerModule
         // other Qai dependent services and things lie in QaiModule
-        QaiServerModule qaiServer = new QaiServerModule();
-        QaiModule qaiModule = new QaiModule();
+        QaiTestServerModule qaiServer = new QaiTestServerModule();
+        QaiTestModule qaiModule = new QaiTestModule();
         injector = Guice.createInjector(qaiServer, qaiModule);
 
         // this is crazy but might just work...

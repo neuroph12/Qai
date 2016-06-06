@@ -56,9 +56,9 @@ public class WikiIntegration {
             Element element = header.get(i);
             Elements children = element.children();
             if (children != null && children.size() > 0) {
-                titles[i] = children.get(0).text();
+                titles[i] = children.get(0).text().trim();
             } else {
-                titles[i] = element.text();
+                titles[i] = element.text().trim();
             }
         }
 

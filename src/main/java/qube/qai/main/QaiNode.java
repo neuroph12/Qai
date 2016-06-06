@@ -3,13 +3,11 @@ package qube.qai.main;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hazelcast.core.HazelcastInstance;
-import net.jmob.guice.conf.core.BindConfig;
-import net.jmob.guice.conf.core.ConfigurationModule;
 import net.jmob.guice.conf.core.InjectConfig;
-import net.jmob.guice.conf.core.Syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.services.implementation.DistributedSearchListener;
+import qube.qai.services.implementation.DistributedSearchService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,6 +34,12 @@ public class QaiNode {
 
     @Inject @Named("Wiktionary_en")
     private DistributedSearchListener wiktionaryListener;
+
+    @Inject @Named("Stock_Quotes")
+    private DistributedSearchListener quotesListener;
+
+    @Inject @Named("Dbpedia_en")
+    private DistributedSearchListener dbpediaSearchListener;
 
     public QaiNode() {
     }
