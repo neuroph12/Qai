@@ -38,8 +38,8 @@ public class QaiNode {
     @Inject @Named("Stock_Quotes")
     private DistributedSearchListener quotesListener;
 
-    @Inject @Named("Dbpedia_en")
-    private DistributedSearchListener dbpediaSearchListener;
+//    @Inject @Named("Dbpedia_en")
+//    private DistributedSearchListener dbpediaSearchListener;
 
     public QaiNode() {
     }

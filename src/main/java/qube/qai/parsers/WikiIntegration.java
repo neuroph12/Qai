@@ -96,7 +96,7 @@ public class WikiIntegration {
         try {
             WikiModel.toText(wikiModel, new HTMLConverter(), wiki, builder, false, false);
         } catch (IOException e) {
-            logger.error("error while converting wiki-data to html");
+            logger.error("error while converting wiki-data to html: " + e.getMessage());
         }
 
         return wikiModel;

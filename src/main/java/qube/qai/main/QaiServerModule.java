@@ -198,18 +198,18 @@ public class QaiServerModule extends AbstractModule {
      * and starts the listener service which will broker the requests
      * @return
      */
-    @Provides @Named("Dbpedia_en") @Singleton
-    DistributedSearchListener provideDbpediaSearchListener() {
-
-        SearchServiceInterface searchService = provideDbpediaSearchService();
-
-        DistributedSearchListener searchListener = new DistributedSearchListener("Dbpedia_en");
-        searchListener.setSearchService(searchService);
-        searchListener.setHazelcastInstance(hazelcastInstance);
-        searchListener.initialize();
-
-        return searchListener;
-    }
+//    @Provides @Named("Dbpedia_en") @Singleton
+//    DistributedSearchListener provideDbpediaSearchListener() {
+//
+//        SearchServiceInterface searchService = provideDbpediaSearchService();
+//
+//        DistributedSearchListener searchListener = new DistributedSearchListener("Dbpedia_en");
+//        searchListener.setSearchService(searchService);
+//        searchListener.setHazelcastInstance(hazelcastInstance);
+//        searchListener.initialize();
+//
+//        return searchListener;
+//    }
 
     /**
      * StockQuotesSearchService
