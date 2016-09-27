@@ -1,5 +1,8 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.IncompleteTypeException;
+import qube.qai.parsers.antimirov.Inequality;
 
 /**
  * Represents a boolean array. This is needed for computing power sets
@@ -15,7 +18,7 @@ package qube.qai.parsers.antimirov;
  * @author Stefan Hohenadel
  * @version 1.0
  * @see Inequality
- * @see RAlternationType
+ * @see AlternationNode
  */
 public class BitArray {
 
@@ -277,10 +280,10 @@ public class BitArray {
      *                                of bounds of the <code>BitArray</code> is tried to be
      *                                accessed.
      */
-    public RType construct(SetElement[] pairs, boolean firstElem)
+    public BaseNode construct(NodeSetElement[] pairs, boolean firstElem)
             throws BitArrayIndexException {
         // result type
-        RType ty = null;
+        BaseNode ty = null;
 
         // arrays of same length?
         if (this.size() != pairs.length) {
@@ -289,7 +292,7 @@ public class BitArray {
         }
 
         // if pattern contains no marks for insertion, return Nothing
-        if (this.all(false)) return new RNoneType();
+        if (this.all(false)) return new NoneNode();
 
         // step to first non-null type pair to insert
         int i = 0;
@@ -305,9 +308,9 @@ public class BitArray {
 
             try {
 
-                ty = (firstElem) ? ((TypePair) pairs[i]).getFirstElement() :
+                ty = (firstElem) ? ((NodePair) pairs[i]).getFirstElement() :
                         //second Element
-                        ((TypePair) pairs[i]).getSecondElement();
+                        ((NodePair) pairs[i]).getSecondElement();
 
             } catch (NullPointerException npe) {
 
@@ -326,14 +329,14 @@ public class BitArray {
                     try {
                         ty = (firstElem) ?
                                 // construct s1 from first element
-                                new RAlternationType(
+                                new AlternationNode(
                                         ty,
-                                        (RType) ((TypePair) pairs[j]).getFirstElement()) :
+                                        (BaseNode) ((NodePair) pairs[j]).getFirstElement()) :
 
                                 // construct s2 from second element
-                                new RAlternationType(
+                                new AlternationNode(
                                         ty,
-                                        (RType) ((TypePair) pairs[j]).getSecondElement());
+                                        (BaseNode) ((NodePair) pairs[j]).getSecondElement());
 
                     } catch (IncompleteTypeException ite) {
                         // cannot occurr here

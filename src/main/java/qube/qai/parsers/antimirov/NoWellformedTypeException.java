@@ -1,6 +1,8 @@
 package qube.qai.parsers.antimirov;
 
 
+import qube.qai.parsers.antimirov.nodes.BaseNode;
+
 /**
  * Occurs if a type instance is analyzed that does not fulfill the
  * two wellformedness constraints of types.
@@ -16,7 +18,7 @@ package qube.qai.parsers.antimirov;
  *
  * @author Stefan Hohenadel
  * @version 1.0
- * @see RType
+ * @see BaseNode
  */
 public class NoWellformedTypeException
         extends TypeException {

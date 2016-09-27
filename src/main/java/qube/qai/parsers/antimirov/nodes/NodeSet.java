@@ -1,5 +1,7 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.IllegalConcatenationException;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,24 +15,24 @@ import java.util.Iterator;
  * @author Stefan Hohenadel
  * @version 1.0
  * @see Concatenable
- * @see SetElement
+ * @see NodeSetElement
  */
-public final class Set
+public final class NodeSet
         implements Concatenable, Iterable {
 
 
     /**
      * Inner representation of the set.
      */
-    private HashSet<SetElement> mySet;
+    private HashSet<NodeSetElement> mySet;
 
 
     /**
      * Constructor for class Set.
      */
-    public Set() {
+    public NodeSet() {
 
-        this.mySet = new HashSet<SetElement>();
+        this.mySet = new HashSet<NodeSetElement>();
     }//constructor
 
 
@@ -39,14 +41,14 @@ public final class Set
      *
      * @param e The element to be added to the empty set.
      */
-    public Set(SetElement e) {
+    public NodeSet(NodeSetElement e) {
 
-        this.mySet = new HashSet<SetElement>();
+        this.mySet = new HashSet<NodeSetElement>();
         this.mySet.add(e);
     }//constructor
 
 
-    public Iterator<SetElement> iterator() {
+    public Iterator<NodeSetElement> iterator() {
         return mySet.iterator();
     }
 
@@ -69,7 +71,7 @@ public final class Set
      * @param e The element to compare the instance to.
      * @return TRUE if element was successfully added, otherwise FALSE.
      */
-    public boolean add(SetElement e) {
+    public boolean add(NodeSetElement e) {
 
         if (this.mySet.isEmpty() == false) {
 
@@ -92,9 +94,9 @@ public final class Set
      * @param e The element to remove.
      * @return TRUE, if removal was successful, otherwise FALSE.
      */
-    public boolean remove(SetElement e) {
+    public boolean remove(NodeSetElement e) {
 
-        SetElement t;
+        NodeSetElement t;
         boolean result = true;
 
         if (this.mySet.remove(e) == false) {
@@ -103,7 +105,7 @@ public final class Set
             Iterator it = this.mySet.iterator();
             while (it.hasNext()) {
 
-                t = (SetElement) it.next();
+                t = (NodeSetElement) it.next();
 
                 if (t.equals(e)) {
                     result = this.mySet.remove(t);
@@ -124,7 +126,7 @@ public final class Set
      * @return TRUE, if element is contained in the set, otherwise
      *         FALSE.
      */
-    public boolean contains(SetElement e) {
+    public boolean contains(NodeSetElement e) {
 
         // if set is empty...
         if (this.mySet.isEmpty())
@@ -141,7 +143,7 @@ public final class Set
             // check every element for equality by value
             Iterator it = this.mySet.iterator();
             while (it.hasNext()) {
-                if (((SetElement) it.next()).equals(e))
+                if (((NodeSetElement) it.next()).equals(e))
                     // if element is already in the set, break
                     return true;
             }//while
@@ -159,17 +161,17 @@ public final class Set
      * @param s The <code>Set</code> to unify the instance with.
      * @return A union of the <code>Set</code> and <code>s</code>.
      */
-    public Set union(Set s) {
+    public NodeSet union(NodeSet s) {
 
-        Set result = null;
+        NodeSet result = null;
 
         if (s != null) {
 
-            result = (Set) this.clone();
+            result = (NodeSet) this.clone();
 
             Iterator it = s.mySet.iterator();
             while (it.hasNext())
-                result.add((SetElement) it.next());
+                result.add((NodeSetElement) it.next());
 
         }
 
@@ -204,9 +206,9 @@ public final class Set
      *
      * @return All elements of the <code>Set</code> in an array.
      */
-    public SetElement[] toArray() {
+    public NodeSetElement[] toArray() {
 
-        return (SetElement[]) this.mySet.toArray(new SetElement[1]);
+        return (NodeSetElement[]) this.mySet.toArray(new NodeSetElement[1]);
     }//toArray
 
 
@@ -218,7 +220,7 @@ public final class Set
      */
     public Object clone() {
 
-        Set copy = new Set();
+        NodeSet copy = new NodeSet();
         copy.mySet = (HashSet) this.mySet.clone();
         return (Object) copy;
     }//clone
@@ -230,7 +232,7 @@ public final class Set
      * @param r The type to concatenate the instance with.
      * @return Concatenation of the instance with type <code>r</code>.
      */
-    public Set concatenate(RType r)
+    public NodeSet concatenate(BaseNode r)
             throws IllegalConcatenationException {
 
         Iterator it;
@@ -276,7 +278,7 @@ public final class Set
                             "No Concatenables in Set."
                     );
                 }
-                Set result = c1.concatenate(r);
+                NodeSet result = c1.concatenate(r);
                 result = result.union(c2.concatenate(r));
 
                 return result;

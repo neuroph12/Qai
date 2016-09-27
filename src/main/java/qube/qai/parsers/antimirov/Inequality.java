@@ -3,6 +3,7 @@ package qube.qai.parsers.antimirov;
 
 import qube.qai.parsers.antimirov.log.LogManager;
 import qube.qai.parsers.antimirov.log.LoggingException;
+import qube.qai.parsers.antimirov.nodes.*;
 
 import java.util.Hashtable;
 
@@ -14,22 +15,22 @@ import java.util.Hashtable;
  *
  * @author Stefan Hohenadel
  * @version 1.0
- * @see RType
+ * @see BaseNode
  */
 public final class Inequality
-        implements SetElement {
+        implements NodeSetElement {
 
 
     /**
      * Type on left side of inequality r <: s.
      */
-    private RType r;
+    private BaseNode r;
 
 
     /**
      * Type on right side of inequality r <: s.
      */
-    private RType s;
+    private BaseNode s;
 
 
     /**
@@ -52,7 +53,7 @@ public final class Inequality
      * @param r Type on left side of r <: s.
      * @param s Type on right side of r <: s.
      */
-    public Inequality(RType r, RType s) {
+    public Inequality(BaseNode r, BaseNode s) {
 
         this.r = r;
         this.s = s;
@@ -70,7 +71,7 @@ public final class Inequality
      * @param lm <code>LogManager</code> instance to generate a protocol
      *           of the subtyping process.
      */
-    public Inequality(RType r, RType s, LogManager lm) {
+    public Inequality(BaseNode r, BaseNode s, LogManager lm) {
 
         this.r = r;
         this.s = s;
@@ -90,7 +91,7 @@ public final class Inequality
      * @param shortCirc If true, subtyping will use short
      *                  circuit evaluation.
      */
-    public Inequality(RType r, RType s, boolean shortCirc) {
+    public Inequality(BaseNode r, BaseNode s, boolean shortCirc) {
 
         this.r = r;
         this.s = s;
@@ -155,7 +156,7 @@ public final class Inequality
      *
      * @param r Sets internal type r in r <: s to <code>r</code>.
      */
-    public void setR(RType r) {
+    public void setR(BaseNode r) {
 
         this.r = r;
 
@@ -167,7 +168,7 @@ public final class Inequality
      *
      * @return Type r of regular inequality r <: s.
      */
-    public RType getR() {
+    public BaseNode getR() {
 
         return this.r;
 
@@ -179,7 +180,7 @@ public final class Inequality
      *
      * @param s Sets internal type s in r <: s to <code>s</code>.
      */
-    public void setS(RType s) {
+    public void setS(BaseNode s) {
 
         this.s = s;
 
@@ -191,7 +192,7 @@ public final class Inequality
      *
      * @return Type s of regular inequality r <: s.
      */
-    public RType getS() {
+    public BaseNode getS() {
 
         return this.s;
 
@@ -242,7 +243,7 @@ public final class Inequality
      *                                       type does not fulfill the wellformedness
      *                                       constraints.
      */
-    public Inequality[] getPartialDerivatives(Set names) throws
+    public Inequality[] getPartialDerivatives(NodeSet names) throws
             IllegalConcatenationException,
             IncompleteTypeException,
             NoWellformedTypeException {
@@ -255,15 +256,15 @@ public final class Inequality
             int index = 0;
 
             //compute partial derivatives
-            Set pdR = this.r.getPartialDerivatives(names);
-            Set pdS = this.s.getPartialDerivatives(names);
+            NodeSet pdR = this.r.getPartialDerivatives(names);
+            NodeSet pdS = this.s.getPartialDerivatives(names);
 
             if (pdR.isEmpty() || pdS.isEmpty())
                 return null;
 
             //make arrays from sets of partial derivatives
-            SetElement[] pdOfR = pdR.toArray();
-            SetElement[] pdOfS = pdS.toArray();
+            NodeSetElement[] pdOfR = pdR.toArray();
+            NodeSetElement[] pdOfS = pdS.toArray();
 
             // detailed log of partial derivatives
             if (this.logmanager != null) {
@@ -300,11 +301,11 @@ public final class Inequality
                 // of all second elements of all pairs
 
                 // construct initial types r1, r2, s1, s2
-                RType r1 = (RType)
-                        (((TypePair) pdOfR[i]).getFirstElement());
-                RType r2 = (RType)
-                        (((TypePair) pdOfR[i]).getSecondElement());
-                RType s1, s2;
+                BaseNode r1 = (BaseNode)
+                        (((NodePair) pdOfR[i]).getFirstElement());
+                BaseNode r2 = (BaseNode)
+                        (((NodePair) pdOfR[i]).getSecondElement());
+                BaseNode s1, s2;
 
                 try {
 
@@ -378,7 +379,7 @@ public final class Inequality
      * @return TRUE, if <code>r</code> and <code>s</code> are the same
      *         type by reference or by content.
      */
-    private boolean sameType(RType r, RType s, long callID) {
+    private boolean sameType(BaseNode r, BaseNode s, long callID) {
 
         //1) r and s of same type (case T3)
         boolean result = ((r == s) || (r.equals(s)));
@@ -415,7 +416,7 @@ public final class Inequality
      * @return TRUE, if <code>iq</code> has already been analyzed.
      */
     private boolean alreadyTested(Inequality iq,
-                                  Set assumptionTable,
+                                  NodeSet assumptionTable,
                                   long callID) {
 
         // 2) r <: s already analyzed  (case T2)
@@ -451,10 +452,10 @@ public final class Inequality
      * @return TRUE, if <code>r</code> is an instance of
      *         <code>none</code>, otherwise FALSE.
      */
-    private boolean rIsNone(RType r, long callID) {
+    private boolean rIsNone(BaseNode r, long callID) {
 
         // 3) r == none (case T4)
-        boolean result = (r instanceof RNoneType);
+        boolean result = (r instanceof NoneNode);
 
         if (result && this.logmanager != null) {
 
@@ -485,18 +486,18 @@ public final class Inequality
      * @return TRUE, if <code>s</code> is an instance of RNoneType,
      *         otherwise FALSE.
      */
-    private boolean sIsNone(RType r, RType s, long callID) {
+    private boolean sIsNone(BaseNode r, BaseNode s, long callID) {
 
         // 4) s == none (case T5)
         // presupposes T3 (check no. 1) or T4 (check no. 3)
-        boolean result = (s instanceof RNoneType);
+        boolean result = (s instanceof NoneNode);
 
         if (result && this.logmanager != null) {
 
             try {
 
                 this.logmanager.logTrivCase("s is none.",
-                        r instanceof RNoneType,
+                        r instanceof NoneNode,
                         callID);
             } catch (LoggingException le) {
 
@@ -521,7 +522,7 @@ public final class Inequality
      * @return TRUE, if <code>r</code> is nullable and <code>s</code> is
      *         not nullable, otherwise FALSE.
      */
-    private boolean rNullableSNotNullable(RType r, RType s, long callID)
+    private boolean rNullableSNotNullable(BaseNode r, BaseNode s, long callID)
             throws NoWellformedTypeException {
 
         boolean result = true;
@@ -560,11 +561,11 @@ public final class Inequality
      * @return TRUE, if <code>r</code> is <code>epsilon</code>, otherwise
      *         FALSE
      */
-    private boolean rIsEpsilon(RType r, RType s, long callID) throws
+    private boolean rIsEpsilon(BaseNode r, BaseNode s, long callID) throws
             NoWellformedTypeException {
 
         // 6) r == epsilon  (cases T6, T7)
-        boolean result = (r instanceof REmptyType);
+        boolean result = (r instanceof EmptyNode);
 
         if (result && this.logmanager != null) {
 
@@ -594,7 +595,7 @@ public final class Inequality
      * @param callID ID of the current call for correct logging.
      * @return TRUE if <code>lNames</code> is empty.
      */
-    private boolean noLeadingNames(Set lNames, long callID) {
+    private boolean noLeadingNames(NodeSet lNames, long callID) {
 
         // 7) no leading names
         // presupposes T1 (check no. 5)
@@ -631,12 +632,12 @@ public final class Inequality
      * @return TRUE, if <code>s</code> is <code>epsilon</code>, otherwise
      *         FALSE
      */
-    private boolean sIsEpsilon(RType r, RType s, long callID) throws
+    private boolean sIsEpsilon(BaseNode r, BaseNode s, long callID) throws
             NoWellformedTypeException {
 
         // 8) s == epsilon
         // presupposes T9 (check no.7)
-        boolean result = (s instanceof REmptyType);
+        boolean result = (s instanceof EmptyNode);
 
         if (result && this.logmanager != null) {
 
@@ -721,7 +722,7 @@ public final class Inequality
         // reinitializing and convenient logging.
 
         boolean result = true;
-        Set assumptionSet = new Set();
+        NodeSet assumptionSet = new NodeSet();
         Counter counter = new Counter(-1);
 
         try {
@@ -765,7 +766,7 @@ public final class Inequality
      * @param calls         Counter for number of recursive calls.
      * @return TRUE, if r <: s holds, otherwise FALSE
      */
-    private boolean wprove(Set assumptionSet, Counter calls)
+    private boolean wprove(NodeSet assumptionSet, Counter calls)
             throws NoWellformedTypeException,
             IncompleteTypeException,
             IllegalConcatenationException {
@@ -778,7 +779,7 @@ public final class Inequality
         if ((this.r == null) || (this.s == null)) {
 
             IncompleteTypeException ite = new IncompleteTypeException(
-                    "One or both input types are " + RName.NULL
+                    "One or both input types are " + Name.NULL
             );
             if (this.logmanager != null)
                 this.logmanager.logException(ite, callID);
@@ -819,7 +820,7 @@ public final class Inequality
 
         // 4) s == none
         if (sIsNone(iq.r, iq.s, callID))
-            return (iq.r instanceof RNoneType);
+            return (iq.r instanceof NoneNode);
 
         // 5) nullable(r) /\ !nullable(s)
         if (rNullableSNotNullable(iq.r, iq.s, callID))
@@ -832,7 +833,7 @@ public final class Inequality
 //   II) take leading names of r and partial derivatives of all these
         // names on r <: s
 
-        Set lNames = iq.r.leadingNames();
+        NodeSet lNames = iq.r.leadingNames();
 
         // 7) no leading names
         if (noLeadingNames(lNames, callID))
@@ -956,7 +957,7 @@ public final class Inequality
      * @return TRUE if <code>e</code> contains same types for r and s
      *         like the instance, otherwise FALSE.
      */
-    public boolean equals(SetElement e) {
+    public boolean equals(NodeSetElement e) {
 
         if (e instanceof Inequality) {
 

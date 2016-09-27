@@ -1,5 +1,7 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.Inequality;
 
 import java.util.Hashtable;
 
@@ -12,10 +14,10 @@ import java.util.Hashtable;
  * @author Stefan Hohenadel
  * @version 1.0
  * @see Inequality
- * @see RType
+ * @see BaseNode
  */
-public class RPrimitiveType
-        extends RType {
+public class PrimitiveNode
+        extends BaseNode {
 
 
     /**
@@ -23,7 +25,7 @@ public class RPrimitiveType
      *
      * @param name Name of the type.
      */
-    public RPrimitiveType(RName name) {
+    public PrimitiveNode(Name name) {
 
         super(null, null);
         this.name = name;
@@ -36,7 +38,7 @@ public class RPrimitiveType
      *
      * @param t No meaning.
      */
-    public void setFirstChild(RType t) {
+    public void setFirstChild(BaseNode t) {
     }
 
 
@@ -46,7 +48,7 @@ public class RPrimitiveType
      *
      * @param t No meaning.
      */
-    public void setSecondChild(RType t) {
+    public void setSecondChild(BaseNode t) {
     }
 
 
@@ -68,10 +70,10 @@ public class RPrimitiveType
      *
      * @return <code>Set</code> containing the leading names.
      */
-    public Set leadingNames() {
+    public NodeSet leadingNames() {
 
         //rule LN4
-        return new Set(this.name);
+        return new NodeSet(this.name);
     }//leadingNames
 
 
@@ -88,7 +90,7 @@ public class RPrimitiveType
      *         no recursive occurrences in non-tail positions,
      *         otherwise FALSE.
      */
-    public boolean checkTailPosition(RName rootName, boolean flag) {
+    public boolean checkTailPosition(Name rootName, boolean flag) {
 
         //rule TP4
         return true;
@@ -120,10 +122,10 @@ public class RPrimitiveType
      *
      * @return Empty type.
      */
-    public RType content() {
+    public BaseNode content() {
 
         //rule CN3
-        return new REmptyType();
+        return new EmptyNode();
     }//content
 
 
@@ -135,7 +137,7 @@ public class RPrimitiveType
      *                  top level named type and all yet unfolded types.
      * @return The unfolded type.
      */
-    public RType unfold(Hashtable nameTable) {
+    public BaseNode unfold(Hashtable nameTable) {
 
         //rule UF4
         return this;
@@ -149,7 +151,7 @@ public class RPrimitiveType
      * @param t The <code>RType</code> to compare the instance with.
      * @return TRUE if types are equal, otherwise false.
      */
-    public boolean equals(RType t) {
+    public boolean equals(BaseNode t) {
 
         if (t == null)
 
@@ -158,7 +160,7 @@ public class RPrimitiveType
             //t != null
         else
 
-            return (t instanceof RPrimitiveType      //same type ?
+            return (t instanceof PrimitiveNode      //same type ?
                     && this.name.equals(t.getName()));  //same name ?
     }//equals
 

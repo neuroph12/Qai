@@ -1,4 +1,4 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
 /**
  * Represents a name. A name can be the name of a letter or the name
@@ -7,8 +7,8 @@ package qube.qai.parsers.antimirov;
  * @author Stefan Hohenadel
  * @version 1.0
  */
-public final class RName
-        implements SetElement {
+public final class Name
+        implements NodeSetElement {
 
     //--------- Regular Expression Based Types
 
@@ -120,7 +120,7 @@ public final class RName
      *
      * @param name The name to construct.
      */
-    public RName(String name) {
+    public Name(String name) {
 
         this.name = name;
     }//constructor
@@ -157,11 +157,11 @@ public final class RName
      * @param s The string to compare the instance to.
      * @return TRUE, if strings are equal, otherwise FALSE.
      */
-    public boolean equals(SetElement s) {
+    public boolean equals(NodeSetElement s) {
 
-        return (s instanceof RName) ?
+        return (s instanceof Name) ?
 
-                (this.getNameString().equals(((RName) s).getNameString())) :
+                (this.getNameString().equals(((Name) s).getNameString())) :
 
                 false;
     }//equals

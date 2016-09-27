@@ -1,4 +1,4 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
 
 /**

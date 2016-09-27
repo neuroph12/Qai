@@ -1,4 +1,4 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
 /**
  * Interface <code>SetElement</code> provides method
@@ -8,9 +8,9 @@ package qube.qai.parsers.antimirov;
  *
  * @author Stefan Hohenadel
  * @version 1.0
- * @see Set
+ * @see NodeSet
  */
-public interface SetElement {
+public interface NodeSetElement {
 
 
     /**
@@ -18,7 +18,7 @@ public interface SetElement {
      *
      * @return TRUE, if e is equal to the instance.
      */
-    public boolean equals(SetElement e);
+    public boolean equals(NodeSetElement e);
 
 
 }//interface

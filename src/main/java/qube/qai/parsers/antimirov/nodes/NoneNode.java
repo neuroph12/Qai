@@ -1,111 +1,109 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.Inequality;
 
 import java.util.Hashtable;
 
 
 /**
- * Represents the empty type, also called epsilon.
+ * Represents the regular expression matching nothing.
  *
  * @author Stefan Hohenadel
  * @version 1.0
  * @see Inequality
- * @see RType
+ * @see BaseNode
  */
-public final class REmptyType
-        extends RType {
+public final class NoneNode
+        extends BaseNode {
 
 
     /**
-     * Sole constructor for empty type.
+     * Sole constructor for type none.
      */
-    public REmptyType() {
+    public NoneNode() {
 
         super(null, null);
-        this.name = new RName(RName.EMPTY);
+        this.name = new Name(Name.NONE);
     }//constructor
 
 
     /**
-     * Does nothing, because <code>REmptyType</code> does not use members.
+     * Does nothing, because <code>RNoneType</code> does not use members.
      *
      * @param t No meaning.
      */
-    public void setFirstChild(RType t) {
+    public void setFirstChild(BaseNode t) {
     }
 
 
     /**
-     * Does nothing, because <code>REmptyType</code> does not use members.
+     * Does nothing, because <code>RNoneType</code> does not use members.
      *
      * @param t No meaning.
      */
-    public void setSecondChild(RType t) {
+    public void setSecondChild(BaseNode t) {
     }
 
 
     /**
-     * Returns TRUE, because the empty type is nullable (rule NA2).
+     * Returns FALSE because the none type is not nullable (rule NA1).
      *
-     * @return TRUE.
+     * @return FALSE.
      */
     public boolean isNullable() {
 
-        //rule NA2
-        return true;
+        //rule NA1
+        return false;
     }//isNullable
 
 
     /**
-     * Returns the leading names of the type (rule LN2).
+     * Returns an empty set because the none type does not have any
+     * names (rule LN1).
      *
-     * @return <code>Set</code> containing the leading names.
+     * @return Empty set.
      */
-    public Set leadingNames() {
+    public NodeSet leadingNames() {
 
-        //rule LN2
-        return new Set();
+        //rule LN1
+        return new NodeSet();
     }//leadingNames
 
 
     /**
      * Returns the partial derivatives of the type for all names in
-     * <code>names</code> (rule LF2).
+     * <code>names</code> (rule LF1).
      *
      * @param names The set of leading names to compute partial
      *              derivatives for.
      * @return The partial derivatives of the type for all names in
      *         <code>names</code>.
      */
-    public Set getPartialDerivatives(Set names) {
+    public NodeSet getPartialDerivatives(NodeSet names) {
 
-        //rule LF2
-        return new Set();
+        //rule LF1
+        return new NodeSet();
     }//getPartialDerivatives
 
 
     /**
      * Returns a concatenation of the instance with type <code>r</code>
-     * (rule CL5).
+     * (rule CL4).
      *
      * @param r The type to concatenate the instance to.
      * @return Concatenation of the instance with type <code>r</code>.
      */
-    public RType concatenate(RType r)
-            throws IllegalConcatenationException {
+    public BaseNode concatenate(BaseNode r) {
 
-        // rule CL5
-        if (r != null)
-            return r;
-        else
-            throw
-                    new IllegalConcatenationException("Concatenation with null.");
-    }//concatenate
+        //rule CL4
+        return this;
+    }// concatenate
 
 
     /**
      * Returns TRUE if wellformedness constraint 1 is fulfilled,
-     * otherwise FALSE (rule TP2). That means, the type does not have
+     * otherwise FALSE (rule TP1). That means, the type does not have
      * recursive occurrences in non-tail positions. Call must have
      * <code>flag == </code>TRUE.
      *
@@ -116,16 +114,16 @@ public final class REmptyType
      *         no recursive occurrences in non-tail positions,
      *         otherwise FALSE.
      */
-    public boolean checkTailPosition(RName rootName, boolean flag) {
+    public boolean checkTailPosition(Name rootName, boolean flag) {
 
-        //rule TP2
+        //rule TP1
         return true;
     }//checkTailPosition
 
 
     /**
      * Returns TRUE if wellformedness constraint 2 is fulfilled, otherwise
-     * FALSE (rule NH2). That means, the type does not have recursive
+     * FALSE (rule NH1). That means, the type does not have recursive
      * occurrences with only nullable predecessors. Call must have
      * <code>flag == </code>FALSE.
      *
@@ -137,22 +135,22 @@ public final class REmptyType
      */
     public boolean checkNonNullableHead(boolean flag) {
 
-        //rule NH2
+        //rule NH1
         return true;
     }//checkNonNullableHead
 
 
     /**
      * Returns an unfolded copy of the type with every recursive
-     * occurrence once replaced by its definition (UF2).
+     * occurrence once replaced by its definition (rule UF1).
      *
      * @param nameTable The table containing name and definition of the
      *                  top level named type and all yet unfolded types.
      * @return The unfolded type.
      */
-    public RType unfold(Hashtable nameTable) {
+    public BaseNode unfold(Hashtable nameTable) {
 
-        //rule UF2
+        //rule UF1
         return this;
     }//unfold
 
@@ -164,21 +162,20 @@ public final class REmptyType
      * @param t The <code>RType</code> to compare the instance with.
      * @return TRUE if types are equal, otherwise false.
      */
-    public boolean equals(RType t) {
+    public boolean equals(BaseNode t) {
 
-        return (t instanceof REmptyType);
+        return (t instanceof NoneNode);
     }//equals
 
 
     /**
-     * Returns a <code>String</code> representation of the expression.
+     * Returns a <code>String</code> representation of the type.
      *
-     * @return A String representation of the
-     *         <code>RIterationType</code>.
+     * @return A <code>String</code> representation of the type.
      */
     public String toString() {
 
-        return RName.EMPTY;
+        return Name.NONE;
     }//toString
 
 

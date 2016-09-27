@@ -1,6 +1,10 @@
 package qube.qai.parsers.antimirov.log;
 
 import qube.qai.parsers.antimirov.*;
+import qube.qai.parsers.antimirov.nodes.Name;
+import qube.qai.parsers.antimirov.nodes.BaseNode;
+import qube.qai.parsers.antimirov.nodes.NodeSet;
+import qube.qai.parsers.antimirov.nodes.NodeSetElement;
 
 
 /**
@@ -159,7 +163,7 @@ public class LogManager {
      * @throws LoggingException Occurrs if some illegal indent
      *                          position is tried to be marked.
      */
-    public void openCall(long id, RType r, RType s)
+    public void openCall(long id, BaseNode r, BaseNode s)
             throws LoggingException {
 
         this.logCall(id);
@@ -213,7 +217,7 @@ public class LogManager {
      * @throws LoggingException Occurrs if some illegal indent
      *                          position is tried to be marked.
      */
-    public void logNullCase(long id, RType r, RType s)
+    public void logNullCase(long id, BaseNode r, BaseNode s)
             throws LoggingException {
 
         openCall(id, r, s);
@@ -247,15 +251,15 @@ public class LogManager {
      * @throws LoggingException Occurrs if some illegal indent
      *                          position is tried to be marked.
      */
-    public void logInput(RType r, RType s)
+    public void logInput(BaseNode r, BaseNode s)
             throws LoggingException {
 
         this.logger.log("Input r: " + ((r != null) ?
                 r.toString() :
-                RName.NULL));
+                Name.NULL));
         this.logger.log("Input s: " + ((s != null) ?
                 s.toString() :
-                RName.NULL));
+                Name.NULL));
         this.logger.emptyLn();
     }//logInput
 
@@ -267,7 +271,7 @@ public class LogManager {
      * @throws LoggingException Occurrs if some illegal indent
      *                          position is tried to be marked.
      */
-    public void logNames(Set lNames)
+    public void logNames(NodeSet lNames)
             throws LoggingException {
 
         this.logger.log("Leading names of r: " + lNames.toString());
@@ -283,7 +287,7 @@ public class LogManager {
      * @throws LoggingException Occurrs if some illegal indent
      *                          position is tried to be marked.
      */
-    public void logPD(SetElement[] lefts, SetElement[] rights)
+    public void logPD(NodeSetElement[] lefts, NodeSetElement[] rights)
             throws LoggingException {
 
         this.logger.log(
@@ -295,7 +299,7 @@ public class LogManager {
         for (int i = 0; i < lefts.length; i++)
             logger.log(i + ": " + ((lefts[i] != null) ?
                     lefts[i].toString() :
-                    RName.NULL));
+                    Name.NULL));
         this.logger.emptyLn();
         this.logger.decIndent();
         this.logger.log("TypePairs in right clause:");
@@ -303,7 +307,7 @@ public class LogManager {
         for (int i = 0; i < rights.length; i++)
             logger.log(i + ": " + ((rights[i] != null) ?
                     rights[i].toString() :
-                    RName.NULL));
+                    Name.NULL));
         this.logger.emptyLn();
         this.logger.decIndent();
         this.logger.decIndent();
@@ -354,10 +358,10 @@ public class LogManager {
 
         // log first disjunction
         this.logger.log(indent + "(" + i + ") "
-                + ((pd[i] != null) ? pd[i].toString() : RName.NULL)
+                + ((pd[i] != null) ? pd[i].toString() : Name.NULL)
                 + " \\/ ");
         this.logger.log(indent + "(" + (i + 1) + ") "
-                + ((pd[i + 1] != null) ? pd[i + 1].toString() : RName.NULL));
+                + ((pd[i + 1] != null) ? pd[i + 1].toString() : Name.NULL));
 
         // log all further disjunctions
         for (i = 2; i < pd.length; i++) {
@@ -365,10 +369,10 @@ public class LogManager {
             this.logger.log(" /\\");
 
             this.logger.log(indent + "(" + i + ") "
-                    + ((pd[i] != null) ? pd[i].toString() : RName.NULL)
+                    + ((pd[i] != null) ? pd[i].toString() : Name.NULL)
                     + " \\/ ");
             this.logger.log(indent + "(" + (i + 1) + ") "
-                    + ((pd[i + 1] != null) ? pd[i + 1].toString() : RName.NULL));
+                    + ((pd[i + 1] != null) ? pd[i + 1].toString() : Name.NULL));
 
             i++;
         }

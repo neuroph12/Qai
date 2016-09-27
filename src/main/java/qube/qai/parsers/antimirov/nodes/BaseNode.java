@@ -1,5 +1,10 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.IllegalConcatenationException;
+import qube.qai.parsers.antimirov.IncompleteTypeException;
+import qube.qai.parsers.antimirov.IrregularContentRequestException;
+import qube.qai.parsers.antimirov.NoWellformedTypeException;
 
 import java.util.Hashtable;
 
@@ -13,32 +18,32 @@ import java.util.Hashtable;
  * @author Stefan Hohenadel
  * @version 1.0
  */
-public abstract class RType {
+public abstract class BaseNode {
 
     /**
      * The name of the type.
      */
-    protected RName name;
+    protected Name name;
 
 
     /**
      * The representation of the first inner type that is modified by
      * this type.
      */
-    protected RType child1;
+    protected BaseNode child1;
 
 
     /**
      * The representation of the second inner type that is modified by
      * this type.
      */
-    protected RType child2;
+    protected BaseNode child2;
 
 
     /**
      * Empty Constructor.
      */
-    public RType() {
+    public BaseNode() {
     }
 
 
@@ -50,7 +55,7 @@ public abstract class RType {
      * @param child2 The type representation of the second child of the
      *               current type.
      */
-    public RType(RType child1, RType child2) {
+    public BaseNode(BaseNode child1, BaseNode child2) {
 
         this.child1 = child1;
         this.child2 = child2;
@@ -64,7 +69,7 @@ public abstract class RType {
      * @return The name of the type or <code>null</code> if type has no
      *         name.
      */
-    public RName getName() {
+    public Name getName() {
 
         return this.name;
     }//getName
@@ -75,7 +80,7 @@ public abstract class RType {
      *
      * @param t new first child
      */
-    public void setFirstChild(RType t) {
+    public void setFirstChild(BaseNode t) {
 
         this.child1 = t;
     }//setFirstChild
@@ -86,7 +91,7 @@ public abstract class RType {
      *
      * @return First child of the type.
      */
-    public RType getFirstChild() {
+    public BaseNode getFirstChild() {
 
         return this.child1;
     }//getFirstChild
@@ -97,7 +102,7 @@ public abstract class RType {
      *
      * @param t new second child
      */
-    public void setSecondChild(RType t) {
+    public void setSecondChild(BaseNode t) {
 
         this.child2 = t;
     }//setSecondChild
@@ -108,7 +113,7 @@ public abstract class RType {
      *
      * @return Second child of the type.
      */
-    public RType getSecondChild() {
+    public BaseNode getSecondChild() {
 
         return this.child2;
     }//getSecondChild
@@ -132,7 +137,7 @@ public abstract class RType {
      *
      * @return <code>Set</code> containing the leading names.
      */
-    public abstract Set leadingNames();
+    public abstract NodeSet leadingNames();
 
 
     /**
@@ -154,22 +159,22 @@ public abstract class RType {
      *                                       applied on recursive
      *                                       occurrences.
      */
-    public Set getPartialDerivatives(Set names)
+    public NodeSet getPartialDerivatives(NodeSet names)
             throws IllegalConcatenationException,
             NoWellformedTypeException {
 
         //rule LF3 is default (to be overriden)
-        Set result = new Set();
-        RType content = null;
+        NodeSet result = new NodeSet();
+        BaseNode content = null;
 
         // Modification of LF3: compute not lf but partial derivatives
         if (names != null && names.contains(this.getName())) {
 
             try {
 
-                result = new Set(
-                        (SetElement)
-                                new TypePair(this.content(), new REmptyType())
+                result = new NodeSet(
+                        (NodeSetElement)
+                                new NodePair(this.content(), new EmptyNode())
                 );
 
             } catch (IrregularContentRequestException icre) {
@@ -199,7 +204,7 @@ public abstract class RType {
      *         no recursive occurrences in non-tail positions,
      *         otherwise FALSE.
      */
-    public abstract boolean checkTailPosition(RName rootName,
+    public abstract boolean checkTailPosition(Name rootName,
                                               boolean flag);
 
 
@@ -256,7 +261,7 @@ public abstract class RType {
      *          <code>content()</code> is called on a type for whom no
      *          content is defined.
      */
-    public RType content()
+    public BaseNode content()
             throws IrregularContentRequestException {
 
         // standard is: no rule applicable
@@ -276,7 +281,7 @@ public abstract class RType {
      *                  top level named type and all yet unfolded types.
      * @return The unfolded type.
      */
-    public abstract RType unfold(Hashtable nameTable);
+    public abstract BaseNode unfold(Hashtable nameTable);
 
 
     /**
@@ -289,13 +294,13 @@ public abstract class RType {
      * @param r The type to concatenate the instance to.
      * @return A concatenation of the instance with type <code>r</code>.
      */
-    public RType concatenate(RType r)
+    public BaseNode concatenate(BaseNode r)
             throws IllegalConcatenationException {
 
         //rule CL6 (to be overriden)
         try {
 
-            return new RConcatenationType(this, r);
+            return new ConcatenationNode(this, r);
         } catch (IncompleteTypeException ite) {
 
             throw new IllegalConcatenationException(
@@ -310,7 +315,7 @@ public abstract class RType {
      * @param t The <code>RType</code> to compare the instance with.
      * @return TRUE if types are equal, otherwise false.
      */
-    public abstract boolean equals(RType t);
+    public abstract boolean equals(BaseNode t);
 
 
     /**

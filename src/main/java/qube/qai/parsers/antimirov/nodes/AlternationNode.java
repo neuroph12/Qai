@@ -1,5 +1,10 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.IllegalConcatenationException;
+import qube.qai.parsers.antimirov.IncompleteTypeException;
+import qube.qai.parsers.antimirov.Inequality;
+import qube.qai.parsers.antimirov.NoWellformedTypeException;
 
 import java.util.Hashtable;
 
@@ -16,10 +21,10 @@ import java.util.Hashtable;
  * @author Stefan Hohenadel
  * @version 1.0
  * @see Inequality
- * @see RType
+ * @see BaseNode
  */
-public final class RAlternationType
-        extends RType {
+public final class AlternationNode
+        extends BaseNode {
 
 
     /**
@@ -30,11 +35,11 @@ public final class RAlternationType
      * @throws IncompleteTypeException Occurrs if type is not
      *                                 constructed as valid alternation expression.
      */
-    public RAlternationType(RType child1, RType child2)
+    public AlternationNode(BaseNode child1, BaseNode child2)
             throws IncompleteTypeException {
 
         super(child1, child2);
-        this.name = new RName(RName.ALTERNATION);
+        this.name = new Name(Name.ALTERNATION);
         this.check();
     }//constructor
 
@@ -57,10 +62,10 @@ public final class RAlternationType
      *
      * @return <code>Set</code> containing the leading names.
      */
-    public Set leadingNames() {
+    public NodeSet leadingNames() {
 
         //rule LN7
-        Set result = this.child1.leadingNames();
+        NodeSet result = this.child1.leadingNames();
 
         result = result.union(this.child2.leadingNames());
 
@@ -77,12 +82,12 @@ public final class RAlternationType
      * @return The partial derivatives of the type for all names in
      *         <code>names</code>.
      */
-    public Set getPartialDerivatives(Set names)
+    public NodeSet getPartialDerivatives(NodeSet names)
             throws IllegalConcatenationException,
             NoWellformedTypeException {
 
         //rule LF7
-        Set result = this.child1.getPartialDerivatives(names);
+        NodeSet result = this.child1.getPartialDerivatives(names);
 
         result = result.union(this.child2.getPartialDerivatives(names));
 
@@ -103,7 +108,7 @@ public final class RAlternationType
      *         no recursive occurrences in non-tail positions,
      *         otherwise FALSE.
      */
-    public boolean checkTailPosition(RName rootName, boolean flag) {
+    public boolean checkTailPosition(Name rootName, boolean flag) {
 
         //rule TP7
         return this.child1.checkTailPosition(rootName, flag)
@@ -139,16 +144,16 @@ public final class RAlternationType
      *                  top level named type and all yet unfolded types.
      * @return The unfolded type.
      */
-    public RType unfold(Hashtable nameTable) {
+    public BaseNode unfold(Hashtable nameTable) {
 
         //rule UF8
-        RAlternationType result = null;
+        AlternationNode result = null;
 
-        RType t1 = this.child1.unfold(nameTable);
-        RType t2 = this.child2.unfold(nameTable);
+        BaseNode t1 = this.child1.unfold(nameTable);
+        BaseNode t2 = this.child2.unfold(nameTable);
 
         try {
-            result = new RAlternationType(t1, t2);
+            result = new AlternationNode(t1, t2);
         } catch (IncompleteTypeException ite) {
             //cannot occur here
         }
@@ -164,7 +169,7 @@ public final class RAlternationType
      * @param t The <code>RType</code> to compare the instance with.
      * @return TRUE if types are equal, otherwise false.
      */
-    public boolean equals(RType t) {
+    public boolean equals(BaseNode t) {
 
         return (t == null) ?
 
@@ -172,7 +177,7 @@ public final class RAlternationType
 
                 //t != null
                 // same type ?
-                (t instanceof RAlternationType
+                (t instanceof AlternationNode
 
                         // child 1 equal ?
                         && ((this.child1 != null) ?
@@ -218,11 +223,11 @@ public final class RAlternationType
         StringBuffer buf = new StringBuffer("(");
         buf.append((this.child1 != null) ?
                 this.child1.toString() :
-                RName.NULL);
+                Name.NULL);
         buf.append(" | ");
         buf.append((this.child2 != null) ?
                 this.child2.toString() :
-                RName.NULL);
+                Name.NULL);
         buf.append(")");
         return buf.toString();
     }//toString

@@ -1,107 +1,114 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.IllegalConcatenationException;
+import qube.qai.parsers.antimirov.Inequality;
 
 import java.util.Hashtable;
 
 
 /**
- * Represents the regular expression matching nothing.
+ * Represents the empty type, also called epsilon.
  *
  * @author Stefan Hohenadel
  * @version 1.0
  * @see Inequality
- * @see RType
+ * @see BaseNode
  */
-public final class RNoneType
-        extends RType {
+public final class EmptyNode
+        extends BaseNode {
 
 
     /**
-     * Sole constructor for type none.
+     * Sole constructor for empty type.
      */
-    public RNoneType() {
+    public EmptyNode() {
 
         super(null, null);
-        this.name = new RName(RName.NONE);
+        this.name = new Name(Name.EMPTY);
     }//constructor
 
 
     /**
-     * Does nothing, because <code>RNoneType</code> does not use members.
+     * Does nothing, because <code>REmptyType</code> does not use members.
      *
      * @param t No meaning.
      */
-    public void setFirstChild(RType t) {
+    public void setFirstChild(BaseNode t) {
     }
 
 
     /**
-     * Does nothing, because <code>RNoneType</code> does not use members.
+     * Does nothing, because <code>REmptyType</code> does not use members.
      *
      * @param t No meaning.
      */
-    public void setSecondChild(RType t) {
+    public void setSecondChild(BaseNode t) {
     }
 
 
     /**
-     * Returns FALSE because the none type is not nullable (rule NA1).
+     * Returns TRUE, because the empty type is nullable (rule NA2).
      *
-     * @return FALSE.
+     * @return TRUE.
      */
     public boolean isNullable() {
 
-        //rule NA1
-        return false;
+        //rule NA2
+        return true;
     }//isNullable
 
 
     /**
-     * Returns an empty set because the none type does not have any
-     * names (rule LN1).
+     * Returns the leading names of the type (rule LN2).
      *
-     * @return Empty set.
+     * @return <code>Set</code> containing the leading names.
      */
-    public Set leadingNames() {
+    public NodeSet leadingNames() {
 
-        //rule LN1
-        return new Set();
+        //rule LN2
+        return new NodeSet();
     }//leadingNames
 
 
     /**
      * Returns the partial derivatives of the type for all names in
-     * <code>names</code> (rule LF1).
+     * <code>names</code> (rule LF2).
      *
      * @param names The set of leading names to compute partial
      *              derivatives for.
      * @return The partial derivatives of the type for all names in
      *         <code>names</code>.
      */
-    public Set getPartialDerivatives(Set names) {
+    public NodeSet getPartialDerivatives(NodeSet names) {
 
-        //rule LF1
-        return new Set();
+        //rule LF2
+        return new NodeSet();
     }//getPartialDerivatives
 
 
     /**
      * Returns a concatenation of the instance with type <code>r</code>
-     * (rule CL4).
+     * (rule CL5).
      *
      * @param r The type to concatenate the instance to.
      * @return Concatenation of the instance with type <code>r</code>.
      */
-    public RType concatenate(RType r) {
+    public BaseNode concatenate(BaseNode r)
+            throws IllegalConcatenationException {
 
-        //rule CL4
-        return this;
-    }// concatenate
+        // rule CL5
+        if (r != null)
+            return r;
+        else
+            throw
+                    new IllegalConcatenationException("Concatenation with null.");
+    }//concatenate
 
 
     /**
      * Returns TRUE if wellformedness constraint 1 is fulfilled,
-     * otherwise FALSE (rule TP1). That means, the type does not have
+     * otherwise FALSE (rule TP2). That means, the type does not have
      * recursive occurrences in non-tail positions. Call must have
      * <code>flag == </code>TRUE.
      *
@@ -112,16 +119,16 @@ public final class RNoneType
      *         no recursive occurrences in non-tail positions,
      *         otherwise FALSE.
      */
-    public boolean checkTailPosition(RName rootName, boolean flag) {
+    public boolean checkTailPosition(Name rootName, boolean flag) {
 
-        //rule TP1
+        //rule TP2
         return true;
     }//checkTailPosition
 
 
     /**
      * Returns TRUE if wellformedness constraint 2 is fulfilled, otherwise
-     * FALSE (rule NH1). That means, the type does not have recursive
+     * FALSE (rule NH2). That means, the type does not have recursive
      * occurrences with only nullable predecessors. Call must have
      * <code>flag == </code>FALSE.
      *
@@ -133,22 +140,22 @@ public final class RNoneType
      */
     public boolean checkNonNullableHead(boolean flag) {
 
-        //rule NH1
+        //rule NH2
         return true;
     }//checkNonNullableHead
 
 
     /**
      * Returns an unfolded copy of the type with every recursive
-     * occurrence once replaced by its definition (rule UF1).
+     * occurrence once replaced by its definition (UF2).
      *
      * @param nameTable The table containing name and definition of the
      *                  top level named type and all yet unfolded types.
      * @return The unfolded type.
      */
-    public RType unfold(Hashtable nameTable) {
+    public BaseNode unfold(Hashtable nameTable) {
 
-        //rule UF1
+        //rule UF2
         return this;
     }//unfold
 
@@ -160,20 +167,21 @@ public final class RNoneType
      * @param t The <code>RType</code> to compare the instance with.
      * @return TRUE if types are equal, otherwise false.
      */
-    public boolean equals(RType t) {
+    public boolean equals(BaseNode t) {
 
-        return (t instanceof RNoneType);
+        return (t instanceof EmptyNode);
     }//equals
 
 
     /**
-     * Returns a <code>String</code> representation of the type.
+     * Returns a <code>String</code> representation of the expression.
      *
-     * @return A <code>String</code> representation of the type.
+     * @return A String representation of the
+     *         <code>RIterationType</code>.
      */
     public String toString() {
 
-        return RName.NONE;
+        return Name.EMPTY;
     }//toString
 
 

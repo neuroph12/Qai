@@ -1,6 +1,8 @@
 package qube.qai.parsers.antimirov;
 
 
+import qube.qai.parsers.antimirov.nodes.Concatenable;
+
 /**
  * Occurs if the concatenation of linear forms is applied
  * to an illegal input. A concatenation of linear forms is defined for

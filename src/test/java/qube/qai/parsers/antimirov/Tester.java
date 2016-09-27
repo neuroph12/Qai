@@ -3,7 +3,7 @@ package qube.qai.parsers.antimirov;
 
 import qube.qai.parsers.antimirov.log.LogManager;
 import qube.qai.parsers.antimirov.log.ScreenLogger;
-import qube.qai.parsers.antimirov.log.TextLogger;
+import qube.qai.parsers.antimirov.nodes.BaseNode;
 
 /**
  * Performs a test of the subtyping
@@ -54,7 +54,7 @@ public final class Tester {
     public boolean subtypeTest() {
 
         // array of test types, tested with type[i] <: type[i+1]
-        RType[] type = TestCases.getProveTestTypes();
+        BaseNode[] type = TestCases.getProveTestTypes();
 
         // array of expected results to each test
         int[] expResult = TestCases.getResults();

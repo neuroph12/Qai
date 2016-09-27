@@ -1,28 +1,30 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.IllegalConcatenationException;
 
 /**
  * Represents a pair of types <code>t1, t2</code>.
  *
  * @author Stefan Hohenadel
  * @version 1.0
- * @see SetElement
+ * @see NodeSetElement
  * @see Concatenable
  */
-public final class TypePair
-        implements SetElement, Concatenable {
+public final class NodePair
+        implements NodeSetElement, Concatenable {
 
 
     /**
      * The first type of the pair.
      */
-    private RType t1;
+    private BaseNode t1;
 
 
     /**
      * The second type of the pair.
      */
-    private RType t2;
+    private BaseNode t2;
 
 
     /**
@@ -32,7 +34,7 @@ public final class TypePair
      * @param t1 The first element of the type pair
      * @param t2 The second element of the type pair
      */
-    public TypePair(RType t1, RType t2) {
+    public NodePair(BaseNode t1, BaseNode t2) {
 
         this.t1 = t1;
         this.t2 = t2;
@@ -44,7 +46,7 @@ public final class TypePair
      *
      * @return The first type of the pair.
      */
-    public RType getFirstElement() {
+    public BaseNode getFirstElement() {
 
         return this.t1;
     }//getFirstElement
@@ -55,7 +57,7 @@ public final class TypePair
      *
      * @param e The new first element of the type pair.
      */
-    public void setFirstElement(RType e) {
+    public void setFirstElement(BaseNode e) {
 
         this.t1 = e;
     }//setFirstElement
@@ -66,7 +68,7 @@ public final class TypePair
      *
      * @return The second element of the pair.
      */
-    public RType getSecondElement() {
+    public BaseNode getSecondElement() {
 
         return this.t2;
     }//getSecondElement
@@ -77,7 +79,7 @@ public final class TypePair
      *
      * @param e The new second element of the type pair.
      */
-    public void setSecondElement(RType e) {
+    public void setSecondElement(BaseNode e) {
 
         this.t2 = e;
     }//setSecondElement
@@ -90,13 +92,13 @@ public final class TypePair
      * @param e The SetElement to compare the instance to.
      * @return TRUE if e is of equal content to the instance.
      */
-    public boolean equals(SetElement e) {
+    public boolean equals(NodeSetElement e) {
 
-        TypePair p = null;
+        NodePair p = null;
 
         try {
 
-            p = (TypePair) e;
+            p = (NodePair) e;
         } catch (ClassCastException cce) {
 
             return false;
@@ -113,7 +115,7 @@ public final class TypePair
      * @return TRUE, if compared elements are of equal content, otherwise
      *         FALSE.
      */
-    public boolean equals(TypePair p) {
+    public boolean equals(NodePair p) {
 
         boolean r1 = true;
         boolean r2 = true;
@@ -121,8 +123,8 @@ public final class TypePair
         // if p is of correct type and not null, start comparison
         if (p != null) {
 
-            RType p1 = p.getFirstElement();
-            RType p2 = p.getSecondElement();
+            BaseNode p1 = p.getFirstElement();
+            BaseNode p2 = p.getSecondElement();
 
             // compare elements
             r1 = (this.t1 != null) ? (t1.equals(p1)) : (p1 == null);
@@ -143,20 +145,20 @@ public final class TypePair
      * @param r The type to concatenate the instance with.
      * @return A Concatenation of the instance with type <code>r</code>.
      */
-    public Set concatenate(RType r)
+    public NodeSet concatenate(BaseNode r)
             throws IllegalConcatenationException {
 
         //rule CL1
-        if (r instanceof RNoneType)
-            return new Set();
+        if (r instanceof NoneNode)
+            return new NodeSet();
 
         //rule CL2
-        if (r instanceof REmptyType)
-            return new Set((SetElement) this);
+        if (r instanceof EmptyNode)
+            return new NodeSet((NodeSetElement) this);
 
         //pass application of rules CL4, CL5, CL6
-        return new Set((SetElement)
-                new TypePair(
+        return new NodeSet((NodeSetElement)
+                new NodePair(
                         this.getFirstElement(),
                         this.getSecondElement().concatenate(r)
                 )
@@ -175,9 +177,9 @@ public final class TypePair
     public String toString() {
 
         StringBuffer buf = new StringBuffer("<");
-        buf.append((t1 == null) ? RName.NULL : this.t1.toString());
+        buf.append((t1 == null) ? Name.NULL : this.t1.toString());
         buf.append(", ");
-        buf.append((t2 == null) ? RName.NULL : this.t2.toString());
+        buf.append((t2 == null) ? Name.NULL : this.t2.toString());
         buf.append(">");
 
         return buf.toString();

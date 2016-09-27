@@ -1,8 +1,8 @@
 package qube.qai.parsers.antimirov.log;
 
 
-import qube.qai.parsers.antimirov.BitArray;
-import qube.qai.parsers.antimirov.BitArrayIndexException;
+import qube.qai.parsers.antimirov.nodes.BitArray;
+import qube.qai.parsers.antimirov.nodes.BitArrayIndexException;
 
 
 /**

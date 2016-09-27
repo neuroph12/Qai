@@ -1,5 +1,10 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.IllegalConcatenationException;
+import qube.qai.parsers.antimirov.IncompleteTypeException;
+import qube.qai.parsers.antimirov.Inequality;
+import qube.qai.parsers.antimirov.NoWellformedTypeException;
 
 import java.util.Hashtable;
 
@@ -21,10 +26,10 @@ import java.util.Hashtable;
  * @author Stefan Hohenadel
  * @version 1.0
  * @see Inequality
- * @see RType
+ * @see BaseNode
  */
-public final class RIterationType
-        extends RType {
+public final class IterationNode
+        extends BaseNode {
 
 
     /**
@@ -46,13 +51,13 @@ public final class RIterationType
      * @throws IncompleteTypeException Occurrs if type is not
      *                                 constructed as valid concatenation expression.
      */
-    public RIterationType(RType child)
+    public IterationNode(BaseNode child)
             throws IncompleteTypeException {
 
         super(child, null);
         this.minOccurrs = 0;
-        this.maxOccurrs = RName.INFINITY;
-        this.name = new RName(RName.ITERATION);
+        this.maxOccurrs = Name.INFINITY;
+        this.name = new Name(Name.ITERATION);
         this.check();
     }//constructor
 
@@ -68,19 +73,19 @@ public final class RIterationType
      * @throws IncompleteTypeException Occurrs if type is not
      *                                 constructed as valid concatenation expression.
      */
-    public RIterationType(RType child, int minOccurrs, int maxOccurrs) {
+    public IterationNode(BaseNode child, int minOccurrs, int maxOccurrs) {
 
         super(child, null);
         this.minOccurrs = (minOccurrs < 0) ? 0 : minOccurrs;
 
-        if (maxOccurrs == RName.INFINITY)
-            this.maxOccurrs = RName.INFINITY;
+        if (maxOccurrs == Name.INFINITY)
+            this.maxOccurrs = Name.INFINITY;
         else
             this.maxOccurrs = (maxOccurrs < minOccurrs) ?
                     minOccurrs :
                     maxOccurrs;
 
-        this.name = new RName(RName.ITERATION);
+        this.name = new Name(Name.ITERATION);
     }//constructor
 
 
@@ -90,7 +95,7 @@ public final class RIterationType
      *
      * @param t No meaning.
      */
-    public void setSecondChild(RType t) {
+    public void setSecondChild(BaseNode t) {
     }
 
 
@@ -134,10 +139,10 @@ public final class RIterationType
      *
      * @return <code>Set</code> containing the leading names.
      */
-    public Set leadingNames() {
+    public NodeSet leadingNames() {
 
         //rule LN8
-        Set result = (this.child1 != null) ?
+        NodeSet result = (this.child1 != null) ?
                 this.child1.leadingNames() :
                 null;
 
@@ -154,12 +159,12 @@ public final class RIterationType
      * @return The partial derivatives of the type for all names in
      *         <code>names</code>.
      */
-    public Set getPartialDerivatives(Set names)
+    public NodeSet getPartialDerivatives(NodeSet names)
             throws IllegalConcatenationException,
             NoWellformedTypeException {
 
         //rule LF8
-        Set result = this.child1.getPartialDerivatives(names);
+        NodeSet result = this.child1.getPartialDerivatives(names);
 
         result = result.concatenate(this);
 
@@ -180,7 +185,7 @@ public final class RIterationType
      *         no recursive occurrences in non-tail positions,
      *         otherwise FALSE.
      */
-    public boolean checkTailPosition(RName rootName, boolean flag) {
+    public boolean checkTailPosition(Name rootName, boolean flag) {
 
         //rule TP8
         if (this.maxOccurrs == 1)
@@ -217,11 +222,11 @@ public final class RIterationType
      *                  top level named type and all yet unfolded types.
      * @return The unfolded type.
      */
-    public RType unfold(Hashtable nameTable) {
+    public BaseNode unfold(Hashtable nameTable) {
 
         //rule UF9
-        RType t1 = this.child1.unfold(nameTable);
-        return new RIterationType(t1, this.minOccurrs, this.maxOccurrs);
+        BaseNode t1 = this.child1.unfold(nameTable);
+        return new IterationNode(t1, this.minOccurrs, this.maxOccurrs);
     }//unfold
 
 
@@ -232,7 +237,7 @@ public final class RIterationType
      * @param t The <code>RType</code> to compare the instance with.
      * @return TRUE if types are equal, otherwise false.
      */
-    public boolean equals(RType t) {
+    public boolean equals(BaseNode t) {
 
         if (t == null)
 
@@ -243,7 +248,7 @@ public final class RIterationType
             boolean result = true;
 
             // same type?
-            if (t instanceof RIterationType) {
+            if (t instanceof IterationNode) {
 
                 // child equal ?
                 if (this.child1 != null)
@@ -256,8 +261,8 @@ public final class RIterationType
                 // bounds equal ?
                 result =
                         result
-                                && this.minOccurrs == ((RIterationType) t).getMinOccurrs()
-                                && this.maxOccurrs == ((RIterationType) t).getMaxOccurrs();
+                                && this.minOccurrs == ((IterationNode) t).getMinOccurrs()
+                                && this.maxOccurrs == ((IterationNode) t).getMaxOccurrs();
 
                 return result;
 
@@ -295,16 +300,16 @@ public final class RIterationType
         StringBuffer buf = new StringBuffer("(");
         buf.append((this.child1 != null) ?
                 this.child1.toString() :
-                RName.NULL);
+                Name.NULL);
         // choose alternative notation
         buf.append((this.minOccurrs == 0) ?
-                (this.maxOccurrs == RName.INFINITY) ?
+                (this.maxOccurrs == Name.INFINITY) ?
                         ")*"
                         : (this.maxOccurrs == 1) ?
                         ")?"
                         : "{" + this.minOccurrs + "-" + this.maxOccurrs + "})"
                 : (this.minOccurrs == 1) ?
-                (this.maxOccurrs == RName.INFINITY) ?
+                (this.maxOccurrs == Name.INFINITY) ?
                         ")+"
                         : "{" + this.minOccurrs + "-" + this.maxOccurrs + "})"
                 : "{" + this.minOccurrs + "-" + this.maxOccurrs + "})"

@@ -1,5 +1,8 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.IncompleteTypeException;
+import qube.qai.parsers.antimirov.Inequality;
 
 import java.util.Hashtable;
 
@@ -13,10 +16,10 @@ import java.util.Hashtable;
  * @author Stefan Hohenadel
  * @version 1.0
  * @see Inequality
- * @see RType
+ * @see BaseNode
  */
-public class RNodeType
-        extends RType {
+public class Node
+        extends BaseNode {
 
 
     /**
@@ -26,7 +29,7 @@ public class RNodeType
      * @throws IncompleteTypeException Occurrs if type is not
      *                                 constructed as valid node type.
      */
-    public RNodeType(RName name)
+    public Node(Name name)
             throws IncompleteTypeException {
 
         super(null, null);
@@ -43,7 +46,7 @@ public class RNodeType
      * @throws IncompleteTypeException Occurrs if type is not
      *                                 constructed as valid node type.
      */
-    public RNodeType(RName name, RType child)
+    public Node(Name name, BaseNode child)
             throws IncompleteTypeException {
 
         super(child, null);
@@ -58,7 +61,7 @@ public class RNodeType
      *
      * @param t No meaning.
      */
-    public void setSecondChild(RType t) {
+    public void setSecondChild(BaseNode t) {
     }
 
 
@@ -79,10 +82,10 @@ public class RNodeType
      *
      * @return <code>Set</code> containing the leading names.
      */
-    public Set leadingNames() {
+    public NodeSet leadingNames() {
 
         //rule LN3
-        return new Set(this.name);
+        return new NodeSet(this.name);
     }//leadingNames
 
 
@@ -99,7 +102,7 @@ public class RNodeType
      *         no recursive occurrences in non-tail positions,
      *         otherwise FALSE.
      */
-    public boolean checkTailPosition(RName rootName, boolean flag) {
+    public boolean checkTailPosition(Name rootName, boolean flag) {
 
         //rule TP3
         return true;
@@ -130,10 +133,10 @@ public class RNodeType
      *
      * @return Content of the type instance.
      */
-    public RType content() {
+    public BaseNode content() {
 
         //rules CN1, CN2
-        return (this.child1 != null) ? this.child1 : new REmptyType();
+        return (this.child1 != null) ? this.child1 : new EmptyNode();
     }//content
 
 
@@ -145,15 +148,15 @@ public class RNodeType
      *                  top level named type and all yet unfolded types.
      * @return The unfolded type.
      */
-    public RType unfold(Hashtable nameTable) {
+    public BaseNode unfold(Hashtable nameTable) {
 
         //rule UF3
-        RType result = null;
+        BaseNode result = null;
 
         try {
 
-            result = new RNodeType(
-                    new RName(this.name.toString()),
+            result = new Node(
+                    new Name(this.name.toString()),
                     (this.child1 != null) ? //recursive occurrence ?
                             this.child1.unfold(nameTable) : //no
                             null //yes
@@ -174,7 +177,7 @@ public class RNodeType
      * @param t The <code>RType</code> to compare the instance with.
      * @return TRUE if types are equal, otherwise false.
      */
-    public boolean equals(RType t) {
+    public boolean equals(BaseNode t) {
 
         if (t == null)
 
@@ -183,7 +186,7 @@ public class RNodeType
             //t != null
         else
             return (   // same type ?
-                    t instanceof RNodeType
+                    t instanceof Node
 
                             // equal tag ?
                             && this.name.equals(t.getName())
@@ -222,11 +225,11 @@ public class RNodeType
         if (this.child1 == null)
             return (this.name != null) ?
                     this.name.getNameString() :
-                    RName.NULL;
+                    Name.NULL;
         else {
             StringBuffer buf = new StringBuffer((this.name != null) ?
                     this.name.getNameString() :
-                    RName.NULL);
+                    Name.NULL);
             buf.append("[");
             buf.append(this.child1.toString());
             buf.append("]");

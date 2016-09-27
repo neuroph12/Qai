@@ -1,4 +1,8 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
+
+import qube.qai.parsers.antimirov.IllegalConcatenationException;
+import qube.qai.parsers.antimirov.Inequality;
+import qube.qai.parsers.antimirov.NoWellformedTypeException;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -12,10 +16,10 @@ import java.util.Iterator;
  * @author Stefan Hohenadel
  * @version 1.0
  * @see Inequality
- * @see RType
+ * @see BaseNode
  */
-public final class RNameType
-        extends RType {
+public final class NameNode
+        extends BaseNode {
 
 
     /**
@@ -23,7 +27,7 @@ public final class RNameType
      *
      * @param name Name of the type.
      */
-    public RNameType(RName name) {
+    public NameNode(Name name) {
 
         super(null, null);
         this.name = name;
@@ -37,7 +41,7 @@ public final class RNameType
      * @param name   Name of the type.
      * @param child1 Content of the type.
      */
-    public RNameType(RName name, RType child1) {
+    public NameNode(Name name, BaseNode child1) {
 
         super(child1, null);
         this.name = name;
@@ -50,7 +54,7 @@ public final class RNameType
      *
      * @param t No meaning.
      */
-    public void setSecondChild(RType t) {
+    public void setSecondChild(BaseNode t) {
     }
 
 
@@ -78,12 +82,12 @@ public final class RNameType
      *
      * @return <code>Set</code> containing the leading names.
      */
-    public Set leadingNames() {
+    public NodeSet leadingNames() {
 
         //rule LN5
-        Set result = (this.child1 != null) ?
+        NodeSet result = (this.child1 != null) ?
                 this.child1.leadingNames() :
-                new Set(this.getName());
+                new NodeSet(this.getName());
 
         return result;
     }//leadingNames
@@ -98,7 +102,7 @@ public final class RNameType
      * @return The partial derivatives of the type for all names in
      *         <code>names</code>.
      */
-    public Set getPartialDerivatives(Set names)
+    public NodeSet getPartialDerivatives(NodeSet names)
             throws IllegalConcatenationException,
             NoWellformedTypeException {
 
@@ -134,7 +138,7 @@ public final class RNameType
      *         no recursive occurrences in non-tail positions,
      *         otherwise FALSE.
      */
-    public boolean checkTailPosition(RName rootName, boolean flag) {
+    public boolean checkTailPosition(Name rootName, boolean flag) {
 
         //rule TP5
         if (this.getName().equals(rootName))
@@ -186,24 +190,24 @@ public final class RNameType
      *                  top level named type and all yet unfolded types.
      * @return The unfolded type.
      */
-    public RType unfold(Hashtable nameTable) {
+    public BaseNode unfold(Hashtable nameTable) {
 
-        RType unfoldedChild = null;
+        BaseNode unfoldedChild = null;
 
         // rule UF5
         // if instance is a recursive occurrence, add its definition
         if (this.child1 == null) {
 
-            RName name = null;
+            Name name = null;
             Iterator it = nameTable.keySet().iterator();
 
             while (it.hasNext()) {
-                name = (RName) it.next();
+                name = (Name) it.next();
                 if (this.getName().equals(name))
                     break;
             }
 
-            unfoldedChild = (RType) nameTable.get(name);
+            unfoldedChild = (BaseNode) nameTable.get(name);
 
             // rule UF6
             // if type is not a recursive occurrence, unfold
@@ -218,8 +222,8 @@ public final class RNameType
         }//else
 
 
-        return new RNameType(
-                new RName(this.name.toString()),
+        return new NameNode(
+                new Name(this.name.toString()),
                 unfoldedChild
         );
     }//unfold
@@ -232,7 +236,7 @@ public final class RNameType
      * @param t The <code>RType</code> to compare the instance with.
      * @return TRUE if types are equal, otherwise false.
      */
-    public boolean equals(RType t) {
+    public boolean equals(BaseNode t) {
 
         if (t == null)
             return false;
@@ -240,7 +244,7 @@ public final class RNameType
             //t != null
         else
             return (    // equal type ?
-                    t instanceof RNameType
+                    t instanceof NameNode
 
                             // equal definition ?
                             && (this.child1 != null ? // recursive occurrence?
@@ -264,12 +268,12 @@ public final class RNameType
         if (this.child1 != null) {
             StringBuffer buf = new StringBuffer(
                     (this.name == null) ?
-                            RName.NULL :
+                            Name.NULL :
                             this.name.toString()
             );
             buf.append(": [");
             buf.append(this.child1 == null ?
-                    RName.NULL :
+                    Name.NULL :
                     this.child1.toString());
             buf.append("]");
             return buf.toString();

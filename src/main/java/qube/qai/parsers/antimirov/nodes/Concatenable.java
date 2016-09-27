@@ -1,5 +1,7 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.IllegalConcatenationException;
 
 /**
  * Interface <code>Concatenable</code> represents an entity on which a
@@ -9,8 +11,8 @@ package qube.qai.parsers.antimirov;
  *
  * @author Stefan Hohenadel
  * @version 1.0
- * @see Set
- * @see TypePair
+ * @see NodeSet
+ * @see NodePair
  */
 public interface Concatenable {
 
@@ -23,7 +25,7 @@ public interface Concatenable {
      * @throws IllegalConcatenationException Occurs if the input entities of a concatenation does
      *                                       not obey the rules for concatenation of linear forms.
      */
-    public Set concatenate(RType r)
+    public NodeSet concatenate(BaseNode r)
             throws IllegalConcatenationException;
 
 }//class

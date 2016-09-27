@@ -1,5 +1,7 @@
-package qube.qai.parsers.antimirov;
+package qube.qai.parsers.antimirov.nodes;
 
+
+import qube.qai.parsers.antimirov.*;
 
 import java.util.Hashtable;
 
@@ -17,10 +19,10 @@ import java.util.Hashtable;
  * @author Stefan Hohenadel
  * @version 1.0
  * @see Inequality
- * @see RType
+ * @see BaseNode
  */
-public final class RConcatenationType
-        extends RType {
+public final class ConcatenationNode
+        extends BaseNode {
 
 
     /**
@@ -31,11 +33,11 @@ public final class RConcatenationType
      * @throws IncompleteTypeException Occurrs if type is not
      *                                 constructed as valid concatenation expression.
      */
-    public RConcatenationType(RType child1, RType child2)
+    public ConcatenationNode(BaseNode child1, BaseNode child2)
             throws IncompleteTypeException {
 
         super(child1, child2);
-        this.name = new RName(RName.CONCATENATION);
+        this.name = new Name(Name.CONCATENATION);
         this.check();
     }//constructor
 
@@ -61,10 +63,10 @@ public final class RConcatenationType
      *
      * @return <code>Set</code> containing the leading names.
      */
-    public Set leadingNames() {
+    public NodeSet leadingNames() {
 
         // rule LN6
-        Set result = this.child1.leadingNames();
+        NodeSet result = this.child1.leadingNames();
 
         try {
 
@@ -75,7 +77,7 @@ public final class RConcatenationType
 
             System.err.println(te.getMessage());
             te.printStackTrace();
-            return new Set();
+            return new NodeSet();
         }
 
         return result;
@@ -91,12 +93,12 @@ public final class RConcatenationType
      * @return The partial derivatives of the type for all names in
      *         <code>names</code>.
      */
-    public Set getPartialDerivatives(Set names)
+    public NodeSet getPartialDerivatives(NodeSet names)
             throws IllegalConcatenationException,
             NoWellformedTypeException {
 
         // (part of rules LF5 and LF6)
-        Set result = this.child1.getPartialDerivatives(names);
+        NodeSet result = this.child1.getPartialDerivatives(names);
 
         result = result.concatenate(this.child2);
 
@@ -124,7 +126,7 @@ public final class RConcatenationType
      *         no recursive occurrences in non-tail positions,
      *         otherwise FALSE.
      */
-    public boolean checkTailPosition(RName rootName, boolean flag) {
+    public boolean checkTailPosition(Name rootName, boolean flag) {
 
         // rule TP6
         return this.child1.checkTailPosition(rootName, false)
@@ -173,16 +175,16 @@ public final class RConcatenationType
      *                  top level named type and all yet unfolded types.
      * @return The unfolded type.
      */
-    public RType unfold(Hashtable nameTable) {
+    public BaseNode unfold(Hashtable nameTable) {
 
         // rule UF7
-        RConcatenationType result = null;
+        ConcatenationNode result = null;
 
-        RType t1 = this.child1.unfold(nameTable);
-        RType t2 = this.child2.unfold(nameTable);
+        BaseNode t1 = this.child1.unfold(nameTable);
+        BaseNode t2 = this.child2.unfold(nameTable);
 
         try {
-            result = new RConcatenationType(t1, t2);
+            result = new ConcatenationNode(t1, t2);
         } catch (IncompleteTypeException ite) {
             //cannot occurr here
         }
@@ -198,7 +200,7 @@ public final class RConcatenationType
      * @param t The <code>RType</code> to compare the instance with.
      * @return TRUE if types are equal, otherwise false.
      */
-    public boolean equals(RType t) {
+    public boolean equals(BaseNode t) {
 
         return (t == null) ?
 
@@ -207,7 +209,7 @@ public final class RConcatenationType
                 //t != null
 
                 // same type ?
-                (t instanceof RConcatenationType
+                (t instanceof ConcatenationNode
 
                         // child 1 equal ?
                         && ((this.child1 != null) ?
@@ -252,11 +254,11 @@ public final class RConcatenationType
         StringBuffer buf = new StringBuffer();
         buf.append((this.child1 != null) ?
                 this.child1.toString() :
-                RName.NULL);
+                Name.NULL);
         buf.append(" ");
         buf.append((this.child2 != null) ?
                 this.child2.toString() :
-                RName.NULL);
+                Name.NULL);
         return buf.toString();
     }//toString
 

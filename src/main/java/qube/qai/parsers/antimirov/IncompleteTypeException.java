@@ -1,6 +1,8 @@
 package qube.qai.parsers.antimirov;
 
 
+import qube.qai.parsers.antimirov.nodes.BaseNode;
+
 /**
  * Occurs if a type instance is not constructed as a regular
  * expression, for instance if a <code>RAlternationType</code> does not
@@ -9,7 +11,7 @@ package qube.qai.parsers.antimirov;
  *
  * @author Stefan Hohenadel
  * @version 1.0
- * @see RType
+ * @see BaseNode
  */
 public class IncompleteTypeException extends TypeException {
 
