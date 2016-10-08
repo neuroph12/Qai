@@ -5,6 +5,8 @@ import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.Parsers;
 import org.codehaus.jparsec.Scanners;
 import org.codehaus.jparsec.functors.Map;
+import org.codehaus.jparsec.functors.Map3;
+import org.codehaus.jparsec.misc.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.parsers.antimirov.IncompleteTypeException;
@@ -12,6 +14,7 @@ import qube.qai.parsers.antimirov.nodes.*;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by rainbird on 9/27/16.
@@ -23,6 +26,9 @@ public class AntimirovParser {
     protected BaseNode previousNode;
 
     protected BaseNode currentNode;
+
+    public AntimirovParser() {
+    }
 
     public BaseNode parseExpression(String expressionString) {
         return null;
@@ -47,15 +53,15 @@ public class AntimirovParser {
                     }
                 } else if ("e".equals(s)) {
                     node = new EmptyNode();
+                    currentNode = node;
                 } else {
                     try {
                         node = new Node(name);
+                        currentNode = node;
                     } catch (IncompleteTypeException e) {
                         logger.error("AntimirovParser.name() threw IncompleteTypeException:", e);
                     }
                 }
-                //
-                popNodes(node);
 
                 return node;
             }
@@ -80,38 +86,34 @@ public class AntimirovParser {
         return Scanners.WHITESPACES.followedBy(element()).map(new Map<Void, BaseNode>() {
             @Override
             public BaseNode map(Void aVoid) {
-                return previousNode;
+                return currentNode;
             }
         });
     }
 
     public Parser<BaseNode> concatenation() {
-        return element().next(spaceElement().many()).map(new Map() {
-            @Override
-            public Object map(Object o) {
-                ConcatenationNode node = null;
-                List<BaseNode> children = null;
-                if (o instanceof List) {
-                    children = (List<BaseNode>) o;
-                } else {
-                    throw new IllegalArgumentException("parse doesn't follow");
-                }
-                for (Iterator<BaseNode> it = children.iterator(); it.hasNext(); ) {
-                    BaseNode child = it.next();
-                    try {
-                        if (child != null) {
-                            node = new ConcatenationNode(child, previousNode);
+        return new Mapper<BaseNode>() {
+            public BaseNode map(BaseNode node1, List<BaseNode> children) {
+                BaseNode node = null;
+                try {
+                    boolean useFirst = true;
+                    for (Iterator<BaseNode> it = children.iterator(); it.hasNext(); ) {
+                        BaseNode child = it.next();
+                        if (useFirst) {
+                            node = new ConcatenationNode(node1, child);
+                            useFirst = false;
                         } else {
-                            node = new ConcatenationNode(previousNode, currentNode);
+                            node = new ConcatenationNode(currentNode, child);
                         }
-                    } catch (IncompleteTypeException e) {
-                        logger.error("AntimirovParser.concat() threw IncompleteTypeException:", e);
+                        currentNode = node;
                     }
-                    popNodes(node);
+
+                } catch (IncompleteTypeException e) {
+                    logger.error("AntimirovParser.concatenation() threw IncompleteTypeException");
                 }
                 return node;
             }
-        });
+        }.sequence(element(), spaceElement().many());
     }
 
     public Parser<BaseNode> iteration() {
@@ -131,6 +133,7 @@ public class AntimirovParser {
     }
 
     private void popNodes(BaseNode node) {
+        //nodeStack.push(node);
         previousNode = currentNode;
         currentNode = node;
     }

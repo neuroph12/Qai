@@ -123,12 +123,6 @@ public class TestAntimirovParser extends TestCase {
     }
 
     public void testConcatenation() throws Exception {
-//        AntimirovParser parser = new AntimirovParser();
-//        BaseNode parsedNode = parser.concatenation().parse("foo[double] baz[double]");
-//        assertNotNull("parsed node should not be null", parsedNode);
-//        BaseNode shouldNode = new ConcatenationNode(new Node(new Name("foo"), new PrimitiveNode(new Name("double"))),
-//                new Node(new Name("baz"), new PrimitiveNode(new Name("double"))));
-        //assertTrue("found: " + parsedNode.toString() + " should be: " + shouldNode.toString(), parsedNode.equals(shouldNode));
 
         AntimirovParser parser = new AntimirovParser();
         BaseNode parsedNode = parser.concatenation().parse("foo baz[integer] bar[double]");
@@ -137,6 +131,14 @@ public class TestAntimirovParser extends TestCase {
                 new Node(new Name("baz"), new PrimitiveNode(new Name("integer")))),
                 new Node(new Name("bar"), new PrimitiveNode(new Name("double"))));
         assertTrue("found: " + parsedNode.toString() + " should be: " + shouldNode.toString(), parsedNode.equals(shouldNode));
+
+        parser = new AntimirovParser();
+        parsedNode = parser.concatenation().parse("foo[double] baz[double]");
+        assertNotNull("parsed node should not be null", parsedNode);
+        shouldNode = new ConcatenationNode(new Node(new Name("foo"), new PrimitiveNode(new Name("double"))),
+                new Node(new Name("baz"), new PrimitiveNode(new Name("double"))));
+        assertTrue("found: " + parsedNode.toString() + " should be: " + shouldNode.toString(), parsedNode.equals(shouldNode));
+
     }
 
     public void testIteration() throws Exception {
