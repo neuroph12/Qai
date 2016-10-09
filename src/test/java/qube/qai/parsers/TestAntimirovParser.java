@@ -5,7 +5,6 @@ package qube.qai.parsers;
  */
 
 import junit.framework.TestCase;
-import org.jmathplot.gui.plotObjects.Base;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.parsers.antimirov.TestCases;
@@ -152,6 +151,32 @@ public class TestAntimirovParser extends TestCase {
         parsedNode = parser.iteration().parse("baz[integer]*");
         assertNotNull("parsed node should not be null", parsedNode);
         shouldNode = new IterationNode(new Node(new Name("baz"), new PrimitiveNode(new Name("integer"))));
+        assertTrue("found: " + parsedNode.toString() + " should be: " + shouldNode.toString(), parsedNode.equals(shouldNode));
+    }
+
+    public void testIterationLonghand() throws Exception {
+        AntimirovParser parser = new AntimirovParser();
+        BaseNode parsedNode = parser.iterationLong().parse("baz{3-5}");
+        assertNotNull("parsed node should not be null", parsedNode);
+        BaseNode shouldNode = new IterationNode(new Node(new Name("baz")), 3, 5);
+        assertTrue("found: " + parsedNode.toString() + " should be: " + shouldNode.toString(), parsedNode.equals(shouldNode));
+    }
+
+    public void testAlternation() throws Exception {
+        AntimirovParser parser = new AntimirovParser();
+        BaseNode parsedNode = parser.alternation().parse("foo | baz | bar");
+        assertNotNull("parsed node should not be null", parsedNode);
+        BaseNode shouldNode = new AlternationNode(new AlternationNode(new Node(new Name("foo")), new Node(new Name("baz"))), new Node(new Name("bar")));
+        assertTrue("found: " + parsedNode.toString() + " should be: " + shouldNode.toString(), parsedNode.equals(shouldNode));
+    }
+
+    public void testParanthesis() throws Exception {
+        AntimirovParser parser = new AntimirovParser();
+        BaseNode parsedNode = parser.paranthesis().parse("(foo baz[integer] bar[double])");
+        assertNotNull("parsed node should not be null", parsedNode);
+        BaseNode shouldNode = new ConcatenationNode(new ConcatenationNode(new Node(new Name("foo")),
+                new Node(new Name("baz"), new PrimitiveNode(new Name("integer")))),
+                new Node(new Name("bar"), new PrimitiveNode(new Name("double"))));
         assertTrue("found: " + parsedNode.toString() + " should be: " + shouldNode.toString(), parsedNode.equals(shouldNode));
     }
 

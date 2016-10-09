@@ -17,7 +17,9 @@ import qube.qai.network.TestNeuralNetwork;
 import qube.qai.network.TestWikiNetwork;
 import qube.qai.network.neural.trainer.TestNeuralNetworkTraining;
 import qube.qai.network.semantic.TestSemanticNetworkBuilder;
+import qube.qai.parsers.TestAntimirovParser;
 import qube.qai.parsers.TestWikiIntegration;
+import qube.qai.parsers.maths.TestMathParser;
 import qube.qai.persistence.mapstores.*;
 import qube.qai.persistence.search.TestRDFTripleSearchService;
 import qube.qai.procedure.TestWikiSearch;
@@ -72,6 +74,8 @@ public class AllQaiTests extends TestCase {
 
         // parsers
         suite.addTestSuite(TestWikiIntegration.class);
+        suite.addTestSuite(TestAntimirovParser.class);
+        suite.addTestSuite(TestMathParser.class);
 
         // persistence.mapstores
         suite.addTestSuite(TestMapStores.class);

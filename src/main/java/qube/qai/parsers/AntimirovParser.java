@@ -1,11 +1,9 @@
 package qube.qai.parsers;
 
-import info.bliki.wiki.template.expr.Scanner;
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.Parsers;
 import org.codehaus.jparsec.Scanners;
 import org.codehaus.jparsec.functors.Map;
-import org.codehaus.jparsec.functors.Map3;
 import org.codehaus.jparsec.misc.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +12,6 @@ import qube.qai.parsers.antimirov.nodes.*;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Created by rainbird on 9/27/16.
@@ -22,8 +19,6 @@ import java.util.Stack;
 public class AntimirovParser {
 
     private static Logger logger = LoggerFactory.getLogger("AntimirovParser");
-
-    protected BaseNode previousNode;
 
     protected BaseNode currentNode;
 
@@ -82,6 +77,21 @@ public class AntimirovParser {
         return Parsers.or(typedName(), name());
     }
 
+    private Parser<BaseNode> expr() {
+        return Parsers.or(concatenation(), alternation(), iteration());
+    }
+
+    public Parser<BaseNode> paranthesis() {
+        return Parsers.between(Scanners.string("("),
+                expr(),
+                Scanners.string(")")).map(new Map<Object, BaseNode>() {
+            @Override
+            public BaseNode map(Object o) {
+                return currentNode;
+            }
+        });
+    }
+
     public Parser<BaseNode> spaceElement() {
         return Scanners.WHITESPACES.followedBy(element()).map(new Map<Void, BaseNode>() {
             @Override
@@ -116,7 +126,7 @@ public class AntimirovParser {
         }.sequence(element(), spaceElement().many());
     }
 
-    public Parser<BaseNode> iteration() {
+    public Parser<BaseNode> iterationShort() {
         return element().followedBy(Scanners.string("*")).map(new Map<BaseNode, BaseNode>() {
             @Override
             public BaseNode map(BaseNode baseNode) {
@@ -126,15 +136,68 @@ public class AntimirovParser {
                 } catch (IncompleteTypeException e) {
                     logger.error("AntimirovParser.alternation() threw IncompleteTypeException", e);
                 }
-                popNodes(node);
+                popNode(node);
                 return node;
             }
         });
     }
 
-    private void popNodes(BaseNode node) {
-        //nodeStack.push(node);
-        previousNode = currentNode;
+    public Parser<BaseNode> iteration() {
+        return Parsers.or(iterationLong(), iterationShort());
+    }
+
+    public Parser<BaseNode> iterationLong() {
+        return new Mapper<BaseNode>() {
+            public BaseNode map(BaseNode node, Void aVoid, String min, Void bVoid, String max, Void cVoid) {
+                int minimum = Integer.parseInt(min);
+                int maximum = Integer.parseInt(max);
+                return new IterationNode(node, minimum, maximum);
+            }
+        }.sequence(element(),
+                Scanners.string("{"),
+                Scanners.INTEGER,
+                Scanners.string("-"),
+                Scanners.INTEGER,
+                Scanners.string("}"));
+    }
+
+    private Parser<BaseNode> altElement() {
+        return Scanners.WHITESPACES.followedBy(Scanners.string("|"))
+                .followedBy(Scanners.WHITESPACES)
+                .followedBy(element()).map(new Map<Void, BaseNode>() {
+            @Override
+            public BaseNode map(Void aVoid) {
+                return currentNode;
+            }
+        });
+    }
+
+    public Parser<BaseNode> alternation() {
+        return new Mapper<BaseNode>() {
+            public BaseNode map(BaseNode node1, List<BaseNode> children) {
+                BaseNode node = null;
+                try {
+                    boolean useFirst = true;
+                    for (Iterator<BaseNode> it = children.iterator(); it.hasNext(); ) {
+                        BaseNode child = it.next();
+                        if (useFirst) {
+                            node = new AlternationNode(node1, child);
+                            useFirst = false;
+                        } else {
+                            node = new AlternationNode(currentNode, child);
+                        }
+                        currentNode = node;
+                    }
+
+                } catch (IncompleteTypeException e) {
+                    logger.error("AntimirovParser.concatenation() threw IncompleteTypeException");
+                }
+                return node;
+            }
+        }.sequence(element(), altElement().many());
+    }
+
+    private void popNode(BaseNode node) {
         currentNode = node;
     }
 }
