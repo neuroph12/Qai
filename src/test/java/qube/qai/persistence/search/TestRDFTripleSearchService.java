@@ -5,6 +5,9 @@ import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import junit.framework.TestCase;
+import org.apache.jena.propertytable.graph.GraphCSV;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.riot.RDFDataMgr;
 import qube.qai.services.implementation.SearchResult;
 
 import java.util.Collection;
@@ -19,7 +22,7 @@ public class TestRDFTripleSearchService extends TestCase {
             {"http://dbpedia.org/resource/Autism", "emedicineTopic"},
             {"http://dbpedia.org/resource/Aristotle", "deathYear"}};
 
-    public void testSearchService() throws Exception {
+    public void restSearchService() throws Exception {
 
         // begin with creating the search service
         Injector injector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
@@ -41,6 +44,12 @@ public class TestRDFTripleSearchService extends TestCase {
         }
 
     }
+
+
+
+
+
+
 
     private void log(String message) {
         System.out.println(message);

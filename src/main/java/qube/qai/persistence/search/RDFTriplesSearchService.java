@@ -2,6 +2,7 @@ package qube.qai.persistence.search;
 
 import org.apache.commons.lang3.StringUtils;
 import qube.qai.persistence.WikiArticle;
+import qube.qai.services.DataServiceInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Created by rainbird on 6/1/16.
  */
-public class RDFTriplesSearchService implements SearchServiceInterface {
+public class RDFTriplesSearchService implements DataServiceInterface {
 
     @Inject
     private EntityManager manager;
