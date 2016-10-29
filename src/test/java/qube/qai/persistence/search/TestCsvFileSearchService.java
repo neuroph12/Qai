@@ -4,6 +4,7 @@ import org.apache.jena.propertytable.graph.GraphCSV;
 import org.apache.jena.rdf.model.*;
 import junit.framework.TestCase;
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.propertytable.lang.CSV2RDF;
 
 /**
  * Created by rainbird on 10/21/16.
@@ -13,13 +14,21 @@ public class TestCsvFileSearchService extends TestCase {
     private String pathToCsvFiles = "/media/rainbird/ALEPH/datasets/";
     private String sNp500File = "S&P_500_constituents_financials.csv";
 
-    public void testCsvFileModel() throws Exception {
+    @Override
+    protected void setUp() throws Exception {
+        CSV2RDF.init();
+    }
+
+    public void restCsvFileModel() throws Exception {
 
         String filename = pathToCsvFiles + sNp500File;
         Model csvModel = ModelFactory.createModelForGraph(new GraphCSV(filename));
+        log("model size: " + csvModel.size());
+//        csvModel.write(System.out);
 
         int count = 0;
 
+        // this way you can read the data row-by-row
         Property rowProperty = csvModel.getProperty("http://w3c/future-csv-vocab/row");
         log("listing resources with property: " + rowProperty);
         for (ResIterator resIt = csvModel.listSubjectsWithProperty(rowProperty); resIt.hasNext(); count++) {
@@ -35,6 +44,10 @@ public class TestCsvFileSearchService extends TestCase {
             }
             log("=================================================================");
         }
+    }
+
+    public void testCsvFileSparql() throws Exception {
+
     }
 
     public void restCsvFileModels() throws Exception {
