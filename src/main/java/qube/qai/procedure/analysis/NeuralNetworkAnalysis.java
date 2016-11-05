@@ -1,9 +1,8 @@
 package qube.qai.procedure.analysis;
 
-import org.apache.lucene.store.SleepingLockWrapper;
 import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
-import qube.qai.data.Selector;
+import qube.qai.data.SelectionOperator;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.*;
 
@@ -20,7 +19,7 @@ public class NeuralNetworkAnalysis extends ProcedureDecorator {
             "does a statistical analysis of the weights, " +
             "their network structure, etc.";
 
-    private Selector<Collection<NeuralNetwork>> networkSelector;
+    private SelectionOperator<Collection<NeuralNetwork>> networkSelectionOperator;
 
     public NeuralNetworkAnalysis(Procedure procedure) {
         super(procedure);

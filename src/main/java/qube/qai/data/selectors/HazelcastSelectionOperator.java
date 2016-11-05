@@ -3,14 +3,14 @@ package qube.qai.data.selectors;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IMap;
-import qube.qai.data.Selector;
+import qube.qai.data.SelectionOperator;
 
 import javax.inject.Inject;
 
 /**
  * Created by rainbird on 11/19/15.
  */
-public class HazelcastSelector<T> implements Selector, HazelcastInstanceAware {
+public class HazelcastSelectionOperator<T> implements SelectionOperator, HazelcastInstanceAware {
 
     private String dataSource;
 
@@ -21,19 +21,19 @@ public class HazelcastSelector<T> implements Selector, HazelcastInstanceAware {
     @Inject
     private HazelcastInstance hazelcastInstance;
 
-    public HazelcastSelector(HazelcastInstance hazelcastInstance, String dataSource, String uuid) {
+    public HazelcastSelectionOperator(HazelcastInstance hazelcastInstance, String dataSource, String uuid) {
         this.dataSource = dataSource;
         this.uuid = uuid;
         this.hazelcastInstance = hazelcastInstance;
     }
 
-    public HazelcastSelector(String dataSource, Object idObject) {
+    public HazelcastSelectionOperator(String dataSource, Object idObject) {
         this.dataSource = dataSource;
         this.idObject = idObject;
         this.hazelcastInstance = hazelcastInstance;
     }
 
-    public HazelcastSelector(String dataSource, String uuid) {
+    public HazelcastSelectionOperator(String dataSource, String uuid) {
         this.dataSource = dataSource;
         this.uuid = uuid;
     }

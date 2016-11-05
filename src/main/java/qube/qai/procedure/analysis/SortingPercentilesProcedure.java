@@ -1,7 +1,7 @@
 package qube.qai.procedure.analysis;
 
 import qube.qai.data.Arguments;
-import qube.qai.data.Selector;
+import qube.qai.data.SelectionOperator;
 import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.procedure.Procedure;
@@ -45,7 +45,7 @@ public class SortingPercentilesProcedure extends ProcedureDecorator {
             throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
         }
 
-        Map<String, Selector> timeSeriesMap = (Map<String, Selector>) arguments.getSelector(FROM).getData();
+        Map<String, SelectionOperator> timeSeriesMap = (Map<String, SelectionOperator>) arguments.getSelector(FROM).getData();
         Map<String, Statistics> statisticsMap = new TreeMap<String, Statistics>();
 
         Date[] dates = null;

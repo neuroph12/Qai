@@ -14,10 +14,10 @@ public class Arguments implements Serializable, MetricTyped {
 
     private Map<String, Object> results;
 
-    private Map<String, Selector> arguments;
+    private Map<String, SelectionOperator> arguments;
 
     public Arguments() {
-        arguments = new HashMap<String, Selector>();
+        arguments = new HashMap<String, SelectionOperator>();
         results = new HashMap<String, Object>();
     }
 
@@ -39,7 +39,7 @@ public class Arguments implements Serializable, MetricTyped {
         return this;
     }
 
-    public Selector<T> getArgument(String name) {
+    public SelectionOperator<T> getArgument(String name) {
         if (arguments.containsKey(name)) {
             return arguments.get(name);
         }
@@ -77,11 +77,11 @@ public class Arguments implements Serializable, MetricTyped {
         }
     }
 
-    public void setArgument(String name, Selector value) {
+    public void setArgument(String name, SelectionOperator value) {
         arguments.put(name, value);
     }
 
-    public Selector getSelector(String name) {
+    public SelectionOperator getSelector(String name) {
         return arguments.get(name);
     }
 

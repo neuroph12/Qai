@@ -1,11 +1,11 @@
 package qube.qai.services;
 
-import qube.qai.data.Selector;
+import qube.qai.data.SelectionOperator;
 
 /**
  * Created by rainbird on 11/30/15.
  */
 public interface SelectorFactoryInterface<T> {
 
-    Selector<T> buildSelector(String dataSource, String uuid, T data);
+    SelectionOperator<T> buildSelector(String dataSource, String uuid, T data);
 }

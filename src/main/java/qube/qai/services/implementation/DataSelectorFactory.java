@@ -1,7 +1,7 @@
 package qube.qai.services.implementation;
 
-import qube.qai.data.Selector;
-import qube.qai.data.selectors.DataSelector;
+import qube.qai.data.SelectionOperator;
+import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.services.SelectorFactoryInterface;
 
 /**
@@ -9,9 +9,9 @@ import qube.qai.services.SelectorFactoryInterface;
  */
 public class DataSelectorFactory<T> implements SelectorFactoryInterface<T> {
 
-    public Selector<T> buildSelector(String dataSource, String uuid, T data) {
-        Selector<T> selector = new DataSelector<T>(data);
-        return selector;
+    public SelectionOperator<T> buildSelector(String dataSource, String uuid, T data) {
+        SelectionOperator<T> selectionOperator = new DataSelectionOperator<T>(data);
+        return selectionOperator;
     }
 
 }

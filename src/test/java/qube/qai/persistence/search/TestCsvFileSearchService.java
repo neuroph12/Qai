@@ -1,10 +1,16 @@
 package qube.qai.persistence.search;
 
+import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.propertytable.graph.GraphCSV;
+import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import junit.framework.TestCase;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.propertytable.lang.CSV2RDF;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Created by rainbird on 10/21/16.
@@ -13,10 +19,62 @@ public class TestCsvFileSearchService extends TestCase {
 
     private String pathToCsvFiles = "/media/rainbird/ALEPH/datasets/";
     private String sNp500File = "S&P_500_constituents_financials.csv";
+    private String otherListedFile = "other-listed.csv";
+    private String nasdaqFile = "nasdaq-listed.csv";
+    private String nyseFile = "nyse-listed.csv";
+    private String namespace = "file:///media/rainbird/ALEPH/datasets/S&P_500_constituents_financials.csv";
+    private String rowPropertyName = "http://w3c/future-csv-vocab/row";
 
     @Override
     protected void setUp() throws Exception {
-        CSV2RDF.init();
+        //CSV2RDF.init();
+    }
+
+    public void testCsvFileSparqlAndSelectors() throws Exception {
+        String filename = pathToCsvFiles + nyseFile; //otherListedFile; // sNp500File;
+        Model csvModel = RDFDataMgr.loadModel(filename);
+
+        // first we query the model in oder to see the
+        // field names which come with the rows and rows start with one...
+        Integer count = 1;
+        Collection<String> modelNames = new ArrayList<String>();
+        Resource subject = csvModel.createResource(rowPropertyName);
+        Property property = csvModel.createProperty(rowPropertyName);
+        Literal literal = csvModel.createTypedLiteral(count.intValue());
+
+        boolean done = false;
+        while (!done) {
+
+            ResIterator resIt = csvModel.listSubjectsWithProperty(property, literal);
+
+            // if there is nothing in the iterator to iterate upon, we simply break
+            if (!resIt.hasNext()) {
+                done = true;
+            }
+
+            while (resIt.hasNext()) {
+                Resource resource = resIt.next();
+                if (resource == null) {
+                    done = true;
+                    break;
+                }
+                log("-> row (" + count + ")");
+                // read the properties of the resource
+                StmtIterator stmtIt = resource.listProperties();
+                while (stmtIt.hasNext()) {
+                    Statement statement = stmtIt.next();
+                    log(statement.getPredicate().getLocalName() + ": " + statement.getObject().asLiteral().getValue().toString());
+                }
+                log("============================================================================");
+
+            }
+            // now increment the row-number to pick
+            count++;
+            literal = csvModel.createTypedLiteral(count.intValue());
+
+        }
+        // the count might seem strange, but this gives the right result
+        log("printed " + (count-2) + " rows from csv-file");
     }
 
     public void restCsvFileModel() throws Exception {
@@ -29,7 +87,7 @@ public class TestCsvFileSearchService extends TestCase {
         int count = 0;
 
         // this way you can read the data row-by-row
-        Property rowProperty = csvModel.getProperty("http://w3c/future-csv-vocab/row");
+        Property rowProperty = csvModel.getProperty(rowPropertyName);
         log("listing resources with property: " + rowProperty);
         for (ResIterator resIt = csvModel.listSubjectsWithProperty(rowProperty); resIt.hasNext(); count++) {
             Resource resource = resIt.next();
@@ -46,10 +104,77 @@ public class TestCsvFileSearchService extends TestCase {
         }
     }
 
-    public void testCsvFileSparql() throws Exception {
+    public void restCsvFileSparql() throws Exception {
+        String filename = pathToCsvFiles + sNp500File;
+        Model csvModel = RDFDataMgr.loadModel(filename);
 
+        // first try to construct a sparql-query which would read the row-properties
+        String rowPropertiesQuery = "PREFIX w3c: <http://w3c/future-csv-vocab/>" +
+                "SELECT ?p ?o" +
+                "WHERE {" +
+                    "?s w3c:row 1;" +
+                    "?p ?o ." +
+                "}";
+        int count = 0;
+        Collection<String> modelNames = new ArrayList<>();
+        Query rowQuery = QueryFactory.create(rowPropertiesQuery);
+        QueryExecution queryExecution = QueryExecutionFactory.create(rowQuery, csvModel);
+        ResultSet resultSet = queryExecution.execSelect();
+        while (resultSet.hasNext()) {
+            log("names of row- result number: " + count);
+            QuerySolution solution = resultSet.next();
+
+            for (Iterator<String> it = solution.varNames(); it.hasNext(); ) {
+                String name = it.next();
+                RDFNode node = solution.get(name);
+                String value = "";
+                if (node.isLiteral()) {
+                    value = node.asLiteral().getValue().toString();
+                } else if (node.isResource()) {
+                    value = node.asResource().getLocalName();
+                } else {
+                    value = node.toString();
+                }
+                log("variable: " + name + " value: " + value);
+                modelNames.add(value);
+            }
+            count++;
+        }
+
+        // after reading the row-properties we can display those rows in their values
+        String dataQuery = "PREFIX w3c: <http://w3c/future-csv-vocab/>" +
+                "SELECT ?o" +
+                "WHERE {" +
+                "?s w3c:row %1$d;" +
+                "?p ?o ." +
+                "}";
+        int rowNumber = 1;
+
+        while (true) {
+            String query = String.format(dataQuery, rowNumber);
+            queryExecution = QueryExecutionFactory.create(query, csvModel);
+            ResultSet dataResults = queryExecution.execSelect();
+
+            // check if the query has actually returned something
+            if (dataResults == null || !dataResults.hasNext()) {
+                break;
+            }
+
+            // this is a stupid loop, because we would in fact always be getting one row at a time
+            while (dataResults.hasNext()) {
+                QuerySolution solution = dataResults.next();
+                for (String name : modelNames) {
+                    String value = "'" + solution.getLiteral(name).getValue() + "'";
+                    log("on row: " + rowNumber + " property: '" + name + "' with value: '" + value + "'");
+                }
+            }
+            // so that we move on to reading the next row
+            rowNumber++;
+        }
     }
 
+    // the experiment below is no longer relevant- too primitive to work with
+    /*
     public void restCsvFileModels() throws Exception {
         String filename = pathToCsvFiles + sNp500File;
         Model csvModel = RDFDataMgr.loadModel(filename);
@@ -98,6 +223,7 @@ public class TestCsvFileSearchService extends TestCase {
             log("=================================================================");
         }
     }
+    */
 
     private void log(String message) {
         System.out.println(message);

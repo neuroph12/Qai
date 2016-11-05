@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by rainbird on 11/19/15.
  */
-public interface Selector<T> extends Serializable {
+public interface SelectionOperator<T> extends Serializable {
 
     T getData();
 }

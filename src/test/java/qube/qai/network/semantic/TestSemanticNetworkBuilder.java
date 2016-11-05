@@ -3,11 +3,10 @@ package qube.qai.network.semantic;
 
 import com.google.inject.name.Named;
 import qube.qai.data.Metrics;
-import qube.qai.data.Selector;
-import qube.qai.data.selectors.DataSelector;
+import qube.qai.data.SelectionOperator;
+import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.Network;
-import qube.qai.network.semantic.SemanticNetwork;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -45,8 +44,8 @@ public class TestSemanticNetworkBuilder extends QaiTestBase {
         assertNotNull("there has to be a wiki-article", wikiArticle);
 
         SemanticNetworkBuilder builder = new SemanticNetworkBuilder();
-        Selector<WikiArticle> selector = new DataSelector<WikiArticle>(wikiArticle);
-        SemanticNetwork semanticNetwork = (SemanticNetwork) builder.buildNetwork(selector);
+        SelectionOperator<WikiArticle> selectionOperator = new DataSelectionOperator<WikiArticle>(wikiArticle);
+        SemanticNetwork semanticNetwork = (SemanticNetwork) builder.buildNetwork(selectionOperator);
 
         logNetwork(semanticNetwork);
     }
@@ -64,8 +63,8 @@ public class TestSemanticNetworkBuilder extends QaiTestBase {
         assertNotNull("there has to be a wiki-article", wikiArticle);
 
         SemanticNetworkBuilder builder = new SemanticNetworkBuilder();
-        Selector<WikiArticle> selector = new DataSelector<WikiArticle>(wikiArticle);
-        SemanticNetwork semanticNetwork = (SemanticNetwork) builder.buildNetwork(selector);
+        SelectionOperator<WikiArticle> selectionOperator = new DataSelectionOperator<WikiArticle>(wikiArticle);
+        SemanticNetwork semanticNetwork = (SemanticNetwork) builder.buildNetwork(selectionOperator);
         semanticNetwork.buildAdjacencyMatrix();
         logNetwork(semanticNetwork);
 

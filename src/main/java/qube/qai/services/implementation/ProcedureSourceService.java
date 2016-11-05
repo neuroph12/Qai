@@ -1,23 +1,7 @@
 package qube.qai.services.implementation;
 
-import org.joda.time.DateTime;
-import org.ojalgo.random.Normal;
-import org.ojalgo.random.RandomNumber;
-import qube.qai.data.Arguments;
-import qube.qai.data.Selector;
-import qube.qai.data.TimeSequence;
-import qube.qai.data.selectors.DataSelector;
-import qube.qai.matrix.Matrix;
-import qube.qai.matrix.Vector;
-import qube.qai.network.Network;
-import qube.qai.network.neural.NeuralNetwork;
-import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.SelectionProcedure;
-import qube.qai.procedure.analysis.*;
 import qube.qai.services.ProcedureSourceInterface;
-
-import java.util.*;
 
 /**
  * Created by rainbird on 12/16/15.

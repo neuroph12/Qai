@@ -3,12 +3,11 @@ package qube.qai.data.selectors;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import org.apache.commons.lang3.StringUtils;
-import qube.qai.data.Selector;
+import qube.qai.data.SelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockEntityId;
 import qube.qai.persistence.WikiArticle;
-import qube.qai.persistence.mapstores.TestMapStores;
 import qube.qai.persistence.mapstores.TestStockEntityMapStore;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSourceInterface;
@@ -56,7 +55,7 @@ public class TestHazelcastSelectors extends QaiTestBase {
         IMap<StockEntityId,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_SOURCE);
 
         int number = 100;
-        Collection<Selector> selectors = new ArrayList<Selector>();
+        Collection<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
         for (int i = 0; i < number; i++) {
             String name = "entity(" + i + ")";
             StockEntity entity = TestStockEntityMapStore.createEntity(name);
@@ -64,14 +63,14 @@ public class TestHazelcastSelectors extends QaiTestBase {
             if (!stockEntities.containsKey(uuid)) {
                 stockEntities.put(uuid, entity);
             }
-            Selector<StockEntity> selector = new HazelcastSelector<StockEntity>(STOCK_SOURCE, uuid);
-            selectors.add(selector);
+            SelectionOperator<StockEntity> selectionOperator = new HazelcastSelectionOperator<StockEntity>(STOCK_SOURCE, uuid);
+            selectionOperators.add(selectionOperator);
         }
 
         // now after putting everything in hazelcast we should be able to read them as well
-        for (Selector selector : selectors) {
-            injector.injectMembers(selector);
-            StockEntity entity = (StockEntity) selector.getData();
+        for (SelectionOperator selectionOperator : selectionOperators) {
+            injector.injectMembers(selectionOperator);
+            StockEntity entity = (StockEntity) selectionOperator.getData();
             assertNotNull("there has to be a stock entity", entity);
         }
     }
@@ -84,7 +83,7 @@ public class TestHazelcastSelectors extends QaiTestBase {
 
         IMap<String,Procedure> procedures = hazelcastInstance.getMap(PROCEDURE_SOURCE);
 
-        List<Selector> selectors = new ArrayList<Selector>();
+        List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
         String[] procedureNames = procedureSource.getProcedureNames();
         for (String name : procedureNames) {
             Procedure procedure = procedureSource.getProcedureWithName(name);
@@ -94,15 +93,15 @@ public class TestHazelcastSelectors extends QaiTestBase {
                 uuid = uuidService.createUUIDString();
                 procedure.setUuid(uuid);
             }
-            Selector<Procedure> selector = new HazelcastSelector<Procedure>(PROCEDURE_SOURCE, uuid);
+            SelectionOperator<Procedure> selectionOperator = new HazelcastSelectionOperator<Procedure>(PROCEDURE_SOURCE, uuid);
             procedures.put(uuid, procedure);
-            selectors.add(selector);
+            selectionOperators.add(selectionOperator);
         }
 
         // now after putting everything in hazelcast we should be able to read them as well
-        for (Selector selector : selectors) {
-            injector.injectMembers(selector);
-            Procedure procedure = (Procedure) selector.getData();
+        for (SelectionOperator selectionOperator : selectionOperators) {
+            injector.injectMembers(selectionOperator);
+            Procedure procedure = (Procedure) selectionOperator.getData();
             assertNotNull("there has to be a procedure", procedure);
         }
     }
@@ -116,17 +115,17 @@ public class TestHazelcastSelectors extends QaiTestBase {
 
         IMap<String,WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKIPEDIA_SOURCE);
 
-        List<Selector> selectors = new ArrayList<Selector>();
+        List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
         Collection<SearchResult> results = wikipediaSearch.searchInputString("mouse", "title", 100);
         for (SearchResult result : results) {
-            Selector<WikiArticle> selector = new HazelcastSelector<WikiArticle>(WIKIPEDIA_SOURCE, result.getFilename());
-            selectors.add(selector);
+            SelectionOperator<WikiArticle> selectionOperator = new HazelcastSelectionOperator<WikiArticle>(WIKIPEDIA_SOURCE, result.getFilename());
+            selectionOperators.add(selectionOperator);
         }
 
         // now collect the results
-        for (Selector<WikiArticle> selector : selectors) {
-            injector.injectMembers(selector);
-            WikiArticle article = selector.getData();
+        for (SelectionOperator<WikiArticle> selectionOperator : selectionOperators) {
+            injector.injectMembers(selectionOperator);
+            WikiArticle article = selectionOperator.getData();
             assertNotNull("article may not be null", article);
         }
     }
@@ -140,17 +139,17 @@ public class TestHazelcastSelectors extends QaiTestBase {
 
         IMap<String,WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKTIONARY_SOURCE);
 
-        List<Selector> selectors = new ArrayList<Selector>();
+        List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
         Collection<SearchResult> results = wiktionarySearch.searchInputString("mouse", "title", 100);
         for (SearchResult result : results) {
-            Selector<WikiArticle> selector = new HazelcastSelector<WikiArticle>(WIKTIONARY_SOURCE, result.getFilename());
-            selectors.add(selector);
+            SelectionOperator<WikiArticle> selectionOperator = new HazelcastSelectionOperator<WikiArticle>(WIKTIONARY_SOURCE, result.getFilename());
+            selectionOperators.add(selectionOperator);
         }
 
         // now collect the results
-        for (Selector<WikiArticle> selector : selectors) {
-            injector.injectMembers(selector);
-            WikiArticle article = selector.getData();
+        for (SelectionOperator<WikiArticle> selectionOperator : selectionOperators) {
+            injector.injectMembers(selectionOperator);
+            WikiArticle article = selectionOperator.getData();
             assertNotNull("article may not be null", article);
         }
     }

@@ -5,13 +5,12 @@ import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.ITopic;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.Arguments;
 import qube.qai.data.DataVisitor;
-import qube.qai.data.Selector;
+import qube.qai.data.SelectionOperator;
 import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.User;
@@ -86,7 +85,7 @@ public abstract class Procedure implements Serializable, Runnable, HazelcastInst
      */
     public abstract void buildArguments();
 
-    protected Selector createSelector(Object data) {
+    protected SelectionOperator createSelector(Object data) {
         return selectorFactory.buildSelector(name, uuid, data);
     }
 

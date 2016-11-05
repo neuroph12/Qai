@@ -2,8 +2,8 @@ package qube.qai.procedure.archive;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.Selector;
-import qube.qai.data.selectors.DataSelector;
+import qube.qai.data.SelectionOperator;
+import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
@@ -29,8 +29,8 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
         injector.injectMembers(ripperProcedure);
 
         WikiArchiveIndexer wikiIndexer = new WikiArchiveIndexer(ripperProcedure);
-        Selector<String> selector = new DataSelector<String>(dummyIndexDirectory);
-        wikiIndexer.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selector);
+        SelectionOperator<String> selectionOperator = new DataSelectionOperator<String>(dummyIndexDirectory);
+        wikiIndexer.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
         injector.injectMembers(wikiIndexer);
 
         long start = System.currentTimeMillis();
@@ -56,16 +56,16 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
         String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_de.index";
 
         WikiRipperProcedure ripperProcedure = new WikiRipperProcedure();
-        Selector<String> fileanmeSelector = new DataSelector<String>(wikiToRip);
-        Selector<String> archiveNameSelector = new DataSelector<String>(archiveToCreate);
-        Selector<Boolean> isWiktionarySelector = new DataSelector<Boolean>(Boolean.TRUE);
-        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_FILENAME, fileanmeSelector);
-        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_TARGET_FILENAME, archiveNameSelector);
-        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_IS_WIKTIONARY, isWiktionarySelector);
+        SelectionOperator<String> fileanmeSelectionOperator = new DataSelectionOperator<String>(wikiToRip);
+        SelectionOperator<String> archiveNameSelectionOperator = new DataSelectionOperator<String>(archiveToCreate);
+        SelectionOperator<Boolean> isWiktionarySelectionOperator = new DataSelectionOperator<Boolean>(Boolean.TRUE);
+        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_FILENAME, fileanmeSelectionOperator);
+        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_TARGET_FILENAME, archiveNameSelectionOperator);
+        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_IS_WIKTIONARY, isWiktionarySelectionOperator);
 
         WikiArchiveIndexer indexerProcedure = new WikiArchiveIndexer(ripperProcedure);
-        Selector<String> selector = new DataSelector<String>(indexDirectory);
-        indexerProcedure.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selector);
+        SelectionOperator<String> selectionOperator = new DataSelectionOperator<String>(indexDirectory);
+        indexerProcedure.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
 
         long start = System.currentTimeMillis();
         log("ripping: " + wikiToRip);

@@ -3,11 +3,10 @@ package qube.qai.procedure.analysis;
 import org.encog.ml.data.MLDataPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.Selector;
-import qube.qai.data.selectors.DataSelector;
+import qube.qai.data.SelectionOperator;
+import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.data.stores.StockEntityDataStore;
 import qube.qai.main.QaiTestBase;
-import qube.qai.network.Network;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.SimpleProcedure;
@@ -40,11 +39,11 @@ public class TestMarketNetworkBuilder extends QaiTestBase {
         Collection<StockEntity> workingSet = pickRandomFrom(numberOfEntities, entityList, names);
         logger.info("picked entities: " + array2String(names));
 
-        Selector<Collection> selector = new DataSelector<Collection>(workingSet);
+        SelectionOperator<Collection> selectionOperator = new DataSelectionOperator<Collection>(workingSet);
         SimpleProcedure procedure = new SimpleProcedure();
         MarketNetworkBuilder networkBuilder = new MarketNetworkBuilder(procedure);
         injector.injectMembers(networkBuilder);
-        NeuralNetwork network = (NeuralNetwork) networkBuilder.buildNetwork(selector);
+        NeuralNetwork network = (NeuralNetwork) networkBuilder.buildNetwork(selectionOperator);
         assertNotNull("duh!", network);
 
         network.getVertices();

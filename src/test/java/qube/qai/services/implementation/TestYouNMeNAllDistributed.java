@@ -1,7 +1,7 @@
 package qube.qai.services.implementation;
 
-import qube.qai.data.Selector;
-import qube.qai.data.selectors.DataSelector;
+import qube.qai.data.SelectionOperator;
+import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
@@ -29,8 +29,8 @@ public class TestYouNMeNAllDistributed extends QaiTestBase {
         wikiIndexer.setAnalyseLocation(true);
         wikiIndexer.setAnalysePerson(true);
         wikiIndexer.setAnalyseOrganization(true);
-        Selector<String> selector = new DataSelector<String>(dummyIndexDirectory);
-        wikiIndexer.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selector);
+        SelectionOperator<String> selectionOperator = new DataSelectionOperator<String>(dummyIndexDirectory);
+        wikiIndexer.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
         injector.injectMembers(wikiIndexer);
 
         long start = System.currentTimeMillis();

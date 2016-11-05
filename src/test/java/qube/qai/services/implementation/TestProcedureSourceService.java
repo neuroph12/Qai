@@ -4,9 +4,9 @@ import org.joda.time.DateTime;
 import org.ojalgo.random.Normal;
 import org.ojalgo.random.RandomNumber;
 import qube.qai.data.Arguments;
-import qube.qai.data.Selector;
+import qube.qai.data.SelectionOperator;
 import qube.qai.data.TimeSequence;
-import qube.qai.data.selectors.DataSelector;
+import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
 import qube.qai.network.Network;
@@ -49,32 +49,32 @@ public class TestProcedureSourceService implements ProcedureSourceInterface {
         if (ChangePointAnalysis.NAME.equals(name)) {
 
             TimeSequence<Double> timeSequence = TimeSequence.createTimeSeries(start, end);
-            Selector<TimeSequence> selector = new DataSelector<TimeSequence>(timeSequence);
-            toDecorate.getArguments().setArgument(ChangePointAnalysis.INPUT_TIME_SEQUENCE, selector);
+            SelectionOperator<TimeSequence> selectionOperator = new DataSelectionOperator<TimeSequence>(timeSequence);
+            toDecorate.getArguments().setArgument(ChangePointAnalysis.INPUT_TIME_SEQUENCE, selectionOperator);
 
             procedure = new ChangePointAnalysis(toDecorate);
 
         } else if (MatrixStatistics.NAME.equals(name)) {
 
             Matrix matrix = Matrix.createMatrix(true, 100, 100);
-            Selector<Matrix> selector = new DataSelector<Matrix>(matrix);
-            toDecorate.getArguments().setArgument(MatrixStatistics.INPUT_MATRIX, selector);
+            SelectionOperator<Matrix> selectionOperator = new DataSelectionOperator<Matrix>(matrix);
+            toDecorate.getArguments().setArgument(MatrixStatistics.INPUT_MATRIX, selectionOperator);
 
             procedure = new MatrixStatistics(toDecorate);
 
         } else if (NetworkStatistics.NAME.equals(name)) {
 
             Network network = Network.createTestNetwork();
-            Selector<Network> selector = new DataSelector<Network>(network);
-            toDecorate.getArguments().setArgument(NetworkStatistics.INPUT_NETWORK, selector);
+            SelectionOperator<Network> selectionOperator = new DataSelectionOperator<Network>(network);
+            toDecorate.getArguments().setArgument(NetworkStatistics.INPUT_NETWORK, selectionOperator);
             procedure = new NetworkStatistics(toDecorate);
 
         } else if (NeuralNetworkAnalysis.NAME.equals(name)) {
 
             Matrix matrix = Matrix.createMatrix(true, 100, 100);
             NeuralNetwork network = new NeuralNetwork(matrix);
-            Selector<NeuralNetwork> selector = new DataSelector<NeuralNetwork>(network);
-            toDecorate.getArguments().setArgument(NeuralNetworkAnalysis.INPUT_NEURAL_NETWORK, selector);
+            SelectionOperator<NeuralNetwork> selectionOperator = new DataSelectionOperator<NeuralNetwork>(network);
+            toDecorate.getArguments().setArgument(NeuralNetworkAnalysis.INPUT_NEURAL_NETWORK, selectionOperator);
 
             procedure = new NeuralNetworkAnalysis(toDecorate);
 
@@ -84,8 +84,8 @@ public class TestProcedureSourceService implements ProcedureSourceInterface {
 
             Matrix matrix = Matrix.createMatrix(true, size, size);
             NeuralNetwork neuralNetwork = new NeuralNetwork(matrix);
-            Selector<NeuralNetwork> networkSelector = new DataSelector<NeuralNetwork>(neuralNetwork);
-            arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_NEURAL_NETWORK, networkSelector);
+            SelectionOperator<NeuralNetwork> networkSelectionOperator = new DataSelectionOperator<NeuralNetwork>(neuralNetwork);
+            arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_NEURAL_NETWORK, networkSelectionOperator);
 
             double[] firstDay = new double[size];
             RandomNumber generator = new Normal(0.5, 0.1);
@@ -93,23 +93,23 @@ public class TestProcedureSourceService implements ProcedureSourceInterface {
                 firstDay[i] = generator.doubleValue();
             }
             Vector startVector = Vector.buildFromArray(firstDay);
-            Selector<Vector> startVectorSelector = new DataSelector<Vector>(startVector);
-            arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_START_VECTOR, startVectorSelector);
+            SelectionOperator<Vector> startVectorSelectionOperator = new DataSelectionOperator<Vector>(startVector);
+            arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_START_VECTOR, startVectorSelectionOperator);
 
             List<String> names = new ArrayList<String>();
             String[] nameStrings = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eightth", "nineth", "tenth"};
             for (String n : nameStrings) {
                 names.add(n);
             }
-            Selector<List> namesSelector = new DataSelector<List>(names);
-            arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_NAMES, namesSelector);
+            SelectionOperator<List> namesSelectionOperator = new DataSelectionOperator<List>(names);
+            arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_NAMES, namesSelectionOperator);
 
             Date startDate = DateTime.parse("2015-1-1").toDate();
             Date endDate = DateTime.parse("2015-1-10").toDate();
 
             List<Date> dates = TimeSequence.createDates(startDate, endDate);;
-            Selector<List> stepsSelector = new DataSelector<List>(dates);
-            arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_DATES_FOR_STEPS, stepsSelector);
+            SelectionOperator<List> stepsSelectionOperator = new DataSelectionOperator<List>(dates);
+            arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_DATES_FOR_STEPS, stepsSelectionOperator);
 
             procedure = new NeuralNetworkForwardPropagation(toDecorate);
 
@@ -121,27 +121,27 @@ public class TestProcedureSourceService implements ProcedureSourceInterface {
             Date startDate = DateTime.parse("2015-1-1").toDate();
             Date endDate = DateTime.now().toDate();
 
-            Map<String, Selector> timeSeriesMap = new HashMap<String, Selector>();
+            Map<String, SelectionOperator> timeSeriesMap = new HashMap<String, SelectionOperator>();
             for (int i = 0; i < number; i++) {
                 TimeSequence<Double> timeSequence = TimeSequence.createTimeSeries(startDate, endDate);
-                Selector<TimeSequence> selector = new DataSelector<TimeSequence>(timeSequence);
+                SelectionOperator<TimeSequence> selectionOperator = new DataSelectionOperator<TimeSequence>(timeSequence);
                 String key = "entity_" + i;
-                timeSeriesMap.put(key, selector);
+                timeSeriesMap.put(key, selectionOperator);
             }
 
-            Selector<Map> collectionSelector = new DataSelector<Map>(timeSeriesMap);
-            procedure.getArguments().setArgument(SortingPercentilesProcedure.FROM, collectionSelector);
+            SelectionOperator<Map> collectionSelectionOperator = new DataSelectionOperator<Map>(timeSeriesMap);
+            procedure.getArguments().setArgument(SortingPercentilesProcedure.FROM, collectionSelectionOperator);
 
             // @TODO is this really required in the latest form of the class and what it does?!?
-            Selector<String> criteria = new DataSelector<String>("criteria");
+            SelectionOperator<String> criteria = new DataSelectionOperator<String>("criteria");
             procedure.getArguments().setArgument(SortingPercentilesProcedure.CRITERIA, criteria);
 
         } else if (TimeSequenceAnalysis.NAME.equals(name)) {
 
             TimeSequence<Double> timeSequence = TimeSequence.createTimeSeries(start, end);
-            Selector<TimeSequence> selector = new DataSelector<TimeSequence>(timeSequence);
+            SelectionOperator<TimeSequence> selectionOperator = new DataSelectionOperator<TimeSequence>(timeSequence);
 
-            toDecorate.getArguments().setArgument(TimeSequenceAnalysis.INPUT_TIME_SEQUENCE, selector);
+            toDecorate.getArguments().setArgument(TimeSequenceAnalysis.INPUT_TIME_SEQUENCE, selectionOperator);
             procedure = new TimeSequenceAnalysis(toDecorate);
 
         } else if (MarketNetworkBuilder.NAME.equals(name)) {
@@ -149,9 +149,9 @@ public class TestProcedureSourceService implements ProcedureSourceInterface {
             procedure = new MarketNetworkBuilder(toDecorate);
 
             Collection<StockEntity> stockEntities = new ArrayList<StockEntity>();
-            Selector<Collection> selector = new DataSelector<Collection>(stockEntities);
+            SelectionOperator<Collection> selectionOperator = new DataSelectionOperator<Collection>(stockEntities);
 
-            procedure.getArguments().setArgument(MarketNetworkBuilder.INPUT_STOCK_ENTITY_COLLECTION, selector);
+            procedure.getArguments().setArgument(MarketNetworkBuilder.INPUT_STOCK_ENTITY_COLLECTION, selectionOperator);
 
         }
 

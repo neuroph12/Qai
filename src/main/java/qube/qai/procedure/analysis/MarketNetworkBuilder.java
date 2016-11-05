@@ -1,7 +1,7 @@
 package qube.qai.procedure.analysis;
 
 import qube.qai.data.Arguments;
-import qube.qai.data.Selector;
+import qube.qai.data.SelectionOperator;
 import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
@@ -41,7 +41,7 @@ public class MarketNetworkBuilder extends ProcedureDecorator implements NetworkB
      * @param source
      * @return
      */
-    public Network buildNetwork(Selector source) {
+    public Network buildNetwork(SelectionOperator source) {
 
         arguments.setArgument(INPUT_STOCK_ENTITY_COLLECTION, source);
         execute();
@@ -55,8 +55,8 @@ public class MarketNetworkBuilder extends ProcedureDecorator implements NetworkB
     @Override
     public void execute() {
 
-        Selector<Collection> selector = arguments.getSelector(INPUT_STOCK_ENTITY_COLLECTION);
-        Collection<StockEntity> entities = selector.getData();
+        SelectionOperator<Collection> selectionOperator = arguments.getSelector(INPUT_STOCK_ENTITY_COLLECTION);
+        Collection<StockEntity> entities = selectionOperator.getData();
         HashMap<String, Collection> trainingData = new HashMap<String, Collection>();
         NeuralNetwork network = new NeuralNetwork(entities.size());
         for (StockEntity entity : entities) {

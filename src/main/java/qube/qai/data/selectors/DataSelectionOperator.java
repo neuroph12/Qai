@@ -1,18 +1,18 @@
 package qube.qai.data.selectors;
 
-import qube.qai.data.Selector;
+import qube.qai.data.SelectionOperator;
 
 /**
  * Created by rainbird on 11/27/15.
  */
-public class DataSelector<T> implements Selector {
+public class DataSelectionOperator<T> implements SelectionOperator {
 
     private T data;
 
-    public DataSelector() {
+    public DataSelectionOperator() {
     }
 
-    public DataSelector(T data) {
+    public DataSelectionOperator(T data) {
         this.data = data;
     }
 

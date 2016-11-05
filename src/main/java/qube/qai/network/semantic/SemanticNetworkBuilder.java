@@ -8,8 +8,7 @@ import opennlp.tools.tokenize.TokenizerModel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.Selector;
-import qube.qai.matrix.Matrix;
+import qube.qai.data.SelectionOperator;
 import qube.qai.network.Graph;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
@@ -27,9 +26,9 @@ public class SemanticNetworkBuilder implements NetworkBuilder {
 
     private String opennlp_module_en = "/opennlp/en/en-token.bin";
 
-    public Network buildNetwork(Selector selector) {
+    public Network buildNetwork(SelectionOperator selectionOperator) {
 
-        WikiArticle wikiArticle = (WikiArticle) selector.getData();
+        WikiArticle wikiArticle = (WikiArticle) selectionOperator.getData();
         Graph graph = new Graph();
         Network network = new SemanticNetwork();
         String wikiContent = wikiArticle.getContent();
