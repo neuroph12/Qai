@@ -46,11 +46,6 @@ public class TestRDFTripleSearchService extends TestCase {
     }
 
 
-
-
-
-
-
     private void log(String message) {
         System.out.println(message);
     }

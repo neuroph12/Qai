@@ -19,7 +19,7 @@ import java.util.Collection;
  */
 public class DistributedSearchService implements SearchServiceInterface, MessageListener {
 
-    private Logger logger = LoggerFactory.getLogger("SearchServiceInterface");
+    private Logger logger = LoggerFactory.getLogger("DistributedSearchService");
 
     @Inject
     private HazelcastInstance hazelcastInstance;

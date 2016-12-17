@@ -7,6 +7,7 @@ import org.apache.jena.rdf.model.*;
 import junit.framework.TestCase;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.propertytable.lang.CSV2RDF;
+import qube.qai.services.implementation.UUIDService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,51 +31,56 @@ public class TestCsvFileSearchService extends TestCase {
         //CSV2RDF.init();
     }
 
+    public void restUUIDNumbers() {
+        for (int i = 0; i < 100; i++) {
+            String uuid = UUIDService.uuidString();
+            log(uuid);
+        }
+    }
+
     public void testCsvFileSparqlAndSelectors() throws Exception {
-        String filename = pathToCsvFiles + nyseFile; //otherListedFile; // sNp500File;
+
+        String filename = pathToCsvFiles + sNp500File; //otherListedFile; //nyseFile ;
         Model csvModel = RDFDataMgr.loadModel(filename);
+
+        // see if this works
+        //csvModel.write(System.out);
 
         // first we query the model in oder to see the
         // field names which come with the rows and rows start with one...
-        Integer count = 1;
-        Collection<String> modelNames = new ArrayList<String>();
-        Resource subject = csvModel.createResource(rowPropertyName);
-        Property property = csvModel.createProperty(rowPropertyName);
-        Literal literal = csvModel.createTypedLiteral(count.intValue());
-
+        int count = 1;
         boolean done = false;
+
         while (!done) {
 
-            ResIterator resIt = csvModel.listSubjectsWithProperty(property, literal);
+            Property property = csvModel.createProperty(rowPropertyName);
+            Literal countLiteral = csvModel.createTypedLiteral(count);
+            ResIterator resIt = csvModel.listSubjectsWithProperty(property, countLiteral);
 
             // if there is nothing in the iterator to iterate upon, we simply break
             if (!resIt.hasNext()) {
+                log("stopping because res-iterator at end");
                 done = true;
-            }
+            } else {
 
-            while (resIt.hasNext()) {
-                Resource resource = resIt.next();
-                if (resource == null) {
-                    done = true;
-                    break;
+                while (resIt.hasNext()) {
+                    Resource resource = resIt.next();
+                    log("-> row (" + count + ")");
+                    // read the properties of the resource
+                    StmtIterator stmtIt = resource.listProperties();
+                    while (stmtIt.hasNext()) {
+                        Statement statement = stmtIt.next();
+                        log(statement.getPredicate().getLocalName() + ": " + statement.getObject().asLiteral().getValue().toString());
+                    }
+                    log("============================================================================");
+
                 }
-                log("-> row (" + count + ")");
-                // read the properties of the resource
-                StmtIterator stmtIt = resource.listProperties();
-                while (stmtIt.hasNext()) {
-                    Statement statement = stmtIt.next();
-                    log(statement.getPredicate().getLocalName() + ": " + statement.getObject().asLiteral().getValue().toString());
-                }
-                log("============================================================================");
-
+                // now increment the row-number to pick
+                count++;
             }
-            // now increment the row-number to pick
-            count++;
-            literal = csvModel.createTypedLiteral(count.intValue());
-
         }
-        // the count might seem strange, but this gives the right result
-        log("printed " + (count-2) + " rows from csv-file");
+        // the count might seem strange, but this the 1 we started with
+        log("printed " + (count-1) + " rows from csv-file");
     }
 
     public void restCsvFileModel() throws Exception {

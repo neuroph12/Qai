@@ -77,8 +77,8 @@ public class StockEntityDataStore implements DataStore {
         IMap<StockEntityId,StockEntity> stockMap = hazelcastInstance.getMap("STOCK_ENTITIES");
 
         Collection<StockEntity> entities = new ArrayList<StockEntity>();
-        WikiArticle article = searchService.retrieveDocumentContentFromZipFile(marketListingName);
-        //WikiArticle article = wikiMap.get(marketListingName);
+        //WikiArticle article = searchService.retrieveDocumentContentFromZipFile(marketListingName);
+        WikiArticle article = wikiMap.get(marketListingName);
         if (article == null) {
             throw new RuntimeException("Listing: " + marketListingName + " could not be found, can't go on");
         }
