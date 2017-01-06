@@ -172,7 +172,7 @@ public class TestAntimirovParser extends TestCase {
 
     public void testParanthesis() throws Exception {
         AntimirovParser parser = new AntimirovParser();
-        BaseNode parsedNode = parser.paranthesis().parse("(foo baz[integer] bar[double])");
+        BaseNode parsedNode = parser.paranthesis(parser.expr()).parse("(foo baz[integer] bar[double])");
         assertNotNull("parsed node should not be null", parsedNode);
         BaseNode shouldNode = new ConcatenationNode(new ConcatenationNode(new Node(new Name("foo")),
                 new Node(new Name("baz"), new PrimitiveNode(new Name("integer")))),

@@ -29,8 +29,8 @@ public class TestRdfTripleFileMapStore extends TestCase {
     private Dataset testDataset;
     //private String directory = "/media/rainbird/ALEPH/qai-persistence.db/dbtest_tdb";
     private String directory = "/media/rainbird/ALEPH/qai-persistence.db/dbpedia_en";
-    private String filename = directory + "/dbpedia_en.ttl";
-    //private String filename = directory + "/dummy.ttl";
+    //private String filename = directory + "/dbpedia_en.ttl";
+    private String filename = directory + "/dummy.ttl";
 
     @Override
     protected void setUp() throws Exception {

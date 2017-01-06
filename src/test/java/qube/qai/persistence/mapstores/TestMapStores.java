@@ -10,6 +10,7 @@ import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
+import qube.qai.user.User;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -104,4 +105,7 @@ public class TestMapStores extends QaiTestBase {
     }
 
 
+    public void testUserMapStore() throws Exception {
+        User user = new User();
+    }
 }

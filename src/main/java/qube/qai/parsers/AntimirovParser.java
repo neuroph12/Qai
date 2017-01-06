@@ -77,19 +77,17 @@ public class AntimirovParser {
         return Parsers.or(typedName(), name());
     }
 
-    private Parser<BaseNode> expr() {
+    public Parser<BaseNode> expr() {
         return Parsers.or(concatenation(), alternation(), iteration());
     }
 
-    public Parser<BaseNode> paranthesis() {
-        return Parsers.between(Scanners.string("("),
-                expr(),
-                Scanners.string(")")).map(new Map<Object, BaseNode>() {
-            @Override
-            public BaseNode map(Object o) {
-                return currentNode;
-            }
-        });
+    public Parser<BaseNode> paranthesis(Parser<BaseNode> base) {
+
+        final Parser.Reference<BaseNode> baseRef = base.newReference();
+        Parser<BaseNode> parser = base.between(Scanners.string("("), Scanners.string(")")).or(base);
+        baseRef.set(base);
+
+        return parser;
     }
 
     public Parser<BaseNode> spaceElement() {

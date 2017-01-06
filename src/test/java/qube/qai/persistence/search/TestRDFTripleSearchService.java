@@ -17,6 +17,8 @@ import java.util.Collection;
  */
 public class TestRDFTripleSearchService extends TestCase {
 
+    private boolean debug = true;
+
     private String[][] rdfids = {{"http://dbpedia.org/resource/Aristotle", "region"},
             {"http://dbpedia.org/resource/Autism", "diseasesdb"},
             {"http://dbpedia.org/resource/Autism", "emedicineTopic"},
@@ -45,8 +47,9 @@ public class TestRDFTripleSearchService extends TestCase {
 
     }
 
-
     private void log(String message) {
-        System.out.println(message);
+        if (debug) {
+            System.out.println(message);
+        }
     }
 }

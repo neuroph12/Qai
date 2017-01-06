@@ -7,6 +7,8 @@ import org.apache.jena.rdf.model.*;
 import junit.framework.TestCase;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.propertytable.lang.CSV2RDF;
+import qube.qai.services.SearchServiceInterface;
+import qube.qai.services.implementation.SearchResult;
 import qube.qai.services.implementation.UUIDService;
 
 import java.util.ArrayList;
@@ -38,16 +40,23 @@ public class TestCsvFileSearchService extends TestCase {
         }
     }
 
+    public void testCsvFileSearchService() throws Exception {
+        SearchServiceInterface searchService = new CsvFileSearchService();
+        Collection<SearchResult> results = searchService.searchInputString("something", null, 100);
+        assertNotNull("there must be some results", results);
+        assertTrue("there must be results", !results.isEmpty());
+    }
+
     public void testCsvFileSparqlAndSelectors() throws Exception {
 
         String filename = pathToCsvFiles + sNp500File; //otherListedFile; //nyseFile ;
         Model csvModel = RDFDataMgr.loadModel(filename);
 
         // see if this works
-        //csvModel.write(System.out);
+        //csvModel.write(System.out, "RDF/XML-ABBREV");
 
         // first we query the model in oder to see the
-        // field names which come with the rows and rows start with one...
+        // field names which come with the rows and rows start with 1...
         int count = 1;
         boolean done = false;
 
