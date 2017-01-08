@@ -22,6 +22,7 @@ import qube.qai.parsers.TestWikiIntegration;
 import qube.qai.parsers.maths.TestMathParser;
 import qube.qai.persistence.mapstores.*;
 import qube.qai.persistence.search.TestRDFTripleSearchService;
+import qube.qai.persistence.search.TestStockQuoteSearchService;
 import qube.qai.procedure.TestWikiSearch;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
@@ -49,7 +50,7 @@ public class AllQaiTests extends TestCase {
      * @return
      */
     public static Test suite() {
-        TestSuite suite = new TestSuite("All tests");
+        TestSuite suite = new TestSuite("All Tests");
 
         // data.analysis
         suite.addTestSuite(TestChangepointAdapter.class);
@@ -81,12 +82,14 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestMapStores.class);
         suite.addTestSuite(TestHazelcastMaps.class);
         suite.addTestSuite(TestIndexedDirectoryMapStore.class);
-//        suite.addTestSuite(TestStockQuoteMapStore.class);
+        suite.addTestSuite(TestStockQuoteMapStore.class);
         suite.addTestSuite(TestRdfTripleFileMapStore.class);
         suite.addTestSuite(TestStockEntityMapStore.class);
+        suite.addTestSuite(TestUserMapStore.class);
+        suite.addTestSuite(TestSessionMapStore.class);
 
         // persistence.search
-//        suite.addTestSuite(TestStockQuoteSearchService.class);
+        suite.addTestSuite(TestStockQuoteSearchService.class);
         suite.addTestSuite(TestRDFTripleSearchService.class);
 
         // procedure

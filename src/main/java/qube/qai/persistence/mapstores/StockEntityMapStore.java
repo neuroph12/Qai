@@ -4,8 +4,6 @@ import com.hazelcast.core.MapStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockEntityId;
-import qube.qai.persistence.StockQuote;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -21,7 +19,7 @@ import java.util.Map;
 /**
  * Created by rainbird on 11/26/15.
  */
-public class StockEntityMapStore implements MapStore<StockEntityId, StockEntity> {
+public class StockEntityMapStore implements MapStore<String, StockEntity> {
 
     private static Logger logger = LoggerFactory.getLogger("StockEntityMapStore");
 
@@ -41,44 +39,44 @@ public class StockEntityMapStore implements MapStore<StockEntityId, StockEntity>
         this.entityManager = manager;
     }
 
-    public void store(StockEntityId key, StockEntity value) {
+    public void store(String key, StockEntity value) {
         entityManager.persist(value);
     }
 
-    public void storeAll(Map<StockEntityId, StockEntity> map) {
-        for (StockEntityId uuid : map.keySet()) {
+    public void storeAll(Map<String, StockEntity> map) {
+        for (String uuid : map.keySet()) {
             StockEntity entity = map.get(uuid);
             store(uuid, entity);
         }
     }
 
-    public void delete(StockEntityId key) {
+    public void delete(String key) {
         StockEntity entity = load(key);
         entityManager.remove(entity);
     }
 
-    public void deleteAll(Collection<StockEntityId> keys) {
-        for (StockEntityId uuid : keys) {
+    public void deleteAll(Collection<String> keys) {
+        for (String uuid : keys) {
             delete(uuid);
         }
     }
 
-    public StockEntity load(StockEntityId key) {
+    public StockEntity load(String key) {
         StockEntity entity = entityManager.find(StockEntity.class, key);
         return entity;
     }
 
-    public Map<StockEntityId, StockEntity> loadAll(Collection<StockEntityId> keys) {
-        Map<StockEntityId, StockEntity> entityMap = new HashMap<StockEntityId, StockEntity>();
-        for (StockEntityId uuid : keys) {
+    public Map<String, StockEntity> loadAll(Collection<String> keys) {
+        Map<String, StockEntity> entityMap = new HashMap<String, StockEntity>();
+        for (String uuid : keys) {
             StockEntity entity = load(uuid);
             entityMap.put(uuid, entity);
         }
         return entityMap;
     }
 
-    public Iterable<StockEntityId> loadAllKeys() {
-        List<StockEntityId> resultList = null;
+    public Iterable<String> loadAllKeys() {
+        List<String> resultList = null;
         if (entityManager != null) {
             resultList = entityManager.createQuery("SELECT entity.id FROM StockEntity entity").getResultList();
         }

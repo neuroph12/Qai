@@ -578,8 +578,8 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
             mapStoreConfig = new MapStoreConfig();
         }
-        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<StockEntityId, StockEntity>() {
-            public MapLoader<StockEntityId, StockEntity> newMapStore(String mapName, Properties properties) {
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
+            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
                 if (STOCK_ENTITIES.equals(mapName)) {
                     if (stockEntityMapStore == null) {
                         stockEntityMapStore = new StockEntityMapStore();

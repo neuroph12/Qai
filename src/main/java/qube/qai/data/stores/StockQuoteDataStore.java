@@ -51,7 +51,7 @@ public class StockQuoteDataStore implements DataStore {
                 quotes.add(quote);
             }
         } catch (Exception e) {
-            logger.error("Ticker symbol: '" + quoteName + "' does not exist");
+            logger.error("Ticker symbol: '" + quoteName + "' does not exist", e);
         } finally {
             return quotes;
         }

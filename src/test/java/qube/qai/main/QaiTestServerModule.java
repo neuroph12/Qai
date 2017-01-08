@@ -17,10 +17,7 @@ import com.hazelcast.core.MapStoreFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.*;
-import qube.qai.persistence.mapstores.DirectoryMapStore;
-import qube.qai.persistence.mapstores.StockEntityMapStore;
-import qube.qai.persistence.mapstores.StockQuoteMapStore;
-import qube.qai.persistence.mapstores.WikiArticleMapStore;
+import qube.qai.persistence.mapstores.*;
 import qube.qai.persistence.search.RDFTriplesSearchService;
 import qube.qai.persistence.search.StockQuoteSearchService;
 import qube.qai.procedure.Procedure;
@@ -36,6 +33,10 @@ public class QaiTestServerModule extends AbstractModule {
     private static Logger logger = LoggerFactory.getLogger("QaiTestServerModule");
 
     private static final String NODE_NAME = "QaiTestNode";
+
+    private static final String USERS = "USERS";
+
+    private static final String USER_SESSIONS = "USER_SESSIONS";
 
     private static final String STOCK_ENTITIES = "STOCK_ENTITIES";
 
@@ -62,6 +63,10 @@ public class QaiTestServerModule extends AbstractModule {
 
     private StockQuoteMapStore stockQuoteMapStore;
 
+    private UserMapStore userMapStore;
+
+    private SessionMapStore sessionMapStore;
+
     private Injector childInjector;
 
     @Override
@@ -70,6 +75,10 @@ public class QaiTestServerModule extends AbstractModule {
         bind(StockEntityMapStore.class).toInstance(stockEntityMapStore);
 
         bind(StockQuoteMapStore.class).toInstance(stockQuoteMapStore);
+
+        bind(UserMapStore.class).toInstance(userMapStore);
+
+        bind(SessionMapStore.class).toInstance(sessionMapStore);
     }
 
     /**
@@ -137,8 +146,8 @@ public class QaiTestServerModule extends AbstractModule {
             stockEntitiesMapstoreConfig = new MapStoreConfig();
 
         }
-        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<StockEntityId, StockEntity>() {
-            public MapLoader<StockEntityId, StockEntity> newMapStore(String mapName, Properties properties) {
+        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
+            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
                 if (STOCK_ENTITIES.equals(mapName)) {
                     if (stockEntityMapStore == null) {
                         stockEntityMapStore = new StockEntityMapStore();

@@ -2,9 +2,9 @@ package qube.qai.user;
 
 import qube.qai.services.implementation.UUIDService;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by rainbird on 12/2/15.
@@ -21,6 +21,9 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "parent")
+    private Set<Session> userSessions = new HashSet<>();
 
     public User() {
         this.uuid = UUIDService.uuidString();
@@ -39,6 +42,28 @@ public class User {
      * will be implemented when the user rights and all
      * are to be decided
      */
+
+    public void addSession(Session session) {
+        if (session.getUserdId() != null || !uuid.equals(session.getUserdId())) {
+            session.setUserdId(uuid);
+        }
+        userSessions.add(session);
+    }
+
+    public Session createSession() {
+        Session session = new Session();
+        addSession(session);
+
+        return session;
+    }
+
+    public Set<Session> getUserSessions() {
+        return userSessions;
+    }
+
+    public void setUserSessions(Set<Session> userSessions) {
+        this.userSessions = userSessions;
+    }
 
     public String getUsername() {
         return username;

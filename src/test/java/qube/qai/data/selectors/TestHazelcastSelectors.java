@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import qube.qai.data.SelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockEntityId;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.persistence.mapstores.TestStockEntityMapStore;
 import qube.qai.procedure.Procedure;
@@ -41,7 +40,7 @@ public class TestHazelcastSelectors extends QaiTestBase {
     @Inject @Named("Wiktionary_en")
     private SearchServiceInterface wiktionarySearch;
 
-    private String STOCK_SOURCE = "STOCK_ENTITIES";
+    private String STOCK_ENTITIES = "STOCK_ENTITIES";
     private String PROCEDURE_SOURCE = "PROCEDURES";
     private String WIKIPEDIA_SOURCE = "WIKIPEDIA_EN";
     private String WIKTIONARY_SOURCE = "WIKTIONARY_EN";
@@ -52,18 +51,18 @@ public class TestHazelcastSelectors extends QaiTestBase {
      */
     public void testHazelcastStockEntities() throws Exception {
 
-        IMap<StockEntityId,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_SOURCE);
+        IMap<String,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_ENTITIES);
 
         int number = 100;
         Collection<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
         for (int i = 0; i < number; i++) {
             String name = "entity(" + i + ")";
             StockEntity entity = TestStockEntityMapStore.createEntity(name);
-            StockEntityId uuid = entity.getId();
-            if (!stockEntities.containsKey(uuid)) {
-                stockEntities.put(uuid, entity);
+            String entityId = entity.getUuid();
+            if (!stockEntities.containsKey(entityId)) {
+                stockEntities.put(entityId, entity);
             }
-            SelectionOperator<StockEntity> selectionOperator = new HazelcastSelectionOperator<StockEntity>(STOCK_SOURCE, uuid);
+            SelectionOperator<StockEntity> selectionOperator = new HazelcastSelectionOperator<StockEntity>(STOCK_ENTITIES, entityId);
             selectionOperators.add(selectionOperator);
         }
 

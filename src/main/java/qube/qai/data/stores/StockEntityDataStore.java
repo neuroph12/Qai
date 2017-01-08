@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.parsers.WikiIntegration;
 import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockEntityId;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -74,7 +73,7 @@ public class StockEntityDataStore implements DataStore {
     public Collection<StockEntity> fetchEntitesOf(String marketListingName) {
 
         IMap<String,WikiArticle> wikiMap = hazelcastInstance.getMap("WIKIPEDIA");
-        IMap<StockEntityId,StockEntity> stockMap = hazelcastInstance.getMap("STOCK_ENTITIES");
+        IMap<String,StockEntity> stockMap = hazelcastInstance.getMap("STOCK_ENTITIES");
 
         Collection<StockEntity> entities = new ArrayList<StockEntity>();
         //WikiArticle article = searchService.retrieveDocumentContentFromZipFile(marketListingName);
@@ -88,7 +87,7 @@ public class StockEntityDataStore implements DataStore {
 
         // start at the first index in order to skip the header line
         for (int i = 1; i < data.length; i++) {
-            // this might seem strange but if have no informaiton whatte field is
+            // this might seem strange but if have no information what the field is
             // we can also not associate with fields
             StockEntity entity = new StockEntity();
             for (int j = 0; j < data[i].length; j++) {
@@ -97,8 +96,8 @@ public class StockEntityDataStore implements DataStore {
                 assignValueToEntity(entity, fieldName, fieldValue);
             }
             entities.add(entity);
-            if (!stockMap.containsKey(entity.getId())) {
-                stockMap.put(entity.getId(), entity);
+            if (!stockMap.containsKey(entity.getUuid())) {
+                stockMap.put(entity.getUuid(), entity);
             }
         }
 

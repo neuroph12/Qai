@@ -17,8 +17,18 @@ import java.util.Date;
 @Entity
 public class StockEntity implements Serializable, AcceptsVisitors {
 
-    @EmbeddedId
-    private StockEntityId id;
+//    @EmbeddedId
+//    private StockEntityId id;
+
+    @Id
+    @Column(name = "uuid", nullable = false)
+    private String uuid;
+
+    @Column(name = "tickerSymbol", nullable = false)
+    private String tickerSymbol;
+
+    @Column(name = "tradedIn", nullable = false)
+    private String tradedIn;
 
     @Column(name = "name")
     private String name;
@@ -45,19 +55,10 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     private String CIK;
 
     public StockEntity() {
-        this.id = new StockEntityId();
     }
 
     public Object accept(DataVisitor visitor, Object data) {
         return visitor.visit(this, data);
-    }
-
-    public StockEntityId getId() {
-        return id;
-    }
-
-    public void setId(StockEntityId id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -68,20 +69,28 @@ public class StockEntity implements Serializable, AcceptsVisitors {
         this.name = name;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
     public String getTickerSymbol() {
-        return id.getTickerSymbol();
+        return tickerSymbol;
     }
 
     public void setTickerSymbol(String tickerSymbol) {
-        this.id.setTickerSymbol(tickerSymbol);
+        this.tickerSymbol = tickerSymbol;
     }
 
     public String getTradedIn() {
-        return id.getTradedIn();
+        return tradedIn;
     }
 
     public void setTradedIn(String tradedIn) {
-        id.setTradedIn(tradedIn);
+        this.tradedIn = tradedIn;
     }
 
     public String getSecurity() {
@@ -144,13 +153,19 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     public boolean equals(Object obj) {
         if (obj instanceof StockEntity) {
             StockEntity other = (StockEntity) obj;
-            return id.equals(other.id);
+            if (uuid != null && other.uuid != null) {
+                return uuid.equals(other.uuid);
+            }
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        if(uuid != null) {
+            return uuid.hashCode();
+        } else {
+            return super.hashCode();
+        }
     }
 }

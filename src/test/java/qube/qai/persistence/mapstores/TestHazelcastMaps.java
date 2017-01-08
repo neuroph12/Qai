@@ -5,7 +5,6 @@ import com.hazelcast.core.IMap;
 import org.apache.commons.lang3.StringUtils;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockEntityId;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSourceInterface;
@@ -102,25 +101,25 @@ public class TestHazelcastMaps extends QaiTestBase {
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
-        IMap<StockEntityId,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_ENTITIES);
+        IMap<String,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_ENTITIES);
         assertNotNull("there has to be a map", stockEntities);
         int number = 100;
-        List<StockEntityId> idList = new ArrayList<StockEntityId>();
+        List<String> idList = new ArrayList<String>();
         for (int i = 0; i < number; i++) {
             String name = "e" + i + "x";
             StockEntity entity = TestStockEntityMapStore.createEntity(name);
-            StockEntityId id = entity.getId();
+            String id = entity.getUuid();
             if (!stockEntities.containsKey(id)) {
                 stockEntities.put(id, entity);
             }
             idList.add(id);
         }
 
-        for (StockEntityId id : idList) {
+        for (String id : idList) {
             assertTrue("we just put this one 'ere", stockEntities.containsKey(id));
         }
 
-        for (StockEntityId id : stockEntities.keySet()) {
+        for (String id : stockEntities.keySet()) {
             StockEntity entity = stockEntities.get(id);
             assertNotNull(entity);
             if (!idList.contains(id)) {

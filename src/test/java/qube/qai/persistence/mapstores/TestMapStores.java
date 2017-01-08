@@ -4,7 +4,6 @@ import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockEntityId;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSourceInterface;
@@ -107,5 +106,7 @@ public class TestMapStores extends QaiTestBase {
 
     public void testUserMapStore() throws Exception {
         User user = new User();
+
+        fail("test not yet implemented");
     }
 }

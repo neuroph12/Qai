@@ -5,11 +5,12 @@ import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockEntityId;
 
 import java.util.HashMap;
 import java.util.Map;
 import junit.framework.TestCase;
+import qube.qai.services.implementation.UUIDService;
+
 /**
  * Created by rainbird on 6/4/16.
  */
@@ -33,30 +34,34 @@ public class TestStockEntityMapStore extends TestCase {
         injector.injectMembers(mapStore);
 
         int number = 100;
-        Map<StockEntityId, StockEntity> entityMap = new HashMap<StockEntityId, StockEntity>();
+        Map<String, StockEntity> entityMap = new HashMap<String, StockEntity>();
         for (int i = 0; i < number; i++) {
             String name = "entity(" + i + ")";
             StockEntity entity = createEntity(name);
-            StockEntityId uuid = entity.getId();
+            String uuid = entity.getUuid();
+            if (uuid == null || "".equals(uuid)) {
+                uuid = UUIDService.uuidString();
+                entity.setUuid(uuid);
+            }
             mapStore.store(uuid, entity);
             entityMap.put(uuid, entity);
         }
 
         // in this case the map-store should be returning all keys
-        Iterable<StockEntityId> storedKeys = mapStore.loadAllKeys();
+        Iterable<String> storedKeys = mapStore.loadAllKeys();
         assertNotNull("stored keys may not be null", storedKeys);
 
         // now read them back from database
-        for (StockEntityId uuid : entityMap.keySet()) {
-            StockEntity cachedEntity = entityMap.get(uuid);
-            StockEntity storedEntity = mapStore.load(uuid);
+        for (String entityId : entityMap.keySet()) {
+            StockEntity cachedEntity = entityMap.get(entityId);
+            StockEntity storedEntity = mapStore.load(entityId);
             assertNotNull("there has to be an entity", storedEntity);
             assertTrue("entities have to be equal", cachedEntity.equals(storedEntity));
         }
 
         // when we are done we delete the things as well, just to keep things managable
-        for (StockEntityId uuid : entityMap.keySet()) {
-            mapStore.delete(uuid);
+        for (String entityId : entityMap.keySet()) {
+            mapStore.delete(entityId);
         }
     }
 
