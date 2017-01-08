@@ -66,11 +66,11 @@ public class StockQuote implements Serializable, AcceptsVisitors {
     }
 
     public Date getDate() {
-        return id.getQuoetDate();
+        return id.getQuoteDate();
     }
 
     public void setDate(Date date) {
-        this.id.setQuoetDate(date);
+        this.id.setQuoteDate(date);
     }
 
     public String getTickerSymbol() {

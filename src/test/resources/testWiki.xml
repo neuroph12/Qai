@@ -225,7 +225,7 @@ xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xm
       <format>text/x-wiki</format>
       <text xml:space="preserve">{{Hatnote|This article is about the classic autistic disorder; some writers use the word ''autism'' when referring to the range of diso
 rders on the [[autism spectrum]] or to the various [[pervasive developmental disorder]]s.&lt;ref name=Caronna/&gt;}}
-{{Use dmy dates|quoetDate=March 2014}}
+{{Use dmy dates|quoteDate=March 2014}}
 {{pp-semi-indef}}
 {{pp-move-indef}}
 [[Category:Psychiatric diagnosis]]</text>

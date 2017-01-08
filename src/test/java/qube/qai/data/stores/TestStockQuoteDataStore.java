@@ -16,7 +16,7 @@ public class TestStockQuoteDataStore extends TestCase {
 
     // HRS GGP DTV CI LMT TAP DO HON JCI AFL
     private String[] names = {"HRS", "GGP", "CI", "LMT", "TAP"};
-    private String dummy = "DTV";
+    private String dummy = "QUAPIL";
 
     public void testDataStore() throws Exception {
 
@@ -30,7 +30,7 @@ public class TestStockQuoteDataStore extends TestCase {
             assertTrue("both ticker and exchange", quote.getTickerSymbol().equals(name));
         }
 
-        // thisone does not exist check that the return value is empty
+        // this one does not exist check that the return value is empty
         Collection<StockQuote> quotes = dataStore.retrieveQuotesFor(dummy);
         assertNotNull("we expect an empty array", quotes);
         assertTrue("we expect an empty array", quotes.isEmpty());
