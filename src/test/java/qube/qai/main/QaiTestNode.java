@@ -32,8 +32,8 @@ public class QaiTestNode {
         // Server configuration lies in QaiServerModule
         // other Qai dependent services and things lie in QaiModule
         QaiTestServerModule qaiServer = new QaiTestServerModule();
-        QaiTestModule qaiModule = new QaiTestModule();
-        injector = Guice.createInjector(qaiServer, qaiModule);
+        QaiTestModule qaiTestModule = new QaiTestModule();
+        injector = Guice.createInjector(qaiServer, qaiTestModule);
 
         // this is crazy but might just work...
         injector.injectMembers(qaiServer);
@@ -50,8 +50,8 @@ public class QaiTestNode {
     public static void main(String[] params) {
 
         // instantiate the node and start its services
-        QaiNode qaiNode = new QaiNode();
-        qaiNode.startServices();
+        QaiTestNode qaiTestNode = new QaiTestNode();
+        qaiTestNode.startServices();
     }
 
     public static Injector getInjector() {

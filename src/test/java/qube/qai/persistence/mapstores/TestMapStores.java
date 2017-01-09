@@ -103,10 +103,4 @@ public class TestMapStores extends QaiTestBase {
         }
     }
 
-
-    public void testUserMapStore() throws Exception {
-        User user = new User();
-
-        fail("test not yet implemented");
-    }
 }

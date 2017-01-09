@@ -22,7 +22,10 @@ import qube.qai.persistence.search.RDFTriplesSearchService;
 import qube.qai.persistence.search.StockQuoteSearchService;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
+import qube.qai.user.Session;
+import qube.qai.user.User;
 
+import javax.inject.Singleton;
 import java.util.Properties;
 
 /**
@@ -67,18 +70,22 @@ public class QaiTestServerModule extends AbstractModule {
 
     private SessionMapStore sessionMapStore;
 
-    private Injector childInjector;
+    // with static fields i can use the injector even when it is active for other tests
+    private static Injector stocksInjector;
+
+    // with static fields i can use the injector even when it is active for other tests
+    private static Injector usersInjector;
 
     @Override
     protected void configure() {
 
-        bind(StockEntityMapStore.class).toInstance(stockEntityMapStore);
-
-        bind(StockQuoteMapStore.class).toInstance(stockQuoteMapStore);
-
-        bind(UserMapStore.class).toInstance(userMapStore);
-
-        bind(SessionMapStore.class).toInstance(sessionMapStore);
+//        bind(StockEntityMapStore.class).toInstance(stockEntityMapStore);
+//
+//        bind(StockQuoteMapStore.class).toInstance(stockQuoteMapStore);
+//
+//        bind(UserMapStore.class).toInstance(userMapStore);
+//
+//        bind(SessionMapStore.class).toInstance(sessionMapStore);
     }
 
     /**
@@ -103,24 +110,26 @@ public class QaiTestServerModule extends AbstractModule {
      * RdfTripleSearchService
      * @return
      */
-    @Provides @Named("Dbpedia_en")
-    SearchServiceInterface provideDbpediaSearchService() {
-
-        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_DBPEDIA"));
-        PersistService service = injector.getInstance(PersistService.class);
-        service.start();
-
-        RDFTriplesSearchService searchService = new RDFTriplesSearchService();
-        injector.injectMembers(searchService);
-        return searchService;
-    }
+    // this should by now be entirely obsolete... or is it not?
+//    @Provides @Named("Dbpedia_en")
+//    SearchServiceInterface provideDbpediaSearchService() {
+//
+//        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_DBPEDIA"));
+//        PersistService service = injector.getInstance(PersistService.class);
+//        service.start();
+//
+//        RDFTriplesSearchService searchService = new RDFTriplesSearchService();
+//        injector.injectMembers(searchService);
+//        return searchService;
+//    }
 
     /**
-     * @TODO refoactir this mess!!!
+     * @TODO refactor this mess!!!
      * this is more or less where everything happens
      * @return
      */
     @Provides
+    @Singleton
     HazelcastInstance provideHazelcastInstance() {
 
         if (hazelcastInstance != null) {
@@ -129,11 +138,62 @@ public class QaiTestServerModule extends AbstractModule {
 
         Config config = new Config(NODE_NAME);
 
-        if (childInjector == null) {
-            childInjector = Guice.createInjector(new JpaPersistModule("STOCKS"));
-            PersistService service = childInjector.getInstance(PersistService.class);
-            service.start();
+        initStocksInjector();
+
+        initUsersInjector();
+
+        /**
+         * here we add the map-store for Users which is
+         * in this case the HsqlDBMapStore
+         */
+        MapConfig usersConfig = config.getMapConfig(USERS);
+        MapStoreConfig userMapstoreConfig = usersConfig.getMapStoreConfig();
+        if (userMapstoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + USERS);
+            userMapstoreConfig = new MapStoreConfig();
         }
+        userMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, User>() {
+            public MapLoader<String,User> newMapStore(String mapName, Properties properties) {
+                if(USERS.equals(mapName)) {
+                    if (userMapStore == null) {
+                        userMapStore = new UserMapStore();
+                        usersInjector.injectMembers(userMapStore);
+                    }
+                    return userMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + USERS);
+        usersConfig.setMapStoreConfig(userMapstoreConfig);
+
+        /**
+         * here we add the map-store for Sessions which is
+         * in this case the HsqlDBMapStore
+         */
+        MapConfig sessionsConfig = config.getMapConfig(USER_SESSIONS);
+        MapStoreConfig sessionMapStoreConfig = sessionsConfig.getMapStoreConfig();
+        if (sessionMapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + USER_SESSIONS);
+            sessionMapStoreConfig = new MapStoreConfig();
+        }
+        sessionMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Session>() {
+            public MapLoader<String, Session> newMapStore(String mapName, Properties properties) {
+                if (USER_SESSIONS.equals(mapName)) {
+                    if (sessionMapStore == null) {
+                        sessionMapStore = new SessionMapStore();
+                        usersInjector.injectMembers(sessionMapStore);
+                    }
+
+                    return sessionMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + USER_SESSIONS);
+        sessionsConfig.setMapStoreConfig(sessionMapStoreConfig);
 
         /**
          * here we add the map-store for Stock-entities which is
@@ -151,7 +211,7 @@ public class QaiTestServerModule extends AbstractModule {
                 if (STOCK_ENTITIES.equals(mapName)) {
                     if (stockEntityMapStore == null) {
                         stockEntityMapStore = new StockEntityMapStore();
-                        childInjector.injectMembers(stockEntityMapStore);
+                        stocksInjector.injectMembers(stockEntityMapStore);
                     }
 
                     return stockEntityMapStore;
@@ -179,7 +239,7 @@ public class QaiTestServerModule extends AbstractModule {
                 if (STOCK_QUOTES.equals(mapName)) {
                     if (stockQuoteMapStore == null) {
                         stockQuoteMapStore = new StockQuoteMapStore();
-                        childInjector.injectMembers(stockQuoteMapStore);
+                        stocksInjector.injectMembers(stockQuoteMapStore);
                     }
 
                     return stockQuoteMapStore;
@@ -231,7 +291,7 @@ public class QaiTestServerModule extends AbstractModule {
                 }
             }
         });
-        logger.info("adding mapstore configuration for " + WIKIPEDIA_ARCHIVE);
+        logger.info("adding mapstore configuration for " + WIKIPEDIA);
         wikiConfig.setMapStoreConfig(wikiMapstoreConfig);
 
         /**
@@ -252,11 +312,31 @@ public class QaiTestServerModule extends AbstractModule {
                 }
             }
         });
-        logger.info("adding mapstore configuration for " + WIKIPEDIA_ARCHIVE);
+        logger.info("adding mapstore configuration for " + WIKTIONARY);
         wiktionaryConfig.setMapStoreConfig(wiktionaryMapstoreConfig);
 
         // now we are ready to get an instance
         hazelcastInstance = Hazelcast.newHazelcastInstance(config);
         return hazelcastInstance;
+    }
+
+    public static Injector initUsersInjector() {
+        if (usersInjector == null) {
+            usersInjector = Guice.createInjector(new JpaPersistModule("TEST_USERS"));
+            PersistService service = usersInjector.getInstance(PersistService.class);
+            service.start();
+        }
+
+        return usersInjector;
+    }
+
+    public static Injector initStocksInjector() {
+        if (stocksInjector == null) {
+            stocksInjector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
+            PersistService service = stocksInjector.getInstance(PersistService.class);
+            service.start();
+        }
+
+        return stocksInjector;
     }
 }

@@ -4,10 +4,10 @@
              version="2.0">
 
     <!-- User database -->
-    <persistence-unit name="USER">
+    <persistence-unit name="USERS">
 
-        <class>qube.qai.persistence.StockEntity</class>
-        <class>qube.qai.persistence.StockQuote</class>
+        <class>qube.qai.user.User</class>
+        <class>qube.qai.user.Session</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
@@ -15,7 +15,7 @@
             <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
 
             <!-- Default is false for backwards compatibility.  Should be used on all new projects -->
-            <property name="hibernate.id.new_generator_mappings" value="true"/>
+            <!--<property name="hibernate.id.new_generator_mappings" value="true"/>-->
             <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
             <property name="hibernate.connection.url" value="jdbc:hsqldb:/media/rainbird/ALEPH/qai-persistence.db/user/"/>
             <property name="hibernate.connection.username" value="sa"/>
@@ -34,10 +34,10 @@
     </persistence-unit>
 
     <!-- Test User database -->
-    <persistence-unit name="TEST_USER">
+    <persistence-unit name="TEST_USERS">
 
-        <class>qube.qai.persistence.StockEntity</class>
-        <class>qube.qai.persistence.StockQuote</class>
+        <class>qube.qai.user.User</class>
+        <class>qube.qai.user.Session</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
@@ -45,14 +45,14 @@
             <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
 
             <!-- Default is false for backwards compatibility.  Should be used on all new projects -->
-            <property name="hibernate.id.new_generator_mappings" value="true"/>
+            <!--<property name="hibernate.id.new_generator_mappings" value="true"/>-->
             <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
             <property name="hibernate.connection.url" value="jdbc:hsqldb:/media/rainbird/ALEPH/qai-persistence.db/test_user/"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
 
-            <!--<property name="hibernate.show_sql" value="true"/>-->
+            <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="create" />
 
             <!--<property name="hibernate.c3p0.min_size" value="5" />-->
@@ -112,7 +112,7 @@
             <property name="hibernate.connection.password" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
 
-            <!--<property name="hibernate.show_sql" value="true"/>-->
+            <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="create" />
 
             <!--<property name="hibernate.c3p0.min_size" value="5" />-->

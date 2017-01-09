@@ -22,8 +22,8 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "parent")
-    private Set<Session> userSessions = new HashSet<>();
+    //@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "parent")
+    //private Set<Session> userSessions = new HashSet<>();
 
     public User() {
         this.uuid = UUIDService.uuidString();
@@ -43,27 +43,27 @@ public class User {
      * are to be decided
      */
 
-    public void addSession(Session session) {
-        if (session.getUserdId() != null || !uuid.equals(session.getUserdId())) {
-            session.setUserdId(uuid);
-        }
-        userSessions.add(session);
-    }
-
-    public Session createSession() {
-        Session session = new Session();
-        addSession(session);
-
-        return session;
-    }
-
-    public Set<Session> getUserSessions() {
-        return userSessions;
-    }
-
-    public void setUserSessions(Set<Session> userSessions) {
-        this.userSessions = userSessions;
-    }
+//    public void addSession(Session session) {
+//        if (session.getUserdId() != null || !uuid.equals(session.getUserdId())) {
+//            session.setUserdId(uuid);
+//        }
+//        userSessions.add(session);
+//    }
+//
+//    public Session createSession() {
+//        Session session = new Session();
+//        addSession(session);
+//
+//        return session;
+//    }
+//
+//    public Set<Session> getUserSessions() {
+//        return userSessions;
+//    }
+//
+//    public void setUserSessions(Set<Session> userSessions) {
+//        this.userSessions = userSessions;
+//    }
 
     public String getUsername() {
         return username;

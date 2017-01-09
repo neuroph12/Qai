@@ -87,19 +87,19 @@ public class QaiTestModule extends AbstractModule {
     }
 
 
-    @Provides @Singleton
-    HazelcastInstance provideHazelcastInstance() {
-        if (hazelcastInstance != null) {
-            return hazelcastInstance;
-        }
-
-        ClientConfig clientConfig = new ClientConfig();
-        //clientConfig.setInstanceName(NODE_NAME);
-        clientConfig.getNetworkConfig().addAddress("127.0.0.1:5701");
-        hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
-
-        return hazelcastInstance;
-    }
+//    @Provides @Singleton
+//    HazelcastInstance provideHazelcastInstance() {
+//        if (hazelcastInstance != null) {
+//            return hazelcastInstance;
+//        }
+//
+//        ClientConfig clientConfig = new ClientConfig();
+//        //clientConfig.setInstanceName(NODE_NAME);
+//        clientConfig.getNetworkConfig().addAddress("127.0.0.1:5701");
+//        hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
+//
+//        return hazelcastInstance;
+//    }
 
     @Provides
     SelectorFactoryInterface provideSelectorFactoryInterface() {
@@ -126,33 +126,33 @@ public class QaiTestModule extends AbstractModule {
      * StockQuotesSearchService
      * @return
      */
-    @Provides @com.google.inject.name.Named("Stock_Quotes")
-    SearchServiceInterface provideStockQuoteSearchService() {
-
-        // create an injector for initializing JPA-Module & start the service
-        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
-        PersistService persistService = injector.getInstance(PersistService.class);
-        persistService.start();
-
-        StockQuoteSearchService searchService = new StockQuoteSearchService();
-        injector.injectMembers(searchService);
-
-        return  searchService;
-    }
+//    @Provides @com.google.inject.name.Named("Stock_Quotes")
+//    SearchServiceInterface provideStockQuoteSearchService() {
+//
+//        // create an injector for initializing JPA-Module & start the service
+//        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
+//        PersistService persistService = injector.getInstance(PersistService.class);
+//        persistService.start();
+//
+//        StockQuoteSearchService searchService = new StockQuoteSearchService();
+//        injector.injectMembers(searchService);
+//
+//        return  searchService;
+//    }
 
     /**
      * RdfTripleSearchService
      * @return
      */
-    @Provides @Named("Dbpedia_en")
-    SearchServiceInterface provideDbpediaSearchService() {
-
-        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_DBPEDIA"));
-        PersistService service = injector.getInstance(PersistService.class);
-        service.start();
-
-        RDFTriplesSearchService searchService = new RDFTriplesSearchService();
-        injector.injectMembers(searchService);
-        return searchService;
-    }
+//    @Provides @Named("Dbpedia_en")
+//    SearchServiceInterface provideDbpediaSearchService() {
+//
+//        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_DBPEDIA"));
+//        PersistService service = injector.getInstance(PersistService.class);
+//        service.start();
+//
+//        RDFTriplesSearchService searchService = new RDFTriplesSearchService();
+//        injector.injectMembers(searchService);
+//        return searchService;
+//    }
 }

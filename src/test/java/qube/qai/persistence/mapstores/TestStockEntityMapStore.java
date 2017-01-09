@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
+import qube.qai.main.QaiTestServerModule;
 import qube.qai.persistence.StockEntity;
 
 import java.util.HashMap;
@@ -25,9 +26,11 @@ public class TestStockEntityMapStore extends TestCase {
      */
     public void testStockEntityMapStore() throws Exception {
 
-        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
-        PersistService service = injector.getInstance(PersistService.class);
-        service.start();
+//        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
+//        PersistService service = injector.getInstance(PersistService.class);
+//        service.start();
+
+        Injector injector = QaiTestServerModule.initStocksInjector();
 
         // the fields in class will have to be injected
         StockEntityMapStore mapStore = new StockEntityMapStore();
