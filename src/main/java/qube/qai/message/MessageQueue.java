@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ public class MessageQueue implements MessageQueueInterface {
 
     private static Logger logger = LoggerFactory.getLogger("MessageQueue");
 
-    @Inject
+    @Inject @Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     private Set<String> topics = new HashSet<String>();
@@ -26,7 +27,7 @@ public class MessageQueue implements MessageQueueInterface {
     }
 
     @Inject
-    public MessageQueue(HazelcastInstance hazelcastInstance) {
+    public MessageQueue(@Named("HAZELCAST_CLIENT") HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
     }
 

@@ -7,6 +7,7 @@ import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureRunnerInterface;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class ProcedureRunner implements ProcedureRunnerInterface {
 
     public static final String SERVICE_NAME = "ProcedureRunnerService";
 
-    @Inject
+    @Inject @Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     private Map<String, ProcedureState> procedures;

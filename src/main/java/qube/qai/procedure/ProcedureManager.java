@@ -8,6 +8,7 @@ import qube.qai.message.MessageQueue;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ public class ProcedureManager extends MessageListener {
     @Inject
     private UUIDService uuidService;
 
-    @Inject
+    @Inject @Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     private static ProcedureManager procedureManager;

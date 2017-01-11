@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import com.hazelcast.config.Config;
@@ -25,6 +24,7 @@ import qube.qai.services.SearchServiceInterface;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.Properties;
 
@@ -93,7 +93,7 @@ public class QaiTestServerModule extends AbstractModule {
      * @return
      */
     @Provides @Named("Stock_Quotes")
-    SearchServiceInterface provideStockQuoteSearchService() {
+    public SearchServiceInterface provideStockQuoteSearchService() {
 
         // create an injector for initializing JPA-Module & start the service
         Injector injector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
@@ -129,8 +129,8 @@ public class QaiTestServerModule extends AbstractModule {
      * @return
      */
     @Provides
-    @Singleton
-    HazelcastInstance provideHazelcastInstance() {
+    @Singleton @Named("HAZELCAST_SERVER")
+    public HazelcastInstance provideHazelcastInstance() {
 
         if (hazelcastInstance != null) {
             return hazelcastInstance;

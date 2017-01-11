@@ -15,7 +15,7 @@ import java.util.Collection;
  */
 public class DistributedSearchListener implements MessageListener {
 
-    @Inject
+    @Inject @Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     private SearchServiceInterface searchService;

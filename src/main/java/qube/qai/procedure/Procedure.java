@@ -16,6 +16,7 @@ import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.User;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -37,7 +38,7 @@ public abstract class Procedure implements Serializable, Runnable, HazelcastInst
     @Inject
     protected transient DataSelectorFactory selectorFactory;
 
-    @Inject
+    @Inject @Named("HAZELCAST_CLIENT")
     protected transient HazelcastInstance hazelcastInstance;
 
     protected User user;

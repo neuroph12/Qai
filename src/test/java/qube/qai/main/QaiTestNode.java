@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Created by rainbird on 12/21/15.
@@ -21,7 +22,7 @@ public class QaiTestNode {
 
     private String NODE_NAME = "QaiTestNode";
 
-    @Inject
+    @Inject @Named("HAZELCAST_SERVER")
     private HazelcastInstance hazelcastInstance;
 
     public QaiTestNode() {
@@ -31,12 +32,13 @@ public class QaiTestNode {
         // injector knows all
         // Server configuration lies in QaiServerModule
         // other Qai dependent services and things lie in QaiModule
-        QaiTestServerModule qaiServer = new QaiTestServerModule();
         QaiTestModule qaiTestModule = new QaiTestModule();
-        injector = Guice.createInjector(qaiServer, qaiTestModule);
+        QaiTestServerModule qaiTestServer = new QaiTestServerModule();
 
-        // this is crazy but might just work...
-        injector.injectMembers(qaiServer);
+        injector = Guice.createInjector(qaiTestServer, qaiTestModule);
+
+        // this looks crazy but just works...
+        injector.injectMembers(qaiTestServer);
 
         injector.injectMembers(this);
 

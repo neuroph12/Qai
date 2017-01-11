@@ -6,13 +6,14 @@ import qube.qai.data.selectors.HazelcastSelectionOperator;
 import qube.qai.services.SelectorFactoryInterface;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Created by rainbird on 11/30/15.
  */
 public class HazelcastSelectorFactory<T> implements SelectorFactoryInterface {
 
-    @Inject
+    @Inject @Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     public SelectionOperator buildSelector(String dataSource, String uuid, Object data) {
