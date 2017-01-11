@@ -3,6 +3,7 @@ package qube.qai.persistence.mapstores;
 import com.google.inject.Injector;
 import junit.framework.TestCase;
 import qube.qai.main.QaiTestServerModule;
+import qube.qai.user.Session;
 import qube.qai.user.User;
 
 import java.util.Random;
@@ -21,12 +22,16 @@ public class TestUserMapStore extends TestCase {
         injector.injectMembers(mapStore);
 
         User user = createUser();
+        Session session = user.createSession();
+
         mapStore.store(user.getUuid(), user);
 
         User readUser = mapStore.load(user.getUuid());
         assertNotNull(readUser);
         assertTrue(user.equals(readUser));
-
+        assertTrue(!user.getSessions().isEmpty());
+        Session readSession = readUser.getSessions().iterator().next();
+        assertTrue(session.equals(readSession));
         mapStore.delete(user.getUuid());
 
         User lostUser = mapStore.load(user.getUuid());

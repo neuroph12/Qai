@@ -22,7 +22,7 @@ public class TestSessionMapStore extends TestCase {
 
         User user = TestUserMapStore.createUser();
         Session session = new Session(TestUserMapStore.randomWord(10), new Date());
-        session.setUserdId(user.getUuid());
+        session.setUserId(user);
 
         mapStore.store(session.getUuid(), session);
 

@@ -2,10 +2,7 @@ package qube.qai.user;
 
 import qube.qai.services.implementation.UUIDService;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -18,8 +15,9 @@ public class Session {
     @Column(name = "uuid")
     private String uuid;
 
-    @JoinColumn(name="PARENTID", nullable = false)
-    private String userdId;
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name="userId", nullable=false)
+    private User userId;
 
     @Column(name = "name")
     private String name;
@@ -55,12 +53,12 @@ public class Session {
         this.uuid = uuid;
     }
 
-    public String getUserdId() {
-        return userdId;
+    public User getUserId() {
+        return userId;
     }
 
-    public void setUserdId(String userdId) {
-        this.userdId = userdId;
+    public void setUserId(User userdId) {
+        this.userId = userdId;
     }
 
     public String getName() {

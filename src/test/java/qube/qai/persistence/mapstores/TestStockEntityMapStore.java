@@ -1,16 +1,13 @@
 package qube.qai.persistence.mapstores;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.persist.PersistService;
-import com.google.inject.persist.jpa.JpaPersistModule;
+import junit.framework.TestCase;
 import qube.qai.main.QaiTestServerModule;
 import qube.qai.persistence.StockEntity;
+import qube.qai.services.implementation.UUIDService;
 
 import java.util.HashMap;
 import java.util.Map;
-import junit.framework.TestCase;
-import qube.qai.services.implementation.UUIDService;
 
 /**
  * Created by rainbird on 6/4/16.
@@ -26,10 +23,7 @@ public class TestStockEntityMapStore extends TestCase {
      */
     public void testStockEntityMapStore() throws Exception {
 
-//        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
-//        PersistService service = injector.getInstance(PersistService.class);
-//        service.start();
-
+        // convenience method for tests and things
         Injector injector = QaiTestServerModule.initStocksInjector();
 
         // the fields in class will have to be injected
