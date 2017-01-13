@@ -234,8 +234,8 @@ public class QaiTestServerModule extends AbstractModule {
             stockQuotesMapstoreConfig = new MapStoreConfig();
 
         }
-        stockQuotesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<QuoteId, StockQuote>() {
-            public MapLoader<QuoteId, StockQuote> newMapStore(String mapName, Properties properties) {
+        stockQuotesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockQuote>() {
+            public MapLoader<String, StockQuote> newMapStore(String mapName, Properties properties) {
                 if (STOCK_QUOTES.equals(mapName)) {
                     if (stockQuoteMapStore == null) {
                         stockQuoteMapStore = new StockQuoteMapStore();

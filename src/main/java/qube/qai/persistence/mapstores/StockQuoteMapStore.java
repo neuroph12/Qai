@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Created by rainbird on 5/15/16.
  */
-public class StockQuoteMapStore implements MapStore<QuoteId, StockQuote> {
+public class StockQuoteMapStore implements MapStore<String, StockQuote> {
 
     /**
      * this is the mapstore for the Stock-quotes which as well as having a
@@ -37,7 +37,7 @@ public class StockQuoteMapStore implements MapStore<QuoteId, StockQuote> {
     }
 
     @Override
-    public void store(QuoteId key, StockQuote value) {
+    public void store(String key, StockQuote value) {
         if (!entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().begin();
         }
@@ -46,54 +46,41 @@ public class StockQuoteMapStore implements MapStore<QuoteId, StockQuote> {
     }
 
     @Override
-    public void storeAll(Map<QuoteId, StockQuote> map) {
+    public void storeAll(Map<String, StockQuote> map) {
 
-        Set<QuoteId> keySet = map.keySet();
-        for (Iterator<QuoteId> it = keySet.iterator(); it.hasNext(); ) {
-            QuoteId key = it.next();
-            StockQuote quote = map.get(key);
-            store(key, quote);
+        for (String uuid : map.keySet()) {
+            StockQuote quote = map.get(uuid);
+            store(uuid, quote);
         }
     }
 
     @Override
-    public void delete(QuoteId key) {
-        StockQuote quote = load(key);
+    public void delete(String uuid) {
+        StockQuote quote = load(uuid);
         if (quote != null) {
             entityManager.remove(quote);
         }
     }
 
     @Override
-    public void deleteAll(Collection<QuoteId> keys) {
-        for (Iterator<QuoteId> it = keys.iterator(); it.hasNext(); ) {
-            delete(it.next());
+    public void deleteAll(Collection<String> keys) {
+        for (String uuid : keys) {
+            delete(uuid);
         }
     }
 
     @Override
-    public StockQuote load(QuoteId key) {
+    public StockQuote load(String uuid) {
 
-        StockQuote quote = entityManager.find(StockQuote.class, key);
-        if (quote == null
-                && !dataStore.isProvided(key.getTickerSymbol())) {
-            Collection<StockQuote> quotes = dataStore.retrieveQuotesFor(key.getTickerSymbol());
-            for (StockQuote current : quotes) {
-                if (current.getId().equals(key)) {
-                    quote = current;
-                }
-                store(current.getId(), current);
-            }
-        }
-
+        StockQuote quote = entityManager.find(StockQuote.class, uuid);
         return quote;
     }
 
     @Override
-    public Map<QuoteId, StockQuote> loadAll(Collection<QuoteId> keys) {
-        Map<QuoteId, StockQuote> results = new HashMap<>();
+    public Map<String, StockQuote> loadAll(Collection<String> keys) {
+        Map<String, StockQuote> results = new HashMap<>();
 
-        for (QuoteId key : keys) {
+        for (String key : keys) {
             StockQuote quote = load(key);
             if (quote != null) {
                 results.put(key, quote);
@@ -104,7 +91,7 @@ public class StockQuoteMapStore implements MapStore<QuoteId, StockQuote> {
     }
 
     @Override
-    public Iterable<QuoteId> loadAllKeys() {
+    public Iterable<String> loadAllKeys() {
         return null;
     }
 }

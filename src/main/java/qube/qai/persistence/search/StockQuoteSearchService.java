@@ -43,7 +43,7 @@ public class StockQuoteSearchService implements SearchServiceInterface {
         Collection<SearchResult> results = new ArrayList<>();
         int count = 0;
         for (StockQuote quote : quotes) {
-            String idString = quote.getTickerSymbol() + "|" + quote.getDate();
+            String idString = quote.getTickerSymbol() + "|" + quote.getQuoteDate();
             SearchResult result = new SearchResult(searchString, idString, 1.0);
             results.add(result);
             count++;

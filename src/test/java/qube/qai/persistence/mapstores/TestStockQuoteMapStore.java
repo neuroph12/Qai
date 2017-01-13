@@ -39,16 +39,16 @@ public class TestStockQuoteMapStore extends TestCase {
         injector.injectMembers(this);
 
         for (int i = 0; i < names.length; i++) {
-            Collection<QuoteId> keys = createKeys(names[i]);
+            Collection<String> keys = createKeys(names[i]);
             assertNotNull(keys);
 
             int count = 0;
-            for (Iterator<QuoteId> it = keys.iterator(); it.hasNext(); ) {
-                QuoteId key = it.next();
+            for (Iterator<String> it = keys.iterator(); it.hasNext(); ) {
+                String key = it.next();
                 StockQuote quote = mapStore.load(key);
                 assertNotNull("Quote shoud not be null", quote);
                 String message = "Quote: " + quote.getTickerSymbol()
-                        + " date: " + quote.getId().getQuoteDate()
+                        + " date: " + quote.getQuoteDate()
                         + " adj-close: " + quote.getAdjustedClose();
                 logger.info(message);
                 count++;
@@ -56,25 +56,21 @@ public class TestStockQuoteMapStore extends TestCase {
 
             logger.info("found: " + keys.size() + " listed: " + count);
 
-            Map<QuoteId, StockQuote> result = mapStore.loadAll(keys);
+            Map<String, StockQuote> result = mapStore.loadAll(keys);
             assertNotNull(result);
 
         }
 
     }
 
-    private Collection<QuoteId> createKeys(String name) {
-        Collection<QuoteId> keys = new ArrayList<>();
+    private Collection<String> createKeys(String name) {
+        Collection<String> keys = new ArrayList<>();
 
         StockQuoteDataStore dataStore = new StockQuoteDataStore();
         Collection<StockQuote> quotes = dataStore.retrieveQuotesFor(name);
 
         for (StockQuote quote : quotes) {
-            QuoteId id = quote.getId();
-            if (id == null) {
-                fail("QuoteId should not be null");
-            }
-            keys.add(id);
+            keys.add(quote.getUuid());
         }
 
         return keys;

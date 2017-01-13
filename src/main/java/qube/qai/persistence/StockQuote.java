@@ -2,6 +2,7 @@ package qube.qai.persistence;
 
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
+import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,8 +14,15 @@ import java.util.Date;
 @Entity
 public class StockQuote implements Serializable, AcceptsVisitors {
 
-    @EmbeddedId
-    private QuoteId id;
+    @Id
+    @Column(name = "uuid")
+    private String uuid;
+
+    @Column(name = "tickerSymbol", nullable = false)
+    private String tickerSymbol;
+
+    @Column(name = "quoteDate", nullable = false)
+    private Date quoteDate;
 
     @Column(name = "adjustedClose")
     public double adjustedClose;
@@ -35,11 +43,10 @@ public class StockQuote implements Serializable, AcceptsVisitors {
     public double volume;
 
     public StockQuote() {
-        this.id = new QuoteId();
+        this.uuid = UUIDService.uuidString();
     }
 
     public StockQuote(String tickerSymbol, Date date, double adjustedClose, double close, double high, double low, double open, double volume) {
-        this.id = new QuoteId(tickerSymbol, date);
         this.adjustedClose = adjustedClose;
         this.close = close;
         this.high = high;
@@ -49,10 +56,6 @@ public class StockQuote implements Serializable, AcceptsVisitors {
     }
 
     public StockQuote(QuoteId quoteId, double adjustedClose, double close, double high, double low, double open, double volume) {
-        if (quoteId == null) {
-            quoteId = new QuoteId();
-        }
-        this.id = quoteId;
         this.adjustedClose = adjustedClose;
         this.close = close;
         this.high = high;
@@ -65,20 +68,28 @@ public class StockQuote implements Serializable, AcceptsVisitors {
         return visitor.visit(this, data);
     }
 
-    public Date getDate() {
-        return id.getQuoteDate();
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setDate(Date date) {
-        this.id.setQuoteDate(date);
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getTickerSymbol() {
-        return id.getTickerSymbol();
+        return tickerSymbol;
     }
 
     public void setTickerSymbol(String tickerSymbol) {
-        this.id.setTickerSymbol(tickerSymbol);
+        this.tickerSymbol = tickerSymbol;
+    }
+
+    public Date getQuoteDate() {
+        return quoteDate;
+    }
+
+    public void setQuoteDate(Date quoteDate) {
+        this.quoteDate = quoteDate;
     }
 
     public double getAdjustedClose() {
@@ -129,11 +140,4 @@ public class StockQuote implements Serializable, AcceptsVisitors {
         this.volume = volume;
     }
 
-    public QuoteId getId() {
-        return id;
-    }
-
-    public void setId(QuoteId id) {
-        this.id = id;
-    }
 }

@@ -36,6 +36,9 @@ public class TestHazelcastMaps extends QaiTestBase {
     @Inject @Named("Wiktionary_en")
     private SearchServiceInterface wiktionarySearch;
 
+    @Inject @Named("HAZELCAST_CLIENT")
+    private HazelcastInstance hazelcastInstance;
+
     private static String STOCK_ENTITIES = "STOCK_ENTITIES";
     private static String PROCEDURES = "PROCEDURES";
     private static String WIKIPEDIA = "WIKIPEDIA_EN";
@@ -59,11 +62,15 @@ public class TestHazelcastMaps extends QaiTestBase {
             "Wiktionary-favicon-en.png",
             "Writing_star.svg"};
 
+//    @Override
+//    protected void setUp() throws Exception {
+//        hazelcastInstance = injector.getInstance(HazelcastInstance.class);
+//    }
+
     public void testHazelcastWikipediaArticles() throws Exception {
 
         String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock market"};
 
-        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
@@ -81,7 +88,6 @@ public class TestHazelcastMaps extends QaiTestBase {
 
         String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock market"};
 
-        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
@@ -97,7 +103,6 @@ public class TestHazelcastMaps extends QaiTestBase {
 
     public void testHazelcastStockEntities() throws Exception {
 
-        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
@@ -131,7 +136,6 @@ public class TestHazelcastMaps extends QaiTestBase {
 
     public void testHazelcastProcedures() throws Exception {
 
-        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
@@ -162,7 +166,7 @@ public class TestHazelcastMaps extends QaiTestBase {
     }
 
     public void testWikipediaResources() throws Exception {
-        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
+
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
@@ -175,7 +179,7 @@ public class TestHazelcastMaps extends QaiTestBase {
     }
 
     public void testWiktionaryResources() throws Exception {
-        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
+
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 

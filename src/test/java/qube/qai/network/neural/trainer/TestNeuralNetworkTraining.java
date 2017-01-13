@@ -94,7 +94,7 @@ public class TestNeuralNetworkTraining extends TestCase {
             while(tmp.isBefore(end) || tmp.equals(end)) {
                 StockQuote quote = new StockQuote();
                 quote.setTickerSymbol(name);
-                quote.setDate(tmp.toDate());
+                quote.setQuoteDate(tmp.toDate());
                 quote.setAdjustedClose(generator.doubleValue());
                 quotes.add(quote);
                 tmp = tmp.plusDays(1);

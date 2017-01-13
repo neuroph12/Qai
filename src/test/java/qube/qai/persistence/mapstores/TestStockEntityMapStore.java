@@ -2,12 +2,13 @@ package qube.qai.persistence.mapstores;
 
 import com.google.inject.Injector;
 import junit.framework.TestCase;
+import org.joda.time.DateTime;
 import qube.qai.main.QaiTestServerModule;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockQuote;
 import qube.qai.services.implementation.UUIDService;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by rainbird on 6/4/16.
@@ -41,6 +42,12 @@ public class TestStockEntityMapStore extends TestCase {
                 entity.setUuid(uuid);
             }
             mapStore.store(uuid, entity);
+
+            // now we create and add the quotes
+            Collection<StockQuote> quotes = generateQuotes(name, 100);
+            for (StockQuote quote : quotes) {
+                entity.addQuote(quote);
+            }
             entityMap.put(uuid, entity);
         }
 
@@ -60,6 +67,41 @@ public class TestStockEntityMapStore extends TestCase {
         for (String entityId : entityMap.keySet()) {
             mapStore.delete(entityId);
         }
+    }
+
+    /**
+     * this routine will be testing entering the stock-entities from
+     * the csv-files which we already have.
+     * @throws Exception
+     */
+    public void testInsertEntitiesFromFile() throws Exception {
+
+        fail("this test is not yet implemented");
+    }
+
+    private Collection<StockQuote> generateQuotes(String tickerSymbol, int number) {
+        Random random = new Random();
+        Collection<StockQuote> quotes = new ArrayList<>();
+        double startValue = random.nextInt(1000) * random.nextDouble();
+        DateTime date = DateTime.now();
+
+        for (int i = 0; i < number; i++) {
+            StockQuote quote = new StockQuote();
+            quote.setTickerSymbol(tickerSymbol);
+            quote.setQuoteDate(date.minusDays(i).toDate());
+            double close = startValue;
+            if (random.nextBoolean()) {
+                close = close + random.nextInt(10) * random.nextDouble();
+            } else {
+                close = close - random.nextInt(10) * random.nextDouble();
+            }
+
+            quote.setAdjustedClose(close);
+
+            quotes.add(quote);
+        }
+
+        return quotes;
     }
 
     /**

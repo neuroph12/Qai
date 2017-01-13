@@ -112,8 +112,8 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
             // and even if all the dates are not same, we want to
             // cover those which do have the same dates
             for (StockQuote quote : quotes) {
-                if (dates.add(quote.getDate())) {
-                    dateList.add(quote.getDate());
+                if (dates.add(quote.getQuoteDate())) {
+                    dateList.add(quote.getQuoteDate());
                 }
             }
         }

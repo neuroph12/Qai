@@ -6,6 +6,7 @@ import com.hazelcast.core.IMap;
 import qube.qai.data.SelectionOperator;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Created by rainbird on 11/19/15.
@@ -18,7 +19,7 @@ public class HazelcastSelectionOperator<T> implements SelectionOperator, Hazelca
 
     private Object idObject;
 
-    @Inject
+    @Inject @Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     public HazelcastSelectionOperator(HazelcastInstance hazelcastInstance, String dataSource, String uuid) {

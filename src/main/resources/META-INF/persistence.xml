@@ -68,6 +68,7 @@
 
         <class>qube.qai.user.User</class>
         <class>qube.qai.user.Session</class>
+        <class>qube.qai.persistence.StockCategory</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
@@ -98,6 +99,7 @@
 
         <class>qube.qai.persistence.StockEntity</class>
         <class>qube.qai.persistence.StockQuote</class>
+        <class>qube.qai.persistence.StockCategory</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>

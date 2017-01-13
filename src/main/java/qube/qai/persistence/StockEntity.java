@@ -4,21 +4,17 @@ import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 import qube.qai.services.implementation.UUIDService;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by rainbird on 11/19/15.
  */
 @Entity
 public class StockEntity implements Serializable, AcceptsVisitors {
-
-//    @EmbeddedId
-//    private StockEntityId id;
 
     @Id
     @Column(name = "uuid", nullable = false)
@@ -54,7 +50,16 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     @Column(name = "CIK")
     private String CIK;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tickerSymbol")
+    private Set<StockQuote> quotes;
+
     public StockEntity() {
+        this.uuid = UUIDService.uuidString();
+        this.quotes = new HashSet<>();
+    }
+
+    public void addQuote(StockQuote quote) {
+        quotes.add(quote);
     }
 
     public Object accept(DataVisitor visitor, Object data) {
