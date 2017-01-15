@@ -16,8 +16,8 @@ public class Session {
     private String uuid;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name="userId", nullable=false)
-    private User userId;
+    @JoinColumn(name="userd", nullable=false)
+    private User user;
 
     @Column(name = "name")
     private String name;
@@ -53,12 +53,12 @@ public class Session {
         this.uuid = uuid;
     }
 
-    public User getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(User userdId) {
-        this.userId = userdId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getName() {
@@ -83,5 +83,21 @@ public class Session {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public int hashCode() {
+        return uuid.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Session) {
+            Session s = (Session) obj;
+            if (uuid.equals(s.uuid)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

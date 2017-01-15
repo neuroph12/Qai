@@ -20,7 +20,7 @@ import qube.qai.network.semantic.TestSemanticNetworkBuilder;
 import qube.qai.parsers.TestAntimirovParser;
 import qube.qai.parsers.TestWikiIntegration;
 import qube.qai.parsers.maths.TestMathParser;
-import qube.qai.persistence.mapstores.TestDatabaseMapStore;
+import qube.qai.persistence.mapstores.TestDatabaseMapStores;
 import qube.qai.persistence.mapstores.TestHazelcastMaps;
 import qube.qai.persistence.mapstores.TestIndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.TestMapStores;
@@ -86,7 +86,7 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestHazelcastMaps.class);
         suite.addTestSuite(TestIndexedDirectoryMapStore.class);
         // these tests are superceded and replaced by
-        suite.addTestSuite(TestDatabaseMapStore.class);
+        suite.addTestSuite(TestDatabaseMapStores.class);
 //        suite.addTestSuite(TestStockQuoteMapStore.class);
 //        suite.addTestSuite(TestRdfTripleFileMapStore.class);
 //        suite.addTestSuite(TestStockEntityMapStore.class);

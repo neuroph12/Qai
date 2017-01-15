@@ -1,16 +1,14 @@
-package qube.qai.persistence;
+package qube.qai.user;
 
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
- * Created by rainbird on 1/13/17.
+ * Created by rainbird on 1/15/17.
  */
 @Entity
-public class StockCategory {
+public class Role {
 
     @Id
     @Column(name = "uuid")
@@ -22,16 +20,20 @@ public class StockCategory {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<StockEntity> entities;
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name="user", nullable=false)
+    private User user;
 
-    public StockCategory() {
+    public Role() {
         this.uuid = UUIDService.uuidString();
-        this.entities = new HashSet<>();
+        this.name = "dummy_role";
     }
 
-    public void addStockEntity(StockEntity entity) {
-        entities.add(entity);
+    public Role(User user, String name, String description) {
+        this();
+        this.user = user;
+        this.name = name;
+        this.description = description;
     }
 
     public String getUuid() {
@@ -40,6 +42,14 @@ public class StockCategory {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getName() {
@@ -58,24 +68,21 @@ public class StockCategory {
         this.description = description;
     }
 
-    public Set<StockEntity> getEntities() {
-        return entities;
-    }
-
-    public void setEntities(Set<StockEntity> entities) {
-        this.entities = entities;
-    }
-
     @Override
     public int hashCode() {
         return uuid.hashCode();
     }
 
+    /**
+     * in case of User-Roles we use only the name as check
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof StockCategory) {
-            StockCategory s = (StockCategory) obj;
-            if (name.equals(s.name))  {
+        if (obj instanceof Role) {
+            Role r = (Role) obj;
+            if (name.equals(r.name)) {
                 return true;
             }
         }

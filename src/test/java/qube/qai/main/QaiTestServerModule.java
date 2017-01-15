@@ -21,6 +21,7 @@ import qube.qai.persistence.search.RDFTriplesSearchService;
 import qube.qai.persistence.search.StockQuoteSearchService;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
+import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 
@@ -40,6 +41,8 @@ public class QaiTestServerModule extends AbstractModule {
     private static final String USERS = "USERS";
 
     private static final String USER_SESSIONS = "USER_SESSIONS";
+
+    private static final String USER_ROLES = "USER_ROLES";
 
     private static final String STOCK_ENTITIES = "STOCK_ENTITIES";
 
@@ -69,6 +72,8 @@ public class QaiTestServerModule extends AbstractModule {
     private DatabaseMapStore userMapStore;
 
     private DatabaseMapStore sessionMapStore;
+
+    private DatabaseMapStore roleMapStore;
 
     // with static fields i can use the injector even when it is active for other tests
     private static Injector stocksInjector;
@@ -194,6 +199,33 @@ public class QaiTestServerModule extends AbstractModule {
         });
         logger.info("adding mapstore configuration for " + USER_SESSIONS);
         sessionsConfig.setMapStoreConfig(sessionMapStoreConfig);
+
+        /**
+         * here we add the map-store for Roles which is
+         * in this case the HsqlDBMapStore
+         */
+        MapConfig rolesConfig = config.getMapConfig(USER_ROLES);
+        MapStoreConfig roleMapStoreConfig = rolesConfig.getMapStoreConfig();
+        if (roleMapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + USER_ROLES);
+            roleMapStoreConfig = new MapStoreConfig();
+        }
+        roleMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Role>() {
+            public MapLoader<String, Role> newMapStore(String mapName, Properties properties) {
+                if (USER_ROLES.equals(mapName)) {
+                    if (roleMapStore == null) {
+                        roleMapStore = new DatabaseMapStore(Role.class);
+                        usersInjector.injectMembers(roleMapStore);
+                    }
+
+                    return roleMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + USER_SESSIONS);
+        rolesConfig.setMapStoreConfig(roleMapStoreConfig);
 
         /**
          * here we add the map-store for Stock-entities which is

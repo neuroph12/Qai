@@ -22,8 +22,11 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Session> sessions = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
         this.uuid = UUIDService.uuidString();
@@ -43,10 +46,17 @@ public class User {
      * are to be decided
      */
     public void addSession(Session session) {
-        if (session.getUserId() != null || !uuid.equals(session.getUserId())) {
-            session.setUserId(this);
+        if (session.getUser() != null || !uuid.equals(session.getUser())) {
+            session.setUser(this);
         }
         sessions.add(session);
+    }
+
+    public void addRole(Role role) {
+        if (role.getUser() != null || !uuid.equals(role.getUser())) {
+            role.setUser(this);
+        }
+        roles.add(role);
     }
 
     public Session createSession() {
@@ -86,5 +96,21 @@ public class User {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    @Override
+    public int hashCode() {
+        return uuid.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof User) {
+            User u = (User) obj;
+            if (uuid.equals(u.uuid)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

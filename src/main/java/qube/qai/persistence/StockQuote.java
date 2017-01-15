@@ -140,4 +140,26 @@ public class StockQuote implements Serializable, AcceptsVisitors {
         this.volume = volume;
     }
 
+    @Override
+    public int hashCode() {
+        return uuid.hashCode();
+    }
+
+    /**
+     * in this case equality is when ticker-symbol and dates are equal
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof StockQuote) {
+            StockQuote q = (StockQuote) obj;
+            if (tickerSymbol.equals(q.tickerSymbol)
+                    && quoteDate != null
+                    && quoteDate.equals(q.quoteDate)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

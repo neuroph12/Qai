@@ -1,9 +1,6 @@
 package qube.qai.persistence.mapstores;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.persist.PersistService;
-import com.google.inject.persist.jpa.JpaPersistModule;
 import junit.framework.TestCase;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -13,6 +10,7 @@ import qube.qai.main.QaiTestServerModule;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.services.implementation.UUIDService;
+import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 
@@ -21,7 +19,7 @@ import java.util.*;
 /**
  * Created by rainbird on 1/14/17.
  */
-public class TestDatabaseMapStore extends TestCase {
+public class TestDatabaseMapStores extends TestCase {
 
     protected Logger logger = LoggerFactory.getLogger("TestStockQuoteMapStore");
 
@@ -38,6 +36,9 @@ public class TestDatabaseMapStore extends TestCase {
         User user = createUser();
         Session session = user.createSession();
 
+        Role role = new Role(user, "DO_ALL_ROLE", "this role will allow you to do everything");
+        user.addRole(role);
+
         mapStore.store(user.getUuid(), user);
 
         User readUser = (User) mapStore.load(user.getUuid());
@@ -53,6 +54,27 @@ public class TestDatabaseMapStore extends TestCase {
 
     }
 
+    public void testRoleMapStore() throws Exception {
+
+        Injector injector = QaiTestServerModule.initUsersInjector();
+        DatabaseMapStore mapStore = new DatabaseMapStore(Role.class);
+        injector.injectMembers(mapStore);
+
+        User user = createUser();
+        Role role = new Role(user, "DO_ALL_ROLE", "this role will allow you to do everything");
+        mapStore.store(role.getUuid(), role);
+
+        Role foundRole = (Role) mapStore.load(role.getUuid());
+        assertNotNull(foundRole);
+        assertTrue(role.equals(foundRole));
+
+        mapStore.delete(role.getUuid());
+
+        Role lostRole = (Role) mapStore.load(role.getUuid());
+        assertTrue(lostRole == null);
+
+    }
+
     public void testSessionmapStore() throws Exception {
 
         Injector injector = QaiTestServerModule.initUsersInjector();
@@ -62,7 +84,7 @@ public class TestDatabaseMapStore extends TestCase {
 
         User user = createUser();
         Session session = new Session(randomWord(10), new Date());
-        session.setUserId(user);
+        session.setUser(user);
 
         mapStore.store(session.getUuid(), session);
 
