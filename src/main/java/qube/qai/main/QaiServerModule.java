@@ -131,13 +131,13 @@ public class QaiServerModule extends AbstractModule {
 
     private HazelcastInstance hazelcastInstance;
 
-    private StockEntityMapStore stockEntityMapStore;
+    private DatabaseMapStore stockEntityMapStore;
 
-    private StockQuoteMapStore stockQuoteMapStore;
+    private DatabaseMapStore stockQuoteMapStore;
 
-    private RdfTripleFileMapStore dbpediaMapStore;
+    private DatabaseMapStore dbpediaMapStore;
 
-    private RdfTripleFileMapStore dbpersonMapStore;
+    private DatabaseMapStore dbpersonMapStore;
 
     private Injector jpaStocksInjector;
 
@@ -368,25 +368,25 @@ public class QaiServerModule extends AbstractModule {
             service.start();
         }
 
-        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPEDIA);
-        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
-        if (mapStoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + DBPEDIA);
-            mapStoreConfig = new MapStoreConfig();
-        }
-        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, RDFTriple>() {
-            public MapLoader<String, RDFTriple> newMapStore(String mapName, Properties properties) {
-                if (DBPEDIA.equals(mapName)) {
-                    dbpediaMapStore = new RdfTripleFileMapStore();
-                    jpaDBPediaInjector.injectMembers(dbpediaMapStore);
-                    return dbpediaMapStore;
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + DBPEDIA);
-        mapConfig.setMapStoreConfig(mapStoreConfig);
+//        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPEDIA);
+//        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+//        if (mapStoreConfig == null) {
+//            logger.info("mapStoreConfig is null... creating one for: " + DBPEDIA);
+//            mapStoreConfig = new MapStoreConfig();
+//        }
+//        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, RDFTriple>() {
+//            public MapLoader<String, RDFTriple> newMapStore(String mapName, Properties properties) {
+//                if (DBPEDIA.equals(mapName)) {
+//                    dbpediaMapStore = new RdfTripleFileMapStore();
+//                    jpaDBPediaInjector.injectMembers(dbpediaMapStore);
+//                    return dbpediaMapStore;
+//                } else {
+//                    return null;
+//                }
+//            }
+//        });
+//        logger.info("adding mapstore configuration for " + DBPEDIA);
+//        mapConfig.setMapStoreConfig(mapStoreConfig);
     }
 
     /**
@@ -553,7 +553,7 @@ public class QaiServerModule extends AbstractModule {
             public MapLoader<String, StockQuote> newMapStore(String mapName, Properties properties) {
                 if (STOCK_QUOTES.equals(mapName)) {
                     if (stockQuoteMapStore == null) {
-                        stockQuoteMapStore = new StockQuoteMapStore();
+                        stockQuoteMapStore = new DatabaseMapStore(StockQuote.class);
                         jpaStocksInjector.injectMembers(stockQuoteMapStore);
                     }
 
@@ -582,7 +582,7 @@ public class QaiServerModule extends AbstractModule {
             public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
                 if (STOCK_ENTITIES.equals(mapName)) {
                     if (stockEntityMapStore == null) {
-                        stockEntityMapStore = new StockEntityMapStore();
+                        stockEntityMapStore = new DatabaseMapStore(StockEntity.class);
                         jpaStocksInjector.injectMembers(stockEntityMapStore);
                     }
 

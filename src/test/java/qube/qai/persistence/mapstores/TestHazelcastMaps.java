@@ -112,7 +112,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         List<String> idList = new ArrayList<String>();
         for (int i = 0; i < number; i++) {
             String name = "e" + i + "x";
-            StockEntity entity = TestStockEntityMapStore.createEntity(name);
+            StockEntity entity = createEntity(name);
             String id = entity.getUuid();
             if (!stockEntities.containsKey(id)) {
                 stockEntities.put(id, entity);
@@ -189,5 +189,22 @@ public class TestHazelcastMaps extends QaiTestBase {
             File found = wiktionaryResources.get(filename);
             assertNotNull("has to be there something", found);
         }
+    }
+
+    /**
+     * creates a silly StockEntity
+     * @param name
+     * @return
+     */
+    public static StockEntity createEntity(String name) {
+        StockEntity entity = new StockEntity();
+        entity.setName(name);
+        entity.setAddress("address of " + name);
+        entity.setGicsSector("gicsSector of " + name);
+        entity.setGicsSubIndustry("gicsSubIndustry of " + name);
+        entity.setSecurity("security of " + name);
+        entity.setTradedIn("vsex");
+        entity.setTickerSymbol(name);
+        return entity;
     }
 }

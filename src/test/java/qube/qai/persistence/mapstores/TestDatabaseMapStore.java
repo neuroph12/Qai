@@ -60,8 +60,8 @@ public class TestDatabaseMapStore extends TestCase {
         DatabaseMapStore mapStore = new DatabaseMapStore(Session.class);
         injector.injectMembers(mapStore);
 
-        User user = TestUserMapStore.createUser();
-        Session session = new Session(TestUserMapStore.randomWord(10), new Date());
+        User user = createUser();
+        Session session = new Session(randomWord(10), new Date());
         session.setUserId(user);
 
         mapStore.store(session.getUuid(), session);

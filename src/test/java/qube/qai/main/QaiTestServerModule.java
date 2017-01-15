@@ -62,13 +62,13 @@ public class QaiTestServerModule extends AbstractModule {
 
     private HazelcastInstance hazelcastInstance;
 
-    private StockEntityMapStore stockEntityMapStore;
+    private DatabaseMapStore stockEntityMapStore;
 
-    private StockQuoteMapStore stockQuoteMapStore;
+    private DatabaseMapStore stockQuoteMapStore;
 
-    private UserMapStore userMapStore;
+    private DatabaseMapStore userMapStore;
 
-    private SessionMapStore sessionMapStore;
+    private DatabaseMapStore sessionMapStore;
 
     // with static fields i can use the injector even when it is active for other tests
     private static Injector stocksInjector;
@@ -156,7 +156,7 @@ public class QaiTestServerModule extends AbstractModule {
             public MapLoader<String,User> newMapStore(String mapName, Properties properties) {
                 if(USERS.equals(mapName)) {
                     if (userMapStore == null) {
-                        userMapStore = new UserMapStore();
+                        userMapStore = new DatabaseMapStore(User.class);
                         usersInjector.injectMembers(userMapStore);
                     }
                     return userMapStore;
@@ -182,7 +182,7 @@ public class QaiTestServerModule extends AbstractModule {
             public MapLoader<String, Session> newMapStore(String mapName, Properties properties) {
                 if (USER_SESSIONS.equals(mapName)) {
                     if (sessionMapStore == null) {
-                        sessionMapStore = new SessionMapStore();
+                        sessionMapStore = new DatabaseMapStore(Session.class);
                         usersInjector.injectMembers(sessionMapStore);
                     }
 
@@ -210,7 +210,7 @@ public class QaiTestServerModule extends AbstractModule {
             public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
                 if (STOCK_ENTITIES.equals(mapName)) {
                     if (stockEntityMapStore == null) {
-                        stockEntityMapStore = new StockEntityMapStore();
+                        stockEntityMapStore = new DatabaseMapStore(StockEntity.class);
                         stocksInjector.injectMembers(stockEntityMapStore);
                     }
 
@@ -238,7 +238,7 @@ public class QaiTestServerModule extends AbstractModule {
             public MapLoader<String, StockQuote> newMapStore(String mapName, Properties properties) {
                 if (STOCK_QUOTES.equals(mapName)) {
                     if (stockQuoteMapStore == null) {
-                        stockQuoteMapStore = new StockQuoteMapStore();
+                        stockQuoteMapStore = new DatabaseMapStore(StockQuote.class);
                         stocksInjector.injectMembers(stockQuoteMapStore);
                     }
 

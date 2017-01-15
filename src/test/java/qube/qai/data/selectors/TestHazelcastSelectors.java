@@ -7,7 +7,6 @@ import qube.qai.data.SelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
-import qube.qai.persistence.mapstores.TestStockEntityMapStore;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
@@ -57,7 +56,7 @@ public class TestHazelcastSelectors extends QaiTestBase {
         Collection<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
         for (int i = 0; i < number; i++) {
             String name = "entity(" + i + ")";
-            StockEntity entity = TestStockEntityMapStore.createEntity(name);
+            StockEntity entity = createEntity(name);
             String entityId = entity.getUuid();
             if (!stockEntities.containsKey(entityId)) {
                 stockEntities.put(entityId, entity);
@@ -153,4 +152,20 @@ public class TestHazelcastSelectors extends QaiTestBase {
         }
     }
 
+    /**
+     * creates a silly StockEntity
+     * @param name
+     * @return
+     */
+    public static StockEntity createEntity(String name) {
+        StockEntity entity = new StockEntity();
+        entity.setName(name);
+        entity.setAddress("address of " + name);
+        entity.setGicsSector("gicsSector of " + name);
+        entity.setGicsSubIndustry("gicsSubIndustry of " + name);
+        entity.setSecurity("security of " + name);
+        entity.setTradedIn("vsex");
+        entity.setTickerSymbol(name);
+        return entity;
+    }
 }
