@@ -6,7 +6,9 @@ import java.io.Serializable;
 
 /**
  * Created by rainbird on 5/30/16.
+ * @Deprecated class is to be replaced by DatabaseMapStore
  */
+@Deprecated
 @Embeddable
 public class RDFId implements Serializable {
 

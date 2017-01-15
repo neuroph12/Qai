@@ -7,7 +7,9 @@ import java.io.Serializable;
 
 /**
  * Created by rainbird on 1/30/16.
+ * @Deprecated class is to be replaced by DatabaseMapStore
  */
+@Deprecated
 @Entity
 //@Table(name="RdfTripleSet")
 public class RDFTriple implements Serializable{
