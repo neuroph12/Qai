@@ -3,12 +3,13 @@ package qube.qai.user;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by rainbird on 1/15/17.
  */
 @Entity
-public class Role {
+public class Role implements Serializable {
 
     @Id
     @Column(name = "uuid")

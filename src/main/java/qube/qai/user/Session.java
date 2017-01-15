@@ -3,20 +3,21 @@ package qube.qai.user;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by rainbird on 1/8/17.
  */
 @Entity
-public class Session {
+public class Session implements Serializable {
 
     @Id
     @Column(name = "uuid")
     private String uuid;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name="userd", nullable=false)
+    @JoinColumn(name="user", nullable=false)
     private User user;
 
     @Column(name = "name")

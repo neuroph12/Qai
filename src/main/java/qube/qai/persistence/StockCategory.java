@@ -3,6 +3,7 @@ package qube.qai.persistence;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,13 +11,13 @@ import java.util.Set;
  * Created by rainbird on 1/13/17.
  */
 @Entity
-public class StockCategory {
+public class StockCategory implements Serializable {
 
     @Id
     @Column(name = "uuid")
     private String uuid;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")

@@ -29,6 +29,7 @@ public class DatabaseMapStore implements MapStore {
         this.entityManager = entityManager;
     }
 
+    //@TODO i am not sure if having a transaction here is really a good thing
     @Override
     public void store(Object key, Object value) {
         if (!entityManager.getTransaction().isActive()) {
@@ -46,11 +47,16 @@ public class DatabaseMapStore implements MapStore {
         }
     }
 
+    //@TODO i am not sure if having a transaction here is really a good thing
     @Override
     public void delete(Object key) {
         Object target = load(key);
         if (target != null) {
+            if (!entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().begin();
+            }
             entityManager.remove(baseClass.cast(target));
+            entityManager.getTransaction().commit();
         }
     }
 
