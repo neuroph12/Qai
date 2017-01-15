@@ -18,7 +18,9 @@ import java.util.Map;
 
 /**
  * Created by rainbird on 11/26/15.
+ * @Deprecated class is to be replaced by DatabaseMapStore
  */
+@Deprecated
 public class StockEntityMapStore implements MapStore<String, StockEntity> {
 
     private static Logger logger = LoggerFactory.getLogger("StockEntityMapStore");

@@ -20,7 +20,10 @@ import qube.qai.network.semantic.TestSemanticNetworkBuilder;
 import qube.qai.parsers.TestAntimirovParser;
 import qube.qai.parsers.TestWikiIntegration;
 import qube.qai.parsers.maths.TestMathParser;
-import qube.qai.persistence.mapstores.*;
+import qube.qai.persistence.mapstores.TestDatabaseMapStore;
+import qube.qai.persistence.mapstores.TestHazelcastMaps;
+import qube.qai.persistence.mapstores.TestIndexedDirectoryMapStore;
+import qube.qai.persistence.mapstores.TestMapStores;
 import qube.qai.persistence.search.TestRDFTripleSearchService;
 import qube.qai.persistence.search.TestStockQuoteSearchService;
 import qube.qai.procedure.TestWikiSearch;
@@ -82,11 +85,13 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestMapStores.class);
         suite.addTestSuite(TestHazelcastMaps.class);
         suite.addTestSuite(TestIndexedDirectoryMapStore.class);
-        suite.addTestSuite(TestStockQuoteMapStore.class);
-        suite.addTestSuite(TestRdfTripleFileMapStore.class);
-        suite.addTestSuite(TestStockEntityMapStore.class);
-        suite.addTestSuite(TestUserMapStore.class);
-        suite.addTestSuite(TestSessionMapStore.class);
+        // these tests are superceded and replaced by
+        suite.addTestSuite(TestDatabaseMapStore.class);
+//        suite.addTestSuite(TestStockQuoteMapStore.class);
+//        suite.addTestSuite(TestRdfTripleFileMapStore.class);
+//        suite.addTestSuite(TestStockEntityMapStore.class);
+//        suite.addTestSuite(TestUserMapStore.class);
+//        suite.addTestSuite(TestSessionMapStore.class);
 
         // persistence.search
         suite.addTestSuite(TestStockQuoteSearchService.class);

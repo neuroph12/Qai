@@ -14,7 +14,9 @@ import java.util.Map;
 
 /**
  * Created by rainbird on 1/8/17.
+ * @Deprecated class is to be replaced by DatabaseMapStore
  */
+@Deprecated
 public class SessionMapStore implements MapStore<String, Session> {
 
     private static Logger logger = LoggerFactory.getLogger("SessionMapStore");

@@ -10,7 +10,9 @@ import java.util.Date;
 
 /**
  * Created by rainbird on 1/8/17.
+ * @Deprecated class is to be replaced by DatabaseMapStore
  */
+@Deprecated
 public class TestSessionMapStore extends TestCase {
 
     public void testSessionmapStore() throws Exception {

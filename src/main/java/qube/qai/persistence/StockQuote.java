@@ -55,14 +55,14 @@ public class StockQuote implements Serializable, AcceptsVisitors {
         this.volume = volume;
     }
 
-    public StockQuote(QuoteId quoteId, double adjustedClose, double close, double high, double low, double open, double volume) {
-        this.adjustedClose = adjustedClose;
-        this.close = close;
-        this.high = high;
-        this.low = low;
-        this.open = open;
-        this.volume = volume;
-    }
+//    public StockQuote(double adjustedClose, double close, double high, double low, double open, double volume) {
+//        this.adjustedClose = adjustedClose;
+//        this.close = close;
+//        this.high = high;
+//        this.low = low;
+//        this.open = open;
+//        this.volume = volume;
+//    }
 
     public Object accept(DataVisitor visitor, Object data) {
         return visitor.visit(this, data);

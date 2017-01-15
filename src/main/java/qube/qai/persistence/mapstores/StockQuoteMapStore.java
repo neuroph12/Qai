@@ -2,17 +2,19 @@ package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.MapStore;
 import qube.qai.data.stores.StockQuoteDataStore;
-import qube.qai.persistence.QuoteId;
 import qube.qai.persistence.StockQuote;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.persistence.EntityManager;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by rainbird on 5/15/16.
+ * @Deprecated class is to be replaced by DatabaseMapStore
  */
+@Deprecated
 public class StockQuoteMapStore implements MapStore<String, StockQuote> {
 
     /**

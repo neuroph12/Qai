@@ -12,7 +12,9 @@ import java.util.*;
 
 /**
  * Created by rainbird on 6/4/16.
+ * @Deprecated class is to be replaced by DatabaseMapStore
  */
+@Deprecated
 public class TestStockEntityMapStore extends TestCase {
 
     /**

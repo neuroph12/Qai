@@ -8,7 +8,6 @@ import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.stores.StockQuoteDataStore;
-import qube.qai.persistence.QuoteId;
 import qube.qai.persistence.StockQuote;
 
 import javax.inject.Inject;
@@ -19,7 +18,9 @@ import java.util.Map;
 
 /**
  * Created by rainbird on 5/15/16.
+ * @Deprecated class is to be replaced by DatabaseMapStore
  */
+@Deprecated
 public class TestStockQuoteMapStore extends TestCase {
 
     protected Logger logger = LoggerFactory.getLogger("TestStockQuoteMapStore");

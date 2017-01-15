@@ -16,7 +16,9 @@ import java.util.*;
 
 /**
  * Created by rainbird on 5/24/16.
+ * @Deprecated class is to be replaced by DatabaseMapStore
  */
+@Deprecated
 public class RdfTripleFileMapStore implements MapStore<String, RDFTriple> {
 
     private Logger logger = LoggerFactory.getLogger("RdfTripleFileMapStore");

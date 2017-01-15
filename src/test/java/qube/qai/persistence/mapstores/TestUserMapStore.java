@@ -10,7 +10,9 @@ import java.util.Random;
 
 /**
  * Created by rainbird on 1/8/17.
+ * @Deprecated class is to be replaced by DatabaseMapStore
  */
+@Deprecated
 public class TestUserMapStore extends TestCase {
 
     public void testUserMapStore() throws Exception {

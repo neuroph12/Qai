@@ -20,7 +20,9 @@ import java.util.Date;
 
 /**
  * Created by rainbird on 5/24/16.
+ * @Deprecated class is to be replaced by DatabaseMapStore
  */
+@Deprecated
 public class TestRdfTripleFileMapStore extends TestCase {
 
     protected Logger logger = LoggerFactory.getLogger("TestRdfTripleFileMapStore");
