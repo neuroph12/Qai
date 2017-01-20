@@ -134,7 +134,7 @@ public class QaiTestServerModule extends AbstractModule {
      * @return
      */
     @Provides
-    @Singleton @Named("HAZELCAST_SERVER")
+    @Singleton //@Named("HAZELCAST_SERVER")
     public HazelcastInstance provideHazelcastInstance() {
 
         if (hazelcastInstance != null) {
@@ -224,7 +224,7 @@ public class QaiTestServerModule extends AbstractModule {
                 }
             }
         });
-        logger.info("adding mapstore configuration for " + USER_SESSIONS);
+        logger.info("adding mapstore configuration for " + USER_ROLES);
         rolesConfig.setMapStoreConfig(roleMapStoreConfig);
 
         /**

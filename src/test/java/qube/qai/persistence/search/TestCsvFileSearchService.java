@@ -40,12 +40,12 @@ public class TestCsvFileSearchService extends TestCase {
         }
     }
 
-    public void testCsvFileSearchService() throws Exception {
-        SearchServiceInterface searchService = new CsvFileSearchService();
-        Collection<SearchResult> results = searchService.searchInputString("something", null, 100);
-        assertNotNull("there must be some results", results);
-        assertTrue("there must be results", !results.isEmpty());
-    }
+//    public void testCsvFileSearchService() throws Exception {
+//        SearchServiceInterface searchService = new CsvFileSearchService();
+//        Collection<SearchResult> results = searchService.searchInputString("something", null, 100);
+//        assertNotNull("there must be some results", results);
+//        assertTrue("there must be results", !results.isEmpty());
+//    }
 
     public void testCsvFileSparqlAndSelectors() throws Exception {
 

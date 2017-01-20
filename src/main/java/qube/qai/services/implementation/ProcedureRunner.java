@@ -24,7 +24,7 @@ public class ProcedureRunner implements ProcedureRunnerInterface {
 
     public static final String SERVICE_NAME = "ProcedureRunnerService";
 
-    @Inject @Named("HAZELCAST_CLIENT")
+    @Inject //@Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     private Map<String, ProcedureState> procedures;

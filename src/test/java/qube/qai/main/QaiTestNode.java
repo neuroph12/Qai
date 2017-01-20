@@ -22,7 +22,7 @@ public class QaiTestNode {
 
     private String NODE_NAME = "QaiTestNode";
 
-    @Inject @Named("HAZELCAST_SERVER")
+    @Inject //@Named("HAZELCAST_SERVER")
     private HazelcastInstance hazelcastInstance;
 
     public QaiTestNode() {

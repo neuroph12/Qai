@@ -25,7 +25,7 @@ public class ProcedureManager extends MessageListener {
     @Inject
     private UUIDService uuidService;
 
-    @Inject @Named("HAZELCAST_CLIENT")
+    @Inject //@Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     private static ProcedureManager procedureManager;

@@ -36,7 +36,7 @@ public class TestHazelcastMaps extends QaiTestBase {
     @Inject @Named("Wiktionary_en")
     private SearchServiceInterface wiktionarySearch;
 
-    @Inject @Named("HAZELCAST_CLIENT")
+    @Inject //@Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     private static String STOCK_ENTITIES = "STOCK_ENTITIES";

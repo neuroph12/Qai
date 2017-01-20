@@ -26,7 +26,7 @@ public class QaiNode {
     @InjectConfig(value = "PERSISTENCE_BASE")
     public String PERSISTENCE_BASE;
 
-    @Inject @Named("HAZELCAST_SERVER")
+    @Inject //@Named("HAZELCAST_SERVER")
     private HazelcastInstance hazelcastInstance;
 
     @Inject @Named("Wikipedia_en")

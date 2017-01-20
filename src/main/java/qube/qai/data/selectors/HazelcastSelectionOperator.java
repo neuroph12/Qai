@@ -19,7 +19,7 @@ public class HazelcastSelectionOperator<T> implements SelectionOperator, Hazelca
 
     private Object idObject;
 
-    @Inject @Named("HAZELCAST_CLIENT")
+    @Inject //@Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     public HazelcastSelectionOperator(HazelcastInstance hazelcastInstance, String dataSource, String uuid) {

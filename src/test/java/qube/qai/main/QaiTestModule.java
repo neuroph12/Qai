@@ -87,7 +87,7 @@ public class QaiTestModule extends AbstractModule {
     }
 
 
-    @Provides @Singleton @Named("HAZELCAST_CLIENT")
+    @Provides @Singleton //@Named("HAZELCAST_CLIENT")
     public HazelcastInstance provideHazelcastInstance() {
         if (hazelcastInstance != null) {
             return hazelcastInstance;

@@ -22,7 +22,7 @@ public class TestProcedureRunnerService extends QaiTestBase {
 
     private Logger logger = LoggerFactory.getLogger("TestExecutionService");
 
-    @Inject @Named("HAZELCAST_CLIENT")
+    @Inject //@Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     @Inject

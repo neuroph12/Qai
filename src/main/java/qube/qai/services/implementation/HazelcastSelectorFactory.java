@@ -13,7 +13,7 @@ import javax.inject.Named;
  */
 public class HazelcastSelectorFactory<T> implements SelectorFactoryInterface {
 
-    @Inject @Named("HAZELCAST_CLIENT")
+    @Inject //@Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     public SelectionOperator buildSelector(String dataSource, String uuid, Object data) {

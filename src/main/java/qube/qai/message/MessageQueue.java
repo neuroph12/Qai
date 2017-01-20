@@ -18,7 +18,7 @@ public class MessageQueue implements MessageQueueInterface {
 
     private static Logger logger = LoggerFactory.getLogger("MessageQueue");
 
-    @Inject @Named("HAZELCAST_CLIENT")
+    @Inject //@Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     private Set<String> topics = new HashSet<String>();
@@ -26,8 +26,8 @@ public class MessageQueue implements MessageQueueInterface {
     public MessageQueue() {
     }
 
-    @Inject
-    public MessageQueue(@Named("HAZELCAST_CLIENT") HazelcastInstance hazelcastInstance) {
+    @Inject //@Named("HAZELCAST_CLIENT")
+    public MessageQueue(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
     }
 

@@ -36,7 +36,7 @@ public class StockEntityDataStore implements DataStore {
     @Named("Wikipedia_en")
     private SearchServiceInterface searchService;
 
-    @Inject @Named("HAZELCAST_CLIENT")
+    @Inject //@Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
 

@@ -25,6 +25,9 @@ import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
 import qube.qai.services.implementation.DistributedSearchListener;
 import qube.qai.services.implementation.WikiSearchService;
+import qube.qai.user.Role;
+import qube.qai.user.Session;
+import qube.qai.user.User;
 
 import javax.inject.Named;
 import java.io.File;
@@ -40,6 +43,12 @@ public class QaiServerModule extends AbstractModule {
     private static Logger logger = LoggerFactory.getLogger("QaiServerModule");
 
     public static final String NODE_NAME = "QaiNode";
+
+    public static final String USERS = "USERS";
+
+    public static final String USER_SESSIONS = "USER_SESSIONS";
+
+    public static final String USER_ROLES = "USER_ROLES";
 
     public static final String STOCK_ENTITIES = "STOCK_ENTITIES";
 
@@ -122,6 +131,15 @@ public class QaiServerModule extends AbstractModule {
     @InjectConfig(value = "CREATE_DBPEDIA")
     public String CREATE_DBPEDIA;
 
+    @InjectConfig(value = "CREATE_USERS")
+    public String CREATE_USERS;
+
+    @InjectConfig(value = "CREATE_USER_SESSIONS")
+    public String CREATE_USER_SESSIONS;
+
+    @InjectConfig(value = "CREATE_USER_ROLES")
+    public String CREATE_USER_ROLES;
+
 //    @InjectConfig(value = "CREATE_DBPERSON")
 //    public String CREATE_DBPERSON;
 
@@ -135,6 +153,12 @@ public class QaiServerModule extends AbstractModule {
 
     private DatabaseMapStore stockQuoteMapStore;
 
+    private DatabaseMapStore userMapStore;
+
+    private DatabaseMapStore sessionMapStore;
+
+    private DatabaseMapStore roleMapStore;
+
     private DatabaseMapStore dbpediaMapStore;
 
     private DatabaseMapStore dbpersonMapStore;
@@ -144,6 +168,8 @@ public class QaiServerModule extends AbstractModule {
     private Injector jpaDBPediaInjector;
 
     private Injector jpaDBPersonInjector;
+
+    private Injector jpaUsersInjector;
 
     public QaiServerModule() {
 
@@ -286,7 +312,7 @@ public class QaiServerModule extends AbstractModule {
         return searchService;
     }
 
-    @Provides
+    @Provides @Singleton //@Named("HAZELCAST_SERVER")
     HazelcastInstance provideHazelcastInstance() {
 
         if (hazelcastInstance != null) {
@@ -338,7 +364,6 @@ public class QaiServerModule extends AbstractModule {
 
         // create DBPedia map-store
         if ("true".equalsIgnoreCase(CREATE_DBPEDIA)) {
-
             createDBPediaConfig(hazelcastConfig);
         }
 //
@@ -351,6 +376,21 @@ public class QaiServerModule extends AbstractModule {
 //            }
 //            createDBPersonConfig(hazelcastConfig);
 //        }
+
+        // create User database and Hazelcast map
+        if ("true".equalsIgnoreCase(CREATE_USERS)) {
+            createUsersMapConfig(hazelcastConfig);
+        }
+
+        // create UserRoles and Hazelcast map
+        if("true".equalsIgnoreCase(CREATE_USER_ROLES)) {
+            createUserRoles(hazelcastConfig);
+        }
+
+        // create UserSessions
+        if ("true".equalsIgnoreCase(CREATE_USER_SESSIONS)) {
+            createUserSessions(hazelcastConfig);
+        }
 
         // now we are ready to get an instance
         hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);
@@ -368,6 +408,11 @@ public class QaiServerModule extends AbstractModule {
             service.start();
         }
 
+        if (jpaUsersInjector == null) {
+            jpaUsersInjector = Guice.createInjector(new JpaPersistModule("USERS"));
+            PersistService service = jpaUsersInjector.getInstance(PersistService.class);
+            service.start();
+        }
 //        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPEDIA);
 //        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
 //        if (mapStoreConfig == null) {
@@ -387,6 +432,84 @@ public class QaiServerModule extends AbstractModule {
 //        });
 //        logger.info("adding mapstore configuration for " + DBPEDIA);
 //        mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
+
+    /**
+     * DbUser map-store
+     * @param hazelcastConfig
+     */
+    private void createUsersMapConfig(Config hazelcastConfig) {
+        MapConfig usersConfig = hazelcastConfig.getMapConfig(USERS);
+        MapStoreConfig userMapstoreConfig = usersConfig.getMapStoreConfig();
+        if (userMapstoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + USERS);
+            userMapstoreConfig = new MapStoreConfig();
+        }
+        userMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, User>() {
+            public MapLoader<String,User> newMapStore(String mapName, Properties properties) {
+                if(USERS.equals(mapName)) {
+                    if (userMapStore == null) {
+                        userMapStore = new DatabaseMapStore(User.class);
+                        jpaUsersInjector.injectMembers(userMapStore);
+                    }
+                    return userMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + USERS);
+        usersConfig.setMapStoreConfig(userMapstoreConfig);
+    }
+
+    private void createUserRoles(Config hazelcastConfig) {
+        MapConfig rolesConfig = hazelcastConfig.getMapConfig(USER_ROLES);
+        MapStoreConfig roleMapStoreConfig = rolesConfig.getMapStoreConfig();
+        if (roleMapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + USER_ROLES);
+            roleMapStoreConfig = new MapStoreConfig();
+        }
+        roleMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Role>() {
+            public MapLoader<String, Role> newMapStore(String mapName, Properties properties) {
+                if (USER_ROLES.equals(mapName)) {
+                    if (roleMapStore == null) {
+                        roleMapStore = new DatabaseMapStore(Role.class);
+                        jpaUsersInjector.injectMembers(roleMapStore);
+                    }
+
+                    return roleMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + USER_ROLES);
+        rolesConfig.setMapStoreConfig(roleMapStoreConfig);
+    }
+
+    private void createUserSessions(Config hazelcastConfig) {
+        MapConfig sessionsConfig = hazelcastConfig.getMapConfig(USER_SESSIONS);
+        MapStoreConfig sessionMapStoreConfig = sessionsConfig.getMapStoreConfig();
+        if (sessionMapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + USER_SESSIONS);
+            sessionMapStoreConfig = new MapStoreConfig();
+        }
+        sessionMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Session>() {
+            public MapLoader<String, Session> newMapStore(String mapName, Properties properties) {
+                if (USER_SESSIONS.equals(mapName)) {
+                    if (sessionMapStore == null) {
+                        sessionMapStore = new DatabaseMapStore(Session.class);
+                        jpaUsersInjector.injectMembers(sessionMapStore);
+                    }
+
+                    return sessionMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + USER_SESSIONS);
+        sessionsConfig.setMapStoreConfig(sessionMapStoreConfig);
     }
 
     /**

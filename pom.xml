@@ -15,7 +15,7 @@
     <properties>
         <!--<javax.persistence.version>1.0.2</javax.persistence.version>-->
         <jdk.version>1.8</jdk.version>
-
+        <project.encoding>UTF-8</project.encoding>
         <lucene.version>5.3.1</lucene.version>
         <tika.version>1.10</tika.version>
         <!-- 3.6.3 seems not to work with map-stores, therefore stay with the 3.5.4 -->
@@ -299,8 +299,30 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <encoding>${project.encoding}</encoding>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.6.1</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <indexDirectory>src/main/webapp/VAADIN/themes</indexDirectory>
+                            <includes>
+                                <include>**/styles.css</include>
+                                <include>**/styles.scss.cache</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
                 </configuration>
             </plugin>
         </plugins>
@@ -338,20 +360,20 @@
     </repositories>
 
     <pluginRepositories>
-        <pluginRepository>
-            <id>central</id>
-            <url>http://192.168.1.4:8081/artifactory/plugins-release</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>snapshots</id>
-            <url>http://192.168.1.4:8081/artifactory/plugins-snapshot</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </pluginRepository>
+        <!--<pluginRepository>-->
+            <!--<id>central</id>-->
+            <!--<url>http://192.168.1.4:8081/artifactory/plugins-release</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+        <!--</pluginRepository>-->
+        <!--<pluginRepository>-->
+            <!--<id>snapshots</id>-->
+            <!--<url>http://192.168.1.4:8081/artifactory/plugins-snapshot</url>-->
+            <!--<releases>-->
+                <!--<enabled>false</enabled>-->
+            <!--</releases>-->
+        <!--</pluginRepository>-->
     </pluginRepositories>
 
 </project>

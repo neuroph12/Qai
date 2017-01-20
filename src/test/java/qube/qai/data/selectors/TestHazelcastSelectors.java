@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class TestHazelcastSelectors extends QaiTestBase {
 
-    @Inject @Named("HAZELCAST_CLIENT")
+    @Inject //@Named("HAZELCAST_CLIENT")
     private HazelcastInstance hazelcastInstance;
 
     @Inject
@@ -111,7 +111,7 @@ public class TestHazelcastSelectors extends QaiTestBase {
      */
     public void testHazelcastWikipediaArticles() throws Exception {
 
-        IMap<String,WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKIPEDIA_SOURCE);
+        //IMap<String,WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKIPEDIA_SOURCE);
 
         List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
         Collection<SearchResult> results = wikipediaSearch.searchInputString("mouse", "title", 100);
