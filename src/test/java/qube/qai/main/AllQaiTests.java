@@ -20,6 +20,7 @@ import qube.qai.network.semantic.TestSemanticNetworkBuilder;
 import qube.qai.parsers.TestAntimirovParser;
 import qube.qai.parsers.TestWikiIntegration;
 import qube.qai.parsers.maths.TestMathParser;
+import qube.qai.persistence.TestModelStore;
 import qube.qai.persistence.mapstores.TestDatabaseMapStores;
 import qube.qai.persistence.mapstores.TestHazelcastMaps;
 import qube.qai.persistence.mapstores.TestIndexedDirectoryMapStore;
@@ -31,6 +32,7 @@ import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
 import qube.qai.procedure.archive.TestDirectoryIndexer;
 import qube.qai.procedure.archive.TestWikiArchiveIndexer;
+import qube.qai.procedure.finance.TestStockEntityInitialization;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
 import qube.qai.services.implementation.*;
@@ -92,6 +94,7 @@ public class AllQaiTests extends TestCase {
 //        suite.addTestSuite(TestStockEntityMapStore.class);
 //        suite.addTestSuite(TestUserMapStore.class);
 //        suite.addTestSuite(TestSessionMapStore.class);
+        suite.addTestSuite(TestModelStore.class);
 
         // persistence.search
         suite.addTestSuite(TestStockQuoteSearchService.class);
@@ -101,6 +104,7 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestWikiArchiveIndexer.class);
         suite.addTestSuite(TestWikiRipperProcedure.class);
         suite.addTestSuite(TestWikiSearch.class);
+        suite.addTestSuite(TestStockEntityInitialization.class);
 
         // procedure.analysis
         suite.addTestSuite(TestAnalysisProcedures.class);
