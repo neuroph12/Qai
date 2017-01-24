@@ -8,11 +8,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 /**
  * Created by rainbird on 12/21/15.
  */
-public class QaiTestNode {
+public class QaiTestNode extends QaiTestModule {
 
     private static Logger logger = LoggerFactory.getLogger("QaiTestNode");
 
@@ -22,7 +23,7 @@ public class QaiTestNode {
 
     private String NODE_NAME = "QaiTestNode";
 
-    @Inject //@Named("HAZELCAST_SERVER")
+    @Inject
     private HazelcastInstance hazelcastInstance;
 
     public QaiTestNode() {
@@ -32,10 +33,10 @@ public class QaiTestNode {
         // injector knows all
         // Server configuration lies in QaiServerModule
         // other Qai dependent services and things lie in QaiModule
-        QaiTestModule qaiTestModule = new QaiTestModule();
+        //QaiTestModule qaiTestModule = new QaiTestModule();
         QaiTestServerModule qaiTestServer = new QaiTestServerModule();
 
-        injector = Guice.createInjector(qaiTestServer, qaiTestModule);
+        injector = Guice.createInjector(qaiTestServer);
 
         // this looks crazy but just works...
         injector.injectMembers(qaiTestServer);
@@ -47,6 +48,11 @@ public class QaiTestNode {
         String instanceName = hazelcastInstance.getName();
         logger.info("hazelcastInstance with name: '" + instanceName + "' has been started");
 
+    }
+
+    @Override @Singleton
+    public HazelcastInstance provideHazelcastInstance() {
+        return hazelcastInstance;
     }
 
     public static void main(String[] params) {

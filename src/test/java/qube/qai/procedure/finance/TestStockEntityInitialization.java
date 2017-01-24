@@ -3,6 +3,7 @@ package qube.qai.procedure.finance;
 import com.google.inject.Injector;
 import com.hazelcast.core.MapStore;
 import junit.framework.TestCase;
+import qube.qai.main.QaiTestBase;
 import qube.qai.main.QaiTestServerModule;
 import qube.qai.persistence.StockCategory;
 import qube.qai.persistence.StockEntity;
@@ -16,9 +17,9 @@ import java.util.Formatter;
 /**
  * Created by rainbird on 1/21/17.
  */
-public class TestStockEntityInitialization extends TestCase {
+public class TestStockEntityInitialization extends QaiTestBase {
 
-    public void testSotckEntityInitialization() throws Exception {
+    public void restStockEntityInitialization() throws Exception {
 
         Injector injector = QaiTestServerModule.initStocksInjector();
 
@@ -39,17 +40,29 @@ public class TestStockEntityInitialization extends TestCase {
         assertNotNull(foundCategory);
         assertTrue(foundCategory.getEntities() != null && !foundCategory.getEntities().isEmpty());
 
-        EntityManager entityMaanger = ((DatabaseMapStore)categoryMapStore).getEntityManager();
+        EntityManager entityManager = ((DatabaseMapStore)categoryMapStore).getEntityManager();
         String queryString = "select c from StockEntity c where c.tickerSymbol like '%s' and c.tradedIn like '%s'";
         for (StockEntity entity : category.getEntities()) {
             String tickerSymbol = entity.getTickerSymbol();
             String tradedIn = entity.getTradedIn();
             String query = String.format(queryString, tickerSymbol, tradedIn);
-            StockEntity foundEntity = entityMaanger.createQuery(query, StockEntity.class).getSingleResult();
+            StockEntity foundEntity = entityManager.createQuery(query, StockEntity.class).getSingleResult();
             assertNotNull(foundEntity);
             assertTrue(foundEntity.getUuid().equals(entity.getUuid()));
         }
     }
 
+    public void testStockEntityInitializationProcedure() throws Exception {
+
+        Injector injector = QaiTestServerModule.initStocksInjector();
+        StockEntityInitializationProcedure procedure = new StockEntityInitializationProcedure();
+        injector.injectMembers(procedure);
+
+        assertTrue("for the moment this si good enough- testing the injector", true);
+
+        procedure.setName("test import procedure");
+        procedure.setCategoryName("Standard & Poor Top 500 Stocks");
+        procedure.setSelectedFile(StockEntityInitializationProcedure.S_AND_P_500_LISTING);
+    }
 
 }

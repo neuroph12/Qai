@@ -37,7 +37,7 @@ public class QaiTestModule extends AbstractModule {
 
     private static String NODE_NAME = "QaiTestNode";
 
-    private HazelcastInstance hazelcastInstance;
+    protected HazelcastInstance hazelcastInstance;
 
     private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
     //private static String wikipediaDirectory = "/media/pi/BET/wiki-archives/wikipedia_en.index";

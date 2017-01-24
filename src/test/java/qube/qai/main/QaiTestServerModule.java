@@ -27,6 +27,7 @@ import qube.qai.user.User;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
+import javax.persistence.EntityManager;
 import java.util.Properties;
 
 /**
@@ -92,6 +93,16 @@ public class QaiTestServerModule extends AbstractModule {
 //
 //        bind(SessionMapStore.class).toInstance(sessionMapStore);
     }
+
+//    @Provides @Named("STOCKS")
+//    public EntityManager provideStocksEntityManager() {
+//        return initStocksInjector().getInstance(EntityManager.class);
+//    }
+//
+//    @Provides @Named("USERS")
+//    public EntityManager provideUsersEntityManager() {
+//        return initUsersInjector().getInstance(EntityManager.class);
+//    }
 
     /**
      * StockQuotesSearchService

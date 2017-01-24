@@ -20,13 +20,13 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     @Column(name = "uuid", nullable = false)
     private String uuid;
 
-    @Column(name = "tickerSymbol", nullable = false)
+    @Column(name = "tickerSymbol")
     private String tickerSymbol;
 
     @Column(name = "tradedIn", nullable = false)
     private String tradedIn;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "security")
@@ -49,6 +49,36 @@ public class StockEntity implements Serializable, AcceptsVisitors {
 
     @Column(name = "CIK")
     private String CIK;
+
+    @Column(name = "yield")
+    private double yield;
+
+    @Column(name = "capital")
+    private double capital;
+
+    @Column(name = "weeklyHigh")
+    private double weeklyHigh;
+
+    @Column(name = "bookingValue")
+    private double bookingValue;
+
+    @Column(name = "weeklyLow")
+    private double weeklyLow;
+
+    @Column(name = "share")
+    private double share;
+
+    @Column(name = "marketPrice")
+    private double marketPrice;
+
+    @Column(name = "EBITDA")
+    private double ebitda;
+
+    @Column(name = "earnings")
+    private double earnings;
+
+    @Column(name = "sales")
+    private double sales;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tickerSymbol")
     private Set<StockQuote> quotes;
@@ -152,6 +182,94 @@ public class StockEntity implements Serializable, AcceptsVisitors {
 
     public void setCIK(String CIK) {
         this.CIK = CIK;
+    }
+
+    public double getYield() {
+        return yield;
+    }
+
+    public void setYield(double yield) {
+        this.yield = yield;
+    }
+
+    public double getCapital() {
+        return capital;
+    }
+
+    public void setCapital(double capital) {
+        this.capital = capital;
+    }
+
+    public double getWeeklyHigh() {
+        return weeklyHigh;
+    }
+
+    public void setWeeklyHigh(double weeklyHigh) {
+        this.weeklyHigh = weeklyHigh;
+    }
+
+    public double getBookingValue() {
+        return bookingValue;
+    }
+
+    public void setBookingValue(double bookingValue) {
+        this.bookingValue = bookingValue;
+    }
+
+    public double getWeeklyLow() {
+        return weeklyLow;
+    }
+
+    public void setWeeklyLow(double weeklyLow) {
+        this.weeklyLow = weeklyLow;
+    }
+
+    public double getShare() {
+        return share;
+    }
+
+    public void setShare(double share) {
+        this.share = share;
+    }
+
+    public double getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(double marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    public double getEbitda() {
+        return ebitda;
+    }
+
+    public void setEbitda(double ebitda) {
+        this.ebitda = ebitda;
+    }
+
+    public double getEarnings() {
+        return earnings;
+    }
+
+    public void setEarnings(double earnings) {
+        this.earnings = earnings;
+    }
+
+    public double getSales() {
+        return sales;
+    }
+
+    public void setSales(double sales) {
+        this.sales = sales;
+    }
+
+    public Set<StockQuote> getQuotes() {
+        return quotes;
+    }
+
+    public void setQuotes(Set<StockQuote> quotes) {
+        this.quotes = quotes;
     }
 
     @Override

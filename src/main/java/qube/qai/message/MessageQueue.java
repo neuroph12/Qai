@@ -26,7 +26,7 @@ public class MessageQueue implements MessageQueueInterface {
     public MessageQueue() {
     }
 
-    @Inject //@Named("HAZELCAST_CLIENT")
+    @Inject
     public MessageQueue(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
     }
