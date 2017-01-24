@@ -55,8 +55,9 @@ public class TestStockEntityInitialization extends QaiTestBase {
     public void testStockEntityInitializationProcedure() throws Exception {
 
         Injector injector = QaiTestServerModule.initStocksInjector();
+        EntityManager entityManager = injector.getInstance(EntityManager.class);
         StockEntityInitializationProcedure procedure = new StockEntityInitializationProcedure();
-        injector.injectMembers(procedure);
+        procedure.setEntityManager(entityManager);
 
         assertTrue("for the moment this si good enough- testing the injector", true);
 

@@ -252,4 +252,12 @@ public class StockEntityInitializationProcedure extends Procedure {
     public void setGetNumberOfRecordsCreated(int getNumberOfRecordsCreated) {
         this.getNumberOfRecordsCreated = getNumberOfRecordsCreated;
     }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 }
