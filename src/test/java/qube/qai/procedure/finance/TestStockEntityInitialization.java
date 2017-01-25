@@ -12,6 +12,7 @@ import qube.qai.persistence.mapstores.TestDatabaseMapStores;
 
 import javax.persistence.EntityManager;
 import java.util.Formatter;
+import java.util.Set;
 
 
 /**
@@ -64,6 +65,22 @@ public class TestStockEntityInitialization extends QaiTestBase {
         procedure.setName("test import procedure");
         procedure.setCategoryName("Standard & Poor Top 500 Stocks");
         procedure.setSelectedFile(StockEntityInitializationProcedure.S_AND_P_500_LISTING);
+
+        procedure.execute();
+        //assertTrue("all has gone good!", true);
+
+        Set<String> resultNames = procedure.getArguments().getResultNames();
+        assertTrue("there has to be result names", !resultNames.isEmpty());
+        log("result names: " + resultNames.toString());
+
+        StockCategory category = (StockCategory) procedure.getArguments().getResult(StockEntityInitializationProcedure.CATEGORY);
+        assertNotNull("there has to be a category", category);
+        Set<StockEntity> entities = category.getEntities();
+        assertNotNull("there have to be some entities", entities);
+        assertTrue("the entity listing should not be empty", !entities.isEmpty());
+        for (StockEntity entity : entities) {
+            log("entity: " + entity.getTickerSymbol() + ": '" + entity.getName() + "'");
+        }
     }
 
 }

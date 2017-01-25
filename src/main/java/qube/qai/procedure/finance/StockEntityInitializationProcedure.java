@@ -26,6 +26,8 @@ public class StockEntityInitializationProcedure extends Procedure {
 
     public static String CATEGORY_NAME = "NAME_OF_THE_STOCK_CATEGORY";
 
+    public static String CATEGORY = "CATEGORY";
+
     public static String NUMBER_OF_RECORDS = "NUMBER_OF_RECORDS";
 
     public static String NUMBER_OF_RECORDS_CREATED = "NUMBER_OF_RECORDS_CREATED";
@@ -52,6 +54,8 @@ public class StockEntityInitializationProcedure extends Procedure {
 
     private int getNumberOfRecordsCreated;
 
+    private StockCategory category;
+
     @Inject
     private EntityManager entityManager;
 
@@ -61,13 +65,14 @@ public class StockEntityInitializationProcedure extends Procedure {
         createCheckAndInsertStockEntitesFromFile();
 
         // after all is done and said, these are the results we are expected to record
-        logger.info("adding '" + CATEGORY_NAME + "' to results");
+        logger.debug("adding '" + CATEGORY_NAME + "' to results");
         arguments.addResult(CATEGORY_NAME, categoryName);
-        logger.info("adding '" + NUMBER_OF_RECORDS + "' to results");
+        logger.debug("adding '" + NUMBER_OF_RECORDS + "' to results");
         arguments.addResult(NUMBER_OF_RECORDS, numberOfRecords);
-        logger.info("adding '" + NUMBER_OF_RECORDS_CREATED + "' to results");
+        logger.debug("adding '" + NUMBER_OF_RECORDS_CREATED + "' to results");
         arguments.addResult(NUMBER_OF_RECORDS_CREATED, getNumberOfRecordsCreated);
-
+        logger.debug("adding '" + CATEGORY + "' to results");
+        arguments.addResult(CATEGORY, category);
     }
 
     public void createCheckAndInsertStockEntitesFromFile() {
@@ -75,25 +80,27 @@ public class StockEntityInitializationProcedure extends Procedure {
         String filename = pathToCsvFiles + selectedFile; //otherListedFile; //nyseFile ;
         Model csvModel = RDFDataMgr.loadModel(filename);
 
-        StockCategory category = new StockCategory();
+        category = new StockCategory();
         category.setName(categoryName);
 
         // field names which come with the rows and rows start with 1...
         int count = 1;
         boolean done = false;
+        Property property = csvModel.createProperty(rowPropertyName);
 
+        // start looping over the rows
         while (!done) {
 
-            Property property = csvModel.createProperty(rowPropertyName);
             Literal countLiteral = csvModel.createTypedLiteral(count);
             ResIterator resIt = csvModel.listSubjectsWithProperty(property, countLiteral);
 
             // if there is nothing in the iterator to iterate upon, we simply break
             if (!resIt.hasNext()) {
-                logger.info("stopping because res-iterator at end");
+                logger.debug("stopping because res-iterator at end");
                 done = true;
             } else {
 
+                // loop over the row-properties and create the entity
                 while (resIt.hasNext()) {
                     Resource resource = resIt.next();
                     logger.info("-> row (" + count + ")");
@@ -110,20 +117,25 @@ public class StockEntityInitializationProcedure extends Procedure {
                 // now increment the row-number to pick
                 count++;
             }
-
-            entityManager.persist(category);
-
-            // now we are done and can change the flag
-            done = true;
-            numberOfRecords = count-1;
-            logger.info("printed " + (count-1) + " rows from csv-file");
         }
+
+        // now save the category we have just created
+        entityManager.persist(category);
+
+        // now we are done and can change the flag
+        numberOfRecords = count-1;
+        logger.info("read " + (count-1) + " rows from csv-file");
     }
 
     public StockEntity findStockEntityDatabaseCopy(StockEntity entity) {
         String queryString = "select c from StockEntity c where c.tickerSymbol like '%s' and c.name like '%s'";
         String query = String.format(queryString, entity.getTickerSymbol(), entity.getName());
-        StockEntity foundEntity = entityManager.createQuery(query, StockEntity.class).getSingleResult();
+        StockEntity foundEntity = null;
+        try {
+            foundEntity = entityManager.createQuery(query, StockEntity.class).getSingleResult();
+        } catch (Exception e) {
+            logger.info("query for: " + entity.getTickerSymbol() + " '" + entity.getName() + "' resulted nothing");
+        }
         return foundEntity;
     }
 
@@ -259,5 +271,13 @@ public class StockEntityInitializationProcedure extends Procedure {
 
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
+    }
+
+    public StockCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(StockCategory category) {
+        this.category = category;
     }
 }
