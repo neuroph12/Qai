@@ -25,6 +25,7 @@ import qube.qai.persistence.mapstores.TestDatabaseMapStores;
 import qube.qai.persistence.mapstores.TestHazelcastMaps;
 import qube.qai.persistence.mapstores.TestIndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.TestMapStores;
+import qube.qai.persistence.search.TestProcedureDataService;
 import qube.qai.persistence.search.TestRDFTripleSearchService;
 import qube.qai.persistence.search.TestStockQuoteSearchService;
 import qube.qai.procedure.TestWikiSearch;
@@ -87,18 +88,13 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestMapStores.class);
         suite.addTestSuite(TestHazelcastMaps.class);
         suite.addTestSuite(TestIndexedDirectoryMapStore.class);
-        // these tests are superceded and replaced by
         suite.addTestSuite(TestDatabaseMapStores.class);
-//        suite.addTestSuite(TestStockQuoteMapStore.class);
-//        suite.addTestSuite(TestRdfTripleFileMapStore.class);
-//        suite.addTestSuite(TestStockEntityMapStore.class);
-//        suite.addTestSuite(TestUserMapStore.class);
-//        suite.addTestSuite(TestSessionMapStore.class);
         suite.addTestSuite(TestModelStore.class);
 
         // persistence.search
         suite.addTestSuite(TestStockQuoteSearchService.class);
         suite.addTestSuite(TestRDFTripleSearchService.class);
+        suite.addTestSuite(TestProcedureDataService.class);
 
         // procedure
         suite.addTestSuite(TestWikiArchiveIndexer.class);

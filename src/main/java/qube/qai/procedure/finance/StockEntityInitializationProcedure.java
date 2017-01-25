@@ -133,6 +133,7 @@ public class StockEntityInitializationProcedure extends Procedure {
         StockEntity foundEntity = null;
         try {
             foundEntity = entityManager.createQuery(query, StockEntity.class).getSingleResult();
+            logger.info("query for: " + entity.getTickerSymbol() + " '" + entity.getName() + "' resulted with " + foundEntity.getUuid());
         } catch (Exception e) {
             logger.info("query for: " + entity.getTickerSymbol() + " '" + entity.getName() + "' resulted nothing");
         }

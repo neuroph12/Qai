@@ -68,6 +68,7 @@ public class TestStockEntityInitialization extends QaiTestBase {
 
         assertTrue("for the moment this is good enough- testing the injector", true);
 
+        int overallCount = 0;
         for (String listingName : listings) {
             procedure.setName("test import procedure");
             procedure.setCategoryName("Testing: " + listingName);
@@ -87,8 +88,12 @@ public class TestStockEntityInitialization extends QaiTestBase {
             assertTrue("the entity listing should not be empty", !entities.isEmpty());
             for (StockEntity entity : entities) {
                 log("entity: " + entity.getTickerSymbol() + ": '" + entity.getName() + "'");
+                overallCount++;
             }
         }
+        log("---------------------------------------------------------------------");
+        log("altogether: " + overallCount + " stock-entities added in the database");
+        log("---------------------------------------------------------------------");
     }
 
 }
