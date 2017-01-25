@@ -60,26 +60,34 @@ public class TestStockEntityInitialization extends QaiTestBase {
         StockEntityInitializationProcedure procedure = new StockEntityInitializationProcedure();
         procedure.setEntityManager(entityManager);
 
-        assertTrue("for the moment this si good enough- testing the injector", true);
+        String[] listings = {StockEntityInitializationProcedure.S_AND_P_500_LISTING,
+                StockEntityInitializationProcedure.NYSE_LISTING,
+                StockEntityInitializationProcedure.OTHER_LISTED_ENTITIES,
+                StockEntityInitializationProcedure.NASDAQ_LISTING
+        };
 
-        procedure.setName("test import procedure");
-        procedure.setCategoryName("Standard & Poor Top 500 Stocks");
-        procedure.setSelectedFile(StockEntityInitializationProcedure.S_AND_P_500_LISTING);
+        assertTrue("for the moment this is good enough- testing the injector", true);
 
-        procedure.execute();
-        //assertTrue("all has gone good!", true);
+        for (String listingName : listings) {
+            procedure.setName("test import procedure");
+            procedure.setCategoryName("Testing: " + listingName);
+            procedure.setSelectedFile(listingName);
 
-        Set<String> resultNames = procedure.getArguments().getResultNames();
-        assertTrue("there has to be result names", !resultNames.isEmpty());
-        log("result names: " + resultNames.toString());
+            procedure.execute();
+            //assertTrue("all has gone good!", true);
 
-        StockCategory category = (StockCategory) procedure.getArguments().getResult(StockEntityInitializationProcedure.CATEGORY);
-        assertNotNull("there has to be a category", category);
-        Set<StockEntity> entities = category.getEntities();
-        assertNotNull("there have to be some entities", entities);
-        assertTrue("the entity listing should not be empty", !entities.isEmpty());
-        for (StockEntity entity : entities) {
-            log("entity: " + entity.getTickerSymbol() + ": '" + entity.getName() + "'");
+            Set<String> resultNames = procedure.getArguments().getResultNames();
+            assertTrue("there has to be result names", !resultNames.isEmpty());
+            log("result names: " + resultNames.toString());
+
+            StockCategory category = (StockCategory) procedure.getArguments().getResult(StockEntityInitializationProcedure.CATEGORY);
+            assertNotNull("there has to be a category", category);
+            Set<StockEntity> entities = category.getEntities();
+            assertNotNull("there have to be some entities", entities);
+            assertTrue("the entity listing should not be empty", !entities.isEmpty());
+            for (StockEntity entity : entities) {
+                log("entity: " + entity.getTickerSymbol() + ": '" + entity.getName() + "'");
+            }
         }
     }
 
