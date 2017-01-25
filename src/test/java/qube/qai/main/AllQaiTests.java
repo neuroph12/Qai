@@ -37,6 +37,7 @@ import qube.qai.procedure.finance.TestStockEntityInitialization;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
 import qube.qai.services.implementation.*;
+import qube.qai.util.TestProcedureToRdfConverter;
 
 /**
  * Created by rainbird on 5/26/16.
@@ -120,6 +121,9 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestYouNMeNAllDistributed.class);
         suite.addTestSuite(TestHowFairAreMarketsDistributed.class);
         suite.addTestSuite(TestTextTranslationDistributed.class);
+
+        // util
+        suite.addTestSuite(TestProcedureToRdfConverter.class);
 
         return suite;
     }

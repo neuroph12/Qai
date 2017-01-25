@@ -1,6 +1,7 @@
 package qube.qai.persistence.search;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jena.rdf.model.Model;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.DataServiceInterface;
 import qube.qai.services.SearchServiceInterface;
@@ -55,6 +56,11 @@ public class RDFTriplesSearchService implements DataServiceInterface {
         }
 
         return results;
+    }
+
+    @Override
+    public void save(Model model) {
+
     }
 
     @Override
