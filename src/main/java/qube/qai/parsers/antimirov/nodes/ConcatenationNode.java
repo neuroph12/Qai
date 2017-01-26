@@ -41,6 +41,10 @@ public final class ConcatenationNode
         this.check();
     }//constructor
 
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visit(this);
+    }
 
     /**
      * Returns TRUE if type is nullable, otherwise FALSE (rule NA6).

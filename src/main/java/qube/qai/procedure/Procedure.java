@@ -11,8 +11,10 @@ import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.Arguments;
 import qube.qai.data.DataVisitor;
 import qube.qai.data.SelectionOperator;
+import qube.qai.parsers.antimirov.IncompleteTypeException;
 import qube.qai.parsers.antimirov.nodes.Name;
 import qube.qai.parsers.antimirov.nodes.NameNode;
+import qube.qai.parsers.antimirov.nodes.Node;
 import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.User;
@@ -25,7 +27,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 11/27/15.
  */
-public abstract class Procedure extends NameNode
+public abstract class Procedure extends Node
         implements Serializable, Runnable, HazelcastInstanceAware, AcceptsVisitors {
 
     protected static Logger logger = LoggerFactory.getLogger("Procedure");

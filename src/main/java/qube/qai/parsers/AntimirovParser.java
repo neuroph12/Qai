@@ -50,12 +50,8 @@ public class AntimirovParser {
                     node = new EmptyNode();
                     currentNode = node;
                 } else {
-                    try {
-                        node = new Node(name);
-                        currentNode = node;
-                    } catch (IncompleteTypeException e) {
-                        logger.error("AntimirovParser.name() threw IncompleteTypeException:", e);
-                    }
+                    node = new Node(name);
+                    currentNode = node;
                 }
 
                 return node;

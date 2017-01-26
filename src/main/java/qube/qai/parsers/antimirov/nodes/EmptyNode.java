@@ -28,6 +28,10 @@ public final class EmptyNode
         this.name = new Name(Name.EMPTY);
     }//constructor
 
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visit(this);
+    }
 
     /**
      * Does nothing, because <code>REmptyType</code> does not use members.

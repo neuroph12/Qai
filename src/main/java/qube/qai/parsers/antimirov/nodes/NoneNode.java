@@ -27,6 +27,10 @@ public final class NoneNode
         this.name = new Name(Name.NONE);
     }//constructor
 
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visit(this);
+    }
 
     /**
      * Does nothing, because <code>RNoneType</code> does not use members.

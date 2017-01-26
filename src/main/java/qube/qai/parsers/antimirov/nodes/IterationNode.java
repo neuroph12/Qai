@@ -61,6 +61,10 @@ public final class IterationNode
         this.check();
     }//constructor
 
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visit(this);
+    }
 
     /**
      * Constructor for class <code>RIterationType</code>. If

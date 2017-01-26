@@ -6,6 +6,7 @@ import qube.qai.parsers.antimirov.IncompleteTypeException;
 import qube.qai.parsers.antimirov.IrregularContentRequestException;
 import qube.qai.parsers.antimirov.NoWellformedTypeException;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 
 
@@ -18,7 +19,7 @@ import java.util.Hashtable;
  * @author Stefan Hohenadel
  * @version 1.0
  */
-public abstract class BaseNode {
+public abstract class BaseNode implements VisitableNode, Serializable {
 
     /**
      * The name of the type.
@@ -61,6 +62,8 @@ public abstract class BaseNode {
         this.child2 = child2;
     }//constructor
 
+
+    public abstract void accept(NodeVisitor visitor);
 
     /**
      * Returns the name of the type. If type has no name,

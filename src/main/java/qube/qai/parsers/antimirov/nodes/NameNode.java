@@ -46,6 +46,10 @@ public class NameNode extends BaseNode {
         this.name = name;
     }//constructor
 
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visit(this);
+    }
 
     /**
      * Does nothing, because <code>RNameType</code> does not use its

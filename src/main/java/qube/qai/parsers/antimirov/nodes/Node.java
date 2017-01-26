@@ -30,7 +30,8 @@ public class Node
      *                                 constructed as valid node type.
      */
     public Node(Name name)
-            throws IncompleteTypeException {
+            //throws IncompleteTypeException {
+    {
 
         super(null, null);
         this.name = name;
@@ -54,6 +55,10 @@ public class Node
         this.check();
     }//constructor
 
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visit(this);
+    }
 
     /**
      * Does nothing, because <code>RNodeType</code> does not use its
@@ -208,7 +213,8 @@ public class Node
      *         otherwise FALSE.
      */
     public boolean check()
-            throws IncompleteTypeException {
+            //throws IncompleteTypeException {
+    {
 
         return (this.name != null);
     }//check

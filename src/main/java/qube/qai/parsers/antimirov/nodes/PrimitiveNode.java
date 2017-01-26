@@ -31,6 +31,10 @@ public class PrimitiveNode
         this.name = name;
     }//constructor
 
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visit(this);
+    }
 
     /**
      * Does nothing, because <code>RPrimitiveType</code> does not use
