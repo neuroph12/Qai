@@ -9,8 +9,18 @@ import qube.qai.procedure.Procedure;
 public class ProcedureToRdfConverter {
 
     public static Model createProcedureModel(Procedure procedure) {
+
         Model model = null;
 
+
         return model;
+    }
+
+    public static Procedure createProcedureFromModel(Model model) {
+
+        Procedure procedure = null;
+
+
+        return null;
     }
 }

@@ -10,11 +10,14 @@ import qube.qai.services.implementation.SearchResult;
 import qube.qai.util.ProcedureToRdfConverter;
 
 import java.util.Collection;
+import java.util.logging.Logger;
 
 /**
  * Created by rainbird on 1/25/17.
  */
 public class TestProcedureDataService extends TestCase {
+
+    Logger logger = Logger.getLogger("TestProcedureDataService");
 
     public void testProcedureDataService() throws Exception {
 

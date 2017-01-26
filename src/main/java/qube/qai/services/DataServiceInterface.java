@@ -17,4 +17,7 @@ public interface DataServiceInterface extends SearchServiceInterface {
      * url's to their results, stock-entities and so on. i guess, there will be more later on as well.
      */
     public void save(Model model);
+
+    public void update(Model model);
+
 }

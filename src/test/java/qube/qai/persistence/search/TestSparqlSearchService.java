@@ -12,8 +12,10 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.VCARD;
+import qube.qai.services.implementation.SearchResult;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
@@ -26,8 +28,26 @@ public class TestSparqlSearchService extends TestCase {
 
     private String serviceURL = "http://192.168.1.2:8890/sparql";
 
+    /**
+     * this is the main test which should be running
+     * all the others are either to be remved or to be checked
+     * as to their relevance- experimental code, i suspect
+     * @throws Exception
+     */
+    public void testSparqlSearchService() throws Exception {
 
-    public void testRemoteSparql() throws Exception {
+        SparqlSearchService searchService = new SparqlSearchService();
+        Collection<SearchResult> results = searchService.searchInputString("*", "uuid", 0);
+        assertNotNull("there has to be some results", results);
+        assertTrue("there has to be something in the results", !results.isEmpty());
+
+    }
+
+    /**
+     * i think this will be removed later on
+     * @throws Exception
+     */
+    public void restRemoteSparql() throws Exception {
         HttpAuthenticator authenticator = new SimpleAuthenticator("dba", "dba".toCharArray());
         try(QueryExecution qe = QueryExecutionFactory.sparqlService(serviceURL,
                 "SELECT * WHERE { ?s a ?type }",
@@ -37,7 +57,10 @@ public class TestSparqlSearchService extends TestCase {
         }
     }
 
-
+    /**
+     * right now not in use
+     * @throws Exception
+     */
     public void restRdfModelAndAll() throws Exception {
 
         // some definitions
@@ -71,6 +94,10 @@ public class TestSparqlSearchService extends TestCase {
 
     }
 
+    /**
+     * currently not in use
+     * @throws Exception
+     */
     public void restRdfReadingFile() throws Exception {
 
         // create an empty model

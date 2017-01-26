@@ -39,6 +39,7 @@ public class WikiRipperProcedure extends Procedure {
 
     // mainly for testing reasons
     public WikiRipperProcedure() {
+        super("WikiRipperProcedure");
     }
 
     @Override

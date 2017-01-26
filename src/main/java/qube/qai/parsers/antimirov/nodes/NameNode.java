@@ -18,8 +18,7 @@ import java.util.Iterator;
  * @see Inequality
  * @see BaseNode
  */
-public final class NameNode
-        extends BaseNode {
+public class NameNode extends BaseNode {
 
 
     /**

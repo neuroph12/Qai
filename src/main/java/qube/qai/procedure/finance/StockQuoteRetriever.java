@@ -16,6 +16,10 @@ public class StockQuoteRetriever extends Procedure {
     @Inject
     private SelectorProvider provider;
 
+    public StockQuoteRetriever(String name) {
+        super(name);
+    }
+
     @Override
     public void execute() {
         Collection<StockQuote> returnValue = new ArrayList<StockQuote>();

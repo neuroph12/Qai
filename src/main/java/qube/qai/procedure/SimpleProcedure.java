@@ -7,6 +7,10 @@ import qube.qai.data.Arguments;
  */
 public class SimpleProcedure extends Procedure {
 
+    public SimpleProcedure(String name) {
+        super(name);
+    }
+
     @Override
     public void execute() {
         // do nothing

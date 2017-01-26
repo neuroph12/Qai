@@ -11,6 +11,8 @@ import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.Arguments;
 import qube.qai.data.DataVisitor;
 import qube.qai.data.SelectionOperator;
+import qube.qai.parsers.antimirov.nodes.Name;
+import qube.qai.parsers.antimirov.nodes.NameNode;
 import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.User;
@@ -23,7 +25,8 @@ import java.util.Collection;
 /**
  * Created by rainbird on 11/27/15.
  */
-public abstract class Procedure implements Serializable, Runnable, HazelcastInstanceAware, AcceptsVisitors {
+public abstract class Procedure extends NameNode
+        implements Serializable, Runnable, HazelcastInstanceAware, AcceptsVisitors {
 
     protected static Logger logger = LoggerFactory.getLogger("Procedure");
 
@@ -57,14 +60,16 @@ public abstract class Procedure implements Serializable, Runnable, HazelcastInst
 
     protected Arguments arguments;
 
-    public Procedure() {
-        uuid = UUIDService.uuidString();
-        buildArguments();
-    }
+//    public Procedure() {
+//        uuid = UUIDService.uuidString();
+//        buildArguments();
+//    }
 
     public Procedure(String name) {
-        this();
+        super(new Name(name));
+        this.uuid = UUIDService.uuidString();
         this.name = name;
+        buildArguments();
     }
 
     /**
@@ -171,7 +176,7 @@ public abstract class Procedure implements Serializable, Runnable, HazelcastInst
         this.uuid = uuid;
     }
 
-    public String getName() {
+    public String getNameString() {
         return name;
     }
 

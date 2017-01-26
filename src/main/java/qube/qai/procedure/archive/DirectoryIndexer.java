@@ -55,7 +55,7 @@ public class DirectoryIndexer extends ProcedureDecorator {
     }
 
     public DirectoryIndexer(String directoryToIndex, String indexDirectory) {
-        super(new SimpleProcedure());
+        super(new SimpleProcedure("Dummy"));
         this.directoryToIndex = directoryToIndex;
         this.indexDirectory = indexDirectory;
     }

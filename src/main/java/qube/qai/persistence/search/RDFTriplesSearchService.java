@@ -60,7 +60,12 @@ public class RDFTriplesSearchService implements DataServiceInterface {
 
     @Override
     public void save(Model model) {
+        throw new RuntimeException("method not implemented");
+    }
 
+    @Override
+    public void update(Model model) {
+        throw new RuntimeException("method not implemented");
     }
 
     @Override

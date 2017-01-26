@@ -59,6 +59,10 @@ public class StockEntityInitializationProcedure extends Procedure {
     @Inject
     private EntityManager entityManager;
 
+    public StockEntityInitializationProcedure(String name) {
+        super(name);
+    }
+
     @Override
     public void execute() {
 
