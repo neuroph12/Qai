@@ -65,6 +65,7 @@ public abstract class BaseNode implements VisitableNode, Serializable {
     public abstract void accept(NodeVisitor visitor);
 
     public void childrenAccept(NodeVisitor visitor) {
+        accept(visitor);
         if (child1 != null) {
             child1.accept(visitor);
             child1.childrenAccept(visitor);

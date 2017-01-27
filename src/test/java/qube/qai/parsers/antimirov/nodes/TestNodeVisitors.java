@@ -10,22 +10,22 @@ import java.util.logging.Logger;
 public class TestNodeVisitors extends TestCase {
 
     Logger logger = Logger.getLogger("TestNodeVisitors");
-    StringBuffer buffer = new StringBuffer();
+    StringBuffer buffer;
 
     public void testVisitorPattern() throws Exception {
 
+        buffer = new StringBuffer();
         BaseNode node = new ConcatenationNode(new ConcatenationNode(new Node(new Name("foo")),
                 new Node(new Name("baz"), new PrimitiveNode(new Name("integer")))),
                 new Node(new Name("bar"), new PrimitiveNode(new Name("double"))));;
         NodeVisitor visitor = createVisitor();
         node.childrenAccept(visitor);
-        log("buffer collected:" + buffer.toString());
-        assertTrue("concatenation foo baz integer bar double ".equals(buffer.toString()));
+        log("buffer collected: '" + buffer.toString() + "'");
+        assertTrue("concatenation concatenation concatenation foo foo baz baz integer integer bar bar double double ".equals(buffer.toString()));
     }
 
     private NodeVisitor createVisitor() {
         NodeVisitor visitor = new NodeVisitor() {
-
 
             @Override
             public void visit(AlternationNode node) {
@@ -72,6 +72,7 @@ public class TestNodeVisitors extends TestCase {
     }
 
     private void log(String message) {
-        System.out.println(message);
+        //System.out.println(message);
+        logger.info(message);
     }
 }
