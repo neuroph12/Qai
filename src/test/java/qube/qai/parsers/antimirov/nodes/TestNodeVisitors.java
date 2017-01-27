@@ -21,7 +21,7 @@ public class TestNodeVisitors extends TestCase {
         NodeVisitor visitor = createVisitor();
         node.childrenAccept(visitor);
         log("buffer collected: '" + buffer.toString() + "'");
-        assertTrue("concatenation concatenation concatenation foo foo baz baz integer integer bar bar double double ".equals(buffer.toString()));
+        assertTrue("concatenation concatenation foo baz integer bar double ".equals(buffer.toString()));
     }
 
     private NodeVisitor createVisitor() {
