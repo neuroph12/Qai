@@ -109,12 +109,12 @@ public class TestMatrix extends TestCase {
         final long tmpRowIndex = Uniform.randomInteger(tmpMaxDimension);
         final long tmpColumnIndex = Uniform.randomInteger(tmpMaxDimension);
 
-        // Using the arbitrary dimensinal interface/facade we will update an entire row (all columns) of the first matrix of the first cube...
+        // Using the arbitrary dimensinal interface/facade we will remove an entire row (all columns) of the first matrix of the first cube...
         long[] tmpReferenceToFirstElement = new long[] { tmpRowIndex, 0L, 0L, 0L };
         int tmpDimension = 1; // That's the column-dimension
         tmpArrayAnyD.fillSet(tmpReferenceToFirstElement, tmpDimension, PI);
 
-        // Using the arbitrary dimensional interface/facade we will update an entire row (all columns) of the first matrix of the first cube...
+        // Using the arbitrary dimensional interface/facade we will remove an entire row (all columns) of the first matrix of the first cube...
         tmpReferenceToFirstElement = new long[] { 0L, tmpColumnIndex, 0L, 0L };
         tmpDimension = 0; // That's the row-dimension
         tmpArrayAnyD.fillSet(tmpReferenceToFirstElement, tmpDimension, PI);

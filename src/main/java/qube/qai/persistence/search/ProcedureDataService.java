@@ -22,7 +22,7 @@ public class ProcedureDataService implements DataServiceInterface {
         ArrayList<SearchResult> results = new ArrayList<>();
 
         dataset.begin(ReadWrite.READ);
-        String queryString = "";
+        String queryString = "select * from " + fieldName + " where " + searchString;
         QueryExecution queryExec = QueryExecutionFactory.create(queryString, dataset);
         ResultSet resultSet = queryExec.execSelect();
         for (; resultSet.hasNext(); ) {
@@ -35,17 +35,25 @@ public class ProcedureDataService implements DataServiceInterface {
             }
         }
 
+        dataset.end();
+
         return results;
     }
 
     @Override
     public void save(Model model) {
-        throw new RuntimeException("method not implemented");
+        dataset.begin(ReadWrite.WRITE);
+        dataset.getDefaultModel().add(model);
+        dataset.commit();
+        dataset.end();
     }
 
     @Override
-    public void update(Model model) {
-        throw new RuntimeException("method not implemented");
+    public void remove(Model model) {
+        dataset.begin(ReadWrite.WRITE);
+        dataset.getDefaultModel().remove(model);
+        dataset.commit();
+        dataset.end();
     }
 
     @Override

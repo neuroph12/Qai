@@ -180,6 +180,16 @@ public class TestAntimirovParser extends TestCase {
         assertTrue("found: " + parsedNode.toString() + " should be: " + shouldNode.toString(), parsedNode.equals(shouldNode));
     }
 
+    public void testExpression() throws Exception {
+        AntimirovParser parser = new AntimirovParser();
+        BaseNode parsedNode = parser.expression().parse("(foo baz[integer] bar[double])* foo");
+        assertNotNull("parsed node should not be null", parsedNode);
+        BaseNode shouldNode = new ConcatenationNode(new ConcatenationNode(new Node(new Name("foo")),
+                new Node(new Name("baz"), new PrimitiveNode(new Name("integer")))),
+                new Node(new Name("bar"), new PrimitiveNode(new Name("double"))));
+        assertTrue("found: " + parsedNode.toString() + " should be: " + shouldNode.toString(), parsedNode.equals(shouldNode));
+    }
+
     private void log(String message) {
         if (debug) {
             System.out.println(message);

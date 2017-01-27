@@ -77,6 +77,10 @@ public class AntimirovParser {
         return Parsers.or(concatenation(), alternation(), iteration());
     }
 
+    public Parser<BaseNode> expression() {
+        return Parsers.or(paranthesis(expr()), expr());
+    }
+
     public Parser<BaseNode> paranthesis(Parser<BaseNode> base) {
 
         final Parser.Reference<BaseNode> baseRef = base.newReference();

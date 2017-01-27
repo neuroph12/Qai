@@ -19,6 +19,7 @@ import qube.qai.network.neural.trainer.TestNeuralNetworkTraining;
 import qube.qai.network.semantic.TestSemanticNetworkBuilder;
 import qube.qai.parsers.TestAntimirovParser;
 import qube.qai.parsers.TestWikiIntegration;
+import qube.qai.parsers.antimirov.nodes.TestNodeVisitors;
 import qube.qai.parsers.maths.TestMathParser;
 import qube.qai.persistence.TestModelStore;
 import qube.qai.persistence.mapstores.TestDatabaseMapStores;
@@ -84,6 +85,9 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestWikiIntegration.class);
         suite.addTestSuite(TestAntimirovParser.class);
         suite.addTestSuite(TestMathParser.class);
+
+        // parsers.antimirov.nodes
+        suite.addTestSuite(TestNodeVisitors.class);
 
         // persistence.mapstores
         suite.addTestSuite(TestMapStores.class);

@@ -57,13 +57,23 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      *               current type.
      */
     public BaseNode(BaseNode child1, BaseNode child2) {
-
         this.child1 = child1;
         this.child2 = child2;
     }//constructor
 
 
     public abstract void accept(NodeVisitor visitor);
+
+    public void childrenAccept(NodeVisitor visitor) {
+        if (child1 != null) {
+            child1.accept(visitor);
+            child1.childrenAccept(visitor);
+        }
+        if (child2 != null) {
+            child2.accept(visitor);
+            child2.childrenAccept(visitor);
+        }
+    }
 
     /**
      * Returns the name of the type. If type has no name,

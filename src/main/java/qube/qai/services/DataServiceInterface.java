@@ -18,6 +18,6 @@ public interface DataServiceInterface extends SearchServiceInterface {
      */
     public void save(Model model);
 
-    public void update(Model model);
+    public void remove(Model model);
 
 }
