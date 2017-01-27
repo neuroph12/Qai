@@ -48,8 +48,6 @@ public abstract class Procedure extends Node
 
     protected User user;
 
-    protected String uuid;
-
     protected String name;
 
     protected String description;
@@ -72,6 +70,11 @@ public abstract class Procedure extends Node
         this.uuid = UUIDService.uuidString();
         this.name = name;
         buildArguments();
+    }
+
+    public Procedure(String name, Procedure child) {
+        this(name);
+        setFirstChild(child);
     }
 
     /**
@@ -168,14 +171,6 @@ public abstract class Procedure extends Node
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     public String getNameString() {

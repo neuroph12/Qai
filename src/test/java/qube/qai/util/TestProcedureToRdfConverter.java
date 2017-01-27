@@ -5,6 +5,7 @@ import org.apache.jena.rdf.model.Model;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.SelectionProcedure;
 import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
+import qube.qai.services.implementation.UUIDService;
 
 import java.util.logging.Logger;
 
@@ -20,17 +21,34 @@ public class TestProcedureToRdfConverter extends TestCase {
         SelectionProcedure selection = new SelectionProcedure();
         Procedure procedure = NeuralNetworkAnalysis.Factory.constructProcedure(selection);
 
-        Model model = ProcedureToRdfConverter.createProcedureModel(procedure);
+        String uuid = UUIDService.uuidString();
+        Model model = createDummyModel(uuid);
         assertNotNull("there has to be a model", model);
+
+
     }
 
     public void testModelConversion() throws Exception {
 
-        SelectionProcedure selection = new SelectionProcedure();
-        Procedure procedure = NeuralNetworkAnalysis.Factory.constructProcedure(selection);
+        Procedure procedure = createDummyProcedure();
         Model model = ProcedureToRdfConverter.createProcedureModel(procedure);
 
         Procedure backProc = ProcedureToRdfConverter.createProcedureFromModel(model);
 
     }
+
+    private Procedure createDummyProcedure() {
+
+        SelectionProcedure selection = new SelectionProcedure();
+        Procedure procedure = null;
+
+        return procedure;
+    }
+
+    private Model createDummyModel(String uuid) {
+        Model model = null;
+
+        return model;
+    }
+
 }

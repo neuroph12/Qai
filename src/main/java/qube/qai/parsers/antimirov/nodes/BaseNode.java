@@ -5,6 +5,7 @@ import qube.qai.parsers.antimirov.IllegalConcatenationException;
 import qube.qai.parsers.antimirov.IncompleteTypeException;
 import qube.qai.parsers.antimirov.IrregularContentRequestException;
 import qube.qai.parsers.antimirov.NoWellformedTypeException;
+import qube.qai.services.implementation.UUIDService;
 
 import java.io.Serializable;
 import java.util.Hashtable;
@@ -20,6 +21,8 @@ import java.util.Hashtable;
  * @version 1.0
  */
 public abstract class BaseNode implements VisitableNode, Serializable {
+
+    protected String uuid;
 
     /**
      * The name of the type.
@@ -45,6 +48,7 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * Empty Constructor.
      */
     public BaseNode() {
+        this.uuid = UUIDService.uuidString();
     }
 
 
@@ -57,6 +61,7 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      *               current type.
      */
     public BaseNode(BaseNode child1, BaseNode child2) {
+        this();
         this.child1 = child1;
         this.child2 = child2;
     }//constructor
@@ -337,5 +342,11 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      */
     public abstract String toString();
 
+    public String getUuid() {
+        return uuid;
+    }
 
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 }//class
