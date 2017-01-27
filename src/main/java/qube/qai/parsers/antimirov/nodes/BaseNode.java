@@ -24,6 +24,8 @@ public abstract class BaseNode implements VisitableNode, Serializable {
 
     protected String uuid;
 
+    protected BaseNode parent;
+
     /**
      * The name of the type.
      */
@@ -64,6 +66,12 @@ public abstract class BaseNode implements VisitableNode, Serializable {
         this();
         this.child1 = child1;
         this.child2 = child2;
+        if (child1 != null) {
+            child1.setParent(this);
+        }
+        if (child2 != null) {
+            child2.setParent(this);
+        }
     }//constructor
 
 
@@ -100,6 +108,9 @@ public abstract class BaseNode implements VisitableNode, Serializable {
     public void setFirstChild(BaseNode t) {
 
         this.child1 = t;
+        if (child1 != null) {
+            child1.setParent(this);
+        }
     }//setFirstChild
 
 
@@ -122,6 +133,9 @@ public abstract class BaseNode implements VisitableNode, Serializable {
     public void setSecondChild(BaseNode t) {
 
         this.child2 = t;
+        if (child2 != null) {
+            child2.setParent(this);
+        }
     }//setSecondChild
 
 
@@ -349,4 +363,13 @@ public abstract class BaseNode implements VisitableNode, Serializable {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
+
+    public BaseNode getParent() {
+        return parent;
+    }
+
+    public void setParent(BaseNode parent) {
+        this.parent = parent;
+    }
+
 }//class
