@@ -7,8 +7,10 @@ import qube.qai.data.Arguments;
  */
 public class SimpleProcedure extends Procedure {
 
-    public SimpleProcedure(String name) {
-        super(name);
+    public static String NAME = "Simple Procedure";
+
+    public SimpleProcedure() {
+        super(NAME);
     }
 
     @Override

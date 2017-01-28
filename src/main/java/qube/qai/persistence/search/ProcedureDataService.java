@@ -27,12 +27,12 @@ public class ProcedureDataService implements DataServiceInterface {
         ResultSet resultSet = queryExec.execSelect();
         for (; resultSet.hasNext(); ) {
             QuerySolution solution = resultSet.next();
-            for (Iterator<String> it = solution.varNames(); it.hasNext(); ) {
-                String name = it.next();
+            String uuid = solution.getResource("uuid").toString();
+            // don't forget to add the things to the return list
+            // after converting the thing- obviously
+            SearchResult result = new SearchResult(fieldName, uuid, 10.0);
+            results.add(result);
 
-                // don't forget to add the things to the return list
-                // after converting the thing- obviously
-            }
         }
 
         dataset.end();

@@ -13,11 +13,13 @@ import java.util.Collection;
  */
 public class StockQuoteRetriever extends Procedure {
 
+    public static String NAME = "Stock Quote Retriever Procedure";
+
     @Inject
     private SelectorProvider provider;
 
-    public StockQuoteRetriever(String name) {
-        super(name);
+    public StockQuoteRetriever() {
+        super(NAME);
     }
 
     @Override

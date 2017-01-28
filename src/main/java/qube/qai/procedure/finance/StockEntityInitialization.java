@@ -57,7 +57,7 @@ public class StockEntityInitialization extends Procedure {
     @Inject
     private EntityManager entityManager;
 
-    public StockEntityInitialization(String name) {
+    public StockEntityInitialization() {
         super(NAME);
     }
 

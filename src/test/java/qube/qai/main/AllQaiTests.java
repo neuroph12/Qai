@@ -33,6 +33,7 @@ import qube.qai.procedure.TestWikiSearch;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
 import qube.qai.procedure.archive.TestDirectoryIndexer;
+import qube.qai.procedure.archive.TestSparqlIndexer;
 import qube.qai.procedure.archive.TestWikiArchiveIndexer;
 import qube.qai.procedure.finance.TestStockEntityInitialization;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
@@ -113,6 +114,7 @@ public class AllQaiTests extends TestCase {
 
         // procedure.archive
         suite.addTestSuite(TestDirectoryIndexer.class);
+        suite.addTestSuite(TestSparqlIndexer.class);
 
         // procedure.visitor
         suite.addTestSuite(TestProcedureVisitors.class);
