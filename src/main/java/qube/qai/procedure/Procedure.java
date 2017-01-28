@@ -32,6 +32,8 @@ public abstract class Procedure extends Node
 
     protected static Logger logger = LoggerFactory.getLogger("Procedure");
 
+    public static String NAME = "Procedure";
+
     public static final String PROCEDURES = "PROCEDURES";
 
     public final static String PROCESS_ENDED = "PROCESS_ENDED";
@@ -48,7 +50,7 @@ public abstract class Procedure extends Node
 
     protected User user;
 
-    protected String name;
+    //protected String name;
 
     protected String description;
 
@@ -60,20 +62,18 @@ public abstract class Procedure extends Node
 
     protected Arguments arguments;
 
-//    public Procedure() {
-//        uuid = UUIDService.uuidString();
-//        buildArguments();
-//    }
-
-    public Procedure(String name) {
-        super(new Name(name));
-        this.uuid = UUIDService.uuidString();
-        this.name = name;
+    public Procedure() {
+        super(new Name(NAME));
         buildArguments();
     }
 
-    public Procedure(String name, Procedure child) {
-        this(name);
+    public Procedure(String name) {
+        super(new Name(name));
+        buildArguments();
+    }
+
+    public Procedure(Procedure child) {
+        this();
         setFirstChild(child);
     }
 
@@ -97,7 +97,7 @@ public abstract class Procedure extends Node
     public abstract void buildArguments();
 
     protected SelectionOperator createSelector(Object data) {
-        return selectorFactory.buildSelector(name, uuid, data);
+        return selectorFactory.buildSelector(NAME, uuid, data);
     }
 
     public final void run() {
@@ -174,12 +174,12 @@ public abstract class Procedure extends Node
     }
 
     public String getNameString() {
-        return name;
+        return getName().getNameString();
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    //public void setName(String name) {
+    //    getName().setNameString(name);
+    //}
 
     public String getDescription() {
         return description;
@@ -213,19 +213,11 @@ public abstract class Procedure extends Node
         this.hasExecuted = hasExecuted;
     }
 
-    public Procedure getParent() {
-        return null;
+    public long getDuration() {
+        return duration;
     }
 
-    public void setParent(Procedure parent) {
-
-    }
-
-    public Collection<Procedure> getChildren() {
-        return null;
-    }
-
-    public void setChildren(Collection<Procedure> children) {
-
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 }

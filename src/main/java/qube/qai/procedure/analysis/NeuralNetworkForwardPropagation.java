@@ -35,7 +35,6 @@ public class NeuralNetworkForwardPropagation extends ProcedureDecorator {
 
     @Override
     public void buildArguments() {
-        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_NEURAL_NETWORK, INPUT_START_VECTOR, INPUT_NAMES, INPUT_DATES_FOR_STEPS);
         arguments.putResultNames(MAP_OF_TIME_SEQUENCE);

@@ -169,7 +169,6 @@ public class WikiArchiveIndexer extends ProcedureDecorator {
 
     @Override
     public void buildArguments() {
-        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_TARGET_FILENAME, INPUT_INDEX_DIRECTORY);
         // arguments.putResultNames(); // no need to return a name for the indexed directory?

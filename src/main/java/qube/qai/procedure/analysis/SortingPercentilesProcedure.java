@@ -29,7 +29,6 @@ public class SortingPercentilesProcedure extends ProcedureDecorator {
 
     @Override
     public void buildArguments() {
-        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(FROM, CRITERIA);
         arguments.putResultNames(SORTED_ITEMS, AVERAGE_TIME_SEQUENCE);

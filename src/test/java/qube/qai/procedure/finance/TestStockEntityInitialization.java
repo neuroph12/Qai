@@ -2,7 +2,6 @@ package qube.qai.procedure.finance;
 
 import com.google.inject.Injector;
 import com.hazelcast.core.MapStore;
-import junit.framework.TestCase;
 import qube.qai.main.QaiTestBase;
 import qube.qai.main.QaiTestServerModule;
 import qube.qai.persistence.StockCategory;
@@ -11,7 +10,6 @@ import qube.qai.persistence.mapstores.DatabaseMapStore;
 import qube.qai.persistence.mapstores.TestDatabaseMapStores;
 
 import javax.persistence.EntityManager;
-import java.util.Formatter;
 import java.util.Set;
 
 
@@ -57,20 +55,20 @@ public class TestStockEntityInitialization extends QaiTestBase {
 
         Injector injector = QaiTestServerModule.initStocksInjector();
         EntityManager entityManager = injector.getInstance(EntityManager.class);
-        StockEntityInitializationProcedure procedure = new StockEntityInitializationProcedure("StockEntityInitializationProcedure");
+        StockEntityInitialization procedure = new StockEntityInitialization("StockEntityInitialization");
         procedure.setEntityManager(entityManager);
 
-        String[] listings = {StockEntityInitializationProcedure.S_AND_P_500_LISTING,
-                StockEntityInitializationProcedure.NYSE_LISTING,
-                StockEntityInitializationProcedure.OTHER_LISTED_ENTITIES,
-                StockEntityInitializationProcedure.NASDAQ_LISTING
+        String[] listings = {StockEntityInitialization.S_AND_P_500_LISTING,
+                StockEntityInitialization.NYSE_LISTING,
+                StockEntityInitialization.OTHER_LISTED_ENTITIES,
+                StockEntityInitialization.NASDAQ_LISTING
         };
 
         assertTrue("for the moment this is good enough- testing the injector", true);
 
         int overallCount = 0;
         for (String listingName : listings) {
-            procedure.setName("test import procedure");
+            //procedure.setName("test import procedure");
             procedure.setCategoryName("Testing: " + listingName);
             procedure.setSelectedFile(listingName);
 
@@ -81,7 +79,7 @@ public class TestStockEntityInitialization extends QaiTestBase {
             assertTrue("there has to be result names", !resultNames.isEmpty());
             log("result names: " + resultNames.toString());
 
-            StockCategory category = (StockCategory) procedure.getArguments().getResult(StockEntityInitializationProcedure.CATEGORY);
+            StockCategory category = (StockCategory) procedure.getArguments().getResult(StockEntityInitialization.CATEGORY);
             assertNotNull("there has to be a category", category);
             Set<StockEntity> entities = category.getEntities();
             assertNotNull("there have to be some entities", entities);

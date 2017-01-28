@@ -137,6 +137,10 @@ public final class Name
     }//getNameString
 
 
+    public void setNameString(String name) {
+        this.name = name;
+    }
+
     /**
      * Returns TRUE, if instance represents same <code>String</code>
      * like <code>s</code>.

@@ -28,7 +28,6 @@ public class MatrixStatistics extends ProcedureDecorator {
 
     @Override
     public void buildArguments() {
-        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_MATRIX);
         arguments.putResultNames(MATRIX_METRICS, MATRIX_DATA_METRICS);

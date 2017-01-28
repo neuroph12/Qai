@@ -28,7 +28,6 @@ public class TimeSequenceAnalysis extends ProcedureDecorator {
 
     @Override
     public void buildArguments() {
-        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_TIME_SEQUENCE);
         arguments.putResultNames(TIME_SEQUENCE_METRICS);

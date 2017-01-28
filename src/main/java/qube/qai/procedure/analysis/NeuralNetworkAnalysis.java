@@ -27,7 +27,6 @@ public class NeuralNetworkAnalysis extends ProcedureDecorator {
 
     @Override
     public void buildArguments() {
-        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_NEURAL_NETWORK);
         arguments.putResultNames(NETWORK_METRICS);

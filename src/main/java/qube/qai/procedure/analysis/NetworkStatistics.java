@@ -25,7 +25,6 @@ public class NetworkStatistics extends ProcedureDecorator {
 
     @Override
     public void buildArguments() {
-        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_NETWORK);
         arguments.putResultNames(NETWORK_METRICS);

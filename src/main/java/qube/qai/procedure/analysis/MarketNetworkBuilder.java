@@ -93,7 +93,6 @@ public class MarketNetworkBuilder extends ProcedureDecorator implements NetworkB
 
     @Override
     public void buildArguments() {
-        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_STOCK_ENTITY_COLLECTION);
         arguments.putResultNames(NETWORK_METRICS,

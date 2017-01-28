@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 public class TestProcedureToRdfConverter extends TestCase {
 
-    Logger logger = Logger.getLogger("TestProcedureToRdfConverter");
+    private Logger logger = Logger.getLogger("TestProcedureToRdfConverter");
 
     public void testRdfConverter() throws Exception {
 
@@ -33,7 +33,7 @@ public class TestProcedureToRdfConverter extends TestCase {
         Procedure procedure = createDummyProcedure();
         Model model = ProcedureToRdfConverter.createProcedureModel(procedure);
 
-        Procedure backProc = ProcedureToRdfConverter.createProcedureFromModel(model);
+        Procedure backProc = ProcedureToRdfConverter.createProcedureFromModel("", model);
 
     }
 

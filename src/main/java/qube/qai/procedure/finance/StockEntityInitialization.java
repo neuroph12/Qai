@@ -1,6 +1,5 @@
 package qube.qai.procedure.finance;
 
-import com.hazelcast.core.MapStore;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
@@ -10,15 +9,14 @@ import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 /**
  * Created by rainbird on 1/21/17.
  */
-public class StockEntityInitializationProcedure extends Procedure {
+public class StockEntityInitialization extends Procedure {
 
-    public static String NAME = "WikiRipperProcedure";
+    public static String NAME = "Stock Entity Initialization Procedure";
 
     public static String DESCRIPTION = "Rips wiki-based archives to individual files which are easier to parse and to read";
 
@@ -59,8 +57,8 @@ public class StockEntityInitializationProcedure extends Procedure {
     @Inject
     private EntityManager entityManager;
 
-    public StockEntityInitializationProcedure(String name) {
-        super(name);
+    public StockEntityInitialization(String name) {
+        super(NAME);
     }
 
     @Override
@@ -204,7 +202,6 @@ public class StockEntityInitializationProcedure extends Procedure {
 
     @Override
     public void buildArguments() {
-        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_FILENAME);
         arguments.putResultNames(CATEGORY_NAME, NUMBER_OF_RECORDS, NUMBER_OF_RECORDS_CREATED);
@@ -219,7 +216,7 @@ public class StockEntityInitializationProcedure extends Procedure {
     }
 
     public static void setPathToCsvFiles(String pathToCsvFiles) {
-        StockEntityInitializationProcedure.pathToCsvFiles = pathToCsvFiles;
+        StockEntityInitialization.pathToCsvFiles = pathToCsvFiles;
     }
 
     public String getSelectedFile() {
@@ -235,7 +232,7 @@ public class StockEntityInitializationProcedure extends Procedure {
     }
 
     public static void setNamespace(String namespace) {
-        StockEntityInitializationProcedure.namespace = namespace;
+        StockEntityInitialization.namespace = namespace;
     }
 
     public String getRowPropertyName() {

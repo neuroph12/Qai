@@ -16,7 +16,7 @@ public abstract class ProcedureDecorator extends Procedure implements ProcedureC
     protected boolean debug = true;
 
     public ProcedureDecorator(Procedure toDecorate) {
-        super("Decorator", toDecorate);
+        super(toDecorate);
         this.toDecorate = toDecorate;
     }
 

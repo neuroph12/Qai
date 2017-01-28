@@ -186,12 +186,20 @@
             <version>3.1.0</version>
         </dependency>
 
-        <!-- -->
+        <!-- https://mvnrepository.com/artifact/org.apache.jena/jena-text -->
         <dependency>
-            <groupId>org.openrdf.sesame</groupId>
-            <artifactId>sesame-rio-turtle</artifactId>
-            <version>4.1.2</version>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-text</artifactId>
+            <version>3.0.1</version>
         </dependency>
+
+
+        <!-- -->
+        <!--<dependency>-->
+            <!--<groupId>org.openrdf.sesame</groupId>-->
+            <!--<artifactId>sesame-rio-turtle</artifactId>-->
+            <!--<version>4.1.2</version>-->
+        <!--</dependency>-->
 
         <!-- smooks seems to be a very cool xml-transformer framework
         in use for transforming the huge xml-files which come with the wikipedia and wiktionary -->

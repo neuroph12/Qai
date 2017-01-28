@@ -30,7 +30,6 @@ public class ChangePointAnalysis extends ProcedureDecorator {
 
     @Override
     public void buildArguments() {
-        name = NAME;
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_TIME_SEQUENCE);
         arguments.putResultNames(CHANGE_POINTS);
