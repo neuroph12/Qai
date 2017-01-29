@@ -2,6 +2,7 @@ package qube.qai.util;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.sparql.syntax.*;
+import qube.qai.parsers.antimirov.nodes.*;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.SelectionProcedure;
 import qube.qai.procedure.SimpleProcedure;
@@ -48,7 +49,58 @@ public class ProcedureToRdfConverter {
         resource.addLiteral(model.createProperty(baseUriString, "progressPercentage"), procedure.getProgressPercentage());
         resource.addLiteral(model.createProperty(baseUriString, "duration"), procedure.getDuration());
 
+        NodeVisitor visitor = createNodeVisitor();
+        procedure.childrenAccept(visitor);
+
         return model;
+    }
+
+    private NodeVisitor createNodeVisitor() {
+
+        NodeVisitor visitor = new NodeVisitor() {
+
+            @Override
+            public void visit(AlternationNode node) {
+
+            }
+
+            @Override
+            public void visit(ConcatenationNode node) {
+
+            }
+
+            @Override
+            public void visit(EmptyNode node) {
+
+            }
+
+            @Override
+            public void visit(IterationNode node) {
+
+            }
+
+            @Override
+            public void visit(Node node) {
+
+            }
+
+            @Override
+            public void visit(NameNode node) {
+
+            }
+
+            @Override
+            public void visit(NoneNode node) {
+
+            }
+
+            @Override
+            public void visit(PrimitiveNode node) {
+
+            }
+        };
+
+        return visitor;
     }
 
     public Procedure createProcedureFromModel(String uuid, Model model) {
@@ -59,54 +111,20 @@ public class ProcedureToRdfConverter {
 
         Statement statement = resource.getProperty(model.getProperty(baseUriString, NAME));
         String name = statement.getLiteral().getString();
-        Procedure procedure = createProcedureFromName(name);
+        Procedure procedure = ModelCreatingVisitor.createProcedureFromName(name);
 
-       RDFVisitor visitor = createRDFVisitor();
-
-        return procedure;
-    }
-
-    private Procedure createProcedureFromName(String name) {
-
-        Procedure procedure = null;
-        SelectionProcedure selection = new SelectionProcedure();
-
-        if (ChangePointAnalysis.NAME.equals(name)) {
-            procedure = new ChangePointAnalysis(selection);
-        } else if (MarketNetworkBuilder.NAME.equals(name)) {
-            procedure = new MarketNetworkBuilder(selection);
-        } else if (MatrixStatistics.NAME.equals(name)) {
-            procedure = new MatrixStatistics(selection);
-        } else if (NetworkStatistics.NAME.equals(name)) {
-            procedure = new NetworkStatistics(selection);
-        } else if (NeuralNetworkAnalysis.NAME.equals(name)) {
-            procedure = new NeuralNetworkAnalysis(selection);
-        } else if (NeuralNetworkForwardPropagation.NAME.equals(name)) {
-            procedure = new NeuralNetworkForwardPropagation(selection);
-        } else if (SortingPercentilesProcedure.NAME.equals(name)) {
-            procedure = new SortingPercentilesProcedure(selection);
-        } else if (DirectoryIndexer.NAME.equals(name)) {
-            procedure = new DirectoryIndexer(selection);
-        } else if (WikiArchiveIndexer.NAME.equals(name)) {
-            procedure = new WikiArchiveIndexer(selection);
-        } else if (StockEntityInitialization.NAME.equals(name)) {
-            procedure = new StockEntityInitialization();
-        } else if (StockQuoteRetriever.NAME.equals(name)) {
-            procedure = new StockQuoteRetriever();
-        } else if (WikiRipperProcedure.NAME.equals(name)) {
-            procedure = new WikiRipperProcedure();
-        } else if (SelectionProcedure.NAME.equals(name)) {
-            procedure = new SelectionProcedure();
-        } else if (SimpleProcedure.NAME.equals(name)) {
-            procedure = new SimpleProcedure();
-        }
+        RDFVisitor visitor = createRDFVisitor();
 
         return procedure;
     }
 
+    /**
+     * creates the visitor which will be working the assigned values
+     * @return theVisitor
+     */
     private RDFVisitor createRDFVisitor() {
 
-        RDFVisitor visitor = new RDFVisitor() {
+        return new RDFVisitor() {
             @Override
             public Object visitBlank(Resource r, AnonId id) {
                 return null;
@@ -122,7 +140,5 @@ public class ProcedureToRdfConverter {
                 return null;
             }
         };
-
-        return visitor;
     }
 }

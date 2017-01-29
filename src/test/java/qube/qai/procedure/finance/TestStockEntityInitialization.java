@@ -55,7 +55,7 @@ public class TestStockEntityInitialization extends QaiTestBase {
 
         Injector injector = QaiTestServerModule.initStocksInjector();
         EntityManager entityManager = injector.getInstance(EntityManager.class);
-        StockEntityInitialization procedure = new StockEntityInitialization("StockEntityInitialization");
+        StockEntityInitialization procedure = new StockEntityInitialization();
         procedure.setEntityManager(entityManager);
 
         String[] listings = {StockEntityInitialization.S_AND_P_500_LISTING,

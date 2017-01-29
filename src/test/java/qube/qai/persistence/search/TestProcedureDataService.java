@@ -26,10 +26,10 @@ public class TestProcedureDataService extends TestCase {
 //        Collection<SearchResult> procedures = dataService.searchInputString("procedure", "*", 0);
 //        assertNotNull("there has to be something", procedures);
 //        assertTrue("the list may not be empty", !procedures.isEmpty());
-
+        ProcedureToRdfConverter converter = new ProcedureToRdfConverter();
         SelectionProcedure selection = new SelectionProcedure();
         Procedure procedure = NeuralNetworkAnalysis.Factory.constructProcedure(selection);
-        Model model = ProcedureToRdfConverter.createProcedureModel(procedure);
+        Model model = converter.createProcedureModel(procedure);
 
         dataService.save(model);
 

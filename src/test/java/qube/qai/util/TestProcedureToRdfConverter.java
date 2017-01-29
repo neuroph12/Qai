@@ -30,10 +30,12 @@ public class TestProcedureToRdfConverter extends TestCase {
 
     public void testModelConversion() throws Exception {
 
-        Procedure procedure = createDummyProcedure();
-        Model model = ProcedureToRdfConverter.createProcedureModel(procedure);
+        ProcedureToRdfConverter converter = new ProcedureToRdfConverter();
 
-        Procedure backProc = ProcedureToRdfConverter.createProcedureFromModel("", model);
+        Procedure procedure = createDummyProcedure();
+        Model model = converter.createProcedureModel(procedure);
+
+        Procedure backProc = converter.createProcedureFromModel("", model);
 
     }
 

@@ -40,7 +40,7 @@ public class TestMarketNetworkBuilder extends QaiTestBase {
         logger.info("picked entities: " + array2String(names));
 
         SelectionOperator<Collection> selectionOperator = new DataSelectionOperator<Collection>(workingSet);
-        SimpleProcedure procedure = new SimpleProcedure("Dummy");
+        SimpleProcedure procedure = new SimpleProcedure();
         MarketNetworkBuilder networkBuilder = new MarketNetworkBuilder(procedure);
         injector.injectMembers(networkBuilder);
         NeuralNetwork network = (NeuralNetwork) networkBuilder.buildNetwork(selectionOperator);
