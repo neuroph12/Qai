@@ -51,11 +51,11 @@ public class DirectoryIndexer extends ProcedureDecorator {
     public String indexDirectory;
 
     public DirectoryIndexer(Procedure procedure) {
-        super(procedure);
+        super(NAME, procedure);
     }
 
     public DirectoryIndexer(String directoryToIndex, String indexDirectory) {
-        super(new SimpleProcedure());
+        super(NAME, new SimpleProcedure());
         this.directoryToIndex = directoryToIndex;
         this.indexDirectory = indexDirectory;
     }

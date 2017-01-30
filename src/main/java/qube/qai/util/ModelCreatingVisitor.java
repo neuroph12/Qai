@@ -1,6 +1,7 @@
 package qube.qai.util;
 
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 import qube.qai.parsers.antimirov.nodes.*;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.SelectionProcedure;
@@ -17,51 +18,69 @@ import qube.qai.procedure.wikiripper.WikiRipperProcedure;
  */
 public class ModelCreatingVisitor implements NodeVisitor {
 
+    private String modelName = "procedure/";
+
+    private String nameSpace = "file:/home/rainbird/projects/work/qai/test/"; //"http://qai.at/"; //http://www.qoan.at/" ;
+
     private Model model;
+
+    public ModelCreatingVisitor(Model model) {
+        this.model = model;
+    }
 
     @Override
     public void visit(AlternationNode node) {
-
+        allVisit(node);
     }
 
     @Override
     public void visit(ConcatenationNode node) {
-
+        allVisit(node);
     }
 
     @Override
     public void visit(EmptyNode node) {
-
+        allVisit(node);
     }
 
     @Override
     public void visit(IterationNode node) {
-
+        allVisit(node);
     }
 
     @Override
     public void visit(Node node) {
-
+        allVisit(node);
     }
 
     @Override
     public void visit(NameNode node) {
-
+        allVisit(node);
     }
 
     @Override
     public void visit(NoneNode node) {
-
+        allVisit(node);
     }
 
     @Override
     public void visit(PrimitiveNode node) {
-
+        allVisit(node);
     }
 
-    public static Procedure createProcedureFromName(String name) {
+    private void allVisit(BaseNode node) {
+        Resource resource = model.createResource("http://www.qai.at/procedures:" + node.getUuid());
+        resource.addLiteral(model.createProperty(nameSpace, "uuid"), node.getUuid());
+        resource.addLiteral(model.createProperty(nameSpace, "name"), node.getNameString());
+        resource.addLiteral(model.createProperty(nameSpace, "className"), node.getClass().getName());
+        if (node.getParent() != null) {
+            resource.addLiteral(model.createProperty(nameSpace, "parentUuid"), node.getParent().getUuid());
+        }
+    }
 
-        Procedure procedure = null;
+    public static BaseNode createNodeFromName(String name) {
+
+        BaseNode procedure = null;
         SelectionProcedure selection = new SelectionProcedure();
 
         if (ChangePointAnalysis.NAME.equals(name)) {
@@ -92,8 +111,32 @@ public class ModelCreatingVisitor implements NodeVisitor {
             procedure = new SelectionProcedure();
         } else if (SimpleProcedure.NAME.equals(name)) {
             procedure = new SimpleProcedure();
-        }
+        } //
 
         return procedure;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public String getNameSpace() {
+        return nameSpace;
+    }
+
+    public void setNameSpace(String nameSpace) {
+        this.nameSpace = nameSpace;
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 }

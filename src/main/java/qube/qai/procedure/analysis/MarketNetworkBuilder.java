@@ -30,7 +30,7 @@ public class MarketNetworkBuilder extends ProcedureDecorator implements NetworkB
     public static String TRAINED_NEURAL_NETWORK = "trained neural network";
 
     public MarketNetworkBuilder(Procedure procedure) {
-        super(procedure);
+        super(NAME, procedure);
     }
 
     private BasicNetworkTrainer trainer;

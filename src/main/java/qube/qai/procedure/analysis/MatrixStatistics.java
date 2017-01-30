@@ -23,7 +23,7 @@ public class MatrixStatistics extends ProcedureDecorator {
      * Runs statistical analysis on the given matrix
      */
     public MatrixStatistics(Procedure procedure) {
-        super(procedure);
+        super(NAME, procedure);
     }
 
     @Override

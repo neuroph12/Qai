@@ -22,7 +22,7 @@ public class NeuralNetworkAnalysis extends ProcedureDecorator {
     private SelectionOperator<Collection<NeuralNetwork>> networkSelectionOperator;
 
     public NeuralNetworkAnalysis(Procedure procedure) {
-        super(procedure);
+        super(NAME, procedure);
     }
 
     @Override

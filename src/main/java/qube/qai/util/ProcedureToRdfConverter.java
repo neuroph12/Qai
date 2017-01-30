@@ -1,17 +1,8 @@
 package qube.qai.util;
 
 import org.apache.jena.rdf.model.*;
-import org.apache.jena.sparql.syntax.*;
 import qube.qai.parsers.antimirov.nodes.*;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.SelectionProcedure;
-import qube.qai.procedure.SimpleProcedure;
-import qube.qai.procedure.analysis.*;
-import qube.qai.procedure.archive.DirectoryIndexer;
-import qube.qai.procedure.archive.WikiArchiveIndexer;
-import qube.qai.procedure.finance.StockEntityInitialization;
-import qube.qai.procedure.finance.StockQuoteRetriever;
-import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
 /**
  * Created by rainbird on 1/25/17.
@@ -38,82 +29,81 @@ public class ProcedureToRdfConverter {
 
         Model model = ModelFactory.createDefaultModel();
 
-        Resource resource = model.createResource(baseUriString + procedure.getUuid());
-        resource.addLiteral(model.createProperty(baseUriString, "name"), procedure.getNameString());
-        resource.addLiteral(model.createProperty(baseUriString, "description"), procedure.getDescription());
-        if (procedure.getUser() != null) {
-            resource.addLiteral(model.createProperty(baseUriString, "username"), procedure.getUser().getUsername());
-            resource.addLiteral(model.createProperty(baseUriString, "userUuuid"), procedure.getUser().getUuid());
-        }
-        resource.addLiteral(model.createProperty(baseUriString, "hasExecuted"), procedure.hasExecuted());
-        resource.addLiteral(model.createProperty(baseUriString, "progressPercentage"), procedure.getProgressPercentage());
-        resource.addLiteral(model.createProperty(baseUriString, "duration"), procedure.getDuration());
+//        Resource resource = model.createResource(baseUriString + procedure.getUuid());
+//        resource.addLiteral(model.createProperty(baseUriString, "name"), procedure.getNameString());
+//        resource.addLiteral(model.createProperty(baseUriString, "description"), procedure.getDescription());
+//        if (procedure.getUser() != null) {
+//            resource.addLiteral(model.createProperty(baseUriString, "username"), procedure.getUser().getUsername());
+//            resource.addLiteral(model.createProperty(baseUriString, "userUuuid"), procedure.getUser().getUuid());
+//        }
+//        resource.addLiteral(model.createProperty(baseUriString, "hasExecuted"), procedure.hasExecuted());
+//        resource.addLiteral(model.createProperty(baseUriString, "progressPercentage"), procedure.getProgressPercentage());
+//        resource.addLiteral(model.createProperty(baseUriString, "duration"), procedure.getDuration());
 
-        NodeVisitor visitor = createNodeVisitor();
+        NodeVisitor visitor = new ModelCreatingVisitor(model);
         procedure.childrenAccept(visitor);
 
         return model;
     }
 
-    private NodeVisitor createNodeVisitor() {
-
-        NodeVisitor visitor = new NodeVisitor() {
-
-            @Override
-            public void visit(AlternationNode node) {
-
-            }
-
-            @Override
-            public void visit(ConcatenationNode node) {
-
-            }
-
-            @Override
-            public void visit(EmptyNode node) {
-
-            }
-
-            @Override
-            public void visit(IterationNode node) {
-
-            }
-
-            @Override
-            public void visit(Node node) {
-
-            }
-
-            @Override
-            public void visit(NameNode node) {
-
-            }
-
-            @Override
-            public void visit(NoneNode node) {
-
-            }
-
-            @Override
-            public void visit(PrimitiveNode node) {
-
-            }
-        };
-
-        return visitor;
-    }
+//    private NodeVisitor createNodeVisitor() {
+//
+//        NodeVisitor visitor = new NodeVisitor() {
+//
+//            @Override
+//            public void visit(AlternationNode node) {
+//
+//            }
+//
+//            @Override
+//            public void visit(ConcatenationNode node) {
+//
+//            }
+//
+//            @Override
+//            public void visit(EmptyNode node) {
+//
+//            }
+//
+//            @Override
+//            public void visit(IterationNode node) {
+//
+//            }
+//
+//            @Override
+//            public void visit(Node node) {
+//
+//            }
+//
+//            @Override
+//            public void visit(NameNode node) {
+//
+//            }
+//
+//            @Override
+//            public void visit(NoneNode node) {
+//
+//            }
+//
+//            @Override
+//            public void visit(PrimitiveNode node) {
+//
+//            }
+//        };
+//
+//        return visitor;
+//    }
 
     public Procedure createProcedureFromModel(String uuid, Model model) {
 
+        ModelCreatingVisitor visitor = new ModelCreatingVisitor(model);
         Resource resource = model.getResource(baseUriString + uuid);
-
-
 
         Statement statement = resource.getProperty(model.getProperty(baseUriString, NAME));
         String name = statement.getLiteral().getString();
-        Procedure procedure = ModelCreatingVisitor.createProcedureFromName(name);
+        Procedure procedure = (Procedure) visitor.createNodeFromName(name);
 
-        RDFVisitor visitor = createRDFVisitor();
+        RDFVisitor rdfVisitor = createRDFVisitor();
 
         return procedure;
     }

@@ -23,7 +23,7 @@ public class TimeSequenceAnalysis extends ProcedureDecorator {
      * top 10/bottom 10/average entities- prepare those results as charts
      */
     public TimeSequenceAnalysis(Procedure procedure) {
-        super(procedure);
+        super(NAME, procedure);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class NetworkStatistics extends ProcedureDecorator {
      * the network along with its statistical properties.
      */
     public NetworkStatistics(Procedure procedure) {
-        super(procedure);
+        super(NAME, procedure);
     }
 
     @Override

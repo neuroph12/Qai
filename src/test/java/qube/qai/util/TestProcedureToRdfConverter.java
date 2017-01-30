@@ -2,6 +2,7 @@ package qube.qai.util;
 
 import junit.framework.TestCase;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.SelectionProcedure;
 import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
@@ -16,7 +17,7 @@ public class TestProcedureToRdfConverter extends TestCase {
 
     private Logger logger = Logger.getLogger("TestProcedureToRdfConverter");
 
-    public void testRdfConverter() throws Exception {
+    public void rtestRdfConverter() throws Exception {
 
         SelectionProcedure selection = new SelectionProcedure();
         Procedure procedure = NeuralNetworkAnalysis.Factory.constructProcedure(selection);
@@ -24,8 +25,7 @@ public class TestProcedureToRdfConverter extends TestCase {
         String uuid = UUIDService.uuidString();
         Model model = createDummyModel(uuid);
         assertNotNull("there has to be a model", model);
-
-
+        model.write(System.out, "RDF/XML-ABBREV");
     }
 
     public void testModelConversion() throws Exception {
@@ -34,21 +34,20 @@ public class TestProcedureToRdfConverter extends TestCase {
 
         Procedure procedure = createDummyProcedure();
         Model model = converter.createProcedureModel(procedure);
-
-        Procedure backProc = converter.createProcedureFromModel("", model);
+        model.write(System.out, "RDF/XML-ABBREV");
 
     }
 
     private Procedure createDummyProcedure() {
 
         SelectionProcedure selection = new SelectionProcedure();
-        Procedure procedure = null;
+        Procedure procedure = NeuralNetworkAnalysis.Factory.constructProcedure(selection);
 
         return procedure;
     }
 
     private Model createDummyModel(String uuid) {
-        Model model = null;
+        Model model = ModelFactory.createDefaultModel();
 
         return model;
     }

@@ -24,7 +24,7 @@ public class ChangePointAnalysis extends ProcedureDecorator {
      * runs change-point analysis of a given time-series
      */
     public ChangePointAnalysis(Procedure procedure) {
-        super(procedure);
+        super(NAME, procedure);
     }
 
 

@@ -67,7 +67,7 @@ public class WikiArchiveIndexer extends ProcedureDecorator {
     private long indexedFileCount = 0;
 
     public WikiArchiveIndexer(Procedure toDecorate) {
-        super(toDecorate);
+        super(NAME, toDecorate);
     }
 
     @Override

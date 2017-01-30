@@ -30,7 +30,7 @@ public class NeuralNetworkForwardPropagation extends ProcedureDecorator {
      * for anyone interested
      */
     public NeuralNetworkForwardPropagation(Procedure procedure) {
-        super(procedure);
+        super(NAME, procedure);
     }
 
     @Override

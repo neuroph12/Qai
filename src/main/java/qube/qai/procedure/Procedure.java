@@ -72,8 +72,8 @@ public abstract class Procedure extends Node
         buildArguments();
     }
 
-    public Procedure(Procedure child) {
-        this();
+    public Procedure(String name, Procedure child) {
+        this(name);
         setFirstChild(child);
     }
 
@@ -172,14 +172,6 @@ public abstract class Procedure extends Node
     public void setUser(User user) {
         this.user = user;
     }
-
-    public String getNameString() {
-        return getName().getNameString();
-    }
-
-    //public void setName(String name) {
-    //    getName().setNameString(name);
-    //}
 
     public String getDescription() {
         return description;

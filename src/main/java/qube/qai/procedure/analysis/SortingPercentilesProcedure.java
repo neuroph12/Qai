@@ -24,7 +24,7 @@ public class SortingPercentilesProcedure extends ProcedureDecorator {
             "values. top and bottom ten and the mean will be the results.";
 
     public SortingPercentilesProcedure(Procedure procedure) {
-        super(procedure);
+        super(NAME, procedure);
     }
 
     @Override

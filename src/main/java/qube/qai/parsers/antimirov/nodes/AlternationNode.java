@@ -23,8 +23,7 @@ import java.util.Hashtable;
  * @see Inequality
  * @see BaseNode
  */
-public final class AlternationNode
-        extends BaseNode {
+public final class AlternationNode extends BaseNode {
 
 
     /**

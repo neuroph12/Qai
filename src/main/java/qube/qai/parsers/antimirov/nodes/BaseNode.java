@@ -49,7 +49,8 @@ public abstract class BaseNode implements VisitableNode, Serializable {
     /**
      * Empty Constructor.
      */
-    public BaseNode() {
+    public BaseNode(String name) {
+        this.name = new Name(name);
         this.uuid = UUIDService.uuidString();
     }
 
@@ -63,7 +64,7 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      *               current type.
      */
     public BaseNode(BaseNode child1, BaseNode child2) {
-        this();
+        this("BaseNode");
         this.child1 = child1;
         this.child2 = child2;
         if (child1 != null) {
@@ -348,7 +349,15 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      */
     public abstract boolean equals(BaseNode t);
 
-
+    /**
+     * convenience method for getting the name of a node
+     */
+    public String getNameString() {
+        if (this.name != null) {
+            return name.getNameString();
+        }
+        return "BaseNode";
+    }
     /**
      * Returns a <code>String</code> representation of the expression.
      *
