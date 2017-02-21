@@ -17,6 +17,8 @@ public class TestProcedureToRdfConverter extends TestCase {
 
     private Logger logger = Logger.getLogger("TestProcedureToRdfConverter");
 
+    public static String MODEL_OUTPUT_TYPE = "RDF/XML-ABBREV";
+
     public void rtestRdfConverter() throws Exception {
 
         SelectionProcedure selection = new SelectionProcedure();
@@ -25,7 +27,7 @@ public class TestProcedureToRdfConverter extends TestCase {
         String uuid = UUIDService.uuidString();
         Model model = createDummyModel(uuid);
         assertNotNull("there has to be a model", model);
-        model.write(System.out, "RDF/XML-ABBREV");
+        model.write(System.out, MODEL_OUTPUT_TYPE);
     }
 
     public void testModelConversion() throws Exception {
@@ -34,7 +36,7 @@ public class TestProcedureToRdfConverter extends TestCase {
 
         Procedure procedure = createDummyProcedure();
         Model model = converter.createProcedureModel(procedure);
-        model.write(System.out, "RDF/XML-ABBREV");
+        model.write(System.out, ProcedureToRdfConverter.MODEL_OUTPUT_TYPE);
 
     }
 

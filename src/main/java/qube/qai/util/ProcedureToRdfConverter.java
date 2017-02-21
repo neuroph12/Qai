@@ -1,7 +1,7 @@
 package qube.qai.util;
 
 import org.apache.jena.rdf.model.*;
-import qube.qai.parsers.antimirov.nodes.*;
+import qube.qai.parsers.antimirov.nodes.NodeVisitor;
 import qube.qai.procedure.Procedure;
 
 /**
@@ -13,7 +13,7 @@ public class ProcedureToRdfConverter {
 
     public static String NAME = "name";
 
-    public static String DESCRIPTION = "descruption";
+    public static String DESCRIPTION = "description";
 
     public static String USERNAME = "username";
 
@@ -24,6 +24,8 @@ public class ProcedureToRdfConverter {
     public static String PROGRESS_PERCENTAGE = "progressPercentage";
 
     public static String DURATION = "duration";
+
+    public static String MODEL_OUTPUT_TYPE = "RDF/XML-ABBREV";
 
     public Model createProcedureModel(Procedure procedure) {
 

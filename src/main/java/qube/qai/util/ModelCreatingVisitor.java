@@ -72,7 +72,8 @@ public class ModelCreatingVisitor implements NodeVisitor {
         Resource resource = model.createResource("http://www.qai.at/procedures:" + node.getUuid());
         resource.addLiteral(model.createProperty(nameSpace, "uuid"), node.getUuid());
         resource.addLiteral(model.createProperty(nameSpace, "name"), node.getNameString());
-        resource.addLiteral(model.createProperty(nameSpace, "className"), node.getClass().getName());
+        resource.addLiteral(model.createProperty(nameSpace, "class"), node.getClass().getName());
+        resource.addLiteral(model.createProperty(nameSpace, "hasExecuted"), ((Procedure) node).hasExecuted());
         if (node.getParent() != null) {
             resource.addLiteral(model.createProperty(nameSpace, "parentUuid"), node.getParent().getUuid());
         }
@@ -111,7 +112,7 @@ public class ModelCreatingVisitor implements NodeVisitor {
             procedure = new SelectionProcedure();
         } else if (SimpleProcedure.NAME.equals(name)) {
             procedure = new SimpleProcedure();
-        } //
+        }
 
         return procedure;
     }
