@@ -51,13 +51,13 @@
             <version>1.6.29</version>
         </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>qube.samsroad</groupId>
             <artifactId>samsroad</artifactId>
             <version>1.0</version>
         </dependency>
-		
-		<!-- bliki for wiki-parsing -->
+
+        <!-- bliki for wiki-parsing -->
         <dependency>
             <groupId>info.bliki.wiki</groupId>
             <artifactId>bliki-core</artifactId>
@@ -65,7 +65,7 @@
         </dependency>
 
         <!-- for converting wiki-entries to pdf-format -->
-		<dependency>
+        <dependency>
             <groupId>info.bliki.pdf</groupId>
             <artifactId>bliki-pdf</artifactId>
             <version>${bliki.version}</version>
@@ -85,7 +85,7 @@
             <version>${ojalgo.version}</version>
         </dependency>
 
-         <!-- Tika does parsing and Lucene does search and indexing -->
+        <!-- Tika does parsing and Lucene does search and indexing -->
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers</artifactId>
@@ -162,9 +162,9 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>com.blazegraph</groupId>-->
-            <!--<artifactId>bigdata-jar</artifactId>-->
-            <!--<version>2.1.0</version>-->
+        <!--<groupId>com.blazegraph</groupId>-->
+        <!--<artifactId>bigdata-jar</artifactId>-->
+        <!--<version>2.1.0</version>-->
         <!--</dependency>-->
 
         <dependency>
@@ -196,9 +196,9 @@
 
         <!-- -->
         <!--<dependency>-->
-            <!--<groupId>org.openrdf.sesame</groupId>-->
-            <!--<artifactId>sesame-rio-turtle</artifactId>-->
-            <!--<version>4.1.2</version>-->
+        <!--<groupId>org.openrdf.sesame</groupId>-->
+        <!--<artifactId>sesame-rio-turtle</artifactId>-->
+        <!--<version>4.1.2</version>-->
         <!--</dependency>-->
 
         <!-- smooks seems to be a very cool xml-transformer framework
@@ -256,9 +256,9 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>org.hibernate.javax.persistence</groupId>-->
-            <!--<artifactId>hibernate-jpa-2.1-api</artifactId>-->
-            <!--<version>${hibernate-jpa.version}</version>-->
+        <!--<groupId>org.hibernate.javax.persistence</groupId>-->
+        <!--<artifactId>hibernate-jpa-2.1-api</artifactId>-->
+        <!--<version>${hibernate-jpa.version}</version>-->
         <!--</dependency>-->
 
         <!-- UUID-generator -->
@@ -270,9 +270,9 @@
 
         <!-- slf4j -->
         <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-jdk14</artifactId>-->
-            <!--<version>1.7.13</version>-->
+        <!--<groupId>org.slf4j</groupId>-->
+        <!--<artifactId>slf4j-jdk14</artifactId>-->
+        <!--<version>1.7.13</version>-->
         <!--</dependency>-->
 
         <!-- joda-time -->
@@ -369,18 +369,18 @@
 
     <pluginRepositories>
         <!--<pluginRepository>-->
-            <!--<id>central</id>-->
-            <!--<url>http://192.168.1.4:8081/artifactory/plugins-release</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>false</enabled>-->
-            <!--</snapshots>-->
+        <!--<id>central</id>-->
+        <!--<url>http://192.168.1.4:8081/artifactory/plugins-release</url>-->
+        <!--<snapshots>-->
+        <!--<enabled>false</enabled>-->
+        <!--</snapshots>-->
         <!--</pluginRepository>-->
         <!--<pluginRepository>-->
-            <!--<id>snapshots</id>-->
-            <!--<url>http://192.168.1.4:8081/artifactory/plugins-snapshot</url>-->
-            <!--<releases>-->
-                <!--<enabled>false</enabled>-->
-            <!--</releases>-->
+        <!--<id>snapshots</id>-->
+        <!--<url>http://192.168.1.4:8081/artifactory/plugins-snapshot</url>-->
+        <!--<releases>-->
+        <!--<enabled>false</enabled>-->
+        <!--</releases>-->
         <!--</pluginRepository>-->
     </pluginRepositories>
 
