@@ -122,7 +122,7 @@ public class TimeSequence<T extends Number> implements Serializable {
         RandomNumber generator = new Normal(0.5, 0.1);
 
         DateTime tmp = startDate;
-        while(tmp.isBefore(endDate) || tmp.equals(endDate)) {
+        while (tmp.isBefore(endDate) || tmp.equals(endDate)) {
             timeSequence.add(tmp.toDate(), generator.doubleValue());
             tmp = tmp.plusDays(1);
         }
@@ -134,7 +134,7 @@ public class TimeSequence<T extends Number> implements Serializable {
         DateTime startDate = new DateTime(start);
         DateTime endDate = new DateTime(end);
         DateTime tmp = startDate;
-        while(tmp.isBefore(endDate) || tmp.equals(endDate)) {
+        while (tmp.isBefore(endDate) || tmp.equals(endDate)) {
             dates.add(tmp.toDate());
             tmp = tmp.plusDays(1);
         }

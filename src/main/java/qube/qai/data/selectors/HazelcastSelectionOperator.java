@@ -6,7 +6,6 @@ import com.hazelcast.core.IMap;
 import qube.qai.data.SelectionOperator;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  * Created by rainbird on 11/19/15.

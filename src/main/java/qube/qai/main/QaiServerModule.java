@@ -16,8 +16,13 @@ import net.jmob.guice.conf.core.InjectConfig;
 import net.jmob.guice.conf.core.Syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.persistence.*;
-import qube.qai.persistence.mapstores.*;
+import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockQuote;
+import qube.qai.persistence.WikiArticle;
+import qube.qai.persistence.mapstores.DatabaseMapStore;
+import qube.qai.persistence.mapstores.DirectoryMapStore;
+import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
+import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.persistence.search.RDFTriplesSearchService;
 import qube.qai.persistence.search.StockQuoteSearchService;
 import qube.qai.procedure.Procedure;
@@ -186,9 +191,12 @@ public class QaiServerModule extends AbstractModule {
      * WiktionarySearchService
      * returns the distributed search service for wiktionary
      * and starts the listener service which will broker the requests
+     *
      * @return
      */
-    @Provides @Named("Wiktionary_en") @Singleton
+    @Provides
+    @Named("Wiktionary_en")
+    @Singleton
     DistributedSearchListener provideWiktionarySearchListener() {
         SearchServiceInterface basicSearchService = new WikiSearchService(WIKTIONARY_DIRECTORY, WIKTIONARY_ARCHIVE);
 
@@ -204,9 +212,12 @@ public class QaiServerModule extends AbstractModule {
      * WikipediaSearchService
      * returns the distributed search service for wikipedia
      * and starts the listener service which will broker the requests
+     *
      * @return
      */
-    @Provides @Named("Wikipedia_en") @Singleton
+    @Provides
+    @Named("Wikipedia_en")
+    @Singleton
     DistributedSearchListener provideWikipediaSearchListener() {
         SearchServiceInterface basicSearchService = new WikiSearchService(WIKIPEDIA_DIRECTORY, WIKIPEDIA_ARCHIVE);
 
@@ -241,9 +252,12 @@ public class QaiServerModule extends AbstractModule {
      * StockQuotesSearchService
      * returns the distributed search service for wikipedia
      * and starts the listener service which will broker the requests
+     *
      * @return
      */
-    @Provides @Named("Stock_Quotes") @Singleton
+    @Provides
+    @Named("Stock_Quotes")
+    @Singleton
     DistributedSearchListener provideStockQuotesSearchListener() {
 
         SearchServiceInterface searchService = provideStockQuoteSearchService();
@@ -258,9 +272,11 @@ public class QaiServerModule extends AbstractModule {
 
     /**
      * WiktionarySearchService
+     *
      * @return
      */
-    @Provides @Named("Wiktionary_en")
+    @Provides
+    @Named("Wiktionary_en")
     SearchServiceInterface provideWiktionarySearchService() {
 
         SearchServiceInterface searchService = new WikiSearchService(WIKTIONARY_DIRECTORY, WIKTIONARY_ARCHIVE);
@@ -269,9 +285,11 @@ public class QaiServerModule extends AbstractModule {
 
     /**
      * WikipediaSearchService
+     *
      * @return
      */
-    @Provides @Named("Wikipedia_en")
+    @Provides
+    @Named("Wikipedia_en")
     SearchServiceInterface provideWikipediaSearchService() {
 
         SearchServiceInterface searchService = new WikiSearchService(WIKIPEDIA_DIRECTORY, WIKIPEDIA_ARCHIVE);
@@ -280,9 +298,11 @@ public class QaiServerModule extends AbstractModule {
 
     /**
      * StockQuotesSearchService
+     *
      * @return
      */
-    @Provides @Named("Stock_Quotes")
+    @Provides
+    @Named("Stock_Quotes")
     SearchServiceInterface provideStockQuoteSearchService() {
 
         // create an injector for initializing JPA-Module & start the service
@@ -293,14 +313,16 @@ public class QaiServerModule extends AbstractModule {
         StockQuoteSearchService searchService = new StockQuoteSearchService();
         injector.injectMembers(searchService);
 
-        return  searchService;
+        return searchService;
     }
 
     /**
      * RdfTripleSearchService
+     *
      * @return
      */
-    @Provides @Named("Dbpedia_en")
+    @Provides
+    @Named("Dbpedia_en")
     SearchServiceInterface provideDbpediaSearchService() {
 
         Injector injector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
@@ -312,7 +334,9 @@ public class QaiServerModule extends AbstractModule {
         return searchService;
     }
 
-    @Provides @Singleton //@Named("HAZELCAST_SERVER")
+    @Provides
+    @Singleton
+        //@Named("HAZELCAST_SERVER")
     HazelcastInstance provideHazelcastInstance() {
 
         if (hazelcastInstance != null) {
@@ -383,7 +407,7 @@ public class QaiServerModule extends AbstractModule {
         }
 
         // create UserRoles and Hazelcast map
-        if("true".equalsIgnoreCase(CREATE_USER_ROLES)) {
+        if ("true".equalsIgnoreCase(CREATE_USER_ROLES)) {
             createUserRoles(hazelcastConfig);
         }
 
@@ -436,6 +460,7 @@ public class QaiServerModule extends AbstractModule {
 
     /**
      * DbUser map-store
+     *
      * @param hazelcastConfig
      */
     private void createUsersMapConfig(Config hazelcastConfig) {
@@ -446,8 +471,8 @@ public class QaiServerModule extends AbstractModule {
             userMapstoreConfig = new MapStoreConfig();
         }
         userMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, User>() {
-            public MapLoader<String,User> newMapStore(String mapName, Properties properties) {
-                if(USERS.equals(mapName)) {
+            public MapLoader<String, User> newMapStore(String mapName, Properties properties) {
+                if (USERS.equals(mapName)) {
                     if (userMapStore == null) {
                         userMapStore = new DatabaseMapStore(User.class);
                         jpaUsersInjector.injectMembers(userMapStore);
@@ -666,7 +691,7 @@ public class QaiServerModule extends AbstractModule {
      */
     private void createStockQuotesConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(STOCK_QUOTES);
-        MapStoreConfig mapStoreConfig = mapConfig .getMapStoreConfig();
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
         if (mapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + STOCK_QUOTES);
             mapStoreConfig = new MapStoreConfig();

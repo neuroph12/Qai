@@ -7,7 +7,10 @@ import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureDecorator;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by rainbird on 11/28/15.

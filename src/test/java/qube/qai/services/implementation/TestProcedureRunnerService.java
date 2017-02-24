@@ -11,7 +11,6 @@ import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.ProcedureSourceInterface;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class TestProcedureRunnerService extends QaiTestBase {
         assertTrue("this usually works", ProcedureRunnerInterface.STATE.COMPLETE.equals(state));
 
         // we then try to read the procedure from map
-        IMap<String,Procedure> procedureMap = hazelcastInstance.getMap("PROCEDURES");
+        IMap<String, Procedure> procedureMap = hazelcastInstance.getMap("PROCEDURES");
         Procedure stored = procedureMap.get(uuid);
         // @TODO this is not ok... have to figure a way out
         logger.info("stored procedure: " + stored);

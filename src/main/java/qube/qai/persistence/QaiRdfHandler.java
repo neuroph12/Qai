@@ -1,13 +1,11 @@
 package qube.qai.persistence;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Created by rainbird on 6/23/16.
+ *
  * @Deprecared i really think this is entirely obsolete
  * and i really see no reason why i should be using two different
  * libraries for the same thing rdf-models and sparql

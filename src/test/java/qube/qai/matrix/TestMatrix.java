@@ -1,37 +1,11 @@
 package qube.qai.matrix;
 
 import junit.framework.TestCase;
-import org.ojalgo.OjAlgoUtils;
 import org.ojalgo.access.Access2D;
-import org.ojalgo.array.Array2D;
-import org.ojalgo.array.ArrayAnyD;
-import org.ojalgo.finance.data.YahooSymbol;
-import org.ojalgo.function.aggregator.AggregatorFunction;
-import org.ojalgo.function.aggregator.PrimitiveAggregator;
-import org.ojalgo.machine.JavaType;
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.ComplexMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
-import org.ojalgo.matrix.store.MatrixStore;
-import org.ojalgo.matrix.store.PhysicalStore;
-import org.ojalgo.matrix.store.PrimitiveDenseStore;
-import org.ojalgo.netio.BasicLogger;
-import org.ojalgo.optimisation.Expression;
-import org.ojalgo.optimisation.ExpressionsBasedModel;
-import org.ojalgo.optimisation.Optimisation;
-import org.ojalgo.optimisation.Variable;
-import org.ojalgo.random.Uniform;
 import org.ojalgo.random.Weibull;
-import org.ojalgo.type.CalendarDateUnit;
-
-import java.io.File;
-import java.util.Date;
-import java.util.List;
-
-import static org.ojalgo.constant.PrimitiveMath.PI;
-import static org.ojalgo.constant.PrimitiveMath.ZERO;
-import static org.ojalgo.function.PrimitiveFunction.DIVIDE;
-import static org.ojalgo.function.PrimitiveFunction.SUBTRACT;
 
 /**
  * Created by rainbird on 11/22/15.
@@ -209,7 +183,7 @@ public class TestMatrix extends TestCase {
 
     }*/
 
-   public void testBasicMatrixUsage() throws Exception {
+    public void testBasicMatrixUsage() throws Exception {
         final BasicMatrix.Factory<PrimitiveMatrix> tmpFactory = PrimitiveMatrix.FACTORY;
         // A MatrixFactory has 13 different methods that return BasicMatrix instances.
 
@@ -242,7 +216,7 @@ public class TestMatrix extends TestCase {
 //        }
         // Don't do this!!!
 
-        final double[][] tmpData = new double[][] { { 1.0, 2.0, 3.0 }, { 4.0, 5.0, 6.0 }, { 7.0, 8.0, 9.0 } };
+        final double[][] tmpData = new double[][]{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}};
         final BasicMatrix tmpH = tmpFactory.rows(tmpData);
         // A, perhaps, natural way to create a small matrix, but the arrays are copied.
         // You do not want to create that array just as an intermediate step towards populating your matrix.

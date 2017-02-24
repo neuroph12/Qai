@@ -10,7 +10,6 @@ import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -61,7 +60,7 @@ public class DistributedSearchService implements SearchServiceInterface, Message
     @Override
     public void onMessage(Message message) {
         Object messageObject = message.getMessageObject();
-        if (messageObject instanceof  Collection) {
+        if (messageObject instanceof Collection) {
             results = (Collection<SearchResult>) messageObject;
         }
     }

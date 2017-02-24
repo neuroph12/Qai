@@ -93,7 +93,7 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * <code>null</code> is returned.
      *
      * @return The name of the type or <code>null</code> if type has no
-     *         name.
+     * name.
      */
     public Name getName() {
 
@@ -181,7 +181,7 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * @param names The set of leading names to compute partial
      *              derivatives for.
      * @return The partial derivatives of the type for all names in
-     *         <code>names</code>.
+     * <code>names</code>.
      * @throws IllegalConcatenationException Occurrs if during the
      *                                       computation of partial
      *                                       derivatives an illegal
@@ -233,8 +233,8 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * @param flag     Says if recursive occurrence is allowed (TRUE)
      *                 or not.
      * @return TRUE, if constraint 1 is fulfilled and there are
-     *         no recursive occurrences in non-tail positions,
-     *         otherwise FALSE.
+     * no recursive occurrences in non-tail positions,
+     * otherwise FALSE.
      */
     public abstract boolean checkTailPosition(Name rootName,
                                               boolean flag);
@@ -249,8 +249,8 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * @param flag Says if nullable instances are allowed (TRUE) or
      *             not (FALSE).
      * @return TRUE, if constraint 2 is fulfilled and there is no
-     *         recursive occurrences with pure nullable predecessors,
-     *         otherwise FALSE.
+     * recursive occurrences with pure nullable predecessors,
+     * otherwise FALSE.
      */
     public abstract boolean checkNonNullableHead(boolean flag);
 
@@ -288,10 +288,9 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * which represent types on which content() is defined.
      *
      * @return Content of the type.
-     * @throws IrregularContentRequestException
-     *          Occurrs if
-     *          <code>content()</code> is called on a type for whom no
-     *          content is defined.
+     * @throws IrregularContentRequestException Occurrs if
+     *                                          <code>content()</code> is called on a type for whom no
+     *                                          content is defined.
      */
     public BaseNode content()
             throws IrregularContentRequestException {
@@ -358,6 +357,7 @@ public abstract class BaseNode implements VisitableNode, Serializable {
         }
         return "BaseNode";
     }
+
     /**
      * Returns a <code>String</code> representation of the expression.
      *

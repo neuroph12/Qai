@@ -44,7 +44,6 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
     }
 
 
-
     public void restWikiRipAndIndex() throws Exception {
 
 //        String wikiToRip = "/media/rainbird/ALEPH/wiki-data/dewiki-20151226-pages-articles.xml";

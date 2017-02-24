@@ -14,7 +14,6 @@ import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.Arguments;
-import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureDecorator;
 import qube.qai.procedure.SimpleProcedure;

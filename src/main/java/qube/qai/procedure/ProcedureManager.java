@@ -8,7 +8,6 @@ import qube.qai.message.MessageQueue;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +16,7 @@ import java.util.Map;
  */
 public class ProcedureManager extends MessageListener {
 
-    private static String QAI_PROCEDURES= "QAI_PROCEDURES";
+    private static String QAI_PROCEDURES = "QAI_PROCEDURES";
 
     @Inject
     private MessageQueue messageQueue;

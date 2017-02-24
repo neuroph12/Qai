@@ -9,7 +9,9 @@ import java.util.Set;
  */
 public interface ProcedureRunnerInterface {
 
-    enum STATE {COMPLETE, RUNNING, ERROR, INTERRUPTED};
+    enum STATE {COMPLETE, RUNNING, ERROR, INTERRUPTED}
+
+    ;
 
     void submitProcedure(Procedure procedure);
 

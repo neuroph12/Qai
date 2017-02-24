@@ -1,11 +1,9 @@
 package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.MapStore;
-import qube.qai.persistence.StockQuote;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

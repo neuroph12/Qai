@@ -11,6 +11,7 @@ import java.util.UUID;
 public class TestUUIDGenerator extends TestCase {
 
     private boolean debug = true;
+
     /*
     depending on how you generate the UUID you have different fields which are accessible
     this test is in order to demonstrate the differences

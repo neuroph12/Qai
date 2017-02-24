@@ -20,7 +20,7 @@ public class StockEntityInitialization extends Procedure {
 
     public static String DESCRIPTION = "Rips wiki-based archives to individual files which are easier to parse and to read";
 
-    public static String INPUT_FILENAME  = "FILENAME";
+    public static String INPUT_FILENAME = "FILENAME";
 
     public static String CATEGORY_NAME = "NAME_OF_THE_STOCK_CATEGORY";
 
@@ -125,8 +125,8 @@ public class StockEntityInitialization extends Procedure {
         entityManager.persist(category);
 
         // now we are done and can change the flag
-        numberOfRecords = count-1;
-        logger.info("read " + (count-1) + " rows from csv-file");
+        numberOfRecords = count - 1;
+        logger.info("read " + (count - 1) + " rows from csv-file");
     }
 
     public StockEntity findStockEntityDatabaseCopy(StockEntity entity) {
@@ -178,7 +178,7 @@ public class StockEntityInitialization extends Procedure {
                 entity.setWeeklyHigh(statement.getObject().asLiteral().getDouble());
             } else if ("Book".equals(name)) {
                 entity.setBookingValue(statement.getObject().asLiteral().getDouble());
-            }  else if ("row".equals(name)) {
+            } else if ("row".equals(name)) {
                 // we simply skip this one...
             } else if ("low".equals(name)) {
                 entity.setWeeklyLow(statement.getObject().asLiteral().getDouble());

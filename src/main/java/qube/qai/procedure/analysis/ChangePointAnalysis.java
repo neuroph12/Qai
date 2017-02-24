@@ -2,14 +2,14 @@ package qube.qai.procedure.analysis;
 
 import qube.qai.data.Arguments;
 import qube.qai.data.TimeSequence;
+import qube.qai.data.analysis.ChangepointAdapter;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureDecorator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import qube.qai.data.analysis.ChangepointAdapter;
-import qube.qai.procedure.ProcedureDecorator;
 
 /**
  * Created by rainbird on 11/28/15.

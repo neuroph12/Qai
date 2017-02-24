@@ -1,8 +1,8 @@
 package qube.qai.main;
 
-import com.google.inject.*;
-import com.google.inject.persist.PersistService;
-import com.google.inject.persist.jpa.JpaPersistModule;
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.HazelcastInstance;
@@ -15,17 +15,11 @@ import org.slf4j.LoggerFactory;
 import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.message.MessageQueue;
 import qube.qai.message.MessageQueueInterface;
-import qube.qai.persistence.search.RDFTriplesSearchService;
-import qube.qai.persistence.search.StockQuoteSearchService;
 import qube.qai.services.*;
 import qube.qai.services.implementation.*;
 
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by rainbird on 11/19/15.
@@ -87,7 +81,8 @@ public class QaiTestModule extends AbstractModule {
     }
 
 
-    @Provides @Singleton //@Named("HAZELCAST_CLIENT")
+    @Provides
+    @Singleton //@Named("HAZELCAST_CLIENT")
     public HazelcastInstance provideHazelcastInstance() {
         if (hazelcastInstance != null) {
             return hazelcastInstance;
@@ -108,14 +103,16 @@ public class QaiTestModule extends AbstractModule {
         return selectorfactory;
     }
 
-    @Provides @Named("Wiktionary_en")
+    @Provides
+    @Named("Wiktionary_en")
     SearchServiceInterface provideWiktionarySearchServiceInterface() {
         SearchServiceInterface searchService = new WikiSearchService(wiktionaryDirectory, wiktionaryZipFileName);
 
         return searchService;
     }
 
-    @Provides @Named("Wikipedia_en")
+    @Provides
+    @Named("Wikipedia_en")
     SearchServiceInterface provideWikipediaSearchServiceInterface() {
         SearchServiceInterface searchService = new WikiSearchService(wikipediaDirectory, wikipediaZipFileName);
 

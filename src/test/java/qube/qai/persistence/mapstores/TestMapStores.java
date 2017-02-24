@@ -1,15 +1,11 @@
 package qube.qai.persistence.mapstores;
 
-import com.google.inject.persist.PersistService;
-import com.google.inject.persist.jpa.JpaPersistModule;
 import qube.qai.main.QaiTestBase;
-import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
-import qube.qai.user.User;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,7 +19,8 @@ public class TestMapStores extends QaiTestBase {
     @Inject
     private ProcedureSourceInterface procedureSource;
 
-    @Inject @Named("Wikipedia_en")
+    @Inject
+    @Named("Wikipedia_en")
     private SearchServiceInterface searchService;
 
     private String testDirectory = "./test/procedures/";
@@ -32,6 +29,7 @@ public class TestMapStores extends QaiTestBase {
 
     /**
      * test wiki-article map-store
+     *
      * @throws Exception
      */
     public void testWikiArticleMapStore() throws Exception {
@@ -54,6 +52,7 @@ public class TestMapStores extends QaiTestBase {
      * in this case we will be storing away the procedures on
      * file-system... in xml-format, with x-stream, so that there are
      * no hassles because of serializable
+     *
      * @throws Exception
      */
     public void testDirectoryMapStore() throws Exception {
@@ -80,7 +79,7 @@ public class TestMapStores extends QaiTestBase {
                 continue;
             }
             Procedure procedure = procedures.get(uuid);
-            logger.info("procedure: " + procedure.getName() +" with uuid: " + uuid + " has not been written on file-system");
+            logger.info("procedure: " + procedure.getName() + " with uuid: " + uuid + " has not been written on file-system");
         }
 
         logger.info("writing was easy, and is done. now comes reading that was written:");

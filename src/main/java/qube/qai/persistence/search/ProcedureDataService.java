@@ -8,7 +8,6 @@ import qube.qai.services.implementation.SearchResult;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Created by rainbird on 1/25/17.

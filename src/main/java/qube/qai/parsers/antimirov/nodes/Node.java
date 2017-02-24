@@ -30,7 +30,7 @@ public class Node
      *                                 constructed as valid node type.
      */
     public Node(Name name)
-            //throws IncompleteTypeException {
+    //throws IncompleteTypeException {
     {
 
         super(null, null);
@@ -104,8 +104,8 @@ public class Node
      * @param flag     Says if recursive occurrence is allowed (TRUE)
      *                 or not.
      * @return TRUE, if constraint 1 is fulfilled and there are
-     *         no recursive occurrences in non-tail positions,
-     *         otherwise FALSE.
+     * no recursive occurrences in non-tail positions,
+     * otherwise FALSE.
      */
     public boolean checkTailPosition(Name rootName, boolean flag) {
 
@@ -123,8 +123,8 @@ public class Node
      * @param flag Says if nullable instances are allowed (TRUE) or
      *             not (FALSE).
      * @return TRUE, if constraint 2 is fulfilled and there is no
-     *         recursive occurrences with pure nullable predecessors,
-     *         otherwise FALSE.
+     * recursive occurrences with pure nullable predecessors,
+     * otherwise FALSE.
      */
     public boolean checkNonNullableHead(boolean flag) {
 
@@ -210,10 +210,10 @@ public class Node
      * otherwise FALSE.
      *
      * @return TRUE if type is a valid node expression
-     *         otherwise FALSE.
+     * otherwise FALSE.
      */
     public boolean check()
-            //throws IncompleteTypeException {
+    //throws IncompleteTypeException {
     {
 
         return (this.name != null);
@@ -224,7 +224,7 @@ public class Node
      * Returns a <code>String</code> representation of the expression.
      *
      * @return A String representation of the
-     *         <code>RNodeType</code>.
+     * <code>RNodeType</code>.
      */
     public String toString() {
 

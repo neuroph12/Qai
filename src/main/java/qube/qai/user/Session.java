@@ -17,7 +17,7 @@ public class Session implements Serializable {
     private String uuid;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name="user", nullable=false)
+    @JoinColumn(name = "user", nullable = false)
     private User user;
 
     @Column(name = "name")

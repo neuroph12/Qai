@@ -215,6 +215,7 @@ public class TestDatabaseMapStores extends TestCase {
 
     /**
      * creates a silly StockEntity
+     *
      * @param name
      * @return
      */
@@ -242,7 +243,7 @@ public class TestDatabaseMapStores extends TestCase {
         Random random = new Random();
         StringBuilder word = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
-            word.append((char)('a' + random.nextInt(26)));
+            word.append((char) ('a' + random.nextInt(26)));
         }
 
         return word.toString();

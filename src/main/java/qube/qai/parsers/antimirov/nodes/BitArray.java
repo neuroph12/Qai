@@ -161,7 +161,7 @@ public class BitArray {
      *
      * @param val Value to compare all flags with.
      * @return TRUE, if all flags have the value <code>val</code>,
-     *         otherwise FALSE.
+     * otherwise FALSE.
      */
     public boolean all(boolean val) {
 
@@ -275,7 +275,7 @@ public class BitArray {
      *                  the marked pairs in <code>pairs</code>, otherwise with
      *                  second.
      * @return A left-deep <code>RAlternationType</code>-tree
-     *         containing the marked elements in <code>pairs</code>.
+     * containing the marked elements in <code>pairs</code>.
      * @throws BitArrayIndexException Occurrs if an index position out
      *                                of bounds of the <code>BitArray</code> is tried to be
      *                                accessed.
@@ -356,7 +356,7 @@ public class BitArray {
      * <code>BitArray</code>.  Rightmost bit is index 0.
      *
      * @return <code>BitArray</code> data as a <code>String</code> with
-     *         rightmost bit as index 0.
+     * rightmost bit as index 0.
      */
     public String toString() {
 

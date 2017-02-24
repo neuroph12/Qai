@@ -2,7 +2,6 @@ package qube.qai.matrix;
 
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
-import org.ojalgo.matrix.store.PhysicalStore;
 import qube.qai.data.TimeSequence;
 
 import java.util.List;
@@ -60,8 +59,8 @@ public class Vector extends Matrix {
         }
 
         if (areChildren) {
-            buffer.deleteCharAt(buffer.length()-1);
-            buffer.deleteCharAt(buffer.length()-1);
+            buffer.deleteCharAt(buffer.length() - 1);
+            buffer.deleteCharAt(buffer.length() - 1);
         }
         buffer.append(")");
         return buffer.toString();

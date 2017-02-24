@@ -35,6 +35,7 @@ public class WikiIntegration {
 
     /**
      * strips the header out of a table
+     *
      * @param html
      * @return
      */
@@ -67,6 +68,7 @@ public class WikiIntegration {
 
     /**
      * converts contents of wikiModel to html-string
+     *
      * @param wikiArticle
      * @return
      */
@@ -76,6 +78,7 @@ public class WikiIntegration {
 
     /**
      * converts contents of wikiModel to html-string
+     *
      * @param wiki
      * @return
      */
@@ -87,6 +90,7 @@ public class WikiIntegration {
 
     /**
      * creates a model out of the given html
+     *
      * @param wiki
      * @param builder
      * @return
@@ -104,6 +108,7 @@ public class WikiIntegration {
 
     /**
      * creates a model out of the given html
+     *
      * @param article
      * @param builder
      * @return
@@ -115,6 +120,7 @@ public class WikiIntegration {
     /**
      * creates a model of the wiki-article
      * and returns the links found in that model
+     *
      * @param article
      * @return
      */
@@ -126,6 +132,7 @@ public class WikiIntegration {
     /**
      * strips the data found in a given wiki-html table
      * assumes that the html is from wiki nad as the style "wikitable"
+     *
      * @param html
      * @return
      */

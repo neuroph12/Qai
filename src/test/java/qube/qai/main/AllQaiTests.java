@@ -56,6 +56,7 @@ public class AllQaiTests extends TestCase {
     /**
      * so that all of the tests are actually called
      * when this suite is in use
+     *
      * @return
      */
     public static Test suite() {

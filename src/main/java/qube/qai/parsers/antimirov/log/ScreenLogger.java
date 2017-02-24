@@ -56,7 +56,7 @@ public class ScreenLogger
      * <code>ScreenLogger</code>.
      *
      * @return A <code>String</code> representation of the
-     *         <code>ScreenLogger</code>. brief status overview.
+     * <code>ScreenLogger</code>. brief status overview.
      */
     public String toString() {
 

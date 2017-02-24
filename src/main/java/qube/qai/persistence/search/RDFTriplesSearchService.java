@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.Model;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.DataServiceInterface;
-import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;

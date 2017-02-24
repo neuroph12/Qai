@@ -61,7 +61,7 @@ public class DirectorySearchService implements SearchServiceInterface {
                 Document doc = reader.document(hit.doc);
                 SearchResult result = new SearchResult(doc.get(FIELD_NAME), doc.get(FIELD_FILE), hit.score);
                 searchResults.add(result);
-                logger.info(doc.get(FIELD_FILE)  + " (" + hit.score + ")");
+                logger.info(doc.get(FIELD_FILE) + " (" + hit.score + ")");
             }
         } catch (IOException e) {
             e.printStackTrace();

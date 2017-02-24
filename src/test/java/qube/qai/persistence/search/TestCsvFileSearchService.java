@@ -1,14 +1,10 @@
 package qube.qai.persistence.search;
 
-import org.apache.jena.datatypes.RDFDatatype;
+import junit.framework.TestCase;
 import org.apache.jena.propertytable.graph.GraphCSV;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
-import junit.framework.TestCase;
 import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.propertytable.lang.CSV2RDF;
-import qube.qai.services.SearchServiceInterface;
-import qube.qai.services.implementation.SearchResult;
 import qube.qai.services.implementation.UUIDService;
 
 import java.util.ArrayList;
@@ -89,7 +85,7 @@ public class TestCsvFileSearchService extends TestCase {
             }
         }
         // the count might seem strange, but this the 1 we started with
-        log("printed " + (count-1) + " rows from csv-file");
+        log("printed " + (count - 1) + " rows from csv-file");
     }
 
     public void restCsvFileModel() throws Exception {
@@ -127,8 +123,8 @@ public class TestCsvFileSearchService extends TestCase {
         String rowPropertiesQuery = "PREFIX w3c: <http://w3c/future-csv-vocab/>" +
                 "SELECT ?p ?o" +
                 "WHERE {" +
-                    "?s w3c:row 1;" +
-                    "?p ?o ." +
+                "?s w3c:row 1;" +
+                "?p ?o ." +
                 "}";
         int count = 0;
         Collection<String> modelNames = new ArrayList<>();

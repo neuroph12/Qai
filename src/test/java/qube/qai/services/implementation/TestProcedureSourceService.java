@@ -29,7 +29,7 @@ public class TestProcedureSourceService implements ProcedureSourceInterface {
     private String startDate = "2000-1-1";
     private String endDate = "2000-12-31";
 
-    private String[] procedureNames = { ChangePointAnalysis.NAME,
+    private String[] procedureNames = {ChangePointAnalysis.NAME,
             MatrixStatistics.NAME,
             NetworkStatistics.NAME,
             NeuralNetworkAnalysis.NAME,
@@ -107,7 +107,8 @@ public class TestProcedureSourceService implements ProcedureSourceInterface {
             Date startDate = DateTime.parse("2015-1-1").toDate();
             Date endDate = DateTime.parse("2015-1-10").toDate();
 
-            List<Date> dates = TimeSequence.createDates(startDate, endDate);;
+            List<Date> dates = TimeSequence.createDates(startDate, endDate);
+            ;
             SelectionOperator<List> stepsSelectionOperator = new DataSelectionOperator<List>(dates);
             arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_DATES_FOR_STEPS, stepsSelectionOperator);
 

@@ -2,7 +2,9 @@ package qube.qai.procedure.analysis;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.*;
+import qube.qai.data.Arguments;
+import qube.qai.data.Metrics;
+import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.Procedure;
@@ -25,6 +27,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
 
     /**
      * do the testing for the MatrixAnalysis class
+     *
      * @throws Exception
      */
     public void testMatrixStatistics() throws Exception {
@@ -80,6 +83,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
 
     /**
      * do the testing for the NeuralNetworkForwardPropagation class
+     *
      * @throws Exception
      */
     public void testTimeSeriesAnalysis() throws Exception {
@@ -105,6 +109,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
 
     /**
      * do the testing for the NetworkStatistics class
+     *
      * @throws Exception
      */
     public void testNetworkStatistics() throws Exception {
@@ -146,7 +151,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
             Object result = statistics.getArguments().getResult(name);
             if (result instanceof Metrics) {
                 log("found metrics: " + name);
-                log((Metrics)result);
+                log((Metrics) result);
             } else {
                 log("result: " + result + " value: " + result);
             }
@@ -155,6 +160,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
 
     /**
      * do the testing for the NeuralNetworkForwardPropagation class
+     *
      * @throws Exception
      */
     public void testNeuralNetworkForwardPropagation() throws Exception {
@@ -185,9 +191,9 @@ public class TestAnalysisProcedures extends QaiTestBase {
     }
 
 
-
     /**
      * do the testing for the SortingPercentilesProcedure class
+     *
      * @throws Exception
      */
     public void testSortingPercentilesProcedure() throws Exception {
@@ -212,13 +218,14 @@ public class TestAnalysisProcedures extends QaiTestBase {
                     rank++;
                 }
             } else if (result instanceof TimeSequence) {
-                log("The average time series: " + ((TimeSequence)result).toArray());
+                log("The average time series: " + ((TimeSequence) result).toArray());
             }
         }
     }
 
     /**
      * convert the sequence to a string
+     *
      * @param series
      * @return
      */
@@ -230,7 +237,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
             buffer.append(",");
         }
 
-        buffer.deleteCharAt(buffer.length()-1);
+        buffer.deleteCharAt(buffer.length() - 1);
         return buffer.toString();
     }
 
@@ -238,6 +245,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
      * run the given procedure and check that every
      * result parameter mentioned in the procedure
      * is actually to be found in the arguments
+     *
      * @param statistics
      */
     private void checkResultsOf(Procedure statistics) {

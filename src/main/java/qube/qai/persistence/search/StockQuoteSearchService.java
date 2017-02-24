@@ -1,6 +1,5 @@
 package qube.qai.persistence.search;
 
-import org.apache.commons.exec.util.StringUtils;
 import qube.qai.persistence.StockQuote;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
@@ -11,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**

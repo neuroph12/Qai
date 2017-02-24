@@ -7,7 +7,6 @@ import net.jmob.guice.conf.core.InjectConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.services.implementation.DistributedSearchListener;
-import qube.qai.services.implementation.DistributedSearchService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,13 +28,16 @@ public class QaiNode {
     @Inject //@Named("HAZELCAST_SERVER")
     private HazelcastInstance hazelcastInstance;
 
-    @Inject @Named("Wikipedia_en")
+    @Inject
+    @Named("Wikipedia_en")
     private DistributedSearchListener wikipediaListener;
 
-    @Inject @Named("Wiktionary_en")
+    @Inject
+    @Named("Wiktionary_en")
     private DistributedSearchListener wiktionaryListener;
 
-    @Inject @Named("Stock_Quotes")
+    @Inject
+    @Named("Stock_Quotes")
     private DistributedSearchListener quotesListener;
 
 //    @Inject @Named("Dbpedia_en")

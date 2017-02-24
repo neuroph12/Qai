@@ -61,7 +61,7 @@ public class TestDirectoryIndexer extends QaiTestBase {
         DirectorySearchService searchService = new DirectorySearchService(testResourceIndexDirectory);
         for (String searchFor : filenames) {
             logger.info("searching for: " + searchFor);
-            Collection<SearchResult> results =  searchService.searchInputString(searchFor, "file", 100);
+            Collection<SearchResult> results = searchService.searchInputString(searchFor, "file", 100);
             assertNotNull("there has to be something", results);
             assertTrue(searchFor + " must be there!!!", !results.isEmpty());
             for (SearchResult result : results) {
@@ -72,6 +72,7 @@ public class TestDirectoryIndexer extends QaiTestBase {
 
     /**
      * this does the actual indexing- not really a test
+     *
      * @throws Exception
      */
     public void restWikipediaResource() throws Exception {
@@ -86,7 +87,7 @@ public class TestDirectoryIndexer extends QaiTestBase {
         DirectorySearchService searchService = new DirectorySearchService(wikipediaResourceIndexDirectory);
         for (String searchFor : wikipediaFilesToSearch) {
             logger.info("searching for: " + searchFor);
-            Collection<SearchResult> results =  searchService.searchInputString(searchFor, "file", 100);
+            Collection<SearchResult> results = searchService.searchInputString(searchFor, "file", 100);
             assertNotNull("there has to be something", results);
 //            assertTrue(searchFor + " must be there!!!", !results.isEmpty());
             for (SearchResult result : results) {
@@ -97,11 +98,12 @@ public class TestDirectoryIndexer extends QaiTestBase {
 
     /**
      * this does the actual indexing- not really a test
+     *
      * @throws Exception
      */
     public void testWikionaryResource() throws Exception {
 
-        DirectoryIndexer indexer = new DirectoryIndexer(wiktionaryResourceDirectory , wiktionaryResourceIndexDirectory);
+        DirectoryIndexer indexer = new DirectoryIndexer(wiktionaryResourceDirectory, wiktionaryResourceIndexDirectory);
         indexer.execute();
 
         String indexDirectory = (String) indexer.getArguments().getResult(DirectoryIndexer.INDEX_DIRECTORY);
@@ -111,7 +113,7 @@ public class TestDirectoryIndexer extends QaiTestBase {
         DirectorySearchService searchService = new DirectorySearchService(wiktionaryResourceIndexDirectory);
         for (String searchFor : wiktionaryFilesToSearch) {
             logger.info("searching for: " + searchFor);
-            Collection<SearchResult> results =  searchService.searchInputString(searchFor, "file", 100);
+            Collection<SearchResult> results = searchService.searchInputString(searchFor, "file", 100);
             assertNotNull("there has to be something", results);
 //            assertTrue(searchFor + " must be there!!!", !results.isEmpty());
             for (SearchResult result : results) {

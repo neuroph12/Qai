@@ -1,11 +1,6 @@
 package qube.qai.services.implementation;
 
 import qube.qai.main.QaiTestBase;
-import qube.qai.services.SearchServiceInterface;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.Collection;
 
 /**
  * Created by rainbird on 1/6/16.

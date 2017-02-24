@@ -2,12 +2,11 @@ package qube.qai.data;
 
 import junit.framework.TestCase;
 import org.joda.time.DateTime;
-import org.ojalgo.random.Normal;
-import org.ojalgo.random.RandomNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Iterator;
 
 /**
  * Created by rainbird on 12/10/15.

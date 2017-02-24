@@ -18,7 +18,7 @@ public class TestCsvFileRipper extends TestCase {
         CsvFileRipper ripper = new CsvFileRipper(pathToCsvFiles + sNp500File);
         Collection<StockEntity> stockEntities = ripper.ripStockEntities();
         assertNotNull("return value may not be null", stockEntities);
-        assertTrue("return value may not be enpty",!stockEntities.isEmpty());
+        assertTrue("return value may not be enpty", !stockEntities.isEmpty());
 
     }
 }

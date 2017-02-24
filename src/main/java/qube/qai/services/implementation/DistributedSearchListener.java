@@ -7,7 +7,6 @@ import com.hazelcast.core.MessageListener;
 import qube.qai.services.SearchServiceInterface;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Collection;
 
 /**
@@ -36,7 +35,7 @@ public class DistributedSearchListener implements MessageListener {
         Object mesasgeObject = message.getMessageObject();
         if (mesasgeObject instanceof DistributedSearchService.SearchRequest) {
             DistributedSearchService.SearchRequest request = (DistributedSearchService.SearchRequest) mesasgeObject;
-                    Collection<SearchResult> results = searchService.searchInputString(request.searchString, request.fieldName, request.hitsPerPage);
+            Collection<SearchResult> results = searchService.searchInputString(request.searchString, request.fieldName, request.hitsPerPage);
             ITopic<Collection> topic = hazelcastInstance.getTopic(topicName);
             topic.publish(results);
         }

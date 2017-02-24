@@ -3,10 +3,6 @@ package qube.qai.parsers;
 import junit.framework.TestCase;
 import org.codehaus.jparsec.Parser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-
 /**
  * Created by rainbird on 1/29/16.
  */
@@ -41,6 +37,7 @@ public class TestOntologyIntegration extends TestCase {
      * and how the performance in that case would be.if the performance is acceptable
      * this would be the easiest way for integrating the whole Dbpedia in the application-
      * including queries really...
+     *
      * @throws Exception
      */
     public void testDirectIntegration() throws Exception {

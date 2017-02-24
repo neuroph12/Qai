@@ -20,7 +20,6 @@ public class CsvFileRipper {
         ArrayList<StockEntity> rippedEntities = new ArrayList<>();
 
 
-
         return rippedEntities;
     }
 

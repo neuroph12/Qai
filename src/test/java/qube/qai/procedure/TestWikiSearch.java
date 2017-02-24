@@ -13,12 +13,13 @@ import java.util.Collection;
  */
 public class TestWikiSearch extends QaiTestBase {
 
-    @Inject @Named("Wiktionary_en")
+    @Inject
+    @Named("Wiktionary_en")
     private SearchServiceInterface searchService;
 
     /**
-     * @TODO this test needs improvement- start with injecting the constants
      * @throws Exception
+     * @TODO this test needs improvement- start with injecting the constants
      */
     public void testSearch() throws Exception {
 

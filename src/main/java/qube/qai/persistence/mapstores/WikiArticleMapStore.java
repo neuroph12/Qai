@@ -64,7 +64,7 @@ public class WikiArticleMapStore implements MapStore<String, WikiArticle> {
     }
 
     public Map<String, WikiArticle> loadAll(Collection<String> keys) {
-        Map<String,WikiArticle> all = new HashMap<String, WikiArticle>();
+        Map<String, WikiArticle> all = new HashMap<String, WikiArticle>();
         for (String key : keys) {
             WikiArticle article = load(key);
             all.put(key, article);

@@ -112,6 +112,7 @@ public class ProcedureToRdfConverter {
 
     /**
      * creates the visitor which will be working the assigned values
+     *
      * @return theVisitor
      */
     private RDFVisitor createRDFVisitor() {

@@ -32,6 +32,7 @@ public class TestSemanticNetworkBuilder extends QaiTestBase {
      * this is in order to test the semantic network building algorithms
      * we'll see how long it take to build up a semantic network of
      * a given text's content.
+     *
      * @throws Exception
      */
     public void testSemanticNetwork() throws Exception {
@@ -78,7 +79,7 @@ public class TestSemanticNetworkBuilder extends QaiTestBase {
         double semVertexCount = (Double) sematicMetrics.getValue("number of vertices");
         double copyVertexCount = (Double) copyMetrics.getValue("number of vertices");
         log("vertex counts, original: " + semVertexCount + " copy: " + copyVertexCount);
-        assertTrue("number of vertices must be same",  semVertexCount == copyVertexCount);
+        assertTrue("number of vertices must be same", semVertexCount == copyVertexCount);
 
         double semEdgeCount = (Double) sematicMetrics.getValue("number of edges");
         double copyEdgeCount = (Double) copyMetrics.getValue("number of edges");

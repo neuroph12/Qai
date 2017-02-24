@@ -32,7 +32,7 @@ public class TestNeuralNetworkTraining extends TestCase {
         trainer.createTrainingSet(dates, dataSet);
 
         trainer.trainNetwork();
-        for(MLDataPair pair: trainer.getTrainingSet()) {
+        for (MLDataPair pair : trainer.getTrainingSet()) {
             double[] output = network.propagate(pair.getInput().getData());
             for (int i = 0; i < output.length; i++) {
                 log("entity name: " + names[i]);
@@ -52,14 +52,14 @@ public class TestNeuralNetworkTraining extends TestCase {
 
     public void testNetworkTrainingWithStockQuotes() throws Exception {
         String[] names = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "nineth", "tenth"};
-        Map<String,Collection> dataMap = createStockQuoteMap(names);
+        Map<String, Collection> dataMap = createStockQuoteMap(names);
 
         NeuralNetwork network = new NeuralNetwork(names.length);
         BasicNetworkTrainer trainer = new BasicNetworkTrainer(network);
         trainer.createTrainingSet(dataMap);
 
         trainer.trainNetwork();
-        for(MLDataPair pair: trainer.getTrainingSet()) {
+        for (MLDataPair pair : trainer.getTrainingSet()) {
             double[] output = network.propagate(pair.getInput().getData());
             for (int i = 0; i < output.length; i++) {
                 log("entity name: " + names[i]);
@@ -91,7 +91,7 @@ public class TestNeuralNetworkTraining extends TestCase {
         for (String name : names) {
             DateTime tmp = start;
             Collection<StockQuote> quotes = new ArrayList<StockQuote>();
-            while(tmp.isBefore(end) || tmp.equals(end)) {
+            while (tmp.isBefore(end) || tmp.equals(end)) {
                 StockQuote quote = new StockQuote();
                 quote.setTickerSymbol(name);
                 quote.setQuoteDate(tmp.toDate());

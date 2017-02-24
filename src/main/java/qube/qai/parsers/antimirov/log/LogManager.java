@@ -1,8 +1,8 @@
 package qube.qai.parsers.antimirov.log;
 
-import qube.qai.parsers.antimirov.*;
-import qube.qai.parsers.antimirov.nodes.Name;
+import qube.qai.parsers.antimirov.Inequality;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
+import qube.qai.parsers.antimirov.nodes.Name;
 import qube.qai.parsers.antimirov.nodes.NodeSet;
 import qube.qai.parsers.antimirov.nodes.NodeSetElement;
 
@@ -99,7 +99,7 @@ public class LogManager {
      * Returns activation status of internal <code>Logger</code>.
      *
      * @return TRUE if <code>Logger</code> is active, otherwise
-     *         FALSE.
+     * FALSE.
      */
     public boolean isActive() {
 

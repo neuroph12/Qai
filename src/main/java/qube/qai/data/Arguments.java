@@ -49,6 +49,7 @@ public class Arguments implements Serializable, MetricTyped {
     /**
      * result name must have been configured in advance to take a
      * result with the name, otherwise the result will be ignored
+     *
      * @param name
      * @param result
      */
@@ -96,6 +97,7 @@ public class Arguments implements Serializable, MetricTyped {
     /**
      * checks whether all of the arguments have already
      * been assigned a value
+     *
      * @return
      */
     public boolean isSatisfied() {
@@ -115,6 +117,7 @@ public class Arguments implements Serializable, MetricTyped {
     /**
      * checks whether the argument with the given name
      * has already been assigned a value
+     *
      * @param name
      * @return
      */
@@ -160,8 +163,8 @@ public class Arguments implements Serializable, MetricTyped {
 
         // remove the last of the ", "
         if (hasArguments) {
-            buffer.deleteCharAt(buffer.length()-1);
-            buffer.deleteCharAt(buffer.length()-1);
+            buffer.deleteCharAt(buffer.length() - 1);
+            buffer.deleteCharAt(buffer.length() - 1);
         }
 
         return buffer.toString();

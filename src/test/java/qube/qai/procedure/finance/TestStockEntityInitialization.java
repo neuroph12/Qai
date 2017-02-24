@@ -39,7 +39,7 @@ public class TestStockEntityInitialization extends QaiTestBase {
         assertNotNull(foundCategory);
         assertTrue(foundCategory.getEntities() != null && !foundCategory.getEntities().isEmpty());
 
-        EntityManager entityManager = ((DatabaseMapStore)categoryMapStore).getEntityManager();
+        EntityManager entityManager = ((DatabaseMapStore) categoryMapStore).getEntityManager();
         String queryString = "select c from StockEntity c where c.tickerSymbol like '%s' and c.tradedIn like '%s'";
         for (StockEntity entity : category.getEntities()) {
             String tickerSymbol = entity.getTickerSymbol();

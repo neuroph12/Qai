@@ -47,6 +47,7 @@ public class StockEntityDataStore implements DataStore {
      * List of companies listed on the Australian Securities Exchange are missing
      * but i guess, when i switch to using hazelcast-maps rather than
      * search service, which i will be removing soon sometime anyways
+     *
      * @return
      */
     public Collection<String> getMarketListings() {
@@ -68,12 +69,11 @@ public class StockEntityDataStore implements DataStore {
 
     /**
      * this is for retrieving the contents of the given listing
-     *
      */
     public Collection<StockEntity> fetchEntitesOf(String marketListingName) {
 
-        IMap<String,WikiArticle> wikiMap = hazelcastInstance.getMap("WIKIPEDIA");
-        IMap<String,StockEntity> stockMap = hazelcastInstance.getMap("STOCK_ENTITIES");
+        IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap("WIKIPEDIA");
+        IMap<String, StockEntity> stockMap = hazelcastInstance.getMap("STOCK_ENTITIES");
 
         Collection<StockEntity> entities = new ArrayList<StockEntity>();
         //WikiArticle article = searchService.retrieveDocumentContentFromZipFile(marketListingName);

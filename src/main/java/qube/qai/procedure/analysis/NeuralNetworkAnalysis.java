@@ -4,7 +4,10 @@ import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
 import qube.qai.data.SelectionOperator;
 import qube.qai.network.neural.NeuralNetwork;
-import qube.qai.procedure.*;
+import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.ProcedureFactory;
+import qube.qai.procedure.SelectionProcedure;
 
 import java.util.Collection;
 

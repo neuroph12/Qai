@@ -63,6 +63,7 @@ public class TestNetwork extends TestCase {
     /**
      * basic test really- and checking out the equals method on vertex is actually used
      * the trick is to implement both hash and equals
+     *
      * @throws Exception
      */
     public void testNetworkVerticesAndEdges() throws Exception {

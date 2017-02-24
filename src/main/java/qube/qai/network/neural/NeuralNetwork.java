@@ -36,6 +36,7 @@ public class NeuralNetwork extends Network {
     /**
      * this network will be assigned its values when the
      * actual training occurs
+     *
      * @param size
      */
     public NeuralNetwork(int size) {
@@ -51,6 +52,7 @@ public class NeuralNetwork extends Network {
      * this network will build the both the neural network
      * using the given adjacency-matrix, and the graph-network
      * again using the same adjacency-matrix
+     *
      * @param weights
      */
     public NeuralNetwork(Matrix weights) {
@@ -63,6 +65,7 @@ public class NeuralNetwork extends Network {
 
     /**
      * forward propagation of the graph
+     *
      * @param input
      * @return
      */
@@ -117,7 +120,7 @@ public class NeuralNetwork extends Network {
         network.addLayer(new BasicLayer(new ActivationSigmoid(), false, size));
         network.getStructure().finalizeStructure();
 
-        double[] flatArray = new double[size*size];
+        double[] flatArray = new double[size * size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 int index = j * size + i;

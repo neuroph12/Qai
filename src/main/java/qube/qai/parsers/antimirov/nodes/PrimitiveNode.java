@@ -91,8 +91,8 @@ public class PrimitiveNode
      * @param flag     Says if recursive occurrence is allowed (TRUE)
      *                 or not.
      * @return TRUE, if constraint 1 is fulfilled and there are
-     *         no recursive occurrences in non-tail positions,
-     *         otherwise FALSE.
+     * no recursive occurrences in non-tail positions,
+     * otherwise FALSE.
      */
     public boolean checkTailPosition(Name rootName, boolean flag) {
 
@@ -110,8 +110,8 @@ public class PrimitiveNode
      * @param flag Says if nullable instances are allowed (TRUE) or
      *             not (FALSE).
      * @return TRUE, if constraint 2 is fulfilled and there is no
-     *         recursive occurrences with pure nullable predecessors,
-     *         otherwise FALSE.
+     * recursive occurrences with pure nullable predecessors,
+     * otherwise FALSE.
      */
     public boolean checkNonNullableHead(boolean flag) {
 
@@ -173,7 +173,7 @@ public class PrimitiveNode
      * Returns a <code>String</code> representation of the expression.
      *
      * @return A String representation of the
-     *         <code>RIterationType</code>.
+     * <code>RIterationType</code>.
      */
     public String toString() {
 

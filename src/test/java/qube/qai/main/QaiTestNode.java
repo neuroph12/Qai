@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 /**
@@ -50,7 +49,8 @@ public class QaiTestNode extends QaiTestModule {
 
     }
 
-    @Override @Singleton
+    @Override
+    @Singleton
     public HazelcastInstance provideHazelcastInstance() {
         return hazelcastInstance;
     }

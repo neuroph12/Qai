@@ -3,18 +3,14 @@ package qube.qai.procedure.archive;
 import junit.framework.TestCase;
 import org.apache.jena.query.*;
 import org.apache.jena.query.text.EntityDefinition;
-import org.apache.jena.query.text.TextDatasetFactory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.util.QueryExecUtils;
 import org.apache.jena.tdb.TDBFactory;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.store.SimpleFSDirectory;
 
 import java.io.File;
-import java.io.IOException;
 
 
 /**
@@ -40,29 +36,23 @@ public class TestSparqlIndexer extends TestCase {
 
         Dataset graphDS = null;
 
-        if( tdbPath == null )
-        {
-            System.out.println( "Construct an in-memory dataset" );
+        if (tdbPath == null) {
+            System.out.println("Construct an in-memory dataset");
             graphDS = DatasetFactory.createMem();
-        }
-        else
-        {
-            System.out.println( "Construct a persistant TDB based dataset to: " + tdbPath );
-            graphDS = TDBFactory.createDataset( tdbPath );
+        } else {
+            System.out.println("Construct a persistant TDB based dataset to: " + tdbPath);
+            graphDS = TDBFactory.createDataset(tdbPath);
         }
 
         // Define the index mapping
-        EntityDefinition entDef = new EntityDefinition( "uri", "text", ResourceFactory.createProperty( URI, indexedProperty ) );
+        EntityDefinition entDef = new EntityDefinition("uri", "text", ResourceFactory.createProperty(URI, indexedProperty));
         Directory luceneDir = null;
 
         // check for in memory or file based (persistant) index
-        if( lucenePath == null )
-        {
-            System.out.println( "Construct an in-memory lucene index" );
-            luceneDir =  new RAMDirectory();
-        }
-        else
-        {
+        if (lucenePath == null) {
+            System.out.println("Construct an in-memory lucene index");
+            luceneDir = new RAMDirectory();
+        } else {
 //            try
 //            {
 //                System.out.println( "Construct a persistant lucene index to: " + lucenePath );
@@ -81,30 +71,26 @@ public class TestSparqlIndexer extends TestCase {
 
         // load a ttl-file in the dataset
         File file = null;
-        System.out.println( "Load data ..." );
+        System.out.println("Load data ...");
         long startTime = System.currentTimeMillis();
-        dataset.begin( ReadWrite.WRITE );
-        try
-        {
+        dataset.begin(ReadWrite.WRITE);
+        try {
             Model m = dataset.getDefaultModel();
             //RDFDataMgr.read(m, file);
             dataset.commit();
-        }
-        finally
-        {
+        } finally {
             dataset.end();
         }
 
-        long finishTime = System.currentTimeMillis() ;
+        long finishTime = System.currentTimeMillis();
         double time = finishTime - startTime;
-        System.out.println( "Loading finished after " + time + "ms" );
+        System.out.println("Loading finished after " + time + "ms");
 
     }
 
     // and this is how you make sparql-queries
-    public void queryData( Dataset dataset )
-    {
-        System.out.println("Query data...") ;
+    public void queryData(Dataset dataset) {
+        System.out.println("Query data...");
 
         String prefix = "PREFIX ta: <" + URI + "> " +
                 "PREFIX text: <http://jena.apache.org/text#> ";
@@ -114,24 +100,21 @@ public class TestSparqlIndexer extends TestCase {
                 "  ?s ta:hasLongText ?text . " +
                 " }";
 
-        long startTime = System.currentTimeMillis() ;
+        long startTime = System.currentTimeMillis();
 
-        dataset.begin( ReadWrite.READ ) ;
-        try
-        {
-            Query q = QueryFactory.create( prefix + query );
-            QueryExecution qexec = QueryExecutionFactory.create( q , dataset );
-            QueryExecUtils.executeQuery( q, qexec );
-        }
-        finally
-        {
-            dataset.end() ;
+        dataset.begin(ReadWrite.READ);
+        try {
+            Query q = QueryFactory.create(prefix + query);
+            QueryExecution qexec = QueryExecutionFactory.create(q, dataset);
+            QueryExecUtils.executeQuery(q, qexec);
+        } finally {
+            dataset.end();
         }
 
         long finishTime = System.currentTimeMillis();
 
         double time = finishTime - startTime;
-        System.out.println( "Query finished  after " + time + "ms" );
+        System.out.println("Query finished  after " + time + "ms");
 
     }
 

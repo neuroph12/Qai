@@ -28,7 +28,7 @@ public class Statistics implements MetricTyped {
     public Statistics(Object[] data) {
         this.data = new double[data.length];
         for (int i = 0; i < data.length; i++) {
-            this.data[i] = ((Number)data[i]).doubleValue();
+            this.data[i] = ((Number) data[i]).doubleValue();
         }
     }
 

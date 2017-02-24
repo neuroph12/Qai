@@ -32,6 +32,7 @@ public class TestSparqlSearchService extends TestCase {
      * this is the main test which should be running
      * all the others are either to be remved or to be checked
      * as to their relevance- experimental code, i suspect
+     *
      * @throws Exception
      */
     public void testSparqlSearchService() throws Exception {
@@ -45,11 +46,12 @@ public class TestSparqlSearchService extends TestCase {
 
     /**
      * i think this will be removed later on
+     *
      * @throws Exception
      */
     public void restRemoteSparql() throws Exception {
         HttpAuthenticator authenticator = new SimpleAuthenticator("dba", "dba".toCharArray());
-        try(QueryExecution qe = QueryExecutionFactory.sparqlService(serviceURL,
+        try (QueryExecution qe = QueryExecutionFactory.sparqlService(serviceURL,
                 "SELECT * WHERE { ?s a ?type }",
                 authenticator)) {
             Model model = qe.execConstruct();
@@ -59,6 +61,7 @@ public class TestSparqlSearchService extends TestCase {
 
     /**
      * right now not in use
+     *
      * @throws Exception
      */
     public void restRdfModelAndAll() throws Exception {
@@ -96,6 +99,7 @@ public class TestSparqlSearchService extends TestCase {
 
     /**
      * currently not in use
+     *
      * @throws Exception
      */
     public void restRdfReadingFile() throws Exception {

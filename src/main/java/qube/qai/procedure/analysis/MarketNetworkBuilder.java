@@ -38,6 +38,7 @@ public class MarketNetworkBuilder extends ProcedureDecorator implements NetworkB
     /**
      * calls execute method to train the network
      * and returns result of that
+     *
      * @param source
      * @return
      */
@@ -80,6 +81,7 @@ public class MarketNetworkBuilder extends ProcedureDecorator implements NetworkB
 
     /**
      * tickerSymbol is something like {{tradedIn|symbol}}
+     *
      * @param
      * @return
      */
@@ -90,7 +92,6 @@ public class MarketNetworkBuilder extends ProcedureDecorator implements NetworkB
 //        entity.setTickerSymbol(ticker);
 //        entity.setTradedIn(tradedIn);
 //    }
-
     @Override
     public void buildArguments() {
         description = DESCRIPTION;

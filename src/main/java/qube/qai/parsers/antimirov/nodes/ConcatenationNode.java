@@ -95,7 +95,7 @@ public final class ConcatenationNode
      * @param names The set of leading names to compute partial
      *              derivatives for.
      * @return The partial derivatives of the type for all names in
-     *         <code>names</code>.
+     * <code>names</code>.
      */
     public NodeSet getPartialDerivatives(NodeSet names)
             throws IllegalConcatenationException,
@@ -127,8 +127,8 @@ public final class ConcatenationNode
      * @param flag     Says if recursive occurrence is allowed (TRUE)
      *                 or not.
      * @return TRUE, if constraint 1 is fulfilled and there are
-     *         no recursive occurrences in non-tail positions,
-     *         otherwise FALSE.
+     * no recursive occurrences in non-tail positions,
+     * otherwise FALSE.
      */
     public boolean checkTailPosition(Name rootName, boolean flag) {
 
@@ -147,8 +147,8 @@ public final class ConcatenationNode
      * @param flag Says if nullable instances are allowed (TRUE) or
      *             not (FALSE).
      * @return TRUE, if constraint 2 is fulfilled and there is no
-     *         recursive occurrences with pure nullable predecessors,
-     *         otherwise FALSE.
+     * recursive occurrences with pure nullable predecessors,
+     * otherwise FALSE.
      */
     public boolean checkNonNullableHead(boolean flag) {
 
@@ -233,7 +233,7 @@ public final class ConcatenationNode
      * expression, otherwise FALSE.
      *
      * @return TRUE if type is a valid concatenation expression
-     *         otherwise FALSE.
+     * otherwise FALSE.
      */
     private boolean check()
             throws IncompleteTypeException {
@@ -251,7 +251,7 @@ public final class ConcatenationNode
      * Returns a <code>String</code> representation of the expression.
      *
      * @return A String representation of the
-     *         <code>RConcatenationType</code>.
+     * <code>RConcatenationType</code>.
      */
     public String toString() {
 

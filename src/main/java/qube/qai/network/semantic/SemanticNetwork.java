@@ -1,24 +1,8 @@
 package qube.qai.network.semantic;
 
-import info.bliki.wiki.filter.PlainTextConverter;
-import info.bliki.wiki.model.WikiModel;
-import opennlp.tools.tokenize.Tokenizer;
-import opennlp.tools.tokenize.TokenizerME;
-import opennlp.tools.tokenize.TokenizerModel;
-import org.apache.commons.lang3.StringUtils;
-import org.ojalgo.access.Access2D;
-import org.ojalgo.matrix.PrimitiveMatrix;
-import org.ojalgo.matrix.store.PrimitiveDenseStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.matrix.Matrix;
-import qube.qai.network.Graph;
 import qube.qai.network.Network;
-import qube.qai.persistence.WikiArticle;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by rainbird on 11/22/15.

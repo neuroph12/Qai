@@ -4,7 +4,6 @@ import org.ojalgo.finance.data.YahooSymbol;
 import org.ojalgo.type.CalendarDateUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.TimeSequence;
 import qube.qai.persistence.StockQuote;
 
 import java.util.ArrayList;

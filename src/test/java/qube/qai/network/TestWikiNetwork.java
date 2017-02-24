@@ -18,13 +18,14 @@ import java.util.Set;
  */
 public class TestWikiNetwork extends QaiTestBase {
 
-    @Inject @Named("Wiktionary_en")
+    @Inject
+    @Named("Wiktionary_en")
     private SearchServiceInterface wikipediaSearchService;
 
 
     @Override
     protected void setUp() throws Exception {
-       super.setUp();
+        super.setUp();
     }
 
     /**
@@ -33,6 +34,7 @@ public class TestWikiNetwork extends QaiTestBase {
      * Network experiment number of vertices: 185842
      * Network experiment number of edges: 783178
      * Network experiment average degree: 8.428428449973634
+     *
      * @throws Exception
      */
     public void restWikiNetwork() throws Exception {
@@ -72,7 +74,7 @@ public class TestWikiNetwork extends QaiTestBase {
 
         ObjectGrph graph = new ObjectGrph<String, String>();
         //IntSet vertices = graph.getVertices();
-        String[] vertices = {"paris", "london", "vienna", "luxemburg", "varsaw", };
+        String[] vertices = {"paris", "london", "vienna", "luxemburg", "varsaw",};
 
         for (String vertex : vertices) {
             graph.addVertex(vertex);

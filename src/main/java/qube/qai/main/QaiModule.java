@@ -2,8 +2,6 @@ package qube.qai.main;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import net.jmob.guice.conf.core.BindConfig;
 import net.jmob.guice.conf.core.ConfigurationModule;
@@ -15,14 +13,16 @@ import qube.qai.data.stores.DataStore;
 import qube.qai.data.stores.StockEntityDataStore;
 import qube.qai.message.MessageQueue;
 import qube.qai.message.MessageQueueInterface;
-import qube.qai.services.*;
-import qube.qai.services.implementation.*;
+import qube.qai.services.ProcedureRunnerInterface;
+import qube.qai.services.ProcedureSourceInterface;
+import qube.qai.services.SelectorFactoryInterface;
+import qube.qai.services.UUIDServiceInterface;
+import qube.qai.services.implementation.CachedProcedureSourceService;
+import qube.qai.services.implementation.HazelcastSelectorFactory;
+import qube.qai.services.implementation.ProcedureRunner;
+import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by rainbird on 11/9/15.
@@ -73,8 +73,8 @@ public class QaiModule extends AbstractModule {
     }
 
     /**
-     * @TODO this was mainly for test reasons, i think it is now time to remove it
      * @return
+     * @TODO this was mainly for test reasons, i think it is now time to remove it
      */
     @Provides
     ProcedureSourceInterface provideProcedureSourceInterface() {
@@ -84,6 +84,7 @@ public class QaiModule extends AbstractModule {
     /**
      * used mainly in procedures themselves so that procedures can
      * get their data from hazelcast and return their data via hazelcast as well
+     *
      * @return
      */
     @Provides

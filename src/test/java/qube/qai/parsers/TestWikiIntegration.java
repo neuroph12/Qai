@@ -83,6 +83,7 @@ public class TestWikiIntegration extends QaiTestBase {
 
     /**
      * these are the header titles on S&P 500 page table
+     *
      * @return
      */
     private Set<String> headerTitles() {
@@ -102,6 +103,7 @@ public class TestWikiIntegration extends QaiTestBase {
      * this time it is even right to have this
      * logger-lines are terrible for reading
      * and getting this test done requires a lot of reading
+     *
      * @param message
      */
     @Override

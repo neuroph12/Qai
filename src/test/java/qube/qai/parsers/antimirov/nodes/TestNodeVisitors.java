@@ -17,7 +17,8 @@ public class TestNodeVisitors extends TestCase {
         buffer = new StringBuffer();
         BaseNode node = new ConcatenationNode(new ConcatenationNode(new Node(new Name("foo")),
                 new Node(new Name("baz"), new PrimitiveNode(new Name("integer")))),
-                new Node(new Name("bar"), new PrimitiveNode(new Name("double"))));;
+                new Node(new Name("bar"), new PrimitiveNode(new Name("double"))));
+        ;
         NodeVisitor visitor = createVisitor();
         node.childrenAccept(visitor);
         log("buffer collected: '" + buffer.toString() + "'");

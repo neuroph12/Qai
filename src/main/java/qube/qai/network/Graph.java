@@ -58,7 +58,7 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
             vertexCount++;
         }
         // remove last one
-        buffer.deleteCharAt(buffer.length()-1);
+        buffer.deleteCharAt(buffer.length() - 1);
         buffer.append(verticesClose);
 
         buffer.append(edgesOpen);
@@ -74,7 +74,7 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
             edgeCount++;
         }
         // remove last one
-        buffer.deleteCharAt(buffer.length()-1);
+        buffer.deleteCharAt(buffer.length() - 1);
         buffer.append(edgesClose);
 
         logger.debug("encoded graph with #vertex: " + vertexCount + " #edges: " + edgeCount);

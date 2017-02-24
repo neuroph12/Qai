@@ -30,10 +30,12 @@ public class TestHazelcastMaps extends QaiTestBase {
     @Inject
     private UUIDServiceInterface uuidService;
 
-    @Inject @Named("Wikipedia_en")
+    @Inject
+    @Named("Wikipedia_en")
     private SearchServiceInterface wikipediaSearch;
 
-    @Inject @Named("Wiktionary_en")
+    @Inject
+    @Named("Wiktionary_en")
     private SearchServiceInterface wiktionarySearch;
 
     @Inject //@Named("HAZELCAST_CLIENT")
@@ -74,7 +76,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
-        IMap<String,WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKIPEDIA);
+        IMap<String, WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKIPEDIA);
         // again- we first do the search and demand the article
         for (String name : someWikiArticles) {
             Collection<SearchResult> results = wikipediaSearch.searchInputString(name, "title", 100);
@@ -91,7 +93,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
-        IMap<String,WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKTIONARY);
+        IMap<String, WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKTIONARY);
         // again- we first do the search and demand the article
         for (String name : someWikiArticles) {
             Collection<SearchResult> results = wiktionarySearch.searchInputString(name, "title", 100);
@@ -106,7 +108,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
-        IMap<String,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_ENTITIES);
+        IMap<String, StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_ENTITIES);
         assertNotNull("there has to be a map", stockEntities);
         int number = 100;
         List<String> idList = new ArrayList<String>();
@@ -139,7 +141,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
-        IMap<String,Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURES);
+        IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURES);
         String[] procedureNames = procedureSource.getProcedureNames();
 
         // first get a hold of the procedures
@@ -170,7 +172,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
-        IMap<String,File> wikipediaResources = hazelcastInstance.getMap(WIKIPEDIA_RESOURCES);
+        IMap<String, File> wikipediaResources = hazelcastInstance.getMap(WIKIPEDIA_RESOURCES);
         for (String filename : wikipediaFilesToSearch) {
             logger.info("now searching: " + filename);
             File found = wikipediaResources.get(filename);
@@ -183,7 +185,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
-        IMap<String,File> wiktionaryResources = hazelcastInstance.getMap(WIKTIONARY_RESOURCES);
+        IMap<String, File> wiktionaryResources = hazelcastInstance.getMap(WIKTIONARY_RESOURCES);
         for (String filename : wiktionaryFilesToSearch) {
             logger.info("now searching: " + filename);
             File found = wiktionaryResources.get(filename);
@@ -193,6 +195,7 @@ public class TestHazelcastMaps extends QaiTestBase {
 
     /**
      * creates a silly StockEntity
+     *
      * @param name
      * @return
      */

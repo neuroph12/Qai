@@ -3,7 +3,6 @@ package qube.qai.persistence;
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**

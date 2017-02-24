@@ -151,7 +151,7 @@ public class TextLogger
      * <code>TextLogger</code>.
      *
      * @return A <code>String</code> representation of the
-     *         <code>TextLogger</code>.
+     * <code>TextLogger</code>.
      */
     public String toString() {
 

@@ -113,7 +113,7 @@ public final class NodePair
      * content of the instance.
      *
      * @return TRUE, if compared elements are of equal content, otherwise
-     *         FALSE.
+     * FALSE.
      */
     public boolean equals(NodePair p) {
 
@@ -172,7 +172,7 @@ public final class NodePair
      * <code>TypePair</code>.
      *
      * @return A <code>String</code> representation of the
-     *         <code>TypePair</code>.
+     * <code>TypePair</code>.
      */
     public String toString() {
 

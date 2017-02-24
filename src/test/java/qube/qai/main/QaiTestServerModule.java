@@ -15,9 +15,12 @@ import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStoreFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.persistence.*;
-import qube.qai.persistence.mapstores.*;
-import qube.qai.persistence.search.RDFTriplesSearchService;
+import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockQuote;
+import qube.qai.persistence.WikiArticle;
+import qube.qai.persistence.mapstores.DatabaseMapStore;
+import qube.qai.persistence.mapstores.DirectoryMapStore;
+import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.persistence.search.StockQuoteSearchService;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
@@ -27,7 +30,6 @@ import qube.qai.user.User;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.persistence.EntityManager;
 import java.util.Properties;
 
 /**
@@ -106,9 +108,11 @@ public class QaiTestServerModule extends AbstractModule {
 
     /**
      * StockQuotesSearchService
+     *
      * @return
      */
-    @Provides @Named("Stock_Quotes")
+    @Provides
+    @Named("Stock_Quotes")
     public SearchServiceInterface provideStockQuoteSearchService() {
 
         // create an injector for initializing JPA-Module & start the service
@@ -119,7 +123,7 @@ public class QaiTestServerModule extends AbstractModule {
         StockQuoteSearchService searchService = new StockQuoteSearchService();
         injector.injectMembers(searchService);
 
-        return  searchService;
+        return searchService;
     }
 
     /**
@@ -140,9 +144,9 @@ public class QaiTestServerModule extends AbstractModule {
 //    }
 
     /**
+     * @return
      * @TODO refactor this mess!!!
      * this is more or less where everything happens
-     * @return
      */
     @Provides
     @Singleton //@Named("HAZELCAST_SERVER")
@@ -169,8 +173,8 @@ public class QaiTestServerModule extends AbstractModule {
             userMapstoreConfig = new MapStoreConfig();
         }
         userMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, User>() {
-            public MapLoader<String,User> newMapStore(String mapName, Properties properties) {
-                if(USERS.equals(mapName)) {
+            public MapLoader<String, User> newMapStore(String mapName, Properties properties) {
+                if (USERS.equals(mapName)) {
                     if (userMapStore == null) {
                         userMapStore = new DatabaseMapStore(User.class);
                         usersInjector.injectMembers(userMapStore);
@@ -271,7 +275,7 @@ public class QaiTestServerModule extends AbstractModule {
          * in this case the HsqlDBMapStore
          */
         MapConfig stockQuotesConfig = config.getMapConfig(STOCK_QUOTES);
-        MapStoreConfig stockQuotesMapstoreConfig = stockQuotesConfig .getMapStoreConfig();
+        MapStoreConfig stockQuotesMapstoreConfig = stockQuotesConfig.getMapStoreConfig();
         if (stockQuotesMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + STOCK_QUOTES);
             stockQuotesMapstoreConfig = new MapStoreConfig();

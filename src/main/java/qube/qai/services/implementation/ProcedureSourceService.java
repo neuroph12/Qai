@@ -13,8 +13,6 @@ public class ProcedureSourceService implements ProcedureSourceInterface {
      */
 
 
-
-
     public Procedure getProcedureWithName(String name) {
         return null;
     }

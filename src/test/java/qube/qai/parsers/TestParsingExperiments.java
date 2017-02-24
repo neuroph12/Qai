@@ -12,8 +12,6 @@ import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.Span;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
@@ -48,6 +46,7 @@ public class TestParsingExperiments extends QaiTestBase {
      * i hope i find a way to integrate
      * i think, in this case, i shall experiment with the name-finder
      * which is specialized for company names.
+     *
      * @throws Exception
      */
     public void restSnP500() throws Exception {
@@ -159,6 +158,7 @@ public class TestParsingExperiments extends QaiTestBase {
     /**
      * this is mainly for testing Wiki-tables which are then will be
      * converted to stock-quotes
+     *
      * @throws Exception
      */
     public void restWikiTableParser() throws Exception {
@@ -229,6 +229,7 @@ public class TestParsingExperiments extends QaiTestBase {
 
     /**
      * i think this is an excellent occasion for testing tokenizers and parsers
+     *
      * @return
      */
     private Tokenizer createTokenizer() {

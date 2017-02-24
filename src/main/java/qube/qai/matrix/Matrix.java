@@ -68,6 +68,7 @@ public class Matrix implements Serializable, MetricTyped {
 
     /**
      * returns the contents of the matrix as a double-array
+     *
      * @return
      */
     public double[] toArray() {
@@ -107,6 +108,7 @@ public class Matrix implements Serializable, MetricTyped {
      * convenience method for creating simple matrices
      * if option filled is true, a normally distributed sample will be generated
      * if option filled is false, a matrix with all zero elements will be generated
+     *
      * @param filled
      * @param rows
      * @param columns

@@ -16,13 +16,13 @@ public class CachedProcedureSourceService implements ProcedureSourceInterface {
 
     private Logger logger = LoggerFactory.getLogger("CachedProcedureSourceService");
 
-    private String[] procedureNames = { ChangePointAnalysis.NAME,
-                                        MatrixStatistics.NAME,
-                                        NetworkStatistics.NAME,
-                                        NeuralNetworkAnalysis.NAME,
-                                        NeuralNetworkForwardPropagation.NAME,
-                                        SortingPercentilesProcedure.NAME,
-                                        TimeSequenceAnalysis.NAME };
+    private String[] procedureNames = {ChangePointAnalysis.NAME,
+            MatrixStatistics.NAME,
+            NetworkStatistics.NAME,
+            NeuralNetworkAnalysis.NAME,
+            NeuralNetworkForwardPropagation.NAME,
+            SortingPercentilesProcedure.NAME,
+            TimeSequenceAnalysis.NAME};
 
     private static CachedProcedureSourceService instance;
 

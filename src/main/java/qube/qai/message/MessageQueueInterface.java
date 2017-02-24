@@ -1,7 +1,5 @@
 package qube.qai.message;
 
-import com.hazelcast.core.*;
-
 /**
  * Created by rainbird on 12/22/15.
  */

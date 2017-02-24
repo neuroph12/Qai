@@ -33,10 +33,12 @@ public class TestHazelcastSelectors extends QaiTestBase {
     @Inject
     private UUIDServiceInterface uuidService;
 
-    @Inject @Named("Wikipedia_en")
+    @Inject
+    @Named("Wikipedia_en")
     private SearchServiceInterface wikipediaSearch;
 
-    @Inject @Named("Wiktionary_en")
+    @Inject
+    @Named("Wiktionary_en")
     private SearchServiceInterface wiktionarySearch;
 
     private String STOCK_ENTITIES = "STOCK_ENTITIES";
@@ -46,11 +48,12 @@ public class TestHazelcastSelectors extends QaiTestBase {
 
     /**
      * test for selector of stock-entities
+     *
      * @throws Exception
      */
     public void testHazelcastStockEntities() throws Exception {
 
-        IMap<String,StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_ENTITIES);
+        IMap<String, StockEntity> stockEntities = hazelcastInstance.getMap(STOCK_ENTITIES);
 
         int number = 100;
         Collection<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
@@ -75,11 +78,12 @@ public class TestHazelcastSelectors extends QaiTestBase {
 
     /**
      * test for procedure selectors
+     *
      * @throws Exception
      */
     public void testHazelcastProcedures() throws Exception {
 
-        IMap<String,Procedure> procedures = hazelcastInstance.getMap(PROCEDURE_SOURCE);
+        IMap<String, Procedure> procedures = hazelcastInstance.getMap(PROCEDURE_SOURCE);
 
         List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
         String[] procedureNames = procedureSource.getProcedureNames();
@@ -107,6 +111,7 @@ public class TestHazelcastSelectors extends QaiTestBase {
     /**
      * this is mainly for testing how the selectors for wiki-articles work
      * there shouldn't really a problem with this
+     *
      * @throws Exception
      */
     public void testHazelcastWikipediaArticles() throws Exception {
@@ -131,11 +136,12 @@ public class TestHazelcastSelectors extends QaiTestBase {
     /**
      * this is mainly for testing how the selectors for wiki-articles work
      * there shouldn't really a problem with this
+     *
      * @throws Exception
      */
     public void testHazelcastWiktionaryArticles() throws Exception {
 
-        IMap<String,WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKTIONARY_SOURCE);
+        IMap<String, WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKTIONARY_SOURCE);
 
         List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
         Collection<SearchResult> results = wiktionarySearch.searchInputString("mouse", "title", 100);
@@ -154,6 +160,7 @@ public class TestHazelcastSelectors extends QaiTestBase {
 
     /**
      * creates a silly StockEntity
+     *
      * @param name
      * @return
      */

@@ -40,8 +40,8 @@ public class TestNeuralNetwork extends TestCase {
 
         // decided to use something called Encog-
         // the thing looks to be pretty complete
-        double XOR_INPUT[][] = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } };
-        double XOR_IDEAL[][] = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 0.0 } };
+        double XOR_INPUT[][] = {{0.0, 0.0}, {1.0, 0.0}, {0.0, 1.0}, {1.0, 1.0}};
+        double XOR_IDEAL[][] = {{0.0, 0.0}, {1.0, 0.0}, {1.0, 0.0}, {0.0, 0.0}};
 
         // weights copied from reasonably well-trained network doing the same thing
         double[] weights = {-0.07436579220019145, 0.04068370154784863, -0.6118178821788891, -1.3482376121640667};
@@ -86,19 +86,19 @@ public class TestNeuralNetwork extends TestCase {
     public void restEncog_2() throws Exception {
         // decided to use something called Encog-
         // the thing looks to be pretty complete
-        double XOR_INPUT[][] = { { 0.0, 0.0, 0.0 },
-                                 { 1.0, 0.0, 0.0 },
-                                 { 0.0, 0.0, 1.0 },
-                                 { 1.0, 1.0, 1.0 },
-                                 { 1.0, 1.0, 0.0 },
-                                 { 0.0, 1.0, 1.0 }};
+        double XOR_INPUT[][] = {{0.0, 0.0, 0.0},
+                {1.0, 0.0, 0.0},
+                {0.0, 0.0, 1.0},
+                {1.0, 1.0, 1.0},
+                {1.0, 1.0, 0.0},
+                {0.0, 1.0, 1.0}};
 
-        double XOR_IDEAL[][] = { { 0.0, 0.0, 0.0 },
-                                 { 1.0, 0.0, 0.0 },
-                                 { 1.0, 0.0, 0.0 },
-                                 { 1.0, 0.0, 0.0 },
-                                 { 0.0, 0.0, 0.0 },
-                                 { 0.0, 0.0, 0.0 }};
+        double XOR_IDEAL[][] = {{0.0, 0.0, 0.0},
+                {1.0, 0.0, 0.0},
+                {1.0, 0.0, 0.0},
+                {1.0, 0.0, 0.0},
+                {0.0, 0.0, 0.0},
+                {0.0, 0.0, 0.0}};
 
         BasicNetwork network = new BasicNetwork();
         network.addLayer(new BasicLayer(null, false, 3));
@@ -118,7 +118,7 @@ public class TestNeuralNetwork extends TestCase {
             train.iteration();
             log("Epoch #" + epoch + " Error:" + train.getError());
             epoch++;
-        } while(train.getError() > 0.2);
+        } while (train.getError() > 0.2);
         train.finishTraining();
 
         log("trained network weights:" + network.dumpWeights());
@@ -132,7 +132,7 @@ public class TestNeuralNetwork extends TestCase {
         }
 
         System.out.println("Neural Network Results:");
-        for(MLDataPair pair: trainingSet ) {
+        for (MLDataPair pair : trainingSet) {
             final MLData output = network.compute(pair.getInput());
             log(pair.getInput().getData(0) + "," + pair.getInput().getData(1)
                     + ", actual=" + output.getData(0) + ",ideal=" + pair.getIdeal().getData(0));
@@ -149,8 +149,8 @@ public class TestNeuralNetwork extends TestCase {
             more = true;
         }
         if (more) {
-            buffer.deleteCharAt(buffer.length()-1);
-            buffer.deleteCharAt(buffer.length()-1);
+            buffer.deleteCharAt(buffer.length() - 1);
+            buffer.deleteCharAt(buffer.length() - 1);
         }
         buffer.append(")");
         return buffer.toString();
@@ -162,9 +162,9 @@ public class TestNeuralNetwork extends TestCase {
     public void restEncog_1() throws Exception {
         // decided to use something called Encog-
         // the thing looks to be pretty complete
-        double XOR_INPUT[][] = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } };
+        double XOR_INPUT[][] = {{0.0, 0.0}, {1.0, 0.0}, {0.0, 1.0}, {1.0, 1.0}};
 
-        double XOR_IDEAL[][] = { { 0.0 }, { 1.0 }, { 1.0 }, { 0.0 } };
+        double XOR_IDEAL[][] = {{0.0}, {1.0}, {1.0}, {0.0}};
 
         BasicNetwork network = new BasicNetwork();
         network.addLayer(new BasicLayer(null, true, 2));
@@ -185,7 +185,7 @@ public class TestNeuralNetwork extends TestCase {
             train.iteration();
             log("Epoch #" + epoch + " Error:" + train.getError());
             epoch++;
-        } while(train.getError() > 0.2);
+        } while (train.getError() > 0.2);
         train.finishTraining();
 
         log("trained network weights:" + network.dumpWeights());
@@ -210,7 +210,7 @@ public class TestNeuralNetwork extends TestCase {
 
         // test the neural network
         System.out.println("Neural Network Results:");
-        for(MLDataPair pair: trainingSet ) {
+        for (MLDataPair pair : trainingSet) {
             final MLData output = network.compute(pair.getInput());
             log(pair.getInput().getData(0) + "," + pair.getInput().getData(1)
                     + ", actual=" + output.getData(0) + ",ideal=" + pair.getIdeal().getData(0));

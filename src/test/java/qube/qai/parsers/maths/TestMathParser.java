@@ -6,7 +6,7 @@ package qube.qai.parsers.maths;
 
 import junit.framework.TestCase;
 
-public class TestMathParser extends TestCase  {
+public class TestMathParser extends TestCase {
 
     public void testDummy() throws Exception {
         fail("test not yet implemented");

@@ -32,31 +32,31 @@ public class AntimirovParser {
     public Parser<BaseNode> name() {
         return Scanners.IDENTIFIER
                 .map(new org.codehaus.jparsec.functors.Map<String, BaseNode>() {
-            @Override
-            public BaseNode map(String s) {
-                Name name = new Name(s);
-                BaseNode node = null;
-                if (Name.BOOLEAN.equals(s)
-                        || "int".equals(s)
-                        || Name.INTEGER.equals(s)
-                        || Name.DECIMAL.equals(s)
-                        || Name.DOUBLE.equals(s)
-                        || Name.STRING.equals(s)) {
-                    node = new PrimitiveNode(name);
-                    if (currentNode != null)  {
-                        currentNode.setFirstChild(node);
-                    }
-                } else if ("e".equals(s)) {
-                    node = new EmptyNode();
-                    currentNode = node;
-                } else {
-                    node = new Node(name);
-                    currentNode = node;
-                }
+                    @Override
+                    public BaseNode map(String s) {
+                        Name name = new Name(s);
+                        BaseNode node = null;
+                        if (Name.BOOLEAN.equals(s)
+                                || "int".equals(s)
+                                || Name.INTEGER.equals(s)
+                                || Name.DECIMAL.equals(s)
+                                || Name.DOUBLE.equals(s)
+                                || Name.STRING.equals(s)) {
+                            node = new PrimitiveNode(name);
+                            if (currentNode != null) {
+                                currentNode.setFirstChild(node);
+                            }
+                        } else if ("e".equals(s)) {
+                            node = new EmptyNode();
+                            currentNode = node;
+                        } else {
+                            node = new Node(name);
+                            currentNode = node;
+                        }
 
-                return node;
-            }
-        });
+                        return node;
+                    }
+                });
     }
 
     public Parser<BaseNode> typedName() {
@@ -163,11 +163,11 @@ public class AntimirovParser {
         return Scanners.WHITESPACES.followedBy(Scanners.string("|"))
                 .followedBy(Scanners.WHITESPACES)
                 .followedBy(element()).map(new Map<Void, BaseNode>() {
-            @Override
-            public BaseNode map(Void aVoid) {
-                return currentNode;
-            }
-        });
+                    @Override
+                    public BaseNode map(Void aVoid) {
+                        return currentNode;
+                    }
+                });
     }
 
     public Parser<BaseNode> alternation() {

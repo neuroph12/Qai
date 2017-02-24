@@ -11,12 +11,10 @@ import org.encog.neural.networks.training.propagation.resilient.ResilientPropaga
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.TimeSequence;
-import qube.qai.matrix.*;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.persistence.StockQuote;
 
 import java.util.*;
-import java.util.Vector;
 
 /**
  * Created by rainbird on 11/23/15.
@@ -62,7 +60,7 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
                 logger.info("Maximum number of iterations have been arrived- stopping training");
                 break;
             }
-        } while(train.getError() > ERROR_TOLERANCE);
+        } while (train.getError() > ERROR_TOLERANCE);
 
         train.finishTraining();
 
@@ -97,7 +95,8 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
 
     /**
      * splices the data to dates and double-arrays
-     * @param map the map with data
+     *
+     * @param map      the map with data
      * @param dateList an empty list which will be filled by the routine
      * @return
      */

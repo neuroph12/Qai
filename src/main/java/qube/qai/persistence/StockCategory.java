@@ -76,7 +76,7 @@ public class StockCategory implements Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof StockCategory) {
             StockCategory s = (StockCategory) obj;
-            if (name.equals(s.name))  {
+            if (name.equals(s.name)) {
                 return true;
             }
         }

@@ -2,8 +2,8 @@ package qube.qai.procedure.analysis;
 
 import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
-import qube.qai.data.analysis.Statistics;
 import qube.qai.data.TimeSequence;
+import qube.qai.data.analysis.Statistics;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureDecorator;
 
@@ -15,11 +15,12 @@ public class TimeSequenceAnalysis extends ProcedureDecorator {
     public static String NAME = "Time-Sequence Analysis";
 
     private static String DESCRIPTION = "This is a procedure to analyze a given time series.";
+
     /**
      * this is a procedure to analyze a given time series
      * statistical:
-     *          average value
-     *          result value variance etc.
+     * average value
+     * result value variance etc.
      * top 10/bottom 10/average entities- prepare those results as charts
      */
     public TimeSequenceAnalysis(Procedure procedure) {

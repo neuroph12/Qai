@@ -5,9 +5,6 @@ import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import junit.framework.TestCase;
-import org.apache.jena.propertytable.graph.GraphCSV;
-import org.apache.jena.rdf.model.*;
-import org.apache.jena.riot.RDFDataMgr;
 import qube.qai.services.implementation.SearchResult;
 
 import java.util.Collection;

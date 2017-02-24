@@ -1,7 +1,6 @@
 package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.MapStore;
-import com.thoughtworks.xstream.XStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;

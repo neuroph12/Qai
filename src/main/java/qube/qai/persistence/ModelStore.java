@@ -20,15 +20,15 @@ public class ModelStore {
     }
 
     public void init() {
-        Dataset dataset = TDBFactory.createDataset(directoryName) ;
+        Dataset dataset = TDBFactory.createDataset(directoryName);
 
-        dataset.begin(ReadWrite.READ) ;
+        dataset.begin(ReadWrite.READ);
         // Get model inside the transaction
-        Model model = dataset.getDefaultModel() ;
-        dataset.end() ;
+        Model model = dataset.getDefaultModel();
+        dataset.end();
 
-        dataset.begin(ReadWrite.WRITE) ;
-        model = dataset.getDefaultModel() ;
-        dataset.end() ;
+        dataset.begin(ReadWrite.WRITE);
+        model = dataset.getDefaultModel();
+        dataset.end();
     }
 }

@@ -285,7 +285,7 @@ public class StockEntity implements Serializable, AcceptsVisitors {
 
     @Override
     public int hashCode() {
-        if(uuid != null) {
+        if (uuid != null) {
             return uuid.hashCode();
         } else {
             return super.hashCode();

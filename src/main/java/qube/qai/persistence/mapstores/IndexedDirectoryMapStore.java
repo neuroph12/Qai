@@ -1,17 +1,17 @@
 package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.MapStore;
-import com.uwyn.jhighlight.tools.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
-import toools.io.file.Directory;
 
 import javax.inject.Inject;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by rainbird on 11/19/15.
@@ -71,6 +71,7 @@ public class IndexedDirectoryMapStore implements MapStore<String, File> {
     /**
      * i don't know if i should really implement this one...
      * 880k names of files... i don't think so...
+     *
      * @return
      */
     public Iterable<String> loadAllKeys() {
@@ -91,7 +92,7 @@ public class IndexedDirectoryMapStore implements MapStore<String, File> {
 
     public File findFile(String name) {
 
-        Collection<SearchResult> results =  searchService.searchInputString(name, "file", 10);
+        Collection<SearchResult> results = searchService.searchInputString(name, "file", 10);
         if (results == null || results.isEmpty()) {
             return null;
         }

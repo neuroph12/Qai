@@ -124,7 +124,7 @@ public final class NodeSet
      *
      * @param e The element to check if it is contained.
      * @return TRUE, if element is contained in the set, otherwise
-     *         FALSE.
+     * FALSE.
      */
     public boolean contains(NodeSetElement e) {
 
@@ -246,7 +246,7 @@ public final class NodeSet
 
                 return this;
 
-                //pass application of rules CL1, CL2, CL4, CL5, CL6
+            //pass application of rules CL1, CL2, CL4, CL5, CL6
             case 1:
 
                 it = this.mySet.iterator();
@@ -263,7 +263,7 @@ public final class NodeSet
 
                 return c1.concatenate(r);
 
-                //rule CL7
+            //rule CL7
             case 2:
 
                 it = this.mySet.iterator();
@@ -299,7 +299,7 @@ public final class NodeSet
      * <code>Set</code>.
      *
      * @return <code>String</code> representation of the
-     *         <code>Set</code>.
+     * <code>Set</code>.
      */
     public String toString() {
 

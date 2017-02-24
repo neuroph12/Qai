@@ -4,7 +4,9 @@ import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 import qube.qai.services.implementation.UUIDService;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -147,6 +149,7 @@ public class StockQuote implements Serializable, AcceptsVisitors {
 
     /**
      * in this case equality is when ticker-symbol and dates are equal
+     *
      * @param obj
      * @return
      */

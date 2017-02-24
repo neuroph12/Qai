@@ -20,6 +20,7 @@ public class TestMarketNetworkBuilder extends QaiTestBase {
 
     private Logger logger = LoggerFactory.getLogger("TestMarketNetworkBuilder");
     private String SnP500Page = "List of S&P 500 companies.xml";
+
     /**
      * well this is actually pretty much it...
      * this is almost the moment of truth we have been waiting for...
@@ -51,7 +52,7 @@ public class TestMarketNetworkBuilder extends QaiTestBase {
         // ok now we take a look at the results
         int displayCount = 0;
         int maxCount = 10;
-        for(MLDataPair pair: networkBuilder.getTrainer().getTrainingSet()) {
+        for (MLDataPair pair : networkBuilder.getTrainer().getTrainingSet()) {
             double[] output = network.propagate(pair.getInput().getData());
             StringBuffer buffer = new StringBuffer();
             for (int i = 0; i < output.length; i++) {

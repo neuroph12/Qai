@@ -377,7 +377,7 @@ public final class Inequality
      * @param s      The second type to be analyzed.
      * @param callID ID of the current call for correct logging.
      * @return TRUE, if <code>r</code> and <code>s</code> are the same
-     *         type by reference or by content.
+     * type by reference or by content.
      */
     private boolean sameType(BaseNode r, BaseNode s, long callID) {
 
@@ -450,7 +450,7 @@ public final class Inequality
      * @param r      The type to be analyzed.
      * @param callID ID of the current call for correct logging.
      * @return TRUE, if <code>r</code> is an instance of
-     *         <code>none</code>, otherwise FALSE.
+     * <code>none</code>, otherwise FALSE.
      */
     private boolean rIsNone(BaseNode r, long callID) {
 
@@ -484,7 +484,7 @@ public final class Inequality
      * @param s      The type to be analyzed.
      * @param callID ID of the current call for correct logging.
      * @return TRUE, if <code>s</code> is an instance of RNoneType,
-     *         otherwise FALSE.
+     * otherwise FALSE.
      */
     private boolean sIsNone(BaseNode r, BaseNode s, long callID) {
 
@@ -520,7 +520,7 @@ public final class Inequality
      * @param s      The second type to be analyzed.
      * @param callID ID of the current call for correct logging.
      * @return TRUE, if <code>r</code> is nullable and <code>s</code> is
-     *         not nullable, otherwise FALSE.
+     * not nullable, otherwise FALSE.
      */
     private boolean rNullableSNotNullable(BaseNode r, BaseNode s, long callID)
             throws NoWellformedTypeException {
@@ -559,7 +559,7 @@ public final class Inequality
      * @param s      The type which determines the result to log.
      * @param callID ID of the current call for correct logging.
      * @return TRUE, if <code>r</code> is <code>epsilon</code>, otherwise
-     *         FALSE
+     * FALSE
      */
     private boolean rIsEpsilon(BaseNode r, BaseNode s, long callID) throws
             NoWellformedTypeException {
@@ -630,7 +630,7 @@ public final class Inequality
      * @param s      The type to be analyzed.
      * @param callID ID of the current call for correct logging.
      * @return TRUE, if <code>s</code> is <code>epsilon</code>, otherwise
-     *         FALSE
+     * FALSE
      */
     private boolean sIsEpsilon(BaseNode r, BaseNode s, long callID) throws
             NoWellformedTypeException {
@@ -698,7 +698,7 @@ public final class Inequality
      * wellformedness constraints 1 and 2, otherwise FALSE.
      *
      * @return TRUE iff both member types of the inequality are
-     *         wellformed, otherwise FALSE.
+     * wellformed, otherwise FALSE.
      */
     public boolean isWellformed()
             throws NoWellformedTypeException {
@@ -955,7 +955,7 @@ public final class Inequality
      *
      * @param e The <code>SetElement</code> to compare the inequality to.
      * @return TRUE if <code>e</code> contains same types for r and s
-     *         like the instance, otherwise FALSE.
+     * like the instance, otherwise FALSE.
      */
     public boolean equals(NodeSetElement e) {
 

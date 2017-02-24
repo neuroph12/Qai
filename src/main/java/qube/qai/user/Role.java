@@ -22,7 +22,7 @@ public class Role implements Serializable {
     private String description;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name="user", nullable=false)
+    @JoinColumn(name = "user", nullable = false)
     private User user;
 
     public Role() {
@@ -76,6 +76,7 @@ public class Role implements Serializable {
 
     /**
      * in case of User-Roles we use only the name as check
+     *
      * @param obj
      * @return
      */

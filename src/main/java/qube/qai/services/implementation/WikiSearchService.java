@@ -20,9 +20,6 @@ import qube.qai.services.SearchServiceInterface;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.zip.ZipEntry;
@@ -109,6 +106,7 @@ public class WikiSearchService implements SearchServiceInterface {
 
         private File file;
         private LockFactory factory;
+
         public AbsoluteDirectory(File file, LockFactory factory) {
             this.file = file;
             this.factory = factory;

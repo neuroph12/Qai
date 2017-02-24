@@ -2,10 +2,6 @@ package qube.qai.network;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.ojalgo.access.Access2D;
-import org.ojalgo.matrix.BasicMatrix;
-import org.ojalgo.matrix.PrimitiveMatrix;
-import org.ojalgo.matrix.store.PhysicalStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.AcceptsVisitors;
@@ -113,7 +109,7 @@ public class Network implements Serializable, MetricTyped, AcceptsVisitors {
             Vertex from = edge.getFrom();
             Vertex to = edge.getTo();
             double value = edge.getWeight();
-            if (value == 0)  {
+            if (value == 0) {
                 value = 1.0;
             }
 
@@ -127,6 +123,7 @@ public class Network implements Serializable, MetricTyped, AcceptsVisitors {
     /**
      * Caution if you are trying to instantiate a Neural-Network this will not work
      * Neural-Networks cannot be built from an external model
+     *
      * @param adjacencyMatrix
      */
     public void buildFromAdjacencyMatrix(Matrix adjacencyMatrix) {
@@ -315,6 +312,7 @@ public class Network implements Serializable, MetricTyped, AcceptsVisitors {
 
     /**
      * a silly method to create a tiny network for playing around
+     *
      * @return
      */
     public static Network createTestNetwork() {
@@ -398,12 +396,12 @@ public class Network implements Serializable, MetricTyped, AcceptsVisitors {
 
         @Override
         public boolean equals(Object obj) {
-            if(obj instanceof Vertex){
+            if (obj instanceof Vertex) {
                 final Vertex other = (Vertex) obj;
                 return new EqualsBuilder()
                         .append(name, other.name)
                         .isEquals();
-            } else{
+            } else {
                 return false;
             }
         }
@@ -426,6 +424,7 @@ public class Network implements Serializable, MetricTyped, AcceptsVisitors {
 
         /**
          * create an edge between the given vertices with weight 1.0
+         *
          * @param from
          * @param to
          */
@@ -435,6 +434,7 @@ public class Network implements Serializable, MetricTyped, AcceptsVisitors {
 
         /**
          * create an edge between vertices with given weight
+         *
          * @param from
          * @param to
          * @param weight

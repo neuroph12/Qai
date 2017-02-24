@@ -1,7 +1,5 @@
 package qube.qai.procedure.wikiripper;
 
-import bsh.StringUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.milyn.Smooks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +20,7 @@ public class WikiRipperProcedure extends Procedure {
     public static String NAME = "WikiRipperProcedure";
     public static String DESCRIPTION = "Rips wiki-based archives to individual files which are easier to parse and to read";
 
-    public static String INPUT_FILENAME  = "FILENAME";
+    public static String INPUT_FILENAME = "FILENAME";
     public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
     public static String INPUT_IS_WIKTIONARY = "IS_WIKTIONARY";
 

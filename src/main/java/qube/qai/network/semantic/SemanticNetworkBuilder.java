@@ -45,7 +45,7 @@ public class SemanticNetworkBuilder implements NetworkBuilder {
             String current = tokens[i];
             String next = null;
             if (i + 1 < tokens.length) {
-                next = tokens[i+1];
+                next = tokens[i + 1];
             }
 
             // now we have current and next tokens
