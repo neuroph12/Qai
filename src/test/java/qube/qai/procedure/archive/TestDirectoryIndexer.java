@@ -79,7 +79,7 @@ public class TestDirectoryIndexer extends QaiTestBase {
             assertNotNull("there has to be something", results);
             assertTrue(searchFor + " must be there!!!", !results.isEmpty());
             for (SearchResult result : results) {
-                logger.info("found: " + result.getFilename());
+                logger.info("found: " + result.getUuid());
             }
         }
     }
@@ -105,7 +105,7 @@ public class TestDirectoryIndexer extends QaiTestBase {
             assertNotNull("there has to be something", results);
 //            assertTrue(searchFor + " must be there!!!", !results.isEmpty());
             for (SearchResult result : results) {
-                logger.info("found: " + result.getFilename());
+                logger.info("found: " + result.getUuid());
             }
         }
     }
@@ -131,7 +131,7 @@ public class TestDirectoryIndexer extends QaiTestBase {
             assertNotNull("there has to be something", results);
 //            assertTrue(searchFor + " must be there!!!", !results.isEmpty());
             for (SearchResult result : results) {
-                logger.info("found: " + result.getFilename());
+                logger.info("found: " + result.getUuid());
             }
         }
     }

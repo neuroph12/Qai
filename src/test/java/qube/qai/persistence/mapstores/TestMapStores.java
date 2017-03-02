@@ -55,8 +55,8 @@ public class TestMapStores extends QaiTestBase {
         for (String name : someWikiArticles) {
             Collection<SearchResult> results = searchService.searchInputString(name, "title", 100);
             SearchResult result = results.iterator().next();
-            logger.info("searching result: " + result.getTitle() + " with " + result.getRelevance() + " %relevance");
-            WikiArticle article = mapStore.load(result.getFilename());
+            logger.info("searching result: " + result.getContext() + " with " + result.getRelevance() + " %relevance");
+            WikiArticle article = mapStore.load(result.getUuid());
             assertNotNull("there has to be something", article);
         }
 

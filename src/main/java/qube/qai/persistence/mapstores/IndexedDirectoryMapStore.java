@@ -111,7 +111,7 @@ public class IndexedDirectoryMapStore implements MapStore<String, File> {
             return null;
         }
 
-        String filename = results.iterator().next().getFilename();
+        String filename = results.iterator().next().getUuid();
         File found = new File(filename);
         if (!found.exists()) {
             throw new RuntimeException("Found file doesn't exist!?!");

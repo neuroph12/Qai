@@ -50,7 +50,7 @@ public class TestDistributedSearchServices extends QaiTestBase {
 //        assertNotNull("have to return something", results);
 //        assertTrue("has to be something in there as well", !results.isEmpty());
 //        for (SearchResult result : results) {
-//            logger.info("found result: " + result.getTitle());
+//            logger.info("found result: " + result.getContext());
 //        }
     }
 
@@ -74,7 +74,7 @@ public class TestDistributedSearchServices extends QaiTestBase {
 //        assertNotNull("have to return something", results);
 //        assertTrue("has to be something in there as well", !results.isEmpty());
 //        for (SearchResult result : results) {
-//            logger.info("found result: " + result.getTitle());
+//            logger.info("found result: " + result.getContext());
 //        }
     }
 
@@ -98,7 +98,7 @@ public class TestDistributedSearchServices extends QaiTestBase {
 //        assertNotNull("have to return something", results);
 //        assertTrue("has to be something in there as well", !results.isEmpty());
 //        for (SearchResult result : results) {
-//            logger.info("found result: " + result.getTitle());
+//            logger.info("found result: " + result.getContext());
 //        }
     }
 }

@@ -52,7 +52,7 @@ public class TestRDFTripleSearchService extends TestCase {
             assertNotNull(results);
             assertTrue(!results.isEmpty());
             for (SearchResult result : results) {
-                log("found uuid: " + result.getFilename());
+                log("found uuid: " + result.getUuid());
             }
         }
 

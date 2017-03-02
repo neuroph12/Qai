@@ -63,7 +63,7 @@ public class TestMatrix extends TestCase {
     /*public void restArrayThings() throws Exception {
         BasicLogger.debug();
         BasicLogger.debug("ArrayBasics");
-        BasicLogger.debug(OjAlgoUtils.getTitle());
+        BasicLogger.debug(OjAlgoUtils.getContext());
         BasicLogger.debug(OjAlgoUtils.getQuoetDate());
         BasicLogger.debug();
 
@@ -140,7 +140,7 @@ public class TestMatrix extends TestCase {
    /* public void restOjAlgoDietProblem() throws Exception {
         BasicLogger.debug();
         BasicLogger.debug("TheDietProblem");
-        BasicLogger.debug(OjAlgoUtils.getTitle());
+        BasicLogger.debug(OjAlgoUtils.getContext());
         BasicLogger.debug(OjAlgoUtils.getQuoetDate());
         BasicLogger.debug();
 

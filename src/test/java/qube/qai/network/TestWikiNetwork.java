@@ -56,7 +56,7 @@ public class TestWikiNetwork extends QaiTestBase {
         Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
         assertNotNull("there has to be a result for the search", results);
 
-        String filename = results.iterator().next().getFilename();
+        String filename = results.iterator().next().getUuid();
         log("name for the test case: " + filename);
         WikiArticle wikiArticle = wikipediaSearchService.retrieveDocumentContentFromZipFile(filename);
         assertNotNull("there has to be a wiki-article", wikiArticle);

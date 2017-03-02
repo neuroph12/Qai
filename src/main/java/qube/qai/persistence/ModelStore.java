@@ -20,6 +20,7 @@ import org.apache.jena.rdf.model.*;
 import org.apache.jena.tdb.TDBFactory;
 import qube.qai.services.DataServiceInterface;
 import qube.qai.services.implementation.SearchResult;
+import qube.qai.user.Role;
 import qube.qai.user.User;
 
 import java.util.ArrayList;
@@ -74,17 +75,43 @@ public class ModelStore implements DataServiceInterface {
         if (resIterator != null && resIterator.hasNext()) {
             Resource resource = resIterator.next();
 
+            User user = new User();
+
             StmtIterator stmtIterator = resource.listProperties();
             while (stmtIterator.hasNext()) {
                 Statement statement = stmtIterator.nextStatement();
                 String name = statement.getPredicate().getLocalName();
                 String value = statement.getObject().asLiteral().getValue().toString();
+
+                if ("username".equals(name)) {
+                    user.setUsername(value);
+                }
+
+                if ("password".equals(name)) {
+                    user.setPassword(value);
+                }
+
                 if ("uuid".equals(name)) {
+                    user.setUuid(value);
                     SearchResult result = new SearchResult("user", value, 10);
                     results.add(result);
                 }
+
+                if ("roleUuid".equals(name)) {
+                    Role role = new Role();
+                    role.setUuid(value);
+                    user.addRole(role);
+                }
+
+                if ("sessionUuid".equals(name)) {
+                    user.createSession().setUuid(value);
+                }
             }
 
+            serializedObject = user;
+            if (isSerializeObject) {
+                serializeSearchResultObject("user");
+            }
 
             //System.out.println("resource: " + resource.toString());
         }
@@ -100,20 +127,11 @@ public class ModelStore implements DataServiceInterface {
      * and persists on a hazelcast map under the given id
      * so that a selector can actually broker the persisted object over hazelcast-maps
      *
-     * @param resource
+     * @param objectType
      */
-    private void serializeSearchResultObject(String objectType, Resource resource) {
+    private void serializeSearchResultObject(String objectType) {
         if ("user".equalsIgnoreCase(objectType)) {
-            User user = new User();
-            Model model = dataset.getDefaultModel();
-            String username = resource.getProperty(model.createProperty(baseUrl, "username")).getLiteral().toString();
-            user.setUsername(username);
-            String uuid = resource.getProperty(model.createProperty(baseUrl, "uuid")).getLiteral().toString();
-            user.setUuid(uuid);
-            String password = resource.getProperty(model.createProperty(baseUrl, "password")).getLiteral().toString();
-            user.setPassword(password);
-
-            serializedObject = user;
+            // serialize the
         }
     }
 

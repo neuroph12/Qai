@@ -43,7 +43,7 @@ public class TestWikiSearch extends QaiTestBase {
             Collection<SearchResult> results = searchService.searchInputString(search, "title", 100);
             assertTrue("no results", results != null && !results.isEmpty());
             for (SearchResult result : results) {
-                logger.info("searching: '" + search + "' resulted: '" + result.getTitle() + "' with " + result.getRelevance() + "% relevance");
+                logger.info("searching: '" + search + "' resulted: '" + result.getContext() + "' with " + result.getRelevance() + "% relevance");
             }
         }
 

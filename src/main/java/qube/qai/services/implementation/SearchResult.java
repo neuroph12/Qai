@@ -21,35 +21,35 @@ import java.io.Serializable;
  */
 public class SearchResult implements Serializable {
 
-    private String title;
+    private String context;
 
-    private String filename;
+    private String uuid;
 
     private double relevance;
 
     public SearchResult() {
     }
 
-    public SearchResult(String title, String filename, double relevance) {
-        this.title = title;
-        this.filename = filename;
+    public SearchResult(String context, String uuid, double relevance) {
+        this.context = context;
+        this.uuid = uuid;
         this.relevance = relevance;
     }
 
-    public String getTitle() {
-        return title;
+    public String getContext() {
+        return context;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setContext(String context) {
+        this.context = context;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public double getRelevance() {

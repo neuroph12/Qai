@@ -57,7 +57,7 @@ public class TestStockQuoteSearchService extends TestCase {
             assertTrue(results.size() > 0);
             log("found " + results.size() + " quotes for the entity: " + names[i]);
             for (SearchResult result : results) {
-                log("found: " + result.getFilename());
+                log("found: " + result.getUuid());
             }
         }
     }

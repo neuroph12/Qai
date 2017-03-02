@@ -135,7 +135,7 @@ public class TestHazelcastSelectors extends QaiTestBase {
         List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
         Collection<SearchResult> results = wikipediaSearch.searchInputString("mouse", "title", 100);
         for (SearchResult result : results) {
-            SelectionOperator<WikiArticle> selectionOperator = new HazelcastSelectionOperator<WikiArticle>(WIKIPEDIA_SOURCE, result.getFilename());
+            SelectionOperator<WikiArticle> selectionOperator = new HazelcastSelectionOperator<WikiArticle>(WIKIPEDIA_SOURCE, result.getUuid());
             selectionOperators.add(selectionOperator);
         }
 
@@ -160,7 +160,7 @@ public class TestHazelcastSelectors extends QaiTestBase {
         List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
         Collection<SearchResult> results = wiktionarySearch.searchInputString("mouse", "title", 100);
         for (SearchResult result : results) {
-            SelectionOperator<WikiArticle> selectionOperator = new HazelcastSelectionOperator<WikiArticle>(WIKTIONARY_SOURCE, result.getFilename());
+            SelectionOperator<WikiArticle> selectionOperator = new HazelcastSelectionOperator<WikiArticle>(WIKTIONARY_SOURCE, result.getUuid());
             selectionOperators.add(selectionOperator);
         }
 

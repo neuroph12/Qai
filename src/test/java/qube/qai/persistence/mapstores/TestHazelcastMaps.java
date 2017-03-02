@@ -95,7 +95,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         for (String name : someWikiArticles) {
             Collection<SearchResult> results = wikipediaSearch.searchInputString(name, "title", 100);
             SearchResult result = results.iterator().next();
-            WikiArticle wikiArticle = wikiArticles.get(result.getFilename());
+            WikiArticle wikiArticle = wikiArticles.get(result.getUuid());
             assertNotNull("there has to be an article", wikiArticle);
         }
     }
@@ -112,7 +112,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         for (String name : someWikiArticles) {
             Collection<SearchResult> results = wiktionarySearch.searchInputString(name, "title", 100);
             SearchResult result = results.iterator().next();
-            WikiArticle wikiArticle = wikiArticles.get(result.getFilename());
+            WikiArticle wikiArticle = wikiArticles.get(result.getUuid());
             assertNotNull("there has to be an article", wikiArticle);
         }
     }

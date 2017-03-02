@@ -55,10 +55,10 @@
         </namespaces>
     </siteinfo>
     <page>
-        <title>AfghanistanGeography</title>
+        <context>AfghanistanGeography</context>
         <ns>0</ns>
         <id>14</id>
-        <redirect title="Geography of Afghanistan"/>
+        <redirect context="Geography of Afghanistan"/>
         <revision>
             <id>407008307</id>
             <parentid>74466619</parentid>
@@ -77,14 +77,14 @@
         </revision>
     </page>
     <page>
-        <title>AfghanistanPeople</title>
+        <context>AfghanistanPeople</context>
         <ns>0</ns>
 
         <id>13</id>
-        <redirect title="History of Afghanistan"/>
+        <redirect context="History of Afghanistan"/>
         <id>74466652</id>
         <id>15</id>
-        <redirect title="Demographics of Afghanistan"/>
+        <redirect context="Demographics of Afghanistan"/>
         <revision>
             <id>616420354</id>
             <parentid>135089040</parentid>
@@ -102,10 +102,10 @@
         </revision>
     </page>
     <page>
-        <title>AfghanistanCommunications</title>
+        <context>AfghanistanCommunications</context>
         <ns>0</ns>
         <id>18</id>
-        <redirect title="Communications in Afghanistan"/>
+        <redirect context="Communications in Afghanistan"/>
         <revision>
             <id>74466499</id>
             <parentid>15898952</parentid>
@@ -122,10 +122,10 @@
         </revision>
     </page>
     <page>
-        <title>AfghanistanTransportations</title>
+        <context>AfghanistanTransportations</context>
         <ns>0</ns>
         <id>19</id>
-        <redirect title="Transport in Afghanistan"/>
+        <redirect context="Transport in Afghanistan"/>
         <revision>
             <id>409266982</id>
             <parentid>74466423</parentid>
@@ -141,10 +141,10 @@
         </revision>
     </page>
     <page>
-        <title>AfghanistanMilitary</title>
+        <context>AfghanistanMilitary</context>
         <ns>0</ns>
         <id>20</id>
-        <redirect title="Afghan Armed Forces"/>
+        <redirect context="Afghan Armed Forces"/>
         <revision>
             <id>558328133</id>
             <parentid>74466354</parentid>
@@ -162,10 +162,10 @@
         </revision>
     </page>
     <page>
-        <title>AfghanistanTransnationalIssues</title>
+        <context>AfghanistanTransnationalIssues</context>
         <ns>0</ns>
         <id>21</id>
-        <redirect title="Foreign relations of Afghanistan"/>
+        <redirect context="Foreign relations of Afghanistan"/>
         <revision>
             <id>46448859</id>
             <parentid>15898955</parentid>
@@ -183,10 +183,10 @@
         </revision>
     </page>
     <page>
-        <title>AssistiveTechnology</title>
+        <context>AssistiveTechnology</context>
         <ns>0</ns>
         <id>23</id>
-        <redirect title="Assistive technology"/>
+        <redirect context="Assistive technology"/>
         <revision>
             <id>74466798</id>
             <parentid>15898957</parentid>
@@ -203,10 +203,10 @@
         </revision>
     </page>
     <page>
-        <title>AmoeboidTaxa</title>
+        <context>AmoeboidTaxa</context>
         <ns>0</ns>
         <id>24</id>
-        <redirect title="Amoeba"/>
+        <redirect context="Amoeba"/>
         <revision>
             <id>627604809</id>
             <parentid>625443465</parentid>
@@ -224,7 +224,7 @@
         </revision>
     </page>
     <page>
-        <title>Autism</title>
+        <context>Autism</context>
         <ns>0</ns>
         <id>25</id>
         <revision>
@@ -248,10 +248,10 @@ rders on the [[autism spectrum]] or to the various [[pervasive developmental dis
         </revision>
     </page>
     <page>
-        <title>AlbaniaHistory</title>
+        <context>AlbaniaHistory</context>
         <ns>0</ns>
         <id>27</id>
-        <redirect title="History of Albania"/>
+        <redirect context="History of Albania"/>
         <revision>
             <id>74467016</id>
             <parentid>15898960</parentid>
@@ -268,10 +268,10 @@ rders on the [[autism spectrum]] or to the various [[pervasive developmental dis
         </revision>
     </page>
     <page>
-        <title>AlbaniaPeople</title>
+        <context>AlbaniaPeople</context>
         <ns>0</ns>
         <id>29</id>
-        <redirect title="Demographics of Albania"/>
+        <redirect context="Demographics of Albania"/>
         <revision>
             <id>74466817</id>
             <parentid>15898962</parentid>
@@ -288,10 +288,10 @@ rders on the [[autism spectrum]] or to the various [[pervasive developmental dis
         </revision>
     </page>
     <page>
-        <title>AsWeMayThink</title>
+        <context>AsWeMayThink</context>
         <ns>0</ns>
         <id>30</id>
-        <redirect title="As We May Think"/>
+        <redirect context="As We May Think"/>
         <revision>
             <id>74467061</id>
             <parentid>15898963</parentid>
@@ -308,10 +308,10 @@ rders on the [[autism spectrum]] or to the various [[pervasive developmental dis
         </revision>
     </page>
     <page>
-        <title>AlbaniaGovernment</title>
+        <context>AlbaniaGovernment</context>
         <ns>0</ns>
         <id>35</id>
-        <redirect title="Politics of Albania"/>
+        <redirect context="Politics of Albania"/>
         <revision>
             <id>74467128</id>
             <parentid>15898965</parentid>

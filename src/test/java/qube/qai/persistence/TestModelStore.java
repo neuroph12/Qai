@@ -46,21 +46,21 @@ public class TestModelStore extends TestCase {
 
         SearchResult result = results.iterator().next();
         assertNotNull("result may not be null", result);
-        assertTrue("username has to be right", "user".equals(result.getTitle()));
-        assertTrue("uuid must be right", user.getUuid().equals(result.getFilename()));
+        assertTrue("username has to be right", "user".equals(result.getContext()));
+        assertTrue("uuid must be right", user.getUuid().equals(result.getUuid()));
 
         modelStore.remove(model);
 
-//        User serializedUser = (User) modelStore.getSerializedObject();
-//        assertNotNull("serialized user may not be null", serializedUser);
-//        assertTrue("uuid has to be equal", user.getUuid().equals(serializedUser.getUuid()));
-//        assertTrue("username has to be equal", user.getUsername().equals(serializedUser.getUsername()));
-//        assertTrue("password has to be equal", user.getPassword().equals(serializedUser.getPassword()));
+        User serializedUser = (User) modelStore.getSerializedObject();
+        assertNotNull("serialized user may not be null", serializedUser);
+        assertTrue("uuid has to be equal", user.getUuid().equals(serializedUser.getUuid()));
+        assertTrue("username has to be equal", user.getUsername().equals(serializedUser.getUsername()));
+        assertTrue("password has to be equal", user.getPassword().equals(serializedUser.getPassword()));
 
 
     }
 
-    public void restUserToModelConversion() throws Exception {
+    public void testUserToModelConversion() throws Exception {
 
         User user = new User("username", "password");
         user.createSession().setName("User Session #One");
