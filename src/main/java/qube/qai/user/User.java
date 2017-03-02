@@ -102,6 +102,7 @@ public class User implements Serializable {
                 roleResource.addProperty(model.createProperty(baseUrl, "uuid"), role.getUuid());
                 roleResource.addProperty(model.createProperty(baseUrl, "name"), role.getName());
                 roleResource.addProperty(model.createProperty(baseUrl, "description"), role.getDescription());
+                roleResource.addProperty(model.createProperty(baseUrl, "userUuid"), role.getUser().getUuid());
             }
         }
 
@@ -111,6 +112,7 @@ public class User implements Serializable {
                 Resource sessionResource = model.createResource(baseUrl + "session/" + session.getUuid());
                 sessionResource.addProperty(model.createProperty(baseUrl, "uuid"), session.getUuid());
                 sessionResource.addProperty(model.createProperty(baseUrl, "name"), session.getName());
+                sessionResource.addProperty(model.createProperty(baseUrl, "userUuid"), session.getUser().getUuid());
             }
         }
 
