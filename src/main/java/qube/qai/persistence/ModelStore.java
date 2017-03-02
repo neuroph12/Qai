@@ -16,11 +16,13 @@ package qube.qai.persistence;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
-import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.tdb.TDBFactory;
 import qube.qai.services.DataServiceInterface;
 import qube.qai.services.implementation.SearchResult;
+import qube.qai.user.User;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -28,7 +30,15 @@ import java.util.Collection;
  */
 public class ModelStore implements DataServiceInterface {
 
+    private String baseUrl = "http://www.qoan.org/data/";
+
+    private boolean isSerializeObject = false;
+
     private String directoryName;
+
+    private Object serializedObject;
+
+    private Dataset dataset;
 
     public ModelStore() {
     }
@@ -38,7 +48,7 @@ public class ModelStore implements DataServiceInterface {
     }
 
     public void init() {
-        Dataset dataset = TDBFactory.createDataset(directoryName);
+        dataset = TDBFactory.createDataset(directoryName);
 
         dataset.begin(ReadWrite.READ);
         // Get model inside the transaction
@@ -52,10 +62,63 @@ public class ModelStore implements DataServiceInterface {
 
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
-        return null;
+
+        ArrayList<SearchResult> results = new ArrayList<>();
+
+        dataset.begin(ReadWrite.READ);
+        Model defaultModel = dataset.getDefaultModel();
+
+        String resourceUrl = baseUrl + fieldName;
+        Property property = defaultModel.createProperty(resourceUrl);
+        ResIterator resIterator = defaultModel.listSubjectsWithProperty(property, searchString);
+        if (resIterator != null && resIterator.hasNext()) {
+            Resource resource = resIterator.next();
+
+            StmtIterator stmtIterator = resource.listProperties();
+            while (stmtIterator.hasNext()) {
+                Statement statement = stmtIterator.nextStatement();
+                String name = statement.getPredicate().getLocalName();
+                String value = statement.getObject().asLiteral().getValue().toString();
+                if ("uuid".equals(name)) {
+                    SearchResult result = new SearchResult("user", value, 10);
+                    results.add(result);
+                }
+            }
+
+
+            //System.out.println("resource: " + resource.toString());
+        }
+
+        dataset.end();
+
+        return results;
+    }
+
+    /**
+     * this method converts the search result- in this case a user-resource
+     * into a user-object as system knows it
+     * and persists on a hazelcast map under the given id
+     * so that a selector can actually broker the persisted object over hazelcast-maps
+     *
+     * @param resource
+     */
+    private void serializeSearchResultObject(String objectType, Resource resource) {
+        if ("user".equalsIgnoreCase(objectType)) {
+            User user = new User();
+            Model model = dataset.getDefaultModel();
+            String username = resource.getProperty(model.createProperty(baseUrl, "username")).getLiteral().toString();
+            user.setUsername(username);
+            String uuid = resource.getProperty(model.createProperty(baseUrl, "uuid")).getLiteral().toString();
+            user.setUuid(uuid);
+            String password = resource.getProperty(model.createProperty(baseUrl, "password")).getLiteral().toString();
+            user.setPassword(password);
+
+            serializedObject = user;
+        }
     }
 
     @Override
+    @Deprecated
     public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
         return null;
     }
@@ -63,10 +126,23 @@ public class ModelStore implements DataServiceInterface {
     @Override
     public void save(Model model) {
 
+        dataset.begin(ReadWrite.WRITE);
+        dataset.getDefaultModel().add(model);
+        dataset.commit();
+        dataset.end();
+
     }
 
     @Override
     public void remove(Model model) {
 
+        dataset.begin(ReadWrite.WRITE);
+        dataset.getDefaultModel().remove(model);
+        dataset.commit();
+        dataset.end();
+    }
+
+    public Object getSerializedObject() {
+        return serializedObject;
     }
 }

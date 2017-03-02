@@ -16,8 +16,12 @@ package qube.qai.persistence;
 
 import junit.framework.TestCase;
 import org.apache.jena.rdf.model.Model;
+import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.Role;
 import qube.qai.user.User;
+
+import java.io.StringWriter;
+import java.util.Collection;
 
 /**
  * Created by rainbird on 1/20/17.
@@ -27,21 +31,53 @@ public class TestModelStore extends TestCase {
     public void testModelStore() throws Exception {
 
         ModelStore modelStore = new ModelStore("./test/dummy.model.directory");
-        //modelStore.init();
+        modelStore.init();
 
-        fail("this test is not yet complete");
+        User user = new User("dummy_user", "dummy_password");
+        user.createSession().setName("dummy_user_session:_test_session");
+        user.addRole(new Role(user, "dummy_role", "this_is_a_test_role_for_the_user"));
+
+        Model model = User.userAsModel(user);
+        modelStore.save(model);
+
+        Collection<SearchResult> results = modelStore.searchInputString(user.getUsername(), "username", 1);
+        assertNotNull("there must be results", results);
+        assertTrue("there has to be the user", !results.isEmpty());
+
+        SearchResult result = results.iterator().next();
+        assertNotNull("result may not be null", result);
+        assertTrue("username has to be right", "user".equals(result.getTitle()));
+        assertTrue("uuid must be right", user.getUuid().equals(result.getFilename()));
+
+        modelStore.remove(model);
+
+//        User serializedUser = (User) modelStore.getSerializedObject();
+//        assertNotNull("serialized user may not be null", serializedUser);
+//        assertTrue("uuid has to be equal", user.getUuid().equals(serializedUser.getUuid()));
+//        assertTrue("username has to be equal", user.getUsername().equals(serializedUser.getUsername()));
+//        assertTrue("password has to be equal", user.getPassword().equals(serializedUser.getPassword()));
+
 
     }
 
-    public void testUserToModelCcnversion() throws Exception {
+    public void restUserToModelConversion() throws Exception {
 
         User user = new User("username", "password");
         user.createSession().setName("User Session #One");
 
         user.addRole(new Role(user, "user role", "just another role"));
+        user.addRole(new Role(user, "test role", "test role"));
 
         Model userModel = User.userAsModel(user);
         assertNotNull("returned model may not be null", userModel);
-        userModel.write(System.out);
+
+        StringWriter writer = new StringWriter();
+        userModel.write(writer);
+
+        log(writer.toString());
+    }
+
+    private void log(String message) {
+        System.out.println(message);
     }
 }

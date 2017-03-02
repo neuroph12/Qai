@@ -77,7 +77,7 @@ public class TestCsvFileSearchService extends TestCase {
             ResIterator resIt = csvModel.listSubjectsWithProperty(property, countLiteral);
 
             // if there is nothing in the iterator to iterate upon, we simply break
-            if (!resIt.hasNext()) {
+            if (resIt == null || !resIt.hasNext()) {
                 log("stopping because res-iterator at end");
                 done = true;
             } else {
