@@ -14,6 +14,9 @@
 
 package qube.qai.user;
 
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
@@ -79,6 +82,43 @@ public class User implements Serializable {
         addSession(session);
 
         return session;
+    }
+
+    public static Model userAsModel(User user) {
+
+        Model model = ModelFactory.createDefaultModel();
+
+        String baseUrl = "http://www.qoan.org/data/";
+
+        Resource userResource = model.createResource(baseUrl + "user/" + user.getUuid());
+        userResource.addProperty(model.createProperty(baseUrl, "uuid"), user.getUuid());
+        userResource.addProperty(model.createProperty(baseUrl, "username"), user.getUsername());
+        userResource.addProperty(model.createProperty(baseUrl, "password"), user.getPassword());
+
+        Set<Role> roles = user.getRoles();
+        if (roles != null && !roles.isEmpty()) {
+            for (Role role : roles) {
+                Resource roleResource = model.createResource(baseUrl + "role/" + role.getUuid());
+                roleResource.addProperty(model.createProperty(baseUrl, "uuid"), role.getUuid());
+                roleResource.addProperty(model.createProperty(baseUrl, "name"), role.getName());
+                roleResource.addProperty(model.createProperty(baseUrl, "description"), role.getDescription());
+            }
+        }
+
+        Set<Session> sessions = user.getSessions();
+        if (sessions != null && !sessions.isEmpty()) {
+            for (Session session : sessions) {
+                Resource sessionResource = model.createResource(baseUrl + "session/" + session.getUuid());
+                sessionResource.addProperty(model.createProperty(baseUrl, "uuid"), session.getUuid());
+                sessionResource.addProperty(model.createProperty(baseUrl, "name"), session.getName());
+            }
+        }
+
+        return model;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     public Set<Session> getSessions() {

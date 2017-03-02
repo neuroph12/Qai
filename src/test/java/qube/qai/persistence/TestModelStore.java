@@ -15,6 +15,9 @@
 package qube.qai.persistence;
 
 import junit.framework.TestCase;
+import org.apache.jena.rdf.model.Model;
+import qube.qai.user.Role;
+import qube.qai.user.User;
 
 /**
  * Created by rainbird on 1/20/17.
@@ -24,9 +27,21 @@ public class TestModelStore extends TestCase {
     public void testModelStore() throws Exception {
 
         ModelStore modelStore = new ModelStore("./test/dummy.model.directory");
-        modelStore.init();
+        //modelStore.init();
 
         fail("this test is not yet complete");
 
+    }
+
+    public void testUserToModelCcnversion() throws Exception {
+
+        User user = new User("username", "password");
+        user.createSession().setName("User Session #One");
+
+        user.addRole(new Role(user, "user role", "just another role"));
+
+        Model userModel = User.userAsModel(user);
+        assertNotNull("returned model may not be null", userModel);
+        userModel.write(System.out);
     }
 }
