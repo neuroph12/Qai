@@ -35,11 +35,11 @@ public class DistributedSearchService implements SearchServiceInterface, Message
     private Logger logger = LoggerFactory.getLogger("DistributedSearchService");
 
     @Inject //@Named("HAZELCAST_CLIENT")
-    private HazelcastInstance hazelcastInstance;
+    protected HazelcastInstance hazelcastInstance;
 
-    private String searchTopicName;
+    protected String searchTopicName;
 
-    private Collection<SearchResult> results;
+    protected Collection<SearchResult> results;
 
     public DistributedSearchService(String searchTopicName) {
         this.searchTopicName = searchTopicName;

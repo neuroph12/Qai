@@ -49,15 +49,11 @@ public class ModelStore implements DataServiceInterface {
     }
 
     public void init() {
+
         dataset = TDBFactory.createDataset(directoryName);
 
         dataset.begin(ReadWrite.READ);
-        // Get model inside the transaction
         Model model = dataset.getDefaultModel();
-        dataset.end();
-
-        dataset.begin(ReadWrite.WRITE);
-        model = dataset.getDefaultModel();
         dataset.end();
     }
 
