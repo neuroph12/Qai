@@ -28,6 +28,7 @@ import java.util.HashMap;
 /**
  * Created by rainbird on 11/25/15.
  */
+@Deprecated
 public class StockQuoteDataStore implements DataStore {
 
     private Logger logger = LoggerFactory.getLogger("StockQuoteDataStore");

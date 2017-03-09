@@ -23,8 +23,6 @@ import org.slf4j.LoggerFactory;
 import qube.qai.data.TestTimeSequence;
 import qube.qai.data.analysis.TestChangepointAdapter;
 import qube.qai.data.selectors.TestHazelcastSelectors;
-import qube.qai.data.stores.TestStockEntityDataStore;
-import qube.qai.data.stores.TestStockQuoteDataStore;
 import qube.qai.matrix.TestMatrix;
 import qube.qai.network.TestNetwork;
 import qube.qai.network.TestNeuralNetwork;
@@ -83,8 +81,8 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestHazelcastSelectors.class);
 
         // data.stores
-        suite.addTestSuite(TestStockQuoteDataStore.class);
-        suite.addTestSuite(TestStockEntityDataStore.class);
+//        suite.addTestSuite(TestStockQuoteDataStore.class);
+//        suite.addTestSuite(TestStockEntityDataStore.class);
 
         // matrix
         suite.addTestSuite(TestMatrix.class);

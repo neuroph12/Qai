@@ -34,6 +34,7 @@ import java.util.Date;
 /**
  * Created by rainbird on 12/26/15.
  */
+@Deprecated
 public class StockEntityDataStore implements DataStore {
 
     private Logger logger = LoggerFactory.getLogger("StockEntityDataStore");

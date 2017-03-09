@@ -24,6 +24,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 11/25/15.
  */
+@Deprecated
 public class TestStockQuoteDataStore extends TestCase {
 
     private static Logger logger = LoggerFactory.getLogger("TestDataStore");

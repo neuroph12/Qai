@@ -27,32 +27,19 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by rainbird on 5/31/16.
- * @Deprecated use the generic DatabaseSearchService instead
+ * Created by rainbird on 3/5/17.
  */
-@Deprecated
-public class StockQuoteSearchService implements SearchServiceInterface {
+public class DatabaseSearchService implements SearchServiceInterface {
 
     @Inject
-    private EntityManager manager;
+    private EntityManager entityManager;
 
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
 
-        String queryString = "SELECT q FROM StockQuote q";
+        String queryString = "SELECT q FROM " + fieldName + " q WHERE " + searchString;
 
-        if ("TICKERSYMBOL".equalsIgnoreCase(fieldName)) {
-            queryString += " WHERE q.id.tickerSymbol = '" + searchString + "'";
-        } else if ("QUOTEDATE".equals(fieldName)) {
-            queryString += " WHERE q.id.quoteDate = " + searchString;
-        } else {
-            String[] parts = org.apache.commons.lang3.StringUtils.split(searchString, '|');
-            queryString += " WHERE q.id.tickerSymbol = '" + parts[0] + "' AND q.id.quoteDate = " + parts[1];
-        }
-
-        //queryString += " ORDER BY q.id.quoteDate ASC";
-
-        Query query = manager.createQuery(queryString);
+        Query query = entityManager.createQuery(queryString);
         List<StockQuote> quotes = query.getResultList();
         Collection<SearchResult> results = new ArrayList<>();
         int count = 0;

@@ -28,7 +28,9 @@ import java.util.Collection;
 
 /**
  * Created by rainbird on 6/1/16.
+ * @Deprecated the class which is being tested here is deprecated and will be removed
  */
+@Deprecated
 public class TestStockQuoteSearchService extends TestCase {
 
     // copied from another test- TestStockQuoteMapStore which is supposed to insert the values as well

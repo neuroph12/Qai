@@ -16,15 +16,12 @@ package qube.qai.main;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.name.Names;
 import net.jmob.guice.conf.core.BindConfig;
 import net.jmob.guice.conf.core.ConfigurationModule;
 import net.jmob.guice.conf.core.InjectConfig;
 import net.jmob.guice.conf.core.Syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.stores.DataStore;
-import qube.qai.data.stores.StockEntityDataStore;
 import qube.qai.message.MessageQueue;
 import qube.qai.message.MessageQueueInterface;
 import qube.qai.services.ProcedureRunnerInterface;
@@ -82,7 +79,7 @@ public class QaiModule extends AbstractModule {
         bind(MessageQueueInterface.class).to(MessageQueue.class);
 
         // stockEntityDataStore
-        bind(DataStore.class).annotatedWith(Names.named("StockEntities")).to(StockEntityDataStore.class);
+        //bind(DataStore.class).annotatedWith(Names.named("StockEntities")).to(StockEntityDataStore.class);
 
     }
 

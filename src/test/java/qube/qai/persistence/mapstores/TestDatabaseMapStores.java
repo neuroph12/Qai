@@ -89,7 +89,7 @@ public class TestDatabaseMapStores extends TestCase {
 
     }
 
-    public void testSessionmapStore() throws Exception {
+    public void testSessionMapStore() throws Exception {
 
         Injector injector = QaiTestServerModule.initUsersInjector();
 

@@ -27,6 +27,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 12/26/15.
  */
+@Deprecated
 public class TestStockEntityDataStore extends QaiTestBase {
 
     @Inject

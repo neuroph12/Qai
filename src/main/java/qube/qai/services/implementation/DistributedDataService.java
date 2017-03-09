@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.DataServiceInterface;
 
+import java.io.Serializable;
+
 /**
  * Created by rainbird on 3/5/17.
  */
@@ -52,5 +54,35 @@ public class DistributedDataService extends DistributedSearchService implements 
 
     }
 
+    static public class SaveRequest implements Serializable {
+        Model model;
 
+        public SaveRequest(Model model) {
+            this.model = model;
+        }
+
+        public Model getModel() {
+            return model;
+        }
+
+        public void setModel(Model model) {
+            this.model = model;
+        }
+    }
+
+    static public class RemoveRequest implements Serializable {
+        Model model;
+
+        public RemoveRequest(Model model) {
+            this.model = model;
+        }
+
+        public Model getModel() {
+            return model;
+        }
+
+        public void setModel(Model model) {
+            this.model = model;
+        }
+    }
 }
