@@ -15,6 +15,7 @@
 package qube.qai.services.implementation;
 
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.WikiArticle;
@@ -29,8 +30,8 @@ public class DistributedDataService extends DistributedSearchService implements 
 
     private Logger logger = LoggerFactory.getLogger("DistributedDataService");
 
-    public DistributedDataService(String searcTopicName) {
-        super(searcTopicName);
+    public DistributedDataService(String searchTopicName) {
+        super(searchTopicName);
     }
 
     public void initialize() {
@@ -52,6 +53,11 @@ public class DistributedDataService extends DistributedSearchService implements 
     @Override
     public void remove(Model model) {
 
+    }
+
+    @Override
+    public Model createDefaultModel() {
+        return ModelFactory.createDefaultModel();
     }
 
     static public class SaveRequest implements Serializable {

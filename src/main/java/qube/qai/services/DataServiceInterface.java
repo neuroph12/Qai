@@ -34,4 +34,5 @@ public interface DataServiceInterface extends SearchServiceInterface {
 
     public void remove(Model model);
 
+    public Model createDefaultModel();
 }

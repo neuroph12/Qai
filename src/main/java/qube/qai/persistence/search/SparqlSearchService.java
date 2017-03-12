@@ -15,6 +15,7 @@
 package qube.qai.persistence.search;
 
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.DataServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -25,6 +26,15 @@ import java.util.Collection;
  * Created by rainbird on 6/8/16.
  */
 public class SparqlSearchService implements DataServiceInterface {
+
+    /**
+     * this is mainly for running Sparql-queries on remote servers.
+     * the first application of which will be with the dbpedia.org server
+     * later on other online databases will be added. i am hoping to use
+     * this interface to query online gene- and protein-databases as well.
+     */
+    public SparqlSearchService() {
+    }
 
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
@@ -44,5 +54,10 @@ public class SparqlSearchService implements DataServiceInterface {
     @Override
     public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
         return null;
+    }
+
+    @Override
+    public Model createDefaultModel() {
+        return ModelFactory.createDefaultModel();
     }
 }

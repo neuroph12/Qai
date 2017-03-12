@@ -85,4 +85,9 @@ public class RDFTriplesSearchService implements DataServiceInterface {
     public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
         return null;
     }
+
+    @Override
+    public Model createDefaultModel() {
+        return null;
+    }
 }

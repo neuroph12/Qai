@@ -156,6 +156,16 @@ public class ModelStore implements DataServiceInterface {
         dataset.end();
     }
 
+    @Override
+    public Model createDefaultModel() {
+
+        dataset.begin(ReadWrite.WRITE);
+        Model defaultModel = dataset.getDefaultModel();
+        dataset.end();
+
+        return defaultModel;
+    }
+
     public Object getSerializedObject() {
         return serializedObject;
     }

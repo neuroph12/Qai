@@ -32,6 +32,7 @@ public class ProcedureDataService implements DataServiceInterface {
 
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
+
         ArrayList<SearchResult> results = new ArrayList<>();
 
         dataset.begin(ReadWrite.READ);
@@ -45,7 +46,6 @@ public class ProcedureDataService implements DataServiceInterface {
             // after converting the thing- obviously
             SearchResult result = new SearchResult(fieldName, uuid, 10.0);
             results.add(result);
-
         }
 
         dataset.end();
@@ -67,6 +67,16 @@ public class ProcedureDataService implements DataServiceInterface {
         dataset.getDefaultModel().remove(model);
         dataset.commit();
         dataset.end();
+    }
+
+    @Override
+    public Model createDefaultModel() {
+
+        dataset.begin(ReadWrite.WRITE);
+        Model defaultModel = dataset.getDefaultModel();
+        dataset.close();
+
+        return defaultModel;
     }
 
     @Override

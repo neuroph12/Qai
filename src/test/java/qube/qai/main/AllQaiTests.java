@@ -48,6 +48,7 @@ import qube.qai.procedure.archive.TestSparqlIndexer;
 import qube.qai.procedure.archive.TestWikiArchiveIndexer;
 import qube.qai.procedure.finance.TestStockEntityInitialization;
 import qube.qai.procedure.finance.TestStockQuoteRetriever;
+import qube.qai.procedure.utils.TestRelateProcedure;
 import qube.qai.procedure.utils.TestWikiSearch;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
@@ -119,7 +120,6 @@ public class AllQaiTests extends TestCase {
         // procedure
         suite.addTestSuite(TestWikiArchiveIndexer.class);
         suite.addTestSuite(TestWikiRipperProcedure.class);
-        suite.addTestSuite(TestWikiSearch.class);
 
         // procedure.analysis
         suite.addTestSuite(TestAnalysisProcedures.class);
@@ -135,6 +135,10 @@ public class AllQaiTests extends TestCase {
 
         // procedure.visitor
         suite.addTestSuite(TestProcedureVisitors.class);
+
+        // procedure.utils
+        suite.addTestSuite(TestRelateProcedure.class);
+        suite.addTestSuite(TestWikiSearch.class);
 
         // services.implementation
         suite.addTestSuite(TestUUIDGenerator.class);
