@@ -23,7 +23,7 @@ import qube.qai.data.stores.StockEntityDataStore;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.persistence.StockEntity;
-import qube.qai.procedure.SimpleProcedure;
+import qube.qai.procedure.utils.SimpleProcedure;
 
 import java.util.*;
 

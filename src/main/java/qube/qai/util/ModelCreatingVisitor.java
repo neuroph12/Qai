@@ -18,13 +18,13 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import qube.qai.parsers.antimirov.nodes.*;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.SelectionProcedure;
-import qube.qai.procedure.SimpleProcedure;
 import qube.qai.procedure.analysis.*;
 import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
 import qube.qai.procedure.finance.StockEntityInitialization;
 import qube.qai.procedure.finance.StockQuoteRetriever;
+import qube.qai.procedure.utils.SelectionProcedure;
+import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
 /**

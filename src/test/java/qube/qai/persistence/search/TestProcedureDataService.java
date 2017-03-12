@@ -17,8 +17,8 @@ package qube.qai.persistence.search;
 import junit.framework.TestCase;
 import org.apache.jena.rdf.model.Model;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.SelectionProcedure;
 import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
+import qube.qai.procedure.utils.SelectionProcedure;
 import qube.qai.util.ProcedureToRdfConverter;
 
 import java.util.logging.Logger;

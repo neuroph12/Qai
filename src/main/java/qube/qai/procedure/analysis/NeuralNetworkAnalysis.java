@@ -21,7 +21,7 @@ import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureDecorator;
 import qube.qai.procedure.ProcedureFactory;
-import qube.qai.procedure.SelectionProcedure;
+import qube.qai.procedure.utils.SelectionProcedure;
 
 import java.util.Collection;
 

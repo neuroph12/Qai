@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import qube.qai.data.Arguments;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureDecorator;
-import qube.qai.procedure.SimpleProcedure;
+import qube.qai.procedure.utils.SimpleProcedure;
 
 import java.io.File;
 import java.io.IOException;

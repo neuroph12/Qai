@@ -41,13 +41,14 @@ import qube.qai.persistence.mapstores.TestMapStores;
 import qube.qai.persistence.search.TestProcedureDataService;
 import qube.qai.persistence.search.TestRDFTripleSearchService;
 import qube.qai.persistence.search.TestStockQuoteSearchService;
-import qube.qai.procedure.TestWikiSearch;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
 import qube.qai.procedure.archive.TestDirectoryIndexer;
 import qube.qai.procedure.archive.TestSparqlIndexer;
 import qube.qai.procedure.archive.TestWikiArchiveIndexer;
 import qube.qai.procedure.finance.TestStockEntityInitialization;
+import qube.qai.procedure.finance.TestStockQuoteRetriever;
+import qube.qai.procedure.utils.TestWikiSearch;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
 import qube.qai.services.implementation.*;
@@ -119,7 +120,6 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestWikiArchiveIndexer.class);
         suite.addTestSuite(TestWikiRipperProcedure.class);
         suite.addTestSuite(TestWikiSearch.class);
-        suite.addTestSuite(TestStockEntityInitialization.class);
 
         // procedure.analysis
         suite.addTestSuite(TestAnalysisProcedures.class);
@@ -128,6 +128,10 @@ public class AllQaiTests extends TestCase {
         // procedure.archive
         suite.addTestSuite(TestDirectoryIndexer.class);
         suite.addTestSuite(TestSparqlIndexer.class);
+
+        // procedure.finance
+        suite.addTestSuite(TestStockEntityInitialization.class);
+        suite.addTestSuite(TestStockQuoteRetriever.class);
 
         // procedure.visitor
         suite.addTestSuite(TestProcedureVisitors.class);

@@ -14,6 +14,8 @@
 
 package qube.qai.parsers.antimirov.nodes;
 
+import java.io.Serializable;
+
 /**
  * Represents a name. A name can be the name of a letter or the name
  * of a named type.
@@ -21,8 +23,7 @@ package qube.qai.parsers.antimirov.nodes;
  * @author Stefan Hohenadel
  * @version 1.0
  */
-public final class Name
-        implements NodeSetElement {
+public final class Name implements NodeSetElement, Serializable {
 
     //--------- Regular Expression Based Types
 

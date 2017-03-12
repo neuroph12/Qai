@@ -18,8 +18,8 @@ import junit.framework.TestCase;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.SelectionProcedure;
 import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
+import qube.qai.procedure.utils.SelectionProcedure;
 import qube.qai.services.implementation.UUIDService;
 
 import java.util.logging.Logger;

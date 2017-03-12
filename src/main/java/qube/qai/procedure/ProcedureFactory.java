@@ -14,6 +14,8 @@
 
 package qube.qai.procedure;
 
+import qube.qai.procedure.utils.SelectionProcedure;
+
 /**
  * Created by rainbird on 11/28/15.
  */

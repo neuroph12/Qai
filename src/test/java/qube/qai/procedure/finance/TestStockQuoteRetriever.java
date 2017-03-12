@@ -12,28 +12,18 @@
  *
  */
 
-package qube.qai.procedure;
+package qube.qai.procedure.finance;
 
-import qube.qai.data.Arguments;
+import junit.framework.TestCase;
 
 /**
- * Created by rainbird on 12/27/15.
+ * Created by rainbird on 3/11/17.
  */
-public class SimpleProcedure extends Procedure {
+public class TestStockQuoteRetriever extends TestCase {
 
-    public static String NAME = "Simple Procedure";
+    public void testStockQuoteRetriever() throws Exception {
 
-    public SimpleProcedure() {
-        super(NAME);
-    }
+        StockQuoteRetriever retriever = new StockQuoteRetriever();
 
-    @Override
-    public void execute() {
-        // do nothing
-    }
-
-    @Override
-    public void buildArguments() {
-        arguments = new Arguments();
     }
 }

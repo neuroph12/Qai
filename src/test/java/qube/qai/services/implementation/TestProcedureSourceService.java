@@ -27,8 +27,8 @@ import qube.qai.network.Network;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.SelectionProcedure;
 import qube.qai.procedure.analysis.*;
+import qube.qai.procedure.utils.SelectionProcedure;
 import qube.qai.services.ProcedureSourceInterface;
 
 import java.util.*;

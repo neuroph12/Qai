@@ -17,10 +17,10 @@ package qube.qai.procedure.visitor;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.procedure.SelectionProcedure;
 import qube.qai.procedure.analysis.MatrixStatistics;
 import qube.qai.procedure.analysis.NetworkStatistics;
 import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
+import qube.qai.procedure.utils.SelectionProcedure;
 
 /**
  * Created by rainbird on 12/1/15.

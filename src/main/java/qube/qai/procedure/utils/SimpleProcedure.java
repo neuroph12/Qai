@@ -12,33 +12,29 @@
  *
  */
 
-package qube.qai.procedure;
+package qube.qai.procedure.utils;
 
 import qube.qai.data.Arguments;
+import qube.qai.procedure.Procedure;
 
 /**
  * Created by rainbird on 12/27/15.
  */
-public class SelectionProcedure extends Procedure {
+public class SimpleProcedure extends Procedure {
 
-    public static String NAME = "Selection Procedure";
+    public static String NAME = "Simple Procedure";
 
-    /**
-     * this is mainly to pass the children the argument
-     * represents user preparing, or choosing a certain
-     * input for the children to process
-     */
-    public SelectionProcedure() {
+    public SimpleProcedure() {
         super(NAME);
+    }
+
+    @Override
+    public void execute() {
+        // do nothing
     }
 
     @Override
     public void buildArguments() {
         arguments = new Arguments();
-    }
-
-    @Override
-    public void execute() {
-        // do nothing as well...
     }
 }

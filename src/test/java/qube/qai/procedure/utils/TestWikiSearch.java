@@ -12,7 +12,7 @@
  *
  */
 
-package qube.qai.procedure;
+package qube.qai.procedure.utils;
 
 import qube.qai.main.QaiTestBase;
 import qube.qai.services.SearchServiceInterface;

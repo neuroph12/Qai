@@ -63,7 +63,6 @@ public class WikiRipperProcedure extends Procedure {
     public void buildArguments() {
         description = DESCRIPTION;
         arguments = new Arguments(INPUT_FILENAME, INPUT_TARGET_FILENAME, INPUT_IS_WIKTIONARY);
-
     }
 
 //    public WikiRipperProcedure(String fileToRipName, String fileToArchiveName) {
