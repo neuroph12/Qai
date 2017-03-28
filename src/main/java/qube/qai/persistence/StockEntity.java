@@ -37,7 +37,7 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     @Column(name = "tickerSymbol")
     private String tickerSymbol;
 
-    @Column(name = "tradedIn", nullable = false)
+    @Column(name = "tradedIn")
     private String tradedIn;
 
     @Column(name = "name", nullable = false)
@@ -96,6 +96,7 @@ public class StockEntity implements Serializable, AcceptsVisitors {
 
     // eager fetch so that they can be serialized along in the hazelcast-maps
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tickerSymbol", fetch = FetchType.EAGER)
+    @OrderBy("quoteDate")
     private Set<StockQuote> quotes;
 
     public StockEntity() {
@@ -104,6 +105,7 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     }
 
     public void addQuote(StockQuote quote) {
+        quote.setParentUuid(uuid);
         quotes.add(quote);
     }
 

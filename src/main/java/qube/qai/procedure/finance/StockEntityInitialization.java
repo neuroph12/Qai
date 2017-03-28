@@ -96,6 +96,8 @@ public class StockEntityInitialization extends Procedure {
         String filename = pathToCsvFiles + selectedFile; //otherListedFile; //nyseFile ;
         Model csvModel = RDFDataMgr.loadModel(filename);
 
+        // begin the transaction in the database
+        entityManager.getTransaction().begin();
         category = new StockCategory();
         category.setName(categoryName);
 
@@ -124,6 +126,7 @@ public class StockEntityInitialization extends Procedure {
                     if (isaValidEntity(stockEntity)) {
                         StockEntity databaseCopy = findStockEntityDatabaseCopy(stockEntity);
                         if (databaseCopy == null) {
+                            entityManager.persist(stockEntity);
                             category.addStockEntity(stockEntity);
                         } else {
                             category.addStockEntity(databaseCopy);
@@ -137,6 +140,10 @@ public class StockEntityInitialization extends Procedure {
 
         // now save the category we have just created
         entityManager.persist(category);
+        // write the rest of data- this writes the entries in relation-table
+        // and commit the transaction
+        entityManager.flush();
+        entityManager.getTransaction().commit();
 
         // now we are done and can change the flag
         numberOfRecords = count - 1;
@@ -182,7 +189,7 @@ public class StockEntityInitialization extends Procedure {
                 entity.setTickerSymbol(value);
             } else if ("Filings".equals(name)) {
                 entity.setCIK(value);
-            } else if ("Name".equals(name)) {
+            } else if ("Name".equals(name) || "Company Name".equals(name)) {
                 entity.setName(value);
             } else if ("Yield".equals(name)) {
                 entity.setYield(statement.getObject().asLiteral().getDouble());

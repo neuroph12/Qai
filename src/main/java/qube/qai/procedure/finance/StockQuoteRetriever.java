@@ -124,4 +124,21 @@ public class StockQuoteRetriever extends Procedure {
         arguments = new Arguments(TICKER_SYMBOLS);
         arguments.putResultNames(NUMBER_OF_INSERTS);
     }
+
+    public static long getNumberOfInserts() {
+        return numberOfInserts;
+    }
+
+    public static void setNumberOfInserts(long numberOfInserts) {
+        StockQuoteRetriever.numberOfInserts = numberOfInserts;
+    }
+
+    public Collection<String> getTickerSymbols() {
+        return tickerSymbols;
+    }
+
+    public void setTickerSymbols(Collection<String> tickerSymbols) {
+        this.tickerSymbols = tickerSymbols;
+    }
+
 }

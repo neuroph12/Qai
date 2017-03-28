@@ -25,7 +25,9 @@ import java.util.Collection;
 
 /**
  * Created by rainbird on 6/1/16.
+ * @Deprecated the tested class is to be deleted
  */
+@Deprecated
 public class TestRDFTripleSearchService extends TestCase {
 
     private boolean debug = true;

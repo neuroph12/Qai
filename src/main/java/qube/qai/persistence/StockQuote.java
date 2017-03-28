@@ -14,6 +14,7 @@
 
 package qube.qai.persistence;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 import qube.qai.services.implementation.UUIDService;
@@ -33,6 +34,9 @@ public class StockQuote implements Serializable, AcceptsVisitors {
     @Id
     @Column(name = "uuid")
     private String uuid;
+
+    @Column(name = "parentUuid", nullable = false)
+    private String parentUuid;
 
     @Column(name = "tickerSymbol", nullable = false)
     private String tickerSymbol;
@@ -70,15 +74,6 @@ public class StockQuote implements Serializable, AcceptsVisitors {
         this.open = open;
         this.volume = volume;
     }
-
-//    public StockQuote(double adjustedClose, double close, double high, double low, double open, double volume) {
-//        this.adjustedClose = adjustedClose;
-//        this.close = close;
-//        this.high = high;
-//        this.low = low;
-//        this.open = open;
-//        this.volume = volume;
-//    }
 
     public Object accept(DataVisitor visitor, Object data) {
         return visitor.visit(this, data);
@@ -156,14 +151,23 @@ public class StockQuote implements Serializable, AcceptsVisitors {
         this.volume = volume;
     }
 
+    public String getParentUuid() {
+        return parentUuid;
+    }
+
+    public void setParentUuid(String parentUuid) {
+        this.parentUuid = parentUuid;
+    }
+
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        HashCodeBuilder b = new HashCodeBuilder(17, 17);
+        return b.append(tickerSymbol).append(quoteDate).toHashCode();
     }
 
     /**
-     * in this case equality is when ticker-symbol and dates are equal
-     *
+     * in this case equality is only when ticker-symbol and dates are equal
+     * and not checked by using uuid, as it might be expected.
      * @param obj
      * @return
      */

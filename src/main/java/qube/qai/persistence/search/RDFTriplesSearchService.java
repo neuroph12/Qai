@@ -29,7 +29,9 @@ import java.util.List;
 
 /**
  * Created by rainbird on 6/1/16.
+ * @Deprecated to be replaced by SparqlSearchService or ModelDataService
  */
+@Deprecated
 public class RDFTriplesSearchService implements DataServiceInterface {
 
     @Inject

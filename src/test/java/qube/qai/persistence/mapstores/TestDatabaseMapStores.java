@@ -144,6 +144,9 @@ public class TestDatabaseMapStores extends TestCase {
 
     }
 
+    /**
+     * @throws Exception
+     */
     public void testStockEntityMapStore() throws Exception {
 
         Injector injector = QaiTestServerModule.initStocksInjector();

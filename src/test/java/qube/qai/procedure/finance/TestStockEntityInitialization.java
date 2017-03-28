@@ -72,10 +72,10 @@ public class TestStockEntityInitialization extends QaiTestBase {
         StockEntityInitialization procedure = new StockEntityInitialization();
         procedure.setEntityManager(entityManager);
 
-        String[] listings = {StockEntityInitialization.S_AND_P_500_LISTING,
-                StockEntityInitialization.NYSE_LISTING,
-                StockEntityInitialization.OTHER_LISTED_ENTITIES,
-                StockEntityInitialization.NASDAQ_LISTING
+        String[] listings = {StockEntityInitialization.S_AND_P_500_LISTING
+//                , StockEntityInitialization.NYSE_LISTING
+//                , StockEntityInitialization.OTHER_LISTED_ENTITIES
+//                , StockEntityInitialization.NASDAQ_LISTING
         };
 
         assertTrue("for the moment this is good enough- testing the injector", true);
@@ -104,6 +104,7 @@ public class TestStockEntityInitialization extends QaiTestBase {
             }
         }
         log("---------------------------------------------------------------------");
+        log("listings created:" + listings[0]);
         log("altogether: " + overallCount + " stock-entities added in the database");
         log("---------------------------------------------------------------------");
     }

@@ -14,16 +14,33 @@
 
 package qube.qai.procedure.finance;
 
-import junit.framework.TestCase;
+import qube.qai.main.QaiTestBase;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by rainbird on 3/11/17.
  */
-public class TestStockQuoteRetriever extends TestCase {
+public class TestStockQuoteRetriever extends QaiTestBase {
 
     public void testStockQuoteRetriever() throws Exception {
 
         StockQuoteRetriever retriever = new StockQuoteRetriever();
+        injector.injectMembers(retriever);
+
+        Collection<String> tickerSymbols = new ArrayList<>();
+        tickerSymbols.add("GOOG");
+        retriever.setTickerSymbols(tickerSymbols);
+        retriever.execute();
+
+        //DatabaseSearchService searchService = new DatabaseSearchService();
+        //Injector stocksInjector = QaiTestServerModule.initStocksInjector();
+        //stocksInjector.injectMembers(searchService);
+
+
+        //EntityManager entityManager = stocksInjector.getInstance(EntityManager.class);
+
 
     }
 }

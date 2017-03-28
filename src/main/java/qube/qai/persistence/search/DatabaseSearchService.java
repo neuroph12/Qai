@@ -14,7 +14,7 @@
 
 package qube.qai.persistence.search;
 
-import qube.qai.persistence.StockQuote;
+import qube.qai.persistence.StockCategory;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -34,17 +34,29 @@ public class DatabaseSearchService implements SearchServiceInterface {
     @Inject
     private EntityManager entityManager;
 
+    public void init() {
+        if (entityManager == null) {
+            throw new RuntimeException("Missing EntityManager- initialization failed");
+        }
+
+    }
+
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
 
-        String queryString = "SELECT q FROM " + fieldName + " q WHERE " + searchString;
+        //String queryString = "SELECT q FROM " + fieldName + " q";
+        String queryString = "SELECT o FROM StockCategory o";
+
+//        if (StringUtils.isNoneEmpty(searchString) & !"*".equals(searchString)) {
+//            queryString +=  " WHERE " + searchString;
+//        }
 
         Query query = entityManager.createQuery(queryString);
-        List<StockQuote> quotes = query.getResultList();
+        List<StockCategory> categories = query.getResultList();
         Collection<SearchResult> results = new ArrayList<>();
         int count = 0;
-        for (StockQuote quote : quotes) {
-            String idString = quote.getTickerSymbol() + "|" + quote.getQuoteDate();
+        for (StockCategory category : categories) {
+            String idString = category.getUuid();
             SearchResult result = new SearchResult(searchString, idString, 1.0);
             results.add(result);
             count++;
@@ -54,6 +66,14 @@ public class DatabaseSearchService implements SearchServiceInterface {
         }
 
         return results;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Override
