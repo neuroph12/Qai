@@ -44,8 +44,8 @@ public class DatabaseSearchService implements SearchServiceInterface {
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
 
-        //String queryString = "SELECT q FROM " + fieldName + " q";
-        String queryString = "SELECT o FROM StockCategory o";
+        String queryString = "SELECT o FROM " + fieldName + " o";
+        //String queryString = "SELECT o FROM StockCategory o";
 
 //        if (StringUtils.isNoneEmpty(searchString) & !"*".equals(searchString)) {
 //            queryString +=  " WHERE " + searchString;

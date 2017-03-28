@@ -73,9 +73,9 @@ public class TestStockEntityInitialization extends QaiTestBase {
         procedure.setEntityManager(entityManager);
 
         String[] listings = {StockEntityInitialization.S_AND_P_500_LISTING
-//                , StockEntityInitialization.NYSE_LISTING
-//                , StockEntityInitialization.OTHER_LISTED_ENTITIES
-//                , StockEntityInitialization.NASDAQ_LISTING
+                , StockEntityInitialization.NYSE_LISTING
+                , StockEntityInitialization.OTHER_LISTED_ENTITIES
+                , StockEntityInitialization.NASDAQ_LISTING
         };
 
         assertTrue("for the moment this is good enough- testing the injector", true);

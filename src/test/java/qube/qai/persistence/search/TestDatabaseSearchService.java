@@ -56,7 +56,7 @@ public class TestDatabaseSearchService extends TestCase {
         injector.injectMembers(databaseSearch);
 
         // now we can actually do some testing
-        Collection<SearchResult> results = databaseSearch.searchInputString("*", "STOCKCATEGORY", 10);
+        Collection<SearchResult> results = databaseSearch.searchInputString("*", "StockCategory", 10);
         assertNotNull("there have to be results", results);
         assertTrue("the result set may not be empty", !results.isEmpty());
 
