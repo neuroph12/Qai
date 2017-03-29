@@ -35,6 +35,8 @@ import java.util.Hashtable;
 public class Node
         extends BaseNode {
 
+    public Node() {
+    }
 
     /**
      * Constructor for class node types.

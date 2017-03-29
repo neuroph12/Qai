@@ -57,6 +57,8 @@ public final class IterationNode
      */
     private int maxOccurrs;
 
+    public IterationNode() {
+    }
 
     /**
      * Constructor for iteration type representation.

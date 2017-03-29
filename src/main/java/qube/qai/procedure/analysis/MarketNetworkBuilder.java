@@ -24,7 +24,7 @@ import qube.qai.network.neural.trainer.BasicNetworkTrainer;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.ProcedureConstants;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -33,7 +33,7 @@ import java.util.HashMap;
 /**
  * Created by rainbird on 12/25/15.
  */
-public class MarketNetworkBuilder extends ProcedureDecorator implements NetworkBuilder {
+public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, ProcedureConstants {
 
     public static String NAME = "Market Network Builder";
 

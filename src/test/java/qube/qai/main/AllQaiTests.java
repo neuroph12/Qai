@@ -34,6 +34,7 @@ import qube.qai.parsers.TestWikiIntegration;
 import qube.qai.parsers.antimirov.nodes.TestNodeVisitors;
 import qube.qai.parsers.maths.TestMathParser;
 import qube.qai.persistence.TestModelStore;
+import qube.qai.persistence.TestRdfSerialization;
 import qube.qai.persistence.mapstores.TestDatabaseMapStores;
 import qube.qai.persistence.mapstores.TestHazelcastMaps;
 import qube.qai.persistence.mapstores.TestIndexedDirectoryMapStore;
@@ -98,6 +99,7 @@ public class AllQaiTests extends TestCase {
         // parsers
         suite.addTestSuite(TestWikiIntegration.class);
         suite.addTestSuite(TestAntimirovParser.class);
+        suite.addTestSuite(TestRdfSerialization.class);
         suite.addTestSuite(TestMathParser.class);
 
         // parsers.antimirov.nodes

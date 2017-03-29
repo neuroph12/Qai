@@ -19,7 +19,7 @@ import qube.qai.data.SelectionOperator;
 import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.ProcedureConstants;
 
 import java.util.Comparator;
 import java.util.Date;
@@ -29,7 +29,7 @@ import java.util.TreeMap;
 /**
  * Created by rainbird on 12/2/15.
  */
-public class SortingPercentilesProcedure extends ProcedureDecorator {
+public class SortingPercentilesProcedure extends Procedure implements ProcedureConstants {
 
     public static String NAME = "Sorting Percentiles Procedure";
 
@@ -51,11 +51,12 @@ public class SortingPercentilesProcedure extends ProcedureDecorator {
     @Override
     public void execute() {
 
-        toDecorate.execute();
+        if (getFirstChild() != null) {
+            ((Procedure) getFirstChild()).execute();
+        }
 
-        // we are of course assuming the selector is already initialized
         if (!arguments.isSatisfied()) {
-            throw new RuntimeException("Process: " + name + " has not been initialized properly- missing argument");
+            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
         }
 
         Map<String, SelectionOperator> timeSeriesMap = (Map<String, SelectionOperator>) arguments.getSelector(FROM).getData();

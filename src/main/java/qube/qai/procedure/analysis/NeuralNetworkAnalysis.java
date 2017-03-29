@@ -19,7 +19,7 @@ import qube.qai.data.Metrics;
 import qube.qai.data.SelectionOperator;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureFactory;
 import qube.qai.procedure.utils.SelectionProcedure;
 
@@ -28,7 +28,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 11/28/15.
  */
-public class NeuralNetworkAnalysis extends ProcedureDecorator {
+public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstants {
 
     public static String NAME = "Neural-Network Analysis";
 
@@ -38,8 +38,8 @@ public class NeuralNetworkAnalysis extends ProcedureDecorator {
 
     private SelectionOperator<Collection<NeuralNetwork>> networkSelectionOperator;
 
-    public NeuralNetworkAnalysis(Procedure procedure) {
-        super(NAME, procedure);
+    public NeuralNetworkAnalysis() {
+        super(NAME);
     }
 
     @Override
@@ -52,11 +52,12 @@ public class NeuralNetworkAnalysis extends ProcedureDecorator {
     @Override
     public void execute() {
 
-        toDecorate.execute();
+        if (getFirstChild() != null) {
+            ((Procedure) getFirstChild()).execute();
+        }
 
-        // we are of course assuming the selector is already initialized
         if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(toDecorate.getArguments());
+            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
         }
 
         NeuralNetwork neuralNetwork = (NeuralNetwork) arguments.getSelector(INPUT_NEURAL_NETWORK).getData();
@@ -82,8 +83,13 @@ public class NeuralNetworkAnalysis extends ProcedureDecorator {
                 selection = new SelectionProcedure();
             }
             MatrixStatistics matrix = new MatrixStatistics(selection);
-            NetworkStatistics network = new NetworkStatistics(matrix);
-            NeuralNetworkAnalysis neural = new NeuralNetworkAnalysis(network);
+
+            NetworkStatistics network = new NetworkStatistics();
+            network.setFirstChild(matrix);
+
+            NeuralNetworkAnalysis neural = new NeuralNetworkAnalysis();
+            neural.setFirstChild(network);
+
 
             return neural;
         }

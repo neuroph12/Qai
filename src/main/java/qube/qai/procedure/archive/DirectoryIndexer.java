@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.Arguments;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.utils.SimpleProcedure;
 
 import java.io.File;
@@ -40,7 +40,7 @@ import java.nio.file.Path;
 /**
  * Created by rainbird on 12/25/15.
  */
-public class DirectoryIndexer extends ProcedureDecorator {
+public class DirectoryIndexer extends Procedure implements ProcedureConstants {
 
 
     private Logger logger = LoggerFactory.getLogger("DirectoryIndexer");

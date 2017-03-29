@@ -207,6 +207,12 @@
             <version>3.0.1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.thewebsemantic/jenabean -->
+        <dependency>
+            <groupId>com.thewebsemantic</groupId>
+            <artifactId>jenabean</artifactId>
+            <version>1.0.6</version>
+        </dependency>
 
         <!-- -->
         <!--<dependency>-->

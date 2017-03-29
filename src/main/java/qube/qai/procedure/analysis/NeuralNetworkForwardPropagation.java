@@ -19,7 +19,7 @@ import qube.qai.data.TimeSequence;
 import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.ProcedureConstants;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Created by rainbird on 11/28/15.
  */
-public class NeuralNetworkForwardPropagation extends ProcedureDecorator {
+public class NeuralNetworkForwardPropagation extends Procedure implements ProcedureConstants {
 
     public static String NAME = "Neural-network forward-propagation";
 
@@ -60,10 +60,12 @@ public class NeuralNetworkForwardPropagation extends ProcedureDecorator {
     @Override
     public void execute() {
 
-        toDecorate.execute();
+        if (getFirstChild() != null) {
+            ((Procedure) getFirstChild()).execute();
+        }
 
         if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(toDecorate.getArguments());
+            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
         }
 
         NeuralNetwork neuralNetwork = (NeuralNetwork) arguments.getSelector(INPUT_NEURAL_NETWORK).getData();

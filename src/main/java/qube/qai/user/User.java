@@ -31,6 +31,7 @@ import java.util.Set;
 public class User implements Serializable {
 
     @Id
+    @thewebsemantic.Id
     @Column(name = "uuid")
     private String uuid;
 

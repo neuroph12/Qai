@@ -28,6 +28,7 @@ import java.util.Set;
 public class StockCategory implements Serializable {
 
     @Id
+    @thewebsemantic.Id
     @Column(name = "uuid")
     private String uuid;
 

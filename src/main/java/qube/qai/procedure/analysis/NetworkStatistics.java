@@ -18,12 +18,12 @@ import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
 import qube.qai.network.Network;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.ProcedureConstants;
 
 /**
  * Created by rainbird on 11/29/15.
  */
-public class NetworkStatistics extends ProcedureDecorator {
+public class NetworkStatistics extends Procedure implements ProcedureConstants {
 
     public static String NAME = "Network Statistics";
 
@@ -33,8 +33,8 @@ public class NetworkStatistics extends ProcedureDecorator {
      * builds a network from a given matrix and displays
      * the network along with its statistical properties.
      */
-    public NetworkStatistics(Procedure procedure) {
-        super(NAME, procedure);
+    public NetworkStatistics() {
+        super(NAME);
     }
 
     @Override
@@ -47,10 +47,12 @@ public class NetworkStatistics extends ProcedureDecorator {
     @Override
     public void execute() {
 
-        toDecorate.execute();
+        if (getFirstChild() != null) {
+            ((Procedure) getFirstChild()).execute();
+        }
 
         if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(toDecorate.getArguments());
+            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
         }
 
         Network network = (Network) arguments.getSelector(INPUT_NETWORK).getData();

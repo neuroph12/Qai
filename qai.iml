@@ -155,6 +155,11 @@
     <orderEntry type="library" name="Maven: org.noggit:noggit:0.5" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.12" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="Maven: com.thewebsemantic:jenabean:1.0.6" level="project" />
+    <orderEntry type="library" name="Maven: com.hp.hpl.jena:arq:2.8.2" level="project" />
+    <orderEntry type="library" name="Maven: com.hp.hpl.jena:jena:2.6.2" level="project" />
+    <orderEntry type="library" name="Maven: com.ibm.icu:icu4j:3.4.4" level="project" />
+    <orderEntry type="library" name="Maven: com.hp.hpl.jena:iri:0.8" level="project" />
     <orderEntry type="library" name="Maven: org.milyn:milyn-smooks-all:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.milyn:milyn-commons:1.6" level="project" />
     <orderEntry type="library" name="Maven: javassist:javassist:3.10.0.GA" level="project" />
@@ -197,7 +202,6 @@
     <orderEntry type="library" name="Maven: jaxen:jaxen:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: xom:xom:1.0" level="project" />
     <orderEntry type="library" name="Maven: xerces:xmlParserAPIs:2.6.2" level="project" />
-    <orderEntry type="library" name="Maven: com.ibm.icu:icu4j:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.20" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant:1.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.7.0" level="project" />

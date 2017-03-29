@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import qube.qai.data.Arguments;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.ProcedureConstants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +44,7 @@ import java.util.zip.ZipFile;
 /**
  * Created by rainbird on 11/3/15.
  */
-public class WikiArchiveIndexer extends ProcedureDecorator {
+public class WikiArchiveIndexer extends Procedure implements ProcedureConstants {
 
     private Logger logger = LoggerFactory.getLogger("WikiArchiveIndexer");
 
@@ -87,10 +87,12 @@ public class WikiArchiveIndexer extends ProcedureDecorator {
     @Override
     public void execute() {
 
-        toDecorate.execute();
+        if (getFirstChild() != null) {
+            ((Procedure) getFirstChild()).execute();
+        }
 
         if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(toDecorate.getArguments());
+            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
         }
 
         indexDirectory = (String) arguments.getSelector(INPUT_INDEX_DIRECTORY).getData();

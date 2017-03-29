@@ -34,6 +34,8 @@ import java.util.Iterator;
  */
 public class NameNode extends BaseNode {
 
+    public NameNode() {
+    }
 
     /**
      * Constructor for recursive occurrences of named types.

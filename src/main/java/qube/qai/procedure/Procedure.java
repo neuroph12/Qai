@@ -174,6 +174,17 @@ public abstract class Procedure extends Node
         return false;
     }
 
+    /**
+     * so that we can actually remind the guy that this is the id which it needs seek
+     *
+     * @return
+     */
+    @Override
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
+
     public User getUser() {
         return user;
     }

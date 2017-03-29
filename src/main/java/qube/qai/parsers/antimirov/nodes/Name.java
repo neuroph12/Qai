@@ -129,6 +129,8 @@ public final class Name implements NodeSetElement, Serializable {
      */
     private String name;
 
+    public Name() {
+    }
 
     /**
      * Constructor for names.

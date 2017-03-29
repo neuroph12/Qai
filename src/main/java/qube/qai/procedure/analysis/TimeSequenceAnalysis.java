@@ -19,12 +19,12 @@ import qube.qai.data.Metrics;
 import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.ProcedureConstants;
 
 /**
  * Created by rainbird on 11/28/15.
  */
-public class TimeSequenceAnalysis extends ProcedureDecorator {
+public class TimeSequenceAnalysis extends Procedure implements ProcedureConstants {
 
     public static String NAME = "Time-Sequence Analysis";
 
@@ -51,10 +51,12 @@ public class TimeSequenceAnalysis extends ProcedureDecorator {
     @Override
     public void execute() {
 
-        toDecorate.execute();
+        if (getFirstChild() != null) {
+            ((Procedure) getFirstChild()).execute();
+        }
 
         if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(toDecorate.getArguments());
+            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
         }
 
         // first get the selector

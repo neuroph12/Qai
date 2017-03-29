@@ -33,6 +33,8 @@ import java.util.Hashtable;
 public class PrimitiveNode
         extends BaseNode {
 
+    public PrimitiveNode() {
+    }
 
     /**
      * Constructor for <code>RPrimitiveType</code>.

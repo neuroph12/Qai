@@ -105,9 +105,9 @@ public class ModelCreatingVisitor implements NodeVisitor {
         } else if (MatrixStatistics.NAME.equals(name)) {
             procedure = new MatrixStatistics(selection);
         } else if (NetworkStatistics.NAME.equals(name)) {
-            procedure = new NetworkStatistics(selection);
+            procedure = new NetworkStatistics();
         } else if (NeuralNetworkAnalysis.NAME.equals(name)) {
-            procedure = new NeuralNetworkAnalysis(selection);
+            procedure = new NeuralNetworkAnalysis();
         } else if (NeuralNetworkForwardPropagation.NAME.equals(name)) {
             procedure = new NeuralNetworkForwardPropagation(selection);
         } else if (SortingPercentilesProcedure.NAME.equals(name)) {

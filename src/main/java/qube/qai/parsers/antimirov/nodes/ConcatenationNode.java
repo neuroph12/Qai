@@ -38,6 +38,8 @@ import java.util.Hashtable;
 public final class ConcatenationNode
         extends BaseNode {
 
+    public ConcatenationNode() {
+    }
 
     /**
      * Constructor for Concatenation type representation.

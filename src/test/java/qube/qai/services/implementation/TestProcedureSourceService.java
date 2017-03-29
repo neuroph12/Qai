@@ -81,7 +81,8 @@ public class TestProcedureSourceService implements ProcedureSourceInterface {
             Network network = Network.createTestNetwork();
             SelectionOperator<Network> selectionOperator = new DataSelectionOperator<Network>(network);
             toDecorate.getArguments().setArgument(NetworkStatistics.INPUT_NETWORK, selectionOperator);
-            procedure = new NetworkStatistics(toDecorate);
+            procedure = new NetworkStatistics();
+            procedure.setFirstChild(toDecorate);
 
         } else if (NeuralNetworkAnalysis.NAME.equals(name)) {
 
@@ -90,7 +91,8 @@ public class TestProcedureSourceService implements ProcedureSourceInterface {
             SelectionOperator<NeuralNetwork> selectionOperator = new DataSelectionOperator<NeuralNetwork>(network);
             toDecorate.getArguments().setArgument(NeuralNetworkAnalysis.INPUT_NEURAL_NETWORK, selectionOperator);
 
-            procedure = new NeuralNetworkAnalysis(toDecorate);
+            procedure = new NeuralNetworkAnalysis();
+            procedure.setFirstChild(toDecorate);
 
         } else if (NeuralNetworkForwardPropagation.NAME.equals(name)) {
 

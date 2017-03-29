@@ -18,7 +18,7 @@ import qube.qai.data.Arguments;
 import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.ChangepointAdapter;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.ProcedureConstants;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.Date;
 /**
  * Created by rainbird on 11/28/15.
  */
-public class ChangePointAnalysis extends ProcedureDecorator {
+public class ChangePointAnalysis extends Procedure implements ProcedureConstants {
 
     public static String NAME = "Change-Point Analysis";
 
@@ -52,10 +52,12 @@ public class ChangePointAnalysis extends ProcedureDecorator {
     @Override
     public void execute() {
 
-        toDecorate.execute();
+        if (getFirstChild() != null) {
+            ((Procedure) getFirstChild()).execute();
+        }
 
         if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(toDecorate.getArguments());
+            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
         }
 
         // first get the selector

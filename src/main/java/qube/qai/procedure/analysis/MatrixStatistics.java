@@ -19,14 +19,14 @@ import qube.qai.data.Metrics;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.matrix.Matrix;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureDecorator;
+import qube.qai.procedure.ProcedureConstants;
 
 import java.util.List;
 
 /**
  * Created by rainbird on 11/28/15.
  */
-public class MatrixStatistics extends ProcedureDecorator {
+public class MatrixStatistics extends Procedure implements ProcedureConstants {
 
     public static String NAME = "Matrix Statistics";
 
@@ -50,10 +50,12 @@ public class MatrixStatistics extends ProcedureDecorator {
     @Override
     public void execute() {
 
-        toDecorate.execute();
+        if (getFirstChild() != null) {
+            ((Procedure) getFirstChild()).execute();
+        }
 
         if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(toDecorate.getArguments());
+            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
         }
 
         // first get the selector

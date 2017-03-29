@@ -36,6 +36,7 @@ import java.util.Hashtable;
  */
 public abstract class BaseNode implements VisitableNode, Serializable {
 
+    @thewebsemantic.Id
     protected String uuid;
 
     protected BaseNode parent;
@@ -59,6 +60,8 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      */
     protected BaseNode child2;
 
+    public BaseNode() {
+    }
 
     /**
      * Empty Constructor.
