@@ -14,18 +14,18 @@
 
 package qube.qai.procedure.finance;
 
-import com.hazelcast.core.IMap;
+import org.apache.commons.lang3.StringUtils;
 import org.ojalgo.finance.data.YahooSymbol;
 import org.ojalgo.type.CalendarDateUnit;
 import qube.qai.data.Arguments;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
-import qube.qai.services.SearchServiceInterface;
-import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -41,17 +41,21 @@ public class StockQuoteRetriever extends Procedure {
     public static String DESCRIPTION = "Retrieves the stock quotes for given list of stock entities " +
             "and updates them to the latest stand";
 
-    public static String TICKER_SYMBOLS = "tickerSymbols";
+    public static String TICKER_SYMBOL = "tickerSymbol";
 
     public static String NUMBER_OF_INSERTS = "numberOfInserts";
 
     public static long numberOfInserts;
 
-    private Collection<String> tickerSymbols;
+    private String tickerSymbol;
+
+//    @Inject
+//    @Named("STOCKS")
+//    private SearchServiceInterface stockSearchService;
 
     @Inject
     @Named("STOCKS")
-    private SearchServiceInterface stockSearchService;
+    private EntityManager entityManager;
 
     public StockQuoteRetriever() {
         super(NAME);
@@ -60,36 +64,45 @@ public class StockQuoteRetriever extends Procedure {
     @Override
     public void execute() {
 
-        if (tickerSymbols == null || tickerSymbols.isEmpty()) {
-            throw new RuntimeException("A list of ticker-symbols must be provided!");
+        if (StringUtils.isEmpty(tickerSymbol)) {
+            throw new RuntimeException("There has to be a ticker-symbol to update");
         }
 
-        for (String tickerSymbol : tickerSymbols) {
-            Collection<StockQuote> quotes = retrieveQuotesFor(tickerSymbol);
-            Collection<SearchResult> searchResults = stockSearchService.searchInputString(tickerSymbol, "STOCK_ENTITIES", 1);
-            // there has to be a stock enttiy to the name
-            if (searchResults.isEmpty()) {
-                //throw new RuntimeException("Entity with ticker-symbol: '" + tickerSymbol + "' could not be found- cannot continue");
-                logger.error("Entity with ticker-symbol: '" + tickerSymbol + "' could not be found- have to skip!");
-                continue;
-            }
-            String entityUuid = searchResults.iterator().next().getUuid();
-            IMap<String, StockEntity> entityMap = hazelcastInstance.getMap("STOCK_ENTITIES");
-            IMap<String, StockQuote> quoteMap = hazelcastInstance.getMap("STOCK_QUOTES");
-            StockEntity stockEntity = entityMap.get(entityUuid);
-            Set<StockQuote> entityQuotes = stockEntity.getQuotes();
-            for (StockQuote quote : quotes) {
-                if (!entityQuotes.contains(quote)) {
-                    // @TODO i am not sure which of these is the right choice- i am not assuming hazelcast can deal reasonably with child-collections
-                    stockEntity.addQuote(quote);
-                    quoteMap.put(quote.getUuid(), quote);
-                    numberOfInserts++;
-                }
+        //entityManager.getTransaction().begin();
+
+        StockEntity entity = retrieveEntityForTickerSymbol(tickerSymbol);
+        if (entity == null) {
+            logger.error("An entity with tickerSymbol: '" + tickerSymbol + "' could not be found- skipping!");
+        }
+
+        Collection<StockQuote> quotes = retrieveQuotesFor(tickerSymbol);
+        Set<StockQuote> entityQuotes = entity.getQuotes();
+        for (StockQuote quote : quotes) {
+            if (!entityQuotes.contains(quote)) {
+                entityManager.persist(quote);
+                entity.addQuote(quote);
+                entityManager.persist(quote);
+                numberOfInserts++;
             }
         }
+
+        entityManager.persist(entity);
+
+        // i really don't get why this is not working
+        //entityManager.flush();
+        //entityManager.getTransaction().commit();
 
         arguments.addResult(NUMBER_OF_INSERTS, numberOfInserts);
 
+    }
+
+    private StockEntity retrieveEntityForTickerSymbol(String tickerSymbol) {
+
+        String searchString = "select o from StockEntity o where o.tickerSymbol like '" + tickerSymbol + "'";
+        Query query = entityManager.createQuery(searchString);
+        StockEntity entity = (StockEntity) query.getSingleResult();
+
+        return entity;
     }
 
     private Collection<StockQuote> retrieveQuotesFor(String stockName) {
@@ -121,7 +134,7 @@ public class StockQuoteRetriever extends Procedure {
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(TICKER_SYMBOLS);
+        arguments = new Arguments(TICKER_SYMBOL);
         arguments.putResultNames(NUMBER_OF_INSERTS);
     }
 
@@ -133,12 +146,27 @@ public class StockQuoteRetriever extends Procedure {
         StockQuoteRetriever.numberOfInserts = numberOfInserts;
     }
 
-    public Collection<String> getTickerSymbols() {
-        return tickerSymbols;
+    public String getTickerSymbol() {
+        return tickerSymbol;
     }
 
-    public void setTickerSymbols(Collection<String> tickerSymbols) {
-        this.tickerSymbols = tickerSymbols;
+    public void setTickerSymbol(String tickerSymbol) {
+        this.tickerSymbol = tickerSymbol;
     }
 
+//    public SearchServiceInterface getStockSearchService() {
+//        return stockSearchService;
+//    }
+//
+//    public void setStockSearchService(SearchServiceInterface stockSearchService) {
+//        this.stockSearchService = stockSearchService;
+//    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 }

@@ -64,7 +64,7 @@ public class StockEntityInitialization extends Procedure {
 
     private int numberOfRecords;
 
-    private int getNumberOfRecordsCreated;
+    private int numberOfRecordsCreated;
 
     private StockCategory category;
 
@@ -86,7 +86,7 @@ public class StockEntityInitialization extends Procedure {
         logger.debug("adding '" + NUMBER_OF_RECORDS + "' to results");
         arguments.addResult(NUMBER_OF_RECORDS, numberOfRecords);
         logger.debug("adding '" + NUMBER_OF_RECORDS_CREATED + "' to results");
-        arguments.addResult(NUMBER_OF_RECORDS_CREATED, getNumberOfRecordsCreated);
+        arguments.addResult(NUMBER_OF_RECORDS_CREATED, numberOfRecordsCreated);
         logger.debug("adding '" + CATEGORY + "' to results");
         arguments.addResult(CATEGORY, category);
     }
@@ -280,12 +280,12 @@ public class StockEntityInitialization extends Procedure {
         this.numberOfRecords = numberOfRecords;
     }
 
-    public int getGetNumberOfRecordsCreated() {
-        return getNumberOfRecordsCreated;
+    public int getNumberOfRecordsCreated() {
+        return numberOfRecordsCreated;
     }
 
-    public void setGetNumberOfRecordsCreated(int getNumberOfRecordsCreated) {
-        this.getNumberOfRecordsCreated = getNumberOfRecordsCreated;
+    public void setNumberOfRecordsCreated(int numberOfRecordsCreated) {
+        this.numberOfRecordsCreated = numberOfRecordsCreated;
     }
 
     public EntityManager getEntityManager() {

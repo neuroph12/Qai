@@ -14,33 +14,46 @@
 
 package qube.qai.procedure.finance;
 
-import qube.qai.main.QaiTestBase;
+import com.google.inject.Injector;
+import junit.framework.TestCase;
+import qube.qai.main.QaiTestServerModule;
+import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockQuote;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.Set;
 
 /**
  * Created by rainbird on 3/11/17.
  */
-public class TestStockQuoteRetriever extends QaiTestBase {
+public class TestStockQuoteRetriever extends TestCase {
+
 
     public void testStockQuoteRetriever() throws Exception {
 
+        Injector injector = QaiTestServerModule.initStocksInjector();
+        EntityManager entityManager = injector.getInstance(EntityManager.class);
         StockQuoteRetriever retriever = new StockQuoteRetriever();
-        injector.injectMembers(retriever);
+        retriever.setEntityManager(entityManager);
 
-        Collection<String> tickerSymbols = new ArrayList<>();
-        tickerSymbols.add("GOOG");
-        retriever.setTickerSymbols(tickerSymbols);
+        String tickerSymbol = "GOOG";
+        retriever.setTickerSymbol(tickerSymbol);
         retriever.execute();
 
-        //DatabaseSearchService searchService = new DatabaseSearchService();
-        //Injector stocksInjector = QaiTestServerModule.initStocksInjector();
-        //stocksInjector.injectMembers(searchService);
+        String queryString = "select o from StockEntity o where o.tickerSymbol like '" + tickerSymbol + "'";
+        Query query = entityManager.createQuery(queryString);
+        StockEntity entity = (StockEntity) query.getSingleResult();
+        Set<StockQuote> quotes = entity.getQuotes();
+        assertNotNull("there has to be quotes now", quotes);
+        assertTrue("the list may not be empty", !quotes.isEmpty());
 
+        for (StockQuote quote : quotes) {
+            log(quote.getTickerSymbol() + " $" + quote.getAdjustedClose() + " on: " + quote.getQuoteDate());
+        }
+    }
 
-        //EntityManager entityManager = stocksInjector.getInstance(EntityManager.class);
-
-
+    private void log(String message) {
+        System.out.println(message);
     }
 }

@@ -30,6 +30,12 @@ public class TestDistributedSearchServices extends QaiTestBase {
 //    @Inject @Named("Dbpedia_en")
 //    SearchServiceInterface dbpediaSearchService;
 
+    public void testDistributedUserSearch() throws Exception {
+
+        fail("there is something wrong with this test- take a look later... now running all tests.");
+
+    }
+
     public void testDistributedWikiSearch() throws Exception {
 
         fail("there is something wrong with this test- take a look later... now running all tests.");

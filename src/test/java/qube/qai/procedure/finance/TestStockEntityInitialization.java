@@ -40,7 +40,7 @@ public class TestStockEntityInitialization extends QaiTestBase {
         injector.injectMembers(categoryMapStore);
 
         StockCategory category = new StockCategory();
-        category.setName("Sandard and Poor top 500");
+        category.setName("Standard and Poor top 500");
 
         for (int i = 0; i < 10; i++) {
             StockEntity entity = TestDatabaseMapStores.createEntity("stock_entity_" + i);
@@ -78,11 +78,8 @@ public class TestStockEntityInitialization extends QaiTestBase {
                 , StockEntityInitialization.NASDAQ_LISTING
         };
 
-        assertTrue("for the moment this is good enough- testing the injector", true);
-
         int overallCount = 0;
         for (String listingName : listings) {
-            //procedure.setName("test import procedure");
             procedure.setCategoryName("Testing: " + listingName);
             procedure.setSelectedFile(listingName);
 

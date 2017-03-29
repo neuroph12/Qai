@@ -37,8 +37,8 @@ import qube.qai.persistence.mapstores.DatabaseMapStore;
 import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
+import qube.qai.persistence.search.DatabaseSearchService;
 import qube.qai.persistence.search.RDFTriplesSearchService;
-import qube.qai.persistence.search.StockQuoteSearchService;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
@@ -310,22 +310,28 @@ public class QaiServerModule extends AbstractModule {
         return searchService;
     }
 
+
     /**
      * StockQuotesSearchService
      *
      * @return
      */
     @Provides
-    @Named("Stock_Quotes")
+    @Named("Stocks")
     SearchServiceInterface provideStockQuoteSearchService() {
 
-        // create an injector for initializing JPA-Module & start the service
-        Injector injector = Guice.createInjector(new JpaPersistModule("STOCKS"));
-        PersistService persistService = injector.getInstance(PersistService.class);
-        persistService.start();
+        DatabaseSearchService searchService = new DatabaseSearchService();
+        getJpaStocksInjector().injectMembers(searchService);
 
-        StockQuoteSearchService searchService = new StockQuoteSearchService();
-        injector.injectMembers(searchService);
+        return searchService;
+    }
+
+    @Provides
+    @Named("Users")
+    SearchServiceInterface provideUsersSearchService() {
+
+        DatabaseSearchService searchService = new DatabaseSearchService();
+        getJpaUsersInjector().injectMembers(searchService);
 
         return searchService;
     }
@@ -348,9 +354,28 @@ public class QaiServerModule extends AbstractModule {
         return searchService;
     }
 
+    public Injector getJpaStocksInjector() {
+
+        if (jpaStocksInjector == null) {
+            jpaStocksInjector = Guice.createInjector(new JpaPersistModule("STOCKS"));
+            PersistService service = jpaStocksInjector.getInstance(PersistService.class);
+            service.start();
+        }
+        return jpaStocksInjector;
+    }
+
+    public Injector getJpaUsersInjector() {
+
+        if (jpaUsersInjector == null) {
+            jpaUsersInjector = Guice.createInjector(new JpaPersistModule("STOCKS"));
+            PersistService service = jpaUsersInjector.getInstance(PersistService.class);
+            service.start();
+        }
+        return jpaUsersInjector;
+    }
+
     @Provides
     @Singleton
-        //@Named("HAZELCAST_SERVER")
     HazelcastInstance provideHazelcastInstance() {
 
         if (hazelcastInstance != null) {
@@ -358,12 +383,6 @@ public class QaiServerModule extends AbstractModule {
         }
 
         Config hazelcastConfig = new Config(NODE_NAME);
-
-        if (jpaStocksInjector == null) {
-            jpaStocksInjector = Guice.createInjector(new JpaPersistModule("STOCKS"));
-            PersistService service = jpaStocksInjector.getInstance(PersistService.class);
-            service.start();
-        }
 
         // create Stock_Entities map-store
         if ("true".equals(CREATE_STOCK_ENTITIES)) {
@@ -446,11 +465,11 @@ public class QaiServerModule extends AbstractModule {
             service.start();
         }
 
-        if (jpaUsersInjector == null) {
-            jpaUsersInjector = Guice.createInjector(new JpaPersistModule("USERS"));
-            PersistService service = jpaUsersInjector.getInstance(PersistService.class);
-            service.start();
-        }
+//        if (jpaUsersInjector == null) {
+//            jpaUsersInjector = Guice.createInjector(new JpaPersistModule("USERS"));
+//            PersistService service = jpaUsersInjector.getInstance(PersistService.class);
+//            service.start();
+//        }
 //        MapConfig mapConfig = hazelcastConfig.getMapConfig(DBPEDIA);
 //        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
 //        if (mapStoreConfig == null) {
@@ -489,7 +508,7 @@ public class QaiServerModule extends AbstractModule {
                 if (USERS.equals(mapName)) {
                     if (userMapStore == null) {
                         userMapStore = new DatabaseMapStore(User.class);
-                        jpaUsersInjector.injectMembers(userMapStore);
+                        getJpaUsersInjector().injectMembers(userMapStore);
                     }
                     return userMapStore;
                 } else {
@@ -513,7 +532,7 @@ public class QaiServerModule extends AbstractModule {
                 if (USER_ROLES.equals(mapName)) {
                     if (roleMapStore == null) {
                         roleMapStore = new DatabaseMapStore(Role.class);
-                        jpaUsersInjector.injectMembers(roleMapStore);
+                        getJpaUsersInjector().injectMembers(roleMapStore);
                     }
 
                     return roleMapStore;
@@ -538,7 +557,7 @@ public class QaiServerModule extends AbstractModule {
                 if (USER_SESSIONS.equals(mapName)) {
                     if (sessionMapStore == null) {
                         sessionMapStore = new DatabaseMapStore(Session.class);
-                        jpaUsersInjector.injectMembers(sessionMapStore);
+                        getJpaUsersInjector().injectMembers(sessionMapStore);
                     }
 
                     return sessionMapStore;
@@ -716,7 +735,7 @@ public class QaiServerModule extends AbstractModule {
                 if (STOCK_QUOTES.equals(mapName)) {
                     if (stockQuoteMapStore == null) {
                         stockQuoteMapStore = new DatabaseMapStore(StockQuote.class);
-                        jpaStocksInjector.injectMembers(stockQuoteMapStore);
+                        getJpaStocksInjector().injectMembers(stockQuoteMapStore);
                     }
 
                     return stockQuoteMapStore;

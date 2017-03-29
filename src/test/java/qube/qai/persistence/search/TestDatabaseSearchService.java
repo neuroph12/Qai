@@ -14,15 +14,13 @@
 
 package qube.qai.persistence.search;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.persist.PersistService;
-import com.google.inject.persist.jpa.JpaPersistModule;
 import junit.framework.TestCase;
 import qube.qai.main.QaiTestServerModule;
 import qube.qai.persistence.StockCategory;
 import qube.qai.persistence.StockEntity;
 import qube.qai.services.implementation.SearchResult;
+import qube.qai.user.User;
 
 import javax.persistence.EntityManager;
 import java.util.Collection;
@@ -35,17 +33,27 @@ public class TestDatabaseSearchService extends TestCase {
 
     private boolean debug = true;
 
-    public void restUserDatabaseSearchService() throws Exception {
+    public void testUserDatabaseSearchService() throws Exception {
 
-        // create the entity-manager and inject to the search-service
-        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_USERS"));
-        PersistService service = injector.getInstance(PersistService.class);
-        service.start();
-
+        Injector injector = QaiTestServerModule.initUsersInjector();
         DatabaseSearchService databaseSearch = new DatabaseSearchService();
         injector.injectMembers(databaseSearch);
 
         // now we can actually do some testing
+        Collection<SearchResult> results = databaseSearch.searchInputString("*", "User", 1);
+
+        assertNotNull("there have to be results", results);
+        assertTrue("the result set may not be empty", !results.isEmpty());
+
+        // now get the entity-manager to get the actual thing
+        EntityManager entityManager = databaseSearch.getEntityManager();
+
+        for (SearchResult result : results) {
+            String uuid = result.getUuid();
+            User user = entityManager.find(User.class, uuid);
+            assertNotNull("the user not found in the database?!?", user);
+        }
+
     }
 
     public void testStocksDatabaseSearchService() throws Exception {

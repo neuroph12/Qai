@@ -44,11 +44,11 @@ public class DatabaseMapStore implements MapStore {
     //@TODO i am not sure if having a transaction here is really a good thing
     @Override
     public void store(Object key, Object value) {
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
+//        if (!entityManager.getTransaction().isActive()) {
+//            entityManager.getTransaction().begin();
+//        }
         entityManager.persist(baseClass.cast(value));
-        entityManager.getTransaction().commit();
+//        entityManager.getTransaction().commit();
     }
 
     @Override

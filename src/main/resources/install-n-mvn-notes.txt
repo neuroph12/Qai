@@ -73,6 +73,9 @@ latest configuration of boxes in intranet
 192.168.1.6 - zenpunk
 192.168.1.7 - qainode
 
+qoan-server operates on
+http://192.168.1.5:8080
+
 qai-node operates on
 192.168.1.7:5701
 
@@ -91,5 +94,5 @@ starting and stopping the thing
 /media/rainbird/ALEPH/qai-persistence.db/dbpedia_en/data/bin/agraph-control --config /media/rainbird/ALEPH/qai-persistence.db/dbpedia_en/data/lib/agraph.cfg start
 /media/rainbird/ALEPH/qai-persistence.db/dbpedia_en/data/bin/agraph-control --config /media/rainbird/ALEPH/qai-persistence.db/dbpedia_en/data/lib/agraph.cfg stop
 
-this will sometime become the virtuoso-server url
+this will sometime become the virtuoso-server url (removed and no longer in use)
 http://192.168.1.2:8890/conductor
