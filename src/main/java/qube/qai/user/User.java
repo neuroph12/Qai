@@ -169,7 +169,7 @@ public class User implements Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof User) {
             User u = (User) obj;
-            if (uuid.equals(u.uuid)) {
+            if (username.equals(u.username) && password.equals(u.password)) {
                 return true;
             }
         }

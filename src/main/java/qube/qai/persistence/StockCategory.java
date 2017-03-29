@@ -46,6 +46,11 @@ public class StockCategory implements Serializable {
         this.entities = new HashSet<>();
     }
 
+    public StockCategory(String name) {
+        this();
+        this.name = name;
+    }
+
     public void addStockEntity(StockEntity entity) {
         entities.add(entity);
     }

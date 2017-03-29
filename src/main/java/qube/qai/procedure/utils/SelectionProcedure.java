@@ -42,4 +42,10 @@ public class SelectionProcedure extends Procedure {
     public void execute() {
         // do nothing as well...
     }
+
+    @Override
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

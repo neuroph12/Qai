@@ -21,6 +21,7 @@ import qube.qai.data.DataVisitor;
 /**
  * Created by rainbird on 12/27/15.
  */
+@Deprecated
 public abstract class ProcedureDecorator extends Procedure implements ProcedureConstants {
 
     protected Procedure toDecorate;
