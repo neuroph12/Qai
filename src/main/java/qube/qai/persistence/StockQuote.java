@@ -183,4 +183,5 @@ public class StockQuote implements Serializable, AcceptsVisitors {
         }
         return false;
     }
+
 }
