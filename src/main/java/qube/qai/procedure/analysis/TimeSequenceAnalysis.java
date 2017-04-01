@@ -71,4 +71,9 @@ public class TimeSequenceAnalysis extends Procedure implements ProcedureConstant
         logger.info("adding '" + TIME_SEQUENCE_METRICS + "' to return values");
         arguments.addResult(TIME_SEQUENCE_METRICS, metrics);
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

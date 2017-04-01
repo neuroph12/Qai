@@ -65,4 +65,9 @@ public class NetworkStatistics extends Procedure implements ProcedureConstants {
         logger.info("adding " + NETWORK_METRICS + " to return values");
         arguments.addResult(NETWORK_METRICS, metrics);
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

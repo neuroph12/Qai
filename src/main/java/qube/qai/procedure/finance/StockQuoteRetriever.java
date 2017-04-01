@@ -169,4 +169,9 @@ public class StockQuoteRetriever extends Procedure {
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

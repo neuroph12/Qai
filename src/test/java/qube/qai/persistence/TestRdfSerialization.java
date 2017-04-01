@@ -24,12 +24,15 @@ import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
+import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.RDF2Bean;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -113,28 +116,50 @@ public class TestRdfSerialization extends TestCase {
         BaseNode storedNode = reader.load(ConcatenationNode.class, uuid);
 
         assertNotNull("there has to be a return value", storedNode);
+        logger.info("parsed: '" + parsedNode.toString() + "' read: " + storedNode.toString() + "'");
         assertTrue("the nodes must be equal", parsedNode.toString().equals(storedNode.toString()));
         assertTrue("the nodes must be equal", parsedNode.equals(storedNode));
     }
 
     public void testRdfSerializationOfProcedures() throws Exception {
 
-        // @TODO procedures which have others as child misbehave
-        Procedure procedure = new NeuralNetworkAnalysis();
-        String uuid = procedure.getUuid();
-        logger.info("procedure uuid: " + uuid + " " + procedure.toString());
-
         Model model = ModelFactory.createDefaultModel();
         Bean2RDF writer = new Bean2RDF(model);
 
-        writer.save(procedure);
-        model.write(System.out);
+        // go through all rpocedures and try them out
+        Collection<Procedure> procedures = generateAllProcedures();
+        for (Procedure procedure : procedures) {
+            String uuid = procedure.getUuid();
+            logger.info("procedure uuid: " + uuid + " " + procedure.toString());
 
-        RDF2Bean reader = new RDF2Bean(model);
-        Procedure storedProcedure = reader.load(NeuralNetworkAnalysis.class, uuid);
-        assertNotNull("three has to be something sotred after all", storedProcedure);
-        assertTrue("the procedures must be equal", procedure.equals(storedProcedure));
+            writer.save(procedure);
+            model.write(System.out);
 
+            RDF2Bean reader = new RDF2Bean(model);
+            Procedure storedProcedure = reader.load(NeuralNetworkAnalysis.class, uuid);
+            assertNotNull("three has to be something sotred after all", storedProcedure);
+            assertTrue("the procedures must be equal", procedure.equals(storedProcedure));
+        }
+    }
+
+    private Collection<Procedure> generateAllProcedures() {
+
+        Collection<Procedure> procedures = new ArrayList<>();
+
+//        procedures.add(new ChangePointAnalysis(null));
+//        procedures.add(new MarketNetworkBuilder(null));
+//        procedures.add(new MatrixStatistics(null));
+//        procedures.add(new NeuralNetworkAnalysis());
+//        procedures.add(new NeuralNetworkForwardPropagation(null));
+//        procedures.add(new SortingPercentilesProcedure(null));
+//        procedures.add(new DirectoryIndexer(null));
+//        procedures.add(new WikiArchiveIndexer(null));
+//        procedures.add(new StockEntityInitialization());
+//        procedures.add(new StockQuoteRetriever());
+//        procedures.add(new SelectionProcedure());
+        procedures.add(new SimpleProcedure());
+
+        return procedures;
     }
 
     private BaseNode parseExpression(String expression) {

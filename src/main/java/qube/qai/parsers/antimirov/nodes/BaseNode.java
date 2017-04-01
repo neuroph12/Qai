@@ -20,6 +20,7 @@ import qube.qai.parsers.antimirov.IncompleteTypeException;
 import qube.qai.parsers.antimirov.IrregularContentRequestException;
 import qube.qai.parsers.antimirov.NoWellformedTypeException;
 import qube.qai.services.implementation.UUIDService;
+import thewebsemantic.Namespace;
 
 import java.io.Serializable;
 import java.util.Hashtable;
@@ -34,9 +35,9 @@ import java.util.Hashtable;
  * @author Stefan Hohenadel
  * @version 1.0
  */
+@Namespace("http://www.qoan.org/nodes#")
 public abstract class BaseNode implements VisitableNode, Serializable {
 
-    @thewebsemantic.Id
     protected String uuid;
 
     protected BaseNode parent;
@@ -93,16 +94,17 @@ public abstract class BaseNode implements VisitableNode, Serializable {
     }//constructor
 
 
-    public abstract void accept(NodeVisitor visitor);
+    public abstract Object accept(NodeVisitor visitor, Object data);
 
-    public void childrenAccept(NodeVisitor visitor) {
-        accept(visitor);
+    public Object childrenAccept(NodeVisitor visitor, Object data) {
+        data = this.accept(visitor, data);
         if (child1 != null) {
-            child1.childrenAccept(visitor);
+            data = child1.childrenAccept(visitor, data);
         }
         if (child2 != null) {
-            child2.childrenAccept(visitor);
+            data = child2.childrenAccept(visitor, data);
         }
+        return data;
     }
 
     /**
@@ -117,6 +119,9 @@ public abstract class BaseNode implements VisitableNode, Serializable {
         return this.name;
     }//getName
 
+    public void setName(Name name) {
+        this.name = name;
+    }
 
     /**
      * Sets first child of the type to <code>t</code>.
@@ -124,7 +129,6 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * @param t new first child
      */
     public void setFirstChild(BaseNode t) {
-
         this.child1 = t;
         if (child1 != null) {
             child1.setParent(this);
@@ -149,7 +153,6 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * @param t new second child
      */
     public void setSecondChild(BaseNode t) {
-
         this.child2 = t;
         if (child2 != null) {
             child2.setParent(this);
@@ -163,7 +166,6 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * @return Second child of the type.
      */
     public BaseNode getSecondChild() {
-
         return this.child2;
     }//getSecondChild
 
@@ -370,7 +372,7 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      */
     public String getNameString() {
         if (this.name != null) {
-            return name.getNameString();
+            return name.getName();
         }
         return "BaseNode";
     }
@@ -382,9 +384,8 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      */
     public abstract String toString();
 
-    public String getUuid() {
-        return uuid;
-    }
+    @thewebsemantic.Id
+    public abstract String getUuid();
 
     public void setUuid(String uuid) {
         this.uuid = uuid;

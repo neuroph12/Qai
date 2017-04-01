@@ -303,4 +303,9 @@ public class StockEntityInitialization extends Procedure {
     public void setCategory(StockCategory category) {
         this.category = category;
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

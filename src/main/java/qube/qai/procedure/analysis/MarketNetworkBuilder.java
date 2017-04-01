@@ -119,4 +119,9 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
     public BasicNetworkTrainer getTrainer() {
         return trainer;
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

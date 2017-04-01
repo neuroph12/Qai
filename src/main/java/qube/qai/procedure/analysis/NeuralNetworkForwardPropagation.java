@@ -94,6 +94,11 @@ public class NeuralNetworkForwardPropagation extends Procedure implements Proced
         }
 
         arguments.addResult(MAP_OF_TIME_SEQUENCE, timeSeriesMap);
-
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
+
 }

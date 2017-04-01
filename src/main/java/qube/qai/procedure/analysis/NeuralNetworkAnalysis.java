@@ -52,7 +52,7 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
     @Override
     public void execute() {
 
-        if (getFirstChild() != null) {
+        if (getProcedureInputs() != null) {
             ((Procedure) getFirstChild()).execute();
         }
 
@@ -85,10 +85,10 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
             MatrixStatistics matrix = new MatrixStatistics(selection);
 
             NetworkStatistics network = new NetworkStatistics();
-            network.setFirstChild(matrix);
+            network.getProcedureInputs().addInput(matrix);
 
             NeuralNetworkAnalysis neural = new NeuralNetworkAnalysis();
-            neural.setFirstChild(network);
+            neural.getProcedureInputs().addInput(network);
 
 
             return neural;

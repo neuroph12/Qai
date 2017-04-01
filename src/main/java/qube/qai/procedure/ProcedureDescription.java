@@ -12,29 +12,23 @@
  *
  */
 
-package qube.qai.parsers.antimirov;
+package qube.qai.procedure;
 
+import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
+import qube.qai.parsers.antimirov.nodes.Name;
 
 /**
- * Abstract superclass for all exceptions concerning inherent parts or
- * behaviour of type classes.
- *
- * @author Stefan Hohenadel
- * @version 1.0
+ * Created by rainbird on 3/30/17.
  */
-public abstract class TypeException
-        extends RuntimeException {
+public class ProcedureDescription extends ConcatenationNode {
 
+    public static String NAME = "Procedure Description";
 
-    /**
-     * Constructor for class <code>TypeException</code>.
-     *
-     * @param msg The error message to be printed.
-     */
-    public TypeException(String msg) {
+    private String description;
 
-        super(msg);
-    }//constructor
-
-
-}//class
+    public ProcedureDescription(String description) {
+        super(new ProcedureInputs(), new ProcedureResults());
+        this.description = description;
+        this.name = new Name(NAME);
+    }
+}

@@ -35,10 +35,11 @@ import java.util.Hashtable;
  * @see Inequality
  * @see BaseNode
  */
-public final class ConcatenationNode
+public class ConcatenationNode
         extends BaseNode {
 
     public ConcatenationNode() {
+        this.name = new Name(Name.CONCATENATION);
     }
 
     /**
@@ -49,17 +50,15 @@ public final class ConcatenationNode
      * @throws IncompleteTypeException Occurrs if type is not
      *                                 constructed as valid concatenation expression.
      */
-    public ConcatenationNode(BaseNode child1, BaseNode child2)
-            throws IncompleteTypeException {
-
+    public ConcatenationNode(BaseNode child1, BaseNode child2) throws IncompleteTypeException {
         super(child1, child2);
         this.name = new Name(Name.CONCATENATION);
         this.check();
     }//constructor
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(NodeVisitor visitor, Object data) {
+        return visitor.visit(this, data);
     }
 
     /**
@@ -282,5 +281,9 @@ public final class ConcatenationNode
         return buf.toString();
     }//toString
 
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 
 }//class

@@ -34,7 +34,7 @@ public class TestNodeVisitors extends TestCase {
                 new Node(new Name("bar"), new PrimitiveNode(new Name("double"))));
         ;
         NodeVisitor visitor = createVisitor();
-        node.childrenAccept(visitor);
+        node.childrenAccept(visitor, null);
         log("buffer collected: '" + buffer.toString() + "'");
         assertTrue("concatenation concatenation foo baz integer bar double ".equals(buffer.toString()));
     }
@@ -43,44 +43,53 @@ public class TestNodeVisitors extends TestCase {
         NodeVisitor visitor = new NodeVisitor() {
 
             @Override
-            public void visit(AlternationNode node) {
+            public Object visit(AlternationNode node, Object data) {
                 buffer.append(node.getName() + " ");
+                return data;
             }
 
             @Override
-            public void visit(ConcatenationNode node) {
+            public Object visit(ConcatenationNode node, Object data) {
                 buffer.append(node.getName() + " ");
+                return data;
             }
 
             @Override
-            public void visit(EmptyNode node) {
+            public Object visit(EmptyNode node, Object data) {
                 buffer.append(node.getName() + " ");
+                return data;
             }
 
             @Override
-            public void visit(IterationNode node) {
+            public Object visit(IterationNode node, Object data) {
                 buffer.append(node.getName() + " ");
+                return data;
             }
 
             @Override
-            public void visit(Node node) {
+            public Object visit(Node node, Object data) {
                 buffer.append(node.getName() + " ");
+                return data;
             }
 
             @Override
-            public void visit(NameNode node) {
+            public Object visit(NameNode node, Object data) {
                 buffer.append(node.getName());
+                return data;
             }
 
             @Override
-            public void visit(NoneNode node) {
+            public Object visit(NoneNode node, Object data) {
                 buffer.append(node.getName() + " ");
+                return data;
             }
 
             @Override
-            public void visit(PrimitiveNode node) {
+            public Object visit(PrimitiveNode node, Object data) {
                 buffer.append(node.getName() + " ");
+                return data;
             }
+
         };
 
         return visitor;

@@ -34,6 +34,10 @@ public class ChangePointAnalysis extends Procedure implements ProcedureConstants
 
     public static String DESCRIPTION = "Analysis for finding likely change points in a time-series";
 
+    public ChangePointAnalysis() {
+        super(NAME);
+    }
+
     /**
      * runs change-point analysis of a given time-series
      */
@@ -88,6 +92,11 @@ public class ChangePointAnalysis extends Procedure implements ProcedureConstants
 
         logger.info("adding '" + CHANGE_POINTS + "' to return values");
         arguments.addResult(CHANGE_POINTS, markers);
+    }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
     }
 
     /**

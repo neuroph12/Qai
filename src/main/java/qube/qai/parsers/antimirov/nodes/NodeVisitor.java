@@ -19,20 +19,20 @@ package qube.qai.parsers.antimirov.nodes;
  */
 public interface NodeVisitor {
 
-    void visit(AlternationNode node);
+    Object visit(AlternationNode node, Object data);
 
-    void visit(ConcatenationNode node);
+    Object visit(ConcatenationNode node, Object data);
 
-    void visit(EmptyNode node);
+    Object visit(EmptyNode node, Object data);
 
-    void visit(IterationNode node);
+    Object visit(IterationNode node, Object data);
 
-    void visit(Node node);
+    Object visit(Node node, Object data);
 
-    void visit(NameNode node);
+    Object visit(NameNode node, Object data);
 
-    void visit(NoneNode node);
+    Object visit(NoneNode node, Object data);
 
-    void visit(PrimitiveNode node);
+    Object visit(PrimitiveNode node, Object data);
 
 }

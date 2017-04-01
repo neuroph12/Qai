@@ -137,4 +137,9 @@ public class WikiRipperProcedure extends Procedure {
     public void setWiktionary(boolean wiktionary) {
         this.isWiktionary = wiktionary;
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

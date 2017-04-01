@@ -42,8 +42,8 @@ public final class NoneNode
     }//constructor
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(NodeVisitor visitor, Object data) {
+        return visitor.visit(this, data);
     }
 
     /**
@@ -196,5 +196,9 @@ public final class NoneNode
         return Name.NONE;
     }//toString
 
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 
 }//class

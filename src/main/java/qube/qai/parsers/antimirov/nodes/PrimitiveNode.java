@@ -34,6 +34,7 @@ public class PrimitiveNode
         extends BaseNode {
 
     public PrimitiveNode() {
+        this.name = new Name("PrimitiveNode");
     }
 
     /**
@@ -48,8 +49,8 @@ public class PrimitiveNode
     }//constructor
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(NodeVisitor visitor, Object data) {
+        return visitor.visit(this, data);
     }
 
     /**
@@ -192,9 +193,11 @@ public class PrimitiveNode
      * <code>RIterationType</code>.
      */
     public String toString() {
-
-        return this.name.getNameString();
+        return this.name.getName();
     }//toString
 
-
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }//class

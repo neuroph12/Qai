@@ -241,4 +241,9 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
     public void setAnalyseOrganization(boolean analyseOrganization) {
         this.analyseOrganization = analyseOrganization;
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

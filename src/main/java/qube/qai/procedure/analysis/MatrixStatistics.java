@@ -74,4 +74,9 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
         arguments.addResult(MATRIX_DATA_METRICS, dataMetrics);
         arguments.addResult(MATRIX_METRICS, matrixMetrics);
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

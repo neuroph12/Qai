@@ -43,8 +43,8 @@ public final class EmptyNode
     }//constructor
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(NodeVisitor visitor, Object data) {
+        return visitor.visit(this, data);
     }
 
     /**
@@ -202,5 +202,9 @@ public final class EmptyNode
         return Name.EMPTY;
     }//toString
 
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 
 }//class

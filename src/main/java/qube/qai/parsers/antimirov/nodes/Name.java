@@ -148,10 +148,11 @@ public final class Name implements NodeSetElement, Serializable {
      *
      * @return Name represented by the instance.
      */
-    public String getNameString() {
+    @thewebsemantic.Id
+    public String getName() {
 
         return this.name;
-    }//getNameString
+    }//getName
 
 
     public void setNameString(String name) {
@@ -182,7 +183,7 @@ public final class Name implements NodeSetElement, Serializable {
 
         return (s instanceof Name) ?
 
-                (this.getNameString().equals(((Name) s).getNameString())) :
+                (this.getName().equals(((Name) s).getName())) :
 
                 false;
     }//equals

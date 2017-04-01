@@ -157,4 +157,9 @@ public class DirectoryIndexer extends Procedure implements ProcedureConstants {
     public void setIndexDirectory(String indexDirectory) {
         this.indexDirectory = indexDirectory;
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

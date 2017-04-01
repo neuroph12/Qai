@@ -40,6 +40,7 @@ import qube.qai.persistence.mapstores.TestHazelcastMaps;
 import qube.qai.persistence.mapstores.TestIndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.TestMapStores;
 import qube.qai.persistence.search.TestProcedureDataService;
+import qube.qai.procedure.TestProcedureInputsAndResults;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
 import qube.qai.procedure.archive.TestDirectoryIndexer;
@@ -118,6 +119,7 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestProcedureDataService.class);
 
         // procedure
+        suite.addTestSuite(TestProcedureInputsAndResults.class);
         suite.addTestSuite(TestWikiArchiveIndexer.class);
         suite.addTestSuite(TestWikiRipperProcedure.class);
 

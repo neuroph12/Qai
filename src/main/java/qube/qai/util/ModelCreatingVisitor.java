@@ -43,46 +43,46 @@ public class ModelCreatingVisitor implements NodeVisitor {
     }
 
     @Override
-    public void visit(AlternationNode node) {
-        allVisit(node);
+    public Object visit(AlternationNode node, Object data) {
+        return allVisit(node, data);
     }
 
     @Override
-    public void visit(ConcatenationNode node) {
-        allVisit(node);
+    public Object visit(ConcatenationNode node, Object data) {
+        return allVisit(node, data);
     }
 
     @Override
-    public void visit(EmptyNode node) {
-        allVisit(node);
+    public Object visit(EmptyNode node, Object data) {
+        return allVisit(node, data);
     }
 
     @Override
-    public void visit(IterationNode node) {
-        allVisit(node);
+    public Object visit(IterationNode node, Object data) {
+        return allVisit(node, data);
     }
 
     @Override
-    public void visit(Node node) {
-        allVisit(node);
+    public Object visit(Node node, Object data) {
+        return allVisit(node, data);
     }
 
     @Override
-    public void visit(NameNode node) {
-        allVisit(node);
+    public Object visit(NameNode node, Object data) {
+        return allVisit(node, data);
     }
 
     @Override
-    public void visit(NoneNode node) {
-        allVisit(node);
+    public Object visit(NoneNode node, Object data) {
+        return allVisit(node, data);
     }
 
     @Override
-    public void visit(PrimitiveNode node) {
-        allVisit(node);
+    public Object visit(PrimitiveNode node, Object data) {
+        return allVisit(node, data);
     }
 
-    private void allVisit(BaseNode node) {
+    private Object allVisit(BaseNode node, Object data) {
         Resource resource = model.createResource("http://www.qai.at/procedures:" + node.getUuid());
         resource.addLiteral(model.createProperty(nameSpace, "uuid"), node.getUuid());
         resource.addLiteral(model.createProperty(nameSpace, "name"), node.getNameString());
@@ -91,6 +91,7 @@ public class ModelCreatingVisitor implements NodeVisitor {
         if (node.getParent() != null) {
             resource.addLiteral(model.createProperty(nameSpace, "parentUuid"), node.getParent().getUuid());
         }
+        return data;
     }
 
     public static BaseNode createNodeFromName(String name) {

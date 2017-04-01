@@ -57,7 +57,7 @@ public class ProcedureToRdfConverter {
 //        resource.addLiteral(model.createProperty(baseUriString, "duration"), procedure.getDuration());
 
         NodeVisitor visitor = new ModelCreatingVisitor(model);
-        procedure.childrenAccept(visitor);
+        procedure.childrenAccept(visitor, null);
 
         return model;
     }

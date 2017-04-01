@@ -105,4 +105,9 @@ public class RelateProcedure extends Procedure {
     public void setRelatedResource(SelectionOperator relatedResource) {
         this.relatedResource = relatedResource;
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

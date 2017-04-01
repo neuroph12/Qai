@@ -130,4 +130,9 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
             return val2.compareTo(val1);
         }
     }
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 }

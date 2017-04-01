@@ -35,6 +35,7 @@ import java.util.Iterator;
 public class NameNode extends BaseNode {
 
     public NameNode() {
+        this.name = new Name("NameNode");
     }
 
     /**
@@ -63,8 +64,8 @@ public class NameNode extends BaseNode {
     }//constructor
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(NodeVisitor visitor, Object data) {
+        return visitor.visit(this, data);
     }
 
     /**
@@ -300,5 +301,9 @@ public class NameNode extends BaseNode {
         return this.name.toString();
     }//toString
 
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 
 }//class       

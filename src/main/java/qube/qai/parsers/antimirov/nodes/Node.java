@@ -32,10 +32,10 @@ import java.util.Hashtable;
  * @see Inequality
  * @see BaseNode
  */
-public class Node
-        extends BaseNode {
+public class Node extends BaseNode {
 
     public Node() {
+        this.name = new Name("Node");
     }
 
     /**
@@ -45,10 +45,8 @@ public class Node
      * @throws IncompleteTypeException Occurrs if type is not
      *                                 constructed as valid node type.
      */
-    public Node(Name name)
-    //throws IncompleteTypeException {
+    public Node(Name name) throws IncompleteTypeException
     {
-
         super(null, null);
         this.name = name;
         this.check();
@@ -63,8 +61,7 @@ public class Node
      * @throws IncompleteTypeException Occurrs if type is not
      *                                 constructed as valid node type.
      */
-    public Node(Name name, BaseNode child)
-            throws IncompleteTypeException {
+    public Node(Name name, BaseNode child) throws IncompleteTypeException {
 
         super(child, null);
         this.name = name;
@@ -72,8 +69,8 @@ public class Node
     }//constructor
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(NodeVisitor visitor, Object data) {
+        return visitor.visit(this, data);
     }
 
     /**
@@ -246,11 +243,11 @@ public class Node
 
         if (this.child1 == null)
             return (this.name != null) ?
-                    this.name.getNameString() :
+                    this.name.getName() :
                     Name.NULL;
         else {
             StringBuffer buf = new StringBuffer((this.name != null) ?
-                    this.name.getNameString() :
+                    this.name.getName() :
                     Name.NULL);
             buf.append("[");
             buf.append(this.child1.toString());
@@ -258,5 +255,10 @@ public class Node
             return buf.toString();
         }
     }//toString
+
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 
 }//class

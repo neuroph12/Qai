@@ -39,6 +39,9 @@ import java.util.Hashtable;
  */
 public final class AlternationNode extends BaseNode {
 
+    public AlternationNode() {
+        this.name = new Name(Name.ALTERNATION);
+    }
 
     /**
      * Constructor for alternation type representation.
@@ -50,15 +53,14 @@ public final class AlternationNode extends BaseNode {
      */
     public AlternationNode(BaseNode child1, BaseNode child2)
             throws IncompleteTypeException {
-
         super(child1, child2);
         this.name = new Name(Name.ALTERNATION);
         this.check();
     }//constructor
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(NodeVisitor visitor, Object data) {
+        return visitor.visit(this, data);
     }
 
     /**
@@ -249,5 +251,9 @@ public final class AlternationNode extends BaseNode {
         return buf.toString();
     }//toString
 
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 
 }//class

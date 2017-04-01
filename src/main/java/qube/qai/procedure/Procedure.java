@@ -25,10 +25,12 @@ import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.Arguments;
 import qube.qai.data.DataVisitor;
 import qube.qai.data.SelectionOperator;
+import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.Name;
 import qube.qai.parsers.antimirov.nodes.Node;
 import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.user.User;
+import thewebsemantic.Namespace;
 
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -36,6 +38,7 @@ import java.io.Serializable;
 /**
  * Created by rainbird on 11/27/15.
  */
+@Namespace("http://www.qoan.org/procedures#")
 public abstract class Procedure extends Node
         implements Serializable, Runnable, HazelcastInstanceAware, AcceptsVisitors {
 
@@ -59,8 +62,6 @@ public abstract class Procedure extends Node
 
     protected User user;
 
-    //protected String name;
-
     protected String description;
 
     protected long duration;
@@ -73,17 +74,27 @@ public abstract class Procedure extends Node
 
     public Procedure() {
         super(new Name(NAME));
+        setFirstChild(new ProcedureDescription(description));
         buildArguments();
     }
 
     public Procedure(String name) {
         super(new Name(name));
+        setFirstChild(new ProcedureDescription(description));
         buildArguments();
     }
 
-    public Procedure(String name, Procedure child) {
+    public Procedure(String name, BaseNode child) {
         this(name);
-        setFirstChild(child);
+        getProcedureInputs().addInput(child);
+    }
+
+    public ProcedureInputs getProcedureInputs() {
+        return (ProcedureInputs) getFirstChild().getFirstChild();
+    }
+
+    public ProcedureResults getProcedureResults() {
+        return (ProcedureResults) getFirstChild().getSecondChild();
     }
 
     /**
@@ -110,23 +121,27 @@ public abstract class Procedure extends Node
     }
 
     public final void run() {
-        long start = System.currentTimeMillis();
-        logger.info("Procedure " + getName() + " has been started, uuid: " + uuid);
-        execute();
-        duration = System.currentTimeMillis() - start;
-        hasExecuted = true;
-        logger.info("Procedure " + getName() + " has been ended normally in " + duration + "ms");
-        sendMessageOK();
+        try {
+            long start = System.currentTimeMillis();
+            logger.info("Procedure " + getName() + " has been started, uuid: " + uuid);
+            execute();
+            duration = System.currentTimeMillis() - start;
+            hasExecuted = true;
+            logger.info("Procedure " + getName() + " has been ended normally in " + duration + "ms");
+            sendMessageOK();
 
-        // and the hat-trick now
-        if (hazelcastInstance != null) {
-            IMap procedures = hazelcastInstance.getMap(PROCEDURES);
-            procedures.put(uuid, this);
-            logger.info("procedure has been serialized in map with uuid: " + uuid);
-        } else {
-            logger.error("no hazelcast-instance to add a copy to- procedure " + uuid + " has not been serialized...");
+            // and the hat-trick now
+            if (hazelcastInstance != null) {
+                IMap procedures = hazelcastInstance.getMap(PROCEDURES);
+                // @TODO consider how you really want to do this...
+                //procedures.put(uuid, this);
+                logger.info("procedure has been serialized in map with uuid: " + uuid);
+            } else {
+                logger.error("no hazelcast-instance to add a copy to- procedure " + uuid + " has not been serialized...");
+            }
+        } catch (Exception e) {
+            logger.error("exception during execution of '" + uuid + "'. terminated...", e);
         }
-
     }
 
     private void sendMessage(String message) {
@@ -179,11 +194,11 @@ public abstract class Procedure extends Node
      *
      * @return
      */
-    @Override
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+    //@Override
+    //@thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 
     public User getUser() {
         return user;
@@ -232,4 +247,8 @@ public abstract class Procedure extends Node
     public void setDuration(long duration) {
         this.duration = duration;
     }
+
+    @thewebsemantic.Id
+    public abstract String getUuid();
+
 }

@@ -367,7 +367,7 @@ public class QaiServerModule extends AbstractModule {
     public Injector getJpaUsersInjector() {
 
         if (jpaUsersInjector == null) {
-            jpaUsersInjector = Guice.createInjector(new JpaPersistModule("STOCKS"));
+            jpaUsersInjector = Guice.createInjector(new JpaPersistModule("USERS"));
             PersistService service = jpaUsersInjector.getInstance(PersistService.class);
             service.start();
         }
@@ -764,7 +764,7 @@ public class QaiServerModule extends AbstractModule {
                 if (STOCK_ENTITIES.equals(mapName)) {
                     if (stockEntityMapStore == null) {
                         stockEntityMapStore = new DatabaseMapStore(StockEntity.class);
-                        jpaStocksInjector.injectMembers(stockEntityMapStore);
+                        getJpaStocksInjector().injectMembers(stockEntityMapStore);
                     }
 
                     return stockEntityMapStore;

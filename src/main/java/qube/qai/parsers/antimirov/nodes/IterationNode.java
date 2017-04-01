@@ -58,6 +58,7 @@ public final class IterationNode
     private int maxOccurrs;
 
     public IterationNode() {
+        this.name = new Name(Name.ITERATION);
     }
 
     /**
@@ -78,8 +79,8 @@ public final class IterationNode
     }//constructor
 
     @Override
-    public void accept(NodeVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(NodeVisitor visitor, Object data) {
+        return visitor.visit(this, data);
     }
 
     /**
@@ -337,5 +338,9 @@ public final class IterationNode
         return buf.toString();
     }//toString
 
+    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 
 }//class
