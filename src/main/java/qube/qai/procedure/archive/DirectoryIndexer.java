@@ -25,9 +25,6 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import qube.qai.data.Arguments;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.utils.SimpleProcedure;
@@ -43,7 +40,7 @@ import java.nio.file.Path;
 public class DirectoryIndexer extends Procedure implements ProcedureConstants {
 
 
-    private Logger logger = LoggerFactory.getLogger("DirectoryIndexer");
+    //private Logger logger = LoggerFactory.getLogger("DirectoryIndexer");
 
     public static String NAME = "DirectoryIndexer";
 
@@ -62,6 +59,10 @@ public class DirectoryIndexer extends Procedure implements ProcedureConstants {
     private long directoryCount = 0;
     private String directoryToIndex;
     public String indexDirectory;
+
+    public DirectoryIndexer() {
+        super(NAME);
+    }
 
     public DirectoryIndexer(Procedure procedure) {
         super(NAME, procedure);
@@ -101,11 +102,11 @@ public class DirectoryIndexer extends Procedure implements ProcedureConstants {
             writer.commit();
             writer.deleteUnusedFiles();
 
-            logger.info(writer.maxDoc() + " documents written " + fileCount + " files and " + directoryCount + " directories indexed");
-            arguments.addResult(INDEX_DIRECTORY, indexDirectory);
+            info(writer.maxDoc() + " documents written " + fileCount + " files and " + directoryCount + " directories indexed");
+//            arguments.addResult(INDEX_DIRECTORY, indexDirectory);
 
         } catch (IOException e) {
-            logger.error("error while indexing directory: " + directoryToIndex);
+            error("error while indexing directory: " + directoryToIndex);
 
         }
     }
@@ -138,8 +139,8 @@ public class DirectoryIndexer extends Procedure implements ProcedureConstants {
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(DIRECTORY_TO_INDEX);
-        arguments.putResultNames(INDEX_DIRECTORY);
+//        arguments = new Arguments(DIRECTORY_TO_INDEX);
+//        arguments.putResultNames(INDEX_DIRECTORY);
     }
 
     public String getDirectoryToIndex() {
@@ -158,8 +159,8 @@ public class DirectoryIndexer extends Procedure implements ProcedureConstants {
         this.indexDirectory = indexDirectory;
     }
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

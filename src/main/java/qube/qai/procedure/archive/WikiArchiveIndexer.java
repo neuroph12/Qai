@@ -18,17 +18,11 @@ import com.thoughtworks.xstream.XStream;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import qube.qai.data.Arguments;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
@@ -46,21 +40,21 @@ import java.util.zip.ZipFile;
  */
 public class WikiArchiveIndexer extends Procedure implements ProcedureConstants {
 
-    private Logger logger = LoggerFactory.getLogger("WikiArchiveIndexer");
+    //private Logger logger = LoggerFactory.getLogger("WikiArchiveIndexer");
 
 
     public static String NAME = "WikiArchiveIndexer";
-    public static String DESCRIPTION = "Indexes the wiki articles which are in the given archive file to the target index directory";
-    public static String FIELD_FILE = "file";
-    public static String FIELD_TITLE = "title";
-    public static String FIELD_CONTENT = "content";
-    public static String FIELD_PERSON = "person";
-    public static String FIELD_LOCATION = "location";
-    public static String FIELD_DATE = "date";
-    public static String FIELD_ORGANIZATION = "organization";
-
-    public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
-    public static String INPUT_INDEX_DIRECTORY = "INDEX_DIRECTORY";
+//    public static String DESCRIPTION = "Indexes the wiki articles which are in the given archive file to the target index directory";
+//    public static String FIELD_FILE = "file";
+//    public static String FIELD_TITLE = "title";
+//    public static String FIELD_CONTENT = "content";
+//    public static String FIELD_PERSON = "person";
+//    public static String FIELD_LOCATION = "location";
+//    public static String FIELD_DATE = "date";
+//    public static String FIELD_ORGANIZATION = "organization";
+//
+//    public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
+//    public static String INPUT_INDEX_DIRECTORY = "INDEX_DIRECTORY";
 
     //public String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
     //public String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
@@ -80,6 +74,10 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
 
     private long indexedFileCount = 0;
 
+    public WikiArchiveIndexer() {
+        super(NAME);
+    }
+
     public WikiArchiveIndexer(Procedure toDecorate) {
         super(NAME, toDecorate);
     }
@@ -91,12 +89,12 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
             ((Procedure) getFirstChild()).execute();
         }
 
-        if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-        }
-
-        indexDirectory = (String) arguments.getSelector(INPUT_INDEX_DIRECTORY).getData();
-        targetFilename = (String) arguments.getSelector(INPUT_TARGET_FILENAME).getData();
+//        if (!arguments.isSatisfied()) {
+//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
+//        }
+//
+//        indexDirectory = (String) arguments.getSelector(INPUT_INDEX_DIRECTORY).getData();
+//        targetFilename = (String) arguments.getSelector(INPUT_TARGET_FILENAME).getData();
         indexZipFileEntries();
     }
 
@@ -126,30 +124,30 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
                 InputStream stream = zipFile.getInputStream(zipEntry);
                 WikiArticle wikiPage = (WikiArticle) xStream.fromXML(stream);
                 String fileName = zipEntry.getName();
-                logger.debug("Indexing zip-entry: " + fileName);
+                debug("Indexing zip-entry: " + fileName);
 
                 Document doc = new Document();
-                doc.add(new StringField(FIELD_FILE, fileName, Field.Store.YES));
-                doc.add(new StringField(FIELD_TITLE, wikiPage.getTitle(), Field.Store.YES));
-                doc.add(new TextField(FIELD_CONTENT, wikiPage.getContent(), Field.Store.NO));
+//                doc.add(new StringField(FIELD_FILE, fileName, Field.Store.YES));
+//                doc.add(new StringField(FIELD_TITLE, wikiPage.getTitle(), Field.Store.YES));
+//                doc.add(new TextField(FIELD_CONTENT, wikiPage.getContent(), Field.Store.NO));
 
                 if (analysePerson) {
-                    logger.debug("Analysing person: " + fileName);
+                    debug("Analysing person: " + fileName);
                     analysePerson(wikiPage, doc);
                 }
 
                 if (analyseDate) {
-                    logger.debug("Analysing date: " + fileName);
+                    debug("Analysing date: " + fileName);
                     analyseDate(wikiPage, doc);
                 }
 
                 if (analyseLocation) {
-                    logger.debug("Analysing location: " + fileName);
+                    debug("Analysing location: " + fileName);
                     analyseLocation(wikiPage, doc);
                 }
 
                 if (analyseOrganization) {
-                    logger.debug("Analysing organization: " + fileName);
+                    debug("Analysing organization: " + fileName);
                     analyseOrganization(wikiPage, doc);
                 }
 
@@ -160,7 +158,7 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
 
             writer.commit();
             writer.deleteUnusedFiles();
-            logger.debug(writer.maxDoc() + " documents written");
+            debug(writer.maxDoc() + " documents written");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -185,8 +183,8 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
 
     @Override
     public void buildArguments() {
-        description = DESCRIPTION;
-        arguments = new Arguments(INPUT_TARGET_FILENAME, INPUT_INDEX_DIRECTORY);
+        //description = DESCRIPTION;
+        // arguments = new Arguments(INPUT_TARGET_FILENAME, INPUT_INDEX_DIRECTORY);
         // arguments.putResultNames(); // no need to return a name for the indexed directory?
     }
 
@@ -242,8 +240,8 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
         this.analyseOrganization = analyseOrganization;
     }
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

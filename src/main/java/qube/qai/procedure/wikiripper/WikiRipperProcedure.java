@@ -17,7 +17,6 @@ package qube.qai.procedure.wikiripper;
 import org.milyn.Smooks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.Arguments;
 import qube.qai.procedure.Procedure;
 
 import javax.xml.transform.stream.StreamSource;
@@ -62,7 +61,7 @@ public class WikiRipperProcedure extends Procedure {
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(INPUT_FILENAME, INPUT_TARGET_FILENAME, INPUT_IS_WIKTIONARY);
+//        arguments = new Arguments(INPUT_FILENAME, INPUT_TARGET_FILENAME, INPUT_IS_WIKTIONARY);
     }
 
 //    public WikiRipperProcedure(String fileToRipName, String fileToArchiveName) {
@@ -75,9 +74,9 @@ public class WikiRipperProcedure extends Procedure {
 
     public void ripWikiFile() {
 
-        fileToRipName = (String) arguments.getSelector(INPUT_FILENAME).getData();
-        fileToArchiveName = (String) arguments.getSelector(INPUT_TARGET_FILENAME).getData();
-        isWiktionary = (Boolean) arguments.getSelector(INPUT_IS_WIKTIONARY).getData();
+//        fileToRipName = (String) arguments.getSelector(INPUT_FILENAME).getData();
+//        fileToArchiveName = (String) arguments.getSelector(INPUT_TARGET_FILENAME).getData();
+//        isWiktionary = (Boolean) arguments.getSelector(INPUT_IS_WIKTIONARY).getData();
 
         File file = new File(fileToRipName);
 
@@ -138,8 +137,8 @@ public class WikiRipperProcedure extends Procedure {
         this.isWiktionary = wiktionary;
     }
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

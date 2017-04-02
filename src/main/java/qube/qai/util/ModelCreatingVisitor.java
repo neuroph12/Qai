@@ -85,7 +85,7 @@ public class ModelCreatingVisitor implements NodeVisitor {
     private Object allVisit(BaseNode node, Object data) {
         Resource resource = model.createResource("http://www.qai.at/procedures:" + node.getUuid());
         resource.addLiteral(model.createProperty(nameSpace, "uuid"), node.getUuid());
-        resource.addLiteral(model.createProperty(nameSpace, "name"), node.getNameString());
+        resource.addLiteral(model.createProperty(nameSpace, "name"), node.getName().getName());
         resource.addLiteral(model.createProperty(nameSpace, "class"), node.getClass().getName());
         resource.addLiteral(model.createProperty(nameSpace, "hasExecuted"), ((Procedure) node).hasExecuted());
         if (node.getParent() != null) {

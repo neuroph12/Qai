@@ -38,6 +38,7 @@ import java.util.Hashtable;
 @Namespace("http://www.qoan.org/nodes#")
 public abstract class BaseNode implements VisitableNode, Serializable {
 
+    @thewebsemantic.Id
     protected String uuid;
 
     protected BaseNode parent;
@@ -62,14 +63,15 @@ public abstract class BaseNode implements VisitableNode, Serializable {
     protected BaseNode child2;
 
     public BaseNode() {
+        this.uuid = UUIDService.uuidString();
     }
 
     /**
      * Empty Constructor.
      */
     public BaseNode(String name) {
+        this();
         this.name = new Name(name);
-        this.uuid = UUIDService.uuidString();
     }
 
 
@@ -367,15 +369,15 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      */
     public abstract boolean equals(BaseNode t);
 
-    /**
-     * convenience method for getting the name of a node
-     */
-    public String getNameString() {
-        if (this.name != null) {
-            return name.getName();
-        }
-        return "BaseNode";
-    }
+//    /**
+//     * convenience method for getting the name of a node
+//     */
+//    public String getNameString() {
+//        if (this.name != null) {
+//            return name.getName();
+//        }
+//        return "BaseNode";
+//    }
 
     /**
      * Returns a <code>String</code> representation of the expression.
@@ -384,8 +386,10 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      */
     public abstract String toString();
 
-    @thewebsemantic.Id
-    public abstract String getUuid();
+    //    @thewebsemantic.Id
+    public String getUuid() {
+        return this.uuid;
+    }
 
     public void setUuid(String uuid) {
         this.uuid = uuid;

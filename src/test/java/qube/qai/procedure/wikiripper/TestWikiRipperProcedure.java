@@ -65,9 +65,9 @@ public class TestWikiRipperProcedure extends TestCase {
         SelectionOperator<String> fileanmeSelectionOperator = new DataSelectionOperator<String>(dummyWikiFileName);
         SelectionOperator<String> archiveNameSelectionOperator = new DataSelectionOperator<String>(dummyWikiArchiveName);
         SelectionOperator<Boolean> isWiktionarySelectionOperator = new DataSelectionOperator<Boolean>(Boolean.FALSE);
-        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_FILENAME, fileanmeSelectionOperator);
-        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_TARGET_FILENAME, archiveNameSelectionOperator);
-        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_IS_WIKTIONARY, isWiktionarySelectionOperator);
+//        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_FILENAME, fileanmeSelectionOperator);
+//        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_TARGET_FILENAME, archiveNameSelectionOperator);
+//        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_IS_WIKTIONARY, isWiktionarySelectionOperator);
         return ripperProcedure;
     }
 

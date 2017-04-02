@@ -202,9 +202,9 @@ public final class EmptyNode
         return Name.EMPTY;
     }//toString
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 
 }//class

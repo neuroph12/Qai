@@ -14,10 +14,6 @@
 
 package qube.qai.procedure.analysis;
 
-import qube.qai.data.Arguments;
-import qube.qai.data.Metrics;
-import qube.qai.data.TimeSequence;
-import qube.qai.data.analysis.Statistics;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 
@@ -44,8 +40,8 @@ public class TimeSequenceAnalysis extends Procedure implements ProcedureConstant
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(INPUT_TIME_SEQUENCE);
-        arguments.putResultNames(TIME_SEQUENCE_METRICS);
+//        arguments = new Arguments(INPUT_TIME_SEQUENCE);
+//        arguments.putResultNames(TIME_SEQUENCE_METRICS);
     }
 
     @Override
@@ -55,25 +51,25 @@ public class TimeSequenceAnalysis extends Procedure implements ProcedureConstant
             ((Procedure) getFirstChild()).execute();
         }
 
-        if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-        }
-
-        // first get the selector
-        TimeSequence timeSequence = (TimeSequence) arguments.getSelector(INPUT_TIME_SEQUENCE).getData();
-        if (timeSequence == null) {
-            logger.error("Input time-series has not been initialized properly: null value");
-        }
-
-        Number[] data = timeSequence.toArray();
-        Statistics stats = new Statistics(data);
-        Metrics metrics = stats.buildMetrics();
-        logger.info("adding '" + TIME_SEQUENCE_METRICS + "' to return values");
-        arguments.addResult(TIME_SEQUENCE_METRICS, metrics);
+//        if (!arguments.isSatisfied()) {
+//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
+//        }
+//
+//        // first get the selector
+//        TimeSequence timeSequence = (TimeSequence) arguments.getSelector(INPUT_TIME_SEQUENCE).getData();
+//        if (timeSequence == null) {
+//            logger.error("Input time-series has not been initialized properly: null value");
+//        }
+//
+//        Number[] data = timeSequence.toArray();
+//        Statistics stats = new Statistics(data);
+//        Metrics metrics = stats.buildMetrics();
+//        logger.info("adding '" + TIME_SEQUENCE_METRICS + "' to return values");
+//        arguments.addResult(TIME_SEQUENCE_METRICS, metrics);
     }
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

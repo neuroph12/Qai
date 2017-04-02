@@ -48,4 +48,12 @@ public interface ProcedureConstants {
     public static String SORTED_ITEMS = "sorted items";
 
     public static String INPUT_NAMES = "input names";
+
+    public static final String PROCEDURES = "PROCEDURES";
+
+    public final static String PROCESS_ENDED = "PROCESS_ENDED";
+
+    public final static String PROCESS_INTERRUPTED = "PROCESS_INTERRUPTED";
+
+    public final static String PROCESS_ERROR = "PROCESS_ERROR";
 }

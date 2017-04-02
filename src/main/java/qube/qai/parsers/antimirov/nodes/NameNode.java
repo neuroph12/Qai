@@ -301,9 +301,9 @@ public class NameNode extends BaseNode {
         return this.name.toString();
     }//toString
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 
 }//class       

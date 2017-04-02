@@ -44,7 +44,7 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
 
         WikiArchiveIndexer wikiIndexer = new WikiArchiveIndexer(ripperProcedure);
         SelectionOperator<String> selectionOperator = new DataSelectionOperator<String>(dummyIndexDirectory);
-        wikiIndexer.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
+//        wikiIndexer.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
         injector.injectMembers(wikiIndexer);
 
         long start = System.currentTimeMillis();
@@ -72,13 +72,13 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
         SelectionOperator<String> fileanmeSelectionOperator = new DataSelectionOperator<String>(wikiToRip);
         SelectionOperator<String> archiveNameSelectionOperator = new DataSelectionOperator<String>(archiveToCreate);
         SelectionOperator<Boolean> isWiktionarySelectionOperator = new DataSelectionOperator<Boolean>(Boolean.TRUE);
-        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_FILENAME, fileanmeSelectionOperator);
-        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_TARGET_FILENAME, archiveNameSelectionOperator);
-        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_IS_WIKTIONARY, isWiktionarySelectionOperator);
+//        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_FILENAME, fileanmeSelectionOperator);
+//        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_TARGET_FILENAME, archiveNameSelectionOperator);
+//        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_IS_WIKTIONARY, isWiktionarySelectionOperator);
 
         WikiArchiveIndexer indexerProcedure = new WikiArchiveIndexer(ripperProcedure);
         SelectionOperator<String> selectionOperator = new DataSelectionOperator<String>(indexDirectory);
-        indexerProcedure.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
+//        indexerProcedure.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
 
         long start = System.currentTimeMillis();
         log("ripping: " + wikiToRip);

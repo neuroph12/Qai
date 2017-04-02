@@ -17,7 +17,6 @@ package qube.qai.procedure.finance;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
-import qube.qai.data.Arguments;
 import qube.qai.persistence.StockCategory;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
@@ -81,14 +80,14 @@ public class StockEntityInitialization extends Procedure {
         createCheckAndInsertStockEntitesFromFile();
 
         // after all is done and said, these are the results we are expected to record
-        logger.debug("adding '" + CATEGORY_NAME + "' to results");
-        arguments.addResult(CATEGORY_NAME, categoryName);
-        logger.debug("adding '" + NUMBER_OF_RECORDS + "' to results");
-        arguments.addResult(NUMBER_OF_RECORDS, numberOfRecords);
-        logger.debug("adding '" + NUMBER_OF_RECORDS_CREATED + "' to results");
-        arguments.addResult(NUMBER_OF_RECORDS_CREATED, numberOfRecordsCreated);
-        logger.debug("adding '" + CATEGORY + "' to results");
-        arguments.addResult(CATEGORY, category);
+//        logger.debug("adding '" + CATEGORY_NAME + "' to results");
+//        arguments.addResult(CATEGORY_NAME, categoryName);
+//        logger.debug("adding '" + NUMBER_OF_RECORDS + "' to results");
+//        arguments.addResult(NUMBER_OF_RECORDS, numberOfRecords);
+//        logger.debug("adding '" + NUMBER_OF_RECORDS_CREATED + "' to results");
+//        arguments.addResult(NUMBER_OF_RECORDS_CREATED, numberOfRecordsCreated);
+//        logger.debug("adding '" + CATEGORY + "' to results");
+//        arguments.addResult(CATEGORY, category);
     }
 
     public void createCheckAndInsertStockEntitesFromFile() {
@@ -114,14 +113,14 @@ public class StockEntityInitialization extends Procedure {
 
             // if there is nothing in the iterator to iterate upon, we simply break
             if (!resIt.hasNext()) {
-                logger.debug("stopping because res-iterator at end");
+                debug("stopping because res-iterator at end");
                 done = true;
             } else {
 
                 // loop over the row-properties and create the entity
                 while (resIt.hasNext()) {
                     Resource resource = resIt.next();
-                    logger.info("-> row (" + count + ")");
+                    info("-> row (" + count + ")");
                     StockEntity stockEntity = ripEntityFromRow(resource);
                     if (isaValidEntity(stockEntity)) {
                         StockEntity databaseCopy = findStockEntityDatabaseCopy(stockEntity);
@@ -147,7 +146,7 @@ public class StockEntityInitialization extends Procedure {
 
         // now we are done and can change the flag
         numberOfRecords = count - 1;
-        logger.info("read " + (count - 1) + " rows from csv-file");
+        info("read " + (count - 1) + " rows from csv-file");
     }
 
     public StockEntity findStockEntityDatabaseCopy(StockEntity entity) {
@@ -156,9 +155,9 @@ public class StockEntityInitialization extends Procedure {
         StockEntity foundEntity = null;
         try {
             foundEntity = entityManager.createQuery(query, StockEntity.class).getSingleResult();
-            logger.info("query for: " + entity.getTickerSymbol() + " '" + entity.getName() + "' resulted with " + foundEntity.getUuid());
+            info("query for: " + entity.getTickerSymbol() + " '" + entity.getName() + "' resulted with " + foundEntity.getUuid());
         } catch (Exception e) {
-            logger.info("query for: " + entity.getTickerSymbol() + " '" + entity.getName() + "' resulted nothing");
+            info("query for: " + entity.getTickerSymbol() + " '" + entity.getName() + "' resulted nothing");
         }
         return foundEntity;
     }
@@ -180,7 +179,7 @@ public class StockEntityInitialization extends Procedure {
             String name = statement.getPredicate().getLocalName();
             String value = statement.getObject().asLiteral().getValue().toString();
 
-            logger.info(name + ": " + value);
+            info(name + ": " + value);
 
             // now assign the values to the entity
             if ("Sector".equals(name)) {
@@ -224,8 +223,8 @@ public class StockEntityInitialization extends Procedure {
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(INPUT_FILENAME);
-        arguments.putResultNames(CATEGORY_NAME, NUMBER_OF_RECORDS, NUMBER_OF_RECORDS_CREATED);
+//        arguments = new Arguments(INPUT_FILENAME);
+//        arguments.putResultNames(CATEGORY_NAME, NUMBER_OF_RECORDS, NUMBER_OF_RECORDS_CREATED);
     }
 
     public String getCompleteNameSpace() {
@@ -303,9 +302,9 @@ public class StockEntityInitialization extends Procedure {
     public void setCategory(StockCategory category) {
         this.category = category;
     }
-
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

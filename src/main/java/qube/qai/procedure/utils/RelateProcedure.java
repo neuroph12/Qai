@@ -18,7 +18,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
-import qube.qai.data.Arguments;
 import qube.qai.data.SelectionOperator;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.DataServiceInterface;
@@ -87,7 +86,7 @@ public class RelateProcedure extends Procedure {
 
     @Override
     public void buildArguments() {
-        arguments = new Arguments();
+//        arguments = new Arguments();
     }
 
     public SelectionOperator getRelateTo() {
@@ -106,8 +105,8 @@ public class RelateProcedure extends Procedure {
         this.relatedResource = relatedResource;
     }
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

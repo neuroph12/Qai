@@ -14,17 +14,12 @@
 
 package qube.qai.procedure.analysis;
 
-import qube.qai.data.Arguments;
-import qube.qai.data.SelectionOperator;
-import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Created by rainbird on 12/2/15.
@@ -37,6 +32,10 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
             "but for the beginning, it will be taking time-series, and sorting them in order of their mean" +
             "values. top and bottom ten and the mean will be the results.";
 
+    public SortingPercentilesProcedure() {
+        super(NAME);
+    }
+
     public SortingPercentilesProcedure(Procedure procedure) {
         super(NAME, procedure);
     }
@@ -44,8 +43,8 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(FROM, CRITERIA);
-        arguments.putResultNames(SORTED_ITEMS, AVERAGE_TIME_SEQUENCE);
+//        arguments = new Arguments(FROM, CRITERIA);
+//        arguments.putResultNames(SORTED_ITEMS, AVERAGE_TIME_SEQUENCE);
     }
 
     @Override
@@ -55,59 +54,59 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
             ((Procedure) getFirstChild()).execute();
         }
 
-        if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-        }
-
-        Map<String, SelectionOperator> timeSeriesMap = (Map<String, SelectionOperator>) arguments.getSelector(FROM).getData();
-        Map<String, Statistics> statisticsMap = new TreeMap<String, Statistics>();
-
-        Date[] dates = null;
-        Number[] averages = null;
-        int count = 0;
-        // now do the actual Statistics calculation for each entry
-        for (String name : timeSeriesMap.keySet()) {
-
-            logger.debug("Now calculating the statistics of: " + name + " the " + count + "th entry");
-
-            TimeSequence timeSequence = (TimeSequence) timeSeriesMap.get(name).getData();
-            Number[] values = timeSequence.toArray();
-
-            // keep copy of the first items to be used later
-            // and add the slots in the first kept array on the later round
-            if (count == 0) {
-                dates = timeSequence.toDates();
-                averages = timeSequence.toArray();
-            } else {
-                for (int i = 0; i < values.length; i++) {
-                    averages[i] = averages[i].doubleValue() + values[i].doubleValue();
-                }
-            }
-
-            // now do the statistics calculation
-            Statistics stats = new Statistics(values);
-            stats.calculate();
-            statisticsMap.put(name, stats);
-
-            count++;
-        }
-
-        // now divide each element with the number of time-series to find their average
-        TimeSequence<Double> averageSeries = new TimeSequence<Double>();
-        double factor = timeSeriesMap.size();
-        for (int i = 0; i < averages.length; i++) {
-            averages[i] = averages[i].doubleValue() / factor;
-            if (dates.length > i) {
-                averageSeries.add(dates[i], averages[i].doubleValue());
-            }
-        }
-
-        // after all is done copy the map in a fresh one whole it gets sorted
-        Map<String, Statistics> sortedTimeSeries = new TreeMap<String, Statistics>(new MapSorter(statisticsMap));
-        sortedTimeSeries.putAll(statisticsMap);
-        // and add the results to the arguments
-        arguments.addResult(SORTED_ITEMS, sortedTimeSeries);
-        arguments.addResult(AVERAGE_TIME_SEQUENCE, averageSeries);
+//        if (!arguments.isSatisfied()) {
+//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
+//        }
+//
+//        Map<String, SelectionOperator> timeSeriesMap = (Map<String, SelectionOperator>) arguments.getSelector(FROM).getData();
+//        Map<String, Statistics> statisticsMap = new TreeMap<String, Statistics>();
+//
+//        Date[] dates = null;
+//        Number[] averages = null;
+//        int count = 0;
+//        // now do the actual Statistics calculation for each entry
+//        for (String name : timeSeriesMap.keySet()) {
+//
+//            logger.debug("Now calculating the statistics of: " + name + " the " + count + "th entry");
+//
+//            TimeSequence timeSequence = (TimeSequence) timeSeriesMap.get(name).getData();
+//            Number[] values = timeSequence.toArray();
+//
+//            // keep copy of the first items to be used later
+//            // and add the slots in the first kept array on the later round
+//            if (count == 0) {
+//                dates = timeSequence.toDates();
+//                averages = timeSequence.toArray();
+//            } else {
+//                for (int i = 0; i < values.length; i++) {
+//                    averages[i] = averages[i].doubleValue() + values[i].doubleValue();
+//                }
+//            }
+//
+//            // now do the statistics calculation
+//            Statistics stats = new Statistics(values);
+//            stats.calculate();
+//            statisticsMap.put(name, stats);
+//
+//            count++;
+//        }
+//
+//        // now divide each element with the number of time-series to find their average
+//        TimeSequence<Double> averageSeries = new TimeSequence<Double>();
+//        double factor = timeSeriesMap.size();
+//        for (int i = 0; i < averages.length; i++) {
+//            averages[i] = averages[i].doubleValue() / factor;
+//            if (dates.length > i) {
+//                averageSeries.add(dates[i], averages[i].doubleValue());
+//            }
+//        }
+//
+//        // after all is done copy the map in a fresh one whole it gets sorted
+//        Map<String, Statistics> sortedTimeSeries = new TreeMap<String, Statistics>(new MapSorter(statisticsMap));
+//        sortedTimeSeries.putAll(statisticsMap);
+//        // and add the results to the arguments
+//        arguments.addResult(SORTED_ITEMS, sortedTimeSeries);
+//        arguments.addResult(AVERAGE_TIME_SEQUENCE, averageSeries);
     }
 
     /**
@@ -131,8 +130,8 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
         }
     }
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

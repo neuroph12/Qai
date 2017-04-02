@@ -17,7 +17,6 @@ package qube.qai.procedure.finance;
 import org.apache.commons.lang3.StringUtils;
 import org.ojalgo.finance.data.YahooSymbol;
 import org.ojalgo.type.CalendarDateUnit;
-import qube.qai.data.Arguments;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
@@ -72,7 +71,7 @@ public class StockQuoteRetriever extends Procedure {
 
         StockEntity entity = retrieveEntityForTickerSymbol(tickerSymbol);
         if (entity == null) {
-            logger.error("An entity with tickerSymbol: '" + tickerSymbol + "' could not be found- skipping!");
+            error("An entity with tickerSymbol: '" + tickerSymbol + "' could not be found- skipping!");
         }
 
         Collection<StockQuote> quotes = retrieveQuotesFor(tickerSymbol);
@@ -92,7 +91,7 @@ public class StockQuoteRetriever extends Procedure {
         //entityManager.flush();
         //entityManager.getTransaction().commit();
 
-        arguments.addResult(NUMBER_OF_INSERTS, numberOfInserts);
+//        arguments.addResult(NUMBER_OF_INSERTS, numberOfInserts);
 
     }
 
@@ -125,7 +124,7 @@ public class StockQuoteRetriever extends Procedure {
                 quotes.add(quote);
             }
         } catch (Exception e) {
-            logger.error("Ticker symbol: '" + stockName + "' does not exist", e);
+            error("Ticker symbol: '" + stockName + "' does not exist", e);
         } finally {
             return quotes;
         }
@@ -134,8 +133,8 @@ public class StockQuoteRetriever extends Procedure {
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(TICKER_SYMBOL);
-        arguments.putResultNames(NUMBER_OF_INSERTS);
+//        arguments = new Arguments(TICKER_SYMBOL);
+//        arguments.putResultNames(NUMBER_OF_INSERTS);
     }
 
     public static long getNumberOfInserts() {
@@ -170,8 +169,8 @@ public class StockQuoteRetriever extends Procedure {
         this.entityManager = entityManager;
     }
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

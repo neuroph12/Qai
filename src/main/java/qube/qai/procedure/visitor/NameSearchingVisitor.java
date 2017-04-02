@@ -47,13 +47,13 @@ public class NameSearchingVisitor implements NodeVisitor {
 
     @Override
     public Object visit(Node node, Object data) {
-        if (node instanceof Procedure) {
-            Procedure p = (Procedure) node;
-            if (p.getName().getName().equals(data)) {
-                found = p;
-                return node;
-            }
-        }
+//        if (node instanceof Procedure) {
+//            Procedure p = (Procedure) node;
+//            if (p.getName().getName().equals(data)) {
+//                found = p;
+//                return data;
+//            }
+//        }
         return visitAll(node, data);
     }
 

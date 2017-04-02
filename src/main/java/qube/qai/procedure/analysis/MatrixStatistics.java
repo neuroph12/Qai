@@ -14,7 +14,6 @@
 
 package qube.qai.procedure.analysis;
 
-import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.matrix.Matrix;
@@ -33,6 +32,10 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
     public static String DESCRIPTION = "Analyses the distribution of the numbers in the matrix, " +
             "and eigenvalues and eigenvectors, as far as they exist, using eigenvalue decomposition";
 
+    public MatrixStatistics() {
+        super(NAME);
+    }
+
     /**
      * Runs statistical analysis on the given matrix
      */
@@ -43,8 +46,8 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(INPUT_MATRIX);
-        arguments.putResultNames(MATRIX_METRICS, MATRIX_DATA_METRICS);
+//        arguments = new Arguments(INPUT_MATRIX);
+//        arguments.putResultNames(MATRIX_METRICS, MATRIX_DATA_METRICS);
     }
 
     @Override
@@ -54,14 +57,15 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
             ((Procedure) getFirstChild()).execute();
         }
 
-        if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-        }
-
-        // first get the selector
-        Matrix matrix = (Matrix) arguments.getSelector(INPUT_MATRIX).getData();
+//        if (!arguments.isSatisfied()) {
+//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
+//        }
+//
+//        // first get the selector
+//        Matrix matrix = (Matrix) arguments.getSelector(INPUT_MATRIX).getData();
+        Matrix matrix = null;
         if (matrix == null || matrix.getMatrix() == null) {
-            logger.error("Input matrix has not been initialized properly: null value");
+            error("Input matrix has not been initialized properly: null value");
             return;
         }
 
@@ -70,13 +74,13 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
         Metrics dataMetrics = stats.buildMetrics();
         Metrics matrixMetrics = matrix.buildMetrics();
 
-        logger.info("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");
-        arguments.addResult(MATRIX_DATA_METRICS, dataMetrics);
-        arguments.addResult(MATRIX_METRICS, matrixMetrics);
+        info("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");
+//        arguments.addResult(MATRIX_DATA_METRICS, dataMetrics);
+//        arguments.addResult(MATRIX_METRICS, matrixMetrics);
     }
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

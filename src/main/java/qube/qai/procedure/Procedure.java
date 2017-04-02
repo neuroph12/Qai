@@ -18,19 +18,15 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.ITopic;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.data.AcceptsVisitors;
-import qube.qai.data.Arguments;
 import qube.qai.data.DataVisitor;
 import qube.qai.data.SelectionOperator;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.Name;
 import qube.qai.parsers.antimirov.nodes.Node;
 import qube.qai.services.implementation.DataSelectorFactory;
+import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.User;
-import thewebsemantic.Namespace;
 
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -38,21 +34,12 @@ import java.io.Serializable;
 /**
  * Created by rainbird on 11/27/15.
  */
-@Namespace("http://www.qoan.org/procedures#")
 public abstract class Procedure extends Node
-        implements Serializable, Runnable, HazelcastInstanceAware, AcceptsVisitors {
+        implements Serializable, Runnable, HazelcastInstanceAware, AcceptsVisitors, ProcedureConstants {
 
-    protected static Logger logger = LoggerFactory.getLogger("Procedure");
+    //protected Logger logger = LoggerFactory.getLogger("Procedure");
 
     public static String NAME = "Procedure";
-
-    public static final String PROCEDURES = "PROCEDURES";
-
-    public final static String PROCESS_ENDED = "PROCESS_ENDED";
-
-    public final static String PROCESS_INTERRUPTED = "PROCESS_INTERRUPTED";
-
-    public final static String PROCESS_ERROR = "PROCESS_ERROR";
 
     @Inject
     protected transient DataSelectorFactory selectorFactory;
@@ -70,10 +57,13 @@ public abstract class Procedure extends Node
 
     protected boolean hasExecuted = false;
 
-    protected Arguments arguments;
+    //protected Arguments arguments;
 
     public Procedure() {
         super(new Name(NAME));
+        if (uuid == null || uuid.length() == 0) {
+            this.uuid = UUIDService.uuidString();
+        }
         setFirstChild(new ProcedureDescription(description));
         buildArguments();
     }
@@ -123,11 +113,11 @@ public abstract class Procedure extends Node
     public final void run() {
         try {
             long start = System.currentTimeMillis();
-            logger.info("Procedure " + getName() + " has been started, uuid: " + uuid);
+            info("Procedure " + getName() + " has been started, uuid: " + uuid);
             execute();
             duration = System.currentTimeMillis() - start;
             hasExecuted = true;
-            logger.info("Procedure " + getName() + " has been ended normally in " + duration + "ms");
+            info("Procedure " + getName() + " has been ended normally in " + duration + "ms");
             sendMessageOK();
 
             // and the hat-trick now
@@ -135,12 +125,12 @@ public abstract class Procedure extends Node
                 IMap procedures = hazelcastInstance.getMap(PROCEDURES);
                 // @TODO consider how you really want to do this...
                 //procedures.put(uuid, this);
-                logger.info("procedure has been serialized in map with uuid: " + uuid);
+                info("procedure has been serialized in map with uuid: " + uuid);
             } else {
-                logger.error("no hazelcast-instance to add a copy to- procedure " + uuid + " has not been serialized...");
+                error("no hazelcast-instance to add a copy to- procedure " + uuid + " has not been serialized...");
             }
         } catch (Exception e) {
-            logger.error("exception during execution of '" + uuid + "'. terminated...", e);
+            error("exception during execution of '" + uuid + "'. terminated...", e);
         }
     }
 
@@ -148,9 +138,9 @@ public abstract class Procedure extends Node
         if (hazelcastInstance != null) {
             ITopic itopic = hazelcastInstance.getTopic(uuid);
             itopic.publish(message);
-            logger.info("message has been successfully sent: " + message);
+            info("message has been successfully sent: " + message);
         } else {
-            logger.error("no hazelcast-instance to send ok message to");
+            error("no hazelcast-instance to send ok message to");
         }
     }
 
@@ -175,16 +165,18 @@ public abstract class Procedure extends Node
         this.hazelcastInstance = hazelcastInstance;
     }
 
-    @Override
-    public int hashCode() {
-        return uuid.hashCode();
-    }
+//    @Override
+//    public int hashCode() {
+//        return uuid.hashCode();
+//    }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(BaseNode obj) {
         if (obj instanceof Procedure) {
             Procedure other = (Procedure) obj;
-            new EqualsBuilder().append(uuid, other.uuid).isEquals();
+            if (uuid.equals(other.uuid)) {
+                return true;
+            }
         }
         return false;
     }
@@ -224,13 +216,13 @@ public abstract class Procedure extends Node
         this.progressPercentage = progressPercentage;
     }
 
-    public Arguments getArguments() {
+    /*public Arguments getArguments() {
         return arguments;
     }
 
     public void setArguments(Arguments arguments) {
         this.arguments = arguments;
-    }
+    }*/
 
     public boolean hasExecuted() {
         return hasExecuted;
@@ -248,7 +240,20 @@ public abstract class Procedure extends Node
         this.duration = duration;
     }
 
-    @thewebsemantic.Id
-    public abstract String getUuid();
+    protected void info(String message) {
+
+    }
+
+    protected void error(String message) {
+
+    }
+
+    protected void error(String message, Exception e) {
+
+    }
+
+    protected void debug(String message) {
+
+    }
 
 }

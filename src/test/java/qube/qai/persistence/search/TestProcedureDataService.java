@@ -39,7 +39,7 @@ public class TestProcedureDataService extends TestCase {
 //        assertTrue("the list may not be empty", !procedures.isEmpty());
         ProcedureToRdfConverter converter = new ProcedureToRdfConverter();
         SelectionProcedure selection = new SelectionProcedure();
-        Procedure procedure = NeuralNetworkAnalysis.Factory.constructProcedure(selection);
+        Procedure procedure = new NeuralNetworkAnalysis();
         Model model = converter.createProcedureModel(procedure);
 
         dataService.save(model);

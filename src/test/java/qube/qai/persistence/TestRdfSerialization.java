@@ -23,7 +23,12 @@ import qube.qai.parsers.AntimirovParser;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
+import qube.qai.procedure.analysis.*;
+import qube.qai.procedure.archive.DirectoryIndexer;
+import qube.qai.procedure.archive.WikiArchiveIndexer;
+import qube.qai.procedure.finance.StockEntityInitialization;
+import qube.qai.procedure.finance.StockQuoteRetriever;
+import qube.qai.procedure.utils.SelectionProcedure;
 import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
@@ -126,6 +131,9 @@ public class TestRdfSerialization extends TestCase {
         Model model = ModelFactory.createDefaultModel();
         Bean2RDF writer = new Bean2RDF(model);
 
+//        AppInfo appInfo = new AppInfo();
+//        writer.save(appInfo);
+
         // go through all rpocedures and try them out
         Collection<Procedure> procedures = generateAllProcedures();
         for (Procedure procedure : procedures) {
@@ -136,8 +144,8 @@ public class TestRdfSerialization extends TestCase {
             model.write(System.out);
 
             RDF2Bean reader = new RDF2Bean(model);
-            Procedure storedProcedure = reader.load(NeuralNetworkAnalysis.class, uuid);
-            assertNotNull("three has to be something sotred after all", storedProcedure);
+            Procedure storedProcedure = reader.load(procedure.getClass(), uuid);
+            assertNotNull("three has to be something stored after all", storedProcedure);
             assertTrue("the procedures must be equal", procedure.equals(storedProcedure));
         }
     }
@@ -146,17 +154,17 @@ public class TestRdfSerialization extends TestCase {
 
         Collection<Procedure> procedures = new ArrayList<>();
 
-//        procedures.add(new ChangePointAnalysis(null));
-//        procedures.add(new MarketNetworkBuilder(null));
-//        procedures.add(new MatrixStatistics(null));
-//        procedures.add(new NeuralNetworkAnalysis());
-//        procedures.add(new NeuralNetworkForwardPropagation(null));
-//        procedures.add(new SortingPercentilesProcedure(null));
-//        procedures.add(new DirectoryIndexer(null));
-//        procedures.add(new WikiArchiveIndexer(null));
-//        procedures.add(new StockEntityInitialization());
-//        procedures.add(new StockQuoteRetriever());
-//        procedures.add(new SelectionProcedure());
+        procedures.add(new ChangePointAnalysis());
+        procedures.add(new MarketNetworkBuilder());
+        procedures.add(new MatrixStatistics());
+        procedures.add(new NeuralNetworkAnalysis());
+        procedures.add(new NeuralNetworkForwardPropagation());
+        procedures.add(new SortingPercentilesProcedure());
+        procedures.add(new DirectoryIndexer());
+        procedures.add(new WikiArchiveIndexer());
+        procedures.add(new StockEntityInitialization());
+        procedures.add(new StockQuoteRetriever());
+        procedures.add(new SelectionProcedure());
         procedures.add(new SimpleProcedure());
 
         return procedures;

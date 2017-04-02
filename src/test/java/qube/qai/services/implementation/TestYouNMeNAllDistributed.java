@@ -44,7 +44,7 @@ public class TestYouNMeNAllDistributed extends QaiTestBase {
         wikiIndexer.setAnalysePerson(true);
         wikiIndexer.setAnalyseOrganization(true);
         SelectionOperator<String> selectionOperator = new DataSelectionOperator<String>(dummyIndexDirectory);
-        wikiIndexer.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
+//        wikiIndexer.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
         injector.injectMembers(wikiIndexer);
 
         long start = System.currentTimeMillis();

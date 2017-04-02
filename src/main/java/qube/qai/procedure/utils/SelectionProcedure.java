@@ -14,7 +14,6 @@
 
 package qube.qai.procedure.utils;
 
-import qube.qai.data.Arguments;
 import qube.qai.procedure.Procedure;
 
 /**
@@ -35,7 +34,7 @@ public class SelectionProcedure extends Procedure {
 
     @Override
     public void buildArguments() {
-        arguments = new Arguments();
+//        arguments = new Arguments();
     }
 
     @Override
@@ -43,9 +42,9 @@ public class SelectionProcedure extends Procedure {
         // do nothing as well...
     }
 
-    @Override
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @Override
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

@@ -14,7 +14,6 @@
 
 package qube.qai.procedure.analysis;
 
-import qube.qai.data.Arguments;
 import qube.qai.data.SelectionOperator;
 import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.network.Network;
@@ -43,6 +42,10 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
 
     public static String TRAINED_NEURAL_NETWORK = "trained neural network";
 
+    public MarketNetworkBuilder() {
+        super(NAME);
+    }
+
     public MarketNetworkBuilder(Procedure procedure) {
         super(NAME, procedure);
     }
@@ -58,10 +61,11 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
      */
     public Network buildNetwork(SelectionOperator source) {
 
-        arguments.setArgument(INPUT_STOCK_ENTITY_COLLECTION, source);
-        execute();
-
-        return (Network) getArguments().getResult(TRAINED_NEURAL_NETWORK);
+//        arguments.setArgument(INPUT_STOCK_ENTITY_COLLECTION, source);
+//        execute();
+//
+//        return (Network) getArguments().getResult(TRAINED_NEURAL_NETWORK);
+        return null;
     }
 
     @Inject
@@ -70,7 +74,7 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
     @Override
     public void execute() {
 
-        SelectionOperator<Collection> selectionOperator = arguments.getSelector(INPUT_STOCK_ENTITY_COLLECTION);
+        SelectionOperator<Collection> selectionOperator = null; //arguments.getSelector(INPUT_STOCK_ENTITY_COLLECTION);
         Collection<StockEntity> entities = selectionOperator.getData();
         HashMap<String, Collection> trainingData = new HashMap<String, Collection>();
         NeuralNetwork network = new NeuralNetwork(entities.size());
@@ -90,7 +94,7 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
         trainer.createTrainingSet(trainingData);
         trainer.trainNetwork();
 
-        arguments.addResult(TRAINED_NEURAL_NETWORK, network);
+//        arguments.addResult(TRAINED_NEURAL_NETWORK, network);
     }
 
     /**
@@ -109,19 +113,19 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(INPUT_STOCK_ENTITY_COLLECTION);
-        arguments.putResultNames(NETWORK_METRICS,
-                AVERAGE_TIME_SEQUENCE,
-                CHANGE_POINTS,
-                TRAINED_NEURAL_NETWORK);
+//        arguments = new Arguments(INPUT_STOCK_ENTITY_COLLECTION);
+//        arguments.putResultNames(NETWORK_METRICS,
+//                AVERAGE_TIME_SEQUENCE,
+//                CHANGE_POINTS,
+//                TRAINED_NEURAL_NETWORK);
     }
 
     public BasicNetworkTrainer getTrainer() {
         return trainer;
     }
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

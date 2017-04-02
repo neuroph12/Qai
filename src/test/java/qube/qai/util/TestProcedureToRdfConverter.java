@@ -36,7 +36,7 @@ public class TestProcedureToRdfConverter extends TestCase {
     public void rtestRdfConverter() throws Exception {
 
         SelectionProcedure selection = new SelectionProcedure();
-        Procedure procedure = NeuralNetworkAnalysis.Factory.constructProcedure(selection);
+        Procedure procedure = new NeuralNetworkAnalysis();
 
         String uuid = UUIDService.uuidString();
         Model model = createDummyModel(uuid);
@@ -57,7 +57,7 @@ public class TestProcedureToRdfConverter extends TestCase {
     private Procedure createDummyProcedure() {
 
         SelectionProcedure selection = new SelectionProcedure();
-        Procedure procedure = NeuralNetworkAnalysis.Factory.constructProcedure(selection);
+        Procedure procedure = new NeuralNetworkAnalysis();
 
         return procedure;
     }

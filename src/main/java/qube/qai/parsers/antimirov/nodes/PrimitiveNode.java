@@ -196,8 +196,8 @@ public class PrimitiveNode
         return this.name.getName();
     }//toString
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }//class

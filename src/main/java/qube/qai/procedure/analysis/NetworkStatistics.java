@@ -14,7 +14,6 @@
 
 package qube.qai.procedure.analysis;
 
-import qube.qai.data.Arguments;
 import qube.qai.data.Metrics;
 import qube.qai.network.Network;
 import qube.qai.procedure.Procedure;
@@ -40,8 +39,8 @@ public class NetworkStatistics extends Procedure implements ProcedureConstants {
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(INPUT_NETWORK);
-        arguments.putResultNames(NETWORK_METRICS);
+//        arguments = new Arguments(INPUT_NETWORK);
+//        arguments.putResultNames(NETWORK_METRICS);
     }
 
     @Override
@@ -51,23 +50,24 @@ public class NetworkStatistics extends Procedure implements ProcedureConstants {
             ((Procedure) getFirstChild()).execute();
         }
 
-        if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-        }
-
-        Network network = (Network) arguments.getSelector(INPUT_NETWORK).getData();
+//        if (!arguments.isSatisfied()) {
+//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
+//        }
+//
+//        Network network = (Network) arguments.getSelector(INPUT_NETWORK).getData();
+        Network network = null;
         if (network == null) {
-            logger.error("Input network has not been initialized properly: null value");
+            error("Input network has not been initialized properly: null value");
             return;
         }
 
         Metrics metrics = network.buildMetrics();
-        logger.info("adding " + NETWORK_METRICS + " to return values");
-        arguments.addResult(NETWORK_METRICS, metrics);
+        info("adding " + NETWORK_METRICS + " to return values");
+        //arguments.addResult(NETWORK_METRICS, metrics);
     }
 
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }

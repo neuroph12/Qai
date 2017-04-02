@@ -14,14 +14,10 @@
 
 package qube.qai.procedure.analysis;
 
-import qube.qai.data.Arguments;
-import qube.qai.data.Metrics;
 import qube.qai.data.SelectionOperator;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.ProcedureFactory;
-import qube.qai.procedure.utils.SelectionProcedure;
 
 import java.util.Collection;
 
@@ -45,8 +41,8 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
     @Override
     public void buildArguments() {
         description = DESCRIPTION;
-        arguments = new Arguments(INPUT_NEURAL_NETWORK);
-        arguments.putResultNames(NETWORK_METRICS);
+//        arguments = new Arguments(INPUT_NEURAL_NETWORK);
+//        arguments.putResultNames(NETWORK_METRICS);
     }
 
     @Override
@@ -56,53 +52,53 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
             ((Procedure) getFirstChild()).execute();
         }
 
-        if (!arguments.isSatisfied()) {
-            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-        }
-
-        NeuralNetwork neuralNetwork = (NeuralNetwork) arguments.getSelector(INPUT_NEURAL_NETWORK).getData();
-        if (neuralNetwork == null) {
-            logger.error("Input neural-network has not been initialized properly: null value");
-            return;
-        }
-
-        Metrics networkMetrics = neuralNetwork.buildMetrics();
-        logger.info("adding '" + NETWORK_METRICS + "' and '" + MATRIX_METRICS + "' to return values");
-        arguments.addResult(NETWORK_METRICS, networkMetrics);
+//        if (!arguments.isSatisfied()) {
+//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
+//        }
+//
+//        NeuralNetwork neuralNetwork = (NeuralNetwork) arguments.getSelector(INPUT_NEURAL_NETWORK).getData();
+//        if (neuralNetwork == null) {
+//            logger.error("Input neural-network has not been initialized properly: null value");
+//            return;
+//        }
+//
+//        Metrics networkMetrics = neuralNetwork.buildMetrics();
+//        logger.info("adding '" + NETWORK_METRICS + "' and '" + MATRIX_METRICS + "' to return values");
+//        arguments.addResult(NETWORK_METRICS, networkMetrics);
 
     }
 
     /**
      * implement a static factory-class so that they can be constructed right
      */
-    public static ProcedureFactory Factory = new ProcedureFactory() {
-
-        public Procedure constructProcedure(SelectionProcedure selection) {
-
-            if (selection == null) {
-                selection = new SelectionProcedure();
-            }
-            MatrixStatistics matrix = new MatrixStatistics(selection);
-
-            NetworkStatistics network = new NetworkStatistics();
-            network.getProcedureInputs().addInput(matrix);
-
-            NeuralNetworkAnalysis neural = new NeuralNetworkAnalysis();
-            neural.getProcedureInputs().addInput(network);
-
-
-            return neural;
-        }
-    };
+//    public static ProcedureFactory Factory = new ProcedureFactory() {
+//
+//        public Procedure constructProcedure(SelectionProcedure selection) {
+//
+//            if (selection == null) {
+//                selection = new SelectionProcedure();
+//            }
+//            MatrixStatistics matrix = new MatrixStatistics(selection);
+//
+//            NetworkStatistics network = new NetworkStatistics();
+//            network.getProcedureInputs().addInput(matrix);
+//
+//            NeuralNetworkAnalysis neural = new NeuralNetworkAnalysis();
+//            neural.getProcedureInputs().addInput(network);
+//
+//
+//            return neural;
+//        }
+//    };
 
     /**
      * so that we can actually remind the guy that this is the id which it needs seek
      *
      * @return
      */
-    @Override
-    @thewebsemantic.Id
-    public String getUuid() {
-        return this.uuid;
-    }
+//    @Override
+//    @thewebsemantic.Id
+//    public String getUuid() {
+//        return this.uuid;
+//    }
 }
