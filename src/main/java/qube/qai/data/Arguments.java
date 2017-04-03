@@ -23,7 +23,9 @@ import java.util.Set;
 
 /**
  * Created by rainbird on 11/27/15.
+ *
  */
+@Deprecated
 public class Arguments implements Serializable, MetricTyped {
 
     private Map<String, Object> results;

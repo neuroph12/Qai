@@ -37,8 +37,4 @@ public class SimpleProcedure extends Procedure {
 //        arguments = new Arguments();
     }
 
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

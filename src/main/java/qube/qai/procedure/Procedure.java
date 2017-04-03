@@ -79,6 +79,10 @@ public abstract class Procedure extends Node
         getProcedureInputs().addInput(child);
     }
 
+    public String getDescriptionText() {
+        return ((ProcedureDescription) getFirstChild()).getDescription();
+    }
+
     public ProcedureInputs getProcedureInputs() {
         return (ProcedureInputs) getFirstChild().getFirstChild();
     }
@@ -181,16 +185,9 @@ public abstract class Procedure extends Node
         return false;
     }
 
-    /**
-     * so that we can actually remind the guy that this is the id which it needs seek
-     *
-     * @return
-     */
-    //@Override
-    //@thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
+    public ProcedureDescription getProcedureDescription() {
+        return (ProcedureDescription) getFirstChild();
+    }
 
     public User getUser() {
         return user;

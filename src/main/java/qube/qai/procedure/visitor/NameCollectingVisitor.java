@@ -19,77 +19,71 @@ import qube.qai.parsers.antimirov.nodes.*;
 import java.util.ArrayList;
 
 /**
- * Created by rainbird on 4/1/17.
+ * Created by rainbird on 4/2/17.
  */
-public class NameSearchingVisitor implements NodeVisitor {
+public class NameCollectingVisitor implements NodeVisitor {
 
-    private ArrayList<BaseNode> allFound;
+    private ArrayList<String> allFound;
 
-    public NameSearchingVisitor() {
-        this.allFound = new ArrayList<>();
+    public NameCollectingVisitor() {
+        allFound = new ArrayList<>();
     }
 
     @Override
     public Object visit(AlternationNode node, Object data) {
-        return visitAll(node, data);
+        return null;
     }
 
     @Override
     public Object visit(ConcatenationNode node, Object data) {
-        return visitAll(node, data);
+        return null;
     }
 
     @Override
     public Object visit(EmptyNode node, Object data) {
-        return visitAll(node, data);
+        return null;
     }
 
     @Override
     public Object visit(IterationNode node, Object data) {
-        return visitAll(node, data);
+        return null;
     }
 
     @Override
     public Object visit(Node node, Object data) {
-        return visitAll(node, data);
+        allFound.add(node.getName().getName());
+        return data;
     }
 
     @Override
     public Object visit(NameNode node, Object data) {
-        return visitAll(node, data);
+        allFound.add(node.getName().getName());
+        return data;
     }
 
     @Override
     public Object visit(NoneNode node, Object data) {
-        return visitAll(node, data);
+        return null;
     }
 
     @Override
     public Object visit(PrimitiveNode node, Object data) {
-        return visitAll(node, data);
-    }
-
-
-    private Object visitAll(BaseNode node, Object data) {
-        if (node.getName().getName().equals(data)) {
-            allFound.add(node);
-            return data;
-        }
-        return data;
-    }
-
-    public BaseNode getFirstFound() {
-        if (allFound.size() > 0) {
-            return allFound.get(0);
-        }
         return null;
     }
 
-    public ArrayList<BaseNode> getAllFound() {
+//    private Object visitAll(BaseNode node, Object data) {
+//        if (node.getName().getName().equals(data)) {
+//            allFound.add(node.getName().getName());
+//            return data;
+//        }
+//        return data;
+//    }
+
+    public ArrayList<String> getAllFound() {
         return allFound;
     }
 
-    public void setAllFound(ArrayList<BaseNode> allFound) {
+    public void setAllFound(ArrayList<String> allFound) {
         this.allFound = allFound;
     }
 }

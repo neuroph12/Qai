@@ -17,13 +17,17 @@ package qube.qai.procedure;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
 import qube.qai.parsers.antimirov.nodes.Name;
+import qube.qai.procedure.visitor.NameCollectingVisitor;
+import qube.qai.procedure.visitor.NameSearchingVisitor;
+
+import java.util.Collection;
 
 /**
  * Created by rainbird on 3/30/17.
  */
 public class ProcedureResults extends ConcatenationNode {
 
-    public static String NAME = "Procdure Results";
+    public static String NAME = "Procedure Results";
 
     public ProcedureResults() {
         this.name = new Name(NAME);
@@ -38,5 +42,17 @@ public class ProcedureResults extends ConcatenationNode {
             BaseNode tmp = getSecondChild();
             setSecondChild(new ConcatenationNode(tmp, result));
         }
+    }
+
+    public BaseNode getNamedResult(String name) {
+        NameSearchingVisitor visitor = new NameSearchingVisitor();
+        childrenAccept(visitor, name);
+        return visitor.getFirstFound();
+    }
+
+    public Collection<String> getResultNames() {
+        NameCollectingVisitor visitor = new NameCollectingVisitor();
+        childrenAccept(visitor, null);
+        return visitor.getAllFound();
     }
 }

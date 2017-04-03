@@ -17,6 +17,8 @@ package qube.qai.procedure.analysis;
 import qube.qai.data.Metrics;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.matrix.Matrix;
+import qube.qai.parsers.antimirov.nodes.Name;
+import qube.qai.parsers.antimirov.nodes.NameNode;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 
@@ -30,7 +32,7 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
     public static String NAME = "Matrix Statistics";
 
     public static String DESCRIPTION = "Analyses the distribution of the numbers in the matrix, " +
-            "and eigenvalues and eigenvectors, as far as they exist, using eigenvalue decomposition";
+            "and in its eigen-vectors, as far as they exist, using eigen-value decomposition";
 
     public MatrixStatistics() {
         super(NAME);
@@ -45,9 +47,10 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
 
     @Override
     public void buildArguments() {
-        description = DESCRIPTION;
-//        arguments = new Arguments(INPUT_MATRIX);
-//        arguments.putResultNames(MATRIX_METRICS, MATRIX_DATA_METRICS);
+        getProcedureDescription().setDescription(DESCRIPTION);
+        getProcedureDescription().getProcedureInputs().addInput(new NameNode(new Name(INPUT_MATRIX)));
+        getProcedureDescription().getProcedureResults().addResult(new NameNode(new Name(MATRIX_METRICS)));
+        getProcedureDescription().getProcedureResults().addResult(new NameNode(new Name(MATRIX_DATA_METRICS)));
     }
 
     @Override

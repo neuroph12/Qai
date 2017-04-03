@@ -31,4 +31,21 @@ public class ProcedureDescription extends ConcatenationNode {
         this.description = description;
         this.name = new Name(NAME);
     }
+
+    public ProcedureInputs getProcedureInputs() {
+        return (ProcedureInputs) getFirstChild();
+    }
+
+    public ProcedureResults getProcedureResults() {
+        return (ProcedureResults) getSecondChild();
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
 }

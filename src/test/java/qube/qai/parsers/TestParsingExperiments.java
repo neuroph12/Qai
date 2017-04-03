@@ -38,7 +38,9 @@ import java.util.Set;
 
 /**
  * Created by rainbird on 12/21/15.
+ * @Deprecated this calss is mainly for playing around with parsing files and so on, not functionality, therefore no longer required
  */
+@Deprecated
 public class TestParsingExperiments extends QaiTestBase {
 
     private String stockListingPage = "Lists of companies by stock exchange listing.xml";

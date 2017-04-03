@@ -25,12 +25,14 @@ import qube.qai.procedure.analysis.NetworkStatistics;
 import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
 import qube.qai.procedure.utils.SimpleProcedure;
 
+import java.util.Collection;
+
 /**
  * Created by rainbird on 3/30/17.
  */
 public class TestProcedureInputsAndResults extends TestCase {
 
-    public void estProcedureInputs() throws Exception {
+    public void testProcedureInputs() throws Exception {
         ProcedureInputs inputs = new ProcedureInputs();
         inputs.addInput(createNamedNode("foo", "integer"));
         inputs.addInput(createNamedNode("baz", "integer"));
@@ -42,7 +44,7 @@ public class TestProcedureInputsAndResults extends TestCase {
 
     }
 
-    public void estProcedureResults() throws Exception {
+    public void testProcedureResults() throws Exception {
 
         ProcedureResults results = new ProcedureResults();
         results.addResult(createNamedNode("foo", "integer"));
@@ -52,6 +54,25 @@ public class TestProcedureInputsAndResults extends TestCase {
 
         log(results.toString());
         assertEquals("foo[integer] baz[integer] bar[double] rad[double]", results.toString());
+
+        BaseNode n1 = results.getNamedResult("foo");
+        assertNotNull("there has to be foo node", n1);
+        assertTrue("nodes must be equal", "foo".equals(n1.getName().getName()));
+
+        BaseNode n2 = results.getNamedResult("baz");
+        assertNotNull("there has to be baz node", n2);
+        assertTrue("nodes must be equal", "baz".equals(n2.getName().getName()));
+
+        BaseNode n3 = results.getNamedResult("bar");
+        assertNotNull("there has to be bar node", n3);
+        assertTrue("nodes must be equal", "bar".equals(n3.getName().getName()));
+
+        BaseNode n4 = results.getNamedResult("rad");
+        assertNotNull("there has to be rad node", n4);
+        assertTrue("nodes must be equal", "rad".equals(n4.getName().getName()));
+
+        BaseNode quapil = results.getNamedResult("quapil");
+        assertTrue("there is no quapil- of course...", quapil == null);
     }
 
     private BaseNode createNamedNode(String name, String type) {
@@ -70,32 +91,40 @@ public class TestProcedureInputsAndResults extends TestCase {
 
         inputs.addInput(new SimpleProcedure());
         inputs.addInput(new ChangePointAnalysis());
-        inputs.addInput(new MatrixStatistics(null));
+        inputs.addInput(new MatrixStatistics());
         inputs.addInput(new NetworkStatistics());
         inputs.addInput(new NeuralNetworkAnalysis());
 
-        Procedure p1 = inputs.getNamedInput(SimpleProcedure.NAME);
+        Procedure p1 = (Procedure) inputs.getNamedInput(SimpleProcedure.NAME);
         assertNotNull("there has to be a procedure", p1);
         assertTrue("the name has to be right", SimpleProcedure.NAME.equals(p1.getName().getName()));
 
-        Procedure p2 = inputs.getNamedInput(ChangePointAnalysis.NAME);
+        Procedure p2 = (Procedure) inputs.getNamedInput(ChangePointAnalysis.NAME);
         assertNotNull("there has to be a procedure", p2);
         assertTrue("the name has to be right", ChangePointAnalysis.NAME.equals(p2.getName().getName()));
 
-        Procedure p3 = inputs.getNamedInput(MatrixStatistics.NAME);
+        Procedure p3 = (Procedure) inputs.getNamedInput(MatrixStatistics.NAME);
         assertNotNull("there has to be a procedure", p3);
         assertTrue("the name has to be right", MatrixStatistics.NAME.equals(p3.getName().getName()));
 
-        Procedure p4 = inputs.getNamedInput(NetworkStatistics.NAME);
+        Procedure p4 = (Procedure) inputs.getNamedInput(NetworkStatistics.NAME);
         assertNotNull("there has to be a procedure", p4);
         assertTrue("the name has to be right", NetworkStatistics.NAME.equals(p4.getName().getName()));
 
-        Procedure p5 = inputs.getNamedInput(NeuralNetworkAnalysis.NAME);
+        Procedure p5 = (Procedure) inputs.getNamedInput(NeuralNetworkAnalysis.NAME);
         assertNotNull("there has to be a procedure", p5);
         assertTrue("the name has to be right", NeuralNetworkAnalysis.NAME.equals(p5.getName().getName()));
 
-        Procedure dummy = inputs.getNamedInput("quapil");
-        assertTrue("there is no dummy procedure to be found", dummy == null);
+        Procedure quapil = (Procedure) inputs.getNamedInput("quapil");
+        assertTrue("quapil has to be null", quapil == null);
+
+        Collection<String> names = inputs.getInputNames();
+        assertNotNull("names may not be null", names);
+        assertTrue(names.contains(SimpleProcedure.NAME));
+        assertTrue(names.contains(ChangePointAnalysis.NAME));
+        assertTrue(names.contains(MatrixStatistics.NAME));
+        assertTrue(names.contains(NetworkStatistics.NAME));
+
     }
 
     private void log(String message) {

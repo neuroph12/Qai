@@ -19,7 +19,10 @@ import org.slf4j.LoggerFactory;
 import qube.qai.data.Metrics;
 import qube.qai.data.TimeSequence;
 import qube.qai.main.QaiTestBase;
+import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ProcedureDescription;
 import qube.qai.services.ProcedureSourceInterface;
 
 import javax.inject.Inject;
@@ -44,10 +47,17 @@ public class TestAnalysisProcedures extends QaiTestBase {
      */
     public void testMatrixStatistics() throws Exception {
 
-        MatrixStatistics statistics = (MatrixStatistics) procedureSource.getProcedureWithName(MatrixStatistics.NAME);
+        MatrixStatistics statistics = new MatrixStatistics();
 
-//        Arguments arguments = statistics.getArguments();
-//        assertNotNull("arguments may not be null", arguments);
+        statistics.buildArguments();
+        ProcedureDescription description = statistics.getProcedureDescription();
+        assertNotNull("arguments may not be null", description);
+        log("description as text: " + description.getDescription());
+
+        BaseNode matrixIn = description.getProcedureInputs().getNamedInput(ProcedureConstants.INPUT_MATRIX);
+        assertNotNull("there has to be an input matrix", matrixIn);
+
+
 //
 //        assertTrue("input matrix is one of the arguments", arguments.getArgumentNames().contains(MatrixStatistics.INPUT_MATRIX));
 //
@@ -67,7 +77,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
 
     }
 
-    public void testChangePointAnalysis() throws Exception {
+    public void estChangePointAnalysis() throws Exception {
 
 //        ChangePointAnalysis statistics = (ChangePointAnalysis) procedureSource.getProcedureWithName(ChangePointAnalysis.NAME);
 //
@@ -98,7 +108,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
      *
      * @throws Exception
      */
-    public void testTimeSeriesAnalysis() throws Exception {
+    public void estTimeSeriesAnalysis() throws Exception {
 
 //        TimeSequenceAnalysis statistics = (TimeSequenceAnalysis) procedureSource.getProcedureWithName(TimeSequenceAnalysis.NAME);
 //
@@ -124,7 +134,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
      *
      * @throws Exception
      */
-    public void testNetworkStatistics() throws Exception {
+    public void estNetworkStatistics() throws Exception {
 
 //        NetworkStatistics statistics = (NetworkStatistics) procedureSource.getProcedureWithName(NetworkStatistics.NAME);
 //
@@ -148,7 +158,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
     /**
      * do the testing for neural-network analysis
      */
-    public void restNeuralNetworkAnalysis() throws Exception {
+    public void estNeuralNetworkAnalysis() throws Exception {
 
 //        NeuralNetworkAnalysis statistics = (NeuralNetworkAnalysis) procedureSource.getProcedureWithName(NeuralNetworkAnalysis.NAME);
 //
@@ -175,7 +185,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
      *
      * @throws Exception
      */
-    public void testNeuralNetworkForwardPropagation() throws Exception {
+    public void estNeuralNetworkForwardPropagation() throws Exception {
 
 //        NeuralNetworkForwardPropagation statistics = (NeuralNetworkForwardPropagation) procedureSource.getProcedureWithName(NeuralNetworkForwardPropagation.NAME);
 //
@@ -208,7 +218,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
      *
      * @throws Exception
      */
-    public void testSortingPercentilesProcedure() throws Exception {
+    public void estSortingPercentilesProcedure() throws Exception {
 
 //        SortingPercentilesProcedure statistics = (SortingPercentilesProcedure) procedureSource.getProcedureWithName(SortingPercentilesProcedure.NAME);
 //

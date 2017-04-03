@@ -17,7 +17,10 @@ package qube.qai.procedure;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
 import qube.qai.parsers.antimirov.nodes.Name;
+import qube.qai.procedure.visitor.NameCollectingVisitor;
 import qube.qai.procedure.visitor.NameSearchingVisitor;
+
+import java.util.Collection;
 
 /**
  * Created by rainbird on 3/30/17.
@@ -41,14 +44,16 @@ public class ProcedureInputs extends ConcatenationNode {
         }
     }
 
-    public Procedure getFirstInput() {
-        return (Procedure) getFirstChild();
-    }
-
-    public Procedure getNamedInput(String name) {
+    public BaseNode getNamedInput(String name) {
         NameSearchingVisitor visitor = new NameSearchingVisitor();
         childrenAccept(visitor, name);
-        return visitor.getFound();
+        return visitor.getFirstFound();
+    }
+
+    public Collection<String> getInputNames() {
+        NameCollectingVisitor visitor = new NameCollectingVisitor();
+        childrenAccept(visitor, null);
+        return visitor.getAllFound();
     }
 
 }
