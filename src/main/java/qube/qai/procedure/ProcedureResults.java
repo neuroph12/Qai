@@ -33,7 +33,7 @@ public class ProcedureResults extends ConcatenationNode {
         this.name = new Name(NAME);
     }
 
-    public void addResult(BaseNode result) {
+    public void addResult(ValueNode result) {
         if (getFirstChild() == null) {
             setFirstChild(result);
         } else if (getSecondChild() == null) {
@@ -44,7 +44,7 @@ public class ProcedureResults extends ConcatenationNode {
         }
     }
 
-    public BaseNode getNamedResult(String name) {
+    public ValueNode getNamedResult(String name) {
         NameSearchingVisitor visitor = new NameSearchingVisitor();
         childrenAccept(visitor, name);
         return visitor.getFirstFound();

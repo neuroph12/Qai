@@ -17,10 +17,9 @@ package qube.qai.procedure.analysis;
 import qube.qai.data.Metrics;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.matrix.Matrix;
-import qube.qai.parsers.antimirov.nodes.Name;
-import qube.qai.parsers.antimirov.nodes.NameNode;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ValueNode;
 
 import java.util.List;
 
@@ -48,25 +47,18 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new NameNode(new Name(INPUT_MATRIX)));
-        getProcedureDescription().getProcedureResults().addResult(new NameNode(new Name(MATRIX_METRICS)));
-        getProcedureDescription().getProcedureResults().addResult(new NameNode(new Name(MATRIX_DATA_METRICS)));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_MATRIX));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(MATRIX_METRICS));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(MATRIX_DATA_METRICS));
     }
 
     @Override
     public void execute() {
 
-        if (getFirstChild() != null) {
-            ((Procedure) getFirstChild()).execute();
-        }
+        executeInputProcedures();
 
-//        if (!arguments.isSatisfied()) {
-//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-//        }
-//
-//        // first get the selector
-//        Matrix matrix = (Matrix) arguments.getSelector(INPUT_MATRIX).getData();
-        Matrix matrix = null;
+        // first get the selector
+        Matrix matrix = (Matrix) getInputValueOf(INPUT_MATRIX);
         if (matrix == null || matrix.getMatrix() == null) {
             error("Input matrix has not been initialized properly: null value");
             return;
@@ -78,12 +70,8 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
         Metrics matrixMetrics = matrix.buildMetrics();
 
         info("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");
-//        arguments.addResult(MATRIX_DATA_METRICS, dataMetrics);
-//        arguments.addResult(MATRIX_METRICS, matrixMetrics);
+        setResultValueOf(MATRIX_DATA_METRICS, dataMetrics);
+        setResultValueOf(MATRIX_METRICS, matrixMetrics);
     }
 
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

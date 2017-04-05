@@ -15,6 +15,7 @@
 package qube.qai.procedure.visitor;
 
 import qube.qai.parsers.antimirov.nodes.*;
+import qube.qai.procedure.ValueNode;
 
 import java.util.ArrayList;
 
@@ -31,27 +32,27 @@ public class NameCollectingVisitor implements NodeVisitor {
 
     @Override
     public Object visit(AlternationNode node, Object data) {
-        return null;
+        return data;
     }
 
     @Override
     public Object visit(ConcatenationNode node, Object data) {
-        return null;
+        return data;
     }
 
     @Override
     public Object visit(EmptyNode node, Object data) {
-        return null;
+        return data;
     }
 
     @Override
     public Object visit(IterationNode node, Object data) {
-        return null;
+        return data;
     }
 
     @Override
     public Object visit(Node node, Object data) {
-        allFound.add(node.getName().getName());
+        //allFound.add(node.getName().getName());
         return data;
     }
 
@@ -63,12 +64,15 @@ public class NameCollectingVisitor implements NodeVisitor {
 
     @Override
     public Object visit(NoneNode node, Object data) {
-        return null;
+        return data;
     }
 
     @Override
     public Object visit(PrimitiveNode node, Object data) {
-        return null;
+        if (node instanceof ValueNode) {
+            allFound.add(node.getName().getName());
+        }
+        return data;
     }
 
 //    private Object visitAll(BaseNode node, Object data) {

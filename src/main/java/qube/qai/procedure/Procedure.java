@@ -30,6 +30,7 @@ import qube.qai.user.User;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Created by rainbird on 11/27/15.
@@ -74,9 +75,35 @@ public abstract class Procedure extends Node
         buildArguments();
     }
 
+    @Deprecated
     public Procedure(String name, BaseNode child) {
         this(name);
-        getProcedureInputs().addInput(child);
+        //getProcedureInputs().addInput(child);
+    }
+
+    protected Object getInputValueOf(String name) {
+        Object value = null;
+        ValueNode nameNode = getProcedureInputs().getNamedInput(name);
+        return nameNode.getValue();
+    }
+
+    protected void setResultValueOf(String name, Object value) {
+        BaseNode nameNode = getProcedureResults().getNamedResult(name);
+        if (nameNode == null) {
+            throw new IllegalArgumentException("No result value with name: '" + name + "'");
+        }
+        nameNode.setFirstChild(new ValueNode(name, value));
+    }
+
+    protected void executeInputProcedures() {
+        Collection<String> names = getProcedureInputs().getInputNames();
+        for (String name : names) {
+            ValueNode node = getProcedureInputs().getNamedInput(name);
+            BaseNode child = node.getFirstChild();
+            if (child != null && child instanceof Procedure) {
+                ((Procedure) child).execute();
+            }
+        }
     }
 
     public String getDescriptionText() {

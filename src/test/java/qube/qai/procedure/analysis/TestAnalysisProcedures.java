@@ -19,13 +19,17 @@ import org.slf4j.LoggerFactory;
 import qube.qai.data.Metrics;
 import qube.qai.data.TimeSequence;
 import qube.qai.main.QaiTestBase;
+import qube.qai.matrix.Matrix;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureDescription;
+import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.services.ProcedureSourceInterface;
 
 import javax.inject.Inject;
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -41,6 +45,31 @@ public class TestAnalysisProcedures extends QaiTestBase {
     private boolean debug = true;
 
     /**
+     * try out how the procedure-as input for another
+     *
+     * @throws Exception
+     */
+    public void testProcedureInputs() throws Exception {
+
+        SimpleProcedure simple = new SimpleProcedure();
+        String name = ProcedureConstants.INPUT_MATRIX;
+        Matrix matrix = Matrix.createMatrix(true, 100, 100);
+        simple.getProcedureDescription().getProcedureResults().addResult(new ValueNode(name, matrix));
+
+        MatrixStatistics statistics = new MatrixStatistics();
+        statistics.getProcedureDescription().getProcedureInputs().getNamedInput(name).setFirstChild(simple);
+
+        statistics.execute();
+
+        Collection<String> resultNames = statistics.getProcedureDescription().getProcedureResults().getResultNames();
+        for (String result : resultNames) {
+            BaseNode node = statistics.getProcedureDescription().getProcedureResults().getNamedResult(result);
+            assertNotNull("there has to be a node with name: " + result, node);
+            log("result name: " + result + " " + node.toString());
+        }
+    }
+
+    /**
      * do the testing for the MatrixAnalysis class
      *
      * @throws Exception
@@ -49,7 +78,8 @@ public class TestAnalysisProcedures extends QaiTestBase {
 
         MatrixStatistics statistics = new MatrixStatistics();
 
-        statistics.buildArguments();
+        // this methd is called already during initialization (constructor) of the base class- procedure.
+        //statistics.buildArguments();
         ProcedureDescription description = statistics.getProcedureDescription();
         assertNotNull("arguments may not be null", description);
         log("description as text: " + description.getDescription());
@@ -57,24 +87,23 @@ public class TestAnalysisProcedures extends QaiTestBase {
         BaseNode matrixIn = description.getProcedureInputs().getNamedInput(ProcedureConstants.INPUT_MATRIX);
         assertNotNull("there has to be an input matrix", matrixIn);
 
+        Collection<String> names = description.getProcedureInputs().getInputNames();
+        for (String name : names) {
+            BaseNode node = description.getProcedureInputs().getNamedInput(name);
+            assertNotNull("there has to be a node", node);
+            log("input named: " + name + " and corresponding node: " + node.toString());
+        }
 
-//
-//        assertTrue("input matrix is one of the arguments", arguments.getArgumentNames().contains(MatrixStatistics.INPUT_MATRIX));
-//
-//        checkResultsOf(statistics);
-//
-//        assertTrue("there has to be some results", !statistics.getArguments().getResultNames().isEmpty());
-//        log("results:" + statistics.getArguments().getResultNames());
-//        for (String name : statistics.getArguments().getResultNames()) {
-//            Object result = statistics.getArguments().getResult(name);
-//            if (result instanceof Metrics) {
-//                log("found metrics: " + name);
-//                log((Metrics) result);
-//            } else {
-//                log("result: " + result + " value: " + result);
-//            }
-//        }
+        Matrix matrix = Matrix.createMatrix(true, 100, 100);
+        description.getProcedureInputs().getNamedInput(ProcedureConstants.INPUT_MATRIX).setFirstChild(new ValueNode("", matrix));
+        statistics.execute();
 
+        Collection<String> resultNames = description.getProcedureResults().getResultNames();
+        for (String name : resultNames) {
+            BaseNode node = description.getProcedureResults().getNamedResult(name);
+            assertNotNull("there has to be a node with name: " + name, node);
+            log("result name: " + name + " " + node.toString());
+        }
     }
 
     public void estChangePointAnalysis() throws Exception {

@@ -16,9 +16,6 @@ package qube.qai.procedure;
 
 import junit.framework.TestCase;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
-import qube.qai.parsers.antimirov.nodes.Name;
-import qube.qai.parsers.antimirov.nodes.Node;
-import qube.qai.parsers.antimirov.nodes.PrimitiveNode;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
 import qube.qai.procedure.analysis.MatrixStatistics;
 import qube.qai.procedure.analysis.NetworkStatistics;
@@ -75,47 +72,41 @@ public class TestProcedureInputsAndResults extends TestCase {
         assertTrue("there is no quapil- of course...", quapil == null);
     }
 
-    private BaseNode createNamedNode(String name, String type) {
-        BaseNode node = null;
-        if (type != null && type.length() > 0) {
-            node = new Node(new Name(name), new PrimitiveNode((new Name(type))));
-        } else {
-            node = new Node(new Name(name));
-        }
-
+    private ValueNode createNamedNode(String name, String type) {
+        ValueNode node = new ValueNode(name);
         return node;
     }
 
     public void testInputPararmeters() throws Exception {
         ProcedureInputs inputs = new ProcedureInputs();
 
-        inputs.addInput(new SimpleProcedure());
-        inputs.addInput(new ChangePointAnalysis());
-        inputs.addInput(new MatrixStatistics());
-        inputs.addInput(new NetworkStatistics());
-        inputs.addInput(new NeuralNetworkAnalysis());
+        inputs.addInput(new ValueNode("Simple Procedure", new SimpleProcedure()));
+        inputs.addInput(new ValueNode("Change Point Analysis", new ChangePointAnalysis()));
+        inputs.addInput(new ValueNode("Matrix Statistics", new MatrixStatistics()));
+        inputs.addInput(new ValueNode("Network Statistics", new NetworkStatistics()));
+        inputs.addInput(new ValueNode("Neural-Network Analysis", new NeuralNetworkAnalysis()));
 
-        Procedure p1 = (Procedure) inputs.getNamedInput(SimpleProcedure.NAME);
+        Procedure p1 = (Procedure) inputs.getNamedInput(SimpleProcedure.NAME).getFirstChild();
         assertNotNull("there has to be a procedure", p1);
         assertTrue("the name has to be right", SimpleProcedure.NAME.equals(p1.getName().getName()));
 
-        Procedure p2 = (Procedure) inputs.getNamedInput(ChangePointAnalysis.NAME);
+        Procedure p2 = (Procedure) inputs.getNamedInput(ChangePointAnalysis.NAME).getFirstChild();
         assertNotNull("there has to be a procedure", p2);
         assertTrue("the name has to be right", ChangePointAnalysis.NAME.equals(p2.getName().getName()));
 
-        Procedure p3 = (Procedure) inputs.getNamedInput(MatrixStatistics.NAME);
+        Procedure p3 = (Procedure) inputs.getNamedInput(MatrixStatistics.NAME).getFirstChild();
         assertNotNull("there has to be a procedure", p3);
         assertTrue("the name has to be right", MatrixStatistics.NAME.equals(p3.getName().getName()));
 
-        Procedure p4 = (Procedure) inputs.getNamedInput(NetworkStatistics.NAME);
+        Procedure p4 = (Procedure) inputs.getNamedInput(NetworkStatistics.NAME).getFirstChild();
         assertNotNull("there has to be a procedure", p4);
         assertTrue("the name has to be right", NetworkStatistics.NAME.equals(p4.getName().getName()));
 
-        Procedure p5 = (Procedure) inputs.getNamedInput(NeuralNetworkAnalysis.NAME);
+        Procedure p5 = (Procedure) inputs.getNamedInput(NeuralNetworkAnalysis.NAME).getFirstChild();
         assertNotNull("there has to be a procedure", p5);
         assertTrue("the name has to be right", NeuralNetworkAnalysis.NAME.equals(p5.getName().getName()));
 
-        Procedure quapil = (Procedure) inputs.getNamedInput("quapil");
+        ValueNode quapil = inputs.getNamedInput("quapil");
         assertTrue("quapil has to be null", quapil == null);
 
         Collection<String> names = inputs.getInputNames();

@@ -15,6 +15,7 @@
 package qube.qai.procedure.visitor;
 
 import qube.qai.parsers.antimirov.nodes.*;
+import qube.qai.procedure.ValueNode;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ import java.util.ArrayList;
  */
 public class NameSearchingVisitor implements NodeVisitor {
 
-    private ArrayList<BaseNode> allFound;
+    private ArrayList<ValueNode> allFound;
 
     public NameSearchingVisitor() {
         this.allFound = new ArrayList<>();
@@ -31,65 +32,60 @@ public class NameSearchingVisitor implements NodeVisitor {
 
     @Override
     public Object visit(AlternationNode node, Object data) {
-        return visitAll(node, data);
+        return data;
     }
 
     @Override
     public Object visit(ConcatenationNode node, Object data) {
-        return visitAll(node, data);
+        return data;
     }
 
     @Override
     public Object visit(EmptyNode node, Object data) {
-        return visitAll(node, data);
+        return data;
     }
 
     @Override
     public Object visit(IterationNode node, Object data) {
-        return visitAll(node, data);
+        return data;
     }
 
     @Override
     public Object visit(Node node, Object data) {
-        return visitAll(node, data);
+        return data;
     }
 
     @Override
     public Object visit(NameNode node, Object data) {
-        return visitAll(node, data);
+        return data;
     }
 
     @Override
     public Object visit(NoneNode node, Object data) {
-        return visitAll(node, data);
+        return data;
     }
 
     @Override
     public Object visit(PrimitiveNode node, Object data) {
-        return visitAll(node, data);
-    }
-
-
-    private Object visitAll(BaseNode node, Object data) {
-        if (node.getName().getName().equals(data)) {
-            allFound.add(node);
-            return data;
+        if (node instanceof ValueNode) {
+            ValueNode valueNode = (ValueNode) node;
+            allFound.add(valueNode);
         }
         return data;
     }
 
-    public BaseNode getFirstFound() {
+    public ValueNode getFirstFound() {
         if (allFound.size() > 0) {
             return allFound.get(0);
         }
         return null;
     }
 
-    public ArrayList<BaseNode> getAllFound() {
+    public ArrayList<ValueNode> getAllFound() {
         return allFound;
     }
 
-    public void setAllFound(ArrayList<BaseNode> allFound) {
+    public void setAllFound(ArrayList<ValueNode> allFound) {
         this.allFound = allFound;
     }
 }
