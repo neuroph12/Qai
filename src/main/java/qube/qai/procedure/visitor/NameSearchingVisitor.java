@@ -57,6 +57,12 @@ public class NameSearchingVisitor implements NodeVisitor {
 
     @Override
     public Object visit(NameNode node, Object data) {
+        if (node instanceof ValueNode) {
+            ValueNode valueNode = (ValueNode) node;
+            if (data.equals(valueNode.getName().getName())) {
+                allFound.add(valueNode);
+            }
+        }
         return data;
     }
 
@@ -67,10 +73,6 @@ public class NameSearchingVisitor implements NodeVisitor {
 
     @Override
     public Object visit(PrimitiveNode node, Object data) {
-        if (node instanceof ValueNode) {
-            ValueNode valueNode = (ValueNode) node;
-            allFound.add(valueNode);
-        }
         return data;
     }
 

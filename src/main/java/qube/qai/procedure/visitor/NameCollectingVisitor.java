@@ -58,7 +58,9 @@ public class NameCollectingVisitor implements NodeVisitor {
 
     @Override
     public Object visit(NameNode node, Object data) {
-        allFound.add(node.getName().getName());
+        if (node instanceof ValueNode) {
+            allFound.add(node.getName().getName());
+        }
         return data;
     }
 
@@ -69,9 +71,6 @@ public class NameCollectingVisitor implements NodeVisitor {
 
     @Override
     public Object visit(PrimitiveNode node, Object data) {
-        if (node instanceof ValueNode) {
-            allFound.add(node.getName().getName());
-        }
         return data;
     }
 

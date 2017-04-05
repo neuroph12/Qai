@@ -16,12 +16,12 @@ package qube.qai.procedure;
 
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.Name;
-import qube.qai.parsers.antimirov.nodes.PrimitiveNode;
+import qube.qai.parsers.antimirov.nodes.NameNode;
 
 /**
  * Created by rainbird on 4/5/17.
  */
-public class ValueNode extends PrimitiveNode {
+public class ValueNode extends NameNode {
 
     private Object value;
 
