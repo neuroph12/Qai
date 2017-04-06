@@ -52,7 +52,6 @@ public class NameCollectingVisitor implements NodeVisitor {
 
     @Override
     public Object visit(Node node, Object data) {
-        //allFound.add(node.getName().getName());
         return data;
     }
 
@@ -73,14 +72,6 @@ public class NameCollectingVisitor implements NodeVisitor {
     public Object visit(PrimitiveNode node, Object data) {
         return data;
     }
-
-//    private Object visitAll(BaseNode node, Object data) {
-//        if (node.getName().getName().equals(data)) {
-//            allFound.add(node.getName().getName());
-//            return data;
-//        }
-//        return data;
-//    }
 
     public ArrayList<String> getAllFound() {
         return allFound;

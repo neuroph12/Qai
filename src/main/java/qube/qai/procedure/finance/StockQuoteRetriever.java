@@ -132,7 +132,7 @@ public class StockQuoteRetriever extends Procedure {
 
     @Override
     public void buildArguments() {
-        description = DESCRIPTION;
+        getProcedureDescription().setDescription(DESCRIPTION);
 //        arguments = new Arguments(TICKER_SYMBOL);
 //        arguments.putResultNames(NUMBER_OF_INSERTS);
     }

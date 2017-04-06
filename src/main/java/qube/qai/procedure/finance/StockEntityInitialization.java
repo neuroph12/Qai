@@ -222,7 +222,7 @@ public class StockEntityInitialization extends Procedure {
 
     @Override
     public void buildArguments() {
-        description = DESCRIPTION;
+        getProcedureDescription().setDescription(DESCRIPTION);
 //        arguments = new Arguments(INPUT_FILENAME);
 //        arguments.putResultNames(CATEGORY_NAME, NUMBER_OF_RECORDS, NUMBER_OF_RECORDS_CREATED);
     }

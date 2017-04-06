@@ -33,15 +33,11 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
     public static String DESCRIPTION = "Analyses the distribution of the numbers in the matrix, " +
             "and in its eigen-vectors, as far as they exist, using eigen-value decomposition";
 
-    public MatrixStatistics() {
-        super(NAME);
-    }
-
     /**
      * Runs statistical analysis on the given matrix
      */
-    public MatrixStatistics(Procedure procedure) {
-        super(NAME, procedure);
+    public MatrixStatistics() {
+        super(NAME);
     }
 
     @Override

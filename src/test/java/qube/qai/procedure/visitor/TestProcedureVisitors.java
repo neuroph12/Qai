@@ -35,7 +35,7 @@ public class TestProcedureVisitors extends TestCase {
 
         // test the simple visitor on network analysis
         SelectionProcedure selection = new SelectionProcedure();
-        MatrixStatistics matrix = new MatrixStatistics(selection);
+        MatrixStatistics matrix = new MatrixStatistics();
         NetworkStatistics network = new NetworkStatistics();
         network.setFirstChild(matrix);
         NeuralNetworkAnalysis neural = new NeuralNetworkAnalysis();

@@ -112,7 +112,7 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
 //    }
     @Override
     public void buildArguments() {
-        description = DESCRIPTION;
+        getProcedureDescription().setDescription(DESCRIPTION);
 //        arguments = new Arguments(INPUT_STOCK_ENTITY_COLLECTION);
 //        arguments.putResultNames(NETWORK_METRICS,
 //                AVERAGE_TIME_SEQUENCE,

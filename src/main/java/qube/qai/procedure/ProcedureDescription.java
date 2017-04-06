@@ -26,9 +26,8 @@ public class ProcedureDescription extends ConcatenationNode {
 
     private String description;
 
-    public ProcedureDescription(String description) {
+    public ProcedureDescription() {
         super(new ProcedureInputs(), new ProcedureResults());
-        this.description = description;
         this.name = new Name(NAME);
     }
 

@@ -14,10 +14,15 @@
 
 package qube.qai.procedure.analysis;
 
+import qube.qai.data.TimeSequence;
+import qube.qai.data.analysis.ChangepointAdapter;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ValueNode;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -42,57 +47,46 @@ public class ChangePointAnalysis extends Procedure implements ProcedureConstants
 
 
     @Override
-    public void buildArguments() {
-        description = DESCRIPTION;
-//        arguments = new Arguments(INPUT_TIME_SEQUENCE);
-//        arguments.putResultNames(CHANGE_POINTS);
+    protected void buildArguments() {
+        getProcedureDescription().setDescription(DESCRIPTION);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_TIME_SEQUENCE));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(CHANGE_POINTS));
     }
 
     @Override
     public void execute() {
 
-        if (getFirstChild() != null) {
-            ((Procedure) getFirstChild()).execute();
+        executeInputProcedures();
+
+        // first get the selector
+        TimeSequence timeSequence = (TimeSequence) getInputValueOf(INPUT_TIME_SEQUENCE);
+        if (timeSequence == null) {
+            error("Input time-series has not been initialized properly: null value");
         }
 
-//        if (!arguments.isSatisfied()) {
-//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-//        }
-//
-//        // first get the selector
-//        TimeSequence timeSequence = (TimeSequence) arguments.getSelector(INPUT_TIME_SEQUENCE).getData();
-//        if (timeSequence == null) {
-//            logger.error("Input time-series has not been initialized properly: null value");
-//        }
-//
-//        ChangepointAdapter changepointAdapter = new ChangepointAdapter();
-//        Date[] dates = timeSequence.toDates();
-//        Number[] rawData = timeSequence.toArray();
-//        double[][] data = new double[rawData.length][2];
-//        for (int i = 0; i < rawData.length; i++) {
-//            data[i][0] = i;
-//            data[i][1] = rawData[i].doubleValue();
-//        }
-//
-//        Collection<ChangepointAdapter.ChangePoint> resultChangepoints = changepointAdapter.collectChangePoints(data);
-//        Collection<ChangePointMarker> markers = new ArrayList<ChangePointMarker>();
-//
-//        for (ChangepointAdapter.ChangePoint point : resultChangepoints) {
-//            int index = point.getIndex();
-//            Date date = dates[index];
-//            ChangePointMarker marker = new ChangePointMarker(index,
-//                    point.getY(), date, point.getProbability());
-//            markers.add(marker);
-//        }
-//
-//        logger.info("adding '" + CHANGE_POINTS + "' to return values");
-//        arguments.addResult(CHANGE_POINTS, markers);
-    }
+        ChangepointAdapter changepointAdapter = new ChangepointAdapter();
+        Date[] dates = timeSequence.toDates();
+        Number[] rawData = timeSequence.toArray();
+        double[][] data = new double[rawData.length][2];
+        for (int i = 0; i < rawData.length; i++) {
+            data[i][0] = i;
+            data[i][1] = rawData[i].doubleValue();
+        }
 
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
+        Collection<ChangepointAdapter.ChangePoint> resultChangepoints = changepointAdapter.collectChangePoints(data);
+        Collection<ChangePointMarker> markers = new ArrayList<ChangePointMarker>();
+
+        for (ChangepointAdapter.ChangePoint point : resultChangepoints) {
+            int index = point.getIndex();
+            Date date = dates[index];
+            ChangePointMarker marker = new ChangePointMarker(index,
+                    point.getY(), date, point.getProbability());
+            markers.add(marker);
+        }
+
+        info("adding '" + CHANGE_POINTS + "' to return values");
+        setResultValueOf(CHANGE_POINTS, markers);
+    }
 
     /**
      * marker class to separate the periods

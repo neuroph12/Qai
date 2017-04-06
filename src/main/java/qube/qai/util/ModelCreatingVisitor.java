@@ -104,7 +104,7 @@ public class ModelCreatingVisitor implements NodeVisitor {
         } else if (MarketNetworkBuilder.NAME.equals(name)) {
             procedure = new MarketNetworkBuilder(selection);
         } else if (MatrixStatistics.NAME.equals(name)) {
-            procedure = new MatrixStatistics(selection);
+            procedure = new MatrixStatistics();
         } else if (NetworkStatistics.NAME.equals(name)) {
             procedure = new NetworkStatistics();
         } else if (NeuralNetworkAnalysis.NAME.equals(name)) {
@@ -112,7 +112,7 @@ public class ModelCreatingVisitor implements NodeVisitor {
         } else if (NeuralNetworkForwardPropagation.NAME.equals(name)) {
             procedure = new NeuralNetworkForwardPropagation(selection);
         } else if (SortingPercentilesProcedure.NAME.equals(name)) {
-            procedure = new SortingPercentilesProcedure(selection);
+            procedure = new SortingPercentilesProcedure();
         } else if (DirectoryIndexer.NAME.equals(name)) {
             procedure = new DirectoryIndexer(selection);
         } else if (WikiArchiveIndexer.NAME.equals(name)) {

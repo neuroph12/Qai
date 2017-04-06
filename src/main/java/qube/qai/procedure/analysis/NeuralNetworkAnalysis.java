@@ -14,10 +14,12 @@
 
 package qube.qai.procedure.analysis;
 
+import qube.qai.data.Metrics;
 import qube.qai.data.SelectionOperator;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ValueNode;
 
 import java.util.Collection;
 
@@ -40,65 +42,27 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
 
     @Override
     public void buildArguments() {
-        description = DESCRIPTION;
-//        arguments = new Arguments(INPUT_NEURAL_NETWORK);
-//        arguments.putResultNames(NETWORK_METRICS);
+        getProcedureDescription().setDescription(DESCRIPTION);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_NEURAL_NETWORK));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(NETWORK_METRICS));
     }
 
     @Override
     public void execute() {
 
-        if (getProcedureInputs() != null) {
-            ((Procedure) getFirstChild()).execute();
+        executeInputProcedures();
+
+        NeuralNetwork neuralNetwork = (NeuralNetwork) getInputValueOf(INPUT_NEURAL_NETWORK);
+        if (neuralNetwork == null) {
+            error("Input neural-network has not been initialized properly: null value");
+            return;
         }
 
-//        if (!arguments.isSatisfied()) {
-//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-//        }
-//
-//        NeuralNetwork neuralNetwork = (NeuralNetwork) arguments.getSelector(INPUT_NEURAL_NETWORK).getData();
-//        if (neuralNetwork == null) {
-//            logger.error("Input neural-network has not been initialized properly: null value");
-//            return;
-//        }
-//
-//        Metrics networkMetrics = neuralNetwork.buildMetrics();
-//        logger.info("adding '" + NETWORK_METRICS + "' and '" + MATRIX_METRICS + "' to return values");
-//        arguments.addResult(NETWORK_METRICS, networkMetrics);
+        Metrics metrics = neuralNetwork.buildMetrics();
+        info("adding '" + NETWORK_METRICS + "' to return values");
+        //info("adding '" + NETWORK_METRICS + "' and '" + MATRIX_METRICS + "' to return values");
+        setResultValueOf(NETWORK_METRICS, metrics);
 
     }
 
-    /**
-     * implement a static factory-class so that they can be constructed right
-     */
-//    public static ProcedureFactory Factory = new ProcedureFactory() {
-//
-//        public Procedure constructProcedure(SelectionProcedure selection) {
-//
-//            if (selection == null) {
-//                selection = new SelectionProcedure();
-//            }
-//            MatrixStatistics matrix = new MatrixStatistics(selection);
-//
-//            NetworkStatistics network = new NetworkStatistics();
-//            network.getProcedureInputs().addInput(matrix);
-//
-//            NeuralNetworkAnalysis neural = new NeuralNetworkAnalysis();
-//            neural.getProcedureInputs().addInput(network);
-//
-//
-//            return neural;
-//        }
-//    };
-
-    /**
-     * so that we can actually remind the guy that this is the id which it needs seek
-     *
-     * @return
-     */
-//    @Override
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

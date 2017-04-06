@@ -14,8 +14,12 @@
 
 package qube.qai.procedure.analysis;
 
+import qube.qai.data.Metrics;
+import qube.qai.data.TimeSequence;
+import qube.qai.data.analysis.Statistics;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ValueNode;
 
 /**
  * Created by rainbird on 11/28/15.
@@ -33,43 +37,32 @@ public class TimeSequenceAnalysis extends Procedure implements ProcedureConstant
      * result value variance etc.
      * top 10/bottom 10/average entities- prepare those results as charts
      */
-    public TimeSequenceAnalysis(Procedure procedure) {
-        super(NAME, procedure);
+    public TimeSequenceAnalysis() {
+        super(NAME);
     }
 
     @Override
     public void buildArguments() {
-        description = DESCRIPTION;
-//        arguments = new Arguments(INPUT_TIME_SEQUENCE);
-//        arguments.putResultNames(TIME_SEQUENCE_METRICS);
+        getProcedureDescription().setDescription(DESCRIPTION);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_TIME_SEQUENCE));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(TIME_SEQUENCE_METRICS));
     }
 
     @Override
     public void execute() {
 
-        if (getFirstChild() != null) {
-            ((Procedure) getFirstChild()).execute();
+        executeInputProcedures();
+
+        // first get the selector
+        TimeSequence timeSequence = (TimeSequence) getInputValueOf(INPUT_TIME_SEQUENCE);
+        if (timeSequence == null) {
+            error("Input time-series has not been initialized properly: null value");
         }
 
-//        if (!arguments.isSatisfied()) {
-//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-//        }
-//
-//        // first get the selector
-//        TimeSequence timeSequence = (TimeSequence) arguments.getSelector(INPUT_TIME_SEQUENCE).getData();
-//        if (timeSequence == null) {
-//            logger.error("Input time-series has not been initialized properly: null value");
-//        }
-//
-//        Number[] data = timeSequence.toArray();
-//        Statistics stats = new Statistics(data);
-//        Metrics metrics = stats.buildMetrics();
-//        logger.info("adding '" + TIME_SEQUENCE_METRICS + "' to return values");
-//        arguments.addResult(TIME_SEQUENCE_METRICS, metrics);
+        Number[] data = timeSequence.toArray();
+        Statistics stats = new Statistics(data);
+        Metrics metrics = stats.buildMetrics();
+        info("adding '" + TIME_SEQUENCE_METRICS + "' to return values");
+        setResultValueOf(TIME_SEQUENCE_METRICS, metrics);
     }
-
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

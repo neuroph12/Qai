@@ -21,7 +21,6 @@ import qube.qai.data.TimeSequence;
 import qube.qai.main.QaiTestBase;
 import qube.qai.matrix.Matrix;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
-import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureDescription;
 import qube.qai.procedure.ValueNode;
@@ -61,12 +60,7 @@ public class TestAnalysisProcedures extends QaiTestBase {
 
         statistics.execute();
 
-        Collection<String> resultNames = statistics.getProcedureDescription().getProcedureResults().getResultNames();
-        for (String result : resultNames) {
-            BaseNode node = statistics.getProcedureDescription().getProcedureResults().getNamedResult(result);
-            assertNotNull("there has to be a node with name: " + result, node);
-            log("result name: " + result + " " + node.toString());
-        }
+        checkProcedureResults(statistics.getProcedureDescription());
     }
 
     /**
@@ -76,60 +70,37 @@ public class TestAnalysisProcedures extends QaiTestBase {
      */
     public void testMatrixStatistics() throws Exception {
 
-        MatrixStatistics statistics = new MatrixStatistics();
+        MatrixStatistics procedure = new MatrixStatistics();
 
-        // this methd is called already during initialization (constructor) of the base class- procedure.
-        //statistics.buildArguments();
-        ProcedureDescription description = statistics.getProcedureDescription();
+        ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("arguments may not be null", description);
         log("description as text: " + description.getDescription());
 
         BaseNode matrixIn = description.getProcedureInputs().getNamedInput(ProcedureConstants.INPUT_MATRIX);
         assertNotNull("there has to be an input matrix", matrixIn);
 
-        Collection<String> names = description.getProcedureInputs().getInputNames();
-        for (String name : names) {
-            BaseNode node = description.getProcedureInputs().getNamedInput(name);
-            assertNotNull("there has to be a node", node);
-            log("input named: " + name + " and corresponding node: " + node.toString());
-        }
+        checkProcedureInputs(description);
 
         Matrix matrix = Matrix.createMatrix(true, 100, 100);
         description.getProcedureInputs().getNamedInput(ProcedureConstants.INPUT_MATRIX).setFirstChild(new ValueNode("", matrix));
-        statistics.execute();
+        procedure.execute();
 
-        Collection<String> resultNames = description.getProcedureResults().getResultNames();
-        for (String name : resultNames) {
-            BaseNode node = description.getProcedureResults().getNamedResult(name);
-            assertNotNull("there has to be a node with name: " + name, node);
-            log("result name: " + name + " " + node.toString());
-        }
+        checkProcedureResults(description);
     }
 
-    public void estChangePointAnalysis() throws Exception {
 
-//        ChangePointAnalysis statistics = (ChangePointAnalysis) procedureSource.getProcedureWithName(ChangePointAnalysis.NAME);
-//
-//        Arguments arguments = statistics.getArguments();
-//        assertNotNull("arguments may not be null", arguments);
-//
-//        assertTrue("input matrix is one of the arguments", arguments.getArgumentNames().contains(ChangePointAnalysis.INPUT_TIME_SEQUENCE));
-//
-//        checkResultsOf(statistics);
-//
-//        assertTrue("there has to be some results", !statistics.getArguments().getResultNames().isEmpty());
-//        log("results:" + statistics.getArguments().getResultNames());
-//        for (String name : statistics.getArguments().getResultNames()) {
-//            Object result = statistics.getArguments().getResult(name);
-//
-//            if (result instanceof Collection) {
-//                Collection<ChangePointAnalysis.ChangePointMarker> changePoints = (Collection<ChangePointAnalysis.ChangePointMarker>) result;
-//                log("the resulting collection isEmpty(): " + changePoints.isEmpty());
-//                for (ChangePointAnalysis.ChangePointMarker marker : changePoints) {
-//                    log("Change point at: " + marker.getDate() + " with " + marker.getProbability());
-//                }
-//            }
-//        }
+    public void testChangePointAnalysis() throws Exception {
+
+        ChangePointAnalysis procedure = new ChangePointAnalysis();
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be a description", description);
+        log("description as text: " + description.getDescription());
+
+        checkProcedureInputs(description);
+
+        checkProcedureResults(description);
+
     }
 
     /**
@@ -137,25 +108,17 @@ public class TestAnalysisProcedures extends QaiTestBase {
      *
      * @throws Exception
      */
-    public void estTimeSeriesAnalysis() throws Exception {
+    public void testTimeSeriesAnalysis() throws Exception {
 
-//        TimeSequenceAnalysis statistics = (TimeSequenceAnalysis) procedureSource.getProcedureWithName(TimeSequenceAnalysis.NAME);
-//
-//        Arguments arguments = statistics.getArguments();
-//        assertNotNull("arguments may not be null", arguments);
-//
-//        checkResultsOf(statistics);
-//
-//        log("results:" + statistics.getArguments().getResultNames());
-//        for (String name : statistics.getArguments().getResultNames()) {
-//            Object result = statistics.getArguments().getResult(name);
-//            if (result instanceof Metrics) {
-//                log("found metrics: " + name);
-//                log((Metrics) result);
-//            } else {
-//                log("result: " + result + " value: " + result);
-//            }
-//        }
+        TimeSequenceAnalysis procedure = new TimeSequenceAnalysis();
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be a description", description);
+        log("description as text: " + description.getDescription());
+
+        checkProcedureInputs(description);
+
+        checkProcedureResults(description);
     }
 
     /**
@@ -163,50 +126,33 @@ public class TestAnalysisProcedures extends QaiTestBase {
      *
      * @throws Exception
      */
-    public void estNetworkStatistics() throws Exception {
+    public void testNetworkStatistics() throws Exception {
 
-//        NetworkStatistics statistics = (NetworkStatistics) procedureSource.getProcedureWithName(NetworkStatistics.NAME);
-//
-//        Arguments arguments = statistics.getArguments();
-//        assertNotNull("arguments may not be null", arguments);
-//
-//        checkResultsOf(statistics);
-//
-//        log("results:" + statistics.getArguments().getResultNames());
-//        for (String name : statistics.getArguments().getResultNames()) {
-//            Object result = statistics.getArguments().getResult(name);
-//            if (result instanceof Metrics) {
-//                log("found metrics: " + name);
-//                log((Metrics) result);
-//            } else {
-//                log("result: " + result + " value: " + result);
-//            }
-//        }
+        NetworkStatistics procedure = new NetworkStatistics();
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be a description", description);
+        log("description as text: " + description.getDescription());
+
+        checkProcedureInputs(description);
+
+        checkProcedureResults(description);
     }
 
     /**
      * do the testing for neural-network analysis
      */
-    public void estNeuralNetworkAnalysis() throws Exception {
+    public void testNeuralNetworkAnalysis() throws Exception {
 
-//        NeuralNetworkAnalysis statistics = (NeuralNetworkAnalysis) procedureSource.getProcedureWithName(NeuralNetworkAnalysis.NAME);
-//
-//        Arguments arguments = statistics.getArguments();
-//        assertNotNull("arguments may not be null", arguments);
-//
-//        checkResultsOf(statistics);
-//
-//        assertTrue("there has to be some results", !statistics.getArguments().getResultNames().isEmpty());
-//        log("results:" + statistics.getArguments().getResultNames());
-//        for (String name : statistics.getArguments().getResultNames()) {
-//            Object result = statistics.getArguments().getResult(name);
-//            if (result instanceof Metrics) {
-//                log("found metrics: " + name);
-//                log((Metrics) result);
-//            } else {
-//                log("result: " + result + " value: " + result);
-//            }
-//        }
+        NeuralNetworkAnalysis procedure = new NeuralNetworkAnalysis();
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be a description", description);
+        log("description as text: " + description.getDescription());
+
+        checkProcedureInputs(description);
+
+        checkProcedureResults(description);
     }
 
     /**
@@ -214,9 +160,17 @@ public class TestAnalysisProcedures extends QaiTestBase {
      *
      * @throws Exception
      */
-    public void estNeuralNetworkForwardPropagation() throws Exception {
+    public void testNeuralNetworkForwardPropagation() throws Exception {
 
-//        NeuralNetworkForwardPropagation statistics = (NeuralNetworkForwardPropagation) procedureSource.getProcedureWithName(NeuralNetworkForwardPropagation.NAME);
+        NeuralNetworkForwardPropagation procedure = new NeuralNetworkForwardPropagation();
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be a description", description);
+        log("description as text: " + description.getDescription());
+
+        checkProcedureInputs(description);
+
+        checkProcedureResults(description);
 //
 //        Arguments arguments = statistics.getArguments();
 //        assertNotNull("arguments may not be null", arguments);
@@ -247,31 +201,17 @@ public class TestAnalysisProcedures extends QaiTestBase {
      *
      * @throws Exception
      */
-    public void estSortingPercentilesProcedure() throws Exception {
+    public void testSortingPercentilesProcedure() throws Exception {
 
-//        SortingPercentilesProcedure statistics = (SortingPercentilesProcedure) procedureSource.getProcedureWithName(SortingPercentilesProcedure.NAME);
-//
-//        Arguments arguments = statistics.getArguments();
-//        assertNotNull("arguments may not be null", arguments);
-//
-//        checkResultsOf(statistics);
-//
-//        assertTrue("there has to be some results", !statistics.getArguments().getResultNames().isEmpty());
-//        log("results:" + statistics.getArguments().getResultNames());
-//        for (String name : statistics.getArguments().getResultNames()) {
-//            Object result = statistics.getArguments().getResult(name);
-//            int rank = 1;
-//            if (result instanceof Map) {
-//                Map<String, Statistics> statisticsMap = (Map<String, Statistics>) result;
-//                for (String key : statisticsMap.keySet()) {
-//                    Statistics stats = statisticsMap.get(key);
-//                    log("stats: " + key + " average: " + stats.getAverage() + " with rank: " + rank);
-//                    rank++;
-//                }
-//            } else if (result instanceof TimeSequence) {
-//                log("The average time series: " + ((TimeSequence) result).toArray());
-//            }
-//        }
+        SortingPercentilesProcedure procedure = new SortingPercentilesProcedure();
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be a description", description);
+        log("description as text: " + description.getDescription());
+
+        checkProcedureInputs(description);
+
+        checkProcedureResults(description);
     }
 
     /**
@@ -292,29 +232,6 @@ public class TestAnalysisProcedures extends QaiTestBase {
         return buffer.toString();
     }
 
-    /**
-     * run the given procedure and check that every
-     * result parameter mentioned in the procedure
-     * is actually to be found in the arguments
-     *
-     * @param statistics
-     */
-    private void checkResultsOf(Procedure statistics) {
-
-//        long start = System.currentTimeMillis();
-//
-//        statistics.run();
-//        long duration = System.currentTimeMillis() - start;
-//
-//        log("Process: " + statistics.getName() + " took " + duration + "ms");
-//
-//        assertTrue("there has to be result names", !statistics.getArguments().getResultNames().isEmpty());
-//        // assert also that the given results can actually be accessed
-//        for (String resultName : statistics.getArguments().getResultNames()) {
-//            assertTrue("result: '" + resultName + "' missing", statistics.getArguments().getResult(resultName) != null);
-//        }
-    }
-
     private void log(Metrics metrics) {
         if (debug) {
             for (String name : metrics.getNames()) {
@@ -324,4 +241,23 @@ public class TestAnalysisProcedures extends QaiTestBase {
         }
     }
 
+    private void checkProcedureInputs(ProcedureDescription description) {
+        Collection<String> names = description.getProcedureInputs().getInputNames();
+        assertTrue("there has to be input names", !names.isEmpty());
+        for (String name : names) {
+            BaseNode node = description.getProcedureInputs().getNamedInput(name);
+            assertNotNull("there has to be a node", node);
+            log("input named: " + name + " and corresponding node: " + node.toString());
+        }
+    }
+
+    private void checkProcedureResults(ProcedureDescription description) {
+        Collection<String> names = description.getProcedureResults().getResultNames();
+        assertTrue("there has to be result names", !names.isEmpty());
+        for (String name : names) {
+            BaseNode node = description.getProcedureResults().getNamedResult(name);
+            assertNotNull("there has to be a node with name: " + name, node);
+            log("result name: " + name + " " + node.toString());
+        }
+    }
 }

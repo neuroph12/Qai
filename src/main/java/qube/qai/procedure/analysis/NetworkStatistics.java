@@ -18,6 +18,7 @@ import qube.qai.data.Metrics;
 import qube.qai.network.Network;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ValueNode;
 
 /**
  * Created by rainbird on 11/29/15.
@@ -38,24 +39,17 @@ public class NetworkStatistics extends Procedure implements ProcedureConstants {
 
     @Override
     public void buildArguments() {
-        description = DESCRIPTION;
-//        arguments = new Arguments(INPUT_NETWORK);
-//        arguments.putResultNames(NETWORK_METRICS);
+        getProcedureDescription().setDescription(DESCRIPTION);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_NETWORK));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(NETWORK_METRICS));
     }
 
     @Override
     public void execute() {
 
-        if (getFirstChild() != null) {
-            ((Procedure) getFirstChild()).execute();
-        }
+        executeInputProcedures();
 
-//        if (!arguments.isSatisfied()) {
-//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-//        }
-//
-//        Network network = (Network) arguments.getSelector(INPUT_NETWORK).getData();
-        Network network = null;
+        Network network = (Network) getInputValueOf(INPUT_NETWORK);
         if (network == null) {
             error("Input network has not been initialized properly: null value");
             return;
@@ -63,11 +57,6 @@ public class NetworkStatistics extends Procedure implements ProcedureConstants {
 
         Metrics metrics = network.buildMetrics();
         info("adding " + NETWORK_METRICS + " to return values");
-        //arguments.addResult(NETWORK_METRICS, metrics);
+        setResultValueOf(NETWORK_METRICS, metrics);
     }
-
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

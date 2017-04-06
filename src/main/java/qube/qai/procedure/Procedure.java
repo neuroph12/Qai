@@ -50,7 +50,7 @@ public abstract class Procedure extends Node
 
     protected User user;
 
-    protected String description;
+    //protected String description;
 
     protected long duration;
 
@@ -65,13 +65,13 @@ public abstract class Procedure extends Node
         if (uuid == null || uuid.length() == 0) {
             this.uuid = UUIDService.uuidString();
         }
-        setFirstChild(new ProcedureDescription(description));
+        setFirstChild(new ProcedureDescription());
         buildArguments();
     }
 
     public Procedure(String name) {
         super(new Name(name));
-        setFirstChild(new ProcedureDescription(description));
+        setFirstChild(new ProcedureDescription());
         buildArguments();
     }
 
@@ -101,7 +101,10 @@ public abstract class Procedure extends Node
             ValueNode node = getProcedureInputs().getNamedInput(name);
             BaseNode child = node.getFirstChild();
             if (child != null && child instanceof Procedure) {
-                ((Procedure) child).execute();
+                Procedure procedure = (Procedure) child;
+                if (!procedure.hasExecuted()) {
+                    procedure.execute();
+                }
             }
         }
     }
@@ -135,7 +138,7 @@ public abstract class Procedure extends Node
      * be, and those have to be available in arguments-field
      * when the procedure is about to be called
      */
-    public abstract void buildArguments();
+    protected abstract void buildArguments();
 
     protected SelectionOperator createSelector(Object data) {
         return selectorFactory.buildSelector(NAME, uuid, data);
@@ -222,14 +225,6 @@ public abstract class Procedure extends Node
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public double getProgressPercentage() {

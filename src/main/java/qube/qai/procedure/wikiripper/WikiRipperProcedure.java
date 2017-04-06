@@ -60,7 +60,7 @@ public class WikiRipperProcedure extends Procedure {
 
     @Override
     public void buildArguments() {
-        description = DESCRIPTION;
+        getProcedureDescription().setDescription(DESCRIPTION);
 //        arguments = new Arguments(INPUT_FILENAME, INPUT_TARGET_FILENAME, INPUT_IS_WIKTIONARY);
     }
 
