@@ -14,29 +14,25 @@
 
 package qube.qai.procedure.analysis;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import qube.qai.data.Metrics;
 import qube.qai.data.TimeSequence;
-import qube.qai.main.QaiTestBase;
 import qube.qai.matrix.Matrix;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureDescription;
+import qube.qai.procedure.TestProcedureBase;
 import qube.qai.procedure.ValueNode;
 import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.services.ProcedureSourceInterface;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
  * Created by rainbird on 11/30/15.
  */
-public class TestAnalysisProcedures extends QaiTestBase {
+public class TestAnalysisProcedures extends TestProcedureBase {
 
-    Logger logger = LoggerFactory.getLogger("TestAnalysisProcedures");
+    //Logger logger = LoggerFactory.getLogger("TestAnalysisProcedures");
 
     @Inject
     private ProcedureSourceInterface procedureSource;
@@ -232,32 +228,4 @@ public class TestAnalysisProcedures extends QaiTestBase {
         return buffer.toString();
     }
 
-    private void log(Metrics metrics) {
-        if (debug) {
-            for (String name : metrics.getNames()) {
-                String line = name + ": " + metrics.getValue(name);
-                System.out.println(line);
-            }
-        }
-    }
-
-    private void checkProcedureInputs(ProcedureDescription description) {
-        Collection<String> names = description.getProcedureInputs().getInputNames();
-        assertTrue("there has to be input names", !names.isEmpty());
-        for (String name : names) {
-            BaseNode node = description.getProcedureInputs().getNamedInput(name);
-            assertNotNull("there has to be a node", node);
-            log("input named: " + name + " and corresponding node: " + node.toString());
-        }
-    }
-
-    private void checkProcedureResults(ProcedureDescription description) {
-        Collection<String> names = description.getProcedureResults().getResultNames();
-        assertTrue("there has to be result names", !names.isEmpty());
-        for (String name : names) {
-            BaseNode node = description.getProcedureResults().getNamedResult(name);
-            assertNotNull("there has to be a node with name: " + name, node);
-            log("result name: " + name + " " + node.toString());
-        }
-    }
 }

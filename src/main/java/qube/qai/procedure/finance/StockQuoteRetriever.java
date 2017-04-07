@@ -20,6 +20,7 @@ import org.ojalgo.type.CalendarDateUnit;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ValueNode;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,10 +49,6 @@ public class StockQuoteRetriever extends Procedure {
 
     private String tickerSymbol;
 
-//    @Inject
-//    @Named("STOCKS")
-//    private SearchServiceInterface stockSearchService;
-
     @Inject
     @Named("STOCKS")
     private EntityManager entityManager;
@@ -62,6 +59,11 @@ public class StockQuoteRetriever extends Procedure {
 
     @Override
     public void execute() {
+
+        executeInputProcedures();
+
+        // first get the selector
+        tickerSymbol = (String) getInputValueOf(INPUT_TIME_SEQUENCE);
 
         if (StringUtils.isEmpty(tickerSymbol)) {
             throw new RuntimeException("There has to be a ticker-symbol to update");
@@ -87,12 +89,7 @@ public class StockQuoteRetriever extends Procedure {
 
         entityManager.persist(entity);
 
-        // i really don't get why this is not working
-        //entityManager.flush();
-        //entityManager.getTransaction().commit();
-
-//        arguments.addResult(NUMBER_OF_INSERTS, numberOfInserts);
-
+        setResultValueOf(NUMBER_OF_INSERTS, numberOfInserts);
     }
 
     private StockEntity retrieveEntityForTickerSymbol(String tickerSymbol) {
@@ -133,8 +130,8 @@ public class StockQuoteRetriever extends Procedure {
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-//        arguments = new Arguments(TICKER_SYMBOL);
-//        arguments.putResultNames(NUMBER_OF_INSERTS);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(TICKER_SYMBOL));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(NUMBER_OF_INSERTS));
     }
 
     public static long getNumberOfInserts() {
@@ -153,14 +150,6 @@ public class StockQuoteRetriever extends Procedure {
         this.tickerSymbol = tickerSymbol;
     }
 
-//    public SearchServiceInterface getStockSearchService() {
-//        return stockSearchService;
-//    }
-//
-//    public void setStockSearchService(SearchServiceInterface stockSearchService) {
-//        this.stockSearchService = stockSearchService;
-//    }
-
     public EntityManager getEntityManager() {
         return entityManager;
     }
@@ -168,9 +157,4 @@ public class StockQuoteRetriever extends Procedure {
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

@@ -26,6 +26,7 @@ import org.apache.lucene.util.Version;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ValueNode;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +45,7 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
 
 
     public static String NAME = "WikiArchiveIndexer";
-//    public static String DESCRIPTION = "Indexes the wiki articles which are in the given archive file to the target index directory";
+    public static String DESCRIPTION = "Indexes the wiki articles which are in the given archive file to the target index directory";
 //    public static String FIELD_FILE = "file";
 //    public static String FIELD_TITLE = "title";
 //    public static String FIELD_CONTENT = "content";
@@ -53,8 +54,8 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
 //    public static String FIELD_DATE = "date";
 //    public static String FIELD_ORGANIZATION = "organization";
 //
-//    public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
-//    public static String INPUT_INDEX_DIRECTORY = "INDEX_DIRECTORY";
+public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
+    public static String INPUT_INDEX_DIRECTORY = "INDEX_DIRECTORY";
 
     //public String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
     //public String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
@@ -85,17 +86,14 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
     @Override
     public void execute() {
 
-        if (getFirstChild() != null) {
-            ((Procedure) getFirstChild()).execute();
-        }
+        executeInputProcedures();
 
-//        if (!arguments.isSatisfied()) {
-//            arguments = arguments.mergeArguments(((Procedure) getFirstChild()).getArguments());
-//        }
-//
-//        indexDirectory = (String) arguments.getSelector(INPUT_INDEX_DIRECTORY).getData();
-//        targetFilename = (String) arguments.getSelector(INPUT_TARGET_FILENAME).getData();
+        indexDirectory = (String) getInputValueOf(INPUT_INDEX_DIRECTORY);
+        targetFilename = (String) getInputValueOf(INPUT_TARGET_FILENAME);
+
         indexZipFileEntries();
+
+        setResultValueOf(INPUT_INDEX_DIRECTORY, indexDirectory);
     }
 
     public void indexZipFileEntries() {
@@ -183,9 +181,10 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
 
     @Override
     public void buildArguments() {
-        //description = DESCRIPTION;
-        // arguments = new Arguments(INPUT_TARGET_FILENAME, INPUT_INDEX_DIRECTORY);
-        // arguments.putResultNames(); // no need to return a name for the indexed directory?
+        getProcedureDescription().setDescription(DESCRIPTION);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_TARGET_FILENAME));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_INDEX_DIRECTORY));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(INPUT_INDEX_DIRECTORY));
     }
 
     public String getIndexDirectory() {
@@ -240,8 +239,4 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
         this.analyseOrganization = analyseOrganization;
     }
 
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

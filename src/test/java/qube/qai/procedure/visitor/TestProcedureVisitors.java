@@ -43,14 +43,7 @@ public class TestProcedureVisitors extends TestCase {
 
         SimpleProcedureVisitor visitor = new SimpleProcedureVisitor();
         Object result = neural.accept(visitor, null);
-        //assertNotNull("there has to be a result", result);
         logger.info(visitor.toString());
     }
-
-//    private void log(String message) {
-//        if (debug) {
-//            System.out.println(message);
-//        }
-//    }
 
 }

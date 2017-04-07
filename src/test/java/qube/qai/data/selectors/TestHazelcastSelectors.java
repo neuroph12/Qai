@@ -38,7 +38,7 @@ import java.util.List;
  */
 public class TestHazelcastSelectors extends QaiTestBase {
 
-    @Inject //@Named("HAZELCAST_CLIENT")
+    @Inject
     private HazelcastInstance hazelcastInstance;
 
     @Inject

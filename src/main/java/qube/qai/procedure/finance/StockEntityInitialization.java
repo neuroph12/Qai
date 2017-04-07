@@ -20,6 +20,8 @@ import org.apache.jena.riot.RDFDataMgr;
 import qube.qai.persistence.StockCategory;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ValueNode;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -27,7 +29,7 @@ import javax.persistence.EntityManager;
 /**
  * Created by rainbird on 1/21/17.
  */
-public class StockEntityInitialization extends Procedure {
+public class StockEntityInitialization extends Procedure implements ProcedureConstants {
 
     public static String NAME = "Stock Entity Initialization Procedure";
 
@@ -75,19 +77,27 @@ public class StockEntityInitialization extends Procedure {
     }
 
     @Override
+    public void buildArguments() {
+        getProcedureDescription().setDescription(DESCRIPTION);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_FILENAME));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(CATEGORY_NAME));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(NUMBER_OF_RECORDS));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(NUMBER_OF_RECORDS_CREATED));
+    }
+
+    @Override
     public void execute() {
+
+        executeInputProcedures();
+
+        pathToCsvFiles = (String) getInputValueOf(INPUT_FILENAME);
 
         createCheckAndInsertStockEntitesFromFile();
 
         // after all is done and said, these are the results we are expected to record
-//        logger.debug("adding '" + CATEGORY_NAME + "' to results");
-//        arguments.addResult(CATEGORY_NAME, categoryName);
-//        logger.debug("adding '" + NUMBER_OF_RECORDS + "' to results");
-//        arguments.addResult(NUMBER_OF_RECORDS, numberOfRecords);
-//        logger.debug("adding '" + NUMBER_OF_RECORDS_CREATED + "' to results");
-//        arguments.addResult(NUMBER_OF_RECORDS_CREATED, numberOfRecordsCreated);
-//        logger.debug("adding '" + CATEGORY + "' to results");
-//        arguments.addResult(CATEGORY, category);
+        setResultValueOf(CATEGORY_NAME, categoryName);
+        setResultValueOf(NUMBER_OF_RECORDS_CREATED, numberOfRecordsCreated);
+        setResultValueOf(CATEGORY, category);
     }
 
     public void createCheckAndInsertStockEntitesFromFile() {
@@ -220,12 +230,6 @@ public class StockEntityInitialization extends Procedure {
         return entity;
     }
 
-    @Override
-    public void buildArguments() {
-        getProcedureDescription().setDescription(DESCRIPTION);
-//        arguments = new Arguments(INPUT_FILENAME);
-//        arguments.putResultNames(CATEGORY_NAME, NUMBER_OF_RECORDS, NUMBER_OF_RECORDS_CREATED);
-    }
 
     public String getCompleteNameSpace() {
         return namespace + selectedFile;

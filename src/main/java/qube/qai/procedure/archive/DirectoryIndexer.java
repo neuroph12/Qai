@@ -27,6 +27,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ValueNode;
 import qube.qai.procedure.utils.SimpleProcedure;
 
 import java.io.File;
@@ -62,10 +63,6 @@ public class DirectoryIndexer extends Procedure implements ProcedureConstants {
 
     public DirectoryIndexer() {
         super(NAME);
-    }
-
-    public DirectoryIndexer(Procedure procedure) {
-        super(NAME, procedure);
     }
 
     public DirectoryIndexer(String directoryToIndex, String indexDirectory) {
@@ -139,8 +136,8 @@ public class DirectoryIndexer extends Procedure implements ProcedureConstants {
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-//        arguments = new Arguments(DIRECTORY_TO_INDEX);
-//        arguments.putResultNames(INDEX_DIRECTORY);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(DIRECTORY_TO_INDEX));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(INDEX_DIRECTORY));
     }
 
     public String getDirectoryToIndex() {
@@ -159,8 +156,4 @@ public class DirectoryIndexer extends Procedure implements ProcedureConstants {
         this.indexDirectory = indexDirectory;
     }
 
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

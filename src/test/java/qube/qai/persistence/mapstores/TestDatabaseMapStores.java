@@ -206,7 +206,7 @@ public class TestDatabaseMapStores extends TestCase {
         return keys;
     }
 
-    private Collection<StockQuote> generateQuotes(String tickerSymbol, int number) {
+    public static Collection<StockQuote> generateQuotes(String tickerSymbol, int number) {
         Random random = new Random();
         Collection<StockQuote> quotes = new ArrayList<>();
         double startValue = random.nextInt(1000) * random.nextDouble();

@@ -35,17 +35,16 @@ import qube.qai.parsers.antimirov.nodes.TestNodeVisitors;
 import qube.qai.parsers.maths.TestMathParser;
 import qube.qai.persistence.TestModelStore;
 import qube.qai.persistence.TestRdfSerialization;
-import qube.qai.persistence.mapstores.TestDatabaseMapStores;
-import qube.qai.persistence.mapstores.TestHazelcastMaps;
-import qube.qai.persistence.mapstores.TestIndexedDirectoryMapStore;
-import qube.qai.persistence.mapstores.TestMapStores;
+import qube.qai.persistence.mapstores.*;
 import qube.qai.persistence.search.TestProcedureDataService;
 import qube.qai.procedure.TestProcedureInputsAndResults;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
+import qube.qai.procedure.archive.TestArchiveProcedures;
 import qube.qai.procedure.archive.TestDirectoryIndexer;
 import qube.qai.procedure.archive.TestSparqlIndexer;
 import qube.qai.procedure.archive.TestWikiArchiveIndexer;
+import qube.qai.procedure.finance.TestFinanceProcedures;
 import qube.qai.procedure.finance.TestStockEntityInitialization;
 import qube.qai.procedure.finance.TestStockQuoteRetriever;
 import qube.qai.procedure.utils.TestRelateProcedure;
@@ -111,6 +110,7 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestHazelcastMaps.class);
         suite.addTestSuite(TestIndexedDirectoryMapStore.class);
         suite.addTestSuite(TestDatabaseMapStores.class);
+        suite.addTestSuite(TestModelMapStores.class);
         suite.addTestSuite(TestModelStore.class);
 
         // persistence.search
@@ -128,10 +128,12 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestMarketNetworkBuilder.class);
 
         // procedure.archive
+        suite.addTestSuite(TestArchiveProcedures.class);
         suite.addTestSuite(TestDirectoryIndexer.class);
         suite.addTestSuite(TestSparqlIndexer.class);
 
         // procedure.finance
+        suite.addTestSuite(TestFinanceProcedures.class);
         suite.addTestSuite(TestStockEntityInitialization.class);
         suite.addTestSuite(TestStockQuoteRetriever.class);
 
