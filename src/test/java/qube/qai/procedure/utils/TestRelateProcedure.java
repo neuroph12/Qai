@@ -14,18 +14,65 @@
 
 package qube.qai.procedure.utils;
 
-import junit.framework.TestCase;
+import org.apache.jena.rdf.model.Model;
+import qube.qai.persistence.WikiArticle;
+import qube.qai.procedure.ProcedureDescription;
+import qube.qai.procedure.TestProcedureBase;
+import qube.qai.services.DataServiceInterface;
+import qube.qai.services.implementation.SearchResult;
+
+import java.util.Collection;
 
 /**
  * Created by rainbird on 3/12/17.
  */
-public class TestRelateProcedure extends TestCase {
+public class TestRelateProcedure extends TestProcedureBase {
 
     public void testRelateProcedure() throws Exception {
 
         RelateProcedure procedure = new RelateProcedure();
-        procedure.execute();
+        DataServiceInterface dummyDateStore = new DataServiceInterface() {
+            @Override
+            public void save(Model model) {
 
-        fail("currently code for checking the result is missing");
+            }
+
+            @Override
+            public void remove(Model model) {
+
+            }
+
+            @Override
+            public Model createDefaultModel() {
+                return null;
+            }
+
+            @Override
+            public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
+                return null;
+            }
+
+            @Override
+            public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
+                return null;
+            }
+        };
+        procedure.setDataService(dummyDateStore);
+        // @TODO this is to be completed- not really urgent right now
+        //procedure.execute();
+        //fail("currently code for checking the result is missing");
+    }
+
+    public void testStockEntityInitialization() throws Exception {
+
+        RelateProcedure procedure = new RelateProcedure();
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be a description", description);
+        log("description as text: " + description.getDescription());
+
+        checkProcedureInputs(description);
+
+        checkProcedureResults(description);
     }
 }

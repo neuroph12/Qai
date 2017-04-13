@@ -96,7 +96,7 @@ public class TestHazelcastMaps extends QaiTestBase {
             Collection<SearchResult> results = wikipediaSearch.searchInputString(name, "title", 100);
             SearchResult result = results.iterator().next();
             WikiArticle wikiArticle = wikiArticles.get(result.getUuid());
-            assertNotNull("there has to be an article", wikiArticle);
+            assertNotNull("there has to be an article for " + name, wikiArticle);
         }
     }
 

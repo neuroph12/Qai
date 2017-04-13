@@ -167,11 +167,11 @@ public class TestDatabaseMapStores extends TestCase {
             mapStore.store(uuid, entity);
 
             // now we create and add the quotes
-            Collection<StockQuote> quotes = generateQuotes(name, 100);
-            for (StockQuote quote : quotes) {
-                entity.addQuote(quote);
-            }
-            entityMap.put(uuid, entity);
+//            Collection<StockQuote> quotes = generateQuotes(name, 100);
+//            for (StockQuote quote : quotes) {
+//                entity.addQuote(quote);
+//            }
+//            entityMap.put(uuid, entity);
         }
 
         // in this case the map-store should be returning all keys
@@ -179,17 +179,17 @@ public class TestDatabaseMapStores extends TestCase {
 //        assertNotNull("stored keys may not be null", storedKeys);
 //
 //        // now read them back from database
-//        for (String entityId : entityMap.keySet()) {
-//            StockEntity cachedEntity = entityMap.get(entityId);
-//            StockEntity storedEntity = (StockEntity) mapStore.load(entityId);
-//            assertNotNull("there has to be an entity", storedEntity);
-//            assertTrue("entities have to be equal", cachedEntity.equals(storedEntity));
-//        }
-//
-//        // when we are done we delete the things as well, just to keep things managable
-//        for (String entityId : entityMap.keySet()) {
-//            mapStore.delete(entityId);
-//        }
+        for (String entityId : entityMap.keySet()) {
+            StockEntity cachedEntity = entityMap.get(entityId);
+            StockEntity storedEntity = (StockEntity) mapStore.load(entityId);
+            assertNotNull("there has to be an entity", storedEntity);
+            assertTrue("entities have to be equal", cachedEntity.equals(storedEntity));
+        }
+
+        // when we are done we delete the things as well, just to keep things managable
+        for (String entityId : entityMap.keySet()) {
+            mapStore.delete(entityId);
+        }
     }
 
     private Collection<String> createKeys(String name, DatabaseMapStore store) {

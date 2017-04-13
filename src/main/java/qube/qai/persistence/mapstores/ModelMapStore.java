@@ -18,6 +18,7 @@ import com.hazelcast.core.MapStore;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import thewebsemantic.Bean2RDF;
+import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
 import java.util.Collection;
@@ -71,7 +72,11 @@ public class ModelMapStore implements MapStore {
 
     @Override
     public Object load(Object key) {
-        return reader.load(baseClass, key);
+        try {
+            return reader.load(baseClass, key);
+        } catch (NotFoundException e) {
+            return null;
+        }
     }
 
     @Override

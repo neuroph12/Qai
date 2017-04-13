@@ -20,6 +20,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import qube.qai.data.SelectionOperator;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ValueNode;
 import qube.qai.services.DataServiceInterface;
 
 import javax.inject.Inject;
@@ -34,9 +35,11 @@ public class RelateProcedure extends Procedure {
 
     public static String DESCRIPTION = "Attaches two resources to each other so that their relation can be persisted ";
 
-    public static String RELATE_TO = "relateTo";
+    public static String INPUT_RELATE_TO = "relateTo";
 
-    public static String RELATED_RESOURCE = "relatedResource";
+    public static String INPUT_RELATED_RESOURCE = "relatedResource";
+
+    public static String RELATION = "relation";
 
     private SelectionOperator relateTo;
 
@@ -66,7 +69,7 @@ public class RelateProcedure extends Procedure {
 
         Statement statement = createStatement();
         dataService.save(statement.getModel());
-
+        setResultValueOf(RELATION, statement);
     }
 
     private Statement createStatement() {
@@ -87,6 +90,10 @@ public class RelateProcedure extends Procedure {
     @Override
     public void buildArguments() {
 //        arguments = new Arguments();
+        getProcedureDescription().setDescription(DESCRIPTION);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_RELATE_TO));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(INPUT_RELATED_RESOURCE));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(RELATION));
     }
 
     public SelectionOperator getRelateTo() {
@@ -105,8 +112,11 @@ public class RelateProcedure extends Procedure {
         this.relatedResource = relatedResource;
     }
 
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
+    public DataServiceInterface getDataService() {
+        return dataService;
+    }
+
+    public void setDataService(DataServiceInterface dataService) {
+        this.dataService = dataService;
+    }
 }
