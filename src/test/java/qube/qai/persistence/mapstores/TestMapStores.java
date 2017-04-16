@@ -63,13 +63,16 @@ public class TestMapStores extends QaiTestBase {
     }
 
     /**
+     *
      * in this case we will be storing away the procedures on
      * file-system... in xml-format, with x-stream, so that there are
      * no hassles because of serializable
+     * @Deprecated this test is no longer relevant as the procedures will not
+     * be persisted this way
      *
      * @throws Exception
      */
-    public void testDirectoryMapStore() throws Exception {
+    public void restDirectoryMapStore() throws Exception {
 
         // begin with creating the thing
         DirectoryMapStore mapStore = new DirectoryMapStore(testDirectory);

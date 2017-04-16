@@ -135,7 +135,11 @@ public class AntimirovParser {
                 }
                 return node;
             }
-        }.sequence(element(), spaceElement().many());
+        }.sequence(paranthesis(element()), spaceElement().many());
+    }
+
+    public Parser<BaseNode> paranConcat() {
+        return paranthesis(concatenation());
     }
 
     public Parser<BaseNode> iterationShort() {
@@ -148,7 +152,7 @@ public class AntimirovParser {
                 } catch (IncompleteTypeException e) {
                     logger.error("AntimirovParser.alternation() threw IncompleteTypeException", e);
                 }
-                popNode(node);
+                //popNode(node);
                 return node;
             }
         });
@@ -202,14 +206,12 @@ public class AntimirovParser {
                     }
 
                 } catch (IncompleteTypeException e) {
-                    logger.error("AntimirovParser.concatenation() threw IncompleteTypeException");
+                    logger.error("AntimirovParser.concatenation() threw IncompleteTypeException", e);
                 }
                 return node;
             }
         }.sequence(element(), altElement().many());
     }
 
-    private void popNode(BaseNode node) {
-        currentNode = node;
-    }
+
 }

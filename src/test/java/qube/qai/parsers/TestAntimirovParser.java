@@ -154,6 +154,13 @@ public class TestAntimirovParser extends TestCase {
 
     }
 
+    public void testParanConcat() throws Exception {
+        AntimirovParser parser = new AntimirovParser();
+        BaseNode parsedNode = parser.concatenation().parse("foo (bar baz) bar");
+        assertNotNull("parsed node should not be null", parsedNode);
+
+    }
+
     public void testIteration() throws Exception {
         AntimirovParser parser = new AntimirovParser();
         BaseNode parsedNode = parser.iteration().parse("int*");
@@ -200,9 +207,9 @@ public class TestAntimirovParser extends TestCase {
      *
      * @throws Exception
      */
-    public void estExpression() throws Exception {
+    public void testExpression() throws Exception {
         AntimirovParser parser = new AntimirovParser();
-        BaseNode parsedNode = parser.expression().parse("foo (foo baz[integer] bar[double])");
+        BaseNode parsedNode = parser.expression().parse("(foo baz[integer] bar[double])");
         assertNotNull("parsed node should not be null", parsedNode);
         BaseNode shouldNode = new ConcatenationNode(new ConcatenationNode(new Node(new Name("foo")),
                 new Node(new Name("baz"), new PrimitiveNode(new Name("integer")))),

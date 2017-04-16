@@ -52,7 +52,7 @@ public class TestHazelcastMaps extends QaiTestBase {
     @Named("Wiktionary_en")
     private SearchServiceInterface wiktionarySearch;
 
-    @Inject //@Named("HAZELCAST_CLIENT")
+    @Inject
     private HazelcastInstance hazelcastInstance;
 
     private static String STOCK_ENTITIES = "STOCK_ENTITIES";
@@ -96,7 +96,7 @@ public class TestHazelcastMaps extends QaiTestBase {
             Collection<SearchResult> results = wikipediaSearch.searchInputString(name, "title", 100);
             SearchResult result = results.iterator().next();
             WikiArticle wikiArticle = wikiArticles.get(result.getUuid());
-            assertNotNull("there has to be an article for " + name, wikiArticle);
+            assertNotNull("there has to be an article for '" + result.getUuid() + "'", wikiArticle);
         }
     }
 
@@ -150,7 +150,12 @@ public class TestHazelcastMaps extends QaiTestBase {
 
     }
 
-    public void testHazelcastProcedures() throws Exception {
+    /**
+     * @throws Exception
+     * @deprecated this method is no longer needed as the persistence of procedures
+     * has been changed and now is done in a different way.
+     */
+    public void restHazelcastProcedures() throws Exception {
 
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");

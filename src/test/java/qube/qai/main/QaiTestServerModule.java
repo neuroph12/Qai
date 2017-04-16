@@ -163,7 +163,7 @@ public class QaiTestServerModule extends AbstractModule {
      * this is more or less where everything happens
      */
     @Provides
-    @Singleton //@Named("HAZELCAST_SERVER")
+    @Singleton
     public HazelcastInstance provideHazelcastInstance() {
 
         if (hazelcastInstance != null) {

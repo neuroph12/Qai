@@ -117,7 +117,6 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * name.
      */
     public Name getName() {
-
         return this.name;
     }//getName
 
@@ -369,16 +368,6 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      */
     public abstract boolean equals(BaseNode t);
 
-//    /**
-//     * convenience method for getting the name of a node
-//     */
-//    public String getNameString() {
-//        if (this.name != null) {
-//            return name.getName();
-//        }
-//        return "BaseNode";
-//    }
-
     /**
      * Returns a <code>String</code> representation of the expression.
      *
@@ -386,7 +375,6 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      */
     public abstract String toString();
 
-    //    @thewebsemantic.Id
     public String getUuid() {
         return this.uuid;
     }
