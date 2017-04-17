@@ -35,14 +35,11 @@ import qube.qai.persistence.WikiArticle;
 import qube.qai.persistence.mapstores.DatabaseMapStore;
 import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
-import qube.qai.persistence.search.StockQuoteSearchService;
 import qube.qai.procedure.Procedure;
-import qube.qai.services.SearchServiceInterface;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 
-import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.Properties;
 
@@ -125,20 +122,20 @@ public class QaiTestServerModule extends AbstractModule {
      *
      * @return
      */
-    @Provides
-    @Named("Stock_Quotes")
-    public SearchServiceInterface provideStockQuoteSearchService() {
-
-        // create an injector for initializing JPA-Module & start the service
-        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
-        PersistService persistService = injector.getInstance(PersistService.class);
-        persistService.start();
-
-        StockQuoteSearchService searchService = new StockQuoteSearchService();
-        injector.injectMembers(searchService);
-
-        return searchService;
-    }
+//    @Provides
+//    @Named("Stock_Quotes")
+//    public SearchServiceInterface provideStockQuoteSearchService() {
+//
+//        // create an injector for initializing JPA-Module & start the service
+//        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
+//        PersistService persistService = injector.getInstance(PersistService.class);
+//        persistService.start();
+//
+//        StockQuoteSearchService searchService = new StockQuoteSearchService();
+//        injector.injectMembers(searchService);
+//
+//        return searchService;
+//    }
 
     /**
      * RdfTripleSearchService

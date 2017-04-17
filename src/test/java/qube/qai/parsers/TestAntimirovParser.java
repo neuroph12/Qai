@@ -155,7 +155,7 @@ public class TestAntimirovParser extends TestCase {
 
     public void testParanConcat() throws Exception {
         AntimirovParser parser = new AntimirovParser();
-        BaseNode parsedNode = parser.concatenation().parse("foo (bar baz) bar");
+        BaseNode parsedNode = parser.paranConcat().parse("(bar baz bar)");
         assertNotNull("parsed node should not be null", parsedNode);
     }
 
