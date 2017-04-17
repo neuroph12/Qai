@@ -105,7 +105,7 @@ public class AntimirovParser {
     }
 
     public Parser<BaseNode> spaceElement() {
-        return Scanners.WHITESPACES.followedBy(element()).map(new Map<Void, BaseNode>() {
+        return Scanners.WHITESPACES.followedBy(paranthesis(element())).map(new Map<Void, BaseNode>() {
             @Override
             public BaseNode map(Void aVoid) {
                 return currentNode;

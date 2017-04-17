@@ -36,13 +36,11 @@ import qube.qai.parsers.maths.TestMathParser;
 import qube.qai.persistence.TestModelStore;
 import qube.qai.persistence.TestRdfSerialization;
 import qube.qai.persistence.mapstores.*;
-import qube.qai.persistence.search.TestProcedureDataService;
 import qube.qai.procedure.TestProcedureInputsAndResults;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
 import qube.qai.procedure.archive.TestArchiveProcedures;
 import qube.qai.procedure.archive.TestDirectoryIndexer;
-import qube.qai.procedure.archive.TestSparqlIndexer;
 import qube.qai.procedure.archive.TestWikiArchiveIndexer;
 import qube.qai.procedure.finance.TestFinanceProcedures;
 import qube.qai.procedure.finance.TestStockEntityInitialization;
@@ -116,7 +114,7 @@ public class AllQaiTests extends TestCase {
         // persistence.search
 //        suite.addTestSuite(TestStockQuoteSearchService.class);
 //        suite.addTestSuite(TestRDFTripleSearchService.class);
-        suite.addTestSuite(TestProcedureDataService.class);
+//        suite.addTestSuite(TestProcedureDataService.class);
 
         // procedure
         suite.addTestSuite(TestProcedureInputsAndResults.class);
@@ -130,7 +128,7 @@ public class AllQaiTests extends TestCase {
         // procedure.archive
         suite.addTestSuite(TestArchiveProcedures.class);
         suite.addTestSuite(TestDirectoryIndexer.class);
-        suite.addTestSuite(TestSparqlIndexer.class);
+//        suite.addTestSuite(TestSparqlIndexer.class);
 
         // procedure.finance
         suite.addTestSuite(TestFinanceProcedures.class);

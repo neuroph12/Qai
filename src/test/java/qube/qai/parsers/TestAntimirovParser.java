@@ -151,14 +151,21 @@ public class TestAntimirovParser extends TestCase {
         shouldNode = new ConcatenationNode(new Node(new Name("foo"), new PrimitiveNode(new Name("double"))),
                 new Node(new Name("baz"), new PrimitiveNode(new Name("double"))));
         assertTrue("found: " + parsedNode.toString() + " should be: " + shouldNode.toString(), parsedNode.equals(shouldNode));
-
     }
 
     public void testParanConcat() throws Exception {
         AntimirovParser parser = new AntimirovParser();
         BaseNode parsedNode = parser.concatenation().parse("foo (bar baz) bar");
         assertNotNull("parsed node should not be null", parsedNode);
+    }
 
+    public void testSpaceElement() throws Exception {
+        AntimirovParser parser = new AntimirovParser();
+        BaseNode parsedNode = parser.spaceElement().parse("   foo");
+        assertNotNull(parsedNode);
+
+        parsedNode = parser.spaceElement().parse("   (foo)");
+        assertNotNull(parsedNode);
     }
 
     public void testIteration() throws Exception {

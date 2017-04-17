@@ -38,7 +38,6 @@ import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.persistence.search.DatabaseSearchService;
-import qube.qai.persistence.search.RDFTriplesSearchService;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
@@ -341,18 +340,18 @@ public class QaiServerModule extends AbstractModule {
      *
      * @return
      */
-    @Provides
-    @Named("Dbpedia_en")
-    SearchServiceInterface provideDbpediaSearchService() {
-
-        Injector injector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
-        PersistService service = injector.getInstance(PersistService.class);
-        service.start();
-
-        RDFTriplesSearchService searchService = new RDFTriplesSearchService();
-        injector.injectMembers(searchService);
-        return searchService;
-    }
+//    @Provides
+//    @Named("Dbpedia_en")
+//    SearchServiceInterface provideDbpediaSearchService() {
+//
+//        Injector injector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
+//        PersistService service = injector.getInstance(PersistService.class);
+//        service.start();
+//
+//        RDFTriplesSearchService searchService = new RDFTriplesSearchService();
+//        injector.injectMembers(searchService);
+//        return searchService;
+//    }
 
     public Injector getJpaStocksInjector() {
 
