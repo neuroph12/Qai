@@ -41,7 +41,7 @@ public class ScreenLogger
     /**
      * Worker for log().
      *
-     * @param msg Message to log.
+     * @param line Message to log.
      */
     protected void wlog(String line) {
 

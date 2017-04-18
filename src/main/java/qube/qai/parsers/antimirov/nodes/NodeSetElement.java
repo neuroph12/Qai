@@ -32,7 +32,7 @@ public interface NodeSetElement {
      *
      * @return TRUE, if e is equal to the instance.
      */
-    public boolean equals(NodeSetElement e);
+    boolean equals(NodeSetElement e);
 
 
 }//interface

@@ -32,7 +32,7 @@ public class TestNodeVisitors extends TestCase {
         BaseNode node = new ConcatenationNode(new ConcatenationNode(new Node(new Name("foo")),
                 new Node(new Name("baz"), new PrimitiveNode(new Name("integer")))),
                 new Node(new Name("bar"), new PrimitiveNode(new Name("double"))));
-        ;
+
         NodeVisitor visitor = createVisitor();
         node.childrenAccept(visitor, null);
         log("buffer collected: '" + buffer.toString() + "'");

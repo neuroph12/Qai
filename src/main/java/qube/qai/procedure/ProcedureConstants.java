@@ -19,41 +19,41 @@ package qube.qai.procedure;
  */
 public interface ProcedureConstants {
 
-    public static String INPUT_TIME_SEQUENCE = "time-sequence";
+    String INPUT_TIME_SEQUENCE = "time-sequence";
 
-    public static String INPUT_NETWORK = "network";
+    String INPUT_NETWORK = "network";
 
-    public static String INPUT_NEURAL_NETWORK = "neural-network";
+    String INPUT_NEURAL_NETWORK = "neural-network";
 
-    public static String INPUT_MATRIX = "matrix";
+    String INPUT_MATRIX = "matrix";
 
-    public static String MATRIX_METRICS = "matrix metrics";
+    String MATRIX_METRICS = "matrix metrics";
 
-    public static String MATRIX_DATA_METRICS = "matrix data metrics";
+    String MATRIX_DATA_METRICS = "matrix data metrics";
 
-    public static String NETWORK_METRICS = "network metrics";
+    String NETWORK_METRICS = "network metrics";
 
-    public static String TIME_SEQUENCE_METRICS = "time-sequence metrics";
+    String TIME_SEQUENCE_METRICS = "time-sequence metrics";
 
-    public static String FROM = "from";
+    String FROM = "from";
 
-    public static String CRITERIA = "criteria";
+    String CRITERIA = "criteria";
 
-    public static String AVERAGE_TIME_SEQUENCE = "average time-sequence";
+    String AVERAGE_TIME_SEQUENCE = "average time-sequence";
 
-    public static String CHANGE_POINTS = "change points";
+    String CHANGE_POINTS = "change points";
 
-    public static String MAP_OF_TIME_SEQUENCE = "time-sequence map";
+    String MAP_OF_TIME_SEQUENCE = "time-sequence map";
 
-    public static String SORTED_ITEMS = "sorted items";
+    String SORTED_ITEMS = "sorted items";
 
-    public static String INPUT_NAMES = "input names";
+    String INPUT_NAMES = "input names";
 
-    public static final String PROCEDURES = "PROCEDURES";
+    String PROCEDURES = "PROCEDURES";
 
-    public final static String PROCESS_ENDED = "PROCESS_ENDED";
+    String PROCESS_ENDED = "PROCESS_ENDED";
 
-    public final static String PROCESS_INTERRUPTED = "PROCESS_INTERRUPTED";
+    String PROCESS_INTERRUPTED = "PROCESS_INTERRUPTED";
 
-    public final static String PROCESS_ERROR = "PROCESS_ERROR";
+    String PROCESS_ERROR = "PROCESS_ERROR";
 }

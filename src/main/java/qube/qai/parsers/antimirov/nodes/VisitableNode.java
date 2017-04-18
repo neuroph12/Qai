@@ -19,5 +19,5 @@ package qube.qai.parsers.antimirov.nodes;
  */
 public interface VisitableNode {
 
-    public Object accept(NodeVisitor visitor, Object data);
+    Object accept(NodeVisitor visitor, Object data);
 }

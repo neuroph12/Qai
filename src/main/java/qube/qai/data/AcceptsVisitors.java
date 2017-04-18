@@ -19,5 +19,5 @@ package qube.qai.data;
  */
 public interface AcceptsVisitors {
 
-    public Object accept(DataVisitor visitor, Object data);
+    Object accept(DataVisitor visitor, Object data);
 }

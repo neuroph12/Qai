@@ -57,7 +57,6 @@ public class TestModelStore extends TestCase {
         assertTrue("username has to be equal", user.getUsername().equals(serializedUser.getUsername()));
         assertTrue("password has to be equal", user.getPassword().equals(serializedUser.getPassword()));
 
-
     }
 
     public void testUserToModelConversion() throws Exception {

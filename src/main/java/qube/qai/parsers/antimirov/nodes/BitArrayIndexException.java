@@ -45,7 +45,7 @@ public final class BitArrayIndexException
     /**
      * Sole constructor for class <code>BitArrayIndexException</code>.
      *
-     * @param i    Index position that caused the exception.
+     * @param errorIndex    Index position that caused the exception.
      * @param size <code>BitArray</code> size.
      */
     public BitArrayIndexException(int errorIndex, int size) {

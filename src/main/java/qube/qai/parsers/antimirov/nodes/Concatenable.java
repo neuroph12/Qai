@@ -39,7 +39,7 @@ public interface Concatenable {
      * @throws IllegalConcatenationException Occurs if the input entities of a concatenation does
      *                                       not obey the rules for concatenation of linear forms.
      */
-    public NodeSet concatenate(BaseNode r)
+    NodeSet concatenate(BaseNode r)
             throws IllegalConcatenationException;
 
 }//class
