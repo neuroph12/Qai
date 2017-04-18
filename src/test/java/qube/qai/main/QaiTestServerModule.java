@@ -29,16 +29,9 @@ import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStoreFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockQuote;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.persistence.mapstores.DatabaseMapStore;
-import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
-import qube.qai.procedure.Procedure;
-import qube.qai.user.Role;
-import qube.qai.user.Session;
-import qube.qai.user.User;
 
 import javax.inject.Singleton;
 import java.util.Properties;
@@ -177,159 +170,165 @@ public class QaiTestServerModule extends AbstractModule {
          * here we add the map-store for Users which is
          * in this case the HsqlDBMapStore
          */
-        MapConfig usersConfig = config.getMapConfig(USERS);
-        MapStoreConfig userMapstoreConfig = usersConfig.getMapStoreConfig();
-        if (userMapstoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + USERS);
-            userMapstoreConfig = new MapStoreConfig();
-        }
-        userMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, User>() {
-            public MapLoader<String, User> newMapStore(String mapName, Properties properties) {
-                if (USERS.equals(mapName)) {
-                    if (userMapStore == null) {
-                        userMapStore = new DatabaseMapStore(User.class);
-                        usersInjector.injectMembers(userMapStore);
-                    }
-                    return userMapStore;
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + USERS);
-        usersConfig.setMapStoreConfig(userMapstoreConfig);
+//        MapConfig usersConfig = config.getMapConfig(USERS);
+//        MapStoreConfig userMapstoreConfig = usersConfig.getMapStoreConfig();
+//        if (userMapstoreConfig == null) {
+//            logger.info("mapStoreConfig is null... creating one for: " + USERS);
+//            userMapstoreConfig = new MapStoreConfig();
+//            userMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
+//        }
+//        userMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, User>() {
+//            public MapLoader<String, User> newMapStore(String mapName, Properties properties) {
+//                if (USERS.equals(mapName)) {
+//                    if (userMapStore == null) {
+//                        userMapStore = new DatabaseMapStore(User.class);
+//                        usersInjector.injectMembers(userMapStore);
+//                    }
+//                    return userMapStore;
+//                } else {
+//                    return null;
+//                }
+//            }
+//        });
+//        logger.info("adding mapstore configuration for " + USERS);
+//        usersConfig.setMapStoreConfig(userMapstoreConfig);
 
         /**
          * here we add the map-store for Sessions which is
          * in this case the HsqlDBMapStore
          */
-        MapConfig sessionsConfig = config.getMapConfig(USER_SESSIONS);
-        MapStoreConfig sessionMapStoreConfig = sessionsConfig.getMapStoreConfig();
-        if (sessionMapStoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + USER_SESSIONS);
-            sessionMapStoreConfig = new MapStoreConfig();
-        }
-        sessionMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Session>() {
-            public MapLoader<String, Session> newMapStore(String mapName, Properties properties) {
-                if (USER_SESSIONS.equals(mapName)) {
-                    if (sessionMapStore == null) {
-                        sessionMapStore = new DatabaseMapStore(Session.class);
-                        usersInjector.injectMembers(sessionMapStore);
-                    }
-
-                    return sessionMapStore;
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + USER_SESSIONS);
-        sessionsConfig.setMapStoreConfig(sessionMapStoreConfig);
+        //MapConfig sessionsConfig = config.getMapConfig(USER_SESSIONS);
+//        MapStoreConfig sessionMapStoreConfig = mapConfig.getMapStoreConfig();
+//        sessionMapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
+//        if (sessionMapStoreConfig == null) {
+//            logger.info("mapStoreConfig is null... creating one for: " + USER_SESSIONS);
+//            sessionMapStoreConfig = new MapStoreConfig();
+//        }
+//        sessionMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Session>() {
+//            public MapLoader<String, Session> newMapStore(String mapName, Properties properties) {
+//                if (USER_SESSIONS.equals(mapName)) {
+//                    if (sessionMapStore == null) {
+//                        sessionMapStore = new DatabaseMapStore(Session.class);
+//                        usersInjector.injectMembers(sessionMapStore);
+//                    }
+//
+//                    return sessionMapStore;
+//                } else {
+//                    return null;
+//                }
+//            }
+//        });
+//        logger.info("adding mapstore configuration for " + USER_SESSIONS);
+//        mapConfig.setMapStoreConfig(sessionMapStoreConfig);
 
         /**
          * here we add the map-store for Roles which is
          * in this case the HsqlDBMapStore
          */
-        MapConfig rolesConfig = config.getMapConfig(USER_ROLES);
-        MapStoreConfig roleMapStoreConfig = rolesConfig.getMapStoreConfig();
-        if (roleMapStoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + USER_ROLES);
-            roleMapStoreConfig = new MapStoreConfig();
-        }
-        roleMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Role>() {
-            public MapLoader<String, Role> newMapStore(String mapName, Properties properties) {
-                if (USER_ROLES.equals(mapName)) {
-                    if (roleMapStore == null) {
-                        roleMapStore = new DatabaseMapStore(Role.class);
-                        usersInjector.injectMembers(roleMapStore);
-                    }
-
-                    return roleMapStore;
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + USER_ROLES);
-        rolesConfig.setMapStoreConfig(roleMapStoreConfig);
+        //MapConfig rolesConfig = config.getMapConfig(USER_ROLES);
+//        MapStoreConfig roleMapStoreConfig = mapConfig.getMapStoreConfig();
+//        roleMapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
+//        if (roleMapStoreConfig == null) {
+//            logger.info("mapStoreConfig is null... creating one for: " + USER_ROLES);
+//            roleMapStoreConfig = new MapStoreConfig();
+//        }
+//        roleMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Role>() {
+//            public MapLoader<String, Role> newMapStore(String mapName, Properties properties) {
+//                if (USER_ROLES.equals(mapName)) {
+//                    if (roleMapStore == null) {
+//                        roleMapStore = new DatabaseMapStore(Role.class);
+//                        usersInjector.injectMembers(roleMapStore);
+//                    }
+//
+//                    return roleMapStore;
+//                } else {
+//                    return null;
+//                }
+//            }
+//        });
+//        logger.info("adding mapstore configuration for " + USER_ROLES);
+//        mapConfig.setMapStoreConfig(roleMapStoreConfig);
 
         /**
          * here we add the map-store for Stock-entities which is
          * in this case the HsqlDBMapStore
          */
-        MapConfig stockEntitiesConfig = config.getMapConfig(STOCK_ENTITIES);
-        MapStoreConfig stockEntitiesMapstoreConfig = stockEntitiesConfig.getMapStoreConfig();
-        if (stockEntitiesMapstoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
-            stockEntitiesMapstoreConfig = new MapStoreConfig();
-
-        }
-        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
-            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
-                if (STOCK_ENTITIES.equals(mapName)) {
-                    if (stockEntityMapStore == null) {
-                        stockEntityMapStore = new DatabaseMapStore(StockEntity.class);
-                        stocksInjector.injectMembers(stockEntityMapStore);
-                    }
-
-                    return stockEntityMapStore;
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
-        stockEntitiesConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
+        //MapConfig stockEntitiesConfig = config.getMapConfig(STOCK_ENTITIES);
+//        MapStoreConfig stockEntitiesMapstoreConfig = mapConfig.getMapStoreConfig();
+//        stockEntitiesMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
+//        if (stockEntitiesMapstoreConfig == null) {
+//            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
+//            stockEntitiesMapstoreConfig = new MapStoreConfig();
+//
+//        }
+//        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
+//            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
+//                if (STOCK_ENTITIES.equals(mapName)) {
+//                    if (stockEntityMapStore == null) {
+//                        stockEntityMapStore = new DatabaseMapStore(StockEntity.class);
+//                        stocksInjector.injectMembers(stockEntityMapStore);
+//                    }
+//
+//                    return stockEntityMapStore;
+//                } else {
+//                    return null;
+//                }
+//            }
+//        });
+//        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
+//        mapConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
 
         /**
          * here we add the map-store for Stock-quotes which is
          * in this case the HsqlDBMapStore
          */
-        MapConfig stockQuotesConfig = config.getMapConfig(STOCK_QUOTES);
-        MapStoreConfig stockQuotesMapstoreConfig = stockQuotesConfig.getMapStoreConfig();
-        if (stockQuotesMapstoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + STOCK_QUOTES);
-            stockQuotesMapstoreConfig = new MapStoreConfig();
-
-        }
-        stockQuotesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockQuote>() {
-            public MapLoader<String, StockQuote> newMapStore(String mapName, Properties properties) {
-                if (STOCK_QUOTES.equals(mapName)) {
-                    if (stockQuoteMapStore == null) {
-                        stockQuoteMapStore = new DatabaseMapStore(StockQuote.class);
-                        stocksInjector.injectMembers(stockQuoteMapStore);
-                    }
-
-                    return stockQuoteMapStore;
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + STOCK_QUOTES);
-        stockQuotesConfig.setMapStoreConfig(stockQuotesMapstoreConfig);
+        //MapConfig stockQuotesConfig = config.getMapConfig(STOCK_QUOTES);
+//        MapStoreConfig stockQuotesMapstoreConfig = mapConfig.getMapStoreConfig();
+//        stockQuotesMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
+//        if (stockQuotesMapstoreConfig == null) {
+//            logger.info("mapStoreConfig is null... creating one for: " + STOCK_QUOTES);
+//            stockQuotesMapstoreConfig = new MapStoreConfig();
+//
+//        }
+//        stockQuotesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockQuote>() {
+//            public MapLoader<String, StockQuote> newMapStore(String mapName, Properties properties) {
+//                if (STOCK_QUOTES.equals(mapName)) {
+//                    if (stockQuoteMapStore == null) {
+//                        stockQuoteMapStore = new DatabaseMapStore(StockQuote.class);
+//                        stocksInjector.injectMembers(stockQuoteMapStore);
+//                    }
+//
+//                    return stockQuoteMapStore;
+//                } else {
+//                    return null;
+//                }
+//            }
+//        });
+//        logger.info("adding mapstore configuration for " + STOCK_QUOTES);
+//        mapConfig.setMapStoreConfig(stockQuotesMapstoreConfig);
 
         /**
          * here we add the map-store for Procedures which is
          * in this case DirectoryMapStore
+         * @TODO use the new model-mapstore in it's stead
          */
-        MapConfig procedureConfig = config.getMapConfig(PROCEDURES);
-        MapStoreConfig procedureMapstoreConfig = procedureConfig.getMapStoreConfig();
-        if (procedureMapstoreConfig == null) {
-            logger.info("mapStoreConfig is null... creating one for: " + PROCEDURES);
-            procedureMapstoreConfig = new MapStoreConfig();
-        }
-        procedureMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
-            public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
-                if (PROCEDURES.equals(mapName)) {
-                    return new DirectoryMapStore(PERSISTENCE_BASE);
-                } else {
-                    return null;
-                }
-            }
-        });
-        logger.info("adding mapstore configuration for " + PROCEDURES);
-        procedureConfig.setMapStoreConfig(procedureMapstoreConfig);
+//        MapConfig procedureConfig = config.getMapConfig(PROCEDURES);
+//        MapStoreConfig procedureMapstoreConfig = procedureConfig.getMapStoreConfig();
+//        if (procedureMapstoreConfig == null) {
+//            logger.info("mapStoreConfig is null... creating one for: " + PROCEDURES);
+//            procedureMapstoreConfig = new MapStoreConfig();
+//        }
+//        procedureMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
+//            public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
+//                if (PROCEDURES.equals(mapName)) {
+//                    return new DirectoryMapStore(PERSISTENCE_BASE);
+//                } else {
+//                    return null;
+//                }
+//            }
+//        });
+//        logger.info("adding mapstore configuration for " + PROCEDURES);
+//        procedureConfig.setMapStoreConfig(procedureMapstoreConfig);
 
         /**
          * wikipedia-article map-store
@@ -339,6 +338,7 @@ public class QaiTestServerModule extends AbstractModule {
         if (wikiMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA);
             wikiMapstoreConfig = new MapStoreConfig();
+            wikiMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
         }
         wikiMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
             public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
@@ -360,6 +360,7 @@ public class QaiTestServerModule extends AbstractModule {
         if (wiktionaryMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY);
             wiktionaryMapstoreConfig = new MapStoreConfig();
+            wiktionaryMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
         }
         wiktionaryMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
             public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {

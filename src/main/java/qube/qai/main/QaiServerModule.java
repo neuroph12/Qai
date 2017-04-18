@@ -30,6 +30,7 @@ import net.jmob.guice.conf.core.InjectConfig;
 import net.jmob.guice.conf.core.Syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.persistence.ResourceData;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.persistence.WikiArticle;
@@ -48,7 +49,6 @@ import qube.qai.user.Session;
 import qube.qai.user.User;
 
 import javax.inject.Named;
-import java.io.File;
 import java.util.Properties;
 
 /**
@@ -605,8 +605,8 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY_RESOURCES);
             mapStoreConfig = new MapStoreConfig();
         }
-        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, File>() {
-            public MapLoader<String, File> newMapStore(String mapName, Properties properties) {
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, ResourceData>() {
+            public MapLoader<String, ResourceData> newMapStore(String mapName, Properties properties) {
                 if (WIKTIONARY_RESOURCES.equals(mapName)) {
                     IndexedDirectoryMapStore store = new IndexedDirectoryMapStore(WIKTIONARY_RESOURCE_DIRECTORY, WIKTIONARY_RESOURCE_INDEX);
                     DirectorySearchService directorySearchService = new DirectorySearchService(WIKTIONARY_RESOURCE_INDEX);
@@ -654,8 +654,8 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA_RESOURCES);
             mapStoreConfig = new MapStoreConfig();
         }
-        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, File>() {
-            public MapLoader<String, File> newMapStore(String mapName, Properties properties) {
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, ResourceData>() {
+            public MapLoader<String, ResourceData> newMapStore(String mapName, Properties properties) {
                 if (WIKIPEDIA_RESOURCES.equals(mapName)) {
                     IndexedDirectoryMapStore store = new IndexedDirectoryMapStore(WIKIPEDIA_RESOURCE_DIRECTORY, WIKIPEDIA_RESOURCE_INDEX);
                     DirectorySearchService directorySearchService = new DirectorySearchService(WIKIPEDIA_RESOURCE_INDEX);

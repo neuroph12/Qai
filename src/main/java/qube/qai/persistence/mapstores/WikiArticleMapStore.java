@@ -40,6 +40,7 @@ public class WikiArticleMapStore implements MapStore<String, WikiArticle> {
     private XStream xStream;
 
     public WikiArticleMapStore(String zipFilename) {
+        logger.info("initializing with zip file: " + zipFilename);
         this.zipFilename = zipFilename;
         xStream = new XStream();
     }
@@ -61,6 +62,8 @@ public class WikiArticleMapStore implements MapStore<String, WikiArticle> {
     }
 
     public WikiArticle load(String key) {
+
+        logger.info("loading entry with key: " + key);
         WikiArticle wikiArticle = null;
 
         try {
@@ -72,12 +75,13 @@ public class WikiArticleMapStore implements MapStore<String, WikiArticle> {
             wikiArticle = (WikiArticle) xStream.fromXML(stream);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Exception while loading: " + key, e);
         }
         return wikiArticle;
     }
 
     public Map<String, WikiArticle> loadAll(Collection<String> keys) {
+        logger.info("loadAll has been called");
         Map<String, WikiArticle> all = new HashMap<String, WikiArticle>();
         for (String key : keys) {
             WikiArticle article = load(key);
@@ -87,6 +91,7 @@ public class WikiArticleMapStore implements MapStore<String, WikiArticle> {
     }
 
     public Iterable<String> loadAllKeys() {
+        logger.info("loadAllKeys has been called");
         return null;
     }
 }

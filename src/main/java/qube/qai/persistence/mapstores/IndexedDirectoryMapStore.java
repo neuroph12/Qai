@@ -17,6 +17,7 @@ package qube.qai.persistence.mapstores;
 import com.hazelcast.core.MapStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.persistence.ResourceData;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 
@@ -30,7 +31,7 @@ import java.util.Map;
 /**
  * Created by rainbird on 11/19/15.
  */
-public class IndexedDirectoryMapStore implements MapStore<String, File> {
+public class IndexedDirectoryMapStore implements MapStore<String, ResourceData> {
 
     private static Logger logger = LoggerFactory.getLogger("TarballMapStore");
 
@@ -52,13 +53,14 @@ public class IndexedDirectoryMapStore implements MapStore<String, File> {
         this();
         this.directoryToIndex = directoryToIndex;
         this.indexDirectory = indexDirectory;
+        logger.info("initialized with directory: " + directoryToIndex + " and index directory: " + indexDirectory);
     }
 
-    public void store(String key, File value) {
+    public void store(String key, ResourceData value) {
         // we are not writing in those files
     }
 
-    public void storeAll(Map<String, File> map) {
+    public void storeAll(Map<String, ResourceData> map) {
         for (String key : map.keySet()) {
             store(key, map.get(key));
         }
@@ -74,11 +76,19 @@ public class IndexedDirectoryMapStore implements MapStore<String, File> {
         }
     }
 
-    public File load(String key) {
-        return findFile(key);
+    public ResourceData load(String key) {
+        logger.info("load is called with key: " + key);
+        ResourceData data = null;
+        File file = findFile(key);
+        if (file != null) {
+            data = new ResourceData();
+            data.setName(file.getName());
+        }
+        return data;
     }
 
-    public Map<String, File> loadAll(Collection<String> keys) {
+    public Map<String, ResourceData> loadAll(Collection<String> keys) {
+        logger.info("loadAll is called");
         return null;
     }
 
@@ -89,6 +99,7 @@ public class IndexedDirectoryMapStore implements MapStore<String, File> {
      * @return
      */
     public Iterable<String> loadAllKeys() {
+        logger.info("loadAllKeys has been called...");
         List<String> filenames = new ArrayList<String>();
         // this would return only one item, which is not a file after all
         // if you really want to implement this method

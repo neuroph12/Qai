@@ -18,13 +18,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
+import qube.qai.persistence.ResourceData;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.File;
 
 /**
  * Created by rainbird on 12/24/15.
@@ -71,7 +71,7 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
         String[] filenames = StringUtils.substringsBetween(article.getContent(), wikiFileFormatStart, wikiFileFormatEnd);
         for (String key : filenames) {
             logger.info("currently checking file: " + key);
-            File result = mapStore.load(key);
+            ResourceData result = mapStore.load(key);
             //assertNotNull(result);
             if (result == null) {
                 notFoundCount++;
@@ -80,8 +80,8 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
                 // fail("resource file: " + key + "must be there");
             } else {
                 foundCount++;
-                logger.info("file: '" + key + "' is OK. actual filename: " + result.getAbsolutePath());
-                assertTrue("the file should be really there as well", result.exists());
+                assertNotNull("there has to be a result", result);
+                logger.info("file: '" + key + "' is OK. actual filename: " + result.getName());
             }
         }
 

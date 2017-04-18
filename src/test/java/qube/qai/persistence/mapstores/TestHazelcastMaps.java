@@ -18,6 +18,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import org.apache.commons.lang3.StringUtils;
 import qube.qai.main.QaiTestBase;
+import qube.qai.persistence.ResourceData;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
@@ -117,7 +118,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         }
     }
 
-    public void testHazelcastStockEntities() throws Exception {
+    public void restHazelcastStockEntities() throws Exception {
 
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
@@ -186,7 +187,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         }
     }
 
-    public void testWikipediaResources() throws Exception {
+    public void restWikipediaResources() throws Exception {
 
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
@@ -199,15 +200,15 @@ public class TestHazelcastMaps extends QaiTestBase {
         }
     }
 
-    public void testWiktionaryResources() throws Exception {
+    public void restWiktionaryResources() throws Exception {
 
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
-        IMap<String, File> wiktionaryResources = hazelcastInstance.getMap(WIKTIONARY_RESOURCES);
+        IMap<String, ResourceData> wiktionaryResources = hazelcastInstance.getMap(WIKTIONARY_RESOURCES);
         for (String filename : wiktionaryFilesToSearch) {
             logger.info("now searching: " + filename);
-            File found = wiktionaryResources.get(filename);
+            ResourceData found = wiktionaryResources.get(filename);
             assertNotNull("has to be there something", found);
         }
     }

@@ -17,8 +17,7 @@ package qube.qai.persistence;
 import org.encog.util.text.Base64;
 import qube.qai.services.implementation.UUIDService;
 
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * Created by rainbird on 4/16/17.
@@ -42,6 +41,15 @@ public class ResourceData implements Serializable {
      */
     public ResourceData() {
         this.uuid = UUIDService.uuidString();
+    }
+
+    public void readFileData(File file) throws FileNotFoundException {
+        FileInputStream stream = new FileInputStream(file);
+        readStreamData(stream);
+    }
+
+    public void readStreamData(InputStream stream) {
+
     }
 
     public String getBinaryAsString() {
