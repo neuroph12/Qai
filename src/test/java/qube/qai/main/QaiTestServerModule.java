@@ -60,6 +60,8 @@ public class QaiTestServerModule extends AbstractModule {
     private String PERSISTENCE_BASE = "/media/rainbird/ALEPH/qai-persistence.db";
     // private String PERSISTENCE_BASE = "/media/pi/BET/qai-persistence.db";
 
+    private static final String MODEL_BASE_DIRECTORY = "/media/rainbird/ALEPH/qai-persistence.db/test_model_persistence";
+
     private static final String WIKIPEDIA = "WIKIPEDIA_EN";
 
     private static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";

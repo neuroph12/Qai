@@ -14,6 +14,7 @@
 
 package qube.qai.persistence;
 
+import org.apache.commons.io.IOUtils;
 import org.encog.util.text.Base64;
 import qube.qai.services.implementation.UUIDService;
 
@@ -43,13 +44,13 @@ public class ResourceData implements Serializable {
         this.uuid = UUIDService.uuidString();
     }
 
-    public void readFileData(File file) throws FileNotFoundException {
+    public void readFileData(File file) throws IOException {
         FileInputStream stream = new FileInputStream(file);
         readStreamData(stream);
     }
 
-    public void readStreamData(InputStream stream) {
-
+    public void readStreamData(InputStream stream) throws IOException {
+        binaryData = IOUtils.toByteArray(stream);
     }
 
     public String getBinaryAsString() {

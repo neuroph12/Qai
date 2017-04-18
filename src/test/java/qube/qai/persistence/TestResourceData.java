@@ -16,13 +16,21 @@ package qube.qai.persistence;
 
 import junit.framework.TestCase;
 
+import java.io.File;
+
 /**
  * Created by rainbird on 4/17/17.
  */
 public class TestResourceData extends TestCase {
 
     public void testResourceData() throws Exception {
+        String fileName = "/home/rainbird/projects/work/qai/test/goog.array";
+        File file = new File(fileName);
+        assertTrue("need a file in order to run the test", file.exists());
+
         ResourceData data = new ResourceData();
-        fail("Yet another test which awaits implementation...");
+        data.readFileData(file);
+        assertNotNull("there has to be data in the file", data.getBinaryData());
+        assertTrue("the content may not be empty", data.getBinaryData().length > 0);
     }
 }

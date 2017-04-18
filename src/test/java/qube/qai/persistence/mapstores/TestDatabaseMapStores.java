@@ -14,13 +14,15 @@
 
 package qube.qai.persistence.mapstores;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.persist.PersistService;
+import com.google.inject.persist.jpa.JpaPersistModule;
 import junit.framework.TestCase;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.stores.StockQuoteDataStore;
-import qube.qai.main.QaiTestServerModule;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.services.implementation.UUIDService;
@@ -41,8 +43,7 @@ public class TestDatabaseMapStores extends TestCase {
 
     public void testUserMapStore() throws Exception {
 
-        // this way i can use the injector even when it is active for other tests
-        Injector injector = QaiTestServerModule.initUsersInjector();
+        Injector injector = createInjector("STAND_ALONE_TEST_USERS");
 
         DatabaseMapStore mapStore = new DatabaseMapStore(User.class);
         injector.injectMembers(mapStore);
@@ -68,9 +69,11 @@ public class TestDatabaseMapStores extends TestCase {
 
     }
 
-    public void testRoleMapStore() throws Exception {
 
-        Injector injector = QaiTestServerModule.initUsersInjector();
+    public void estRoleMapStore() throws Exception {
+
+        Injector injector = createInjector("STAND_ALONE_TEST_USERS");
+
         DatabaseMapStore mapStore = new DatabaseMapStore(Role.class);
         injector.injectMembers(mapStore);
 
@@ -89,9 +92,9 @@ public class TestDatabaseMapStores extends TestCase {
 
     }
 
-    public void testSessionMapStore() throws Exception {
+    public void estSessionMapStore() throws Exception {
 
-        Injector injector = QaiTestServerModule.initUsersInjector();
+        Injector injector = createInjector("STAND_ALONE_TEST_USERS");
 
         DatabaseMapStore mapStore = new DatabaseMapStore(Session.class);
         injector.injectMembers(mapStore);
@@ -112,9 +115,9 @@ public class TestDatabaseMapStores extends TestCase {
         assertTrue(lostSession == null);
     }
 
-    public void restStockQuoteMapStore() throws Exception {
+    public void testStockQuoteMapStore() throws Exception {
 
-        Injector injector = QaiTestServerModule.initStocksInjector();
+        Injector injector = createInjector("STAND_ALONE_TEST_STOCKS");
 
         DatabaseMapStore mapStore = new DatabaseMapStore(StockQuote.class);
         injector.injectMembers(mapStore);
@@ -149,7 +152,7 @@ public class TestDatabaseMapStores extends TestCase {
      */
     public void testStockEntityMapStore() throws Exception {
 
-        Injector injector = QaiTestServerModule.initStocksInjector();
+        Injector injector = createInjector("STAND_ALONE_TEST_STOCKS");
 
         DatabaseMapStore mapStore = new DatabaseMapStore(StockEntity.class);
         injector.injectMembers(mapStore);
@@ -265,5 +268,27 @@ public class TestDatabaseMapStores extends TestCase {
         }
 
         return word.toString();
+    }
+
+    private Injector userInjector;
+    private Injector stockInjector;
+
+    private Injector createInjector(String name) {
+        if ("STAND_ALONE_TEST_STOCKS".equals(name)) {
+            if (stockInjector == null) {
+                stockInjector = Guice.createInjector(new JpaPersistModule(name));
+                PersistService service = stockInjector.getInstance(PersistService.class);
+                service.start();
+            }
+            return stockInjector;
+        } else if ("STAND_ALONE_TEST_USERS".equals(name)) {
+            if (userInjector == null) {
+                userInjector = Guice.createInjector(new JpaPersistModule(name));
+                PersistService service = userInjector.getInstance(PersistService.class);
+                service.start();
+            }
+            return userInjector;
+        }
+        return null;
     }
 }
