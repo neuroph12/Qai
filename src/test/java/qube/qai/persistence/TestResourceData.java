@@ -24,7 +24,7 @@ import java.io.File;
 public class TestResourceData extends TestCase {
 
     public void testResourceData() throws Exception {
-        String fileName = "/home/rainbird/projects/work/qai/test/goog.array";
+        String fileName = "test/goog.array";
         File file = new File(fileName);
         assertTrue("need a file in order to run the test", file.exists());
 

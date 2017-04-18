@@ -81,6 +81,7 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
             } else {
                 foundCount++;
                 assertNotNull("there has to be a result", result);
+                assertNotNull("there has to be content", result.getBinaryData());
                 logger.info("file: '" + key + "' is OK. actual filename: " + result.getName());
             }
         }

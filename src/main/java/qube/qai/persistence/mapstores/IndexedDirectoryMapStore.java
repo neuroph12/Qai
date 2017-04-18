@@ -23,6 +23,7 @@ import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -83,6 +84,11 @@ public class IndexedDirectoryMapStore implements MapStore<String, ResourceData> 
         if (file != null) {
             data = new ResourceData();
             data.setName(file.getName());
+            try {
+                data.readFileData(file);
+            } catch (IOException e) {
+                logger.error("error while reading file content", e);
+            }
         }
         return data;
     }

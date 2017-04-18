@@ -75,7 +75,7 @@ public class TestProcedureInputsAndResults extends TestCase {
         return node;
     }
 
-    public void testInputPararmeters() throws Exception {
+    public void testInputParameters() throws Exception {
         ProcedureInputs inputs = new ProcedureInputs();
 
         inputs.addInput(new ValueNode(SimpleProcedure.NAME, new SimpleProcedure()));

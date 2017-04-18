@@ -51,7 +51,6 @@ import qube.qai.procedure.utils.TestWikiSearch;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
 import qube.qai.services.implementation.*;
-import qube.qai.util.TestProcedureToRdfConverter;
 
 /**
  * Created by rainbird on 5/26/16.
@@ -159,7 +158,7 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestTextTranslationDistributed.class);
 
         // util
-        suite.addTestSuite(TestProcedureToRdfConverter.class);
+        //suite.addTestSuite(TestProcedureToRdfConverter.class);
 
         return suite;
     }
