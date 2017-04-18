@@ -334,6 +334,7 @@ public class QaiTestServerModule extends AbstractModule {
          * wikipedia-article map-store
          */
         MapConfig wikiConfig = config.getMapConfig(WIKIPEDIA);
+        wikiConfig.getMapStoreConfig().setEnabled(true);
         MapStoreConfig wikiMapstoreConfig = wikiConfig.getMapStoreConfig();
         if (wikiMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA);
@@ -356,6 +357,7 @@ public class QaiTestServerModule extends AbstractModule {
          * wiktionary-article map-store
          */
         MapConfig wiktionaryConfig = config.getMapConfig(WIKTIONARY);
+        wiktionaryConfig.getMapStoreConfig().setEnabled(true);
         MapStoreConfig wiktionaryMapstoreConfig = wiktionaryConfig.getMapStoreConfig();
         if (wiktionaryMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY);
