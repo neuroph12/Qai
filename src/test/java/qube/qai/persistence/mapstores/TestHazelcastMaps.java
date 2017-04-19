@@ -16,12 +16,10 @@ package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import org.apache.commons.lang3.StringUtils;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.ResourceData;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
-import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.UUIDServiceInterface;
@@ -29,7 +27,6 @@ import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -78,11 +75,6 @@ public class TestHazelcastMaps extends QaiTestBase {
             "ipa-rendering-ff.png",
             "Wiktionary-favicon-en.png",
             "Writing_star.svg"};
-
-//    @Override
-//    protected void setUp() throws Exception {
-//        hazelcastInstance = injector.getInstance(HazelcastInstance.class);
-//    }
 
     public void testHazelcastWikipediaArticles() throws Exception {
 
@@ -156,47 +148,47 @@ public class TestHazelcastMaps extends QaiTestBase {
      * @deprecated this method is no longer needed as the persistence of procedures
      * has been changed and now is done in a different way.
      */
-    public void restHazelcastProcedures() throws Exception {
+//    public void restHazelcastProcedures() throws Exception {
+//
+//        assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
+//        logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
+//
+//        IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURES);
+//        String[] procedureNames = procedureSource.getProcedureNames();
+//
+//        // first get a hold of the procedures
+//        List<String> uuidList = new ArrayList<String>();
+//        for (String name : procedureNames) {
+//            Procedure procedure = procedureSource.getProcedureWithName(name);
+//            String uuid = procedure.getUuid();
+//            if (StringUtils.isBlank(uuid)) {
+//                uuid = uuidService.createUUIDString();
+//                procedure.setUuid(uuid);
+//            }
+//            procedureMap.put(uuid, procedure);
+//            uuidList.add(uuid);
+//        }
+//
+//        for (String uuid : uuidList) {
+//            assertTrue("we just put this one 'ere", procedureMap.containsKey(uuid));
+//        }
+//
+//        for (String uuid : uuidList) {
+//            Procedure procedure = procedureMap.get(uuid);
+//            assertNotNull("procedure should not be null", procedure);
+//        }
+//    }
+    public void testWikipediaResources() throws Exception {
 
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
-        IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURES);
-        String[] procedureNames = procedureSource.getProcedureNames();
-
-        // first get a hold of the procedures
-        List<String> uuidList = new ArrayList<String>();
-        for (String name : procedureNames) {
-            Procedure procedure = procedureSource.getProcedureWithName(name);
-            String uuid = procedure.getUuid();
-            if (StringUtils.isBlank(uuid)) {
-                uuid = uuidService.createUUIDString();
-                procedure.setUuid(uuid);
-            }
-            procedureMap.put(uuid, procedure);
-            uuidList.add(uuid);
-        }
-
-        for (String uuid : uuidList) {
-            assertTrue("we just put this one 'ere", procedureMap.containsKey(uuid));
-        }
-
-        for (String uuid : uuidList) {
-            Procedure procedure = procedureMap.get(uuid);
-            assertNotNull("procedure should not be null", procedure);
-        }
-    }
-
-    public void restWikipediaResources() throws Exception {
-
-        assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
-        logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
-
-        IMap<String, File> wikipediaResources = hazelcastInstance.getMap(WIKIPEDIA_RESOURCES);
+        IMap<String, ResourceData> wikipediaResources = hazelcastInstance.getMap(WIKIPEDIA_RESOURCES);
         for (String filename : wikipediaFilesToSearch) {
             logger.info("now searching: " + filename);
-            File found = wikipediaResources.get(filename);
+            ResourceData found = wikipediaResources.get(filename);
             assertNotNull("has to be there something", found);
+            assertNotNull("there has to be content", found.getBinaryData());
         }
     }
 

@@ -71,8 +71,10 @@ public class TestMapStores extends QaiTestBase {
      * be persisted this way
      *
      * @throws Exception
+     * @Deprecated procedures are not to be persisted this way
      */
-    public void restDirectoryMapStore() throws Exception {
+    @Deprecated
+    public void estDirectoryMapStore() throws Exception {
 
         // begin with creating the thing
         DirectoryMapStore mapStore = new DirectoryMapStore(testDirectory);

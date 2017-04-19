@@ -14,6 +14,7 @@
 
 package qube.qai.persistence;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.*;
@@ -49,6 +50,10 @@ public class ModelStore implements DataServiceInterface {
     }
 
     public void init() {
+
+        if (StringUtils.isEmpty(directoryName)) {
+            throw new IllegalArgumentException("there has to be a diretory to settle in!");
+        }
 
         dataset = TDBFactory.createDataset(directoryName);
 

@@ -29,9 +29,12 @@ import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStoreFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.persistence.ResourceData;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.persistence.mapstores.DatabaseMapStore;
+import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
+import qube.qai.services.implementation.DirectorySearchService;
 
 import javax.inject.Singleton;
 import java.util.Properties;
@@ -71,6 +74,12 @@ public class QaiTestServerModule extends AbstractModule {
 
     private static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
     //private static final String WIKTIONARY_ARCHIVE = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
+
+    public static final String WIKIPEDIA_RESOURCES = "WIKIPEDIA_RESOURCES";
+
+    public String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
+
+    public String WIKIPEDIA_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
 
     private HazelcastInstance hazelcastInstance;
 
@@ -377,6 +386,31 @@ public class QaiTestServerModule extends AbstractModule {
         });
         logger.info("adding mapstore configuration for " + WIKTIONARY);
         wiktionaryConfig.setMapStoreConfig(wiktionaryMapstoreConfig);
+
+        /**
+         * wikipedia-resources
+         */
+        MapConfig mapConfig = config.getMapConfig(WIKIPEDIA_RESOURCES);
+        mapConfig.getMapStoreConfig().setEnabled(true);
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+        if (mapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA_RESOURCES);
+            mapStoreConfig = new MapStoreConfig();
+        }
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, ResourceData>() {
+            public MapLoader<String, ResourceData> newMapStore(String mapName, Properties properties) {
+                if (WIKIPEDIA_RESOURCES.equals(mapName)) {
+                    IndexedDirectoryMapStore store = new IndexedDirectoryMapStore(WIKIPEDIA_RESOURCE_DIRECTORY, WIKIPEDIA_RESOURCE_INDEX);
+                    DirectorySearchService directorySearchService = new DirectorySearchService(WIKIPEDIA_RESOURCE_INDEX);
+                    store.setSearchService(directorySearchService);
+                    return store;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + WIKIPEDIA_RESOURCES);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
 
         // now we are ready to get an instance
         hazelcastInstance = Hazelcast.newHazelcastInstance(config);
