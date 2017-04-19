@@ -25,6 +25,33 @@
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../qoan/lib/samsroad-1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/grph-1.6.29-big.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-javadoc.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-javadoc.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/thewebsemantic-1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/thewebsemantic-1.1-src.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../qoan/lib/samsroad-1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/grph-1.6.29-big.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-javadoc.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-javadoc.jar!/" />
+          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
     <orderEntry type="library" name="Maven: grph:grph.all:1.6.29" level="project" />
     <orderEntry type="library" name="Maven: qube.samsroad:samsroad:1.0" level="project" />
     <orderEntry type="library" name="Maven: info.bliki.wiki:bliki-core:3.0.19" level="project" />
@@ -219,32 +246,5 @@
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.9.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../qoan/lib/samsroad-1.0.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/grph-1.6.29-big.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-javadoc.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-sources.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-javadoc.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-sources.jar!/" />
-          <root url="jar://$MODULE_DIR$/lib/thewebsemantic-1.1.jar!/" />
-          <root url="jar://$MODULE_DIR$/lib/thewebsemantic-1.1-src.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../qoan/lib/samsroad-1.0.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/grph-1.6.29-big.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-javadoc.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-sources.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-javadoc.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
   </component>
 </module>
