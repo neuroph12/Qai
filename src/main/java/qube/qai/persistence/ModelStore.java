@@ -23,6 +23,8 @@ import qube.qai.services.DataServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.Role;
 import qube.qai.user.User;
+import thewebsemantic.RDF2Bean;
+import thewebsemantic.Sparql;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +41,8 @@ public class ModelStore implements DataServiceInterface {
     private String directoryName;
 
     private Object serializedObject;
+
+    private Class objectClass;
 
     private Dataset dataset;
 
@@ -68,11 +72,13 @@ public class ModelStore implements DataServiceInterface {
         ArrayList<SearchResult> results = new ArrayList<>();
 
         dataset.begin(ReadWrite.READ);
-        Model defaultModel = dataset.getDefaultModel();
+        Model model = dataset.getDefaultModel();
+        RDF2Bean reader = new RDF2Bean(model);
+        Sparql.exec(model, objectClass, searchString);
 
         String resourceUrl = baseUrl + fieldName;
-        Property property = defaultModel.createProperty(resourceUrl);
-        ResIterator resIterator = defaultModel.listSubjectsWithProperty(property, searchString);
+        Property property = model.createProperty(resourceUrl);
+        ResIterator resIterator = model.listSubjectsWithProperty(property, searchString);
         if (resIterator != null && resIterator.hasNext()) {
             Resource resource = resIterator.next();
 

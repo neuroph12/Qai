@@ -182,38 +182,51 @@
         <!--<version>2.1.0</version>-->
         <!--</dependency>-->
 
+        <!--<dependency>-->
+        <!--<groupId>org.apache.jena</groupId>-->
+        <!--<artifactId>jena</artifactId>-->
+        <!--<version>3.2.0</version>-->
+        <!--</dependency>-->
+
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-core</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>apache-jena-libs</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.0</version>
             <type>pom</type>
         </dependency>
 
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-csv</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.jena/jena-text -->
-        <dependency>
-            <groupId>org.apache.jena</groupId>
-            <artifactId>jena-text</artifactId>
-            <version>3.0.1</version>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.apache.jena</groupId>-->
+        <!--<artifactId>jena-text</artifactId>-->
+        <!--<version>3.0.1</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>com.hp.hpl.jena</groupId>-->
+        <!--<artifactId>jena</artifactId>-->
+        <!--<version>2.6.4</version>-->
+        <!--</dependency>-->
+
 
         <!-- https://mvnrepository.com/artifact/com.thewebsemantic/jenabean -->
-        <dependency>
-            <groupId>com.thewebsemantic</groupId>
-            <artifactId>jenabean</artifactId>
-            <version>1.0.6</version>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>com.thewebsemantic</groupId>-->
+        <!--<artifactId>jenabean</artifactId>-->
+        <!--<version>1.1</version>-->
+        <!--</dependency>-->
 
         <!-- -->
         <!--<dependency>-->
