@@ -496,8 +496,9 @@ public class QaiServerModule extends AbstractModule {
      * @param hazelcastConfig
      */
     private void createUsersMapConfig(Config hazelcastConfig) {
-        MapConfig usersConfig = hazelcastConfig.getMapConfig(USERS);
-        MapStoreConfig userMapstoreConfig = usersConfig.getMapStoreConfig();
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(USERS);
+        mapConfig.getMapStoreConfig().setEnabled(true);
+        MapStoreConfig userMapstoreConfig = mapConfig.getMapStoreConfig();
         if (userMapstoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + USERS);
             userMapstoreConfig = new MapStoreConfig();
@@ -516,12 +517,13 @@ public class QaiServerModule extends AbstractModule {
             }
         });
         logger.info("adding mapstore configuration for " + USERS);
-        usersConfig.setMapStoreConfig(userMapstoreConfig);
+        mapConfig.setMapStoreConfig(userMapstoreConfig);
     }
 
     private void createUserRoles(Config hazelcastConfig) {
-        MapConfig rolesConfig = hazelcastConfig.getMapConfig(USER_ROLES);
-        MapStoreConfig roleMapStoreConfig = rolesConfig.getMapStoreConfig();
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(USER_ROLES);
+        mapConfig.getMapStoreConfig().setEnabled(true);
+        MapStoreConfig roleMapStoreConfig = mapConfig.getMapStoreConfig();
         if (roleMapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + USER_ROLES);
             roleMapStoreConfig = new MapStoreConfig();
@@ -541,12 +543,13 @@ public class QaiServerModule extends AbstractModule {
             }
         });
         logger.info("adding mapstore configuration for " + USER_ROLES);
-        rolesConfig.setMapStoreConfig(roleMapStoreConfig);
+        mapConfig.setMapStoreConfig(roleMapStoreConfig);
     }
 
     private void createUserSessions(Config hazelcastConfig) {
-        MapConfig sessionsConfig = hazelcastConfig.getMapConfig(USER_SESSIONS);
-        MapStoreConfig sessionMapStoreConfig = sessionsConfig.getMapStoreConfig();
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(USER_SESSIONS);
+        mapConfig.getMapStoreConfig().setEnabled(true);
+        MapStoreConfig sessionMapStoreConfig = mapConfig.getMapStoreConfig();
         if (sessionMapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + USER_SESSIONS);
             sessionMapStoreConfig = new MapStoreConfig();
@@ -566,7 +569,7 @@ public class QaiServerModule extends AbstractModule {
             }
         });
         logger.info("adding mapstore configuration for " + USER_SESSIONS);
-        sessionsConfig.setMapStoreConfig(sessionMapStoreConfig);
+        mapConfig.setMapStoreConfig(sessionMapStoreConfig);
     }
 
     /**
@@ -600,6 +603,7 @@ public class QaiServerModule extends AbstractModule {
      */
     private void createWiktionaryResourceConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(WIKTIONARY_RESOURCES);
+        mapConfig.getMapStoreConfig().setEnabled(true);
         MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
         if (mapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY_RESOURCES);
@@ -626,6 +630,7 @@ public class QaiServerModule extends AbstractModule {
      */
     private void createWiktionaryConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(WIKTIONARY);
+        mapConfig.getMapStoreConfig().setEnabled(true);
         MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
         if (mapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY);
@@ -649,6 +654,7 @@ public class QaiServerModule extends AbstractModule {
      */
     private void createWikipediaResourcesConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(WIKIPEDIA_RESOURCES);
+        mapConfig.getMapStoreConfig().setEnabled(true);
         MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
         if (mapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA_RESOURCES);
@@ -675,6 +681,7 @@ public class QaiServerModule extends AbstractModule {
      */
     private void createWikipediaConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(WIKIPEDIA);
+        mapConfig.getMapStoreConfig().setEnabled(true);
         MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
         if (mapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA);
@@ -699,6 +706,7 @@ public class QaiServerModule extends AbstractModule {
      */
     private void createProceduresConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(PROCEDURES);
+        mapConfig.getMapStoreConfig().setEnabled(true);
         MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
         if (mapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + PROCEDURES);
@@ -723,6 +731,7 @@ public class QaiServerModule extends AbstractModule {
      */
     private void createStockQuotesConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(STOCK_QUOTES);
+        mapConfig.getMapStoreConfig().setEnabled(true);
         MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
         if (mapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + STOCK_QUOTES);
@@ -753,6 +762,7 @@ public class QaiServerModule extends AbstractModule {
      */
     private void createStockEntitiesConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(STOCK_ENTITIES);
+        mapConfig.getMapStoreConfig().setEnabled(true);
         MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
         if (mapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);

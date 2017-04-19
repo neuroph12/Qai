@@ -390,14 +390,14 @@ public class QaiTestServerModule extends AbstractModule {
         /**
          * wikipedia-resources
          */
-        MapConfig mapConfig = config.getMapConfig(WIKIPEDIA_RESOURCES);
-        mapConfig.getMapStoreConfig().setEnabled(true);
-        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
-        if (mapStoreConfig == null) {
+        MapConfig wikiresourcesConfig = config.getMapConfig(WIKIPEDIA_RESOURCES);
+        wikiresourcesConfig.getMapStoreConfig().setEnabled(true);
+        MapStoreConfig wikiResourceMapStoreConfig = wikiresourcesConfig.getMapStoreConfig();
+        if (wikiResourceMapStoreConfig == null) {
             logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA_RESOURCES);
-            mapStoreConfig = new MapStoreConfig();
+            wikiResourceMapStoreConfig = new MapStoreConfig();
         }
-        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, ResourceData>() {
+        wikiResourceMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, ResourceData>() {
             public MapLoader<String, ResourceData> newMapStore(String mapName, Properties properties) {
                 if (WIKIPEDIA_RESOURCES.equals(mapName)) {
                     IndexedDirectoryMapStore store = new IndexedDirectoryMapStore(WIKIPEDIA_RESOURCE_DIRECTORY, WIKIPEDIA_RESOURCE_INDEX);
@@ -410,7 +410,7 @@ public class QaiTestServerModule extends AbstractModule {
             }
         });
         logger.info("adding mapstore configuration for " + WIKIPEDIA_RESOURCES);
-        mapConfig.setMapStoreConfig(mapStoreConfig);
+        wikiresourcesConfig.setMapStoreConfig(wikiResourceMapStoreConfig);
 
         // now we are ready to get an instance
         hazelcastInstance = Hazelcast.newHazelcastInstance(config);
