@@ -99,7 +99,7 @@ public class ModelStore implements DataServiceInterface {
         if (USERS.equals(fieldName)) {
             Collection<User> found = Sparql.exec(model, User.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/User> }");
             for (User user : found) {
-                if (searchString.equals(user.getUsername())) {
+                if ("*".equals(searchString) || searchString.equals(user.getUsername())) {
                     SearchResult result = new SearchResult("user", user.getUuid(), 1.0);
                     results.add(result);
                 }
@@ -126,28 +126,6 @@ public class ModelStore implements DataServiceInterface {
                 results.add(result);
             }
         }
-
-
-//        if (USERS.equals(fieldName)) {
-//            //User user = reader.load(User.class, searchString);
-//            Resource searchResource = model.createResource("qube.qai.user.User");
-//            String propertyName = "uuid";
-//            logger.info("Searching for user " + searchString);
-//            searchResource.addProperty(model.createProperty(baseUrl, propertyName), searchString);
-//            //Collection<User> found
-//            User user = reader.load(User.class, searchString);
-//            SearchResult result = new SearchResult(fieldName, user.getUuid(), 1.0);
-//            result.setContext("user");
-//            results.add(result);
-//            for (User user : found) {
-//                //if (searchString.equals(user.getUsername())) {
-//                    String uuid = user.getUuid();
-//                    SearchResult result = new SearchResult(fieldName, uuid, 1.0);
-//                    results.add(result);
-//                //}
-//            }
-//        }
-
 
         dataset.end();
 

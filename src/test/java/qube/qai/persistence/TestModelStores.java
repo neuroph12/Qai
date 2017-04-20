@@ -22,6 +22,7 @@ import qube.qai.user.Role;
 import qube.qai.user.User;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -29,10 +30,12 @@ import java.util.Collection;
  */
 public class TestModelStores extends TestCase {
 
-    public void testModelStore() throws Exception {
+    public void testUserModelStore() throws Exception {
 
         ModelStore modelStore = new ModelStore("./test/dummy.model.directory");
         modelStore.init();
+
+        Collection<String> uuids = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
             String userName = TestDatabaseMapStores.randomWord(10);
@@ -49,9 +52,23 @@ public class TestModelStores extends TestCase {
             String foundUuid = results.iterator().next().getUuid();
             assertTrue("uuids must be equal", foundUuid.equals(user.getUuid()));
             modelStore.remove(User.class, user);
+            uuids.add(user.getUuid());
+        }
+
+        // this way we can check that the leftover users are not one of those which we already deleted
+        Collection<SearchResult> others = modelStore.searchInputString("*", ModelStore.USERS, 0);
+        for (SearchResult result : others) {
+            log("additionally found user with uuid: " + result.getUuid());
+            assertTrue("the originals must have been deleted", !uuids.contains(result.getUuid()));
         }
     }
 
+    /**
+     * since we are now letting this be done by jenabeans, somewhat pointless test
+     * don't need to run it
+     *
+     * @throws Exception
+     */
     public void estUserToModelConversion() throws Exception {
 
         User user = new User("username", "password");
