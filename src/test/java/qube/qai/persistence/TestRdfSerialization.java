@@ -179,7 +179,7 @@ public class TestRdfSerialization extends TestCase {
 
     }
 
-    private Collection<Procedure> generateAllProcedures() {
+    public static Collection<Procedure> generateAllProcedures() {
 
         Collection<Procedure> procedures = new ArrayList<>();
 

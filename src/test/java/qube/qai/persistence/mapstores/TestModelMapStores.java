@@ -17,22 +17,23 @@ package qube.qai.persistence.mapstores;
 import junit.framework.TestCase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
+import qube.qai.persistence.TestRdfSerialization;
+import qube.qai.procedure.Procedure;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by rainbird on 4/6/17.
  */
 public class TestModelMapStores extends TestCase {
 
-    private String directoryName = "./test/dummy.model.directory";
+    private String userDirectory = "./test/dummy.user.model.directory";
+
+    private String procedureDirectory = "./test/dummy.procedure.model.directory";
 
     public void testUserMapStore() throws Exception {
 
@@ -68,7 +69,7 @@ public class TestModelMapStores extends TestCase {
         // this way i can use the injector even when it is active for other tests
         //Injector injector = QaiTestServerModule.initUsersInjector();
 
-        PersistentModelMapStore mapStore = new PersistentModelMapStore(User.class, directoryName);
+        PersistentModelMapStore mapStore = new PersistentModelMapStore(User.class, userDirectory);
         mapStore.init();
         //injector.injectMembers(mapStore);
 
@@ -178,38 +179,30 @@ public class TestModelMapStores extends TestCase {
      *
      * @throws Exception
      */
-    public void testPersistentStockEntityMapStore() throws Exception {
+    public void testPersistentProcedureMapStore() throws Exception {
 
         //Injector injector = QaiTestServerModule.initStocksInjector();
 
-        PersistentModelMapStore mapStore = new PersistentModelMapStore(StockEntity.class, directoryName);
+        PersistentModelMapStore mapStore = new PersistentModelMapStore(Procedure.class, procedureDirectory);
         mapStore.init();
         //injector.injectMembers(mapStore);
 
-        int number = 100;
-        Map<String, StockEntity> entityMap = new HashMap<String, StockEntity>();
-        for (int i = 0; i < number; i++) {
-            String name = "entity(" + i + ")";
-            StockEntity entity = TestDatabaseMapStores.createEntity(name);
-            String uuid = entity.getUuid();
-            if (uuid == null || "".equals(uuid)) {
-                uuid = UUIDService.uuidString();
-                entity.setUuid(uuid);
-            }
-            mapStore.store(uuid, entity);
+        Collection<String> uuids = new ArrayList<>();
+        Collection<Procedure> procedures = TestRdfSerialization.generateAllProcedures();
+        for (Procedure procedure : procedures) {
+            String uuid = procedure.getUuid();
+            uuids.add(uuid);
+            mapStore.store(uuid, procedure);
 
-            // now we create and add the quotes
-            Collection<StockQuote> quotes = TestDatabaseMapStores.generateQuotes(name, 100);
-            for (StockQuote quote : quotes) {
-                entity.addQuote(quote);
-            }
-            entityMap.put(uuid, entity);
+            log("loading procedure of type " + procedure.getName());
+            Procedure storedProcedure = (Procedure) mapStore.load(uuid);
+            assertNotNull("there has to be a stored procedure", storedProcedure);
+
         }
 
-        for (String uuid : entityMap.keySet()) {
-            StockEntity storedEntity = (StockEntity) mapStore.load(uuid);
-            StockEntity cachedEntity = entityMap.get(uuid);
-            assertTrue("stored and cached entites must be equal", cachedEntity.equals(storedEntity));
-        }
+    }
+
+    private void log(String message) {
+        System.out.println(message);
     }
 }

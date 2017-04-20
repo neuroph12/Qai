@@ -20,10 +20,19 @@ import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.tdb.TDBFactory;
+import qube.qai.procedure.Procedure;
+import qube.qai.procedure.analysis.*;
+import qube.qai.procedure.archive.DirectoryIndexer;
+import qube.qai.procedure.archive.WikiArchiveIndexer;
+import qube.qai.procedure.finance.StockEntityInitialization;
+import qube.qai.procedure.finance.StockQuoteRetriever;
+import qube.qai.procedure.utils.SelectionProcedure;
+import qube.qai.procedure.utils.SimpleProcedure;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -103,12 +112,33 @@ public class PersistentModelMapStore implements MapStore {
     public Object load(Object key) {
         try {
             dataset.begin(ReadWrite.WRITE);
-            Object found = reader.load(baseClass, key);
+            Object found = null;
+            if (baseClass.isAssignableFrom(Procedure.class)) {
+                found = checkProcedureTypes(key);
+            } else {
+                found = reader.load(baseClass, key);
+            }
+
             dataset.end();
             return found;
         } catch (NotFoundException e) {
             return null;
         }
+    }
+
+    private Object checkProcedureTypes(Object key) {
+        Object found = null;
+        for (Class klass : createClasses()) {
+            try {
+                found = reader.load(klass, key);
+            } catch (NotFoundException e) {
+                continue;
+            }
+            if (found != null) {
+                break;
+            }
+        }
+        return found;
     }
 
     @Override
@@ -124,5 +154,25 @@ public class PersistentModelMapStore implements MapStore {
     @Override
     public Iterable loadAllKeys() {
         return null;
+    }
+
+    private static Collection<Class> createClasses() {
+
+        Collection<Class> classes = new ArrayList<>();
+
+        classes.add(ChangePointAnalysis.class);
+        classes.add(MarketNetworkBuilder.class);
+        classes.add(MatrixStatistics.class);
+        classes.add(NeuralNetworkAnalysis.class);
+        classes.add(NeuralNetworkForwardPropagation.class);
+        classes.add(SortingPercentilesProcedure.class);
+        classes.add(DirectoryIndexer.class);
+        classes.add(WikiArchiveIndexer.class);
+        classes.add(StockEntityInitialization.class);
+        classes.add(StockQuoteRetriever.class);
+        classes.add(SelectionProcedure.class);
+        classes.add(SimpleProcedure.class);
+
+        return classes;
     }
 }
