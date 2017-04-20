@@ -62,7 +62,6 @@ public class PersistentModelMapStore implements MapStore {
 
         dataset.begin(ReadWrite.WRITE);
         model = dataset.getNamedModel(baseUrl);
-
         writer = new Bean2RDF(model);
         reader = new RDF2Bean(model);
 

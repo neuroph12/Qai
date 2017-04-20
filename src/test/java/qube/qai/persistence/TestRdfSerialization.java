@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import qube.qai.parsers.AntimirovParser;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
+import qube.qai.persistence.mapstores.TestDatabaseMapStores;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.analysis.*;
 import qube.qai.procedure.archive.DirectoryIndexer;
@@ -35,6 +36,7 @@ import qube.qai.user.Session;
 import qube.qai.user.User;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.RDF2Bean;
+import thewebsemantic.Sparql;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,7 +49,7 @@ public class TestRdfSerialization extends TestCase {
 
     private static Logger logger = LoggerFactory.getLogger("TestRdfSerialization");
 
-    public void testRedSerializationOfStocks() throws Exception {
+    public void estRedSerializationOfStocks() throws Exception {
 
         StockCategory category = new StockCategory("My category");
         StockEntity entity = new StockEntity();
@@ -78,7 +80,7 @@ public class TestRdfSerialization extends TestCase {
         assertTrue("the users must be equals", category.equals(storedCategory));
     }
 
-    public void testRdfSerializationOfUsers() throws Exception {
+    public void estRdfSerializationOfUsers() throws Exception {
 
         User user = new User("test user", "test password");
         user.addRole(new Role());
@@ -103,7 +105,7 @@ public class TestRdfSerialization extends TestCase {
         assertTrue("the sessions has to be equal", session.equals(storedSession));
     }
 
-    public void testRdfSerializationOfAntimirovNodes() throws Exception {
+    public void estRdfSerializationOfAntimirovNodes() throws Exception {
 
         // we make it easy for ourself creating the ast-tree
         BaseNode parsedNode = parseExpression("(foo baz[integer] bar[double])");
@@ -126,7 +128,7 @@ public class TestRdfSerialization extends TestCase {
         assertTrue("the nodes must be equal", parsedNode.equals(storedNode));
     }
 
-    public void testRdfSerializationOfProcedures() throws Exception {
+    public void estRdfSerializationOfProcedures() throws Exception {
 
         Model model = ModelFactory.createDefaultModel();
         Bean2RDF writer = new Bean2RDF(model);
@@ -148,6 +150,33 @@ public class TestRdfSerialization extends TestCase {
             assertNotNull("three has to be something stored after all", storedProcedure);
             assertTrue("the procedures must be equal", procedure.equals(storedProcedure));
         }
+    }
+
+    public void testRdfSerializationCollections() throws Exception {
+
+        Model model = ModelFactory.createDefaultModel();
+        Bean2RDF writer = new Bean2RDF(model);
+
+        Collection<String> uuids = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) {
+            StockEntity entity = TestDatabaseMapStores.createEntity(TestDatabaseMapStores.randomWord(10));
+            uuids.add(entity.getUuid());
+            writer.save(entity);
+        }
+
+        RDF2Bean reader = new RDF2Bean(model);
+        for (String uuid : uuids) {
+            StockEntity entity = reader.load(StockEntity.class, uuid);
+            assertNotNull("there has to be an entity", entity);
+            assertTrue("uuids must be identical", uuid.equals(entity.getUuid()));
+        }
+
+        Collection<StockEntity> entities = Sparql.exec(model, StockEntity.class, "SELECT ?s WHERE { ?s a <http://qube.qai.persistence/StockEntity> }");
+        //Collection<StockEntity> entities = reader.load(StockEntity.class);
+        assertNotNull("there has to be entities", entities);
+        assertTrue("entities list may not be empty", !entities.isEmpty());
+
     }
 
     private Collection<Procedure> generateAllProcedures() {

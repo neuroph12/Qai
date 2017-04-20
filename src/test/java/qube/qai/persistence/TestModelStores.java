@@ -16,6 +16,7 @@ package qube.qai.persistence;
 
 import junit.framework.TestCase;
 import org.apache.jena.rdf.model.Model;
+import qube.qai.persistence.mapstores.TestDatabaseMapStores;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.Role;
 import qube.qai.user.User;
@@ -26,42 +27,29 @@ import java.util.Collection;
 /**
  * Created by rainbird on 1/20/17.
  */
-public class TestModelStore extends TestCase {
+public class TestModelStores extends TestCase {
 
     public void testModelStore() throws Exception {
 
         ModelStore modelStore = new ModelStore("./test/dummy.model.directory");
         modelStore.init();
 
-        String userName = "dummy_user";
-        User user = new User(userName, "dummy_password");
-        user.createSession().setName("dummy_user_session:_test_session");
-        user.addRole(new Role(user, "dummy_role", "this_is_a_test_role_for_the_user"));
+        for (int i = 0; i < 10; i++) {
+            String userName = TestDatabaseMapStores.randomWord(10);
+            User user = new User(userName, "dummy_password");
+            user.createSession().setName("dummy_user_session:_test_session");
+            user.addRole(new Role(user, "dummy_role", "this_is_a_test_role_for_the_user"));
 
-        Model model = User.userAsModel(user);
-        modelStore.save(model);
+            modelStore.save(User.class, user);
 
-        //Model model = User.userAsModel(user);
-        //modelStore.save(User.class, user);
-
-        String query = user.getUsername();
-        Collection<SearchResult> results = modelStore.searchInputString(query, ModelStore.USERS, 1);
-        assertNotNull("there must be results", results);
-        assertTrue("there has to be the user", !results.isEmpty());
-
-        SearchResult result = results.iterator().next();
-        assertNotNull("result may not be null", result);
-        assertTrue("username has to be right", "user".equals(result.getContext()));
-        assertTrue("uuid must be right", user.getUuid().equals(result.getUuid()));
-
-        modelStore.remove(User.class, user);
-
-        User serializedUser = (User) modelStore.getSerializedObject();
-        assertNotNull("serialized user may not be null", serializedUser);
-        assertTrue("uuid has to be equal", user.getUuid().equals(serializedUser.getUuid()));
-        assertTrue("username has to be equal", user.getUsername().equals(serializedUser.getUsername()));
-        assertTrue("password has to be equal", user.getPassword().equals(serializedUser.getPassword()));
-
+            String query = userName;
+            Collection<SearchResult> results = modelStore.searchInputString(query, ModelStore.USERS, 1);
+            assertNotNull("there must be results", results);
+            assertTrue("there has to be the user", !results.isEmpty());
+            String foundUuid = results.iterator().next().getUuid();
+            assertTrue("uuids must be equal", foundUuid.equals(user.getUuid()));
+            modelStore.remove(User.class, user);
+        }
     }
 
     public void estUserToModelConversion() throws Exception {

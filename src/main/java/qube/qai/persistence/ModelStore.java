@@ -19,6 +19,8 @@ import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.tdb.TDBFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.DataServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -36,6 +38,8 @@ import java.util.Collection;
  * Created by rainbird on 1/20/17.
  */
 public class ModelStore implements DataServiceInterface {
+
+    private static Logger logger = LoggerFactory.getLogger("ModelStore");
 
     public static String PROCEDURES = "PROCEDURES";
 
@@ -59,6 +63,10 @@ public class ModelStore implements DataServiceInterface {
 
     private Model model;
 
+    private Bean2RDF writer;
+
+    private RDF2Bean reader;
+
     public ModelStore() {
     }
 
@@ -74,8 +82,11 @@ public class ModelStore implements DataServiceInterface {
 
         dataset = TDBFactory.createDataset(directoryName);
 
-        dataset.begin(ReadWrite.READ);
+        dataset.begin(ReadWrite.WRITE);
         model = dataset.getNamedModel(baseUrl);
+        writer = new Bean2RDF(model);
+        reader = new RDF2Bean(model);
+
         dataset.end();
     }
 
@@ -83,37 +94,32 @@ public class ModelStore implements DataServiceInterface {
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
 
         ArrayList<SearchResult> results = new ArrayList<>();
-
         dataset.begin(ReadWrite.WRITE);
-        //Model model = dataset.getNamedModel(baseUrl);
-        if (PROCEDURES.equals(fieldName)) {
-            //Collection<Procedure> found = Sparql.exec(model, Procedure.class, searchString);
-            RDF2Bean reader = new RDF2Bean(model);
-            Collection<Procedure> found = reader.load(Procedure.class);
+
+        if (USERS.equals(fieldName)) {
+            Collection<User> found = Sparql.exec(model, User.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/User> }");
+            for (User user : found) {
+                if (searchString.equals(user.getUsername())) {
+                    SearchResult result = new SearchResult("user", user.getUuid(), 1.0);
+                    results.add(result);
+                }
+            }
+        } else if (PROCEDURES.equals(fieldName)) {
+            Collection<Procedure> found = Sparql.exec(model, Procedure.class, "SELECT ?s WHERE { ?s a <http://qube.qai.procedure/Procedure> }");
             for (Procedure procedure : found) {
                 String uuid = procedure.getUuid();
                 SearchResult result = new SearchResult(fieldName, uuid, 1.0);
                 results.add(result);
             }
-        } else if (USERS.equals(fieldName)) {
-            RDF2Bean reader = new RDF2Bean(model);
-            Collection<User> found = reader.load(User.class);
-            for (User user : found) {
-                if (searchString.equals(user.getUsername())) {
-                    String uuid = user.getUuid();
-                    SearchResult result = new SearchResult(fieldName, uuid, 1.0);
-                    results.add(result);
-                }
-            }
         } else if (SESSIONS.equals(fieldName)) {
-            Collection<Session> found = Sparql.exec(model, Session.class, searchString);
+            Collection<Session> found = Sparql.exec(model, Session.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/Session> }");
             for (Session session : found) {
                 String uuid = session.getUuid();
                 SearchResult result = new SearchResult(fieldName, uuid, 1.0);
                 results.add(result);
             }
         } else if (ROLES.equals(fieldName)) {
-            Collection<Role> found = Sparql.exec(model, Role.class, searchString);
+            Collection<Role> found = Sparql.exec(model, Role.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/Role> }");
             for (Role role : found) {
                 String uuid = role.getUuid();
                 SearchResult result = new SearchResult(fieldName, uuid, 1.0);
@@ -121,23 +127,31 @@ public class ModelStore implements DataServiceInterface {
             }
         }
 
+
+//        if (USERS.equals(fieldName)) {
+//            //User user = reader.load(User.class, searchString);
+//            Resource searchResource = model.createResource("qube.qai.user.User");
+//            String propertyName = "uuid";
+//            logger.info("Searching for user " + searchString);
+//            searchResource.addProperty(model.createProperty(baseUrl, propertyName), searchString);
+//            //Collection<User> found
+//            User user = reader.load(User.class, searchString);
+//            SearchResult result = new SearchResult(fieldName, user.getUuid(), 1.0);
+//            result.setContext("user");
+//            results.add(result);
+//            for (User user : found) {
+//                //if (searchString.equals(user.getUsername())) {
+//                    String uuid = user.getUuid();
+//                    SearchResult result = new SearchResult(fieldName, uuid, 1.0);
+//                    results.add(result);
+//                //}
+//            }
+//        }
+
+
         dataset.end();
 
         return results;
-    }
-
-    /**
-     * this method converts the search result- in this case a user-resource
-     * into a user-object as system knows it
-     * and persists on a hazelcast map under the given id
-     * so that a selector can actually broker the persisted object over hazelcast-maps
-     *
-     * @param objectType
-     */
-    private void serializeSearchResultObject(String objectType) {
-        if ("user".equalsIgnoreCase(objectType)) {
-            // serialize the
-        }
     }
 
     @Override
@@ -149,7 +163,7 @@ public class ModelStore implements DataServiceInterface {
     @Override
     public void save(Model model) {
         dataset.begin(ReadWrite.WRITE);
-        dataset.getNamedModel(baseUrl).add(model);
+        this.model.add(model);
         dataset.commit();
         dataset.end();
     }
@@ -157,36 +171,29 @@ public class ModelStore implements DataServiceInterface {
     @Override
     public void remove(Model model) {
         dataset.begin(ReadWrite.WRITE);
-        dataset.getNamedModel(baseUrl).remove(model);
+        this.model.remove(model);
         dataset.commit();
         dataset.end();
     }
 
     @Override
     public Model createDefaultModel() {
-
-//        dataset.begin(ReadWrite.WRITE);
-//        Model defaultModel = dataset.getNamedModel(baseUrl);
-//        dataset.end();
-
         return model;
     }
 
     @Override
     public void remove(Class baseClass, Object toRemove) {
         dataset.begin(ReadWrite.WRITE);
-        //Model model = dataset.getNamedModel(baseUrl);
-        Bean2RDF writer = new Bean2RDF(model);
         writer.delete(toRemove);
+        dataset.commit();
         dataset.end();
     }
 
     @Override
     public void save(Class baseCLass, Object data) {
         dataset.begin(ReadWrite.WRITE);
-        //Model model = dataset.getNamedModel(baseUrl);
-        Bean2RDF writer = new Bean2RDF(model);
         writer.save(data);
+        dataset.commit();
         dataset.end();
     }
 

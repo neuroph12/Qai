@@ -17,6 +17,8 @@ package qube.qai.persistence.mapstores;
 import com.hazelcast.core.MapStore;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
@@ -29,6 +31,8 @@ import java.util.Map;
  * Created by rainbird on 4/6/17.
  */
 public class ModelMapStore implements MapStore {
+
+    private static Logger logger = LoggerFactory.getLogger("ModelMapStore");
 
     private Class baseClass;
 
@@ -91,6 +95,9 @@ public class ModelMapStore implements MapStore {
 
     @Override
     public Iterable loadAllKeys() {
+        //ArrayList<String> uuids = new ArrayList<>();
+        //Collection results = reader.load(baseClass);
+
         return null;
     }
 }

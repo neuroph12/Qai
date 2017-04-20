@@ -170,4 +170,46 @@ public class TestModelMapStores extends TestCase {
             assertTrue("stored and cached entites must be equal", cachedEntity.equals(storedEntity));
         }
     }
+
+    /**
+     * out of some reason this one's not working. on the other hand, i don't
+     * really see this one as a useful test, as the thing is not meant to be persisting
+     * StockEntities in this kind of a map-store.
+     *
+     * @throws Exception
+     */
+    public void testPersistentStockEntityMapStore() throws Exception {
+
+        //Injector injector = QaiTestServerModule.initStocksInjector();
+
+        PersistentModelMapStore mapStore = new PersistentModelMapStore(StockEntity.class, directoryName);
+        mapStore.init();
+        //injector.injectMembers(mapStore);
+
+        int number = 100;
+        Map<String, StockEntity> entityMap = new HashMap<String, StockEntity>();
+        for (int i = 0; i < number; i++) {
+            String name = "entity(" + i + ")";
+            StockEntity entity = TestDatabaseMapStores.createEntity(name);
+            String uuid = entity.getUuid();
+            if (uuid == null || "".equals(uuid)) {
+                uuid = UUIDService.uuidString();
+                entity.setUuid(uuid);
+            }
+            mapStore.store(uuid, entity);
+
+            // now we create and add the quotes
+            Collection<StockQuote> quotes = TestDatabaseMapStores.generateQuotes(name, 100);
+            for (StockQuote quote : quotes) {
+                entity.addQuote(quote);
+            }
+            entityMap.put(uuid, entity);
+        }
+
+        for (String uuid : entityMap.keySet()) {
+            StockEntity storedEntity = (StockEntity) mapStore.load(uuid);
+            StockEntity cachedEntity = entityMap.get(uuid);
+            assertTrue("stored and cached entites must be equal", cachedEntity.equals(storedEntity));
+        }
+    }
 }
