@@ -33,14 +33,19 @@ public class TestModelStore extends TestCase {
         ModelStore modelStore = new ModelStore("./test/dummy.model.directory");
         modelStore.init();
 
-        User user = new User("dummy_user", "dummy_password");
+        String userName = "dummy_user";
+        User user = new User(userName, "dummy_password");
         user.createSession().setName("dummy_user_session:_test_session");
         user.addRole(new Role(user, "dummy_role", "this_is_a_test_role_for_the_user"));
 
         Model model = User.userAsModel(user);
         modelStore.save(model);
 
-        Collection<SearchResult> results = modelStore.searchInputString(user.getUsername(), "username", 1);
+        //Model model = User.userAsModel(user);
+        //modelStore.save(User.class, user);
+
+        String query = user.getUsername();
+        Collection<SearchResult> results = modelStore.searchInputString(query, ModelStore.USERS, 1);
         assertNotNull("there must be results", results);
         assertTrue("there has to be the user", !results.isEmpty());
 
@@ -49,7 +54,7 @@ public class TestModelStore extends TestCase {
         assertTrue("username has to be right", "user".equals(result.getContext()));
         assertTrue("uuid must be right", user.getUuid().equals(result.getUuid()));
 
-        modelStore.remove(model);
+        modelStore.remove(User.class, user);
 
         User serializedUser = (User) modelStore.getSerializedObject();
         assertNotNull("serialized user may not be null", serializedUser);
@@ -59,7 +64,7 @@ public class TestModelStore extends TestCase {
 
     }
 
-    public void testUserToModelConversion() throws Exception {
+    public void estUserToModelConversion() throws Exception {
 
         User user = new User("username", "password");
         user.createSession().setName("User Session #One");

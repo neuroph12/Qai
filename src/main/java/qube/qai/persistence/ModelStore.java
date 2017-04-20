@@ -17,12 +17,15 @@ package qube.qai.persistence;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
-import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.tdb.TDBFactory;
+import qube.qai.procedure.Procedure;
 import qube.qai.services.DataServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.Role;
+import qube.qai.user.Session;
 import qube.qai.user.User;
+import thewebsemantic.Bean2RDF;
 import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
 
@@ -33,6 +36,14 @@ import java.util.Collection;
  * Created by rainbird on 1/20/17.
  */
 public class ModelStore implements DataServiceInterface {
+
+    public static String PROCEDURES = "PROCEDURES";
+
+    public static String USERS = "USERS";
+
+    public static String SESSIONS = "SESSIONS";
+
+    public static String ROLES = "ROLES";
 
     private String baseUrl = "http://www.qoan.org/data/";
 
@@ -45,6 +56,8 @@ public class ModelStore implements DataServiceInterface {
     private Class objectClass;
 
     private Dataset dataset;
+
+    private Model model;
 
     public ModelStore() {
     }
@@ -62,7 +75,7 @@ public class ModelStore implements DataServiceInterface {
         dataset = TDBFactory.createDataset(directoryName);
 
         dataset.begin(ReadWrite.READ);
-        Model model = dataset.getDefaultModel();
+        model = dataset.getNamedModel(baseUrl);
         dataset.end();
     }
 
@@ -71,56 +84,41 @@ public class ModelStore implements DataServiceInterface {
 
         ArrayList<SearchResult> results = new ArrayList<>();
 
-        dataset.begin(ReadWrite.READ);
-        Model model = dataset.getDefaultModel();
-        RDF2Bean reader = new RDF2Bean(model);
-        Sparql.exec(model, objectClass, searchString);
-
-        String resourceUrl = baseUrl + fieldName;
-        Property property = model.createProperty(resourceUrl);
-        ResIterator resIterator = model.listSubjectsWithProperty(property, searchString);
-        if (resIterator != null && resIterator.hasNext()) {
-            Resource resource = resIterator.next();
-
-            User user = new User();
-
-            StmtIterator stmtIterator = resource.listProperties();
-            while (stmtIterator.hasNext()) {
-                Statement statement = stmtIterator.nextStatement();
-                String name = statement.getPredicate().getLocalName();
-                String value = statement.getObject().asLiteral().getValue().toString();
-
-                if ("username".equals(name)) {
-                    user.setUsername(value);
-                }
-
-                if ("password".equals(name)) {
-                    user.setPassword(value);
-                }
-
-                if ("uuid".equals(name)) {
-                    user.setUuid(value);
-                    SearchResult result = new SearchResult("user", value, 10);
+        dataset.begin(ReadWrite.WRITE);
+        //Model model = dataset.getNamedModel(baseUrl);
+        if (PROCEDURES.equals(fieldName)) {
+            //Collection<Procedure> found = Sparql.exec(model, Procedure.class, searchString);
+            RDF2Bean reader = new RDF2Bean(model);
+            Collection<Procedure> found = reader.load(Procedure.class);
+            for (Procedure procedure : found) {
+                String uuid = procedure.getUuid();
+                SearchResult result = new SearchResult(fieldName, uuid, 1.0);
+                results.add(result);
+            }
+        } else if (USERS.equals(fieldName)) {
+            RDF2Bean reader = new RDF2Bean(model);
+            Collection<User> found = reader.load(User.class);
+            for (User user : found) {
+                if (searchString.equals(user.getUsername())) {
+                    String uuid = user.getUuid();
+                    SearchResult result = new SearchResult(fieldName, uuid, 1.0);
                     results.add(result);
                 }
-
-                if ("roleUuid".equals(name)) {
-                    Role role = new Role();
-                    role.setUuid(value);
-                    user.addRole(role);
-                }
-
-                if ("sessionUuid".equals(name)) {
-                    user.createSession().setUuid(value);
-                }
             }
-
-            serializedObject = user;
-            if (isSerializeObject) {
-                serializeSearchResultObject("user");
+        } else if (SESSIONS.equals(fieldName)) {
+            Collection<Session> found = Sparql.exec(model, Session.class, searchString);
+            for (Session session : found) {
+                String uuid = session.getUuid();
+                SearchResult result = new SearchResult(fieldName, uuid, 1.0);
+                results.add(result);
             }
-
-            //System.out.println("resource: " + resource.toString());
+        } else if (ROLES.equals(fieldName)) {
+            Collection<Role> found = Sparql.exec(model, Role.class, searchString);
+            for (Role role : found) {
+                String uuid = role.getUuid();
+                SearchResult result = new SearchResult(fieldName, uuid, 1.0);
+                results.add(result);
+            }
         }
 
         dataset.end();
@@ -150,19 +148,16 @@ public class ModelStore implements DataServiceInterface {
 
     @Override
     public void save(Model model) {
-
         dataset.begin(ReadWrite.WRITE);
-        dataset.getDefaultModel().add(model);
+        dataset.getNamedModel(baseUrl).add(model);
         dataset.commit();
         dataset.end();
-
     }
 
     @Override
     public void remove(Model model) {
-
         dataset.begin(ReadWrite.WRITE);
-        dataset.getDefaultModel().remove(model);
+        dataset.getNamedModel(baseUrl).remove(model);
         dataset.commit();
         dataset.end();
     }
@@ -170,11 +165,29 @@ public class ModelStore implements DataServiceInterface {
     @Override
     public Model createDefaultModel() {
 
-        dataset.begin(ReadWrite.WRITE);
-        Model defaultModel = dataset.getDefaultModel();
-        dataset.end();
+//        dataset.begin(ReadWrite.WRITE);
+//        Model defaultModel = dataset.getNamedModel(baseUrl);
+//        dataset.end();
 
-        return defaultModel;
+        return model;
+    }
+
+    @Override
+    public void remove(Class baseClass, Object toRemove) {
+        dataset.begin(ReadWrite.WRITE);
+        //Model model = dataset.getNamedModel(baseUrl);
+        Bean2RDF writer = new Bean2RDF(model);
+        writer.delete(toRemove);
+        dataset.end();
+    }
+
+    @Override
+    public void save(Class baseCLass, Object data) {
+        dataset.begin(ReadWrite.WRITE);
+        //Model model = dataset.getNamedModel(baseUrl);
+        Bean2RDF writer = new Bean2RDF(model);
+        writer.save(data);
+        dataset.end();
     }
 
     public Object getSerializedObject() {

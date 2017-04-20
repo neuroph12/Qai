@@ -60,4 +60,14 @@ public class SparqlSearchService implements DataServiceInterface {
     public Model createDefaultModel() {
         return ModelFactory.createDefaultModel();
     }
+
+    @Override
+    public void save(Class baseCLass, Object data) {
+
+    }
+
+    @Override
+    public void remove(Class baseClass, Object toRemove) {
+
+    }
 }

@@ -56,6 +56,16 @@ public class TestRelateProcedure extends TestProcedureBase {
             public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
                 return null;
             }
+
+            @Override
+            public void save(Class baseCLass, Object data) {
+
+            }
+
+            @Override
+            public void remove(Class baseClass, Object toRemove) {
+
+            }
         };
         procedure.setDataService(dummyDateStore);
         // @TODO this is to be completed- not really urgent right now

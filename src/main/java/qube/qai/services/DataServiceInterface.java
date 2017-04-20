@@ -30,9 +30,17 @@ public interface DataServiceInterface extends SearchServiceInterface {
      * capable of doing so. Initially, i am planning to use this for the procedures,
      * url's to their results, stock-entities and so on. i guess, there will be more later on as well.
      */
+
+    @Deprecated
     void save(Model model);
 
+    @Deprecated
     void remove(Model model);
 
+    @Deprecated
     Model createDefaultModel();
+
+    void save(Class baseCLass, Object data);
+
+    void remove(Class baseClass, Object toRemove);
 }

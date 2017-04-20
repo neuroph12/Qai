@@ -60,6 +60,16 @@ public class DistributedDataService extends DistributedSearchService implements 
         return ModelFactory.createDefaultModel();
     }
 
+    @Override
+    public void save(Class baseCLass, Object data) {
+
+    }
+
+    @Override
+    public void remove(Class baseClass, Object toRemove) {
+
+    }
+
     static public class SaveRequest implements Serializable {
         Model model;
 

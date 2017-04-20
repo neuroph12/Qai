@@ -32,6 +32,8 @@ import java.util.Map;
  */
 public class TestModelMapStores extends TestCase {
 
+    private String directoryName = "./test/dummy.model.directory";
+
     public void testUserMapStore() throws Exception {
 
         // this way i can use the injector even when it is active for other tests
@@ -54,6 +56,36 @@ public class TestModelMapStores extends TestCase {
         assertTrue(!user.getSessions().isEmpty());
         Session readSession = readUser.getSessions().iterator().next();
         assertTrue(session.equals(readSession));
+        mapStore.delete(user.getUuid());
+
+        User lostUser = (User) mapStore.load(user.getUuid());
+        assertTrue(lostUser == null);
+
+    }
+
+    public void testPersistentUserMapStore() throws Exception {
+
+        // this way i can use the injector even when it is active for other tests
+        //Injector injector = QaiTestServerModule.initUsersInjector();
+
+        PersistentModelMapStore mapStore = new PersistentModelMapStore(User.class, directoryName);
+        mapStore.init();
+        //injector.injectMembers(mapStore);
+
+        User user = TestDatabaseMapStores.createUser();
+        Session session = user.createSession();
+
+        Role role = new Role(user, "DO_ALL_ROLE", "this role will allow you to do everything");
+        user.addRole(role);
+
+        mapStore.store(user.getUuid(), user);
+
+        User readUser = (User) mapStore.load(user.getUuid());
+        assertNotNull(readUser);
+        assertTrue(user.equals(readUser));
+        assertTrue(!user.getSessions().isEmpty());
+//        Session readSession = readUser.getSessions().iterator().next();
+//        assertTrue(session.equals(readSession));
         mapStore.delete(user.getUuid());
 
         User lostUser = (User) mapStore.load(user.getUuid());
