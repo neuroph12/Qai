@@ -41,9 +41,9 @@ public class ChangePointAnalysis extends Procedure implements ProcedureConstants
     /**
      * runs change-point analysis of a given time-series
      */
-    public ChangePointAnalysis(Procedure procedure) {
-        super(NAME, procedure);
-    }
+//    public ChangePointAnalysis(Procedure procedure) {
+//        super(NAME, procedure);
+//    }
 
 
     @Override

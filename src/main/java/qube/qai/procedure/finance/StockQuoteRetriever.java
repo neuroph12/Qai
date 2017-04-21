@@ -63,7 +63,9 @@ public class StockQuoteRetriever extends Procedure {
         executeInputProcedures();
 
         // first get the selector
-        tickerSymbol = (String) getInputValueOf(INPUT_TIME_SEQUENCE);
+        if (StringUtils.isEmpty(tickerSymbol)) {
+            tickerSymbol = (String) getInputValueOf(INPUT_TIME_SEQUENCE);
+        }
 
         if (StringUtils.isEmpty(tickerSymbol)) {
             throw new RuntimeException("There has to be a ticker-symbol to update");

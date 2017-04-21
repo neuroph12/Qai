@@ -100,9 +100,9 @@ public class TestHazelcastSelectors extends QaiTestBase {
         IMap<String, Procedure> procedures = hazelcastInstance.getMap(PROCEDURE_SOURCE);
 
         List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
-        String[] procedureNames = procedureSource.getProcedureNames();
-        for (String name : procedureNames) {
-            Procedure procedure = procedureSource.getProcedureWithName(name);
+        Collection<Class> procedureNames = Procedure.knownSubClasses();
+        for (Class name : procedureNames) {
+            Procedure procedure = (Procedure) name.newInstance();
             assertNotNull("procedure should not be null", procedure);
             String uuid = procedure.getUuid();
             if (StringUtils.isBlank(uuid)) {

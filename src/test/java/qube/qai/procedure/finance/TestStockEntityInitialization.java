@@ -14,14 +14,11 @@
 
 package qube.qai.procedure.finance;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.hazelcast.core.MapStore;
-import qube.qai.main.QaiTestBase;
-import qube.qai.main.QaiTestServerModule;
-import qube.qai.persistence.StockCategory;
-import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.mapstores.DatabaseMapStore;
-import qube.qai.persistence.mapstores.TestDatabaseMapStores;
+import com.google.inject.persist.PersistService;
+import com.google.inject.persist.jpa.JpaPersistModule;
+import junit.framework.TestCase;
 
 import javax.persistence.EntityManager;
 
@@ -29,44 +26,44 @@ import javax.persistence.EntityManager;
 /**
  * Created by rainbird on 1/21/17.
  */
-public class TestStockEntityInitialization extends QaiTestBase {
+public class TestStockEntityInitialization extends TestCase {
 
-    public void restStockEntityInitialization() throws Exception {
-
-        Injector injector = QaiTestServerModule.initStocksInjector();
-
-        MapStore categoryMapStore = new DatabaseMapStore(StockCategory.class);
-        injector.injectMembers(categoryMapStore);
-
-        StockCategory category = new StockCategory();
-        category.setName("Standard and Poor top 500");
-
-        for (int i = 0; i < 10; i++) {
-            StockEntity entity = TestDatabaseMapStores.createEntity("stock_entity_" + i);
-            category.addStockEntity(entity);
-        }
-
-        categoryMapStore.store(category.getUuid(), category);
-
-        StockCategory foundCategory = (StockCategory) categoryMapStore.load(category.getUuid());
-        assertNotNull(foundCategory);
-        assertTrue(foundCategory.getEntities() != null && !foundCategory.getEntities().isEmpty());
-
-        EntityManager entityManager = ((DatabaseMapStore) categoryMapStore).getEntityManager();
-        String queryString = "select c from StockEntity c where c.tickerSymbol like '%s' and c.tradedIn like '%s'";
-        for (StockEntity entity : category.getEntities()) {
-            String tickerSymbol = entity.getTickerSymbol();
-            String tradedIn = entity.getTradedIn();
-            String query = String.format(queryString, tickerSymbol, tradedIn);
-            StockEntity foundEntity = entityManager.createQuery(query, StockEntity.class).getSingleResult();
-            assertNotNull(foundEntity);
-            assertTrue(foundEntity.getUuid().equals(entity.getUuid()));
-        }
-    }
+//    public void restStockEntityInitialization() throws Exception {
+//
+//        Injector injector = QaiTestServerModule.initStocksInjector();
+//
+//        MapStore categoryMapStore = new DatabaseMapStore(StockCategory.class);
+//        injector.injectMembers(categoryMapStore);
+//
+//        StockCategory category = new StockCategory();
+//        category.setName("Standard and Poor top 500");
+//
+//        for (int i = 0; i < 10; i++) {
+//            StockEntity entity = TestDatabaseMapStores.createEntity("stock_entity_" + i);
+//            category.addStockEntity(entity);
+//        }
+//
+//        categoryMapStore.store(category.getUuid(), category);
+//
+//        StockCategory foundCategory = (StockCategory) categoryMapStore.load(category.getUuid());
+//        assertNotNull(foundCategory);
+//        assertTrue(foundCategory.getEntities() != null && !foundCategory.getEntities().isEmpty());
+//
+//        EntityManager entityManager = ((DatabaseMapStore) categoryMapStore).getEntityManager();
+//        String queryString = "select c from StockEntity c where c.tickerSymbol like '%s' and c.tradedIn like '%s'";
+//        for (StockEntity entity : category.getEntities()) {
+//            String tickerSymbol = entity.getTickerSymbol();
+//            String tradedIn = entity.getTradedIn();
+//            String query = String.format(queryString, tickerSymbol, tradedIn);
+//            StockEntity foundEntity = entityManager.createQuery(query, StockEntity.class).getSingleResult();
+//            assertNotNull(foundEntity);
+//            assertTrue(foundEntity.getUuid().equals(entity.getUuid()));
+//        }
+//    }
 
     public void testStockEntityInitializationProcedure() throws Exception {
 
-        Injector injector = QaiTestServerModule.initStocksInjector();
+        Injector injector = createInjector();
         EntityManager entityManager = injector.getInstance(EntityManager.class);
         StockEntityInitialization procedure = new StockEntityInitialization();
         procedure.setEntityManager(entityManager);
@@ -105,4 +102,14 @@ public class TestStockEntityInitialization extends QaiTestBase {
         log("---------------------------------------------------------------------");
     }
 
+    private Injector createInjector() {
+        Injector injector = Guice.createInjector(new JpaPersistModule("STAND_ALONE_TEST_STOCKS"));
+        PersistService service = injector.getInstance(PersistService.class);
+        service.start();
+        return injector;
+    }
+
+    private void log(String message) {
+        System.out.println(message);
+    }
 }

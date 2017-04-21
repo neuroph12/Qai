@@ -49,7 +49,7 @@ public class TestRdfSerialization extends TestCase {
 
     private static Logger logger = LoggerFactory.getLogger("TestRdfSerialization");
 
-    public void estRedSerializationOfStocks() throws Exception {
+    public void testRedSerializationOfStocks() throws Exception {
 
         StockCategory category = new StockCategory("My category");
         StockEntity entity = new StockEntity();
@@ -80,7 +80,7 @@ public class TestRdfSerialization extends TestCase {
         assertTrue("the users must be equals", category.equals(storedCategory));
     }
 
-    public void estRdfSerializationOfUsers() throws Exception {
+    public void testRdfSerializationOfUsers() throws Exception {
 
         User user = new User("test user", "test password");
         user.addRole(new Role());
@@ -105,7 +105,7 @@ public class TestRdfSerialization extends TestCase {
         assertTrue("the sessions has to be equal", session.equals(storedSession));
     }
 
-    public void estRdfSerializationOfAntimirovNodes() throws Exception {
+    public void testRdfSerializationOfAntimirovNodes() throws Exception {
 
         // we make it easy for ourself creating the ast-tree
         BaseNode parsedNode = parseExpression("(foo baz[integer] bar[double])");
@@ -128,7 +128,7 @@ public class TestRdfSerialization extends TestCase {
         assertTrue("the nodes must be equal", parsedNode.equals(storedNode));
     }
 
-    public void estRdfSerializationOfProcedures() throws Exception {
+    public void testRdfSerializationOfProcedures() throws Exception {
 
         Model model = ModelFactory.createDefaultModel();
         Bean2RDF writer = new Bean2RDF(model);

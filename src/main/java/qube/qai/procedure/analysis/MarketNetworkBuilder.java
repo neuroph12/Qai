@@ -46,9 +46,9 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
         super(NAME);
     }
 
-    public MarketNetworkBuilder(Procedure procedure) {
-        super(NAME, procedure);
-    }
+//    public MarketNetworkBuilder(Procedure procedure) {
+//        super(NAME, procedure);
+//    }
 
     private BasicNetworkTrainer trainer;
 

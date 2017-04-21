@@ -26,6 +26,7 @@ import qube.qai.services.ProcedureSourceInterface;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ public class TestProcedureRunnerService extends QaiTestBase {
 
     private Logger logger = LoggerFactory.getLogger("TestExecutionService");
 
-    @Inject //@Named("HAZELCAST_CLIENT")
+    @Inject
     private HazelcastInstance hazelcastInstance;
 
     @Inject
@@ -97,9 +98,9 @@ public class TestProcedureRunnerService extends QaiTestBase {
 
         // create some procedures and see what happens
         List<String> uuidList = new ArrayList<String>();
-        String[] procedureNames = procedureSource.getProcedureNames();
-        for (String name : procedureNames) {
-            Procedure procedure = procedureSource.getProcedureWithName(name);
+        Collection<Class> procedureNames = Procedure.knownSubClasses();
+        for (Class name : procedureNames) {
+            Procedure procedure = (Procedure) name.newInstance();
             String uuid = procedure.getUuid();
             uuidList.add(uuid);
             logger.info("submitting procedure " + uuid);

@@ -100,9 +100,9 @@ public class ModelCreatingVisitor implements NodeVisitor {
         SelectionProcedure selection = new SelectionProcedure();
 
         if (ChangePointAnalysis.NAME.equals(name)) {
-            procedure = new ChangePointAnalysis(selection);
+            procedure = new ChangePointAnalysis();
         } else if (MarketNetworkBuilder.NAME.equals(name)) {
-            procedure = new MarketNetworkBuilder(selection);
+            procedure = new MarketNetworkBuilder();
         } else if (MatrixStatistics.NAME.equals(name)) {
             procedure = new MatrixStatistics();
         } else if (NetworkStatistics.NAME.equals(name)) {
@@ -110,13 +110,13 @@ public class ModelCreatingVisitor implements NodeVisitor {
         } else if (NeuralNetworkAnalysis.NAME.equals(name)) {
             procedure = new NeuralNetworkAnalysis();
         } else if (NeuralNetworkForwardPropagation.NAME.equals(name)) {
-            procedure = new NeuralNetworkForwardPropagation(selection);
+            procedure = new NeuralNetworkForwardPropagation();
         } else if (SortingPercentilesProcedure.NAME.equals(name)) {
             procedure = new SortingPercentilesProcedure();
         } else if (DirectoryIndexer.NAME.equals(name)) {
             procedure = new DirectoryIndexer();
         } else if (WikiArchiveIndexer.NAME.equals(name)) {
-            procedure = new WikiArchiveIndexer(selection);
+            procedure = new WikiArchiveIndexer();
         } else if (StockEntityInitialization.NAME.equals(name)) {
             procedure = new StockEntityInitialization();
         } else if (StockQuoteRetriever.NAME.equals(name)) {

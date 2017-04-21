@@ -21,18 +21,10 @@ import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.tdb.TDBFactory;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.analysis.*;
-import qube.qai.procedure.archive.DirectoryIndexer;
-import qube.qai.procedure.archive.WikiArchiveIndexer;
-import qube.qai.procedure.finance.StockEntityInitialization;
-import qube.qai.procedure.finance.StockQuoteRetriever;
-import qube.qai.procedure.utils.SelectionProcedure;
-import qube.qai.procedure.utils.SimpleProcedure;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -126,9 +118,18 @@ public class PersistentModelMapStore implements MapStore {
         }
     }
 
+    /**
+     * i hate having to resort to such means but
+     * there really doesn't seem to be an altenrative
+     * as jenabeans can't deal with sub-classes and
+     * inheritance in general as it turns out
+     *
+     * @param key
+     * @return
+     */
     private Object checkProcedureTypes(Object key) {
         Object found = null;
-        for (Class klass : createClasses()) {
+        for (Class klass : Procedure.knownSubClasses()) {
             try {
                 found = reader.load(klass, key);
             } catch (NotFoundException e) {
@@ -156,23 +157,4 @@ public class PersistentModelMapStore implements MapStore {
         return null;
     }
 
-    private static Collection<Class> createClasses() {
-
-        Collection<Class> classes = new ArrayList<>();
-
-        classes.add(ChangePointAnalysis.class);
-        classes.add(MarketNetworkBuilder.class);
-        classes.add(MatrixStatistics.class);
-        classes.add(NeuralNetworkAnalysis.class);
-        classes.add(NeuralNetworkForwardPropagation.class);
-        classes.add(SortingPercentilesProcedure.class);
-        classes.add(DirectoryIndexer.class);
-        classes.add(WikiArchiveIndexer.class);
-        classes.add(StockEntityInitialization.class);
-        classes.add(StockQuoteRetriever.class);
-        classes.add(SelectionProcedure.class);
-        classes.add(SimpleProcedure.class);
-
-        return classes;
-    }
 }

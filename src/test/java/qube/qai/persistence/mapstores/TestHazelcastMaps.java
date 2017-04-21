@@ -16,10 +16,12 @@ package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import org.apache.commons.lang3.StringUtils;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.ResourceData;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
+import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.UUIDServiceInterface;
@@ -148,36 +150,40 @@ public class TestHazelcastMaps extends QaiTestBase {
      * @deprecated this method is no longer needed as the persistence of procedures
      * has been changed and now is done in a different way.
      */
-//    public void restHazelcastProcedures() throws Exception {
-//
-//        assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
-//        logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
-//
-//        IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURES);
-//        String[] procedureNames = procedureSource.getProcedureNames();
-//
-//        // first get a hold of the procedures
-//        List<String> uuidList = new ArrayList<String>();
-//        for (String name : procedureNames) {
-//            Procedure procedure = procedureSource.getProcedureWithName(name);
-//            String uuid = procedure.getUuid();
-//            if (StringUtils.isBlank(uuid)) {
-//                uuid = uuidService.createUUIDString();
-//                procedure.setUuid(uuid);
-//            }
-//            procedureMap.put(uuid, procedure);
-//            uuidList.add(uuid);
-//        }
-//
-//        for (String uuid : uuidList) {
-//            assertTrue("we just put this one 'ere", procedureMap.containsKey(uuid));
-//        }
-//
-//        for (String uuid : uuidList) {
-//            Procedure procedure = procedureMap.get(uuid);
-//            assertNotNull("procedure should not be null", procedure);
-//        }
-//    }
+    public void testHazelcastProcedures() throws Exception {
+
+        assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
+        logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
+
+        IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURES);
+        Collection<Class> procedureClasses = Procedure.knownSubClasses();
+
+        // first get a hold of the procedures
+        List<String> uuidList = new ArrayList<String>();
+        for (Class klass : procedureClasses) {
+            Procedure procedure = (Procedure) klass.newInstance();
+            String uuid = procedure.getUuid();
+            if (StringUtils.isBlank(uuid)) {
+                uuid = uuidService.createUUIDString();
+                procedure.setUuid(uuid);
+            }
+            procedureMap.put(uuid, procedure);
+            uuidList.add(uuid);
+        }
+
+        for (String uuid : uuidList) {
+            assertTrue("we just put this one 'ere", procedureMap.containsKey(uuid));
+        }
+
+        for (String uuid : uuidList) {
+            Procedure procedure = procedureMap.get(uuid);
+            assertNotNull("procedure should not be null", procedure);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
     public void testWikipediaResources() throws Exception {
 
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);

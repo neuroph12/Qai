@@ -51,9 +51,9 @@ public class NeuralNetworkForwardPropagation extends Procedure implements Proced
     }
 
 
-    public NeuralNetworkForwardPropagation(Procedure procedure) {
-        super(NAME, procedure);
-    }
+//    public NeuralNetworkForwardPropagation(Procedure procedure) {
+//        super(NAME, procedure);
+//    }
 
     @Override
     public void buildArguments() {

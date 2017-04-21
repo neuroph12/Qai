@@ -37,11 +37,7 @@ public class TestModelMapStores extends TestCase {
 
     public void testUserMapStore() throws Exception {
 
-        // this way i can use the injector even when it is active for other tests
-        //Injector injector = QaiTestServerModule.initUsersInjector();
-
         ModelMapStore mapStore = new ModelMapStore(User.class);
-        //injector.injectMembers(mapStore);
 
         User user = TestDatabaseMapStores.createUser();
         Session session = user.createSession();
@@ -66,12 +62,8 @@ public class TestModelMapStores extends TestCase {
 
     public void testPersistentUserMapStore() throws Exception {
 
-        // this way i can use the injector even when it is active for other tests
-        //Injector injector = QaiTestServerModule.initUsersInjector();
-
         PersistentModelMapStore mapStore = new PersistentModelMapStore(User.class, userDirectory);
         mapStore.init();
-        //injector.injectMembers(mapStore);
 
         User user = TestDatabaseMapStores.createUser();
         Session session = user.createSession();
@@ -96,9 +88,7 @@ public class TestModelMapStores extends TestCase {
 
     public void testRoleMapStore() throws Exception {
 
-        //Injector injector = QaiTestServerModule.initUsersInjector();
         ModelMapStore mapStore = new ModelMapStore(Role.class);
-        //injector.injectMembers(mapStore);
 
         User user = TestDatabaseMapStores.createUser();
         Role role = new Role(user, "DO_ALL_ROLE", "this role will allow you to do everything");
@@ -117,10 +107,7 @@ public class TestModelMapStores extends TestCase {
 
     public void testSessionMapStore() throws Exception {
 
-        //Injector injector = QaiTestServerModule.initUsersInjector();
-
         ModelMapStore mapStore = new ModelMapStore(Session.class);
-        //injector.injectMembers(mapStore);
 
         User user = TestDatabaseMapStores.createUser();
         Session session = new Session(TestDatabaseMapStores.randomWord(10), new Date());
@@ -140,10 +127,7 @@ public class TestModelMapStores extends TestCase {
 
     public void testStockEntityMapStore() throws Exception {
 
-        //Injector injector = QaiTestServerModule.initStocksInjector();
-
         ModelMapStore mapStore = new ModelMapStore(StockEntity.class);
-        //injector.injectMembers(mapStore);
 
         int number = 100;
         Map<String, StockEntity> entityMap = new HashMap<String, StockEntity>();
@@ -173,19 +157,12 @@ public class TestModelMapStores extends TestCase {
     }
 
     /**
-     * out of some reason this one's not working. on the other hand, i don't
-     * really see this one as a useful test, as the thing is not meant to be persisting
-     * StockEntities in this kind of a map-store.
-     *
-     * @throws Exception
+     * this is where we try and see how our procedures from disk will work
      */
     public void testPersistentProcedureMapStore() throws Exception {
 
-        //Injector injector = QaiTestServerModule.initStocksInjector();
-
         PersistentModelMapStore mapStore = new PersistentModelMapStore(Procedure.class, procedureDirectory);
         mapStore.init();
-        //injector.injectMembers(mapStore);
 
         Collection<String> uuids = new ArrayList<>();
         Collection<Procedure> procedures = TestRdfSerialization.generateAllProcedures();

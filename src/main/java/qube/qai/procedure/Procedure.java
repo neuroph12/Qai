@@ -18,18 +18,28 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.ITopic;
+import org.slf4j.LoggerFactory;
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 import qube.qai.data.SelectionOperator;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.Name;
 import qube.qai.parsers.antimirov.nodes.Node;
+import qube.qai.procedure.analysis.*;
+import qube.qai.procedure.archive.DirectoryIndexer;
+import qube.qai.procedure.archive.WikiArchiveIndexer;
+import qube.qai.procedure.finance.StockEntityInitialization;
+import qube.qai.procedure.finance.StockQuoteRetriever;
+import qube.qai.procedure.utils.RelateProcedure;
+import qube.qai.procedure.utils.SelectionProcedure;
+import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.User;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -37,8 +47,6 @@ import java.util.Collection;
  */
 public abstract class Procedure extends Node
         implements Serializable, Runnable, HazelcastInstanceAware, AcceptsVisitors, ProcedureConstants {
-
-    //protected Logger logger = LoggerFactory.getLogger("Procedure");
 
     public static String NAME = "Procedure";
 
@@ -50,15 +58,11 @@ public abstract class Procedure extends Node
 
     protected User user;
 
-    //protected String description;
-
     protected long duration;
 
     protected double progressPercentage;
 
     protected boolean hasExecuted = false;
-
-    //protected Arguments arguments;
 
     public Procedure() {
         super(new Name(NAME));
@@ -75,16 +79,48 @@ public abstract class Procedure extends Node
         buildArguments();
     }
 
-    @Deprecated
-    public Procedure(String name, BaseNode child) {
-        this(name);
-        //getProcedureInputs().addInput(child);
+    /**
+     * All known implementing sub-classes
+     *
+     * @return
+     */
+    public static Collection<Class> knownSubClasses() {
+
+        Collection<Class> classes = new ArrayList<>();
+
+        // analysis
+        classes.add(ChangePointAnalysis.class);
+        classes.add(MarketNetworkBuilder.class);
+        classes.add(MatrixStatistics.class);
+        classes.add(NetworkStatistics.class);
+        classes.add(NeuralNetworkAnalysis.class);
+        classes.add(NeuralNetworkForwardPropagation.class);
+        classes.add(SortingPercentilesProcedure.class);
+        classes.add(TimeSequenceAnalysis.class);
+
+        // archive
+        classes.add(DirectoryIndexer.class);
+        classes.add(WikiArchiveIndexer.class);
+
+        // finance
+        classes.add(StockEntityInitialization.class);
+        classes.add(StockQuoteRetriever.class);
+
+        // utils
+        classes.add(RelateProcedure.class);
+        classes.add(SelectionProcedure.class);
+        classes.add(SimpleProcedure.class);
+
+        return classes;
     }
 
     protected Object getInputValueOf(String name) {
         Object value = null;
         ValueNode nameNode = getProcedureInputs().getNamedInput(name);
-        return nameNode.getValue();
+        if (nameNode != null) {
+            value = nameNode.getValue();
+        }
+        return value;
     }
 
     protected void setResultValueOf(String name, Object value) {
@@ -192,17 +228,12 @@ public abstract class Procedure extends Node
 
 
     public boolean haveChildren() {
-        return false;
+        return true;
     }
 
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
     }
-
-//    @Override
-//    public int hashCode() {
-//        return uuid.hashCode();
-//    }
 
     @Override
     public boolean equals(BaseNode obj) {
@@ -235,14 +266,6 @@ public abstract class Procedure extends Node
         this.progressPercentage = progressPercentage;
     }
 
-    /*public Arguments getArguments() {
-        return arguments;
-    }
-
-    public void setArguments(Arguments arguments) {
-        this.arguments = arguments;
-    }*/
-
     public boolean hasExecuted() {
         return hasExecuted;
     }
@@ -260,19 +283,20 @@ public abstract class Procedure extends Node
     }
 
     protected void info(String message) {
-
+        LoggerFactory.getLogger("Procedure").info(message);
     }
 
     protected void error(String message) {
-
+        LoggerFactory.getLogger("Procedure").error(message);
     }
 
     protected void error(String message, Exception e) {
-
+        LoggerFactory.getLogger("Procedure").error(message, e);
     }
 
     protected void debug(String message) {
-
+        LoggerFactory.getLogger("Procedure").debug(message);
     }
+
 
 }

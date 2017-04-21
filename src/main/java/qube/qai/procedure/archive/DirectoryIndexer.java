@@ -28,7 +28,6 @@ import org.apache.lucene.util.Version;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ValueNode;
-import qube.qai.procedure.utils.SimpleProcedure;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,7 +65,7 @@ public class DirectoryIndexer extends Procedure implements ProcedureConstants {
     }
 
     public DirectoryIndexer(String directoryToIndex, String indexDirectory) {
-        super(NAME, new SimpleProcedure());
+        //super(NAME, new SimpleProcedure());
         this.directoryToIndex = directoryToIndex;
         this.indexDirectory = indexDirectory;
     }

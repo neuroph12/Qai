@@ -14,9 +14,11 @@
 
 package qube.qai.procedure.finance;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.persist.PersistService;
+import com.google.inject.persist.jpa.JpaPersistModule;
 import junit.framework.TestCase;
-import qube.qai.main.QaiTestServerModule;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 
@@ -32,7 +34,7 @@ public class TestStockQuoteRetriever extends TestCase {
 
     public void testStockQuoteRetriever() throws Exception {
 
-        Injector injector = QaiTestServerModule.initStocksInjector();
+        Injector injector = createInjector();
         EntityManager entityManager = injector.getInstance(EntityManager.class);
         StockQuoteRetriever retriever = new StockQuoteRetriever();
         retriever.setEntityManager(entityManager);
@@ -55,5 +57,12 @@ public class TestStockQuoteRetriever extends TestCase {
 
     private void log(String message) {
         System.out.println(message);
+    }
+
+    private Injector createInjector() {
+        Injector injector = Guice.createInjector(new JpaPersistModule("STAND_ALONE_TEST_STOCKS"));
+        PersistService service = injector.getInstance(PersistService.class);
+        service.start();
+        return injector;
     }
 }

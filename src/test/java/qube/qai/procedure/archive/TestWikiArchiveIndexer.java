@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import qube.qai.data.SelectionOperator;
 import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
+import qube.qai.procedure.ValueNode;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
@@ -42,9 +43,9 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
         WikiRipperProcedure ripperProcedure = TestWikiRipperProcedure.createTestWikiRipper();
         injector.injectMembers(ripperProcedure);
 
-        WikiArchiveIndexer wikiIndexer = new WikiArchiveIndexer(ripperProcedure);
+        WikiArchiveIndexer wikiIndexer = new WikiArchiveIndexer();
+        wikiIndexer.getProcedureDescription().getProcedureInputs().addInput(new ValueNode(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, ripperProcedure));
         SelectionOperator<String> selectionOperator = new DataSelectionOperator<String>(dummyIndexDirectory);
-//        wikiIndexer.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
         injector.injectMembers(wikiIndexer);
 
         long start = System.currentTimeMillis();
@@ -76,7 +77,8 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
 //        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_TARGET_FILENAME, archiveNameSelectionOperator);
 //        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_IS_WIKTIONARY, isWiktionarySelectionOperator);
 
-        WikiArchiveIndexer indexerProcedure = new WikiArchiveIndexer(ripperProcedure);
+        WikiArchiveIndexer indexerProcedure = new WikiArchiveIndexer();
+        indexerProcedure.getProcedureDescription().getProcedureInputs().addInput(new ValueNode(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, ripperProcedure));
         SelectionOperator<String> selectionOperator = new DataSelectionOperator<String>(indexDirectory);
 //        indexerProcedure.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
 

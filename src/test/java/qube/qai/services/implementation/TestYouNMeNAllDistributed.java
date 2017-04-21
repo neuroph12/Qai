@@ -17,6 +17,7 @@ package qube.qai.services.implementation;
 import qube.qai.data.SelectionOperator;
 import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
+import qube.qai.procedure.ValueNode;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
@@ -37,7 +38,8 @@ public class TestYouNMeNAllDistributed extends QaiTestBase {
         WikiRipperProcedure ripperProcedure = TestWikiRipperProcedure.createTestWikiRipper();
         injector.injectMembers(ripperProcedure);
 
-        WikiArchiveIndexer wikiIndexer = new WikiArchiveIndexer(ripperProcedure);
+        WikiArchiveIndexer wikiIndexer = new WikiArchiveIndexer();
+        wikiIndexer.getProcedureDescription().getProcedureInputs().addInput(new ValueNode(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, ripperProcedure));
         // these are the only additional arguments which we need in this case
         wikiIndexer.setAnalyseDate(true);
         wikiIndexer.setAnalyseLocation(true);

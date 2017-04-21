@@ -15,6 +15,7 @@
 package qube.qai.procedure.archive;
 
 import com.thoughtworks.xstream.XStream;
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -79,18 +80,21 @@ public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
         super(NAME);
     }
 
-    public WikiArchiveIndexer(Procedure toDecorate) {
-        super(NAME, toDecorate);
-    }
+//    public WikiArchiveIndexer(Procedure toDecorate) {
+//        super(NAME, toDecorate);
+//    }
 
     @Override
     public void execute() {
 
         executeInputProcedures();
 
-        indexDirectory = (String) getInputValueOf(INPUT_INDEX_DIRECTORY);
-        targetFilename = (String) getInputValueOf(INPUT_TARGET_FILENAME);
-
+        if (StringUtils.isEmpty(indexDirectory)) {
+            indexDirectory = (String) getInputValueOf(INPUT_INDEX_DIRECTORY);
+        }
+        if (StringUtils.isEmpty(targetFilename)) {
+            targetFilename = (String) getInputValueOf(INPUT_TARGET_FILENAME);
+        }
         indexZipFileEntries();
 
         setResultValueOf(INPUT_INDEX_DIRECTORY, indexDirectory);
@@ -99,6 +103,11 @@ public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
     public void indexZipFileEntries() {
 
         try {
+
+            if (StringUtils.isBlank(indexDirectory) || StringUtils.isEmpty(targetFilename)) {
+                throw new IllegalArgumentException("Can't work with blank input");
+            }
+
             ZipFile zipFile = new ZipFile(targetFilename);
 
             // feed the output directory name

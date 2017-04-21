@@ -23,7 +23,6 @@ import qube.qai.data.stores.StockEntityDataStore;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.persistence.StockEntity;
-import qube.qai.procedure.utils.SimpleProcedure;
 
 import java.util.*;
 
@@ -55,8 +54,7 @@ public class TestMarketNetworkBuilder extends QaiTestBase {
         logger.info("picked entities: " + array2String(names));
 
         SelectionOperator<Collection> selectionOperator = new DataSelectionOperator<Collection>(workingSet);
-        SimpleProcedure procedure = new SimpleProcedure();
-        MarketNetworkBuilder networkBuilder = new MarketNetworkBuilder(procedure);
+        MarketNetworkBuilder networkBuilder = new MarketNetworkBuilder();
         injector.injectMembers(networkBuilder);
         NeuralNetwork network = (NeuralNetwork) networkBuilder.buildNetwork(selectionOperator);
         assertNotNull("duh!", network);
