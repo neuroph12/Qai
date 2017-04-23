@@ -150,8 +150,8 @@ public class AllQaiTests extends TestCase {
         // services.implementation
         suite.addTestSuite(TestUUIDGenerator.class);
         suite.addTestSuite(TestProcedureRunnerService.class);
-        suite.addTestSuite(TestDistributedSearchServices.class);
-        suite.addTestSuite(TestDistributedDataService.class);
+        //suite.addTestSuite(TestDistributedSearchServices.class);
+        //suite.addTestSuite(TestDistributedDataService.class);
         suite.addTestSuite(TestDistributedProcedureRunnerService.class);
         suite.addTestSuite(TestYouNMeNAllDistributed.class);
         suite.addTestSuite(TestHowFairAreMarketsDistributed.class);

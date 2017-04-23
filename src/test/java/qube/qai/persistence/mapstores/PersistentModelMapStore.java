@@ -20,6 +20,8 @@ import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.tdb.TDBFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
@@ -33,6 +35,8 @@ import java.util.Map;
  * Created by rainbird on 4/19/17.
  */
 public class PersistentModelMapStore implements MapStore {
+
+    private static Logger logger = LoggerFactory.getLogger("PersistentModelMapStore");
 
     private String directoryName;
 
@@ -55,6 +59,8 @@ public class PersistentModelMapStore implements MapStore {
 
     public void init() {
 
+        logger.info("Initializing PersistentModelMapStore for directory: " + directoryName);
+
         if (StringUtils.isEmpty(directoryName)) {
             throw new IllegalArgumentException("there has to be a diretory to settle in!");
         }
@@ -71,6 +77,7 @@ public class PersistentModelMapStore implements MapStore {
 
     @Override
     public void store(Object key, Object value) {
+        logger.info("Storing object: " + value + " with key: " + key);
         dataset.begin(ReadWrite.WRITE);
         writer.save(baseClass.cast(value));
         dataset.commit();
@@ -86,6 +93,7 @@ public class PersistentModelMapStore implements MapStore {
 
     @Override
     public void delete(Object key) {
+        logger.info("Deleting object with key: " + key);
         Object toDelete = load(key);
         dataset.begin(ReadWrite.WRITE);
         writer.delete(baseClass.cast(toDelete));
@@ -102,6 +110,7 @@ public class PersistentModelMapStore implements MapStore {
 
     @Override
     public Object load(Object key) {
+        logger.info("Loading object with key: " + key);
         try {
             dataset.begin(ReadWrite.WRITE);
             Object found = null;

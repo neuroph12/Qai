@@ -22,7 +22,7 @@ import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
-import qube.qai.services.DataServiceInterface;
+import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
@@ -37,7 +37,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 1/20/17.
  */
-public class ModelStore implements DataServiceInterface {
+public class ModelStore implements SearchServiceInterface {
 
     private static Logger logger = LoggerFactory.getLogger("ModelStore");
 
@@ -138,28 +138,24 @@ public class ModelStore implements DataServiceInterface {
         return null;
     }
 
-    @Override
-    public void save(Model model) {
-        dataset.begin(ReadWrite.WRITE);
-        this.model.add(model);
-        dataset.commit();
-        dataset.end();
-    }
+//    public void save(Model model) {
+//        dataset.begin(ReadWrite.WRITE);
+//        this.model.add(model);
+//        dataset.commit();
+//        dataset.end();
+//    }
+//
+//    public void remove(Model model) {
+//        dataset.begin(ReadWrite.WRITE);
+//        this.model.remove(model);
+//        dataset.commit();
+//        dataset.end();
+//    }
 
-    @Override
-    public void remove(Model model) {
-        dataset.begin(ReadWrite.WRITE);
-        this.model.remove(model);
-        dataset.commit();
-        dataset.end();
-    }
-
-    @Override
     public Model createDefaultModel() {
         return model;
     }
 
-    @Override
     public void remove(Class baseClass, Object toRemove) {
         dataset.begin(ReadWrite.WRITE);
         writer.delete(toRemove);
@@ -167,7 +163,6 @@ public class ModelStore implements DataServiceInterface {
         dataset.end();
     }
 
-    @Override
     public void save(Class baseCLass, Object data) {
         dataset.begin(ReadWrite.WRITE);
         writer.save(data);

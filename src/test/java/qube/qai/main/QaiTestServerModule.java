@@ -23,18 +23,16 @@ import com.google.inject.persist.jpa.JpaPersistModule;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MapStoreConfig;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.MapLoader;
-import com.hazelcast.core.MapStoreFactory;
+import com.hazelcast.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.ResourceData;
 import qube.qai.persistence.WikiArticle;
-import qube.qai.persistence.mapstores.DatabaseMapStore;
 import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
+import qube.qai.persistence.mapstores.PersistentModelMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.services.implementation.DirectorySearchService;
+import qube.qai.user.User;
 
 import javax.inject.Singleton;
 import java.util.Properties;
@@ -81,17 +79,19 @@ public class QaiTestServerModule extends AbstractModule {
 
     public String WIKIPEDIA_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
 
+    public String USER_MODEL_DIRECTORY = "/media/rainbird/ALEPH/qai-persistence.db/test_user_model";
+
     private HazelcastInstance hazelcastInstance;
 
-    private DatabaseMapStore stockEntityMapStore;
+    private MapStore stockEntityMapStore;
 
-    private DatabaseMapStore stockQuoteMapStore;
+    private MapStore stockQuoteMapStore;
 
-    private DatabaseMapStore userMapStore;
+    private MapStore userMapStore;
 
-    private DatabaseMapStore sessionMapStore;
+    private MapStore sessionMapStore;
 
-    private DatabaseMapStore roleMapStore;
+    private MapStore roleMapStore;
 
     // with static fields i can use the injector even when it is active for other tests
     private static Injector stocksInjector;
@@ -181,28 +181,30 @@ public class QaiTestServerModule extends AbstractModule {
          * here we add the map-store for Users which is
          * in this case the HsqlDBMapStore
          */
-//        MapConfig usersConfig = config.getMapConfig(USERS);
-//        MapStoreConfig userMapstoreConfig = usersConfig.getMapStoreConfig();
-//        if (userMapstoreConfig == null) {
-//            logger.info("mapStoreConfig is null... creating one for: " + USERS);
-//            userMapstoreConfig = new MapStoreConfig();
-//            userMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
-//        }
-//        userMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, User>() {
-//            public MapLoader<String, User> newMapStore(String mapName, Properties properties) {
-//                if (USERS.equals(mapName)) {
-//                    if (userMapStore == null) {
-//                        userMapStore = new DatabaseMapStore(User.class);
-//                        usersInjector.injectMembers(userMapStore);
-//                    }
-//                    return userMapStore;
-//                } else {
-//                    return null;
-//                }
-//            }
-//        });
-//        logger.info("adding mapstore configuration for " + USERS);
-//        usersConfig.setMapStoreConfig(userMapstoreConfig);
+        MapConfig usersConfig = config.getMapConfig(USERS);
+        usersConfig.getMapStoreConfig().setEnabled(true);
+        MapStoreConfig userMapstoreConfig = usersConfig.getMapStoreConfig();
+        if (userMapstoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + USERS);
+            userMapstoreConfig = new MapStoreConfig();
+            userMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
+        }
+        userMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, User>() {
+            public MapLoader<String, User> newMapStore(String mapName, Properties properties) {
+                if (USERS.equals(mapName)) {
+                    if (userMapStore == null) {
+                        userMapStore = new PersistentModelMapStore(User.class, USER_MODEL_DIRECTORY);
+                        ((PersistentModelMapStore) userMapStore).init();
+                        usersInjector.injectMembers(userMapStore);
+                    }
+                    return userMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + USERS);
+        usersConfig.setMapStoreConfig(userMapstoreConfig);
 
         /**
          * here we add the map-store for Sessions which is

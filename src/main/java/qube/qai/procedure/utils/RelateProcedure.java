@@ -14,17 +14,10 @@
 
 package qube.qai.procedure.utils;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import qube.qai.data.SelectionOperator;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ValueNode;
-import qube.qai.services.DataServiceInterface;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  * Created by rainbird on 3/11/17.
@@ -45,9 +38,9 @@ public class RelateProcedure extends Procedure {
 
     private SelectionOperator relatedResource;
 
-    @Inject
-    @Named("PROCEDURE")
-    private DataServiceInterface dataService;
+//    @Inject
+//    @Named("PROCEDURE")
+//    private DataServiceInterface dataService;
 
     /**
      * this class is mainly for relating two resources with each other
@@ -63,12 +56,12 @@ public class RelateProcedure extends Procedure {
     @Override
     public void execute() {
 
-        if (dataService == null) {
-            throw new RuntimeException("No DataService: Procedure has not been properly initialized- aborting");
-        }
+//        if (dataService == null) {
+//            throw new RuntimeException("No DataService: Procedure has not been properly initialized- aborting");
+//        }
 
         Statement statement = createStatement();
-        dataService.save(statement.getModel());
+        //dataService.save(statement.getModel());
         setResultValueOf(RELATION, statement);
     }
 
@@ -78,13 +71,13 @@ public class RelateProcedure extends Procedure {
             throw new RuntimeException("Resources to relate are not properly defined- have to abort!");
         }
 
-        Model model = dataService.createDefaultModel();
-        Resource relateToResource = model.createResource(relateTo.toString());
-        Resource relatedResource = model.createResource(relateToResource.toString());
-        Property property = model.createProperty("namespace", "relatesTo");
-        Statement statement = model.createStatement(relatedResource, property, relateToResource);
+//        Model model = dataService.createDefaultModel();
+//        Resource relateToResource = model.createResource(relateTo.toString());
+//        Resource relatedResource = model.createResource(relateToResource.toString());
+//        Property property = model.createProperty("namespace", "relatesTo");
+//        Statement statement = model.createStatement(relatedResource, property, relateToResource);
 
-        return statement;
+        return null;
     }
 
     @Override
@@ -112,11 +105,11 @@ public class RelateProcedure extends Procedure {
         this.relatedResource = relatedResource;
     }
 
-    public DataServiceInterface getDataService() {
-        return dataService;
-    }
-
-    public void setDataService(DataServiceInterface dataService) {
-        this.dataService = dataService;
-    }
+//    public DataServiceInterface getDataService() {
+//        return dataService;
+//    }
+//
+//    public void setDataService(DataServiceInterface dataService) {
+//        this.dataService = dataService;
+//    }
 }

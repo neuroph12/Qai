@@ -14,14 +14,8 @@
 
 package qube.qai.procedure.utils;
 
-import org.apache.jena.rdf.model.Model;
-import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.ProcedureDescription;
 import qube.qai.procedure.TestProcedureBase;
-import qube.qai.services.DataServiceInterface;
-import qube.qai.services.implementation.SearchResult;
-
-import java.util.Collection;
 
 /**
  * Created by rainbird on 3/12/17.
@@ -31,43 +25,43 @@ public class TestRelateProcedure extends TestProcedureBase {
     public void testRelateProcedure() throws Exception {
 
         RelateProcedure procedure = new RelateProcedure();
-        DataServiceInterface dummyDateStore = new DataServiceInterface() {
-            @Override
-            public void save(Model model) {
-
-            }
-
-            @Override
-            public void remove(Model model) {
-
-            }
-
-            @Override
-            public Model createDefaultModel() {
-                return null;
-            }
-
-            @Override
-            public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
-                return null;
-            }
-
-            @Override
-            public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
-                return null;
-            }
-
-            @Override
-            public void save(Class baseCLass, Object data) {
-
-            }
-
-            @Override
-            public void remove(Class baseClass, Object toRemove) {
-
-            }
-        };
-        procedure.setDataService(dummyDateStore);
+//        DataServiceInterface dummyDateStore = new DataServiceInterface() {
+//            @Override
+//            public void save(Model model) {
+//
+//            }
+//
+//            @Override
+//            public void remove(Model model) {
+//
+//            }
+//
+//            @Override
+//            public Model createDefaultModel() {
+//                return null;
+//            }
+//
+//            @Override
+//            public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
+//                return null;
+//            }
+//
+//            @Override
+//            public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
+//                return null;
+//            }
+//
+//            @Override
+//            public void save(Class baseCLass, Object data) {
+//
+//            }
+//
+//            @Override
+//            public void remove(Class baseClass, Object toRemove) {
+//
+//            }
+//        };
+//        procedure.setDataService(dummyDateStore);
         // @TODO this is to be completed- not really urgent right now
         //procedure.execute();
         //fail("currently code for checking the result is missing");
