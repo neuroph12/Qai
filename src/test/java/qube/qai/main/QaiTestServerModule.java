@@ -27,11 +27,15 @@ import com.hazelcast.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.ResourceData;
+import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
+import qube.qai.persistence.mapstores.DatabaseMapStore;
 import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.PersistentModelMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
+import qube.qai.procedure.Procedure;
 import qube.qai.services.implementation.DirectorySearchService;
+import qube.qai.services.implementation.DistributedSearchListener;
 import qube.qai.user.User;
 
 import javax.inject.Singleton;
@@ -81,6 +85,8 @@ public class QaiTestServerModule extends AbstractModule {
 
     public String USER_MODEL_DIRECTORY = "/media/rainbird/ALEPH/qai-persistence.db/test_user_model";
 
+    public String PROCEDURE_MODEL_DIRECTORY = "/media/rainbird/ALEPH/qai-persistence.db/test_procedure_model";
+
     private HazelcastInstance hazelcastInstance;
 
     private MapStore stockEntityMapStore;
@@ -92,6 +98,19 @@ public class QaiTestServerModule extends AbstractModule {
     private MapStore sessionMapStore;
 
     private MapStore roleMapStore;
+
+    private DistributedSearchListener userSearchListener;
+
+    private DistributedSearchListener wikipediaSearchListener;
+
+    private DistributedSearchListener wiktionarySearchListener;
+
+    private DistributedSearchListener wikiResourcesSearchListener;
+
+    private DistributedSearchListener stockEntitiesSearchListener;
+
+    private DistributedSearchListener proceduresSearchListener;
+
 
     // with static fields i can use the injector even when it is active for other tests
     private static Injector stocksInjector;
@@ -266,30 +285,31 @@ public class QaiTestServerModule extends AbstractModule {
          * here we add the map-store for Stock-entities which is
          * in this case the HsqlDBMapStore
          */
-        //MapConfig stockEntitiesConfig = config.getMapConfig(STOCK_ENTITIES);
-//        MapStoreConfig stockEntitiesMapstoreConfig = mapConfig.getMapStoreConfig();
-//        stockEntitiesMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
-//        if (stockEntitiesMapstoreConfig == null) {
-//            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
-//            stockEntitiesMapstoreConfig = new MapStoreConfig();
-//
-//        }
-//        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
-//            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
-//                if (STOCK_ENTITIES.equals(mapName)) {
-//                    if (stockEntityMapStore == null) {
-//                        stockEntityMapStore = new DatabaseMapStore(StockEntity.class);
-//                        stocksInjector.injectMembers(stockEntityMapStore);
-//                    }
-//
-//                    return stockEntityMapStore;
-//                } else {
-//                    return null;
-//                }
-//            }
-//        });
-//        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
-//        mapConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
+        MapConfig stockEntitiesConfig = config.getMapConfig(STOCK_ENTITIES);
+        stockEntitiesConfig.getMapStoreConfig().setEnabled(true);
+        MapStoreConfig stockEntitiesMapstoreConfig = stockEntitiesConfig.getMapStoreConfig();
+        stockEntitiesMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
+        if (stockEntitiesMapstoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
+            stockEntitiesMapstoreConfig = new MapStoreConfig();
+
+        }
+        stockEntitiesMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
+            public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
+                if (STOCK_ENTITIES.equals(mapName)) {
+                    if (stockEntityMapStore == null) {
+                        stockEntityMapStore = new DatabaseMapStore(StockEntity.class);
+                        stocksInjector.injectMembers(stockEntityMapStore);
+                    }
+
+                    return stockEntityMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
+        stockEntitiesConfig.setMapStoreConfig(stockEntitiesMapstoreConfig);
 
         /**
          * here we add the map-store for Stock-quotes which is
@@ -323,25 +343,25 @@ public class QaiTestServerModule extends AbstractModule {
         /**
          * here we add the map-store for Procedures which is
          * in this case DirectoryMapStore
-         * @TODO use the new model-mapstore in it's stead
          */
-//        MapConfig procedureConfig = config.getMapConfig(PROCEDURES);
-//        MapStoreConfig procedureMapstoreConfig = procedureConfig.getMapStoreConfig();
-//        if (procedureMapstoreConfig == null) {
-//            logger.info("mapStoreConfig is null... creating one for: " + PROCEDURES);
-//            procedureMapstoreConfig = new MapStoreConfig();
-//        }
-//        procedureMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
-//            public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
-//                if (PROCEDURES.equals(mapName)) {
-//                    return new DirectoryMapStore(PERSISTENCE_BASE);
-//                } else {
-//                    return null;
-//                }
-//            }
-//        });
-//        logger.info("adding mapstore configuration for " + PROCEDURES);
-//        procedureConfig.setMapStoreConfig(procedureMapstoreConfig);
+        MapConfig procedureConfig = config.getMapConfig(PROCEDURES);
+        procedureConfig.getMapStoreConfig().setEnabled(true);
+        MapStoreConfig procedureMapstoreConfig = procedureConfig.getMapStoreConfig();
+        if (procedureMapstoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + PROCEDURES);
+            procedureMapstoreConfig = new MapStoreConfig();
+        }
+        procedureMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
+            public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
+                if (PROCEDURES.equals(mapName)) {
+                    return new PersistentModelMapStore(Procedure.class, PROCEDURE_MODEL_DIRECTORY);
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + PROCEDURES);
+        procedureConfig.setMapStoreConfig(procedureMapstoreConfig);
 
         /**
          * wikipedia-article map-store
@@ -416,6 +436,20 @@ public class QaiTestServerModule extends AbstractModule {
 
         // now we are ready to get an instance
         hazelcastInstance = Hazelcast.newHazelcastInstance(config);
+
+        // now start the search-listeners
+        userSearchListener = QaiServerModule.provideUsersSearchListener(hazelcastInstance);
+
+        wikipediaSearchListener = QaiServerModule.provideWikipediaSearchListener(hazelcastInstance);
+
+        wiktionarySearchListener = QaiServerModule.provideWiktionarySearchListener(hazelcastInstance);
+
+        wikiResourcesSearchListener = QaiServerModule.provideWikiResourcesSearchListener(hazelcastInstance);
+
+        stockEntitiesSearchListener = QaiServerModule.provideStockQuotesSearchListener(hazelcastInstance);
+
+        proceduresSearchListener = QaiServerModule.provideProceduresSearchListener(hazelcastInstance);
+
         return hazelcastInstance;
     }
 

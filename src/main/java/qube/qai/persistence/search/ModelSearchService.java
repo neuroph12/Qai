@@ -23,7 +23,9 @@ import java.util.Collection;
 /**
  * Created by rainbird on 6/8/16.
  */
-public class SparqlSearchService implements SearchServiceInterface {
+public class ModelSearchService implements SearchServiceInterface {
+
+    private String baseDriectory;
 
     /**
      * this is mainly for running Sparql-queries on remote servers.
@@ -31,7 +33,11 @@ public class SparqlSearchService implements SearchServiceInterface {
      * later on other online databases will be added. i am hoping to use
      * this interface to query online gene- and protein-databases as well.
      */
-    public SparqlSearchService() {
+    public ModelSearchService() {
+    }
+
+    public ModelSearchService(String baseDriectory) {
+        this.baseDriectory = baseDriectory;
     }
 
     @Override
@@ -39,33 +45,8 @@ public class SparqlSearchService implements SearchServiceInterface {
         return null;
     }
 
-    //    @Override
-//    public void save(Model model) {
-//        throw new RuntimeException("method not implemented");
-//    }
-//
-//    @Override
-//    public void remove(Model model) {
-//        throw new RuntimeException("method not implemented");
-//    }
-//
     @Override
     public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
         return null;
     }
-//
-//    @Override
-//    public Model createDefaultModel() {
-//        return ModelFactory.createDefaultModel();
-//    }
-//
-//    @Override
-//    public void save(Class baseCLass, Object data) {
-//
-//    }
-//
-//    @Override
-//    public void remove(Class baseClass, Object toRemove) {
-//
-//    }
 }

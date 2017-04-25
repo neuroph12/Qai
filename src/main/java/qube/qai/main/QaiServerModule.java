@@ -30,10 +30,7 @@ import net.jmob.guice.conf.core.InjectConfig;
 import net.jmob.guice.conf.core.Syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.persistence.ResourceData;
-import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockQuote;
-import qube.qai.persistence.WikiArticle;
+import qube.qai.persistence.*;
 import qube.qai.persistence.mapstores.DatabaseMapStore;
 import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
@@ -48,6 +45,7 @@ import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Properties;
 
@@ -75,17 +73,17 @@ public class QaiServerModule extends AbstractModule {
     public static final String PROCEDURES = "PROCEDURES";
 
     @InjectConfig(value = "PROCEDURE_BASE_DIRECTORY")
-    public String PROCEDURE_BASE_DIRECTORY;
+    public static String PROCEDURE_BASE_DIRECTORY;
 
     public static final String WIKIPEDIA = "WIKIPEDIA_EN";
 
     @InjectConfig(value = "WIKIPEDIA_ARCHIVE")
-    public String WIKIPEDIA_ARCHIVE;
+    public static String WIKIPEDIA_ARCHIVE;
     //public static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
     //public static final String WIKIPEDIA_ARCHIVE = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
 
     @InjectConfig(value = "WIKIPEDIA_DIRECTORY")
-    public String WIKIPEDIA_DIRECTORY;
+    public static String WIKIPEDIA_DIRECTORY;
     //public static final String WIKIPEDIA_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
     //public static final String WIKIPEDIA_DIRECTORY = "/media/pi/BET/wiki-archives/wikipedia_en.index";
 
@@ -104,24 +102,24 @@ public class QaiServerModule extends AbstractModule {
     public static final String WIKTIONARY = "WIKTIONARY_EN";
 
     @InjectConfig(value = "WIKTIONARY_ARCHIVE")
-    public String WIKTIONARY_ARCHIVE;
+    public static String WIKTIONARY_ARCHIVE;
     //public static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
     //public static final String WIKTIONARY_ARCHIVE = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
 
     @InjectConfig("WIKTIONARY_DIRECTORY")
-    public String WIKTIONARY_DIRECTORY;
+    public static String WIKTIONARY_DIRECTORY;
     //public static final String WIKTIONARY_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
     //public static final String WIKTIONARY_DIRECTORY = "/media/pi/BET/wiki-archives/wiktionary_en.index";
 
     public static final String WIKTIONARY_RESOURCES = "WIKTIONARY_RESOURCES";
 
     @InjectConfig(value = "WIKTIONARY_RESOURCE_DIRECTORY")
-    public String WIKTIONARY_RESOURCE_DIRECTORY;
+    public static String WIKTIONARY_RESOURCE_DIRECTORY;
     //public static final String WIKTIONARY_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources";
     //public static final String WIKTIONARY_RESOURCE_DIRECTORY = "/media/pi/BET/wiki-archives/wiktionary_en.resources";
 
     @InjectConfig(value = "WIKTIONARY_RESOURCE_INDEX")
-    public String WIKTIONARY_RESOURCE_INDEX;
+    public static String WIKTIONARY_RESOURCE_INDEX;
     //public static final String WIKTIONARY_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources.index";
     //public static final String WIKTIONARY_RESOURCE_INDEX = "/media/pi/BET/wiki-archives/wiktionary_en.resources.index";
 
@@ -181,13 +179,37 @@ public class QaiServerModule extends AbstractModule {
 
     private DatabaseMapStore dbpersonMapStore;
 
-    private Injector jpaStocksInjector;
+    private static Injector jpaStocksInjector;
 
-    private Injector jpaDBPediaInjector;
+    private static Injector jpaDBPediaInjector;
 
-    private Injector jpaDBPersonInjector;
+    private static Injector jpaDBPersonInjector;
 
-    private Injector jpaUsersInjector;
+    private static Injector jpaUsersInjector;
+
+    @Inject
+    @Named("Users")
+    private DistributedSearchListener userSearchListener;
+
+    @Inject
+    @Named("Wikipedia_en")
+    private DistributedSearchListener wikipediaSearchListener;
+
+    @Inject
+    @Named("Wiktionary_en")
+    private DistributedSearchListener wiktionarySearchListener;
+
+    @Inject
+    @Named("WikiResources_en")
+    private DistributedSearchListener wikiResourcesSearchListener;
+
+    @Inject
+    @Named("StockEntities")
+    private DistributedSearchListener stockEntitiesSearchListener;
+
+    @Inject
+    @Named("Procedures")
+    private DistributedSearchListener proceduresSearchListener;
 
     public QaiServerModule() {
 
@@ -195,7 +217,7 @@ public class QaiServerModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        // load the given configuration for
+        // load the given configuration for loading config-file
         install(ConfigurationModule.create());
         requestInjection(this);
     }
@@ -210,7 +232,8 @@ public class QaiServerModule extends AbstractModule {
     @Provides
     @Named("Wiktionary_en")
     @Singleton
-    DistributedSearchListener provideWiktionarySearchListener() {
+    public static DistributedSearchListener provideWiktionarySearchListener(HazelcastInstance hazelcastInstance) {
+
         SearchServiceInterface basicSearchService = new WikiSearchService(WIKTIONARY_DIRECTORY, WIKTIONARY_ARCHIVE);
 
         DistributedSearchListener searchListener = new DistributedSearchListener("Wiktionary_en");
@@ -231,7 +254,7 @@ public class QaiServerModule extends AbstractModule {
     @Provides
     @Named("Wikipedia_en")
     @Singleton
-    DistributedSearchListener provideWikipediaSearchListener() {
+    public static DistributedSearchListener provideWikipediaSearchListener(HazelcastInstance hazelcastInstance) {
         SearchServiceInterface basicSearchService = new WikiSearchService(WIKIPEDIA_DIRECTORY, WIKIPEDIA_ARCHIVE);
 
         DistributedSearchListener searchListener = new DistributedSearchListener("Wikipedia_en");
@@ -243,23 +266,25 @@ public class QaiServerModule extends AbstractModule {
     }
 
     /**
-     * DbpediaSearchService
-     * returns the distributed search service for wikipedia
+     * WikiResourcesSearchService
+     * returns the distributed search service for WikiResources
      * and starts the listener service which will broker the requests
      * @return
      */
-//    @Provides @Named("Dbpedia_en") @Singleton
-//    DistributedSearchListener provideDbpediaSearchListener() {
-//
-//        SearchServiceInterface searchService = provideDbpediaSearchService();
-//
-//        DistributedSearchListener searchListener = new DistributedSearchListener("Dbpedia_en");
-//        searchListener.setSearchService(searchService);
-//        searchListener.setHazelcastInstance(hazelcastInstance);
-//        searchListener.initialize();
-//
-//        return searchListener;
-//    }
+    @Provides
+    @Named("WikiResources_en")
+    @Singleton
+    public static DistributedSearchListener provideWikiResourcesSearchListener(HazelcastInstance hazelcastInstance) {
+
+        SearchServiceInterface searchService = new DirectorySearchService(WIKTIONARY_RESOURCE_INDEX);
+
+        DistributedSearchListener searchListener = new DistributedSearchListener("WikiResources_en");
+        searchListener.setSearchService(searchService);
+        searchListener.setHazelcastInstance(hazelcastInstance);
+        searchListener.initialize();
+
+        return searchListener;
+    }
 
     /**
      * StockQuotesSearchService
@@ -269,13 +294,59 @@ public class QaiServerModule extends AbstractModule {
      * @return
      */
     @Provides
-    @Named("Stock_Quotes")
+    @Named("StockEntities")
     @Singleton
-    DistributedSearchListener provideStockQuotesSearchListener() {
+    public static DistributedSearchListener provideStockQuotesSearchListener(HazelcastInstance hazelcastInstance) {
 
-        SearchServiceInterface searchService = provideStockQuoteSearchService();
+        SearchServiceInterface searchService = new DatabaseSearchService();
+        getJpaStocksInjector().injectMembers(searchService);
 
-        DistributedSearchListener searchListener = new DistributedSearchListener("Stock_Quotes");
+        DistributedSearchListener searchListener = new DistributedSearchListener("StockEntities");
+        searchListener.setSearchService(searchService);
+        searchListener.setHazelcastInstance(hazelcastInstance);
+        searchListener.initialize();
+
+        return searchListener;
+    }
+
+    /**
+     * UsersSearchService
+     * returns the distributed search service for wikipedia
+     * and starts the listener service which will broker the requests
+     *
+     * @return
+     */
+    @Provides
+    @Named("Users")
+    @Singleton
+    public static DistributedSearchListener provideUsersSearchListener(HazelcastInstance hazelcastInstance) {
+
+        SearchServiceInterface searchService = new DatabaseSearchService();
+        getJpaUsersInjector().injectMembers(searchService);
+
+        DistributedSearchListener searchListener = new DistributedSearchListener("Users");
+        searchListener.setSearchService(searchService);
+        searchListener.setHazelcastInstance(hazelcastInstance);
+        searchListener.initialize();
+
+        return searchListener;
+    }
+
+    /**
+     * ProceduresSearchService
+     * returns the distributed search service for wikipedia
+     * and starts the listener service which will broker the requests
+     *
+     * @return
+     */
+    @Provides
+    @Named("Procedures")
+    @Singleton
+    public static DistributedSearchListener provideProceduresSearchListener(HazelcastInstance hazelcastInstance) {
+
+        SearchServiceInterface searchService = new ModelStore(PROCEDURE_BASE_DIRECTORY);
+
+        DistributedSearchListener searchListener = new DistributedSearchListener("Procedures");
         searchListener.setSearchService(searchService);
         searchListener.setHazelcastInstance(hazelcastInstance);
         searchListener.initialize();
@@ -288,26 +359,26 @@ public class QaiServerModule extends AbstractModule {
      *
      * @return
      */
-    @Provides
-    @Named("Wiktionary_en")
-    SearchServiceInterface provideWiktionarySearchService() {
-
-        SearchServiceInterface searchService = new WikiSearchService(WIKTIONARY_DIRECTORY, WIKTIONARY_ARCHIVE);
-        return searchService;
-    }
-
-    /**
-     * WikipediaSearchService
-     *
-     * @return
-     */
-    @Provides
-    @Named("Wikipedia_en")
-    SearchServiceInterface provideWikipediaSearchService() {
-
-        SearchServiceInterface searchService = new WikiSearchService(WIKIPEDIA_DIRECTORY, WIKIPEDIA_ARCHIVE);
-        return searchService;
-    }
+//    @Provides
+//    @Named("Wiktionary_en")
+//    SearchServiceInterface provideWiktionarySearchService() {
+//
+//        SearchServiceInterface searchService = new WikiSearchService(WIKTIONARY_DIRECTORY, WIKTIONARY_ARCHIVE);
+//        return searchService;
+//    }
+//
+//    /**
+//     * WikipediaSearchService
+//     *
+//     * @return
+//     */
+//    @Provides
+//    @Named("Wikipedia_en")
+//    SearchServiceInterface provideWikipediaSearchService() {
+//
+//        SearchServiceInterface searchService = new WikiSearchService(WIKIPEDIA_DIRECTORY, WIKIPEDIA_ARCHIVE);
+//        return searchService;
+//    }
 
 
     /**
@@ -315,25 +386,25 @@ public class QaiServerModule extends AbstractModule {
      *
      * @return
      */
-    @Provides
-    @Named("Stocks")
-    SearchServiceInterface provideStockQuoteSearchService() {
-
-        DatabaseSearchService searchService = new DatabaseSearchService();
-        getJpaStocksInjector().injectMembers(searchService);
-
-        return searchService;
-    }
-
-    @Provides
-    @Named("Users")
-    SearchServiceInterface provideUsersSearchService() {
-
-        DatabaseSearchService searchService = new DatabaseSearchService();
-        getJpaUsersInjector().injectMembers(searchService);
-
-        return searchService;
-    }
+//    @Provides
+//    @Named("Stocks")
+//    SearchServiceInterface provideStockQuoteSearchService() {
+//
+//        DatabaseSearchService searchService = new DatabaseSearchService();
+//        getJpaStocksInjector().injectMembers(searchService);
+//
+//        return searchService;
+//    }
+//
+//    @Provides
+//    @Named("Users")
+//    SearchServiceInterface provideUsersSearchService() {
+//
+//        DatabaseSearchService searchService = new DatabaseSearchService();
+//        getJpaUsersInjector().injectMembers(searchService);
+//
+//        return searchService;
+//    }
 
     /**
      * RdfTripleSearchService
@@ -352,8 +423,7 @@ public class QaiServerModule extends AbstractModule {
 //        injector.injectMembers(searchService);
 //        return searchService;
 //    }
-
-    public Injector getJpaStocksInjector() {
+    public static Injector getJpaStocksInjector() {
 
         if (jpaStocksInjector == null) {
             jpaStocksInjector = Guice.createInjector(new JpaPersistModule("STOCKS"));
@@ -363,7 +433,7 @@ public class QaiServerModule extends AbstractModule {
         return jpaStocksInjector;
     }
 
-    public Injector getJpaUsersInjector() {
+    public static Injector getJpaUsersInjector() {
 
         if (jpaUsersInjector == null) {
             jpaUsersInjector = Guice.createInjector(new JpaPersistModule("USERS"));

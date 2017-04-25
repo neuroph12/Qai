@@ -45,6 +45,13 @@ public class DatabaseSearchService implements SearchServiceInterface {
 
     }
 
+    public DatabaseSearchService() {
+    }
+
+    public DatabaseSearchService(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
 

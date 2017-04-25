@@ -20,10 +20,8 @@ import com.hazelcast.core.HazelcastInstance;
 import net.jmob.guice.conf.core.InjectConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.services.implementation.DistributedSearchListener;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  * Created by rainbird on 11/9/15.
@@ -41,21 +39,6 @@ public class QaiNode {
 
     @Inject
     private HazelcastInstance hazelcastInstance;
-
-    @Inject
-    @Named("Wikipedia_en")
-    private DistributedSearchListener wikipediaListener;
-
-    @Inject
-    @Named("Wiktionary_en")
-    private DistributedSearchListener wiktionaryListener;
-
-    @Inject
-    @Named("Stock_Quotes")
-    private DistributedSearchListener quotesListener;
-
-//    @Inject @Named("Dbpedia_en")
-//    private DistributedSearchListener dbpediaSearchListener;
 
     public QaiNode() {
     }
