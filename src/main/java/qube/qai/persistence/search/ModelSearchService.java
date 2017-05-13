@@ -25,7 +25,7 @@ import java.util.Collection;
  */
 public class ModelSearchService implements SearchServiceInterface {
 
-    private String baseDriectory;
+    private String baseDirectory;
 
     /**
      * this is mainly for running Sparql-queries on remote servers.
@@ -36,8 +36,8 @@ public class ModelSearchService implements SearchServiceInterface {
     public ModelSearchService() {
     }
 
-    public ModelSearchService(String baseDriectory) {
-        this.baseDriectory = baseDriectory;
+    public ModelSearchService(String baseDirectory) {
+        this.baseDirectory = baseDirectory;
     }
 
     @Override

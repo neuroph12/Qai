@@ -55,12 +55,12 @@ public class TestHazelcastMaps extends QaiTestBase {
     @Inject
     private HazelcastInstance hazelcastInstance;
 
-    private static String STOCK_ENTITIES = "STOCK_ENTITIES";
-    private static String PROCEDURES = "PROCEDURES";
-    private static String WIKIPEDIA = "WIKIPEDIA_EN";
-    private static String WIKTIONARY = "WIKTIONARY_EN";
-    private static String WIKIPEDIA_RESOURCES = "WIKIPEDIA_RESOURCES";
-    private static String WIKTIONARY_RESOURCES = "WIKTIONARY_RESOURCES";
+    private static String STOCK_ENTITIES = "StockEntities";
+    private static String PROCEDURES = "Procedures";
+    private static String WIKIPEDIA = "Wikipedia_en";
+    private static String WIKTIONARY = "Wiktionary_en";
+    private static String WIKIPEDIA_RESOURCES = "WikiResources_en";
+    private static String WIKTIONARY_RESOURCES = "WiktionaryResources_en";
     private static String[] wikipediaFilesToSearch = {"€2_commemorative_coin_Greece_2007_TOR.jpg",
             "3D_Hot_Rally_boxart.PNG",
             "1_on_1.jpg",
@@ -112,7 +112,7 @@ public class TestHazelcastMaps extends QaiTestBase {
         }
     }
 
-    public void restHazelcastStockEntities() throws Exception {
+    public void testHazelcastStockEntities() throws Exception {
 
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");

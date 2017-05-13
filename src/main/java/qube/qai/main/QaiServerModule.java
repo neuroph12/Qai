@@ -60,22 +60,22 @@ public class QaiServerModule extends AbstractModule {
 
     public static final String NODE_NAME = "QaiNode";
 
-    public static final String USERS = "USERS";
+    public static final String USERS = "Users";
 
-    public static final String USER_SESSIONS = "USER_SESSIONS";
+    public static final String USER_SESSIONS = "UserSessions";
 
-    public static final String USER_ROLES = "USER_ROLES";
+    public static final String USER_ROLES = "UserRoles";
 
-    public static final String STOCK_ENTITIES = "STOCK_ENTITIES";
+    public static final String STOCK_ENTITIES = "StockEntities";
 
-    private static final String STOCK_QUOTES = "STOCK_QUOTES";
+    private static final String STOCK_QUOTES = "StockQuotes";
 
-    public static final String PROCEDURES = "PROCEDURES";
+    public static final String PROCEDURES = "Procedures";
 
     @InjectConfig(value = "PROCEDURE_BASE_DIRECTORY")
     public static String PROCEDURE_BASE_DIRECTORY;
 
-    public static final String WIKIPEDIA = "WIKIPEDIA_EN";
+    public static final String WIKIPEDIA = "Wikipedia_en";
 
     @InjectConfig(value = "WIKIPEDIA_ARCHIVE")
     public static String WIKIPEDIA_ARCHIVE;
@@ -87,7 +87,7 @@ public class QaiServerModule extends AbstractModule {
     //public static final String WIKIPEDIA_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
     //public static final String WIKIPEDIA_DIRECTORY = "/media/pi/BET/wiki-archives/wikipedia_en.index";
 
-    public static final String WIKIPEDIA_RESOURCES = "WIKIPEDIA_RESOURCES";
+    public static final String WIKIPEDIA_RESOURCES = "WikiResources_en";
 
     @InjectConfig(value = "WIKIPEDIA_RESOURCE_DIRECTORY")
     public String WIKIPEDIA_RESOURCE_DIRECTORY;
@@ -99,7 +99,7 @@ public class QaiServerModule extends AbstractModule {
     //public static final String WIKIPEDIA_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
     //public static final String WIKIPEDIA_RESOURCE_INDEX = "/media/pi/BET/wiki-archives/wikipedia_en.resources.index";
 
-    public static final String WIKTIONARY = "WIKTIONARY_EN";
+    public static final String WIKTIONARY = "Wiktionary_en";
 
     @InjectConfig(value = "WIKTIONARY_ARCHIVE")
     public static String WIKTIONARY_ARCHIVE;

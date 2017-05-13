@@ -50,34 +50,34 @@ public class QaiTestServerModule extends AbstractModule {
 
     private static final String NODE_NAME = "QaiTestNode";
 
-    private static final String USERS = "USERS";
+    private static final String USERS = "Users";
 
-    private static final String USER_SESSIONS = "USER_SESSIONS";
+    private static final String USER_SESSIONS = "UserSessions";
 
-    private static final String USER_ROLES = "USER_ROLES";
+    private static final String USER_ROLES = "UserRoles";
 
-    private static final String STOCK_ENTITIES = "STOCK_ENTITIES";
+    private static final String STOCK_ENTITIES = "StockEntities";
 
-    private static final String STOCK_QUOTES = "STOCK_QUOTES";
+    private static final String STOCK_QUOTES = "StockQuotes";
 
-    private static final String PROCEDURES = "PROCEDURES";
+    private static final String PROCEDURES = "Procedures";
 
     private String PERSISTENCE_BASE = "/media/rainbird/ALEPH/qai-persistence.db";
     // private String PERSISTENCE_BASE = "/media/pi/BET/qai-persistence.db";
 
     private static final String MODEL_BASE_DIRECTORY = "/media/rainbird/ALEPH/qai-persistence.db/test_model_persistence";
 
-    private static final String WIKIPEDIA = "WIKIPEDIA_EN";
+    private static final String WIKIPEDIA = "Wikipedia_en";
 
     private static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
     //private static final String WIKIPEDIA_ARCHIVE = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
 
-    private static final String WIKTIONARY = "WIKTIONARY_EN";
+    private static final String WIKTIONARY = "Wiktionary_en";
 
     private static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
     //private static final String WIKTIONARY_ARCHIVE = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
 
-    public static final String WIKIPEDIA_RESOURCES = "WIKIPEDIA_RESOURCES";
+    public static final String WIKIPEDIA_RESOURCES = "WikiResources_en";
 
     public String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
 

@@ -41,21 +41,17 @@ public class ModelStore implements SearchServiceInterface {
 
     private static Logger logger = LoggerFactory.getLogger("ModelStore");
 
-    public static String PROCEDURES = "PROCEDURES";
+    public static String PROCEDURES = "Procedures";
 
-    public static String USERS = "USERS";
+    public static String USERS = "Users";
 
-    public static String SESSIONS = "SESSIONS";
+    public static String SESSIONS = "Sessions";
 
-    public static String ROLES = "ROLES";
+    public static String ROLES = "Roles";
 
     private String baseUrl = "http://www.qoan.org/data/";
 
-    private boolean isSerializeObject = false;
-
     private String directoryName;
-
-    private Object serializedObject;
 
     private Class objectClass;
 
@@ -138,20 +134,6 @@ public class ModelStore implements SearchServiceInterface {
         return null;
     }
 
-//    public void save(Model model) {
-//        dataset.begin(ReadWrite.WRITE);
-//        this.model.add(model);
-//        dataset.commit();
-//        dataset.end();
-//    }
-//
-//    public void remove(Model model) {
-//        dataset.begin(ReadWrite.WRITE);
-//        this.model.remove(model);
-//        dataset.commit();
-//        dataset.end();
-//    }
-
     public Model createDefaultModel() {
         return model;
     }
@@ -170,7 +152,7 @@ public class ModelStore implements SearchServiceInterface {
         dataset.end();
     }
 
-    public Object getSerializedObject() {
-        return serializedObject;
-    }
+//    public Object getSerializedObject() {
+//        return serializedObject;
+//    }
 }

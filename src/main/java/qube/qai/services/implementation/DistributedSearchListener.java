@@ -18,6 +18,8 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.services.SearchServiceInterface;
 
 import javax.inject.Inject;
@@ -28,12 +30,14 @@ import java.util.Collection;
  */
 public class DistributedSearchListener implements MessageListener {
 
-    @Inject //@Named("HAZELCAST_CLIENT")
+    private static Logger logger = LoggerFactory.getLogger("DistributedSearchListener");
+
+    @Inject
     private HazelcastInstance hazelcastInstance;
 
     private SearchServiceInterface searchService;
 
-    private String topicName; // = "Wikipedia_en";
+    private String topicName;
 
     public DistributedSearchListener(String topicName) {
         this.topicName = topicName;
@@ -42,6 +46,7 @@ public class DistributedSearchListener implements MessageListener {
     public void initialize() {
         ITopic topic = hazelcastInstance.getTopic(topicName);
         topic.addMessageListener(this);
+        logger.info("Registered listener for '" + topicName + "' search-service");
     }
 
     @Override
@@ -52,7 +57,9 @@ public class DistributedSearchListener implements MessageListener {
             Collection<SearchResult> results = searchService.searchInputString(request.searchString, request.fieldName, request.hitsPerPage);
             ITopic<Collection> topic = hazelcastInstance.getTopic(topicName);
             topic.publish(results);
+            logger.info("Search in '" + topicName + "' : '" + request.searchString + "' brokered with " + results.size() + " results");
         }
+
     }
 
     public void setSearchService(SearchServiceInterface searchService) {

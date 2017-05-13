@@ -55,10 +55,10 @@ public class TestHazelcastSelectors extends QaiTestBase {
     @Named("Wiktionary_en")
     private SearchServiceInterface wiktionarySearch;
 
-    private String STOCK_ENTITIES = "STOCK_ENTITIES";
-    private String PROCEDURE_SOURCE = "PROCEDURES";
-    private String WIKIPEDIA_SOURCE = "WIKIPEDIA_EN";
-    private String WIKTIONARY_SOURCE = "WIKTIONARY_EN";
+    private String STOCK_ENTITIES = "StockEntities";
+    private String PROCEDURE_SOURCE = "Procedures";
+    private String WIKIPEDIA_SOURCE = "Wikipedia_en";
+    private String WIKTIONARY_SOURCE = "Wiktionary_en";
 
     /**
      * test for selector of stock-entities
