@@ -45,6 +45,7 @@ import java.util.zip.ZipFile;
 public class WikiSearchService implements SearchServiceInterface {
 
     private Logger logger = LoggerFactory.getLogger("WikiSearchService");
+
     public String INDEX_DIRECTORY;
 
     public String ZIP_FILE_NAME;
