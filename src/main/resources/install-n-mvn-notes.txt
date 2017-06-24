@@ -65,6 +65,9 @@ mvn exec:java -Dexec.mainClass="qube.qai.main.QaiNode"
 git pull rainbird@192.168.1.6:/home/rainbird/projects/work/qai
 git pull rainbird@192.168.1.6:/home/rainbird/projects/work/qoan
 
+in order to have larger memory for the JVM
+-Xmx1024M -Xss128M -XX:-UseGCOverheadLimit -XX:+CMSClassUnloadingEnabled
+
 latest configuration of boxes in intranet
 192.168.1.2	- modelserver
 192.168.1.3 - weber
