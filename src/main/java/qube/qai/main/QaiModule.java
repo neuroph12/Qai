@@ -16,10 +16,7 @@ package qube.qai.main;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import net.jmob.guice.conf.core.BindConfig;
-import net.jmob.guice.conf.core.ConfigurationModule;
-import net.jmob.guice.conf.core.InjectConfig;
-import net.jmob.guice.conf.core.Syntax;
+import com.google.inject.name.Names;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.message.MessageQueue;
@@ -34,15 +31,20 @@ import qube.qai.services.implementation.ProcedureRunner;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.EntityManager;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * Created by rainbird on 11/9/15.
  */
-@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
+//@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
 //@BindConfig(value = "qube/qai/main/config_deploy", syntax = Syntax.PROPERTIES)
 public class QaiModule extends AbstractModule {
 
     private Logger logger = LoggerFactory.getLogger("Qai-Module");
+
+    public static final String CONFIG_FILE_NAME = "config_dev.properties";
 
 //    private static String wiktionaryDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
 //
@@ -54,7 +56,7 @@ public class QaiModule extends AbstractModule {
 //
 //    private static String wikipediaZipFileName = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
 
-    @InjectConfig(value = "PERSISTENCE_BASE")
+    //@InjectConfig(value = "PERSISTENCE_BASE")
     public String PERSISTENCE_BASE;
 
     //private static String stockQuotesDirectory = "data/stockquotes/";
@@ -67,8 +69,15 @@ public class QaiModule extends AbstractModule {
         logger.info("Guice initialization called- binding services");
 
         // load the given configuration for
-        install(ConfigurationModule.create());
-        requestInjection(this);
+        //install(ConfigurationModule.create());
+        //requestInjection(this);
+        try {
+            Properties properties = new Properties();
+            properties.load(new FileReader(CONFIG_FILE_NAME));
+            Names.bindProperties(binder(), properties);
+        } catch (IOException e) {
+            logger.error("Error while loading configuration file: " + CONFIG_FILE_NAME, e);
+        }
 
         // UUIDService
         bind(UUIDServiceInterface.class).to(UUIDService.class);

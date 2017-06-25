@@ -46,6 +46,9 @@ public class DistributedSearchService implements SearchServiceInterface, Message
     }
 
     public void initialize() {
+
+        logger.info("Initializing DistributedSearchService: " + searchTopicName);
+
         ITopic topic = hazelcastInstance.getTopic(searchTopicName);
         topic.addMessageListener(this);
     }

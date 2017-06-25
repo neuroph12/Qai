@@ -20,14 +20,7 @@ import com.google.inject.persist.jpa.JpaPersistModule;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MapStoreConfig;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.MapLoader;
-import com.hazelcast.core.MapStoreFactory;
-import net.jmob.guice.conf.core.BindConfig;
-import net.jmob.guice.conf.core.ConfigurationModule;
-import net.jmob.guice.conf.core.InjectConfig;
-import net.jmob.guice.conf.core.Syntax;
+import com.hazelcast.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.*;
@@ -52,109 +45,46 @@ import java.util.Properties;
 /**
  * Created by rainbird on 11/26/15.
  */
-@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
+//@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
 //@BindConfig(value = "qube/qai/main/config_deploy", syntax = Syntax.PROPERTIES)
-public class QaiServerModule extends AbstractModule {
+public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     private static Logger logger = LoggerFactory.getLogger("QaiServerModule");
 
-    public static final String NODE_NAME = "QaiNode";
+    public static final String CONFIG_FILE_NAME = "/home/rainbird/projects/work/qai/src/main/resources/qube/qai/main/config_dev.properties";
 
-    public static final String USERS = "Users";
+    //@InjectConfig(value = "CREATE_STOCK_ENTITIES")
+    public String CREATE_STOCK_ENTITIES = "CREATE_STOCK_ENTITIES";
 
-    public static final String USER_SESSIONS = "UserSessions";
+    //@InjectConfig(value = "CREATE_STOCK_QUOTES")
+    public String CREATE_STOCK_QUOTES = "CREATE_STOCK_QUOTES";
 
-    public static final String USER_ROLES = "UserRoles";
+    //@InjectConfig(value = "CREATE_PROCEDURES")
+    public String CREATE_PROCEDURES = "CREATE_PROCEDURES";
 
-    public static final String STOCK_ENTITIES = "StockEntities";
+    //@InjectConfig(value = "CREATE_WIKIPEDIA")
+    public String CREATE_WIKIPEDIA = "CREATE_WIKIPEDIA";
 
-    private static final String STOCK_QUOTES = "StockQuotes";
+    //@InjectConfig(value = "CREATE_WIKIPEDIA_RESOURCES")
+    public String CREATE_WIKIPEDIA_RESOURCES = "CREATE_WIKIPEDIA_RESOURCES";
 
-    public static final String PROCEDURES = "Procedures";
+    //@InjectConfig(value = "CREATE_WIKTIONARY")
+    public String CREATE_WIKTIONARY = "CREATE_WIKTIONARY";
 
-    @InjectConfig(value = "PROCEDURE_BASE_DIRECTORY")
-    public static String PROCEDURE_BASE_DIRECTORY;
+    //@InjectConfig(value = "CREATE_WIKTIONARY_RESOURCES")
+    public String CREATE_WIKTIONARY_RESOURCES = "CREATE_WIKTIONARY_RESOURCES";
 
-    public static final String WIKIPEDIA = "Wikipedia_en";
+    //@InjectConfig(value = "CREATE_DBPEDIA")
+    public String CREATE_DBPEDIA = "CREATE_DBPEDIA";
 
-    @InjectConfig(value = "WIKIPEDIA_ARCHIVE")
-    public static String WIKIPEDIA_ARCHIVE;
-    //public static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
-    //public static final String WIKIPEDIA_ARCHIVE = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
+    //@InjectConfig(value = "CREATE_USERS")
+    public String CREATE_USERS = "CREATE_USERS";
 
-    @InjectConfig(value = "WIKIPEDIA_DIRECTORY")
-    public static String WIKIPEDIA_DIRECTORY;
-    //public static final String WIKIPEDIA_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
-    //public static final String WIKIPEDIA_DIRECTORY = "/media/pi/BET/wiki-archives/wikipedia_en.index";
+    //@InjectConfig(value = "CREATE_USER_SESSIONS")
+    public String CREATE_USER_SESSIONS = "CREATE_USER_SESSIONS";
 
-    public static final String WIKIPEDIA_RESOURCES = "WikiResources_en";
-
-    @InjectConfig(value = "WIKIPEDIA_RESOURCE_DIRECTORY")
-    public String WIKIPEDIA_RESOURCE_DIRECTORY;
-    //public static final String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
-    //public static final String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/pi/BET/wiki-archives/wikipedia_en.resources";
-
-    @InjectConfig(value = "WIKIPEDIA_RESOURCE_INDEX")
-    public String WIKIPEDIA_RESOURCE_INDEX;
-    //public static final String WIKIPEDIA_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
-    //public static final String WIKIPEDIA_RESOURCE_INDEX = "/media/pi/BET/wiki-archives/wikipedia_en.resources.index";
-
-    public static final String WIKTIONARY = "Wiktionary_en";
-
-    @InjectConfig(value = "WIKTIONARY_ARCHIVE")
-    public static String WIKTIONARY_ARCHIVE;
-    //public static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
-    //public static final String WIKTIONARY_ARCHIVE = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
-
-    @InjectConfig("WIKTIONARY_DIRECTORY")
-    public static String WIKTIONARY_DIRECTORY;
-    //public static final String WIKTIONARY_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
-    //public static final String WIKTIONARY_DIRECTORY = "/media/pi/BET/wiki-archives/wiktionary_en.index";
-
-    public static final String WIKTIONARY_RESOURCES = "WIKTIONARY_RESOURCES";
-
-    @InjectConfig(value = "WIKTIONARY_RESOURCE_DIRECTORY")
-    public static String WIKTIONARY_RESOURCE_DIRECTORY;
-    //public static final String WIKTIONARY_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources";
-    //public static final String WIKTIONARY_RESOURCE_DIRECTORY = "/media/pi/BET/wiki-archives/wiktionary_en.resources";
-
-    @InjectConfig(value = "WIKTIONARY_RESOURCE_INDEX")
-    public static String WIKTIONARY_RESOURCE_INDEX;
-    //public static final String WIKTIONARY_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources.index";
-    //public static final String WIKTIONARY_RESOURCE_INDEX = "/media/pi/BET/wiki-archives/wiktionary_en.resources.index";
-
-    @InjectConfig(value = "CREATE_STOCK_ENTITIES")
-    public String CREATE_STOCK_ENTITIES;
-
-    @InjectConfig(value = "CREATE_STOCK_QUOTES")
-    public String CREATE_STOCK_QUOTES;
-
-    @InjectConfig(value = "CREATE_PROCEDURES")
-    public String CREATE_PROCEDURES;
-
-    @InjectConfig(value = "CREATE_WIKIPEDIA")
-    public String CREATE_WIKIPEDIA;
-
-    @InjectConfig(value = "CREATE_WIKIPEDIA_RESOURCES")
-    public String CREATE_WIKIPEDIA_RESOURCES;
-
-    @InjectConfig(value = "CREATE_WIKTIONARY")
-    public String CREATE_WIKTIONARY;
-
-    @InjectConfig(value = "CREATE_WIKTIONARY_RESOURCES")
-    public String CREATE_WIKTIONARY_RESOURCES;
-
-    @InjectConfig(value = "CREATE_DBPEDIA")
-    public String CREATE_DBPEDIA;
-
-    @InjectConfig(value = "CREATE_USERS")
-    public String CREATE_USERS;
-
-    @InjectConfig(value = "CREATE_USER_SESSIONS")
-    public String CREATE_USER_SESSIONS;
-
-    @InjectConfig(value = "CREATE_USER_ROLES")
-    public String CREATE_USER_ROLES;
+    //@InjectConfig(value = "CREATE_USER_ROLES")
+    public String CREATE_USER_ROLES = "CREATE_USER_ROLES";
 
 //    @InjectConfig(value = "CREATE_DBPERSON")
 //    public String CREATE_DBPERSON;
@@ -167,7 +97,7 @@ public class QaiServerModule extends AbstractModule {
 
     private DatabaseMapStore stockEntityMapStore;
 
-    private DatabaseMapStore stockQuoteMapStore;
+    private MapStore<String, StockQuote> stockQuoteMapStore;
 
     private DatabaseMapStore userMapStore;
 
@@ -175,15 +105,19 @@ public class QaiServerModule extends AbstractModule {
 
     private DatabaseMapStore roleMapStore;
 
-    private DatabaseMapStore dbpediaMapStore;
+    private MapStore<String, Procedure> procedureMapStore;
 
-    private DatabaseMapStore dbpersonMapStore;
+    private MapStore<String, WikiArticle> wikipediaMapStore;
+
+    private IndexedDirectoryMapStore wikiResourcesMapStore;
+
+    private MapStore<String, WikiArticle> wiktionaryMapStore;
+
+    private IndexedDirectoryMapStore wiktionaryResourcesStore;
 
     private static Injector jpaStocksInjector;
 
     private static Injector jpaDBPediaInjector;
-
-    private static Injector jpaDBPersonInjector;
 
     private static Injector jpaUsersInjector;
 
@@ -211,15 +145,37 @@ public class QaiServerModule extends AbstractModule {
     @Named("Procedures")
     private DistributedSearchListener proceduresSearchListener;
 
-    public QaiServerModule() {
+    private Properties properties;
 
+    public QaiServerModule(Properties properties) {
+        this.properties = properties;
     }
 
     @Override
     protected void configure() {
+
         // load the given configuration for loading config-file
-        install(ConfigurationModule.create());
-        requestInjection(this);
+//        install(ConfigurationModule.create());
+//        requestInjection(this);
+//        try {
+//            properties = new Properties();
+//
+//            ClassLoader loader = QaiServerModule.class.getClassLoader();
+//            URL url = loader.getResource("qube/qai/main/config_dev.properties");
+//            properties.load(url.openStream());
+//
+////            properties.load(new FileInputStream(CONFIG_FILE_NAME));
+////            Names.bindProperties(binder(), properties);
+////            String s = properties.getProperty("WIKIPEDIA_DIRECTORY");
+////            if (StringUtils.isEmpty(s)) {
+////                throw new RuntimeException("Configuration 'WIKIPEDIA_DIRECTORY' could not be found- have to exit!");
+////            }
+//
+//
+//        } catch (IOException e) {
+//            logger.error("Error while loading configuration file: " + CONFIG_FILE_NAME, e);
+//            throw new RuntimeException("Configuration file: '" + CONFIG_FILE_NAME + "' could not be found- have to exit!");
+//        }
     }
 
     /**
@@ -232,11 +188,13 @@ public class QaiServerModule extends AbstractModule {
     @Provides
     @Named("Wiktionary_en")
     @Singleton
-    public static DistributedSearchListener provideWiktionarySearchListener(HazelcastInstance hazelcastInstance) {
+    public DistributedSearchListener provideWiktionarySearchListener(HazelcastInstance hazelcastInstance) {
 
-        SearchServiceInterface basicSearchService = new WikiSearchService(WIKTIONARY_DIRECTORY, WIKTIONARY_ARCHIVE);
+        SearchServiceInterface basicSearchService = new WikiSearchService(
+                properties.getProperty(WIKTIONARY_DIRECTORY),
+                properties.getProperty(WIKTIONARY_ARCHIVE));
 
-        DistributedSearchListener searchListener = new DistributedSearchListener("Wiktionary_en");
+        DistributedSearchListener searchListener = new DistributedSearchListener(WIKTIONARY);
         searchListener.setSearchService(basicSearchService);
         searchListener.setHazelcastInstance(hazelcastInstance);
         searchListener.initialize();
@@ -254,11 +212,14 @@ public class QaiServerModule extends AbstractModule {
     @Provides
     @Named("Wikipedia_en")
     @Singleton
-    public static DistributedSearchListener provideWikipediaSearchListener(HazelcastInstance hazelcastInstance) {
-        SearchServiceInterface basicSearchService = new WikiSearchService(WIKIPEDIA_DIRECTORY, WIKIPEDIA_ARCHIVE);
+    public DistributedSearchListener provideWikipediaSearchListener(HazelcastInstance hazelcastInstance) {
 
-        DistributedSearchListener searchListener = new DistributedSearchListener("Wikipedia_en");
-        searchListener.setSearchService(basicSearchService);
+        SearchServiceInterface searchService = new WikiSearchService(
+                properties.getProperty(WIKIPEDIA_DIRECTORY),
+                properties.getProperty(WIKIPEDIA_ARCHIVE));
+
+        DistributedSearchListener searchListener = new DistributedSearchListener(WIKIPEDIA);
+        searchListener.setSearchService(searchService);
         searchListener.setHazelcastInstance(hazelcastInstance);
         searchListener.initialize();
 
@@ -274,11 +235,12 @@ public class QaiServerModule extends AbstractModule {
     @Provides
     @Named("WikiResources_en")
     @Singleton
-    public static DistributedSearchListener provideWikiResourcesSearchListener(HazelcastInstance hazelcastInstance) {
+    public DistributedSearchListener provideWikiResourcesSearchListener(HazelcastInstance hazelcastInstance) {
 
-        SearchServiceInterface searchService = new DirectorySearchService(WIKTIONARY_RESOURCE_INDEX);
+        SearchServiceInterface searchService = new DirectorySearchService(
+                properties.getProperty(WIKTIONARY_RESOURCE_INDEX));
 
-        DistributedSearchListener searchListener = new DistributedSearchListener("WikiResources_en");
+        DistributedSearchListener searchListener = new DistributedSearchListener(WIKIPEDIA_RESOURCES);
         searchListener.setSearchService(searchService);
         searchListener.setHazelcastInstance(hazelcastInstance);
         searchListener.initialize();
@@ -296,12 +258,12 @@ public class QaiServerModule extends AbstractModule {
     @Provides
     @Named("StockEntities")
     @Singleton
-    public static DistributedSearchListener provideStockQuotesSearchListener(HazelcastInstance hazelcastInstance) {
+    public DistributedSearchListener provideStockQuotesSearchListener(HazelcastInstance hazelcastInstance) {
 
         SearchServiceInterface searchService = new DatabaseSearchService();
         getJpaStocksInjector().injectMembers(searchService);
 
-        DistributedSearchListener searchListener = new DistributedSearchListener("StockEntities");
+        DistributedSearchListener searchListener = new DistributedSearchListener(STOCK_ENTITIES);
         searchListener.setSearchService(searchService);
         searchListener.setHazelcastInstance(hazelcastInstance);
         searchListener.initialize();
@@ -324,7 +286,7 @@ public class QaiServerModule extends AbstractModule {
         SearchServiceInterface searchService = new DatabaseSearchService();
         getJpaUsersInjector().injectMembers(searchService);
 
-        DistributedSearchListener searchListener = new DistributedSearchListener("Users");
+        DistributedSearchListener searchListener = new DistributedSearchListener(USERS);
         searchListener.setSearchService(searchService);
         searchListener.setHazelcastInstance(hazelcastInstance);
         searchListener.initialize();
@@ -342,11 +304,11 @@ public class QaiServerModule extends AbstractModule {
     @Provides
     @Named("Procedures")
     @Singleton
-    public static DistributedSearchListener provideProceduresSearchListener(HazelcastInstance hazelcastInstance) {
+    public DistributedSearchListener provideProceduresSearchListener(HazelcastInstance hazelcastInstance) {
 
-        SearchServiceInterface searchService = new ModelStore(PROCEDURE_BASE_DIRECTORY);
+        SearchServiceInterface searchService = new ModelStore(properties.getProperty(PROCEDURE_BASE_DIRECTORY));
 
-        DistributedSearchListener searchListener = new DistributedSearchListener("Procedures");
+        DistributedSearchListener searchListener = new DistributedSearchListener(PROCEDURES);
         searchListener.setSearchService(searchService);
         searchListener.setHazelcastInstance(hazelcastInstance);
         searchListener.initialize();
@@ -454,42 +416,42 @@ public class QaiServerModule extends AbstractModule {
         Config hazelcastConfig = new Config(NODE_NAME);
 
         // create Stock_Entities map-store
-        if ("true".equals(CREATE_STOCK_ENTITIES)) {
+        if ("true".equals(properties.getProperty(CREATE_STOCK_ENTITIES))) {
             createStockEntitiesConfig(hazelcastConfig);
         }
 
         // create StockQuotes map-store
-        if ("true".equalsIgnoreCase(CREATE_STOCK_QUOTES)) {
+        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_STOCK_QUOTES))) {
             createStockQuotesConfig(hazelcastConfig);
         }
 
         // create Procedures map-store
-        if ("true".equalsIgnoreCase(CREATE_PROCEDURES)) {
+        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_PROCEDURES))) {
             createProceduresConfig(hazelcastConfig);
         }
 
         // create Wikipedia map-store
-        if ("true".equalsIgnoreCase(CREATE_WIKIPEDIA)) {
+        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKIPEDIA))) {
             createWikipediaConfig(hazelcastConfig);
         }
 
         // create Wikipedia-Resources map-store
-        if ("true".equalsIgnoreCase(CREATE_WIKIPEDIA_RESOURCES)) {
+        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKIPEDIA_RESOURCES))) {
             createWikipediaResourcesConfig(hazelcastConfig);
         }
 
         // create Wiktionary map-store
-        if ("true".equalsIgnoreCase(CREATE_WIKTIONARY)) {
+        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKTIONARY))) {
             createWiktionaryConfig(hazelcastConfig);
         }
 
         // create Wiktionary-Resources map-store
-        if ("true".equalsIgnoreCase(CREATE_WIKTIONARY_RESOURCES)) {
+        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKTIONARY_RESOURCES))) {
             createWiktionaryResourceConfig(hazelcastConfig);
         }
 
         // create DBPedia map-store
-        if ("true".equalsIgnoreCase(CREATE_DBPEDIA)) {
+        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_DBPEDIA))) {
             createDBPediaConfig(hazelcastConfig);
         }
 //
@@ -504,17 +466,17 @@ public class QaiServerModule extends AbstractModule {
 //        }
 
         // create User database and Hazelcast map
-        if ("true".equalsIgnoreCase(CREATE_USERS)) {
+        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USERS))) {
             createUsersMapConfig(hazelcastConfig);
         }
 
         // create UserRoles and Hazelcast map
-        if ("true".equalsIgnoreCase(CREATE_USER_ROLES)) {
+        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USER_ROLES))) {
             createUserRoles(hazelcastConfig);
         }
 
         // create UserSessions
-        if ("true".equalsIgnoreCase(CREATE_USER_SESSIONS)) {
+        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USER_SESSIONS))) {
             createUserSessions(hazelcastConfig);
         }
 
@@ -573,13 +535,13 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + USERS);
             userMapstoreConfig = new MapStoreConfig();
         }
+
+        userMapStore = new DatabaseMapStore(User.class);
+        getJpaUsersInjector().injectMembers(userMapStore);
+
         userMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, User>() {
             public MapLoader<String, User> newMapStore(String mapName, Properties properties) {
                 if (USERS.equals(mapName)) {
-                    if (userMapStore == null) {
-                        userMapStore = new DatabaseMapStore(User.class);
-                        getJpaUsersInjector().injectMembers(userMapStore);
-                    }
                     return userMapStore;
                 } else {
                     return null;
@@ -598,14 +560,13 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + USER_ROLES);
             roleMapStoreConfig = new MapStoreConfig();
         }
+
+        roleMapStore = new DatabaseMapStore(Role.class);
+        getJpaUsersInjector().injectMembers(roleMapStore);
+
         roleMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Role>() {
             public MapLoader<String, Role> newMapStore(String mapName, Properties properties) {
                 if (USER_ROLES.equals(mapName)) {
-                    if (roleMapStore == null) {
-                        roleMapStore = new DatabaseMapStore(Role.class);
-                        getJpaUsersInjector().injectMembers(roleMapStore);
-                    }
-
                     return roleMapStore;
                 } else {
                     return null;
@@ -624,14 +585,13 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + USER_SESSIONS);
             sessionMapStoreConfig = new MapStoreConfig();
         }
+
+        sessionMapStore = new DatabaseMapStore(Session.class);
+        getJpaUsersInjector().injectMembers(sessionMapStore);
+
         sessionMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Session>() {
             public MapLoader<String, Session> newMapStore(String mapName, Properties properties) {
                 if (USER_SESSIONS.equals(mapName)) {
-                    if (sessionMapStore == null) {
-                        sessionMapStore = new DatabaseMapStore(Session.class);
-                        getJpaUsersInjector().injectMembers(sessionMapStore);
-                    }
-
                     return sessionMapStore;
                 } else {
                     return null;
@@ -671,6 +631,7 @@ public class QaiServerModule extends AbstractModule {
     /**
      * wiktionary resources
      */
+
     private void createWiktionaryResourceConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(WIKTIONARY_RESOURCES);
         mapConfig.getMapStoreConfig().setEnabled(true);
@@ -679,13 +640,17 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY_RESOURCES);
             mapStoreConfig = new MapStoreConfig();
         }
+
+        wiktionaryResourcesStore = new IndexedDirectoryMapStore(
+                properties.getProperty(WIKTIONARY_RESOURCE_DIRECTORY),
+                properties.getProperty(WIKTIONARY_RESOURCE_INDEX));
+        DirectorySearchService directorySearchService = new DirectorySearchService(properties.getProperty(WIKTIONARY_RESOURCE_INDEX));
+        wiktionaryResourcesStore.setSearchService(directorySearchService);
+
         mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, ResourceData>() {
             public MapLoader<String, ResourceData> newMapStore(String mapName, Properties properties) {
                 if (WIKTIONARY_RESOURCES.equals(mapName)) {
-                    IndexedDirectoryMapStore store = new IndexedDirectoryMapStore(WIKTIONARY_RESOURCE_DIRECTORY, WIKTIONARY_RESOURCE_INDEX);
-                    DirectorySearchService directorySearchService = new DirectorySearchService(WIKTIONARY_RESOURCE_INDEX);
-                    store.setSearchService(directorySearchService);
-                    return store;
+                    return wiktionaryResourcesStore;
                 } else {
                     return null;
                 }
@@ -698,6 +663,8 @@ public class QaiServerModule extends AbstractModule {
     /**
      * wiktionary-article map-store
      */
+
+
     private void createWiktionaryConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(WIKTIONARY);
         mapConfig.getMapStoreConfig().setEnabled(true);
@@ -706,10 +673,13 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + WIKTIONARY);
             mapStoreConfig = new MapStoreConfig();
         }
+
+        wiktionaryMapStore = new WikiArticleMapStore(properties.getProperty(WIKTIONARY_ARCHIVE));
+
         mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
             public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
                 if (WIKTIONARY.equals(mapName)) {
-                    return new WikiArticleMapStore(WIKTIONARY_ARCHIVE);
+                    return wiktionaryMapStore;
                 } else {
                     return null;
                 }
@@ -730,13 +700,17 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA_RESOURCES);
             mapStoreConfig = new MapStoreConfig();
         }
+
+        wikiResourcesMapStore = new IndexedDirectoryMapStore(
+                properties.getProperty(WIKIPEDIA_RESOURCE_DIRECTORY),
+                properties.getProperty(WIKIPEDIA_RESOURCE_INDEX));
+        DirectorySearchService directorySearchService = new DirectorySearchService(properties.getProperty(WIKIPEDIA_RESOURCE_INDEX));
+        wikiResourcesMapStore.setSearchService(directorySearchService);
+
         mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, ResourceData>() {
             public MapLoader<String, ResourceData> newMapStore(String mapName, Properties properties) {
                 if (WIKIPEDIA_RESOURCES.equals(mapName)) {
-                    IndexedDirectoryMapStore store = new IndexedDirectoryMapStore(WIKIPEDIA_RESOURCE_DIRECTORY, WIKIPEDIA_RESOURCE_INDEX);
-                    DirectorySearchService directorySearchService = new DirectorySearchService(WIKIPEDIA_RESOURCE_INDEX);
-                    store.setSearchService(directorySearchService);
-                    return store;
+                    return wikiResourcesMapStore;
                 } else {
                     return null;
                 }
@@ -757,10 +731,13 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA);
             mapStoreConfig = new MapStoreConfig();
         }
+
+        wikipediaMapStore = new WikiArticleMapStore(properties.getProperty(WIKIPEDIA_ARCHIVE));
+
         mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
             public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
                 if (WIKIPEDIA.equals(mapName)) {
-                    return new WikiArticleMapStore(WIKIPEDIA_ARCHIVE);
+                    return wikipediaMapStore;
                 } else {
                     return null;
                 }
@@ -782,10 +759,13 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + PROCEDURES);
             mapStoreConfig = new MapStoreConfig();
         }
+
+        procedureMapStore = new DirectoryMapStore(properties.getProperty(PROCEDURE_BASE_DIRECTORY));
+
         mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
             public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
                 if (PROCEDURES.equals(mapName)) {
-                    return new DirectoryMapStore(PROCEDURE_BASE_DIRECTORY);
+                    return procedureMapStore;
                 } else {
                     return null;
                 }
@@ -808,14 +788,13 @@ public class QaiServerModule extends AbstractModule {
             mapStoreConfig = new MapStoreConfig();
 
         }
+
+        stockQuoteMapStore = new DatabaseMapStore(StockQuote.class);
+        getJpaStocksInjector().injectMembers(stockQuoteMapStore);
+
         mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockQuote>() {
             public MapLoader<String, StockQuote> newMapStore(String mapName, Properties properties) {
                 if (STOCK_QUOTES.equals(mapName)) {
-                    if (stockQuoteMapStore == null) {
-                        stockQuoteMapStore = new DatabaseMapStore(StockQuote.class);
-                        getJpaStocksInjector().injectMembers(stockQuoteMapStore);
-                    }
-
                     return stockQuoteMapStore;
                 } else {
                     return null;
@@ -838,14 +817,13 @@ public class QaiServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + STOCK_ENTITIES);
             mapStoreConfig = new MapStoreConfig();
         }
+
+        stockEntityMapStore = new DatabaseMapStore(StockEntity.class);
+        getJpaStocksInjector().injectMembers(stockEntityMapStore);
+
         mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockEntity>() {
             public MapLoader<String, StockEntity> newMapStore(String mapName, Properties properties) {
                 if (STOCK_ENTITIES.equals(mapName)) {
-                    if (stockEntityMapStore == null) {
-                        stockEntityMapStore = new DatabaseMapStore(StockEntity.class);
-                        getJpaStocksInjector().injectMembers(stockEntityMapStore);
-                    }
-
                     return stockEntityMapStore;
                 } else {
                     return null;

@@ -44,6 +44,11 @@ public class DistributedSearchListener implements MessageListener {
     }
 
     public void initialize() {
+
+        if (hazelcastInstance == null || searchService == null) {
+            throw new RuntimeException("Hazelcast instance or the search service to be employed are not configured right- exiting");
+        }
+
         ITopic topic = hazelcastInstance.getTopic(topicName);
         topic.addMessageListener(this);
         logger.info("Registered listener for '" + topicName + "' search-service");
@@ -51,13 +56,19 @@ public class DistributedSearchListener implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
+
         Object mesasgeObject = message.getMessageObject();
+
         if (mesasgeObject instanceof DistributedSearchService.SearchRequest) {
             DistributedSearchService.SearchRequest request = (DistributedSearchService.SearchRequest) mesasgeObject;
             Collection<SearchResult> results = searchService.searchInputString(request.searchString, request.fieldName, request.hitsPerPage);
-            ITopic<Collection> topic = hazelcastInstance.getTopic(topicName);
-            topic.publish(results);
-            logger.info("Search in '" + topicName + "' : '" + request.searchString + "' brokered with " + results.size() + " results");
+            if (results != null && !results.isEmpty()) {
+                ITopic<Collection> topic = hazelcastInstance.getTopic(topicName);
+                topic.publish(results);
+                logger.info("Search in '" + topicName + "' : '" + request.searchString + "' brokered with " + results.size() + " results");
+            } else {
+                logger.info("Search in '" + topicName + "' : '" + request.searchString + "' returned no results ");
+            }
         }
 
     }

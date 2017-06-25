@@ -17,11 +17,17 @@ package qube.qai.main;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hazelcast.core.HazelcastInstance;
-import net.jmob.guice.conf.core.InjectConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.services.implementation.DistributedSearchListener;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Properties;
+
+import static qube.qai.main.QaiServerModule.CONFIG_FILE_NAME;
 
 /**
  * Created by rainbird on 11/9/15.
@@ -34,8 +40,32 @@ public class QaiNode {
 
     private String NODE_NAME = "QaiNode";
 
-    @InjectConfig(value = "PERSISTENCE_BASE")
-    public String PERSISTENCE_BASE;
+//    @InjectConfig(value = "PERSISTENCE_BASE")
+//    public String PERSISTENCE_BASE;
+
+    @Inject
+    @Named("Wikipedia_en")
+    private DistributedSearchListener wikipediaListener;
+
+    @Inject
+    @Named("Wiktionary_en")
+    private DistributedSearchListener wikitionaryListener;
+
+    @Inject
+    @Named("WikiResources_en")
+    private DistributedSearchListener wikiResourcesListener;
+
+    @Inject
+    @Named("Users")
+    private DistributedSearchListener usersListener;
+
+    @Inject
+    @Named("StockEntities")
+    private DistributedSearchListener stocksListener;
+
+    @Inject
+    @Named("Procedures")
+    private DistributedSearchListener proceduresListener;
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -48,9 +78,29 @@ public class QaiNode {
         // injector knows all
         // Server configuration lies in QaiServerModule
         // other Qai dependent services and things lie in QaiModule
-        QaiServerModule qaiServer = new QaiServerModule();
-        QaiModule qaiModule = new QaiModule();
-        injector = Guice.createInjector(qaiServer, qaiModule);
+        try {
+            Properties properties = new Properties();
+
+            ClassLoader loader = QaiServerModule.class.getClassLoader();
+            URL url = loader.getResource("qube/qai/main/config_dev.properties");
+            properties.load(url.openStream());
+
+//            properties.load(new FileInputStream(CONFIG_FILE_NAME));
+//            Names.bindProperties(binder(), properties);
+//            String s = properties.getProperty("WIKIPEDIA_DIRECTORY");
+//            if (StringUtils.isEmpty(s)) {
+//                throw new RuntimeException("Configuration 'WIKIPEDIA_DIRECTORY' could not be found- have to exit!");
+//            }
+
+            QaiServerModule qaiServer = new QaiServerModule(properties);
+            QaiModule qaiModule = new QaiModule();
+            injector = Guice.createInjector(qaiServer, qaiModule);
+
+        } catch (IOException e) {
+            logger.error("Error while loading configuration file: " + CONFIG_FILE_NAME, e);
+            throw new RuntimeException("Configuration file: '" + CONFIG_FILE_NAME + "' could not be found- have to exit!");
+        }
+
 
         // this is crazy but might just work...
         //injector.injectMembers(qaiServer);

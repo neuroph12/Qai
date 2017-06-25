@@ -15,10 +15,10 @@
 package qube.qai.services.implementation;
 
 import com.thoughtworks.xstream.XStream;
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -50,6 +50,10 @@ public class WikiSearchService implements SearchServiceInterface {
 
     public String ZIP_FILE_NAME;
 
+    Directory directory;
+
+    boolean isInitialized = false;
+
     public WikiSearchService() {
     }
 
@@ -58,24 +62,45 @@ public class WikiSearchService implements SearchServiceInterface {
         this.ZIP_FILE_NAME = zipFileName;
     }
 
+    private void initialize() {
+
+        try {
+
+            if (StringUtils.isEmpty(INDEX_DIRECTORY)) {
+                throw new RuntimeException("Initialization problem: INDEX_DIRECTORY has not been defined");
+            }
+
+            File file = new File(INDEX_DIRECTORY);
+            if (!file.exists() || !file.isDirectory()) {
+                throw new RuntimeException("Directory: " + INDEX_DIRECTORY + " either does not exist, or is not a directory!");
+            }
+            directory = FSDirectory.open(file.toPath(), NoLockFactory.INSTANCE);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        isInitialized = true;
+    }
+
     /* Sample application for searching an index
      * adapting the code for doing search and returning the contents of
      * the documents which are picked for reading
     */
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
 
+        if (!isInitialized) {
+            initialize();
+        }
+
         Collection<SearchResult> searchResults = new ArrayList<SearchResult>();
         try {
-            File file = new File(INDEX_DIRECTORY);
-            if (!file.exists() || !file.isDirectory()) {
-                throw new RuntimeException("Directory: " + INDEX_DIRECTORY + " either does not exist, or is not a directory!");
-            }
-            Directory directory = FSDirectory.open(file.toPath(), NoLockFactory.INSTANCE);
 
             // Build a Query object
             Query query = new QueryParser(fieldName, new StandardAnalyzer()).parse(searchString);
 
-            IndexReader reader = DirectoryReader.open(directory);
+            DirectoryReader reader = DirectoryReader.open(directory);
+
             IndexSearcher searcher = new IndexSearcher(reader);
             TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
             searcher.search(query, collector);

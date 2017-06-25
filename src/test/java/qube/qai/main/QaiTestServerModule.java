@@ -440,15 +440,15 @@ public class QaiTestServerModule extends AbstractModule {
         // now start the search-listeners
         userSearchListener = QaiServerModule.provideUsersSearchListener(hazelcastInstance);
 
-        wikipediaSearchListener = QaiServerModule.provideWikipediaSearchListener(hazelcastInstance);
+        //wikipediaSearchListener = QaiServerModule.provideWikipediaSearchListener(hazelcastInstance);
 
-        wiktionarySearchListener = QaiServerModule.provideWiktionarySearchListener(hazelcastInstance);
-
-        wikiResourcesSearchListener = QaiServerModule.provideWikiResourcesSearchListener(hazelcastInstance);
-
-        stockEntitiesSearchListener = QaiServerModule.provideStockQuotesSearchListener(hazelcastInstance);
-
-        proceduresSearchListener = QaiServerModule.provideProceduresSearchListener(hazelcastInstance);
+//        wiktionarySearchListener = QaiServerModule.provideWiktionarySearchListener(hazelcastInstance);
+//
+//        wikiResourcesSearchListener = QaiServerModule.provideWikiResourcesSearchListener(hazelcastInstance);
+//
+//        stockEntitiesSearchListener = QaiServerModule.provideStockQuotesSearchListener(hazelcastInstance);
+//
+//        proceduresSearchListener = QaiServerModule.provideProceduresSearchListener(hazelcastInstance);
 
         return hazelcastInstance;
     }

@@ -148,11 +148,11 @@
         </dependency>
 
         <!-- Guice-config for using external configurations -->
-        <dependency>
-            <groupId>net.jmob</groupId>
-            <artifactId>guice.conf</artifactId>
-            <version>${guice-conf.version}</version>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>net.jmob</groupId>-->
+        <!--<artifactId>guice.conf</artifactId>-->
+        <!--<version>${guice-conf.version}</version>-->
+        <!--</dependency>-->
 
         <!-- Hazelcast for distributed computing -->
         <dependency>
