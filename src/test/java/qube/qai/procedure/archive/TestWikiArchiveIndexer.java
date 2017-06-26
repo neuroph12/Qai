@@ -14,13 +14,12 @@
 
 package qube.qai.procedure.archive;
 
+import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.SelectionOperator;
 import qube.qai.data.selectors.DataSelectionOperator;
-import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.ValueNode;
-import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
 import java.io.File;
@@ -28,7 +27,7 @@ import java.io.File;
 /**
  * Created by rainbird on 11/3/15.
  */
-public class TestWikiArchiveIndexer extends QaiTestBase {
+public class TestWikiArchiveIndexer extends TestCase {
 
     private Logger logger = LoggerFactory.getLogger("TestWikiArchiever");
 
@@ -40,16 +39,12 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
 
     public void testWikiIndexer() throws Exception {
 
-        WikiRipperProcedure ripperProcedure = TestWikiRipperProcedure.createTestWikiRipper();
-        injector.injectMembers(ripperProcedure);
-
         WikiArchiveIndexer wikiIndexer = new WikiArchiveIndexer();
-        wikiIndexer.getProcedureDescription().getProcedureInputs().addInput(new ValueNode(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, ripperProcedure));
-        SelectionOperator<String> selectionOperator = new DataSelectionOperator<String>(dummyIndexDirectory);
-        injector.injectMembers(wikiIndexer);
+        wikiIndexer.setIndexDirectory(dummyIndexDirectory);
+        wikiIndexer.setTargetFilename(dummyWikiArchiveName);
 
         long start = System.currentTimeMillis();
-        wikiIndexer.execute();
+        wikiIndexer.indexZipFileEntries();
         long duration = System.currentTimeMillis() - start;
         log("procedure completed in: " + duration + " ms");
 
@@ -91,6 +86,10 @@ public class TestWikiArchiveIndexer extends QaiTestBase {
         indexerProcedure.execute();
         duration = System.currentTimeMillis() - start;
         log("indexing finished, took " + duration + "ms");
+    }
+
+    private void log(String message) {
+        System.out.println(message);
     }
 
 }

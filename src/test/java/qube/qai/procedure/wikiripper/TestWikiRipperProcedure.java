@@ -39,7 +39,10 @@ public class TestWikiRipperProcedure extends TestCase {
      */
     public void testWikiRipper() throws Exception {
 
-        WikiRipperProcedure ripperProcedure = createTestWikiRipper();
+        WikiRipperProcedure ripperProcedure = new WikiRipperProcedure();
+        ripperProcedure.setFileToRipName(dummyWikiArchiveName);
+        ripperProcedure.setFileToArchiveName(dummyWikiFileName);
+        ripperProcedure.setWiktionary(false);
 
         long start = System.currentTimeMillis();
         ripperProcedure.ripWikiFile();
