@@ -62,6 +62,9 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     //@InjectConfig(value = "CREATE_PROCEDURES")
     public String CREATE_PROCEDURES = "CREATE_PROCEDURES";
 
+    //@InjectConfig(value = "CREATE_PROCEDURES")
+    public String CREATE_STOCK_GROUPS = "CREATE_STOCK_GROUPS";
+
     //@InjectConfig(value = "CREATE_WIKIPEDIA")
     public String CREATE_WIKIPEDIA = "CREATE_WIKIPEDIA";
 
@@ -97,6 +100,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     private DatabaseMapStore stockEntityMapStore;
 
+    private DatabaseMapStore stockGroupsMapStore;
+
     private MapStore<String, StockQuote> stockQuoteMapStore;
 
     private DatabaseMapStore userMapStore;
@@ -120,6 +125,11 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     private static Injector jpaDBPediaInjector;
 
     private static Injector jpaUsersInjector;
+
+    private SearchServiceInterface stocksSearchServiceInterface;
+
+    private SearchServiceInterface userSearchService;
+
 
     @Inject
     @Named("Users")
@@ -191,6 +201,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     public DistributedSearchListener provideWiktionarySearchListener(HazelcastInstance hazelcastInstance) {
 
         SearchServiceInterface basicSearchService = new WikiSearchService(
+                WIKTIONARY,
                 properties.getProperty(WIKTIONARY_DIRECTORY),
                 properties.getProperty(WIKTIONARY_ARCHIVE));
 
@@ -215,6 +226,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     public DistributedSearchListener provideWikipediaSearchListener(HazelcastInstance hazelcastInstance) {
 
         SearchServiceInterface searchService = new WikiSearchService(
+                WIKIPEDIA,
                 properties.getProperty(WIKIPEDIA_DIRECTORY),
                 properties.getProperty(WIKIPEDIA_ARCHIVE));
 
@@ -256,14 +268,74 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
      * @return
      */
     @Provides
-    @Named("StockEntities")
+    @Named("StockQuotes")
     @Singleton
     public DistributedSearchListener provideStockQuotesSearchListener(HazelcastInstance hazelcastInstance) {
 
-        SearchServiceInterface searchService = new DatabaseSearchService();
-        getJpaStocksInjector().injectMembers(searchService);
+        SearchServiceInterface searchService = createStocksSearchServiceInterface();
+
+        DistributedSearchListener searchListener = new DistributedSearchListener(STOCK_QUOTES);
+        searchListener.setSearchService(searchService);
+        searchListener.setHazelcastInstance(hazelcastInstance);
+        searchListener.initialize();
+
+        return searchListener;
+    }
+
+    private SearchServiceInterface createUserDatabaseSearchService() {
+        if (userSearchService == null) {
+            userSearchService = new DatabaseSearchService();
+            getJpaUsersInjector().injectMembers(userSearchService);
+        }
+        return userSearchService;
+    }
+
+    /**
+     * StockQuotesSearchService
+     * returns the distributed search service for wikipedia
+     * and starts the listener service which will broker the requests
+     *
+     * @return
+     */
+    @Provides
+    @Named("StockEntities")
+    @Singleton
+    public DistributedSearchListener provideStockEntitiesSearchListener(HazelcastInstance hazelcastInstance) {
+
+        SearchServiceInterface searchService = createStocksSearchServiceInterface();
 
         DistributedSearchListener searchListener = new DistributedSearchListener(STOCK_ENTITIES);
+        searchListener.setSearchService(searchService);
+        searchListener.setHazelcastInstance(hazelcastInstance);
+        searchListener.initialize();
+
+        return searchListener;
+    }
+
+
+    private SearchServiceInterface createStocksSearchServiceInterface() {
+        if (stocksSearchServiceInterface == null) {
+            stocksSearchServiceInterface = new DatabaseSearchService();
+            getJpaStocksInjector().injectMembers(stocksSearchServiceInterface);
+        }
+        return stocksSearchServiceInterface;
+    }
+
+    /**
+     * StockQuotesSearchService
+     * returns the distributed search service for wikipedia
+     * and starts the listener service which will broker the requests
+     *
+     * @return
+     */
+    @Provides
+    @Named("StockGroups")
+    @Singleton
+    public DistributedSearchListener provideStockGroupsSearchListener(HazelcastInstance hazelcastInstance) {
+
+        SearchServiceInterface searchService = createStocksSearchServiceInterface();
+
+        DistributedSearchListener searchListener = new DistributedSearchListener(STOCK_GROUPS);
         searchListener.setSearchService(searchService);
         searchListener.setHazelcastInstance(hazelcastInstance);
         searchListener.initialize();
@@ -281,10 +353,9 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     @Provides
     @Named("Users")
     @Singleton
-    public static DistributedSearchListener provideUsersSearchListener(HazelcastInstance hazelcastInstance) {
+    public DistributedSearchListener provideUsersSearchListener(HazelcastInstance hazelcastInstance) {
 
-        SearchServiceInterface searchService = new DatabaseSearchService();
-        getJpaUsersInjector().injectMembers(searchService);
+        SearchServiceInterface searchService = createUserDatabaseSearchService();
 
         DistributedSearchListener searchListener = new DistributedSearchListener(USERS);
         searchListener.setSearchService(searchService);
@@ -430,6 +501,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             createProceduresConfig(hazelcastConfig);
         }
 
+        if ("true".equals(properties.getProperty(CREATE_STOCK_GROUPS))) {
+            createStockGroupsConfig(hazelcastConfig);
+        }
+
         // create Wikipedia map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKIPEDIA))) {
             createWikipediaConfig(hazelcastConfig);
@@ -450,21 +525,6 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             createWiktionaryResourceConfig(hazelcastConfig);
         }
 
-        // create DBPedia map-store
-        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_DBPEDIA))) {
-            createDBPediaConfig(hazelcastConfig);
-        }
-//
-//        // create DBPerson map-store
-//        if ("true".equals(CREATE_DBPERSON)) {
-//            if (jpaDBPersonInjector == null) {
-//                jpaDBPersonInjector = Guice.createInjector(new JpaPersistModule("DBPERSON"));
-//                PersistService service = jpaDBPersonInjector.getInstance(PersistService.class);
-//                service.start();
-//            }
-//            createDBPersonConfig(hazelcastConfig);
-//        }
-
         // create User database and Hazelcast map
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USERS))) {
             createUsersMapConfig(hazelcastConfig);
@@ -472,12 +532,12 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
         // create UserRoles and Hazelcast map
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USER_ROLES))) {
-            createUserRoles(hazelcastConfig);
+            createUserRolesConfig(hazelcastConfig);
         }
 
         // create UserSessions
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USER_SESSIONS))) {
-            createUserSessions(hazelcastConfig);
+            createUserSessionsConfig(hazelcastConfig);
         }
 
         // now we are ready to get an instance
@@ -488,7 +548,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     /**
      * DBPedia map-store
      */
-    private void createDBPediaConfig(Config hazelcastConfig) {
+    /*private void createDBPediaConfig(Config hazelcastConfig) {
         // first create injector for jpa-module
         if (jpaDBPediaInjector == null) {
             jpaDBPediaInjector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
@@ -520,7 +580,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 //        });
 //        logger.info("adding mapstore configuration for " + DBPEDIA);
 //        mapConfig.setMapStoreConfig(mapStoreConfig);
-    }
+    }*/
 
     /**
      * DbUser map-store
@@ -535,6 +595,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             logger.info("mapStoreConfig is null... creating one for: " + USERS);
             userMapstoreConfig = new MapStoreConfig();
         }
+
+        userMapstoreConfig.setWriteDelaySeconds(0);
 
         userMapStore = new DatabaseMapStore(User.class);
         getJpaUsersInjector().injectMembers(userMapStore);
@@ -552,7 +614,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         mapConfig.setMapStoreConfig(userMapstoreConfig);
     }
 
-    private void createUserRoles(Config hazelcastConfig) {
+    /**
+     * @param hazelcastConfig
+     */
+    private void createUserRolesConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(USER_ROLES);
         mapConfig.getMapStoreConfig().setEnabled(true);
         MapStoreConfig roleMapStoreConfig = mapConfig.getMapStoreConfig();
@@ -577,7 +642,11 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         mapConfig.setMapStoreConfig(roleMapStoreConfig);
     }
 
-    private void createUserSessions(Config hazelcastConfig) {
+    /**
+     *
+     * @param hazelcastConfig
+     */
+    private void createUserSessionsConfig(Config hazelcastConfig) {
         MapConfig mapConfig = hazelcastConfig.getMapConfig(USER_SESSIONS);
         mapConfig.getMapStoreConfig().setEnabled(true);
         MapStoreConfig sessionMapStoreConfig = mapConfig.getMapStoreConfig();
@@ -802,6 +871,36 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             }
         });
         logger.info("adding mapstore configuration for " + STOCK_QUOTES);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
+
+    /**
+     * here we add the map-store for Stock-quotes which is
+     * in this case the HsqlDBMapStore
+     */
+    private void createStockGroupsConfig(Config hazelcastConfig) {
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(STOCK_GROUPS);
+        mapConfig.getMapStoreConfig().setEnabled(true);
+        MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+        if (mapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + STOCK_GROUPS);
+            mapStoreConfig = new MapStoreConfig();
+
+        }
+
+        stockGroupsMapStore = new DatabaseMapStore(StockGroup.class);
+        getJpaStocksInjector().injectMembers(stockGroupsMapStore);
+
+        mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, StockGroup>() {
+            public MapLoader<String, StockGroup> newMapStore(String mapName, Properties properties) {
+                if (STOCK_GROUPS.equals(mapName)) {
+                    return stockGroupsMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + STOCK_GROUPS);
         mapConfig.setMapStoreConfig(mapStoreConfig);
     }
 

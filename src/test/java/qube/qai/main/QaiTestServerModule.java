@@ -438,7 +438,7 @@ public class QaiTestServerModule extends AbstractModule {
         hazelcastInstance = Hazelcast.newHazelcastInstance(config);
 
         // now start the search-listeners
-        userSearchListener = QaiServerModule.provideUsersSearchListener(hazelcastInstance);
+        //userSearchListener = QaiServerModule.provideUsersSearchListener(hazelcastInstance);
 
         //wikipediaSearchListener = QaiServerModule.provideWikipediaSearchListener(hazelcastInstance);
 

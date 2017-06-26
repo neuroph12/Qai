@@ -61,7 +61,15 @@ public class QaiNode {
 
     @Inject
     @Named("StockEntities")
-    private DistributedSearchListener stocksListener;
+    private DistributedSearchListener stockEntitiesListener;
+
+    @Inject
+    @Named("StockQuotes")
+    private DistributedSearchListener stockQuotesListener;
+
+    @Inject
+    @Named("StockGroups")
+    private DistributedSearchListener stockGroupsListener;
 
     @Inject
     @Named("Procedures")
@@ -102,9 +110,7 @@ public class QaiNode {
         }
 
 
-        // this is crazy but might just work...
-        //injector.injectMembers(qaiServer);
-
+        // self inoculation...
         injector.injectMembers(this);
 
         // the whole configuration takes place in guice

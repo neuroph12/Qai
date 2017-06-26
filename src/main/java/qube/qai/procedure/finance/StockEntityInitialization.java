@@ -17,8 +17,8 @@ package qube.qai.procedure.finance;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
-import qube.qai.persistence.StockCategory;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockGroup;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ValueNode;
@@ -37,9 +37,9 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
 
     public static String INPUT_FILENAME = "FILENAME";
 
-    public static String CATEGORY_NAME = "NAME_OF_THE_STOCK_CATEGORY";
+    public static String GROUP_NAME = "NAME_OF_THE_STOCK_GROUP";
 
-    public static String CATEGORY = "CATEGORY";
+    public static String GROUP = "GROUP";
 
     public static String NUMBER_OF_RECORDS = "NUMBER_OF_RECORDS";
 
@@ -61,13 +61,13 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
 
     private String selectedFile;
 
-    private String categoryName;
+    private String groupName;
 
     private int numberOfRecords;
 
     private int numberOfRecordsCreated;
 
-    private StockCategory category;
+    //private StockGroup group;
 
     @Inject
     private EntityManager entityManager;
@@ -80,7 +80,8 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
         getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_FILENAME));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(CATEGORY_NAME));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(GROUP_NAME));
+        //getProcedureDescription().getProcedureResults().addResult(new ValueNode(GROUP));
         getProcedureDescription().getProcedureResults().addResult(new ValueNode(NUMBER_OF_RECORDS));
         getProcedureDescription().getProcedureResults().addResult(new ValueNode(NUMBER_OF_RECORDS_CREATED));
     }
@@ -90,14 +91,14 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
 
         executeInputProcedures();
 
-        pathToCsvFiles = (String) getInputValueOf(INPUT_FILENAME);
+        //pathToCsvFiles = (String) getInputValueOf(INPUT_FILENAME);
 
         createCheckAndInsertStockEntitesFromFile();
 
         // after all is done and said, these are the results we are expected to record
-        setResultValueOf(CATEGORY_NAME, categoryName);
+        setResultValueOf(GROUP_NAME, groupName);
         setResultValueOf(NUMBER_OF_RECORDS_CREATED, numberOfRecordsCreated);
-        setResultValueOf(CATEGORY, category);
+        hasExecuted = true;
     }
 
     public void createCheckAndInsertStockEntitesFromFile() {
@@ -107,8 +108,8 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
 
         // begin the transaction in the database
         entityManager.getTransaction().begin();
-        category = new StockCategory();
-        category.setName(categoryName);
+        StockGroup group = new StockGroup();
+        group.setName(groupName);
 
         // field names which come with the rows and rows start with 1...
         int count = 1;
@@ -136,9 +137,9 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
                         StockEntity databaseCopy = findStockEntityDatabaseCopy(stockEntity);
                         if (databaseCopy == null) {
                             entityManager.persist(stockEntity);
-                            category.addStockEntity(stockEntity);
+                            group.addStockEntity(stockEntity);
                         } else {
-                            category.addStockEntity(databaseCopy);
+                            group.addStockEntity(databaseCopy);
                         }
                     }
                 }
@@ -147,8 +148,8 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
             }
         }
 
-        // now save the category we have just created
-        entityManager.persist(category);
+        // now save the group we have just created
+        entityManager.persist(group);
         // write the rest of data- this writes the entries in relation-table
         // and commit the transaction
         entityManager.flush();
@@ -267,12 +268,12 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
         this.rowPropertyName = rowPropertyName;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public int getNumberOfRecords() {
@@ -299,16 +300,4 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
         this.entityManager = entityManager;
     }
 
-    public StockCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(StockCategory category) {
-        this.category = category;
-    }
-//
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

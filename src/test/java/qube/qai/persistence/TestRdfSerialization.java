@@ -51,7 +51,7 @@ public class TestRdfSerialization extends TestCase {
 
     public void testRedSerializationOfStocks() throws Exception {
 
-        StockCategory category = new StockCategory("My category");
+        StockGroup category = new StockGroup("My category");
         StockEntity entity = new StockEntity();
         entity.setName("Test Stock");
         entity.setTickerSymbol("TSTCK");
@@ -75,7 +75,7 @@ public class TestRdfSerialization extends TestCase {
         model.write(System.out);
 
         RDF2Bean reader = new RDF2Bean(model);
-        StockCategory storedCategory = reader.load(StockCategory.class, categoryUuid);
+        StockGroup storedCategory = reader.load(StockGroup.class, categoryUuid);
         assertNotNull("there has to be a user", storedCategory);
         assertTrue("the users must be equals", category.equals(storedCategory));
     }

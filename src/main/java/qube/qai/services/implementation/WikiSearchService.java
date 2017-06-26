@@ -50,14 +50,17 @@ public class WikiSearchService implements SearchServiceInterface {
 
     public String ZIP_FILE_NAME;
 
-    Directory directory;
+    private String context;
 
-    boolean isInitialized = false;
+    private Directory directory;
+
+    private boolean isInitialized = false;
 
     public WikiSearchService() {
     }
 
-    public WikiSearchService(String indexDirectory, String zipFileName) {
+    public WikiSearchService(String context, String indexDirectory, String zipFileName) {
+        this.context = context;
         this.INDEX_DIRECTORY = indexDirectory;
         this.ZIP_FILE_NAME = zipFileName;
     }
@@ -108,7 +111,7 @@ public class WikiSearchService implements SearchServiceInterface {
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc hit : hits) {
                 Document doc = reader.document(hit.doc);
-                SearchResult result = new SearchResult(doc.get("title"), doc.get("file"), hit.score);
+                SearchResult result = new SearchResult(context, doc.get("file"), hit.score);
                 searchResults.add(result);
                 logger.debug(doc.get("file") + ": title: " + doc.get("title") + " (" + hit.score + ")");
             }
@@ -140,6 +143,14 @@ public class WikiSearchService implements SearchServiceInterface {
             e.printStackTrace();
         }
         return wikiArticle;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
     }
 
     class AbsoluteDirectory extends Directory {

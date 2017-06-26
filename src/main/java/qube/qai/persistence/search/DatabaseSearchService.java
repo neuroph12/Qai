@@ -14,8 +14,9 @@
 
 package qube.qai.persistence.search;
 
-import org.apache.commons.lang3.StringUtils;
-import qube.qai.persistence.StockCategory;
+import qube.qai.main.QaiConstants;
+import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockGroup;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -23,18 +24,23 @@ import qube.qai.user.User;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by rainbird on 3/5/17.
  */
-public class DatabaseSearchService implements SearchServiceInterface {
+public class DatabaseSearchService implements SearchServiceInterface, QaiConstants {
 
     @Inject
     private EntityManager entityManager;
+
+    @Inject
+    private EntityManagerFactory entityManagerFactory;
 
     private int hitsPerPage = 0;
 
@@ -56,17 +62,15 @@ public class DatabaseSearchService implements SearchServiceInterface {
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
 
         this.hitsPerPage = hitsPerPage;
-        String queryString = "SELECT o FROM " + fieldName + " o";
-        if (StringUtils.isNoneEmpty(searchString) & !"*".equals(searchString)) {
-            queryString += " WHERE " + searchString;
-        }
 
         Collection<SearchResult> results = new ArrayList<>();
 
-        if ("StockCategory".equals(fieldName)) {
-            searchStockCategories(searchString, queryString, results);
-        } else if ("User".equals(fieldName)) {
-            searchUsers(searchString, queryString, results);
+        if (STOCK_ENTITIES.equals(fieldName)) {
+            searchStockEntities(searchString, fieldName, results);
+        } else if (STOCK_GROUPS.equals(fieldName)) {
+            searchStockGroups(searchString, fieldName, results);
+        } else if (USERS.equals(fieldName)) {
+            searchUsers(searchString, fieldName, results);
         }
 
         return results;
@@ -74,7 +78,8 @@ public class DatabaseSearchService implements SearchServiceInterface {
 
     private void searchUsers(String searchString, String queryString, Collection<SearchResult> results) {
 
-        Query query = entityManager.createQuery(queryString);
+        String qString = "SELECT u FROM User AS u WHERE u.username = :userName";
+        Query query = entityManager.createQuery(qString).setParameter("userName", searchString);
         List<User> users = query.getResultList();
 
         int count = 0;
@@ -89,19 +94,38 @@ public class DatabaseSearchService implements SearchServiceInterface {
         }
     }
 
-    private void searchStockCategories(String searchString, String queryString, Collection<SearchResult> results) {
-        Query query = entityManager.createQuery(queryString);
-        List<StockCategory> categories = query.getResultList();
+    private void searchStockEntities(String searchString, String fieldName, Collection<SearchResult> results) {
 
-        int count = 0;
-        for (StockCategory category : categories) {
-            String idString = category.getUuid();
-            SearchResult result = new SearchResult(searchString, idString, 1.0);
-            results.add(result);
-            count++;
-            if (hitsPerPage > 0 && count >= hitsPerPage) {
-                break;
+        String qString = "SELECT s FROM StockGroup AS s WHERE s.name = :name";
+        Query query = entityManager.createQuery(qString).setParameter("name", searchString);
+
+        List<StockGroup> stockGroups = query.getResultList();
+
+        for (StockGroup group : stockGroups) {
+            Set<StockEntity> entities = group.getEntities();
+            for (StockEntity entity : entities) {
+                SearchResult r = new SearchResult(STOCK_ENTITIES, entity.getUuid(), 1.0);
+                results.add(r);
             }
+        }
+    }
+
+    /**
+     * @param searchString in this case the name of the Stock-Group to read its children or nothing
+     * @param fieldName    if STOCK_ENTITIES is used the children of the found group
+     * @param results      uuid's of results
+     */
+    private void searchStockGroups(String searchString, String fieldName, Collection<SearchResult> results) {
+
+        String qString = "SELECT s FROM StockGroup AS s";
+        Query query = entityManager.createQuery(qString);
+
+        List<StockGroup> stockGroups = query.getResultList();
+
+        for (StockGroup group : stockGroups) {
+            String idString = group.getUuid();
+            SearchResult result = new SearchResult(STOCK_GROUPS, idString, 1.0);
+            results.add(result);
         }
     }
 

@@ -31,6 +31,9 @@ import qube.qai.services.implementation.*;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
+import static qube.qai.main.QaiConstants.WIKIPEDIA;
+import static qube.qai.main.QaiConstants.WIKTIONARY;
+
 /**
  * Created by rainbird on 11/19/15.
  */
@@ -111,23 +114,20 @@ public class QaiTestModule extends AbstractModule {
     @Provides
     SelectorFactoryInterface provideSelectorFactoryInterface() {
         SelectorFactoryInterface selectorfactory = new DataSelectorFactory();
-
         return selectorfactory;
     }
 
     @Provides
     @Named("Wiktionary_en")
     SearchServiceInterface provideWiktionarySearchServiceInterface() {
-        SearchServiceInterface searchService = new WikiSearchService(wiktionaryDirectory, wiktionaryZipFileName);
-
+        SearchServiceInterface searchService = new WikiSearchService(WIKTIONARY, wiktionaryDirectory, wiktionaryZipFileName);
         return searchService;
     }
 
     @Provides
     @Named("Wikipedia_en")
     SearchServiceInterface provideWikipediaSearchServiceInterface() {
-        SearchServiceInterface searchService = new WikiSearchService(wikipediaDirectory, wikipediaZipFileName);
-
+        SearchServiceInterface searchService = new WikiSearchService(WIKIPEDIA, wikipediaDirectory, wikipediaZipFileName);
         return searchService;
     }
 

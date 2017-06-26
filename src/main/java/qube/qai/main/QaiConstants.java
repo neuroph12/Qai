@@ -28,6 +28,8 @@ public interface QaiConstants {
 
     public String USER_ROLES = "UserRoles";
 
+    public String STOCK_GROUPS = "StockGroups";
+
     public String STOCK_ENTITIES = "StockEntities";
 
     static String STOCK_QUOTES = "StockQuotes";

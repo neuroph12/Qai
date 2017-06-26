@@ -63,9 +63,14 @@ public class DistributedSearchService implements SearchServiceInterface, Message
         SearchRequest request = new SearchRequest(searchString, fieldName, hitsPerPage);
         topic.publish(request);
 
+        int count = 0;
         try {
             while (results == null) {
                 Thread.sleep(100);
+                count++;
+                if (count >= 10) {
+                    break;
+                }
             }
         } catch (InterruptedException e) {
             logger.error("Interrupted with exception: " + e.getMessage());

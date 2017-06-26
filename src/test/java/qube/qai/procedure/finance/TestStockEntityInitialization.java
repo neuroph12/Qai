@@ -19,8 +19,15 @@ import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import junit.framework.TestCase;
+import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockGroup;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
+import java.util.Set;
+
+import static qube.qai.procedure.finance.StockEntityInitialization.NUMBER_OF_RECORDS_CREATED;
 
 
 /**
@@ -32,10 +39,10 @@ public class TestStockEntityInitialization extends TestCase {
 //
 //        Injector injector = QaiTestServerModule.initStocksInjector();
 //
-//        MapStore categoryMapStore = new DatabaseMapStore(StockCategory.class);
+//        MapStore categoryMapStore = new DatabaseMapStore(StockGroup.class);
 //        injector.injectMembers(categoryMapStore);
 //
-//        StockCategory category = new StockCategory();
+//        StockGroup category = new StockGroup();
 //        category.setName("Standard and Poor top 500");
 //
 //        for (int i = 0; i < 10; i++) {
@@ -45,7 +52,7 @@ public class TestStockEntityInitialization extends TestCase {
 //
 //        categoryMapStore.store(category.getUuid(), category);
 //
-//        StockCategory foundCategory = (StockCategory) categoryMapStore.load(category.getUuid());
+//        StockGroup foundCategory = (StockGroup) categoryMapStore.load(category.getUuid());
 //        assertNotNull(foundCategory);
 //        assertTrue(foundCategory.getEntities() != null && !foundCategory.getEntities().isEmpty());
 //
@@ -63,47 +70,52 @@ public class TestStockEntityInitialization extends TestCase {
 
     public void testStockEntityInitializationProcedure() throws Exception {
 
-        Injector injector = createInjector();
+        // "STAND_ALONE_TEST_STOCKS" is for running test regularly
+        // "TEST_STOCKS" is what all test-routines with hazelcast use
+        // "STOCKS" is the life database
+        String jpaModuleName = "STAND_ALONE_TEST_STOCKS";
+        Injector injector = createInjector(jpaModuleName);
         EntityManager entityManager = injector.getInstance(EntityManager.class);
         StockEntityInitialization procedure = new StockEntityInitialization();
         procedure.setEntityManager(entityManager);
 
         String[] listings = {StockEntityInitialization.S_AND_P_500_LISTING
-                , StockEntityInitialization.NYSE_LISTING
-                , StockEntityInitialization.OTHER_LISTED_ENTITIES
+//                , StockEntityInitialization.NYSE_LISTING
+//                , StockEntityInitialization.OTHER_LISTED_ENTITIES
                 , StockEntityInitialization.NASDAQ_LISTING
         };
 
-        int overallCount = 0;
-//        for (String listingName : listings) {
-//            procedure.setCategoryName("Testing: " + listingName);
-//            procedure.setSelectedFile(listingName);
-//
-//            procedure.execute();
-            //assertTrue("all has gone good!", true);
+        //int overallCount = 0;
+        for (String listingName : listings) {
+            procedure.setGroupName("Testing: " + listingName);
+            procedure.setSelectedFile(listingName);
 
-//            Set<String> resultNames = procedure.getArguments().getResultNames();
-//            assertTrue("there has to be result names", !resultNames.isEmpty());
-//            log("result names: " + resultNames.toString());
+            procedure.execute();
+            Integer recordsCreated = (Integer) procedure.getProcedureDescription().getProcedureResults().getNamedResult(NUMBER_OF_RECORDS_CREATED).getValue();
+            assertTrue("all has gone good!", procedure.hasExecuted());
+            log("--------------------------------------------------------------------");
+            log("listings created:" + listings[0]);
+            log("altogether: " + recordsCreated + " stock-entities added in the database");
+            log("---------------------------------------------------------------------");
+        }
 
-//            StockCategory category = (StockCategory) procedure.getArguments().getResult(StockEntityInitialization.CATEGORY);
-//            assertNotNull("there has to be a category", category);
-//            Set<StockEntity> entities = category.getEntities();
-//            assertNotNull("there have to be some entities", entities);
-//            assertTrue("the entity listing should not be empty", !entities.isEmpty());
-//            for (StockEntity entity : entities) {
-//                log("entity: " + entity.getTickerSymbol() + ": '" + entity.getName() + "'");
-//                overallCount++;
-//            }
-//        }
-        log("---------------------------------------------------------------------");
-        log("listings created:" + listings[0]);
-        log("altogether: " + overallCount + " stock-entities added in the database");
-        log("---------------------------------------------------------------------");
+        // now we read the data from the database which has been imported
+        Query query = entityManager.createQuery("SELECT g FROM StockGroup AS g");
+        List<StockGroup> groups = query.getResultList();
+        assertNotNull("result may not be null", groups);
+        assertTrue("resultset may not be empty", !groups.isEmpty());
+
+        StockGroup group = groups.iterator().next();
+        Set<StockEntity> entities = group.getEntities();
+        for (StockEntity entity : entities) {
+            log("'" + group.getName() + "' eleement entity: '" + entity.getName() + "'");
+        }
+
+
     }
 
-    private Injector createInjector() {
-        Injector injector = Guice.createInjector(new JpaPersistModule("STAND_ALONE_TEST_STOCKS"));
+    private Injector createInjector(String moduleName) {
+        Injector injector = Guice.createInjector(new JpaPersistModule(moduleName));
         PersistService service = injector.getInstance(PersistService.class);
         service.start();
         return injector;

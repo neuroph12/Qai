@@ -16,15 +16,15 @@ package qube.qai.persistence.search;
 
 import com.google.inject.Injector;
 import junit.framework.TestCase;
+import qube.qai.main.QaiConstants;
 import qube.qai.main.QaiTestServerModule;
-import qube.qai.persistence.StockCategory;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockGroup;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.User;
 
 import javax.persistence.EntityManager;
 import java.util.Collection;
-import java.util.Set;
 
 /**
  * Created by rainbird on 3/5/17.
@@ -33,26 +33,28 @@ public class TestDatabaseSearchService extends TestCase {
 
     private boolean debug = true;
 
-    public void testUserDatabaseSearchService() throws Exception {
+    public void estUserDatabaseSearchService() throws Exception {
 
         Injector injector = QaiTestServerModule.initUsersInjector();
         DatabaseSearchService databaseSearch = new DatabaseSearchService();
         injector.injectMembers(databaseSearch);
 
+        EntityManager entityManager = databaseSearch.getEntityManager();
+        User user = new User("sa", "");
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(user);
+        entityManager.flush();
+        entityManager.getTransaction().commit();
+
         // now we can actually do some testing
-        Collection<SearchResult> results = databaseSearch.searchInputString("*", "User", 1);
+        String selectString = "sa";
+        Collection<SearchResult> results = databaseSearch.searchInputString(selectString, QaiConstants.USERS, 1);
 
         assertNotNull("there have to be results", results);
         assertTrue("the result set may not be empty", !results.isEmpty());
-
-        // now get the entity-manager to get the actual thing
-        EntityManager entityManager = databaseSearch.getEntityManager();
-
-        for (SearchResult result : results) {
-            String uuid = result.getUuid();
-            User user = entityManager.find(User.class, uuid);
-            assertNotNull("the user not found in the database?!?", user);
-        }
+        log("there are " + results.size() + " results to the query");
+        assertTrue("", user.getUuid().equals(results.iterator().next().getUuid()));
 
     }
 
@@ -63,30 +65,28 @@ public class TestDatabaseSearchService extends TestCase {
         DatabaseSearchService databaseSearch = new DatabaseSearchService();
         injector.injectMembers(databaseSearch);
 
-        // now we can actually do some testing
-        Collection<SearchResult> results = databaseSearch.searchInputString("*", "StockCategory", 10);
-        assertNotNull("there have to be results", results);
-        assertTrue("the result set may not be empty", !results.isEmpty());
-
-        // now get the entity-manager to get the actual thing
         EntityManager entityManager = databaseSearch.getEntityManager();
 
-        for (SearchResult result : results) {
-            String uuid = result.getUuid();
-            StockCategory category = entityManager.find(StockCategory.class, uuid);
-            assertNotNull("there has to be a category", category);
-            log("found category name: '" + category.getName() + "' with entities as follows:");
-            Set<StockEntity> entities = category.getEntities();
-            assertNotNull("there have to be entities", entities);
-            assertTrue("entities list must be full", !entities.isEmpty());
-            int count = 0;
-            for (StockEntity entity : entities) {
-                assertNotNull("ther has to be an entity", entity);
-                log("Stock entity: '" + entity.getName() + "'");
-                count++;
-            }
-            log("in all " + count + " entities in category");
-        }
+        StockGroup group = new StockGroup("S&P 3");
+        StockEntity goog = new StockEntity();
+        goog.setTickerSymbol("GOOG");
+        goog.setName("Google");
+        group.addStockEntity(goog);
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(group);
+        entityManager.getTransaction().commit();
+
+        // now we can actually do some testing
+        Collection<SearchResult> results = databaseSearch.searchInputString("", QaiConstants.STOCK_GROUPS, 0);
+        assertNotNull("there have to be results", results);
+        assertTrue("the result set may not be empty", !results.isEmpty());
+        assertTrue("the result set may not be empty", group.getUuid().equals(results.iterator().next().getUuid()));
+
+        results = databaseSearch.searchInputString("S&P 3", QaiConstants.STOCK_ENTITIES, 0);
+        assertNotNull("there have to be results", results);
+        assertTrue("the result set may not be empty", !results.isEmpty());
+        assertTrue("the result set may not be empty", goog.getUuid().equals(results.iterator().next().getUuid()));
     }
 
     private void log(String message) {

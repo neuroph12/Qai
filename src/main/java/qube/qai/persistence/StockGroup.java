@@ -25,7 +25,7 @@ import java.util.Set;
  * Created by rainbird on 1/13/17.
  */
 @Entity
-public class StockCategory implements Serializable {
+public class StockGroup implements Serializable {
 
     @Id
     @thewebsemantic.Id
@@ -41,12 +41,12 @@ public class StockCategory implements Serializable {
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<StockEntity> entities;
 
-    public StockCategory() {
+    public StockGroup() {
         this.uuid = UUIDService.uuidString();
         this.entities = new HashSet<>();
     }
 
-    public StockCategory(String name) {
+    public StockGroup(String name) {
         this();
         this.name = name;
     }
@@ -94,8 +94,8 @@ public class StockCategory implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof StockCategory) {
-            StockCategory s = (StockCategory) obj;
+        if (obj instanceof StockGroup) {
+            StockGroup s = (StockGroup) obj;
             if (name.equals(s.name)) {
                 return true;
             }
