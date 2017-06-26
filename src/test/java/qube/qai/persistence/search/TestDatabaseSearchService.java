@@ -14,10 +14,12 @@
 
 package qube.qai.persistence.search;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.persist.PersistService;
+import com.google.inject.persist.jpa.JpaPersistModule;
 import junit.framework.TestCase;
 import qube.qai.main.QaiConstants;
-import qube.qai.main.QaiTestServerModule;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
 import qube.qai.services.implementation.SearchResult;
@@ -35,11 +37,12 @@ public class TestDatabaseSearchService extends TestCase {
 
     public void testUserDatabaseSearchService() throws Exception {
 
-        Injector injector = QaiTestServerModule.initUsersInjector();
+        String jpaModuleName = "STAND_ALONE_TEST_USERS";
+        Injector injector = createInjector(jpaModuleName);
+        EntityManager entityManager = injector.getInstance(EntityManager.class);
         DatabaseSearchService databaseSearch = new DatabaseSearchService();
-        injector.injectMembers(databaseSearch);
+        databaseSearch.setEntityManager(entityManager);
 
-        EntityManager entityManager = databaseSearch.getEntityManager();
         User user = new User("sa", "");
 
         User dummy = new User("dummy", "");
@@ -69,11 +72,11 @@ public class TestDatabaseSearchService extends TestCase {
     public void testStocksDatabaseSearchService() throws Exception {
 
         // create the entity-manager and inject to the search-service
-        Injector injector = QaiTestServerModule.initStocksInjector();
+        String jpaModuleName = "STAND_ALONE_TEST_STOCKS";
+        Injector injector = createInjector(jpaModuleName);
+        EntityManager entityManager = injector.getInstance(EntityManager.class);
         DatabaseSearchService databaseSearch = new DatabaseSearchService();
-        injector.injectMembers(databaseSearch);
-
-        EntityManager entityManager = databaseSearch.getEntityManager();
+        databaseSearch.setEntityManager(entityManager);
 
         StockGroup group = new StockGroup("S&P 3");
         StockEntity goog = new StockEntity();
@@ -101,5 +104,12 @@ public class TestDatabaseSearchService extends TestCase {
         if (debug) {
             System.out.println(message);
         }
+    }
+
+    private Injector createInjector(String moduleName) {
+        Injector injector = Guice.createInjector(new JpaPersistModule(moduleName));
+        PersistService service = injector.getInstance(PersistService.class);
+        service.start();
+        return injector;
     }
 }

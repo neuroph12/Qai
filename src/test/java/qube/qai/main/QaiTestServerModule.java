@@ -99,6 +99,8 @@ public class QaiTestServerModule extends AbstractModule {
 
     private MapStore roleMapStore;
 
+    private MapStore<String, Procedure> procedureMapStore;
+
     private DistributedSearchListener userSearchListener;
 
     private DistributedSearchListener wikipediaSearchListener;
@@ -208,14 +210,12 @@ public class QaiTestServerModule extends AbstractModule {
             userMapstoreConfig = new MapStoreConfig();
             userMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
         }
+        userMapStore = new PersistentModelMapStore(User.class, USER_MODEL_DIRECTORY);
+        ((PersistentModelMapStore) userMapStore).init();
+        usersInjector.injectMembers(userMapStore);
         userMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, User>() {
             public MapLoader<String, User> newMapStore(String mapName, Properties properties) {
                 if (USERS.equals(mapName)) {
-                    if (userMapStore == null) {
-                        userMapStore = new PersistentModelMapStore(User.class, USER_MODEL_DIRECTORY);
-                        ((PersistentModelMapStore) userMapStore).init();
-                        usersInjector.injectMembers(userMapStore);
-                    }
                     return userMapStore;
                 } else {
                     return null;
@@ -351,10 +351,12 @@ public class QaiTestServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + PROCEDURES);
             procedureMapstoreConfig = new MapStoreConfig();
         }
+        procedureMapStore = new PersistentModelMapStore(Procedure.class, PROCEDURE_MODEL_DIRECTORY);
+        ((PersistentModelMapStore) procedureMapStore).init();
         procedureMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
             public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {
                 if (PROCEDURES.equals(mapName)) {
-                    return new PersistentModelMapStore(Procedure.class, PROCEDURE_MODEL_DIRECTORY);
+                    return procedureMapStore;
                 } else {
                     return null;
                 }
