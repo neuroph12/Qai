@@ -82,7 +82,7 @@ public class TestStockEntityInitialization extends TestCase {
         String[] listings = {StockEntityInitialization.S_AND_P_500_LISTING
 //                , StockEntityInitialization.NYSE_LISTING
 //                , StockEntityInitialization.OTHER_LISTED_ENTITIES
-                , StockEntityInitialization.NASDAQ_LISTING
+//                , StockEntityInitialization.NASDAQ_LISTING
         };
 
         //int overallCount = 0;

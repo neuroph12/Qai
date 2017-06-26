@@ -14,6 +14,7 @@
 
 package qube.qai.persistence.search;
 
+import org.apache.commons.lang3.StringUtils;
 import qube.qai.main.QaiConstants;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
@@ -65,12 +66,12 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
 
         Collection<SearchResult> results = new ArrayList<>();
 
-        if (STOCK_ENTITIES.equals(fieldName)) {
+        if (USERS.equals(fieldName)) {
+            searchUsers(searchString, fieldName, results);
+        } else if (STOCK_ENTITIES.equals(fieldName)) {
             searchStockEntities(searchString, fieldName, results);
         } else if (STOCK_GROUPS.equals(fieldName)) {
             searchStockGroups(searchString, fieldName, results);
-        } else if (USERS.equals(fieldName)) {
-            searchUsers(searchString, fieldName, results);
         }
 
         return results;
@@ -78,8 +79,15 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
 
     private void searchUsers(String searchString, String queryString, Collection<SearchResult> results) {
 
-        String qString = "SELECT u FROM User AS u WHERE u.username = :userName";
-        Query query = entityManager.createQuery(qString).setParameter("userName", searchString);
+        String qString = "SELECT u FROM User AS u";
+        Query query;
+        if (StringUtils.isNoneBlank(searchString)) {
+            qString += " WHERE u.username = :userName";
+            query = entityManager.createQuery(qString).setParameter("userName", searchString);
+        } else {
+            query = entityManager.createQuery(qString);
+        }
+
         List<User> users = query.getResultList();
 
         int count = 0;

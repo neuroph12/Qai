@@ -33,10 +33,11 @@ import qube.qai.parsers.TestAntimirovParser;
 import qube.qai.parsers.TestWikiIntegration;
 import qube.qai.parsers.antimirov.nodes.TestNodeVisitors;
 import qube.qai.parsers.maths.TestMathParser;
-import qube.qai.persistence.TestModelStores;
 import qube.qai.persistence.TestRdfSerialization;
 import qube.qai.persistence.TestResourceData;
 import qube.qai.persistence.mapstores.*;
+import qube.qai.persistence.search.TestDatabaseSearchService;
+import qube.qai.persistence.search.TestModelSearchServices;
 import qube.qai.procedure.TestProcedureInputsAndResults;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
@@ -104,7 +105,6 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestNodeVisitors.class);
 
         // persistence
-        suite.addTestSuite(TestModelStores.class);
         suite.addTestSuite(TestResourceData.class);
         suite.addTestSuite(TestRdfSerialization.class);
 
@@ -117,9 +117,8 @@ public class AllQaiTests extends TestCase {
 
 
         // persistence.search
-//        suite.addTestSuite(TestStockQuoteSearchService.class);
-//        suite.addTestSuite(TestRDFTripleSearchService.class);
-//        suite.addTestSuite(TestProcedureDataService.class);
+        suite.addTestSuite(TestModelSearchServices.class);
+        suite.addTestSuite(TestDatabaseSearchService.class);
 
         // procedure
         suite.addTestSuite(TestProcedureInputsAndResults.class);

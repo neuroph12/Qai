@@ -12,7 +12,7 @@
  *
  */
 
-package qube.qai.persistence;
+package qube.qai.persistence.search;
 
 import junit.framework.TestCase;
 import org.apache.jena.rdf.model.Model;
@@ -28,12 +28,12 @@ import java.util.Collection;
 /**
  * Created by rainbird on 1/20/17.
  */
-public class TestModelStores extends TestCase {
+public class TestModelSearchServices extends TestCase {
 
     public void testUserModelStore() throws Exception {
 
-        ModelStore modelStore = new ModelStore("./test/dummy.model.directory");
-        modelStore.init();
+        ModelSearchService modelSearchService = new ModelSearchService("./test/dummy.model.directory");
+        modelSearchService.init();
 
         Collection<String> uuids = new ArrayList<>();
 
@@ -43,20 +43,20 @@ public class TestModelStores extends TestCase {
             user.createSession().setName("dummy_user_session:_test_session");
             user.addRole(new Role(user, "dummy_role", "this_is_a_test_role_for_the_user"));
 
-            modelStore.save(User.class, user);
+            modelSearchService.save(User.class, user);
 
             String query = userName;
-            Collection<SearchResult> results = modelStore.searchInputString(query, ModelStore.USERS, 1);
+            Collection<SearchResult> results = modelSearchService.searchInputString(query, ModelSearchService.USERS, 1);
             assertNotNull("there must be results", results);
             assertTrue("there has to be the user", !results.isEmpty());
             String foundUuid = results.iterator().next().getUuid();
             assertTrue("uuids must be equal", foundUuid.equals(user.getUuid()));
-            modelStore.remove(User.class, user);
+            modelSearchService.remove(User.class, user);
             uuids.add(user.getUuid());
         }
 
         // this way we can check that the leftover users are not one of those which we already deleted
-        Collection<SearchResult> others = modelStore.searchInputString("*", ModelStore.USERS, 0);
+        Collection<SearchResult> others = modelSearchService.searchInputString("*", ModelSearchService.USERS, 0);
         for (SearchResult result : others) {
             log("additionally found user with uuid: " + result.getUuid());
             assertTrue("the originals must have been deleted", !uuids.contains(result.getUuid()));

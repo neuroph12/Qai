@@ -33,7 +33,7 @@ public class TestDatabaseSearchService extends TestCase {
 
     private boolean debug = true;
 
-    public void estUserDatabaseSearchService() throws Exception {
+    public void testUserDatabaseSearchService() throws Exception {
 
         Injector injector = QaiTestServerModule.initUsersInjector();
         DatabaseSearchService databaseSearch = new DatabaseSearchService();
@@ -42,8 +42,11 @@ public class TestDatabaseSearchService extends TestCase {
         EntityManager entityManager = databaseSearch.getEntityManager();
         User user = new User("sa", "");
 
+        User dummy = new User("dummy", "");
+
         entityManager.getTransaction().begin();
         entityManager.persist(user);
+        entityManager.persist(dummy);
         entityManager.flush();
         entityManager.getTransaction().commit();
 
@@ -53,9 +56,14 @@ public class TestDatabaseSearchService extends TestCase {
 
         assertNotNull("there have to be results", results);
         assertTrue("the result set may not be empty", !results.isEmpty());
-        log("there are " + results.size() + " results to the query");
+        assertTrue("there are more than one user with same name", results.size() == 1);
         assertTrue("", user.getUuid().equals(results.iterator().next().getUuid()));
 
+        selectString = "";
+        results = databaseSearch.searchInputString(selectString, QaiConstants.USERS, 100);
+        assertNotNull("there have to be results", results);
+        assertTrue("the result set may not be empty", !results.isEmpty());
+        assertTrue("there has to be more than one user", results.size() > 1);
     }
 
     public void testStocksDatabaseSearchService() throws Exception {

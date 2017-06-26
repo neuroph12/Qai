@@ -29,6 +29,7 @@ import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.persistence.search.DatabaseSearchService;
+import qube.qai.persistence.search.ModelSearchService;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
@@ -377,7 +378,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     @Singleton
     public DistributedSearchListener provideProceduresSearchListener(HazelcastInstance hazelcastInstance) {
 
-        SearchServiceInterface searchService = new ModelStore(properties.getProperty(PROCEDURE_BASE_DIRECTORY));
+        SearchServiceInterface searchService = new ModelSearchService(properties.getProperty(PROCEDURE_BASE_DIRECTORY));
 
         DistributedSearchListener searchListener = new DistributedSearchListener(PROCEDURES);
         searchListener.setSearchService(searchService);
