@@ -49,4 +49,16 @@ public class MapDataProvider implements DataProvider {
         }
         return getData(result.getUuid());
     }
+
+    public String getContext() {
+        return context;
+    }
+
+    public HazelcastInstance getHazelcastInstance() {
+        return hazelcastInstance;
+    }
+
+    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
+        this.hazelcastInstance = hazelcastInstance;
+    }
 }

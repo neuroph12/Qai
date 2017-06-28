@@ -21,6 +21,8 @@ import qube.qai.data.SelectionOperator;
 import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.Network;
+import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.DummyDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -37,9 +39,12 @@ public class TestSemanticNetworkBuilder extends QaiTestBase {
     @Named("Wiktionary_en")
     private SearchServiceInterface wikipediaSearchService;
 
+    private DataProvider wikiArticleProvider;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        wikiArticleProvider = new DummyDataProvider("Wikipedia_en", new WikiArticle());
     }
 
     /**
@@ -55,7 +60,7 @@ public class TestSemanticNetworkBuilder extends QaiTestBase {
 
         String filename = results.iterator().next().getUuid();
         log("name for the test case: " + filename);
-        WikiArticle wikiArticle = wikipediaSearchService.retrieveDocumentContentFromZipFile(filename);
+        WikiArticle wikiArticle = (WikiArticle) wikiArticleProvider.getData(filename);
         assertNotNull("there has to be a wiki-article", wikiArticle);
 
         SemanticNetworkBuilder builder = new SemanticNetworkBuilder();
@@ -74,7 +79,7 @@ public class TestSemanticNetworkBuilder extends QaiTestBase {
 
         String filename = results.iterator().next().getUuid();
         log("name for the test case: " + filename);
-        WikiArticle wikiArticle = wikipediaSearchService.retrieveDocumentContentFromZipFile(filename);
+        WikiArticle wikiArticle = (WikiArticle) wikiArticleProvider.getData(filename);
         assertNotNull("there has to be a wiki-article", wikiArticle);
 
         SemanticNetworkBuilder builder = new SemanticNetworkBuilder();

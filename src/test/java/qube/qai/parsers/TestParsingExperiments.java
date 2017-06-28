@@ -27,6 +27,7 @@ import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.Span;
 import qube.qai.main.QaiTestBase;
+import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -57,6 +58,10 @@ public class TestParsingExperiments extends QaiTestBase {
     @Named("Wikipedia_en")
     private SearchServiceInterface searchService;
 
+    @Inject
+    @Named("Wikipedia_en")
+    private DataProvider<WikiArticle> wikiArticleDataProvider;
+
     /**
      * this is only for playing around with "the" page
      * i hope i find a way to integrate
@@ -67,7 +72,7 @@ public class TestParsingExperiments extends QaiTestBase {
      */
     public void restSnP500() throws Exception {
 
-        WikiArticle snpPage = searchService.retrieveDocumentContentFromZipFile(SnP500Page);
+        WikiArticle snpPage = wikiArticleDataProvider.getData(SnP500Page);
         assertNotNull("oh, come on!!!", snpPage);
 
         Tokenizer tokenizer = createTokenizer();
@@ -97,7 +102,7 @@ public class TestParsingExperiments extends QaiTestBase {
      */
     public void restPOS() throws Exception {
 
-        WikiArticle pythagorasArticle = searchService.retrieveDocumentContentFromZipFile(pythagorasTheorem);
+        WikiArticle pythagorasArticle = wikiArticleDataProvider.getData(pythagorasTheorem);
         assertNotNull("oh come on!!!", pythagorasArticle);
 
         Tokenizer tokenizer = createTokenizer();
@@ -118,7 +123,7 @@ public class TestParsingExperiments extends QaiTestBase {
      */
     public void testNameDetection() throws Exception {
 
-        WikiArticle darwinArticle = searchService.retrieveDocumentContentFromZipFile(darwinPage);
+        WikiArticle darwinArticle = wikiArticleDataProvider.getData(darwinPage);
         assertNotNull("oh come on!!!", darwinArticle);
 
         //InputStream modelIn = getClass().getResourceAsStream("/opennlp/en/en-token.bin");
@@ -152,7 +157,7 @@ public class TestParsingExperiments extends QaiTestBase {
     public void restSenteceDetection() throws Exception {
 
         // load first the article we want to try the things out
-        WikiArticle mouseArticle = searchService.retrieveDocumentContentFromZipFile(mousePage);
+        WikiArticle mouseArticle = wikiArticleDataProvider.getData(mousePage);
         assertNotNull("oh come on!!!", mouseArticle);
 
         // this is how you create the trained sentence detection model
@@ -180,7 +185,7 @@ public class TestParsingExperiments extends QaiTestBase {
     public void restWikiTableParser() throws Exception {
 
         // in any case, this is the page we are interested in
-        WikiArticle wikiArticle = searchService.retrieveDocumentContentFromZipFile(stockListingPage);
+        WikiArticle wikiArticle = wikiArticleDataProvider.getData(stockListingPage);
         assertNotNull("if this list cannot be found this would be a very short test indeed", wikiArticle);
 
         String articleContent = wikiArticle.getContent();
@@ -199,7 +204,7 @@ public class TestParsingExperiments extends QaiTestBase {
         for (String link : links) {
             String filename = convertToFilename(link);
             log("retrieving the link: '" + link + "' with filename: " + filename);
-            linkArticle = searchService.retrieveDocumentContentFromZipFile(filename);
+            linkArticle = wikiArticleDataProvider.getData(filename);
 
             // for the moment being, let's say it's ok that file not found
             // and simply get on to the next one

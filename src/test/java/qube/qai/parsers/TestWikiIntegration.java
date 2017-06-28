@@ -17,6 +17,8 @@ package qube.qai.parsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
+import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.DummyDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -41,9 +43,17 @@ public class TestWikiIntegration extends QaiTestBase {
     @Named("Wikipedia_en")
     private SearchServiceInterface searchService;
 
+    private DataProvider<WikiArticle> wikiArticleDataProvider;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        wikiArticleDataProvider = new DummyDataProvider("Wikipedia_en", new WikiArticle());
+    }
+
     public void testStripTableData() throws Exception {
 
-        WikiArticle snp500 = searchService.retrieveDocumentContentFromZipFile(SnP500Page);
+        WikiArticle snp500 = wikiArticleDataProvider.getData(SnP500Page);
         assertNotNull("we are here to play with this file", snp500);
 
         WikiIntegration wiki = new WikiIntegration();
@@ -68,7 +78,7 @@ public class TestWikiIntegration extends QaiTestBase {
 
         Set<String> titles = headerTitles();
 
-        WikiArticle snp500 = searchService.retrieveDocumentContentFromZipFile(SnP500Page);
+        WikiArticle snp500 = wikiArticleDataProvider.getData(SnP500Page);
         assertNotNull("we are here to play with this file", snp500);
 
         WikiIntegration wiki = new WikiIntegration();
@@ -84,7 +94,7 @@ public class TestWikiIntegration extends QaiTestBase {
 
     public void testLinkFinder() throws Exception {
 
-        WikiArticle snp500 = searchService.retrieveDocumentContentFromZipFile(SnP500Page);
+        WikiArticle snp500 = wikiArticleDataProvider.getData(SnP500Page);
         assertNotNull("we are here to play with this file", snp500);
 
         Collection<String> links = WikiIntegration.getLinksOf(snp500);

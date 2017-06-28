@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
+import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.ResourceData;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
@@ -44,6 +45,8 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
     @Named("Wikipedia_en")
     private SearchServiceInterface searchService;
 
+    private DataProvider<WikiArticle> wikiArticleDataProvider;
+
     public void testIndexedDirectoryMapStore() throws Exception {
 
         // ok- this is simple really- we pick a wiki-article
@@ -54,7 +57,7 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
         IndexedDirectoryMapStore mapStore = new IndexedDirectoryMapStore(wikipediaResourceDirectory, wikipediaResourceIndexDirectory);
         mapStore.setSearchService(directorySearchService);
 
-        WikiArticle article = searchService.retrieveDocumentContentFromZipFile(wikiArticleName);
+        WikiArticle article = wikiArticleDataProvider.getData(wikiArticleName);
         assertNotNull("seriously?!?", article);
 
         //log(article.getContent());

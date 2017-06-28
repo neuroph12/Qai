@@ -22,9 +22,12 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.HazelcastInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.message.MessageQueue;
 import qube.qai.message.MessageQueueInterface;
+import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.DummyDataProvider;
+import qube.qai.persistence.MapDataProvider;
+import qube.qai.persistence.WikiArticle;
 import qube.qai.services.*;
 import qube.qai.services.implementation.*;
 
@@ -90,11 +93,17 @@ public class QaiTestModule extends AbstractModule {
     }
 
     @Provides
-    public StockQuoteDataStore provideStockQuoteDataStore() {
-        StockQuoteDataStore dataStore = new StockQuoteDataStore();
-        return dataStore;
+    public DataProvider provideDataProvider() {
+        return new DummyDataProvider();
     }
 
+    @Provides
+    @Named("Wikipedia_en")
+    public DataProvider provideWikiDataProvider() {
+        DataProvider<WikiArticle> wikiProvider = new MapDataProvider("Wikipedia_en");
+        ((MapDataProvider) wikiProvider).setHazelcastInstance(hazelcastInstance);
+        return wikiProvider;
+    }
 
     @Provides
     @Singleton
