@@ -25,6 +25,8 @@ public class SearchResult implements Serializable {
 
     private String uuid;
 
+    private String title;
+
     private double relevance;
 
     public SearchResult() {
@@ -58,5 +60,13 @@ public class SearchResult implements Serializable {
 
     public void setRelevance(double relevance) {
         this.relevance = relevance;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

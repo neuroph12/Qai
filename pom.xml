@@ -36,7 +36,7 @@
         <hazelcast.version>3.8.2</hazelcast.version>
         <!--<hazelcast.version>3.5.4</hazelcast.version>-->
 
-        <guice.version>4.0</guice.version>
+        <guice.version>4.1.0</guice.version>
         <guice-conf.version>1.2.0</guice-conf.version>
 
         <hsqldb.version>2.3.4</hsqldb.version>
