@@ -12,17 +12,19 @@
  *
  */
 
-package qube.qai.services;
+package qube.qai.persistence;
 
 import qube.qai.services.implementation.SearchResult;
 
-import java.util.Collection;
-
 /**
- * Created by rainbird on 11/9/15.
+ * Created by rainbird on 6/28/17.
  */
-public interface SearchServiceInterface {
+public interface DataProvider<T> {
 
-    Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage);
+    void setContext(String context);
+
+    T getData(String uuid);
+
+    T brokerSearchResult(SearchResult result);
 
 }

@@ -14,7 +14,6 @@
 
 package qube.qai.persistence.search;
 
-import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 
@@ -30,8 +29,4 @@ public class CsvFileSearchService implements SearchServiceInterface {
         return null;
     }
 
-    @Override
-    public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
-        return null;
-    }
 }

@@ -21,7 +21,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -127,12 +126,6 @@ public class ModelSearchService implements SearchServiceInterface {
         dataset.end();
 
         return results;
-    }
-
-    @Override
-    @Deprecated
-    public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
-        return null;
     }
 
     public Model createDefaultModel() {

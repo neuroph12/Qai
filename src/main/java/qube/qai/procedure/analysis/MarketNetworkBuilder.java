@@ -15,7 +15,6 @@
 package qube.qai.procedure.analysis;
 
 import qube.qai.data.SelectionOperator;
-import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
 import qube.qai.network.neural.NeuralNetwork;
@@ -25,7 +24,7 @@ import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 
-import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -68,9 +67,6 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
         return null;
     }
 
-    @Inject
-    private StockQuoteDataStore stockQuoteDataStore;
-
     @Override
     public void execute() {
 
@@ -81,7 +77,9 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
         for (StockEntity entity : entities) {
             Network.Vertex vertex = new Network.Vertex(entity.getTickerSymbol());
             // while we are at it we collect the data here as well
-            Collection<StockQuote> quotes = stockQuoteDataStore.retrieveQuotesFor(entity.getTickerSymbol());
+            Collection<StockQuote> quotes = new ArrayList<>(); // removed reference
+            // to deprecated interface which was not working anyways
+            // so whatever was happening here will no wbe broken
             // if there are no available quotes, skip it and remove from list
             if (quotes != null || !quotes.isEmpty()) {
                 network.addVertex(vertex);

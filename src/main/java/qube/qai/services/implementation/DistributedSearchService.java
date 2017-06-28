@@ -20,7 +20,6 @@ import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
 import javax.inject.Inject;
@@ -85,11 +84,6 @@ public class DistributedSearchService implements SearchServiceInterface, Message
         if (messageObject instanceof Collection) {
             results = (Collection<SearchResult>) messageObject;
         }
-    }
-
-    @Override
-    public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
-        return null;
     }
 
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {

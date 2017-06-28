@@ -19,6 +19,7 @@ import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringUtils;
 import qube.qai.network.Network;
+import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -40,6 +41,9 @@ public class WikiNetwork extends Network {
     @Inject
     @Named("Wiktionary_en")
     private SearchServiceInterface wikipediaSearchService;
+
+    @Inject
+    private DataProvider<WikiArticle> dataProvider;
 
     public WikiNetwork() {
         titles = new Vector<String>();
@@ -68,7 +72,7 @@ public class WikiNetwork extends Network {
             if (article == null && wikiModel == null) {
                 try {
                     String filename = title + ".xml";
-                    article = wikipediaSearchService.retrieveDocumentContentFromZipFile(filename);
+                    article = dataProvider.getData(filename);
                     wikiModel = createModel(article);
                 } catch (Exception e) {
                     log("Exception while loading: '" + title + "', removing from graph");

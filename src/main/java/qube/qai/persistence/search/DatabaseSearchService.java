@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import qube.qai.main.QaiConstants;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
-import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.User;
@@ -145,8 +144,4 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
         this.entityManager = entityManager;
     }
 
-    @Override
-    public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
-        return null;
-    }
 }
