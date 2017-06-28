@@ -15,7 +15,7 @@
 package qube.qai.network.semantic;
 
 
-import com.google.inject.name.Named;
+import com.hazelcast.core.HazelcastInstance;
 import qube.qai.data.Metrics;
 import qube.qai.data.SelectionOperator;
 import qube.qai.data.selectors.DataSelectionOperator;
@@ -28,6 +28,7 @@ import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Collection;
 
 /**
@@ -36,15 +37,20 @@ import java.util.Collection;
 public class TestSemanticNetworkBuilder extends QaiTestBase {
 
     @Inject
+    private HazelcastInstance hazelcastInstance;
+
+    @Inject
     @Named("Wiktionary_en")
     private SearchServiceInterface wikipediaSearchService;
 
-    private DataProvider wikiArticleProvider;
+    //@Inject
+    //@Named("Wikipedia_en")
+    private DataProvider<WikiArticle> wikiArticleProvider;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        wikiArticleProvider = new DummyDataProvider("Wikipedia_en", new WikiArticle());
+        wikiArticleProvider = new DummyDataProvider(WIKIPEDIA, new WikiArticle());
     }
 
     /**

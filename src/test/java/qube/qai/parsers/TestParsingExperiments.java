@@ -14,6 +14,7 @@
 
 package qube.qai.parsers;
 
+import com.hazelcast.core.HazelcastInstance;
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.model.WikiModel;
 import opennlp.tools.namefind.NameFinderME;
@@ -53,6 +54,9 @@ public class TestParsingExperiments extends QaiTestBase {
     private String darwinPage = "Charles Darwin.xml";
 
     private String pythagorasTheorem = "Pythagorean theorem.xml";
+
+    @Inject
+    private HazelcastInstance hazelcastInstance;
 
     @Inject
     @Named("Wikipedia_en")

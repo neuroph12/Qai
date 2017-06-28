@@ -113,7 +113,11 @@ public class QaiTestServerModule extends AbstractModule {
 
     private DistributedSearchListener proceduresSearchListener;
 
+    private WikiArticleMapStore wiktionaryMapStore;
 
+    private WikiArticleMapStore wikipediaMapStore;
+
+    private IndexedDirectoryMapStore wikiResourceStore;
     // with static fields i can use the injector even when it is active for other tests
     private static Injector stocksInjector;
 
@@ -376,10 +380,13 @@ public class QaiTestServerModule extends AbstractModule {
             wikiMapstoreConfig = new MapStoreConfig();
             wikiMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
         }
+
+        wiktionaryMapStore = new WikiArticleMapStore(WIKIPEDIA_ARCHIVE);
+
         wikiMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
             public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
                 if (WIKIPEDIA.equals(mapName)) {
-                    return new WikiArticleMapStore(WIKIPEDIA_ARCHIVE);
+                    return wiktionaryMapStore;
                 } else {
                     return null;
                 }
@@ -399,10 +406,13 @@ public class QaiTestServerModule extends AbstractModule {
             wiktionaryMapstoreConfig = new MapStoreConfig();
             wiktionaryMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
         }
+
+        wikipediaMapStore = new WikiArticleMapStore(WIKTIONARY_ARCHIVE);
+
         wiktionaryMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, WikiArticle>() {
             public MapLoader<String, WikiArticle> newMapStore(String mapName, Properties properties) {
                 if (WIKTIONARY.equals(mapName)) {
-                    return new WikiArticleMapStore(WIKTIONARY_ARCHIVE);
+                    return wikipediaMapStore;
                 } else {
                     return null;
                 }
@@ -421,13 +431,15 @@ public class QaiTestServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + WIKIPEDIA_RESOURCES);
             wikiResourceMapStoreConfig = new MapStoreConfig();
         }
+
+        wikiResourceStore = new IndexedDirectoryMapStore(WIKIPEDIA_RESOURCE_DIRECTORY, WIKIPEDIA_RESOURCE_INDEX);
+        DirectorySearchService directorySearchService = new DirectorySearchService(WIKIPEDIA_RESOURCES, WIKIPEDIA_RESOURCE_INDEX);
+        wikiResourceStore.setSearchService(directorySearchService);
+
         wikiResourceMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, ResourceData>() {
             public MapLoader<String, ResourceData> newMapStore(String mapName, Properties properties) {
                 if (WIKIPEDIA_RESOURCES.equals(mapName)) {
-                    IndexedDirectoryMapStore store = new IndexedDirectoryMapStore(WIKIPEDIA_RESOURCE_DIRECTORY, WIKIPEDIA_RESOURCE_INDEX);
-                    DirectorySearchService directorySearchService = new DirectorySearchService(WIKIPEDIA_RESOURCE_INDEX);
-                    store.setSearchService(directorySearchService);
-                    return store;
+                    return wikiResourceStore;
                 } else {
                     return null;
                 }

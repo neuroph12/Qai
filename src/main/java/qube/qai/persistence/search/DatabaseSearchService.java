@@ -36,6 +36,8 @@ import java.util.Set;
  */
 public class DatabaseSearchService implements SearchServiceInterface, QaiConstants {
 
+    private String context;
+
     @Inject
     private EntityManager entityManager;
 
@@ -54,7 +56,12 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
     public DatabaseSearchService() {
     }
 
-    public DatabaseSearchService(EntityManager entityManager) {
+    public DatabaseSearchService(String context) {
+        this.context = context;
+    }
+
+    public DatabaseSearchService(String context, EntityManager entityManager) {
+        this.context = context;
         this.entityManager = entityManager;
     }
 
@@ -92,7 +99,7 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
         int count = 0;
         for (User user : users) {
             String idString = user.getUuid();
-            SearchResult result = new SearchResult(searchString, idString, 1.0);
+            SearchResult result = new SearchResult(context, user.getUsername(), idString, "User in system", 1.0);
             results.add(result);
             count++;
             if (hitsPerPage > 0 && count >= hitsPerPage) {
@@ -111,7 +118,7 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
         for (StockGroup group : stockGroups) {
             Set<StockEntity> entities = group.getEntities();
             for (StockEntity entity : entities) {
-                SearchResult r = new SearchResult(STOCK_ENTITIES, entity.getUuid(), 1.0);
+                SearchResult r = new SearchResult(STOCK_ENTITIES, entity.getName(), entity.getUuid(), entity.getGicsSector(), 1.0);
                 results.add(r);
             }
         }
@@ -131,7 +138,7 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
 
         for (StockGroup group : stockGroups) {
             String idString = group.getUuid();
-            SearchResult result = new SearchResult(STOCK_GROUPS, idString, 1.0);
+            SearchResult result = new SearchResult(STOCK_GROUPS, group.getName(), idString, group.getDescription(), 1.0);
             results.add(result);
         }
     }
@@ -144,4 +151,12 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
         this.entityManager = entityManager;
     }
 
+    @Override
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
 }

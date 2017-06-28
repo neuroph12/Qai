@@ -77,8 +77,6 @@ public class QaiTestModule extends AbstractModule {
 //        install(ConfigurationModule.create());
 //        requestInjection(this);
 
-
-
         // UUIDService
         bind(UUIDServiceInterface.class).to(UUIDService.class);
 
@@ -99,7 +97,7 @@ public class QaiTestModule extends AbstractModule {
 
     @Provides
     @Named("Wikipedia_en")
-    public DataProvider provideWikiDataProvider() {
+    public DataProvider<WikiArticle> provideWikiDataProvider() {
         DataProvider<WikiArticle> wikiProvider = new MapDataProvider("Wikipedia_en");
         ((MapDataProvider) wikiProvider).setHazelcastInstance(hazelcastInstance);
         return wikiProvider;

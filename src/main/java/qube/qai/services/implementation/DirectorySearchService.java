@@ -48,12 +48,15 @@ public class DirectorySearchService implements SearchServiceInterface {
 
     public static String FIELD_NAME = "name";
 
+    private String context;
+
     private String indexDirectory;
 
     public DirectorySearchService() {
     }
 
-    public DirectorySearchService(String indexDirectory) {
+    public DirectorySearchService(String context, String indexDirectory) {
+        this.context = context;
         this.indexDirectory = indexDirectory;
     }
 
@@ -73,7 +76,8 @@ public class DirectorySearchService implements SearchServiceInterface {
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc hit : hits) {
                 Document doc = reader.document(hit.doc);
-                SearchResult result = new SearchResult(doc.get(FIELD_NAME), doc.get(FIELD_FILE), hit.score);
+                String desc = "Search for: '" + searchString + "'";
+                SearchResult result = new SearchResult(context, doc.get(FIELD_NAME), doc.get(FIELD_FILE), desc, hit.score);
                 searchResults.add(result);
                 logger.info(doc.get(FIELD_FILE) + " (" + hit.score + ")");
             }
@@ -96,5 +100,13 @@ public class DirectorySearchService implements SearchServiceInterface {
 
     public void setIndexDirectory(String indexDirectory) {
         this.indexDirectory = indexDirectory;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
     }
 }

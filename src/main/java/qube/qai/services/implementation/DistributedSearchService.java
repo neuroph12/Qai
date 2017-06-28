@@ -33,12 +33,19 @@ public class DistributedSearchService implements SearchServiceInterface, Message
 
     private Logger logger = LoggerFactory.getLogger("DistributedSearchService");
 
+    private String context;
+
     @Inject
     protected HazelcastInstance hazelcastInstance;
 
     protected String searchTopicName;
 
     protected Collection<SearchResult> results;
+
+    protected int maxTryNumber = 100;
+
+    protected boolean interrupt = false;
+
 
     public DistributedSearchService(String searchTopicName) {
         this.searchTopicName = searchTopicName;
@@ -67,7 +74,7 @@ public class DistributedSearchService implements SearchServiceInterface, Message
             while (results == null) {
                 Thread.sleep(100);
                 count++;
-                if (count >= 10) {
+                if (count >= maxTryNumber || interrupt) {
                     break;
                 }
             }
@@ -88,6 +95,39 @@ public class DistributedSearchService implements SearchServiceInterface, Message
 
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
+    }
+
+    public String getSearchTopicName() {
+        return searchTopicName;
+    }
+
+    public void setSearchTopicName(String searchTopicName) {
+        this.searchTopicName = searchTopicName;
+    }
+
+    public int getMaxTryNumber() {
+        return maxTryNumber;
+    }
+
+    public void setMaxTryNumber(int maxTryNumber) {
+        this.maxTryNumber = maxTryNumber;
+    }
+
+    public boolean isInterrupt() {
+        return interrupt;
+    }
+
+    public void setInterrupt(boolean interrupt) {
+        this.interrupt = interrupt;
+    }
+
+    @Override
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
     }
 
     static public class SearchRequest implements Serializable {

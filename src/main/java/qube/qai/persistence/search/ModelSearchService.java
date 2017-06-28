@@ -51,6 +51,8 @@ public class ModelSearchService implements SearchServiceInterface {
 
     private String baseUrl = "http://www.qoan.org/data/";
 
+    private String context;
+
     private String directoryName;
 
     private Class objectClass;
@@ -66,7 +68,8 @@ public class ModelSearchService implements SearchServiceInterface {
     public ModelSearchService() {
     }
 
-    public ModelSearchService(String directoryName) {
+    public ModelSearchService(String context, String directoryName) {
+        this.context = context;
         this.directoryName = directoryName;
     }
 
@@ -96,7 +99,7 @@ public class ModelSearchService implements SearchServiceInterface {
             Collection<User> found = Sparql.exec(model, User.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/User> }");
             for (User user : found) {
                 if ("*".equals(searchString) || searchString.equals(user.getUsername())) {
-                    SearchResult result = new SearchResult("user", user.getUuid(), 1.0);
+                    SearchResult result = new SearchResult(USERS, user.getUsername(), user.getUuid(), "User", 1.0);
                     results.add(result);
                 }
             }
@@ -104,21 +107,21 @@ public class ModelSearchService implements SearchServiceInterface {
             Collection<Procedure> found = Sparql.exec(model, Procedure.class, "SELECT ?s WHERE { ?s a <http://qube.qai.procedure/Procedure> }");
             for (Procedure procedure : found) {
                 String uuid = procedure.getUuid();
-                SearchResult result = new SearchResult(fieldName, uuid, 1.0);
+                SearchResult result = new SearchResult(PROCEDURES, procedure.getProcedureName(), uuid, procedure.getDescriptionText(), 1.0);
                 results.add(result);
             }
         } else if (SESSIONS.equals(fieldName)) {
             Collection<Session> found = Sparql.exec(model, Session.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/Session> }");
             for (Session session : found) {
                 String uuid = session.getUuid();
-                SearchResult result = new SearchResult(fieldName, uuid, 1.0);
+                SearchResult result = new SearchResult(SESSIONS, session.getName(), uuid, "User session", 1.0);
                 results.add(result);
             }
         } else if (ROLES.equals(fieldName)) {
             Collection<Role> found = Sparql.exec(model, Role.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/Role> }");
             for (Role role : found) {
                 String uuid = role.getUuid();
-                SearchResult result = new SearchResult(fieldName, uuid, 1.0);
+                SearchResult result = new SearchResult(ROLES, role.getName(), uuid, role.getDescription(), 1.0);
                 results.add(result);
             }
         }
@@ -146,7 +149,12 @@ public class ModelSearchService implements SearchServiceInterface {
         dataset.end();
     }
 
-//    public Object getSerializedObject() {
-//        return serializedObject;
-//    }
+    @Override
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
 }

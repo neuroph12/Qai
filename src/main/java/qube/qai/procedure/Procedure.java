@@ -298,5 +298,7 @@ public abstract class Procedure extends Node
         LoggerFactory.getLogger("Procedure").debug(message);
     }
 
-
+    public String getProcedureName() {
+        return this.getName().getName();
+    }
 }

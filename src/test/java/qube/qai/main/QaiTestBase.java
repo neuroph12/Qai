@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by rainbird on 11/19/15.
  */
-public class QaiTestBase extends TestCase {
+public class QaiTestBase extends TestCase implements QaiConstants {
 
     protected Logger logger = LoggerFactory.getLogger("QaiTest");
 

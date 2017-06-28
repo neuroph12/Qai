@@ -25,6 +25,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static qube.qai.main.QaiConstants.USERS;
+
 /**
  * Created by rainbird on 1/20/17.
  */
@@ -32,7 +34,7 @@ public class TestModelSearchServices extends TestCase {
 
     public void testUserModelStore() throws Exception {
 
-        ModelSearchService modelSearchService = new ModelSearchService("./test/dummy.model.directory");
+        ModelSearchService modelSearchService = new ModelSearchService(USERS, "./test/dummy.model.directory");
         modelSearchService.init();
 
         Collection<String> uuids = new ArrayList<>();

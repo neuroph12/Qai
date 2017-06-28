@@ -23,6 +23,8 @@ import java.util.Collection;
  */
 public interface SearchServiceInterface {
 
+    String getContext();
+
     Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage);
 
 }

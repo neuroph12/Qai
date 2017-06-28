@@ -14,7 +14,6 @@
 
 package qube.qai.services.implementation;
 
-import com.thoughtworks.xstream.XStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -28,16 +27,12 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 /**
  * Created by rainbird on 11/9/15.
@@ -111,7 +106,8 @@ public class WikiSearchService implements SearchServiceInterface {
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc hit : hits) {
                 Document doc = reader.document(hit.doc);
-                SearchResult result = new SearchResult(context, doc.get("file"), hit.score);
+                String desc = "Search term: '" + searchString + "'";
+                SearchResult result = new SearchResult(context, doc.get("title"), doc.get("file"), desc, hit.score);
                 searchResults.add(result);
                 logger.debug(doc.get("file") + ": title: " + doc.get("title") + " (" + hit.score + ")");
             }
@@ -124,26 +120,26 @@ public class WikiSearchService implements SearchServiceInterface {
         return searchResults;
     }
 
-    public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
-
-        WikiArticle wikiArticle = null;
-
-        try {
-            ZipFile zipFile = new ZipFile(ZIP_FILE_NAME);
-            ZipEntry zipEntry = zipFile.getEntry(fileName);
-            if (zipEntry == null) {
-                return null;
-            }
-            InputStream stream = zipFile.getInputStream(zipEntry);
-
-            XStream xStream = new XStream();
-            wikiArticle = (WikiArticle) xStream.fromXML(stream);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return wikiArticle;
-    }
+//    public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
+//
+//        WikiArticle wikiArticle = null;
+//
+//        try {
+//            ZipFile zipFile = new ZipFile(ZIP_FILE_NAME);
+//            ZipEntry zipEntry = zipFile.getEntry(fileName);
+//            if (zipEntry == null) {
+//                return null;
+//            }
+//            InputStream stream = zipFile.getInputStream(zipEntry);
+//
+//            XStream xStream = new XStream();
+//            wikiArticle = (WikiArticle) xStream.fromXML(stream);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return wikiArticle;
+//    }
 
     public String getContext() {
         return context;

@@ -24,9 +24,19 @@ import java.util.Collection;
  */
 public class CsvFileSearchService implements SearchServiceInterface {
 
+    private String context;
+
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
         return null;
     }
 
+    @Override
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
 }

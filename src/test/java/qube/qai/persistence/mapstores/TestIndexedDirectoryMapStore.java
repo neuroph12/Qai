@@ -14,6 +14,7 @@
 
 package qube.qai.persistence.mapstores;
 
+import com.hazelcast.core.HazelcastInstance;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +43,14 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
     private static String wikiFileFormatEnd = "|";
 
     @Inject
+    private HazelcastInstance hazelcastInstance;
+
+    @Inject
     @Named("Wikipedia_en")
     private SearchServiceInterface searchService;
 
+    @Inject
+    @Named("Wikipedia_en")
     private DataProvider<WikiArticle> wikiArticleDataProvider;
 
     public void testIndexedDirectoryMapStore() throws Exception {
@@ -53,7 +59,7 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
         // and query the resources required- use of course a wiki-model
         // for the purpose, and check that the tarball map-store
         // can actually locate and retrieve them
-        DirectorySearchService directorySearchService = new DirectorySearchService(wikipediaResourceIndexDirectory);
+        DirectorySearchService directorySearchService = new DirectorySearchService(WIKIPEDIA_RESOURCES, wikipediaResourceIndexDirectory);
         IndexedDirectoryMapStore mapStore = new IndexedDirectoryMapStore(wikipediaResourceDirectory, wikipediaResourceIndexDirectory);
         mapStore.setSearchService(directorySearchService);
 

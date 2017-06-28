@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import static qube.qai.main.QaiConstants.STOCK_ENTITIES;
+import static qube.qai.main.QaiConstants.WIKIPEDIA;
+
 /**
  * Created by rainbird on 12/26/15.
  */
@@ -87,8 +90,8 @@ public class StockEntityDataStore implements DataStore {
      */
     public Collection<StockEntity> fetchEntitesOf(String marketListingName) {
 
-        IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap("WIKIPEDIA");
-        IMap<String, StockEntity> stockMap = hazelcastInstance.getMap("STOCK_ENTITIES");
+        IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
+        IMap<String, StockEntity> stockMap = hazelcastInstance.getMap(STOCK_ENTITIES);
 
         Collection<StockEntity> entities = new ArrayList<StockEntity>();
         //WikiArticle article = searchService.retrieveDocumentContentFromZipFile(marketListingName);

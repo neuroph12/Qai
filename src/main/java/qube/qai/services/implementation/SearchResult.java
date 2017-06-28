@@ -27,14 +27,18 @@ public class SearchResult implements Serializable {
 
     private String title;
 
+    private String description;
+
     private double relevance;
 
     public SearchResult() {
     }
 
-    public SearchResult(String context, String uuid, double relevance) {
+    public SearchResult(String context, String title, String uuid, String description, double relevance) {
         this.context = context;
+        this.title = title;
         this.uuid = uuid;
+        this.description = description;
         this.relevance = relevance;
     }
 
@@ -68,5 +72,13 @@ public class SearchResult implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

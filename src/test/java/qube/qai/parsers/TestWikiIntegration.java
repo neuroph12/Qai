@@ -14,11 +14,11 @@
 
 package qube.qai.parsers;
 
+import com.hazelcast.core.HazelcastInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.DataProvider;
-import qube.qai.persistence.DummyDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -40,16 +40,15 @@ public class TestWikiIntegration extends QaiTestBase {
     private String SnP500Page = "List of S&P 500 companies.xml";
 
     @Inject
+    private HazelcastInstance hazelcastInstance;
+
+    @Inject
     @Named("Wikipedia_en")
     private SearchServiceInterface searchService;
 
+    @Inject
+    @Named("Wikipedia_en")
     private DataProvider<WikiArticle> wikiArticleDataProvider;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        wikiArticleDataProvider = new DummyDataProvider("Wikipedia_en", new WikiArticle());
-    }
 
     public void testStripTableData() throws Exception {
 
