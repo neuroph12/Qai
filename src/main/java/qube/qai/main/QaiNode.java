@@ -72,7 +72,7 @@ public class QaiNode {
 
         // create the services by injecting them
         qaiServices = new QaiServices();
-        injector.injectMembers(qaiServices);
+        qaiServices.startServices(injector);
         qaiServices.checkAllServices();
 
         // the whole configuration takes place in guice

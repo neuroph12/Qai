@@ -19,6 +19,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -43,19 +45,17 @@ import java.util.zip.ZipFile;
 public class WikiArchiveIndexer extends Procedure implements ProcedureConstants {
 
     //private Logger logger = LoggerFactory.getLogger("WikiArchiveIndexer");
-
-
     public static String NAME = "WikiArchiveIndexer";
     public static String DESCRIPTION = "Indexes the wiki articles which are in the given archive file to the target index directory";
-//    public static String FIELD_FILE = "file";
-//    public static String FIELD_TITLE = "title";
-//    public static String FIELD_CONTENT = "content";
-//    public static String FIELD_PERSON = "person";
-//    public static String FIELD_LOCATION = "location";
-//    public static String FIELD_DATE = "date";
-//    public static String FIELD_ORGANIZATION = "organization";
-//
-public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
+    public static String FIELD_FILE = "file";
+    public static String FIELD_TITLE = "title";
+    public static String FIELD_CONTENT = "content";
+    public static String FIELD_PERSON = "person";
+    public static String FIELD_LOCATION = "location";
+    public static String FIELD_DATE = "date";
+    public static String FIELD_ORGANIZATION = "organization";
+
+    public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
     public static String INPUT_INDEX_DIRECTORY = "INDEX_DIRECTORY";
 
     //public String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
@@ -79,10 +79,6 @@ public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
     public WikiArchiveIndexer() {
         super(NAME);
     }
-
-//    public WikiArchiveIndexer(Procedure toDecorate) {
-//        super(NAME, toDecorate);
-//    }
 
     @Override
     public void execute() {
@@ -134,9 +130,9 @@ public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
                 debug("Indexing zip-entry: " + fileName);
 
                 Document doc = new Document();
-//                doc.add(new StringField(FIELD_FILE, fileName, Field.Store.YES));
-//                doc.add(new StringField(FIELD_TITLE, wikiPage.getTitle(), Field.Store.YES));
-//                doc.add(new TextField(FIELD_CONTENT, wikiPage.getContent(), Field.Store.NO));
+                doc.add(new StringField(FIELD_FILE, fileName, Field.Store.YES));
+                doc.add(new StringField(FIELD_TITLE, wikiPage.getTitle(), Field.Store.YES));
+                doc.add(new StringField(FIELD_CONTENT, wikiPage.getContent(), Field.Store.NO));
 
                 if (analysePerson) {
                     debug("Analysing person: " + fileName);

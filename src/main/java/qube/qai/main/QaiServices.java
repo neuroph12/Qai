@@ -14,6 +14,7 @@
 
 package qube.qai.main;
 
+import com.google.inject.Injector;
 import qube.qai.services.implementation.DistributedSearchListener;
 
 import javax.inject.Inject;
@@ -57,6 +58,12 @@ public class QaiServices {
     private DistributedSearchListener proceduresListener;
 
     public QaiServices() {
+    }
+
+    public void startServices(Injector injector) {
+
+        // as ridculous as it might seem- this is all we need to do
+        injector.injectMembers(this);
     }
 
     public void checkAllServices() {
