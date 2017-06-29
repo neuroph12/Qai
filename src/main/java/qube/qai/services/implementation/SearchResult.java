@@ -14,6 +14,9 @@
 
 package qube.qai.services.implementation;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.io.Serializable;
 
 /**
@@ -80,5 +83,31 @@ public class SearchResult implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(uuid).append(context).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        SearchResult rhs = (SearchResult) obj;
+        return new EqualsBuilder()
+                .append(context, rhs.context)
+                .append(uuid, rhs.uuid)
+                .append(title, rhs.title)
+                .append(description, rhs.description)
+                .append(relevance, rhs.relevance)
+                .isEquals();
     }
 }
