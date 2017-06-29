@@ -60,7 +60,7 @@ public class WikiSearchService implements SearchServiceInterface {
         this.ZIP_FILE_NAME = zipFileName;
     }
 
-    private void initialize() {
+    public void initialize() {
 
         try {
 

@@ -20,6 +20,7 @@ import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.services.SearchResultSink;
 import qube.qai.services.SearchServiceInterface;
 
 import javax.inject.Inject;
@@ -38,14 +39,23 @@ public class DistributedSearchService implements SearchServiceInterface, Message
     @Inject
     protected HazelcastInstance hazelcastInstance;
 
+    @Inject
+    private SearchResultSink resultSink;
+
     protected String searchTopicName;
 
     protected Collection<SearchResult> results;
 
-    protected int maxTryNumber = 100;
+    protected int maxTryNumber = 10;
+
+    protected boolean useSink = false;
+
+    protected boolean resultsReturned = false;
 
     protected boolean interrupt = false;
 
+
+    protected boolean initialized = false;
 
     public DistributedSearchService(String searchTopicName) {
         this.searchTopicName = searchTopicName;
@@ -57,11 +67,16 @@ public class DistributedSearchService implements SearchServiceInterface, Message
 
         ITopic topic = hazelcastInstance.getTopic(searchTopicName);
         topic.addMessageListener(this);
+
+        initialized = true;
     }
 
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
 
+        if (!initialized) {
+            initialize();
+        }
         // first set the results to null
         results = null;
 
@@ -90,6 +105,9 @@ public class DistributedSearchService implements SearchServiceInterface, Message
         Object messageObject = message.getMessageObject();
         if (messageObject instanceof Collection) {
             results = (Collection<SearchResult>) messageObject;
+            if (!resultsReturned && useSink) {
+                resultSink.addResults(results);
+            }
         }
     }
 
@@ -113,11 +131,11 @@ public class DistributedSearchService implements SearchServiceInterface, Message
         this.maxTryNumber = maxTryNumber;
     }
 
-    public boolean isInterrupt() {
+    public synchronized boolean isInterrupt() {
         return interrupt;
     }
 
-    public void setInterrupt(boolean interrupt) {
+    public synchronized void setInterrupt(boolean interrupt) {
         this.interrupt = interrupt;
     }
 
@@ -128,6 +146,27 @@ public class DistributedSearchService implements SearchServiceInterface, Message
 
     public void setContext(String context) {
         this.context = context;
+    }
+
+    public void setResultSink(SearchResultSink resultSink) {
+        this.resultSink = resultSink;
+    }
+
+    static public class SearchResponse implements Serializable {
+
+        public Collection<SearchResult> results;
+
+        public SearchResponse(Collection<SearchResult> results) {
+            this.results = results;
+        }
+
+        public Collection<SearchResult> getResults() {
+            return results;
+        }
+
+        public void setResults(Collection<SearchResult> results) {
+            this.results = results;
+        }
     }
 
     static public class SearchRequest implements Serializable {

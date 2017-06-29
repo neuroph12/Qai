@@ -80,4 +80,12 @@ public class DistributedSearchListener implements MessageListener {
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
     }
+
+    public static void setLogger(Logger logger) {
+        DistributedSearchListener.logger = logger;
+    }
+
+    public void setTopicName(String topicName) {
+        this.topicName = topicName;
+    }
 }
