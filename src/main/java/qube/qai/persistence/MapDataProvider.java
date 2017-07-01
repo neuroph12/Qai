@@ -27,6 +27,11 @@ public class MapDataProvider implements DataProvider {
 
     private HazelcastInstance hazelcastInstance;
 
+    public MapDataProvider(String context, HazelcastInstance hazelcastInstance) {
+        this.context = context;
+        this.hazelcastInstance = hazelcastInstance;
+    }
+
     public MapDataProvider(String context) {
         this.context = context;
     }

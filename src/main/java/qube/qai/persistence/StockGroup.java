@@ -38,7 +38,7 @@ public class StockGroup implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<StockEntity> entities;
 
     public StockGroup() {
