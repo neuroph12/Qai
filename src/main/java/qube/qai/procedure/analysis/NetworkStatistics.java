@@ -18,7 +18,7 @@ import qube.qai.data.Metrics;
 import qube.qai.network.Network;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.nodes.ValueNode;
 
 /**
  * Created by rainbird on 11/29/15.

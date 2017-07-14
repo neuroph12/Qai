@@ -27,7 +27,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.nodes.ValueNode;
 
 import java.io.File;
 import java.io.IOException;

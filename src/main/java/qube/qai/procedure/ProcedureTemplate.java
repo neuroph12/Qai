@@ -14,12 +14,11 @@
 
 package qube.qai.procedure;
 
-import qube.qai.procedure.utils.SelectionProcedure;
-
 /**
- * Created by rainbird on 11/28/15.
+ * Created by rainbird on 7/14/17.
  */
-public interface ProcedureFactory {
+public interface ProcedureTemplate<P extends Procedure> {
 
-    Procedure constructProcedure(SelectionProcedure dataSource);
+    P createProcedure();
+
 }

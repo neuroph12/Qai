@@ -21,7 +21,7 @@ import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.nodes.ValueNode;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;

@@ -17,8 +17,8 @@ package qube.qai.services.implementation;
 import qube.qai.data.SelectionOperator;
 import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
-import qube.qai.procedure.ValueNode;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
+import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 

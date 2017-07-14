@@ -15,7 +15,7 @@
 package qube.qai.procedure.visitor;
 
 import qube.qai.parsers.antimirov.nodes.*;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.nodes.ValueNode;
 
 import java.util.ArrayList;
 

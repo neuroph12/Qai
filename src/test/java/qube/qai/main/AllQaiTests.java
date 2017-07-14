@@ -38,7 +38,6 @@ import qube.qai.persistence.TestResourceData;
 import qube.qai.persistence.mapstores.*;
 import qube.qai.persistence.search.TestDatabaseSearchService;
 import qube.qai.persistence.search.TestModelSearchServices;
-import qube.qai.procedure.TestProcedureInputsAndResults;
 import qube.qai.procedure.analysis.TestAnalysisProcedures;
 import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
 import qube.qai.procedure.archive.TestArchiveProcedures;
@@ -47,7 +46,8 @@ import qube.qai.procedure.archive.TestWikiArchiveIndexer;
 import qube.qai.procedure.finance.TestFinanceProcedures;
 import qube.qai.procedure.finance.TestStockEntityInitialization;
 import qube.qai.procedure.finance.TestStockQuoteRetriever;
-import qube.qai.procedure.utils.TestRelateProcedure;
+import qube.qai.procedure.nodes.TestProcedureInputsAndResults;
+import qube.qai.procedure.utils.TestUtilProcedures;
 import qube.qai.procedure.utils.TestWikiSearch;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
@@ -143,7 +143,7 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestProcedureVisitors.class);
 
         // procedure.utils
-        suite.addTestSuite(TestRelateProcedure.class);
+        suite.addTestSuite(TestUtilProcedures.class);
         suite.addTestSuite(TestWikiSearch.class);
 
         // services.implementation

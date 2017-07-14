@@ -19,7 +19,7 @@ import org.milyn.Smooks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.nodes.ValueNode;
 
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;

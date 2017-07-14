@@ -18,9 +18,10 @@ import qube.qai.data.TimeSequence;
 import qube.qai.matrix.Matrix;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.ProcedureDescription;
-import qube.qai.procedure.TestProcedureBase;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.nodes.ProcedureDescription;
+import qube.qai.procedure.nodes.TestProcedureBase;
+import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.services.ProcedureSourceInterface;
 
@@ -46,7 +47,7 @@ public class TestAnalysisProcedures extends TestProcedureBase {
      */
     public void testProcedureInputs() throws Exception {
 
-        SimpleProcedure simple = new SimpleProcedure();
+        SimpleProcedure simple = ProcedureLibrary.simpleTemplate.createProcedure();
         String name = ProcedureConstants.INPUT_MATRIX;
         Matrix matrix = Matrix.createMatrix(true, 100, 100);
         simple.getProcedureDescription().getProcedureResults().addResult(new ValueNode(name, matrix));
@@ -66,7 +67,7 @@ public class TestAnalysisProcedures extends TestProcedureBase {
      */
     public void testMatrixStatistics() throws Exception {
 
-        MatrixStatistics procedure = new MatrixStatistics();
+        MatrixStatistics procedure = ProcedureLibrary.matrixStatisticsTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("arguments may not be null", description);
@@ -87,7 +88,7 @@ public class TestAnalysisProcedures extends TestProcedureBase {
 
     public void testChangePointAnalysis() throws Exception {
 
-        ChangePointAnalysis procedure = new ChangePointAnalysis();
+        ChangePointAnalysis procedure = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -106,7 +107,7 @@ public class TestAnalysisProcedures extends TestProcedureBase {
      */
     public void testTimeSeriesAnalysis() throws Exception {
 
-        TimeSequenceAnalysis procedure = new TimeSequenceAnalysis();
+        TimeSequenceAnalysis procedure = ProcedureLibrary.timeSequenceAnalysisTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -124,7 +125,7 @@ public class TestAnalysisProcedures extends TestProcedureBase {
      */
     public void testNetworkStatistics() throws Exception {
 
-        NetworkStatistics procedure = new NetworkStatistics();
+        NetworkStatistics procedure = ProcedureLibrary.networkStatisticstemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -140,7 +141,7 @@ public class TestAnalysisProcedures extends TestProcedureBase {
      */
     public void testNeuralNetworkAnalysis() throws Exception {
 
-        NeuralNetworkAnalysis procedure = new NeuralNetworkAnalysis();
+        NeuralNetworkAnalysis procedure = ProcedureLibrary.neuralNetworkAnalysisTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -158,7 +159,7 @@ public class TestAnalysisProcedures extends TestProcedureBase {
      */
     public void testNeuralNetworkForwardPropagation() throws Exception {
 
-        NeuralNetworkForwardPropagation procedure = new NeuralNetworkForwardPropagation();
+        NeuralNetworkForwardPropagation procedure = ProcedureLibrary.forwardPropagationTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);

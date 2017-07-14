@@ -12,7 +12,7 @@
  *
  */
 
-package qube.qai.procedure;
+package qube.qai.procedure.nodes;
 
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.ConcatenationNode;

@@ -12,33 +12,20 @@
  *
  */
 
-package qube.qai.procedure.archive;
+package qube.qai.procedure.utils;
 
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.nodes.ProcedureDescription;
 import qube.qai.procedure.nodes.TestProcedureBase;
 
 /**
- * Created by rainbird on 4/7/17.
+ * Created by rainbird on 3/12/17.
  */
-public class TestArchiveProcedures extends TestProcedureBase {
+public class TestUtilProcedures extends TestProcedureBase {
 
-    public void testDirectoryIndexer() throws Exception {
+    public void testRelateProcedure() throws Exception {
 
-        DirectoryIndexer procedure = ProcedureLibrary.directoryIndexerTemplate.createProcedure();
-
-        ProcedureDescription description = procedure.getProcedureDescription();
-        assertNotNull("there has to be a description", description);
-        log("description as text: " + description.getDescription());
-
-        checkProcedureInputs(description);
-
-        checkProcedureResults(description);
-    }
-
-    public void testWikiArchiveIndexer() throws Exception {
-
-        WikiArchiveIndexer procedure = ProcedureLibrary.wikiArchiveIndexerTemplate.createProcedure();
+        RelateProcedure procedure = ProcedureLibrary.relateTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -49,4 +36,42 @@ public class TestArchiveProcedures extends TestProcedureBase {
         checkProcedureResults(description);
     }
 
+    public void testSelectionProcedure() throws Exception {
+
+        SelectionProcedure procedure = ProcedureLibrary.selectionTemplate.createProcedure();
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be a description", description);
+        log("description as text: " + description.getDescription());
+
+        checkProcedureInputs(description);
+
+        checkProcedureResults(description);
+    }
+
+    public void testSimpleProcedure() throws Exception {
+
+        SimpleProcedure procedure = ProcedureLibrary.simpleTemplate.createProcedure();
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be a description", description);
+        log("description as text: " + description.getDescription());
+
+        checkProcedureInputs(description);
+
+        checkProcedureResults(description);
+    }
+
+    public void testCreateUserProcedure() throws Exception {
+
+        CreateUserProcedure procedure = ProcedureLibrary.createUserTemplate.createProcedure();
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be a description", description);
+        log("description as text: " + description.getDescription());
+
+        checkProcedureInputs(description);
+
+        checkProcedureResults(description);
+    }
 }

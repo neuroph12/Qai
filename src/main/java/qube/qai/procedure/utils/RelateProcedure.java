@@ -17,7 +17,7 @@ package qube.qai.procedure.utils;
 import org.apache.jena.rdf.model.Statement;
 import qube.qai.data.SelectionOperator;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.nodes.ValueNode;
 
 /**
  * Created by rainbird on 3/11/17.

@@ -18,7 +18,7 @@ import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.ChangepointAdapter;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.nodes.ValueNode;
 
 import java.io.Serializable;
 import java.util.ArrayList;

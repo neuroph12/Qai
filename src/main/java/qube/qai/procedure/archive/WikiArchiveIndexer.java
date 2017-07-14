@@ -29,7 +29,7 @@ import org.apache.lucene.util.Version;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.nodes.ValueNode;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -12,11 +12,12 @@
  *
  */
 
-package qube.qai.procedure;
+package qube.qai.procedure.nodes;
 
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.Name;
 import qube.qai.parsers.antimirov.nodes.NameNode;
+import qube.qai.procedure.Procedure;
 
 /**
  * Created by rainbird on 4/5/17.

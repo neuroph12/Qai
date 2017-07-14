@@ -12,9 +12,10 @@
  *
  */
 
-package qube.qai.procedure;
+package qube.qai.procedure.nodes;
 
 import junit.framework.TestCase;
+import qube.qai.procedure.Procedure;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
 import qube.qai.procedure.analysis.MatrixStatistics;
 import qube.qai.procedure.analysis.NetworkStatistics;

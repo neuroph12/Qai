@@ -19,7 +19,7 @@ import qube.qai.data.SelectionOperator;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.nodes.ValueNode;
 
 import java.util.Collection;
 

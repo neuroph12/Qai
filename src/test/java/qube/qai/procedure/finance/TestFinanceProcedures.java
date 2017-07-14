@@ -14,8 +14,9 @@
 
 package qube.qai.procedure.finance;
 
-import qube.qai.procedure.ProcedureDescription;
-import qube.qai.procedure.TestProcedureBase;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.nodes.ProcedureDescription;
+import qube.qai.procedure.nodes.TestProcedureBase;
 
 /**
  * Created by rainbird on 4/7/17.
@@ -24,7 +25,7 @@ public class TestFinanceProcedures extends TestProcedureBase {
 
     public void testStockEntityInitialization() throws Exception {
 
-        StockEntityInitialization procedure = new StockEntityInitialization();
+        StockEntityInitialization procedure = ProcedureLibrary.stockEntityInitializationTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -37,7 +38,7 @@ public class TestFinanceProcedures extends TestProcedureBase {
 
     public void testStockQuoteRetriever() throws Exception {
 
-        StockQuoteRetriever procedure = new StockQuoteRetriever();
+        StockQuoteRetriever procedure = ProcedureLibrary.stockQuoteRetriverTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);

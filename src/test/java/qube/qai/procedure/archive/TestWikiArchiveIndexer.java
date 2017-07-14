@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.SelectionOperator;
 import qube.qai.data.selectors.DataSelectionOperator;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
 import java.io.File;

@@ -19,7 +19,7 @@ import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.Statistics;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.ValueNode;
+import qube.qai.procedure.nodes.ValueNode;
 
 import java.util.Comparator;
 import java.util.Date;

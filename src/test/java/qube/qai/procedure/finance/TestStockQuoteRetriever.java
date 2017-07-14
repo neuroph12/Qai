@@ -21,6 +21,7 @@ import com.google.inject.persist.jpa.JpaPersistModule;
 import junit.framework.TestCase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
+import qube.qai.procedure.ProcedureLibrary;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -36,7 +37,7 @@ public class TestStockQuoteRetriever extends TestCase {
 
         Injector injector = createInjector();
         EntityManager entityManager = injector.getInstance(EntityManager.class);
-        StockQuoteRetriever retriever = new StockQuoteRetriever();
+        StockQuoteRetriever retriever = ProcedureLibrary.stockQuoteRetriverTemplate.createProcedure();
         retriever.setEntityManager(entityManager);
 
         String tickerSymbol = "GOOG";

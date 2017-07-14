@@ -12,7 +12,7 @@
  *
  */
 
-package qube.qai.procedure;
+package qube.qai.procedure.nodes;
 
 import junit.framework.TestCase;
 import qube.qai.data.Metrics;
