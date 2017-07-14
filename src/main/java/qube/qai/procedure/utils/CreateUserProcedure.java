@@ -26,12 +26,6 @@ public class CreateUserProcedure extends Procedure {
 
     public static String DESCRIPTION = "Creates a new user in the system";
 
-    public static String USER_NAME = "USER_NAME";
-
-    public static String PASSWORD = "PASSWORD";
-
-    public static String USER_UUID = "USER_UUID";
-
     public CreateUserProcedure() {
         super(NAME);
     }

@@ -15,6 +15,7 @@
 package qube.qai.procedure.utils;
 
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.nodes.ValueNode;
 
 /**
  * Created by rainbird on 12/27/15.
@@ -22,6 +23,8 @@ import qube.qai.procedure.Procedure;
 public class SelectionProcedure extends Procedure {
 
     public static String NAME = "Selection Procedure";
+
+    public static String DESCRIPTION = "Selects the data input for other procedures";
 
     /**
      * this is mainly to pass the children the argument
@@ -34,7 +37,9 @@ public class SelectionProcedure extends Procedure {
 
     @Override
     public void buildArguments() {
-//        arguments = new Arguments();
+        getProcedureDescription().setDescription(DESCRIPTION);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(PARAMETER_NAME));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(POINTER_OR_DATA_VALUE));
     }
 
     @Override

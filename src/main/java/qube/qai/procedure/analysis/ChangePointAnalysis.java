@@ -17,7 +17,6 @@ package qube.qai.procedure.analysis;
 import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.ChangepointAdapter;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.nodes.ValueNode;
 
 import java.io.Serializable;
@@ -28,7 +27,7 @@ import java.util.Date;
 /**
  * Created by rainbird on 11/28/15.
  */
-public class ChangePointAnalysis extends Procedure implements ProcedureConstants {
+public class ChangePointAnalysis extends Procedure {
 
     public static String NAME = "Change-Point Analysis";
 

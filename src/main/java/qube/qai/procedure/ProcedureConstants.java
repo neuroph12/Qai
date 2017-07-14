@@ -56,4 +56,14 @@ public interface ProcedureConstants {
     String PROCESS_INTERRUPTED = "PROCESS_INTERRUPTED";
 
     String PROCESS_ERROR = "PROCESS_ERROR";
+
+    String PARAMETER_NAME = "parameter name";
+
+    String POINTER_OR_DATA_VALUE = "pointer to or data of value";
+
+    String USER_NAME = "USER_NAME";
+
+    String PASSWORD = "PASSWORD";
+
+    String USER_UUID = "USER_UUID";
 }
