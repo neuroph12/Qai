@@ -19,16 +19,16 @@ import qube.qai.services.implementation.SearchResult;
 /**
  * Created by rainbird on 6/28/17.
  */
-public class DummyDataProvider implements DataProvider {
+public class DummyQaiDataProvider implements QaiDataProvider {
 
     private String context;
 
     private Object data;
 
-    public DummyDataProvider() {
+    public DummyQaiDataProvider() {
     }
 
-    public DummyDataProvider(String context, Object data) {
+    public DummyQaiDataProvider(String context, Object data) {
         this.context = context;
         this.data = data;
     }

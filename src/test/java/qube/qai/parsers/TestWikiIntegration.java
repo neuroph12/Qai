@@ -18,7 +18,7 @@ import com.hazelcast.core.HazelcastInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
-import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -48,7 +48,7 @@ public class TestWikiIntegration extends QaiTestBase {
 
     @Inject
     @Named("Wikipedia_en")
-    private DataProvider<WikiArticle> wikiArticleDataProvider;
+    private QaiDataProvider<WikiArticle> wikiArticleDataProvider;
 
     public void testStripTableData() throws Exception {
 

@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
-import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.ResourceData;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
@@ -51,7 +51,7 @@ public class TestIndexedDirectoryMapStore extends QaiTestBase {
 
     @Inject
     @Named("Wikipedia_en")
-    private DataProvider<WikiArticle> wikiArticleDataProvider;
+    private QaiDataProvider<WikiArticle> wikiArticleDataProvider;
 
     public void testIndexedDirectoryMapStore() throws Exception {
 

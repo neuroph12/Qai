@@ -19,8 +19,8 @@ import grph.oo.ObjectGrph;
 import grph.oo.ObjectPath;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.wiki.WikiNetwork;
-import qube.qai.persistence.DataProvider;
-import qube.qai.persistence.DummyDataProvider;
+import qube.qai.persistence.DummyQaiDataProvider;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -38,12 +38,12 @@ public class TestWikiNetwork extends QaiTestBase {
     @Named("Wiktionary_en")
     private SearchServiceInterface wikipediaSearchService;
 
-    private DataProvider wikiDataProvider;
+    private QaiDataProvider wikiDataProvider;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        wikiDataProvider = new DummyDataProvider("Wikipedia_en", new WikiArticle());
+        wikiDataProvider = new DummyQaiDataProvider("Wikipedia_en", new WikiArticle());
     }
 
     /**

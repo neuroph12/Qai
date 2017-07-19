@@ -27,7 +27,7 @@ public class ProviderSelector {
     private SelectorProvider provider;
 
     /**
-     * a selector which employs a DataProvider to retrieve
+     * a selector which employs a QaiDataProvider to retrieve
      * required data
      */
 }

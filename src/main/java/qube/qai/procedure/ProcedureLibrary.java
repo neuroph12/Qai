@@ -134,4 +134,22 @@ public class ProcedureLibrary {
             return new CreateUserProcedure();
         }
     };
+
+    public static ProcedureTemplate[] allTemplates = new ProcedureTemplate[]{
+            simpleTemplate,
+            matrixStatisticsTemplate,
+            changePointAnalysisTemplate,
+            timeSequenceAnalysisTemplate,
+            networkStatisticstemplate,
+            neuralNetworkAnalysisTemplate,
+            forwardPropagationTemplate,
+            directoryIndexerTemplate,
+            wikiArchiveIndexerTemplate,
+            stockEntityInitializationTemplate,
+            stockQuoteRetriverTemplate,
+            wikiRipperTemplate,
+            relateTemplate,
+            selectionTemplate,
+            createUserTemplate
+    };
 }

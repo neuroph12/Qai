@@ -19,7 +19,7 @@ import qube.qai.services.implementation.SearchResult;
 /**
  * Created by rainbird on 6/28/17.
  */
-public interface DataProvider<T> {
+public interface QaiDataProvider<T> {
 
     void setContext(String context);
 

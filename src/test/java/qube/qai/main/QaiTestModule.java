@@ -24,9 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.message.MessageQueue;
 import qube.qai.message.MessageQueueInterface;
-import qube.qai.persistence.DataProvider;
-import qube.qai.persistence.DummyDataProvider;
+import qube.qai.persistence.DummyQaiDataProvider;
 import qube.qai.persistence.MapDataProvider;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.*;
 import qube.qai.services.implementation.*;
@@ -91,14 +91,14 @@ public class QaiTestModule extends AbstractModule {
     }
 
     @Provides
-    public DataProvider provideDataProvider() {
-        return new DummyDataProvider();
+    public QaiDataProvider provideDataProvider() {
+        return new DummyQaiDataProvider();
     }
 
     @Provides
     @Named("Wikipedia_en")
-    public DataProvider<WikiArticle> provideWikiDataProvider() {
-        DataProvider<WikiArticle> wikiProvider = new MapDataProvider("Wikipedia_en");
+    public QaiDataProvider<WikiArticle> provideWikiDataProvider() {
+        QaiDataProvider<WikiArticle> wikiProvider = new MapDataProvider("Wikipedia_en");
         ((MapDataProvider) wikiProvider).setHazelcastInstance(hazelcastInstance);
         return wikiProvider;
     }

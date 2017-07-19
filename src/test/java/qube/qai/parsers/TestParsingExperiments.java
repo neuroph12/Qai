@@ -28,7 +28,7 @@ import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.Span;
 import qube.qai.main.QaiTestBase;
-import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 
@@ -64,7 +64,7 @@ public class TestParsingExperiments extends QaiTestBase {
 
     @Inject
     @Named("Wikipedia_en")
-    private DataProvider<WikiArticle> wikiArticleDataProvider;
+    private QaiDataProvider<WikiArticle> wikiArticleDataProvider;
 
     /**
      * this is only for playing around with "the" page

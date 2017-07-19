@@ -21,7 +21,7 @@ import qube.qai.services.implementation.SearchResult;
 /**
  * Created by rainbird on 6/28/17.
  */
-public class MapDataProvider implements DataProvider {
+public class MapDataProvider implements QaiDataProvider {
 
     private String context;
 

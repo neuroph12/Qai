@@ -21,8 +21,8 @@ import qube.qai.data.SelectionOperator;
 import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.Network;
-import qube.qai.persistence.DataProvider;
-import qube.qai.persistence.DummyDataProvider;
+import qube.qai.persistence.DummyQaiDataProvider;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -45,12 +45,12 @@ public class TestSemanticNetworkBuilder extends QaiTestBase {
 
     //@Inject
     //@Named("Wikipedia_en")
-    private DataProvider<WikiArticle> wikiArticleProvider;
+    private QaiDataProvider<WikiArticle> wikiArticleProvider;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        wikiArticleProvider = new DummyDataProvider(WIKIPEDIA, new WikiArticle());
+        wikiArticleProvider = new DummyQaiDataProvider(WIKIPEDIA, new WikiArticle());
     }
 
     /**
