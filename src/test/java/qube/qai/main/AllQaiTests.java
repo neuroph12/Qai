@@ -51,6 +51,7 @@ import qube.qai.procedure.utils.TestUtilProcedures;
 import qube.qai.procedure.utils.TestWikiSearch;
 import qube.qai.procedure.visitor.TestProcedureVisitors;
 import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
+import qube.qai.security.TestQaiSecurity;
 import qube.qai.services.implementation.*;
 
 /**
@@ -145,6 +146,9 @@ public class AllQaiTests extends TestCase {
         // procedure.utils
         suite.addTestSuite(TestUtilProcedures.class);
         suite.addTestSuite(TestWikiSearch.class);
+
+        // security
+        suite.addTestSuite(TestQaiSecurity.class);
 
         // services.implementation
         suite.addTestSuite(TestUUIDGenerator.class);
