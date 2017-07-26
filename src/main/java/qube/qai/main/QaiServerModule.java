@@ -197,6 +197,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     @Singleton
     public DistributedSearchListener provideWiktionarySearchListener(HazelcastInstance hazelcastInstance) {
 
+        if (wiktionarySearchListener != null) {
+            return wiktionarySearchListener;
+        }
+
         wiktionarySearchService = new WikiSearchService(
                 WIKTIONARY,
                 properties.getProperty(WIKTIONARY_DIRECTORY),
@@ -224,6 +228,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     @Singleton
     public DistributedSearchListener provideWikipediaSearchListener(HazelcastInstance hazelcastInstance) {
 
+        if (wikipediaSearchListener != null) {
+            return wikipediaSearchListener;
+        }
+
         wikipediaSearchService = new WikiSearchService(
                 WIKIPEDIA,
                 properties.getProperty(WIKIPEDIA_DIRECTORY),
@@ -250,6 +258,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     @Singleton
     public DistributedSearchListener provideWikiResourcesSearchListener(HazelcastInstance hazelcastInstance) {
 
+        if (wikiResourcesSearchListener != null) {
+            return wikipediaSearchListener;
+        }
+
         wikiResourcesSearchService = new DirectorySearchService(WIKIPEDIA_RESOURCES,
                 properties.getProperty(WIKTIONARY_RESOURCE_INDEX));
 
@@ -273,6 +285,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     @Named("StockQuotes")
     @Singleton
     public DistributedSearchListener provideStockQuotesSearchListener(HazelcastInstance hazelcastInstance) {
+
+        if (stockQuotesSearchListener != null) {
+            return stockQuotesSearchListener;
+        }
 
         SearchServiceInterface searchService = new DatabaseSearchService("StockQuotes");
         getJpaStocksInjector().injectMembers(searchService);
@@ -308,6 +324,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     @Singleton
     public DistributedSearchListener provideStockEntitiesSearchListener(HazelcastInstance hazelcastInstance) {
 
+        if (stockEntitiesSearchListener != null) {
+            return stockEntitiesSearchListener;
+        }
+
         SearchServiceInterface stocksSearchService = new DatabaseSearchService("StockEntities");
         getJpaStocksInjector().injectMembers(stocksSearchService);
 
@@ -342,6 +362,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     @Singleton
     public DistributedSearchListener provideStockGroupsSearchListener(HazelcastInstance hazelcastInstance) {
 
+        if (stockGroupsSearchListener != null) {
+            return stockGroupsSearchListener;
+        }
+
         SearchServiceInterface searchService = createStockGroupsSearchServiceInterface();
 
         stockGroupsSearchListener = new DistributedSearchListener(STOCK_GROUPS);
@@ -364,6 +388,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     @Singleton
     public DistributedSearchListener provideUsersSearchListener(HazelcastInstance hazelcastInstance) {
 
+        if (userSearchListener != null) {
+            return userSearchListener;
+        }
+
         SearchServiceInterface searchService = createUserDatabaseSearchService();
 
         userSearchListener = new DistributedSearchListener(USERS);
@@ -385,6 +413,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     @Named("Procedures")
     @Singleton
     public DistributedSearchListener provideProceduresSearchListener(HazelcastInstance hazelcastInstance) {
+
+        if (proceduresSearchListener != null) {
+            return proceduresSearchListener;
+        }
 
         SearchServiceInterface searchService = new ModelSearchService(PROCEDURES, properties.getProperty(PROCEDURE_BASE_DIRECTORY));
 
