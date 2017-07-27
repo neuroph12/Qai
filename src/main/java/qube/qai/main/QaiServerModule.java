@@ -161,28 +161,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     @Override
     protected void configure() {
 
-        // load the given configuration for loading config-file
-//        install(ConfigurationModule.create());
-//        requestInjection(this);
-//        try {
-//            properties = new Properties();
-//
-//            ClassLoader loader = QaiServerModule.class.getClassLoader();
-//            URL url = loader.getResource("qube/qai/main/config_dev.properties");
-//            properties.load(url.openStream());
-//
-////            properties.load(new FileInputStream(CONFIG_FILE_NAME));
-////            Names.bindProperties(binder(), properties);
-////            String s = properties.getProperty("WIKIPEDIA_DIRECTORY");
-////            if (StringUtils.isEmpty(s)) {
-////                throw new RuntimeException("Configuration 'WIKIPEDIA_DIRECTORY' could not be found- have to exit!");
-////            }
-//
-//
-//        } catch (IOException e) {
-//            logger.error("Error while loading configuration file: " + CONFIG_FILE_NAME, e);
-//            throw new RuntimeException("Configuration file: '" + CONFIG_FILE_NAME + "' could not be found- have to exit!");
-//        }
+        // for the time being nothing to do here.
+
     }
 
     /**
@@ -428,75 +408,6 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         return proceduresSearchListener;
     }
 
-    /**
-     * WiktionarySearchService
-     *
-     * @return
-     */
-//    @Provides
-//    @Named("Wiktionary_en")
-//    SearchServiceInterface provideWiktionarySearchService() {
-//
-//        SearchServiceInterface searchService = new WikiSearchService(WIKTIONARY_DIRECTORY, WIKTIONARY_ARCHIVE);
-//        return searchService;
-//    }
-//
-//    /**
-//     * WikipediaSearchService
-//     *
-//     * @return
-//     */
-//    @Provides
-//    @Named("Wikipedia_en")
-//    SearchServiceInterface provideWikipediaSearchService() {
-//
-//        SearchServiceInterface searchService = new WikiSearchService(WIKIPEDIA_DIRECTORY, WIKIPEDIA_ARCHIVE);
-//        return searchService;
-//    }
-
-
-    /**
-     * StockQuotesSearchService
-     *
-     * @return
-     */
-//    @Provides
-//    @Named("Stocks")
-//    SearchServiceInterface provideStockQuoteSearchService() {
-//
-//        DatabaseSearchService searchService = new DatabaseSearchService();
-//        getJpaStocksInjector().injectMembers(searchService);
-//
-//        return searchService;
-//    }
-//
-//    @Provides
-//    @Named("Users")
-//    SearchServiceInterface provideUsersSearchService() {
-//
-//        DatabaseSearchService searchService = new DatabaseSearchService();
-//        getJpaUsersInjector().injectMembers(searchService);
-//
-//        return searchService;
-//    }
-
-    /**
-     * RdfTripleSearchService
-     *
-     * @return
-     */
-//    @Provides
-//    @Named("Dbpedia_en")
-//    SearchServiceInterface provideDbpediaSearchService() {
-//
-//        Injector injector = Guice.createInjector(new JpaPersistModule("DBPEDIA"));
-//        PersistService service = injector.getInstance(PersistService.class);
-//        service.start();
-//
-//        RDFTriplesSearchService searchService = new RDFTriplesSearchService();
-//        injector.injectMembers(searchService);
-//        return searchService;
-//    }
     public static Injector getJpaStocksInjector() {
 
         if (jpaStocksInjector == null) {

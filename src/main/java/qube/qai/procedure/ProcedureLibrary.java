@@ -19,8 +19,8 @@ import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
 import qube.qai.procedure.finance.StockEntityInitialization;
 import qube.qai.procedure.finance.StockQuoteRetriever;
+import qube.qai.procedure.utils.AttachProcedure;
 import qube.qai.procedure.utils.CreateUserProcedure;
-import qube.qai.procedure.utils.RelateProcedure;
 import qube.qai.procedure.utils.SelectionProcedure;
 import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
@@ -114,10 +114,10 @@ public class ProcedureLibrary {
         }
     };
 
-    public static ProcedureTemplate<RelateProcedure> relateTemplate = new ProcedureTemplate<RelateProcedure>() {
+    public static ProcedureTemplate<AttachProcedure> relateTemplate = new ProcedureTemplate<AttachProcedure>() {
         @Override
-        public RelateProcedure createProcedure() {
-            return new RelateProcedure();
+        public AttachProcedure createProcedure() {
+            return new AttachProcedure();
         }
     };
 

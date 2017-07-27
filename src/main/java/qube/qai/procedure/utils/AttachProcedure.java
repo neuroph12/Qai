@@ -22,21 +22,21 @@ import qube.qai.procedure.nodes.ValueNode;
 /**
  * Created by rainbird on 3/11/17.
  */
-public class RelateProcedure extends Procedure {
+public class AttachProcedure extends Procedure {
 
-    public static String NAME = "Relate Procedure";
+    public static String NAME = "Attach Procedure";
 
     public static String DESCRIPTION = "Attaches two resources to each other so that their relation can be persisted ";
 
-    public static String INPUT_RELATE_TO = "relateTo";
+    public static String INPUT_ATTACH = "attach";
 
-    public static String INPUT_RELATED_RESOURCE = "relatedResource";
+    public static String INPUT_ATTATCH_TO = "attachTo";
 
     public static String RELATION = "relation";
 
-    private SelectionOperator relateTo;
+    private SelectionOperator attach;
 
-    private SelectionOperator relatedResource;
+    private SelectionOperator attachTo;
 
 //    @Inject
 //    @Named("PROCEDURE")
@@ -49,7 +49,7 @@ public class RelateProcedure extends Procedure {
      * stock-entities, and charts and plots of data which have already been
      * generated and so on.
      */
-    public RelateProcedure() {
+    public AttachProcedure() {
         super(NAME);
     }
 
@@ -67,15 +67,15 @@ public class RelateProcedure extends Procedure {
 
     private Statement createStatement() {
 
-        if (relateTo == null || relatedResource == null) {
+        if (attach == null || attachTo == null) {
             throw new RuntimeException("Resources to relate are not properly defined- have to abort!");
         }
 
 //        Model model = dataService.createDefaultModel();
-//        Resource relateToResource = model.createResource(relateTo.toString());
-//        Resource relatedResource = model.createResource(relateToResource.toString());
+//        Resource relateToResource = model.createResource(attach.toString());
+//        Resource attachTo = model.createResource(relateToResource.toString());
 //        Property property = model.createProperty("namespace", "relatesTo");
-//        Statement statement = model.createStatement(relatedResource, property, relateToResource);
+//        Statement statement = model.createStatement(attachTo, property, relateToResource);
 
         return null;
     }
@@ -84,25 +84,25 @@ public class RelateProcedure extends Procedure {
     public void buildArguments() {
 //        arguments = new Arguments();
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_RELATE_TO));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(INPUT_RELATED_RESOURCE));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_ATTACH));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(INPUT_ATTATCH_TO));
         getProcedureDescription().getProcedureResults().addResult(new ValueNode(RELATION));
     }
 
-    public SelectionOperator getRelateTo() {
-        return relateTo;
+    public SelectionOperator getAttach() {
+        return attach;
     }
 
-    public void setRelateTo(SelectionOperator relateTo) {
-        this.relateTo = relateTo;
+    public void setAttach(SelectionOperator attach) {
+        this.attach = attach;
     }
 
-    public SelectionOperator getRelatedResource() {
-        return relatedResource;
+    public SelectionOperator getAttachTo() {
+        return attachTo;
     }
 
-    public void setRelatedResource(SelectionOperator relatedResource) {
-        this.relatedResource = relatedResource;
+    public void setAttachTo(SelectionOperator attachTo) {
+        this.attachTo = attachTo;
     }
 
 //    public DataServiceInterface getDataService() {
