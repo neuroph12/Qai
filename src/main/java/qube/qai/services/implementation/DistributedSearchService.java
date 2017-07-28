@@ -48,7 +48,7 @@ public class DistributedSearchService implements SearchServiceInterface, Message
 
     protected int maxTryNumber = 10;
 
-    protected boolean useSink = false;
+//    protected boolean useSink = false;
 
     protected boolean resultsReturned = false;
 
@@ -105,7 +105,7 @@ public class DistributedSearchService implements SearchServiceInterface, Message
         Object messageObject = message.getMessageObject();
         if (messageObject instanceof Collection) {
             results = (Collection<SearchResult>) messageObject;
-            if (!resultsReturned && useSink) {
+            if (resultSink != null) {
                 resultSink.addResults(results);
             }
         }
