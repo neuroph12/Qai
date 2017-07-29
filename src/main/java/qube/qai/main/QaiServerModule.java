@@ -29,18 +29,17 @@ import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.persistence.search.DatabaseSearchService;
-import qube.qai.persistence.search.ModelSearchService;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
-import qube.qai.services.implementation.DistributedSearchListener;
-import qube.qai.services.implementation.WikiSearchService;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 
 import javax.inject.Named;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * Created by rainbird on 11/26/15.
@@ -136,23 +135,9 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     private SearchServiceInterface wiktionarySearchService;
 
-    private DistributedSearchListener userSearchListener;
-
-    private DistributedSearchListener wikipediaSearchListener;
-
-    private DistributedSearchListener wiktionarySearchListener;
-
-    private DistributedSearchListener wikiResourcesSearchListener;
-
-    private DistributedSearchListener stockGroupsSearchListener;
-
-    private DistributedSearchListener stockEntitiesSearchListener;
-
-    private DistributedSearchListener stockQuotesSearchListener;
-
-    private DistributedSearchListener proceduresSearchListener;
-
     private Properties properties;
+
+    private Set<String> localServices = new HashSet<>();
 
     public QaiServerModule(Properties properties) {
         this.properties = properties;
@@ -172,7 +157,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
      *
      * @return
      */
-    @Provides
+    /*@Provides
     @Named("Wiktionary_en")
     @Singleton
     public DistributedSearchListener provideWiktionarySearchListener(HazelcastInstance hazelcastInstance) {
@@ -194,7 +179,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         wiktionarySearchListener.initialize();
 
         return wiktionarySearchListener;
-    }
+    }*/
 
     /**
      * WikipediaSearchService
@@ -203,7 +188,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
      *
      * @return
      */
-    @Provides
+    /*@Provides
     @Named("Wikipedia_en")
     @Singleton
     public DistributedSearchListener provideWikipediaSearchListener(HazelcastInstance hazelcastInstance) {
@@ -225,7 +210,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         wikipediaSearchListener.initialize();
 
         return wikipediaSearchListener;
-    }
+    }*/
 
     /**
      * WikiResourcesSearchService
@@ -233,7 +218,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
      * and starts the listener service which will broker the requests
      * @return
      */
-    @Provides
+    /*@Provides
     @Named("WikiResources_en")
     @Singleton
     public DistributedSearchListener provideWikiResourcesSearchListener(HazelcastInstance hazelcastInstance) {
@@ -251,7 +236,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         wikiResourcesSearchListener.initialize();
 
         return wikiResourcesSearchListener;
-    }
+    }*/
 
     /**
      * StockQuotesSearchService
@@ -260,8 +245,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
      *
      * @return
      */
-
-    @Provides
+    /*@Provides
     @Named("StockQuotes")
     @Singleton
     public DistributedSearchListener provideStockQuotesSearchListener(HazelcastInstance hazelcastInstance) {
@@ -279,7 +263,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         stockQuotesSearchListener.initialize();
 
         return stockQuotesSearchListener;
-    }
+    }*/
 
     @Provides
     @Named("Users")
@@ -299,7 +283,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
      *
      * @return
      */
-    @Provides
+    /*@Provides
     @Named("StockEntities")
     @Singleton
     public DistributedSearchListener provideStockEntitiesSearchListener(HazelcastInstance hazelcastInstance) {
@@ -317,7 +301,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         stockEntitiesSearchListener.initialize();
 
         return stockEntitiesSearchListener;
-    }
+    }*/
 
     @Provides
     @Named("StockGroups")
@@ -337,24 +321,24 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
      *
      * @return
      */
-    @Provides
-    @Named("StockGroups")
-    @Singleton
-    public DistributedSearchListener provideStockGroupsSearchListener(HazelcastInstance hazelcastInstance) {
-
-        if (stockGroupsSearchListener != null) {
-            return stockGroupsSearchListener;
-        }
-
-        SearchServiceInterface searchService = createStockGroupsSearchServiceInterface();
-
-        stockGroupsSearchListener = new DistributedSearchListener(STOCK_GROUPS);
-        stockGroupsSearchListener.setSearchService(searchService);
-        stockGroupsSearchListener.setHazelcastInstance(hazelcastInstance);
-        stockGroupsSearchListener.initialize();
-
-        return stockGroupsSearchListener;
-    }
+//    @Provides
+//    @Named("StockGroups")
+//    @Singleton
+//    public DistributedSearchListener provideStockGroupsSearchListener(HazelcastInstance hazelcastInstance) {
+//
+//        if (stockGroupsSearchListener != null) {
+//            return stockGroupsSearchListener;
+//        }
+//
+//        SearchServiceInterface searchService = createStockGroupsSearchServiceInterface();
+//
+//        stockGroupsSearchListener = new DistributedSearchListener(STOCK_GROUPS);
+//        stockGroupsSearchListener.setSearchService(searchService);
+//        stockGroupsSearchListener.setHazelcastInstance(hazelcastInstance);
+//        stockGroupsSearchListener.initialize();
+//
+//        return stockGroupsSearchListener;
+//    }
 
     /**
      * UsersSearchService
@@ -363,24 +347,24 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
      *
      * @return
      */
-    @Provides
-    @Named("Users")
-    @Singleton
-    public DistributedSearchListener provideUsersSearchListener(HazelcastInstance hazelcastInstance) {
-
-        if (userSearchListener != null) {
-            return userSearchListener;
-        }
-
-        SearchServiceInterface searchService = createUserDatabaseSearchService();
-
-        userSearchListener = new DistributedSearchListener(USERS);
-        userSearchListener.setSearchService(searchService);
-        userSearchListener.setHazelcastInstance(hazelcastInstance);
-        userSearchListener.initialize();
-
-        return userSearchListener;
-    }
+//    @Provides
+//    @Named("Users")
+//    @Singleton
+//    public DistributedSearchListener provideUsersSearchListener(HazelcastInstance hazelcastInstance) {
+//
+//        if (userSearchListener != null) {
+//            return userSearchListener;
+//        }
+//
+//        SearchServiceInterface searchService = createUserDatabaseSearchService();
+//
+//        userSearchListener = new DistributedSearchListener(USERS);
+//        userSearchListener.setSearchService(searchService);
+//        userSearchListener.setHazelcastInstance(hazelcastInstance);
+//        userSearchListener.initialize();
+//
+//        return userSearchListener;
+//    }
 
     /**
      * ProceduresSearchService
@@ -389,7 +373,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
      *
      * @return
      */
-    @Provides
+    /*@Provides
     @Named("Procedures")
     @Singleton
     public DistributedSearchListener provideProceduresSearchListener(HazelcastInstance hazelcastInstance) {
@@ -406,7 +390,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         proceduresSearchListener.initialize();
 
         return proceduresSearchListener;
-    }
+    }*/
 
     public static Injector getJpaStocksInjector() {
 
@@ -438,58 +422,70 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
         Config hazelcastConfig = new Config(NODE_NAME);
 
+        // create stock-groups map-store
+        if ("true".equals(properties.getProperty(CREATE_STOCK_GROUPS))) {
+            createStockGroupsConfig(hazelcastConfig);
+            localServices.add(STOCK_GROUPS);
+        }
+
         // create Stock_Entities map-store
         if ("true".equals(properties.getProperty(CREATE_STOCK_ENTITIES))) {
             createStockEntitiesConfig(hazelcastConfig);
+            localServices.add(STOCK_ENTITIES);
         }
 
         // create StockQuotes map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_STOCK_QUOTES))) {
             createStockQuotesConfig(hazelcastConfig);
+            localServices.add(STOCK_QUOTES);
         }
 
         // create Procedures map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_PROCEDURES))) {
             createProceduresConfig(hazelcastConfig);
-        }
-
-        if ("true".equals(properties.getProperty(CREATE_STOCK_GROUPS))) {
-            createStockGroupsConfig(hazelcastConfig);
+            localServices.add(PROCEDURES);
         }
 
         // create Wikipedia map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKIPEDIA))) {
             createWikipediaConfig(hazelcastConfig);
+            localServices.add(WIKIPEDIA);
         }
 
         // create Wikipedia-Resources map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKIPEDIA_RESOURCES))) {
             createWikipediaResourcesConfig(hazelcastConfig);
+            localServices.add(WIKIPEDIA_RESOURCES);
         }
 
         // create Wiktionary map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKTIONARY))) {
             createWiktionaryConfig(hazelcastConfig);
+            localServices.add(WIKTIONARY);
         }
 
         // create Wiktionary-Resources map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKTIONARY_RESOURCES))) {
             createWiktionaryResourceConfig(hazelcastConfig);
+            // interesting that this doesn't really exist :)
         }
 
         // create User database and Hazelcast map
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USERS))) {
             createUsersMapConfig(hazelcastConfig);
+            localServices.add(USERS);
         }
 
         // create UserRoles and Hazelcast map
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USER_ROLES))) {
             createUserRolesConfig(hazelcastConfig);
+            localServices.add(USER_ROLES);
         }
 
         // create UserSessions
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USER_SESSIONS))) {
             createUserSessionsConfig(hazelcastConfig);
+            localServices.add(USER_SESSIONS);
         }
 
         // now we are ready to get an instance
@@ -883,5 +879,21 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         });
         logger.info("adding mapstore configuration for " + STOCK_ENTITIES);
         mapConfig.setMapStoreConfig(mapStoreConfig);
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
+
+    public Set<String> getLocalServices() {
+        return localServices;
+    }
+
+    public void setLocalServices(Set<String> localServices) {
+        this.localServices = localServices;
     }
 }

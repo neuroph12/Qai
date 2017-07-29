@@ -50,6 +50,7 @@ public class QaiNode {
         // injector knows all
         // Server configuration lies in QaiServerModule
         // other Qai dependent services and things lie in QaiModule
+        QaiServerModule qaiServer;
         try {
             Properties properties = new Properties();
 
@@ -57,7 +58,7 @@ public class QaiNode {
             URL url = loader.getResource("qube/qai/main/config_dev.properties");
             properties.load(url.openStream());
 
-            QaiServerModule qaiServer = new QaiServerModule(properties);
+            qaiServer = new QaiServerModule(properties);
             QaiModule qaiModule = new QaiModule();
             injector = Guice.createInjector(qaiServer, qaiModule);
 
@@ -72,7 +73,7 @@ public class QaiNode {
 
         // create the services by injecting them
         qaiServices = new QaiServices();
-        qaiServices.startServices(injector);
+        qaiServices.startServices(injector, qaiServer.getProperties(), qaiServer.getLocalServices());
         qaiServices.checkAllServices();
 
         // the whole configuration takes place in guice

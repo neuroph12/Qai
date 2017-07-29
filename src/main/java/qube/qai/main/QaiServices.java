@@ -15,86 +15,95 @@
 package qube.qai.main;
 
 import com.google.inject.Injector;
+import com.hazelcast.core.HazelcastInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.services.implementation.DistributedSearchListener;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.util.Collection;
+import java.util.Properties;
+
+import static qube.qai.main.QaiConstants.*;
 
 /**
  * Created by rainbird on 6/29/17.
  */
 public class QaiServices {
 
-    @Inject
-    @Named("Wikipedia_en")
+    private static Logger logger = LoggerFactory.getLogger("QaiServices");
+
     private DistributedSearchListener wikipediaListener;
 
-    @Inject
-    @Named("Wiktionary_en")
     private DistributedSearchListener wiktionaryListener;
 
-    @Inject
-    @Named("WikiResources_en")
     private DistributedSearchListener wikiResourcesListener;
 
-    @Inject
-    @Named("Users")
     private DistributedSearchListener usersListener;
 
-    @Inject
-    @Named("StockEntities")
     private DistributedSearchListener stockEntitiesListener;
 
-    @Inject
-    @Named("StockQuotes")
     private DistributedSearchListener stockQuotesListener;
 
-    @Inject
-    @Named("StockGroups")
     private DistributedSearchListener stockGroupsListener;
 
-    @Inject
-    @Named("Procedures")
     private DistributedSearchListener proceduresListener;
 
     public QaiServices() {
     }
 
-    public void startServices(Injector injector) {
+    public void startServices(Injector injector, Properties properties, Collection<String> localServices) {
 
-        // as ridculous as it might seem- this is all we need to do
-        injector.injectMembers(this);
+        String message = "Initilailizing service: %s";
+
+        QaiServicesModule qaiServices = new QaiServicesModule(properties);
+        // is there a way of getting this here?
+        //Injector childInjector = injector.createChildInjector(qaiServices);
+        HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
+
+        if (localServices.contains(USERS)) {
+            logger.info(String.format(message, USERS));
+            usersListener = qaiServices.provideUserSearchListener(hazelcastInstance);
+        }
+
+        if (localServices.contains(PROCEDURES)) {
+            logger.info(String.format(message, PROCEDURES));
+            proceduresListener = qaiServices.provideProcedureSearchListener(hazelcastInstance);
+        }
+
+        if (localServices.contains(WIKIPEDIA)) {
+            logger.info(String.format(message, WIKIPEDIA));
+            wikipediaListener = qaiServices.provideWikipediaSearchListener(hazelcastInstance);
+        }
+
+        if (localServices.contains(WIKTIONARY)) {
+            logger.info(String.format(message, WIKTIONARY));
+            wiktionaryListener = qaiServices.provideWiktionarySearchListener(hazelcastInstance);
+        }
+
+        if (localServices.contains(WIKIPEDIA_RESOURCES)) {
+            logger.info(String.format(message, WIKIPEDIA_RESOURCES));
+            wikiResourcesListener = qaiServices.provideWikiResourcesSearchListener(hazelcastInstance);
+        }
+
+        if (localServices.contains(STOCK_ENTITIES)) {
+            logger.info(String.format(message, STOCK_ENTITIES));
+            stockEntitiesListener = qaiServices.provideStockEntitesSearchListener(hazelcastInstance);
+        }
+
+        if (localServices.contains(STOCK_GROUPS)) {
+            logger.info(String.format(message, STOCK_GROUPS));
+            stockGroupsListener = qaiServices.provideStockGroupsSearchListener(hazelcastInstance);
+        }
+
+        if (localServices.contains(STOCK_QUOTES)) {
+            logger.info(String.format(message, STOCK_QUOTES));
+            stockQuotesListener = qaiServices.provideStockQuotesSearchListener(hazelcastInstance);
+        }
     }
 
     public void checkAllServices() {
 
-        if (wikipediaListener == null) {
-            throw new RuntimeException("Wikipedia listener missing");
-        }
 
-        if (wiktionaryListener == null) {
-            throw new RuntimeException("WiktionaryListenre is missing");
-        }
-
-        if (usersListener == null) {
-            throw new RuntimeException("UsersListener is missing");
-        }
-
-        if (stockEntitiesListener == null) {
-            throw new RuntimeException("stockEntitiesListener is missing");
-        }
-
-        if (stockGroupsListener == null) {
-            throw new RuntimeException("stockGroupsListerner is missing");
-        }
-
-        if (stockQuotesListener == null) {
-            throw new RuntimeException("stockQuotesListener is missing");
-        }
-
-        if (proceduresListener == null) {
-            throw new RuntimeException("procedures listener is missing");
-        }
     }
 
     public DistributedSearchListener getWikipediaListener() {

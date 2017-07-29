@@ -21,6 +21,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.main.QaiConstants;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -37,17 +38,9 @@ import java.util.Collection;
 /**
  * Created by rainbird on 1/20/17.
  */
-public class ModelSearchService implements SearchServiceInterface {
+public class ModelSearchService implements SearchServiceInterface, QaiConstants {
 
     private static Logger logger = LoggerFactory.getLogger("ModelSearchService");
-
-    public static String PROCEDURES = "Procedures";
-
-    public static String USERS = "Users";
-
-    public static String SESSIONS = "Sessions";
-
-    public static String ROLES = "Roles";
 
     private String baseUrl = "http://www.qoan.org/data/";
 
@@ -110,18 +103,18 @@ public class ModelSearchService implements SearchServiceInterface {
                 SearchResult result = new SearchResult(PROCEDURES, procedure.getProcedureName(), uuid, procedure.getDescriptionText(), 1.0);
                 results.add(result);
             }
-        } else if (SESSIONS.equals(fieldName)) {
+        } else if (USER_SESSIONS.equals(fieldName)) {
             Collection<Session> found = Sparql.exec(model, Session.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/Session> }");
             for (Session session : found) {
                 String uuid = session.getUuid();
-                SearchResult result = new SearchResult(SESSIONS, session.getName(), uuid, "User session", 1.0);
+                SearchResult result = new SearchResult(USER_SESSIONS, session.getName(), uuid, "User session", 1.0);
                 results.add(result);
             }
-        } else if (ROLES.equals(fieldName)) {
+        } else if (USER_ROLES.equals(fieldName)) {
             Collection<Role> found = Sparql.exec(model, Role.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/Role> }");
             for (Role role : found) {
                 String uuid = role.getUuid();
-                SearchResult result = new SearchResult(ROLES, role.getName(), uuid, role.getDescription(), 1.0);
+                SearchResult result = new SearchResult(USER_ROLES, role.getName(), uuid, role.getDescription(), 1.0);
                 results.add(result);
             }
         }
