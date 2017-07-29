@@ -56,8 +56,6 @@ public class QaiServices {
         String message = "Initilailizing service: %s";
 
         QaiServicesModule qaiServices = new QaiServicesModule(properties);
-        // is there a way of getting this here?
-        //Injector childInjector = injector.createChildInjector(qaiServices);
         HazelcastInstance hazelcastInstance = injector.getInstance(HazelcastInstance.class);
 
         if (localServices.contains(USERS)) {
@@ -85,14 +83,14 @@ public class QaiServices {
             wikiResourcesListener = qaiServices.provideWikiResourcesSearchListener(hazelcastInstance);
         }
 
-        if (localServices.contains(STOCK_ENTITIES)) {
-            logger.info(String.format(message, STOCK_ENTITIES));
-            stockEntitiesListener = qaiServices.provideStockEntitesSearchListener(hazelcastInstance);
-        }
-
         if (localServices.contains(STOCK_GROUPS)) {
             logger.info(String.format(message, STOCK_GROUPS));
             stockGroupsListener = qaiServices.provideStockGroupsSearchListener(hazelcastInstance);
+        }
+
+        if (localServices.contains(STOCK_ENTITIES)) {
+            logger.info(String.format(message, STOCK_ENTITIES));
+            stockEntitiesListener = qaiServices.provideStockEntitesSearchListener(hazelcastInstance);
         }
 
         if (localServices.contains(STOCK_QUOTES)) {
@@ -103,7 +101,56 @@ public class QaiServices {
 
     public void checkAllServices() {
 
+        String messageOn = "SearchListener: '%s' has been started";
+        String messageOff = "SearchListener: '%s' has not been started";
 
+        if (usersListener != null) {
+            logger.info(String.format(messageOn, USERS));
+        } else {
+            logger.info(String.format(messageOff, USERS));
+        }
+
+        if (proceduresListener != null) {
+            logger.info(String.format(messageOn, PROCEDURES));
+        } else {
+            logger.info(String.format(messageOff, PROCEDURES));
+        }
+
+        if (wikipediaListener != null) {
+            logger.info(String.format(messageOn, WIKIPEDIA));
+        } else {
+            logger.info(String.format(messageOff, WIKIPEDIA));
+        }
+
+        if (wiktionaryListener != null) {
+            logger.info(String.format(messageOn, WIKTIONARY));
+        } else {
+            logger.info(String.format(messageOff, WIKTIONARY));
+        }
+
+        if (wikiResourcesListener != null) {
+            logger.info(String.format(messageOn, WIKIPEDIA_RESOURCES));
+        } else {
+            logger.info(String.format(messageOff, WIKIPEDIA_RESOURCES));
+        }
+
+        if (stockGroupsListener != null) {
+            logger.info(String.format(messageOn, STOCK_GROUPS));
+        } else {
+            logger.info(String.format(messageOff, STOCK_GROUPS));
+        }
+
+        if (stockEntitiesListener != null) {
+            logger.info(String.format(messageOn, STOCK_ENTITIES));
+        } else {
+            logger.info(String.format(messageOff, STOCK_ENTITIES));
+        }
+
+        if (stockQuotesListener != null) {
+            logger.info(String.format(messageOn, STOCK_QUOTES));
+        } else {
+            logger.info(String.format(messageOff, STOCK_QUOTES));
+        }
     }
 
     public DistributedSearchListener getWikipediaListener() {
