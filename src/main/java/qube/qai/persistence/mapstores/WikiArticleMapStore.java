@@ -69,11 +69,12 @@ public class WikiArticleMapStore implements MapStore<String, WikiArticle> {
         try {
             ZipFile zipFile = new ZipFile(zipFilename);
             ZipEntry zipEntry = zipFile.getEntry(key);
-            InputStream stream = zipFile.getInputStream(zipEntry);
+            if (zipEntry != null) {
+                InputStream stream = zipFile.getInputStream(zipEntry);
 
-            XStream xStream = new XStream();
-            wikiArticle = (WikiArticle) xStream.fromXML(stream);
-
+                XStream xStream = new XStream();
+                wikiArticle = (WikiArticle) xStream.fromXML(stream);
+            }
         } catch (IOException e) {
             logger.error("Exception while loading: " + key, e);
         }
