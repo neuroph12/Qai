@@ -36,9 +36,6 @@ public class StockQuote implements Serializable, AcceptsVisitors {
     @Column(name = "uuid")
     private String uuid;
 
-    @Column(name = "parentUuid", nullable = false)
-    private String parentUuid;
-
     @Column(name = "tickerSymbol", nullable = false)
     private String tickerSymbol;
 
@@ -150,14 +147,6 @@ public class StockQuote implements Serializable, AcceptsVisitors {
 
     public void setVolume(double volume) {
         this.volume = volume;
-    }
-
-    public String getParentUuid() {
-        return parentUuid;
-    }
-
-    public void setParentUuid(String parentUuid) {
-        this.parentUuid = parentUuid;
     }
 
     @Override

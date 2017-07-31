@@ -25,8 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.*;
 import qube.qai.persistence.mapstores.DatabaseMapStore;
-import qube.qai.persistence.mapstores.DirectoryMapStore;
 import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
+import qube.qai.persistence.mapstores.PersistentModelMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.persistence.search.DatabaseSearchService;
 import qube.qai.procedure.Procedure;
@@ -777,7 +777,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             mapStoreConfig = new MapStoreConfig();
         }
 
-        procedureMapStore = new DirectoryMapStore(properties.getProperty(PROCEDURE_BASE_DIRECTORY));
+        procedureMapStore = new PersistentModelMapStore(Procedure.class, properties.getProperty(PROCEDURE_MODEL_DIRECTORY));
+        ((PersistentModelMapStore) procedureMapStore).init();
 
         mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
             public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {

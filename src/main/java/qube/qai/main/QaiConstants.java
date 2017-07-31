@@ -41,6 +41,8 @@ public interface QaiConstants {
     //@Named("PROCEDURE_BASE_DIRECTORY")
     public String PROCEDURE_BASE_DIRECTORY = "PROCEDURE_BASE_DIRECTORY";
 
+    public String PROCEDURE_MODEL_DIRECTORY = "PROCEDURE_MODEL_DIRECTORY";
+
     //    @Inject
 //    @Named("WIKIPEDIA_ARCHIVE")
     public String WIKIPEDIA_ARCHIVE = "WIKIPEDIA_ARCHIVE";

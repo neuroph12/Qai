@@ -63,9 +63,9 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
 
     private String groupName;
 
-    private int numberOfRecords;
+    private int numberOfRecords = 0;
 
-    private int numberOfRecordsCreated;
+    private int numberOfRecordsCreated = 0;
 
     //private StockGroup group;
 
@@ -141,6 +141,7 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
                         } else {
                             group.addStockEntity(databaseCopy);
                         }
+                        numberOfRecordsCreated++;
                     }
                 }
                 // now increment the row-number to pick

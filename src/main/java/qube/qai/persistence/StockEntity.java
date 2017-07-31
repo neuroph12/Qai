@@ -106,7 +106,6 @@ public class StockEntity implements Serializable, AcceptsVisitors {
     }
 
     public void addQuote(StockQuote quote) {
-        quote.setParentUuid(uuid);
         quotes.add(quote);
     }
 

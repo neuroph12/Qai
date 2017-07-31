@@ -30,6 +30,8 @@ public class QaiServicesModule extends AbstractModule implements QaiConstants {
 
     private DistributedSearchListener userSearchListener;
 
+    private DistributedSearchListener sessionsListener;
+
     private DistributedSearchListener wikipediaSearchListener;
 
     private DistributedSearchListener wiktionarySearchListener;
@@ -69,6 +71,24 @@ public class QaiServicesModule extends AbstractModule implements QaiConstants {
         userSearchListener.setSearchService(searchService);
         userSearchListener.setHazelcastInstance(hazelcastInstance);
         userSearchListener.initialize();
+
+        return userSearchListener;
+    }
+
+    @Provides
+    public DistributedSearchListener provideSessionSearchListener(HazelcastInstance hazelcastInstance) {
+
+        if (sessionsListener != null) {
+            return sessionsListener;
+        }
+
+        SearchServiceInterface searchService = new DatabaseSearchService(USER_SESSIONS);
+        QaiServerModule.getJpaUsersInjector().injectMembers(searchService);
+
+        sessionsListener = new DistributedSearchListener(USER_SESSIONS);
+        sessionsListener.setSearchService(searchService);
+        sessionsListener.setHazelcastInstance(hazelcastInstance);
+        sessionsListener.initialize();
 
         return userSearchListener;
     }
@@ -190,6 +210,7 @@ public class QaiServicesModule extends AbstractModule implements QaiConstants {
         }
 
         SearchServiceInterface searchService = new ModelSearchService(PROCEDURES, properties.getProperty(PROCEDURE_BASE_DIRECTORY));
+        ((ModelSearchService) searchService).init();
 
         proceduresSearchListener = new DistributedSearchListener(PROCEDURES);
         proceduresSearchListener.setSearchService(searchService);

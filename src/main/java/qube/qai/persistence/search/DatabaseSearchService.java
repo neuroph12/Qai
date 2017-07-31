@@ -15,9 +15,11 @@
 package qube.qai.persistence.search;
 
 import org.apache.commons.lang3.StringUtils;
+import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.main.QaiConstants;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
+import qube.qai.persistence.StockQuote;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.User;
@@ -78,6 +80,8 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
             searchStockEntities(searchString, fieldName, results);
         } else if (STOCK_GROUPS.equals(fieldName)) {
             searchStockGroups(searchString, fieldName, results);
+        } else if (STOCK_QUOTES.equals(fieldName)) {
+            searchStockQuotes(searchString, fieldName, results);
         }
 
         return results;
@@ -140,6 +144,34 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
             String idString = group.getUuid();
             SearchResult result = new SearchResult(STOCK_GROUPS, group.getName(), idString, group.getDescription(), 1.0);
             results.add(result);
+        }
+    }
+
+    private void searchStockQuotes(String searchString, String fieldName, Collection<SearchResult> results) {
+
+        String qString = "SELECT q FROM StockQuote AS q WHERE q.tickerSymbol = :tickerSmbol";
+        Query query = entityManager.createQuery(qString).setParameter("tickerSmbol", searchString);
+
+        Collection<StockQuote> quotes = query.getResultList();
+        if (quotes == null || quotes.isEmpty()) {
+            StockQuoteDataStore store = new StockQuoteDataStore();
+            quotes = store.retrieveQuotesFor(searchString);
+//            if (quotes != null && !quotes.isEmpty()) {
+//                entityManager.getTransaction().begin();
+//            }
+
+            for (StockQuote quote : quotes) {
+                entityManager.persist(quote);
+            }
+
+//            if (quotes != null && !quotes.isEmpty()) {
+//                entityManager.getTransaction().commit();
+//            }
+        }
+
+        for (StockQuote quote : quotes) {
+            SearchResult r = new SearchResult(STOCK_QUOTES, quote.getTickerSymbol(), quote.getUuid(), quote.getQuoteDate().toString(), 1.0);
+            results.add(r);
         }
     }
 

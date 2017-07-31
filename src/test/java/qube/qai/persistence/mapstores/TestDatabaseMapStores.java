@@ -39,7 +39,7 @@ public class TestDatabaseMapStores extends TestCase {
 
     protected Logger logger = LoggerFactory.getLogger("TestStockQuoteMapStore");
 
-    private String[] names = {"HRS"};
+    private String[] names = {"GOOG", "KMI", "YHOO"};
 
     public void testUserMapStore() throws Exception {
 
@@ -123,8 +123,11 @@ public class TestDatabaseMapStores extends TestCase {
         injector.injectMembers(mapStore);
 
         for (int i = 0; i < names.length; i++) {
+
             Collection<String> keys = createKeys(names[i], mapStore);
+
             assertNotNull(keys);
+            assertTrue("there has to be some values in here", !keys.isEmpty());
 
             int count = 0;
             for (Iterator<String> it = keys.iterator(); it.hasNext(); ) {

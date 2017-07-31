@@ -40,6 +40,8 @@ public class QaiServices {
 
     private DistributedSearchListener usersListener;
 
+    private DistributedSearchListener sessionsListener;
+
     private DistributedSearchListener stockEntitiesListener;
 
     private DistributedSearchListener stockQuotesListener;
@@ -61,6 +63,11 @@ public class QaiServices {
         if (localServices.contains(USERS)) {
             logger.info(String.format(message, USERS));
             usersListener = qaiServices.provideUserSearchListener(hazelcastInstance);
+        }
+
+        if (localServices.contains(USER_SESSIONS)) {
+            logger.info(String.format(message, USER_SESSIONS));
+            sessionsListener = qaiServices.provideSessionSearchListener(hazelcastInstance);
         }
 
         if (localServices.contains(PROCEDURES)) {
@@ -108,6 +115,12 @@ public class QaiServices {
             logger.info(String.format(messageOn, USERS));
         } else {
             logger.info(String.format(messageOff, USERS));
+        }
+
+        if (sessionsListener != null) {
+            logger.info(String.format(messageOn, USER_SESSIONS));
+        } else {
+            logger.info(String.format(messageOff, USER_SESSIONS));
         }
 
         if (proceduresListener != null) {
