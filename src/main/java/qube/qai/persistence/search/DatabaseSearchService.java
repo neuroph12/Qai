@@ -149,24 +149,17 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
 
     private void searchStockQuotes(String searchString, String fieldName, Collection<SearchResult> results) {
 
-        String qString = "SELECT q FROM StockQuote AS q WHERE q.tickerSymbol = :tickerSmbol";
-        Query query = entityManager.createQuery(qString).setParameter("tickerSmbol", searchString);
+        String qString = "SELECT q FROM StockQuote AS q WHERE q.tickerSymbol = :tickerSymbol";
+        Query query = entityManager.createQuery(qString).setParameter("tickerSymbol", searchString);
 
         Collection<StockQuote> quotes = query.getResultList();
         if (quotes == null || quotes.isEmpty()) {
             StockQuoteDataStore store = new StockQuoteDataStore();
             quotes = store.retrieveQuotesFor(searchString);
-//            if (quotes != null && !quotes.isEmpty()) {
-//                entityManager.getTransaction().begin();
-//            }
 
             for (StockQuote quote : quotes) {
                 entityManager.persist(quote);
             }
-
-//            if (quotes != null && !quotes.isEmpty()) {
-//                entityManager.getTransaction().commit();
-//            }
         }
 
         for (StockQuote quote : quotes) {
