@@ -16,7 +16,6 @@ package qube.qai.main;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.name.Names;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.message.MessageQueue;
@@ -31,9 +30,6 @@ import qube.qai.services.implementation.ProcedureRunner;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.EntityManager;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
 
 /**
  * Created by rainbird on 11/9/15.
@@ -71,13 +67,13 @@ public class QaiModule extends AbstractModule {
         // load the given configuration for
         //install(ConfigurationModule.create());
         //requestInjection(this);
-        try {
-            Properties properties = new Properties();
-            properties.load(new FileReader(CONFIG_FILE_NAME));
-            Names.bindProperties(binder(), properties);
-        } catch (IOException e) {
-            logger.error("Error while loading configuration file: " + CONFIG_FILE_NAME, e);
-        }
+//        try {
+//            Properties properties = new Properties();
+//            properties.load(new FileReader(CONFIG_FILE_NAME));
+//            Names.bindProperties(binder(), properties);
+//        } catch (IOException e) {
+//            logger.error("Error while loading configuration file: " + CONFIG_FILE_NAME, e);
+//        }
 
         // UUIDService
         bind(UUIDServiceInterface.class).to(UUIDService.class);

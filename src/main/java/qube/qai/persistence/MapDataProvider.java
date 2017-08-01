@@ -66,4 +66,10 @@ public class MapDataProvider implements QaiDataProvider {
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
     }
+
+    @Override
+    public void putData(String uuid, Object data) {
+        IMap map = hazelcastInstance.getMap(context);
+        map.put(uuid, data);
+    }
 }

@@ -60,4 +60,9 @@ public class DummyQaiDataProvider implements QaiDataProvider {
     public Object brokerSearchResult(SearchResult result) {
         return null;
     }
+
+    @Override
+    public void putData(String uuid, Object data) {
+
+    }
 }

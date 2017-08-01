@@ -27,4 +27,6 @@ public interface QaiDataProvider<T> {
 
     T brokerSearchResult(SearchResult result);
 
+    void putData(String uuid, T data);
+
 }

@@ -25,6 +25,9 @@ import qube.qai.procedure.utils.SelectionProcedure;
 import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * Created by rainbird on 7/14/17.
  */
@@ -152,4 +155,29 @@ public class ProcedureLibrary {
             selectionTemplate,
             createUserTemplate
     };
+
+    public static Map<String, ProcedureTemplate> templateMap = new TreeMap<>();
+
+
+    public static ProcedureTemplate getNamedProcedureTemplate(String name) {
+        if (templateMap.isEmpty()) {
+            templateMap.put(SimpleProcedure.NAME, simpleTemplate);
+            templateMap.put(MatrixStatistics.NAME, matrixStatisticsTemplate);
+            templateMap.put(ChangePointAnalysis.NAME, changePointAnalysisTemplate);
+            templateMap.put(TimeSequenceAnalysis.NAME, timeSequenceAnalysisTemplate);
+            templateMap.put(NetworkStatistics.NAME, networkStatisticstemplate);
+            templateMap.put(NeuralNetworkAnalysis.NAME, neuralNetworkAnalysisTemplate);
+            templateMap.put(NeuralNetworkForwardPropagation.NAME, forwardPropagationTemplate);
+            templateMap.put(DirectoryIndexer.NAME, directoryIndexerTemplate);
+            templateMap.put(WikiArchiveIndexer.NAME, wikiArchiveIndexerTemplate);
+            templateMap.put(StockEntityInitialization.NAME, stockEntityInitializationTemplate);
+            templateMap.put(StockQuoteRetriever.NAME, stockQuoteRetriverTemplate);
+            templateMap.put(WikiRipperProcedure.NAME, wikiRipperTemplate);
+            templateMap.put(AttachProcedure.NAME, relateTemplate);
+            templateMap.put(SelectionProcedure.NAME, selectionTemplate);
+            templateMap.put(CreateUserProcedure.NAME, createUserTemplate);
+        }
+
+        return templateMap.get(name);
+    }
 }
