@@ -97,9 +97,9 @@ public final class Name implements NodeSetElement, Serializable {
     public static final String TEXTNODE = "text";
 
     /**
-     * Name of the node type document.
+     * Name of the node type resource.
      */
-    public static final String DOCNODE = "document";
+    public static final String DOCNODE = "resource";
 
     /**
      * Name of the node type attribute.

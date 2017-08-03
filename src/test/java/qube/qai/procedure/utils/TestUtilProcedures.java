@@ -25,7 +25,7 @@ public class TestUtilProcedures extends TestProcedureBase {
 
     public void testRelateProcedure() throws Exception {
 
-        AttachProcedure procedure = ProcedureLibrary.relateTemplate.createProcedure();
+        AttachProcedure procedure = ProcedureLibrary.attachTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);

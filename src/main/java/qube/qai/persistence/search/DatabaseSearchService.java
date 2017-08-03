@@ -15,6 +15,8 @@
 package qube.qai.persistence.search;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.main.QaiConstants;
 import qube.qai.persistence.StockEntity;
@@ -38,6 +40,8 @@ import java.util.Set;
  */
 public class DatabaseSearchService implements SearchServiceInterface, QaiConstants {
 
+    private static Logger logger = LoggerFactory.getLogger("DatabaseSearchService");
+
     private String context;
 
     @Inject
@@ -52,7 +56,7 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
         if (entityManager == null) {
             throw new RuntimeException("Missing EntityManager- initialization failed");
         }
-
+        logger.info("Databease search-service: '" + context + "' has been initialized");
     }
 
     public DatabaseSearchService() {
@@ -83,6 +87,8 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
         } else if (STOCK_QUOTES.equals(fieldName)) {
             searchStockQuotes(searchString, fieldName, results);
         }
+
+        logger.info("Databease search-service: '" + context + "' brokering search: '" + searchString + "' with " + results.size() + " results");
 
         return results;
     }

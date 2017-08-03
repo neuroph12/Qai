@@ -22,15 +22,15 @@ import qube.qai.procedure.Procedure;
 /**
  * Created by rainbird on 4/5/17.
  */
-public class ValueNode extends NameNode {
+public class ValueNode<T extends Object> extends NameNode {
 
-    private Object value;
+    private T value;
 
     public ValueNode(String name) {
         super(new Name(name));
     }
 
-    public ValueNode(String name, Object value) {
+    public ValueNode(String name, T value) {
         this(name);
         this.value = value;
     }
@@ -40,19 +40,19 @@ public class ValueNode extends NameNode {
         setFirstChild(child);
     }
 
-    public Object getValue() {
+    public T getValue() {
         if (value == null) {
             if (getFirstChild() instanceof Procedure) {
                 Procedure procedure = (Procedure) getFirstChild();
-                ValueNode resultNode = (ValueNode) procedure.getProcedureResults().getNamedResult(name.getName());
-                value = resultNode.getValue();
+                ValueNode resultNode = procedure.getProcedureResults().getNamedResult(name.getName());
+                value = ((T) resultNode.getValue());
             }
 
         }
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(T value) {
         this.value = value;
     }
 }

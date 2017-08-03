@@ -50,6 +50,11 @@ public class QaiServices {
 
     private DistributedSearchListener proceduresListener;
 
+    private DistributedSearchListener pdfFileListener;
+
+    private DistributedSearchListener molecularListener;
+
+
     public QaiServices() {
     }
 
@@ -103,6 +108,16 @@ public class QaiServices {
         if (localServices.contains(STOCK_QUOTES)) {
             logger.info(String.format(message, STOCK_QUOTES));
             stockQuotesListener = qaiServices.provideStockQuotesSearchListener(hazelcastInstance);
+        }
+
+        if (localServices.contains(PDF_FILE_RESOURCES)) {
+            logger.info(String.format(message, PDF_FILE_RESOURCES));
+            pdfFileListener = qaiServices.providePdfFileSearchListener(hazelcastInstance);
+        }
+
+        if (true || localServices.contains(MOLECULAR_RESOURCES)) {
+            logger.info(String.format(message, MOLECULAR_RESOURCES));
+            molecularListener = qaiServices.provideMolecularSearchListener(hazelcastInstance);
         }
     }
 
@@ -163,6 +178,18 @@ public class QaiServices {
             logger.info(String.format(messageOn, STOCK_QUOTES));
         } else {
             logger.info(String.format(messageOff, STOCK_QUOTES));
+        }
+
+        if (pdfFileListener != null) {
+            logger.info(String.format(messageOn, PDF_FILE_RESOURCES));
+        } else {
+            logger.info(String.format(messageOff, PDF_FILE_RESOURCES));
+        }
+
+        if (molecularListener != null) {
+            logger.info(String.format(messageOn, MOLECULAR_RESOURCES));
+        } else {
+            logger.info(String.format(messageOff, MOLECULAR_RESOURCES));
         }
     }
 

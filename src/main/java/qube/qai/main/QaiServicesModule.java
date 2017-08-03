@@ -19,6 +19,8 @@ import com.google.inject.Provides;
 import com.hazelcast.core.HazelcastInstance;
 import qube.qai.persistence.search.DatabaseSearchService;
 import qube.qai.persistence.search.ModelSearchService;
+import qube.qai.persistence.search.MolecularResourcesSearchService;
+import qube.qai.persistence.search.SimpleDirectorySearchService;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
 import qube.qai.services.implementation.DistributedSearchListener;
@@ -45,6 +47,10 @@ public class QaiServicesModule extends AbstractModule implements QaiConstants {
     private DistributedSearchListener stockQuotesSearchListener;
 
     private DistributedSearchListener proceduresSearchListener;
+
+    private DistributedSearchListener molecularSearchListener;
+
+    private DistributedSearchListener pdfFileSearchListener;
 
     private Properties properties;
 
@@ -220,6 +226,38 @@ public class QaiServicesModule extends AbstractModule implements QaiConstants {
         return proceduresSearchListener;
     }
 
+    public DistributedSearchListener provideMolecularSearchListener(HazelcastInstance hazelcastInstance) {
+
+        if (molecularSearchListener != null) {
+            return molecularSearchListener;
+        }
+
+        SearchServiceInterface searchService = new MolecularResourcesSearchService();
+
+        molecularSearchListener = new DistributedSearchListener(MOLECULAR_RESOURCES);
+        molecularSearchListener.setSearchService(searchService);
+        molecularSearchListener.setHazelcastInstance(hazelcastInstance);
+        molecularSearchListener.initialize();
+
+        return molecularSearchListener;
+    }
+
+    public DistributedSearchListener providePdfFileSearchListener(HazelcastInstance hazelcastInstance) {
+
+        if (pdfFileSearchListener != null) {
+            return pdfFileSearchListener;
+        }
+
+        SearchServiceInterface searchService = new SimpleDirectorySearchService(PDF_FILE_RESOURCES, properties.getProperty(UPLOAD_FILE_DIRECTORY));
+
+        pdfFileSearchListener = new DistributedSearchListener(PDF_FILE_RESOURCES);
+        pdfFileSearchListener.setSearchService(searchService);
+        pdfFileSearchListener.setHazelcastInstance(hazelcastInstance);
+        pdfFileSearchListener.initialize();
+
+        return pdfFileSearchListener;
+    }
+
     public DistributedSearchListener getUserSearchListener() {
         return userSearchListener;
     }
@@ -282,6 +320,30 @@ public class QaiServicesModule extends AbstractModule implements QaiConstants {
 
     public void setProceduresSearchListener(DistributedSearchListener proceduresSearchListener) {
         this.proceduresSearchListener = proceduresSearchListener;
+    }
+
+    public DistributedSearchListener getSessionsListener() {
+        return sessionsListener;
+    }
+
+    public void setSessionsListener(DistributedSearchListener sessionsListener) {
+        this.sessionsListener = sessionsListener;
+    }
+
+    public DistributedSearchListener getMolecularSearchListener() {
+        return molecularSearchListener;
+    }
+
+    public void setMolecularSearchListener(DistributedSearchListener molecularSearchListener) {
+        this.molecularSearchListener = molecularSearchListener;
+    }
+
+    public DistributedSearchListener getPdfFileSearchListener() {
+        return pdfFileSearchListener;
+    }
+
+    public void setPdfFileSearchListener(DistributedSearchListener pdfFileSearchListener) {
+        this.pdfFileSearchListener = pdfFileSearchListener;
     }
 
     public Properties getProperties() {

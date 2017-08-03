@@ -113,6 +113,10 @@ public class QaiTestServerModule extends AbstractModule {
 
     private DistributedSearchListener proceduresSearchListener;
 
+    private DistributedSearchListener molecularSearchListener;
+
+    private DistributedSearchListener pdfFileSearchListener;
+
     private WikiArticleMapStore wiktionaryMapStore;
 
     private WikiArticleMapStore wikipediaMapStore;
@@ -453,16 +457,6 @@ public class QaiTestServerModule extends AbstractModule {
 
         // now start the search-listeners
         //userSearchListener = QaiServerModule.provideUsersSearchListener(hazelcastInstance);
-
-        //wikipediaSearchListener = QaiServerModule.provideWikipediaSearchListener(hazelcastInstance);
-
-//        wiktionarySearchListener = QaiServerModule.provideWiktionarySearchListener(hazelcastInstance);
-//
-//        wikiResourcesSearchListener = QaiServerModule.provideWikiResourcesSearchListener(hazelcastInstance);
-//
-//        stockEntitiesSearchListener = QaiServerModule.provideStockQuotesSearchListener(hazelcastInstance);
-//
-//        proceduresSearchListener = QaiServerModule.provideProceduresSearchListener(hazelcastInstance);
 
         return hazelcastInstance;
     }

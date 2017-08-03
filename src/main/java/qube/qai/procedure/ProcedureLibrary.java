@@ -19,6 +19,7 @@ import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
 import qube.qai.procedure.finance.StockEntityInitialization;
 import qube.qai.procedure.finance.StockQuoteRetriever;
+import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.utils.AttachProcedure;
 import qube.qai.procedure.utils.CreateUserProcedure;
 import qube.qai.procedure.utils.SelectionProcedure;
@@ -106,7 +107,12 @@ public class ProcedureLibrary {
     public static ProcedureTemplate<StockQuoteRetriever> stockQuoteRetriverTemplate = new ProcedureTemplate<StockQuoteRetriever>() {
         @Override
         public StockQuoteRetriever createProcedure() {
-            return new StockQuoteRetriever();
+            StockQuoteRetriever procedure = new StockQuoteRetriever();
+            for (String name : procedure.getProcedureDescription().getProcedureInputs().getInputNames()) {
+                ValueNode value = procedure.getProcedureInputs().getNamedInput(name);
+
+            }
+            return procedure;
         }
     };
 
@@ -117,7 +123,7 @@ public class ProcedureLibrary {
         }
     };
 
-    public static ProcedureTemplate<AttachProcedure> relateTemplate = new ProcedureTemplate<AttachProcedure>() {
+    public static ProcedureTemplate<AttachProcedure> attachTemplate = new ProcedureTemplate<AttachProcedure>() {
         @Override
         public AttachProcedure createProcedure() {
             return new AttachProcedure();
@@ -151,7 +157,7 @@ public class ProcedureLibrary {
             stockEntityInitializationTemplate,
             stockQuoteRetriverTemplate,
             wikiRipperTemplate,
-            relateTemplate,
+            attachTemplate,
             selectionTemplate,
             createUserTemplate
     };
@@ -173,7 +179,7 @@ public class ProcedureLibrary {
             templateMap.put(StockEntityInitialization.NAME, stockEntityInitializationTemplate);
             templateMap.put(StockQuoteRetriever.NAME, stockQuoteRetriverTemplate);
             templateMap.put(WikiRipperProcedure.NAME, wikiRipperTemplate);
-            templateMap.put(AttachProcedure.NAME, relateTemplate);
+            templateMap.put(AttachProcedure.NAME, attachTemplate);
             templateMap.put(SelectionProcedure.NAME, selectionTemplate);
             templateMap.put(CreateUserProcedure.NAME, createUserTemplate);
         }

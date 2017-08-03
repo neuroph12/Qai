@@ -17,15 +17,19 @@ package qube.qai.persistence.mapstores;
 import com.hazelcast.core.MapStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.procedure.Procedure;
+import qube.qai.persistence.ResourceData;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by rainbird on 12/13/15.
  */
-public class DirectoryMapStore implements MapStore<String, Procedure> {
+public class DirectoryMapStore implements MapStore<String, ResourceData> {
 
     private Logger logger = LoggerFactory.getLogger("DirectoryMapStore");
 
@@ -44,86 +48,96 @@ public class DirectoryMapStore implements MapStore<String, Procedure> {
         }
     }
 
-    public void store(String key, Procedure value) {
+    public void store(String key, ResourceData value) {
+        File file = new File(directory + key);
         try {
-            String filename = directory + key;
-            File file = new File(filename);
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutput out = new ObjectOutputStream(fos);
-            out.writeObject(value);
-            out.close();
-            logger.info("stored procedure with uuid: " + key);
+            value.writeDataToFile(file);
         } catch (IOException e) {
-            logger.error("error while writing " + key + " " + e.getMessage());
+            logger.error("error while reading file content", e);
         }
     }
 
-    public void storeAll(Map<String, Procedure> map) {
-        for (String name : map.keySet()) {
-            Procedure procedure = map.get(name);
-            store(name, procedure);
+    public void storeAll(Map<String, ResourceData> map) {
+        for (String key : map.keySet()) {
+            store(key, map.get(key));
         }
     }
 
     public void delete(String key) {
-        String filename = directory + key;
-        File file = new File(filename);
-        if (file.exists()) {
-            file.delete();
-        }
+        // no idea... just forget about it i suppose
     }
 
     public void deleteAll(Collection<String> keys) {
-        for (String name : keys) {
-            delete(name);
-        }
-    }
-
-    public Procedure load(String key) {
-        Procedure procedure = null;
-        try {
-            String filename = directory + key;
-            File file = new File(filename);
-            if (!file.exists()) {
-                logger.error("procedure: " + key + " not found, returning null");
-                return null;
-            }
-            InputStream fin = new FileInputStream(file);
-            ObjectInputStream inStream = new ObjectInputStream(fin);
-            procedure = (Procedure) inStream.readObject();
-        } catch (FileNotFoundException e) {
-            logger.error("error while reading " + key + " " + e.getMessage());
-        } catch (IOException e) {
-            logger.error("error while reading " + key + " " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            logger.error("error while reading " + key + " " + e.getMessage());
-        }
-        return procedure;
-    }
-
-    public Map<String, Procedure> loadAll(Collection<String> keys) {
-
-        Map<String, Procedure> procedures = new HashMap<String, Procedure>();
         for (String key : keys) {
-            Procedure procedure = load(key);
-            if (procedure != null) {
-                procedures.put(key, procedure);
+            delete(key);
+        }
+    }
+
+    public ResourceData load(String key) {
+        logger.info("load is called with key: " + key);
+        ResourceData data = null;
+        File file = new File(directory);
+        if (file == null || !file.exists() || !file.isDirectory()) {
+            throw new IllegalArgumentException("Given is not a directory- can't return searched file in directory '" + directory + "'");
+        }
+        for (String name : file.list()) {
+            if (key.equals(name)) {
+                data = new ResourceData();
+                data.setName(file.getName());
+                try {
+                    data.readFileData(file);
+                } catch (IOException e) {
+                    logger.error("error while reading file content", e);
+                }
+
+                break;
             }
         }
 
-        return procedures;
+        return data;
     }
 
+    public Map<String, ResourceData> loadAll(Collection<String> keys) {
+        logger.info("loadAll is called");
+        return null;
+    }
+
+    /**
+     * i don't know if i should really implement this one...
+     * 880k names of files... i don't think so...
+     *
+     * @return
+     */
     public Iterable<String> loadAllKeys() {
+        logger.info("loadAllKeys has been called...");
         List<String> filenames = new ArrayList<String>();
-        File file = new File(directory);
-        String[] names = file.list();
-        if (names == null) {
-            return filenames;
-        }
-        for (String name : names) {
-            filenames.add(name);
-        }
+        // this would return only one item, which is not a file after all
+        // if you really want to implement this method
+        // you would have to traverse the sub-directories, obviously
+//        File file = new File(indexDirectory);
+//        String[] names = file.list();
+//        if (names == null) {
+//            return filenames;
+//        }
+//        for (String name : names) {
+//            filenames.add(name);
+//        }
         return filenames;
     }
+
+//    public File findFile(String name) {
+//
+//        Collection<SearchResult> results = searchService.searchInputString(name, "file", 10);
+//        if (results == null || results.isEmpty()) {
+//            return null;
+//        }
+//
+//        String filename = results.iterator().next().getUuid();
+//        File found = new File(filename);
+//        if (!found.exists()) {
+//            throw new RuntimeException("Found file doesn't exist!?!");
+//        }
+//
+//        return found;
+//    }
 }

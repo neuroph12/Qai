@@ -16,14 +16,13 @@ package qube.qai.persistence.mapstores;
 
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.WikiArticle;
-import qube.qai.procedure.Procedure;
 import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.*;
+import java.util.Collection;
 
 /**
  * Created by rainbird on 11/19/15.
@@ -73,8 +72,8 @@ public class TestMapStores extends QaiTestBase {
      * @throws Exception
      * @Deprecated procedures are not to be persisted this way
      */
-    @Deprecated
-    public void estDirectoryMapStore() throws Exception {
+    //@Deprecated
+   /* public void estDirectoryMapStore() throws Exception {
 
         // begin with creating the thing
         DirectoryMapStore mapStore = new DirectoryMapStore(testDirectory);
@@ -118,7 +117,8 @@ public class TestMapStores extends QaiTestBase {
         for (String uuid : uuidList) {
             logger.info("deleting procedure with uuid: " + uuid);
             mapStore.delete(uuid);
-        }
-    }
+        }//
+
+    }*/
 
 }

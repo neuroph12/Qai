@@ -24,10 +24,7 @@ import com.hazelcast.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.*;
-import qube.qai.persistence.mapstores.DatabaseMapStore;
-import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
-import qube.qai.persistence.mapstores.PersistentModelMapStore;
-import qube.qai.persistence.mapstores.WikiArticleMapStore;
+import qube.qai.persistence.mapstores.*;
 import qube.qai.persistence.search.DatabaseSearchService;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
@@ -76,9 +73,6 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     //@InjectConfig(value = "CREATE_WIKTIONARY_RESOURCES")
     public String CREATE_WIKTIONARY_RESOURCES = "CREATE_WIKTIONARY_RESOURCES";
 
-    //@InjectConfig(value = "CREATE_DBPEDIA")
-    public String CREATE_DBPEDIA = "CREATE_DBPEDIA";
-
     //@InjectConfig(value = "CREATE_USERS")
     public String CREATE_USERS = "CREATE_USERS";
 
@@ -88,12 +82,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     //@InjectConfig(value = "CREATE_USER_ROLES")
     public String CREATE_USER_ROLES = "CREATE_USER_ROLES";
 
-//    @InjectConfig(value = "CREATE_DBPERSON")
-//    public String CREATE_DBPERSON;
-
-    public static final String DBPEDIA = "DBPEDIA";
-
-//    public static final String DBPERSON = "DBPERSON";
+    public String CREATE_UPLOAD_DIRECTORY = "CREATE_UPLOAD_DIRECTORY";
 
     private HazelcastInstance hazelcastInstance;
 
@@ -108,6 +97,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     private DatabaseMapStore sessionMapStore;
 
     private DatabaseMapStore roleMapStore;
+
+    private DirectoryMapStore uploadDirectoryMapStore;
 
     private MapStore<String, Procedure> procedureMapStore;
 
@@ -488,6 +479,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             localServices.add(USER_SESSIONS);
         }
 
+        if ("true".equalsIgnoreCase(properties.getProperty(CREATE_UPLOAD_DIRECTORY))) {
+            createUploadDirectoryConfig(hazelcastConfig);
+            localServices.add(PDF_FILE_RESOURCES);
+        }
         // now we are ready to get an instance
         hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);
         return hazelcastInstance;
@@ -616,6 +611,30 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             }
         });
         logger.info("adding mapstore configuration for " + USER_SESSIONS);
+        mapConfig.setMapStoreConfig(sessionMapStoreConfig);
+    }
+
+    private void createUploadDirectoryConfig(Config hazelcastConfig) {
+        MapConfig mapConfig = hazelcastConfig.getMapConfig(PDF_FILE_RESOURCES);
+        mapConfig.getMapStoreConfig().setEnabled(true);
+        MapStoreConfig sessionMapStoreConfig = mapConfig.getMapStoreConfig();
+        if (sessionMapStoreConfig == null) {
+            logger.info("mapStoreConfig is null... creating one for: " + PDF_FILE_RESOURCES);
+            sessionMapStoreConfig = new MapStoreConfig();
+        }
+
+        uploadDirectoryMapStore = new DirectoryMapStore(properties.getProperty(UPLOAD_FILE_DIRECTORY));
+
+        sessionMapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, ResourceData>() {
+            public MapLoader<String, ResourceData> newMapStore(String mapName, Properties properties) {
+                if (PDF_FILE_RESOURCES.equals(mapName)) {
+                    return uploadDirectoryMapStore;
+                } else {
+                    return null;
+                }
+            }
+        });
+        logger.info("adding mapstore configuration for " + PDF_FILE_RESOURCES);
         mapConfig.setMapStoreConfig(sessionMapStoreConfig);
     }
 

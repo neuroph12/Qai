@@ -43,6 +43,8 @@ public interface QaiConstants {
 
     public String PROCEDURE_MODEL_DIRECTORY = "PROCEDURE_MODEL_DIRECTORY";
 
+    public String UPLOAD_FILE_DIRECTORY = "UPLOAD_FILE_DIRECTORY";
+
     //    @Inject
 //    @Named("WIKIPEDIA_ARCHIVE")
     public String WIKIPEDIA_ARCHIVE = "WIKIPEDIA_ARCHIVE";
@@ -56,6 +58,10 @@ public interface QaiConstants {
     //public static final String WIKIPEDIA_DIRECTORY = "/media/pi/BET/wiki-archives/wikipedia_en.index";
 
     public String WIKIPEDIA_RESOURCES = "WikiResources_en";
+
+    public String MOLECULAR_RESOURCES = "MolecularResources";
+
+    public String PDF_FILE_RESOURCES = "PdfFileResources";
 
     //@Named("WIKIPEDIA_RESOURCE_DIRECTORY")
     public String WIKIPEDIA_RESOURCE_DIRECTORY = "WIKIPEDIA_RESOURCE_DIRECTORY";

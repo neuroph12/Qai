@@ -26,6 +26,10 @@ public class SelectionProcedure extends Procedure {
 
     public static String DESCRIPTION = "Selects the data input for other procedures";
 
+    private ValueNode valueFrom;
+
+    private ValueNode valueTo;
+
     /**
      * this is mainly to pass the children the argument
      * represents user preparing, or choosing a certain
@@ -34,6 +38,7 @@ public class SelectionProcedure extends Procedure {
     public SelectionProcedure() {
         super(NAME);
     }
+
 
     @Override
     public void buildArguments() {
@@ -44,12 +49,10 @@ public class SelectionProcedure extends Procedure {
 
     @Override
     public void execute() {
-        // do nothing as well...
+        // this is all there is to it really, and nothing else ...
+        Object value = valueFrom.getValue();
+        valueTo.setValue(value);
+
     }
 
-//    @Override
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

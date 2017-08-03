@@ -49,6 +49,12 @@ public class ResourceData implements Serializable {
         readStreamData(stream);
     }
 
+    public void writeDataToFile(File file) throws IOException {
+        FileOutputStream fileOut = new FileOutputStream(file);
+        fileOut.write(binaryData);
+        fileOut.close();
+    }
+
     public void readStreamData(InputStream stream) throws IOException {
         binaryData = IOUtils.toByteArray(stream);
     }
