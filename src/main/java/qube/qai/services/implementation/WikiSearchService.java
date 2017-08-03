@@ -91,7 +91,12 @@ public class WikiSearchService implements SearchServiceInterface {
             initialize();
         }
 
-        Collection<SearchResult> searchResults = new ArrayList<SearchResult>();
+        Collection<SearchResult> results = new ArrayList<SearchResult>();
+
+        if (StringUtils.isEmpty(searchString)) {
+            return results;
+        }
+
         try {
 
             // Build a Query object
@@ -108,7 +113,7 @@ public class WikiSearchService implements SearchServiceInterface {
                 Document doc = reader.document(hit.doc);
                 String desc = "Search term: '" + searchString + "'";
                 SearchResult result = new SearchResult(context, doc.get("title"), doc.get("file"), desc, hit.score);
-                searchResults.add(result);
+                results.add(result);
                 logger.debug(doc.get("file") + ": title: " + doc.get("title") + " (" + hit.score + ")");
             }
         } catch (IOException e) {
@@ -117,7 +122,7 @@ public class WikiSearchService implements SearchServiceInterface {
             e.printStackTrace();
         }
 
-        return searchResults;
+        return results;
     }
 
 //    public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {

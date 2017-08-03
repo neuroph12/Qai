@@ -14,6 +14,7 @@
 
 package qube.qai.services.implementation;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -61,7 +62,13 @@ public class DirectorySearchService implements SearchServiceInterface {
     }
 
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
-        Collection<SearchResult> searchResults = new ArrayList<SearchResult>();
+
+        Collection<SearchResult> results = new ArrayList<SearchResult>();
+
+        if (StringUtils.isEmpty(searchString)) {
+            return results;
+        }
+
         try {
             Path path = FileSystems.getDefault().getPath(indexDirectory);
             Directory directory = FSDirectory.open(path);
@@ -78,16 +85,18 @@ public class DirectorySearchService implements SearchServiceInterface {
                 Document doc = reader.document(hit.doc);
                 String desc = "Search for: '" + searchString + "'";
                 SearchResult result = new SearchResult(context, doc.get(FIELD_NAME), doc.get(FIELD_FILE), desc, hit.score);
-                searchResults.add(result);
+                results.add(result);
                 logger.info(doc.get(FIELD_FILE) + " (" + hit.score + ")");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("IOException during search: ", e);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("ParseException during search: ", e);
         }
 
-        return searchResults;
+        logger.info("DirectorySearchService: " + context + " brokered " + results.size() + " for search: '" + searchString + "'");
+
+        return results;
     }
 
     public WikiArticle retrieveDocumentContentFromZipFile(String fileName) {
