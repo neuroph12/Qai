@@ -80,12 +80,12 @@ public class DirectoryMapStore implements MapStore<String, ResourceData> {
         if (file == null || !file.exists() || !file.isDirectory()) {
             throw new IllegalArgumentException("Given is not a directory- can't return searched file in directory '" + directory + "'");
         }
-        for (String name : file.list()) {
-            if (key.equals(name)) {
+        for (File found : file.listFiles()) {
+            if (key.equals(found.getName())) {
                 data = new ResourceData();
-                data.setName(file.getName());
+                data.setName(found.getName());
                 try {
-                    data.readFileData(file);
+                    data.readFileData(found);
                 } catch (IOException e) {
                     logger.error("error while reading file content", e);
                 }
