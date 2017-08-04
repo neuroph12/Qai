@@ -38,12 +38,16 @@ public class MolecularResourcesSearchService implements SearchServiceInterface, 
 
         results.add(new SearchResult(MOLECULAR_RESOURCES, "Crambin", "1crm", "Crambin structure", 1.0));
         results.add(new SearchResult(MOLECULAR_RESOURCES, "1BLU", "1blu", "Ferredoxin structure", 1.0));
-        results.add(new SearchResult(MOLECULAR_RESOURCES, "1HM", "1hm", "Structure of the Noro virus capsid", 1.0));
+        results.add(new SearchResult(MOLECULAR_RESOURCES, "1IHM", "1ihm", "Structure of the Noro virus capsid", 1.0));
         results.add(new SearchResult(MOLECULAR_RESOURCES, "3J3Y", "3j3y", "HIV-1 capsid structure", 1.0));
         results.add(new SearchResult(MOLECULAR_RESOURCES, "3PQR", "3pqr", "Structure of light-activated rhodopsin in complex with a peptide derived from the C-terminus of transducin", 1.0));
         results.add(new SearchResult(MOLECULAR_RESOURCES, "1D66", "1d66", "System of a peptide derived from the C-terminus of transducin", 1.0));
-        results.add(new SearchResult(MOLECULAR_RESOURCES, "1CRN", "1crn", "Structure of crambin", 1.0));
-        results.add(new SearchResult(MOLECULAR_RESOURCES, "1CRN", "1crn", "Structure of crambin", 1.0));
+        results.add(new SearchResult(MOLECULAR_RESOURCES, "1HMS", "1hms", "Muscle Fatty Acid Binding Protein", 1.0));
+        results.add(new SearchResult(MOLECULAR_RESOURCES, "1J1E", "4j1e", "Beta-secretase 1", 1.0));
+        results.add(new SearchResult(MOLECULAR_RESOURCES, "HEMOGLOBIN-1hgb", "1hgb", "HEMOGLOBIN (AQUO MET) (ALPHA CHAIN)", 1.0));
+        results.add(new SearchResult(MOLECULAR_RESOURCES, "HEMOGLOBIN-1hga", "1hga", "HEMOGLOBIN (DEOXY) (ALPHA CHAIN)", 1.0));
+        results.add(new SearchResult(MOLECULAR_RESOURCES, "HEMOGLOBIN-1hgc", "1hgc", "HEMOGLOBIN (OXY) (ALPHA CHAIN)", 1.0));
+        results.add(new SearchResult(MOLECULAR_RESOURCES, "5JDO", "5jdo", "Haptoglobin-haemoglobin receptor", 1.0));
 
         return results;
     }
