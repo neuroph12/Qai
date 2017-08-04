@@ -24,10 +24,7 @@ import qube.qai.services.implementation.SearchResult;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by rainbird on 11/19/15.
@@ -80,10 +77,10 @@ public class IndexedDirectoryMapStore implements MapStore<String, ResourceData> 
     public ResourceData load(String key) {
         logger.info("load is called with key: " + key);
         ResourceData data = null;
-        File file = findFile(key);
-        if (file != null) {
+        File file = new File(key);
+        if (file != null && file.exists() && !file.isDirectory()) {
             data = new ResourceData();
-            data.setName(file.getName());
+            data.setName(key);
             try {
                 data.readFileData(file);
             } catch (IOException e) {
@@ -95,7 +92,15 @@ public class IndexedDirectoryMapStore implements MapStore<String, ResourceData> 
 
     public Map<String, ResourceData> loadAll(Collection<String> keys) {
         logger.info("loadAll is called");
-        return null;
+        Map<String, ResourceData> results = new HashMap<>();
+        for (String key : keys) {
+            ResourceData data = load(key);
+            if (data != null) {
+                results.put(key, data);
+            }
+        }
+
+        return results;
     }
 
     /**
