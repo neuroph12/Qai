@@ -23,8 +23,9 @@ import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 import qube.qai.data.SelectionOperator;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
+import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
+import qube.qai.parsers.antimirov.nodes.EmptyNode;
 import qube.qai.parsers.antimirov.nodes.Name;
-import qube.qai.parsers.antimirov.nodes.Node;
 import qube.qai.procedure.analysis.*;
 import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
@@ -49,7 +50,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 11/27/15.
  */
-public abstract class Procedure extends Node
+public abstract class Procedure extends ConcatenationNode
         implements Serializable, Runnable, HazelcastInstanceAware, AcceptsVisitors, ProcedureConstants {
 
     public static String NAME = "Procedure";
@@ -69,17 +70,15 @@ public abstract class Procedure extends Node
     protected boolean hasExecuted = false;
 
     public Procedure() {
-        super(new Name(NAME));
-        if (uuid == null || uuid.length() == 0) {
-            this.uuid = UUIDService.uuidString();
-        }
-        setFirstChild(new ProcedureDescription());
+        super(new ProcedureDescription(), new EmptyNode());
+        this.name = new Name(NAME);
+        this.uuid = UUIDService.uuidString();
         buildArguments();
     }
 
     public Procedure(String name) {
-        super(new Name(name));
-        setFirstChild(new ProcedureDescription());
+        this();
+        this.name = new Name(name);
         buildArguments();
     }
 
@@ -116,6 +115,16 @@ public abstract class Procedure extends Node
         classes.add(SimpleProcedure.class);
 
         return classes;
+    }
+
+    public void addChild(Procedure child) {
+        child.setParent(this);
+        if (getSecondChild() instanceof EmptyNode) {
+            setSecondChild(child);
+        } else {
+            ConcatenationNode concat = new ConcatenationNode(getSecondChild(), child);
+            setSecondChild(concat);
+        }
     }
 
     protected Object getInputValueOf(String name) {

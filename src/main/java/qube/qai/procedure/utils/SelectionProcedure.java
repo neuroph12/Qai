@@ -26,9 +26,15 @@ public class SelectionProcedure extends Procedure {
 
     public static String DESCRIPTION = "Selects the data input for other procedures";
 
+    public static String PARAMEETER_ASSIIGN_TO = "ASSIGN_TO";
+
+    public static String PARAMEETER_ASSIIGN_FROM = "ASSIGN_FROM";
+
     private ValueNode valueFrom;
 
     private ValueNode valueTo;
+
+    private Object value;
 
     /**
      * this is mainly to pass the children the argument
@@ -39,20 +45,61 @@ public class SelectionProcedure extends Procedure {
         super(NAME);
     }
 
+    public SelectionProcedure(ValueNode targetValue) {
+        valueTo = targetValue;
+    }
+
+    public SelectionProcedure(ValueNode valueFrom, ValueNode valueTo) {
+        this();
+        this.valueFrom = valueFrom;
+        this.valueTo = valueTo;
+    }
 
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(PARAMETER_NAME));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(PARAMEETER_ASSIIGN_TO));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(PARAMEETER_ASSIIGN_FROM));
         getProcedureDescription().getProcedureResults().addResult(new ValueNode(POINTER_OR_DATA_VALUE));
     }
 
     @Override
     public void execute() {
+
         // this is all there is to it really, and nothing else ...
-        Object value = valueFrom.getValue();
+        if (valueFrom != null && value == null) {
+            value = valueFrom.getValue();
+        }
+
+        if (value == null) {
+            throw new RuntimeException("Value to set for '" + valueTo.getName() + "' has not beein assigned right- null value");
+        }
+
         valueTo.setValue(value);
 
     }
 
+    public ValueNode getValueFrom() {
+        return valueFrom;
+    }
+
+    public void setValueFrom(ValueNode valueFrom) {
+        this.valueFrom = valueFrom;
+    }
+
+    public ValueNode getValueTo() {
+        return valueTo;
+    }
+
+    public void setValueTo(ValueNode valueTo) {
+        this.valueTo = valueTo;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
 }

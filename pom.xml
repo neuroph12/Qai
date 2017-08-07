@@ -22,7 +22,7 @@
     <groupId>qube.qai</groupId>
     <artifactId>qai</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0-beta-SNAPSHOT</version>
 
     <name>qube.qai</name>
 
