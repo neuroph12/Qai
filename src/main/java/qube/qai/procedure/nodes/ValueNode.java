@@ -17,7 +17,6 @@ package qube.qai.procedure.nodes;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.Name;
 import qube.qai.parsers.antimirov.nodes.NameNode;
-import qube.qai.procedure.Procedure;
 
 /**
  * Created by rainbird on 4/5/17.
@@ -25,6 +24,8 @@ import qube.qai.procedure.Procedure;
 public class ValueNode<T extends Object> extends NameNode {
 
     private T value;
+
+    private String mimeType;
 
     public ValueNode(String name) {
         super(new Name(name));
@@ -41,18 +42,18 @@ public class ValueNode<T extends Object> extends NameNode {
     }
 
     public T getValue() {
-        if (value == null) {
-            if (getFirstChild() instanceof Procedure) {
-                Procedure procedure = (Procedure) getFirstChild();
-                ValueNode resultNode = procedure.getProcedureResults().getNamedResult(name.getName());
-                value = ((T) resultNode.getValue());
-            }
-
-        }
         return value;
     }
 
     public void setValue(T value) {
         this.value = value;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 }

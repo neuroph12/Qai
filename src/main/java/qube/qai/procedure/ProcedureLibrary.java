@@ -19,7 +19,6 @@ import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
 import qube.qai.procedure.finance.StockEntityInitialization;
 import qube.qai.procedure.finance.StockQuoteRetriever;
-import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.utils.AttachProcedure;
 import qube.qai.procedure.utils.CreateUserProcedure;
 import qube.qai.procedure.utils.SelectionProcedure;
@@ -107,12 +106,7 @@ public class ProcedureLibrary {
     public static ProcedureTemplate<StockQuoteRetriever> stockQuoteRetriverTemplate = new ProcedureTemplate<StockQuoteRetriever>() {
         @Override
         public StockQuoteRetriever createProcedure() {
-            StockQuoteRetriever procedure = new StockQuoteRetriever();
-            for (String name : procedure.getProcedureDescription().getProcedureInputs().getInputNames()) {
-                ValueNode value = procedure.getProcedureInputs().getNamedInput(name);
-
-            }
-            return procedure;
+            return new StockQuoteRetriever();
         }
     };
 
