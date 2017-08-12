@@ -20,9 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.persistence.StockQuote;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by rainbird on 11/25/15.
@@ -36,9 +36,9 @@ public class StockQuoteDataStore implements DataStore {
     public StockQuoteDataStore() {
     }
 
-    public Collection<StockQuote> retrieveQuotesFor(String quoteName) {
+    public Set<StockQuote> retrieveQuotesFor(String quoteName) {
 
-        Collection<StockQuote> quotes = new ArrayList<StockQuote>();
+        Set<StockQuote> quotes = new HashSet<>();
         GoogleSymbol symbol = new GoogleSymbol(quoteName);
 
         try {

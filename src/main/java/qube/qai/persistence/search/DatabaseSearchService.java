@@ -81,7 +81,7 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
         if (USERS.equals(fieldName)) {
             searchUsers(searchString, fieldName, results);
         } else if (STOCK_ENTITIES.equals(fieldName)) {
-            searchStockEntities(searchString, fieldName, results);
+            searchStockEntitiesOfGroupWithName(searchString, fieldName, results);
         } else if (STOCK_GROUPS.equals(fieldName)) {
             searchStockGroups(searchString, fieldName, results);
         } else if (STOCK_QUOTES.equals(fieldName)) {
@@ -118,7 +118,7 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
         }
     }
 
-    private void searchStockEntities(String searchString, String fieldName, Collection<SearchResult> results) {
+    private void searchStockEntitiesOfGroupWithName(String searchString, String fieldName, Collection<SearchResult> results) {
 
         String qString = "SELECT s FROM StockGroup AS s WHERE s.name = :name";
         Query query = entityManager.createQuery(qString).setParameter("name", searchString);
@@ -155,21 +155,37 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
 
     private void searchStockQuotes(String searchString, String fieldName, Collection<SearchResult> results) {
 
-        String qString = "SELECT q FROM StockQuote AS q WHERE q.tickerSymbol = :tickerSymbol";
+        String qString = "SELECT entity FROM StockEntity AS entity WHERE entity.tickerSymbol = :tickerSymbol";
         Query query = entityManager.createQuery(qString).setParameter("tickerSymbol", searchString);
 
-        Collection<StockQuote> quotes = query.getResultList();
-        if (quotes == null || quotes.isEmpty()) {
-            StockQuoteDataStore store = new StockQuoteDataStore();
-            quotes = store.retrieveQuotesFor(searchString);
+        Collection<StockEntity> entities = query.getResultList();
 
-            for (StockQuote quote : quotes) {
-                entityManager.persist(quote);
-            }
+        if (entities == null || entities.isEmpty()) {
+            return;
         }
 
-        for (StockQuote quote : quotes) {
-            SearchResult r = new SearchResult(STOCK_QUOTES, quote.getTickerSymbol(), quote.getUuid(), quote.getQuoteDate().toString(), 1.0);
+        for (StockEntity entity : entities) {
+            Set<StockQuote> quotes = entity.getQuotes();
+            //entityManager.getTransaction().begin();
+            if (quotes == null || quotes.isEmpty()) {
+                StockQuoteDataStore store = new StockQuoteDataStore();
+                quotes = store.retrieveQuotesFor(searchString);
+//                for (StockQuote quote : quotes) {
+//                    entityManager.persist(quote);
+//                }
+                if (quotes != null && !quotes.isEmpty()) {
+                    entity.setQuotes(quotes);
+                    entityManager.persist(entity);
+                    logger.info("Added " + quotes.size() + " quotes for " + entity.getName());
+                }
+            }
+            //entityManager.flush();
+            //entityManager.getTransaction().commit();
+        }
+
+
+        for (StockEntity entity : entities) {
+            SearchResult r = new SearchResult(STOCK_ENTITIES, entity.getTickerSymbol(), entity.getUuid(), entity.getName(), 1.0);
             results.add(r);
         }
     }

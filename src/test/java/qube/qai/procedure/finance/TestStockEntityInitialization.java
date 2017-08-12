@@ -82,13 +82,14 @@ public class TestStockEntityInitialization extends TestCase {
         String[] listings = {StockEntityInitialization.S_AND_P_500_LISTING
                 //, StockEntityInitialization.NYSE_LISTING
 //                , StockEntityInitialization.OTHER_LISTED_ENTITIES
-                , StockEntityInitialization.NASDAQ_LISTING
+//                , StockEntityInitialization.NASDAQ_LISTING
         };
 
         //int overallCount = 0;
         for (String listingName : listings) {
             procedure.setGroupName(listingName);
             procedure.setSelectedFile(listingName);
+            procedure.addQuotes = false;
 
             procedure.execute();
             Integer recordsCreated = (Integer) procedure.getProcedureDescription().getProcedureResults().getNamedResult(NUMBER_OF_RECORDS_CREATED).getValue();
@@ -105,10 +106,22 @@ public class TestStockEntityInitialization extends TestCase {
         assertNotNull("result may not be null", groups);
         assertTrue("resultset may not be empty", !groups.isEmpty());
 
+        //StockQuoteDataStore store = new StockQuoteDataStore();
         StockGroup group = groups.iterator().next();
         Set<StockEntity> entities = group.getEntities();
         for (StockEntity entity : entities) {
-            log("'" + group.getName() + "' eleement entity: '" + entity.getName() + "'");
+            log("'" + group.getName() + "' entity: '" + entity.getName() + "'");
+            log("'" + entity.getName() + "' quotes is empty: '" + entity.getQuotes().isEmpty() + "'");
+            /*if (entity.getQuotes() == null || entity.getQuotes().isEmpty()) {
+                entityManager.getTransaction().begin();
+                Set<StockQuote> quotes = store.retrieveQuotesFor(entity.getTickerSymbol());
+                if (quotes != null && !quotes.isEmpty()) {
+                    entity.setQuotes(quotes);
+                    entityManager.persist(entity);
+                }
+                entityManager.getTransaction().commit();
+            }*/
+
         }
 
 

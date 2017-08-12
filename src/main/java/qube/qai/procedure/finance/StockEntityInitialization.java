@@ -17,19 +17,26 @@ package qube.qai.procedure.finance;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
+import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.nodes.ValueNode;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.util.Set;
 
 /**
  * Created by rainbird on 1/21/17.
  */
 public class StockEntityInitialization extends Procedure implements ProcedureConstants {
+
+    protected Logger logger = LoggerFactory.getLogger("StockEntityInitialization");
 
     public static String NAME = "Stock Entity Initialization Procedure";
 
@@ -66,6 +73,8 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
     private int numberOfRecords = 0;
 
     private int numberOfRecordsCreated = 0;
+
+    public boolean addQuotes = false;
 
     //private StockGroup group;
 
@@ -105,6 +114,7 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
 
         String filename = pathToCsvFiles + selectedFile; //otherListedFile; //nyseFile ;
         Model csvModel = RDFDataMgr.loadModel(filename);
+        StockQuoteDataStore store = new StockQuoteDataStore();
 
         // begin the transaction in the database
         entityManager.getTransaction().begin();
@@ -130,15 +140,33 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
 
                 // loop over the row-properties and create the entity
                 while (resIt.hasNext()) {
+
                     Resource resource = resIt.next();
                     info("-> row (" + count + ")");
                     StockEntity stockEntity = ripEntityFromRow(resource);
+
                     if (isaValidEntity(stockEntity)) {
+
                         StockEntity databaseCopy = findStockEntityDatabaseCopy(stockEntity);
+
                         if (databaseCopy == null) {
+
                             entityManager.persist(stockEntity);
+                            info("persisted stock-entity: '" + stockEntity.getName() + "' symbol: '" + stockEntity.getTickerSymbol() + "'");
+
+                            if (addQuotes) {
+                                Set<StockQuote> quotes = store.retrieveQuotesFor(stockEntity.getTickerSymbol());
+                                for (StockQuote quote : quotes) {
+                                    entityManager.persist(quote);
+                                }
+                                stockEntity.setQuotes(quotes);
+                                info("persisted quotes for entity: '" + stockEntity.getName() + "' symbol: '" + stockEntity.getTickerSymbol() + "' #quotes: " + quotes.size());
+                            }
+
                             group.addStockEntity(stockEntity);
+
                         } else {
+
                             group.addStockEntity(databaseCopy);
                         }
                         numberOfRecordsCreated++;
@@ -162,11 +190,14 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
     }
 
     public StockEntity findStockEntityDatabaseCopy(StockEntity entity) {
-        String queryString = "select c from StockEntity c where c.tickerSymbol like '%s' and c.name like '%s'";
+        String queryString = "select c from StockEntity c where c.tickerSymbol like :tickerSymbol and c.name like :name";
         String query = String.format(queryString, entity.getTickerSymbol(), entity.getName());
         StockEntity foundEntity = null;
         try {
-            foundEntity = entityManager.createQuery(query, StockEntity.class).getSingleResult();
+            foundEntity = entityManager.createQuery(query, StockEntity.class).
+                    setParameter("tickerSymbol", entity.getTickerSymbol()).
+                    setParameter("name", entity.getName()).
+                    getSingleResult();
             info("query for: " + entity.getTickerSymbol() + " '" + entity.getName() + "' resulted with " + foundEntity.getUuid());
         } catch (Exception e) {
             info("query for: " + entity.getTickerSymbol() + " '" + entity.getName() + "' resulted nothing");

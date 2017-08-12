@@ -70,51 +70,6 @@ public class TestDatabaseMapStores extends TestCase {
     }
 
 
-    public void estRoleMapStore() throws Exception {
-
-        Injector injector = createInjector("STAND_ALONE_TEST_USERS");
-
-        DatabaseMapStore mapStore = new DatabaseMapStore(Role.class);
-        injector.injectMembers(mapStore);
-
-        User user = createUser();
-        Role role = new Role(user, "DO_ALL_ROLE", "this role will allow you to do everything");
-        mapStore.store(role.getUuid(), role);
-
-        Role foundRole = (Role) mapStore.load(role.getUuid());
-        assertNotNull(foundRole);
-        assertTrue(role.equals(foundRole));
-
-        mapStore.delete(role.getUuid());
-
-        Role lostRole = (Role) mapStore.load(role.getUuid());
-        assertTrue(lostRole == null);
-
-    }
-
-    public void estSessionMapStore() throws Exception {
-
-        Injector injector = createInjector("STAND_ALONE_TEST_USERS");
-
-        DatabaseMapStore mapStore = new DatabaseMapStore(Session.class);
-        injector.injectMembers(mapStore);
-
-        User user = createUser();
-        Session session = new Session(randomWord(10), new Date());
-        session.setUser(user);
-
-        mapStore.store(session.getUuid(), session);
-
-        Session foundSession = (Session) mapStore.load(session.getUuid());
-        assertNotNull(foundSession);
-        assertTrue(session.equals(foundSession));
-
-        mapStore.delete(session.getUuid());
-
-        Session lostSession = (Session) mapStore.load(session.getUuid());
-        assertTrue(lostSession == null);
-    }
-
     public void testStockQuoteMapStore() throws Exception {
 
         Injector injector = createInjector("STAND_ALONE_TEST_STOCKS");
@@ -173,11 +128,11 @@ public class TestDatabaseMapStores extends TestCase {
             mapStore.store(uuid, entity);
 
             // now we create and add the quotes
-//            Collection<StockQuote> quotes = generateQuotes(name, 100);
-//            for (StockQuote quote : quotes) {
-//                entity.addQuote(quote);
-//            }
-//            entityMap.put(uuid, entity);
+            Collection<StockQuote> quotes = generateQuotes(name, 100);
+            for (StockQuote quote : quotes) {
+                entity.addQuote(quote);
+            }
+            entityMap.put(uuid, entity);
         }
 
         // in this case the map-store should be returning all keys
@@ -190,6 +145,7 @@ public class TestDatabaseMapStores extends TestCase {
             StockEntity storedEntity = (StockEntity) mapStore.load(entityId);
             assertNotNull("there has to be an entity", storedEntity);
             assertTrue("entities have to be equal", cachedEntity.equals(storedEntity));
+            assertTrue("entities must have quotes", !storedEntity.getQuotes().isEmpty());
         }
 
         // when we are done we delete the things as well, just to keep things managable
@@ -197,6 +153,53 @@ public class TestDatabaseMapStores extends TestCase {
             mapStore.delete(entityId);
         }
     }
+
+    // these classes are to be persisted in model-stores, therefore the tests
+    // are no longer required
+    /*public void estRoleMapStore() throws Exception {
+
+        Injector injector = createInjector("STAND_ALONE_TEST_USERS");
+
+        DatabaseMapStore mapStore = new DatabaseMapStore(Role.class);
+        injector.injectMembers(mapStore);
+
+        User user = createUser();
+        Role role = new Role(user, "DO_ALL_ROLE", "this role will allow you to do everything");
+        mapStore.store(role.getUuid(), role);
+
+        Role foundRole = (Role) mapStore.load(role.getUuid());
+        assertNotNull(foundRole);
+        assertTrue(role.equals(foundRole));
+
+        mapStore.delete(role.getUuid());
+
+        Role lostRole = (Role) mapStore.load(role.getUuid());
+        assertTrue(lostRole == null);
+
+    }
+
+    public void estSessionMapStore() throws Exception {
+
+        Injector injector = createInjector("STAND_ALONE_TEST_USERS");
+
+        DatabaseMapStore mapStore = new DatabaseMapStore(Session.class);
+        injector.injectMembers(mapStore);
+
+        User user = createUser();
+        Session session = new Session(randomWord(10), new Date());
+        session.setUser(user);
+
+        mapStore.store(session.getUuid(), session);
+
+        Session foundSession = (Session) mapStore.load(session.getUuid());
+        assertNotNull(foundSession);
+        assertTrue(session.equals(foundSession));
+
+        mapStore.delete(session.getUuid());
+
+        Session lostSession = (Session) mapStore.load(session.getUuid());
+        assertTrue(lostSession == null);
+    }*/
 
     private Collection<String> createKeys(String name, DatabaseMapStore store) {
         Collection<String> keys = new ArrayList<>();

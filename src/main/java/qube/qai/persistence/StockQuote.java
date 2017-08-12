@@ -14,6 +14,7 @@
 
 package qube.qai.persistence;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
@@ -152,7 +153,7 @@ public class StockQuote implements Serializable, AcceptsVisitors {
     @Override
     public int hashCode() {
         HashCodeBuilder b = new HashCodeBuilder(17, 17);
-        return b.append(tickerSymbol).append(quoteDate).toHashCode();
+        return b.append(quoteDate).toHashCode(); // append(tickerSymbol)
     }
 
     /**
@@ -163,15 +164,11 @@ public class StockQuote implements Serializable, AcceptsVisitors {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof StockQuote) {
-            StockQuote q = (StockQuote) obj;
-            if (tickerSymbol.equals(q.tickerSymbol)
-                    && quoteDate != null
-                    && quoteDate.equals(q.quoteDate)) {
-                return true;
-            }
+        if (obj == null || !(obj instanceof StockQuote)) {
+            return false;
         }
-        return false;
+        StockQuote other = (StockQuote) obj;
+        return new EqualsBuilder().append(quoteDate, other.quoteDate).append(tickerSymbol, other.tickerSymbol).build();
     }
 
 }
