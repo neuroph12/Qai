@@ -19,11 +19,16 @@ import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
+import qube.qai.persistence.StockQuote;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -35,48 +40,65 @@ import static qube.qai.procedure.finance.StockEntityInitialization.NUMBER_OF_REC
  */
 public class TestStockEntityInitialization extends TestCase {
 
-//    public void restStockEntityInitialization() throws Exception {
-//
-//        Injector injector = QaiTestServerModule.initStocksInjector();
-//
-//        MapStore categoryMapStore = new DatabaseMapStore(StockGroup.class);
-//        injector.injectMembers(categoryMapStore);
-//
-//        StockGroup category = new StockGroup();
-//        category.setName("Standard and Poor top 500");
-//
-//        for (int i = 0; i < 10; i++) {
-//            StockEntity entity = TestDatabaseMapStores.createEntity("stock_entity_" + i);
-//            category.addStockEntity(entity);
-//        }
-//
-//        categoryMapStore.store(category.getUuid(), category);
-//
-//        StockGroup foundCategory = (StockGroup) categoryMapStore.load(category.getUuid());
-//        assertNotNull(foundCategory);
-//        assertTrue(foundCategory.getEntities() != null && !foundCategory.getEntities().isEmpty());
-//
-//        EntityManager entityManager = ((DatabaseMapStore) categoryMapStore).getEntityManager();
-//        String queryString = "select c from StockEntity c where c.tickerSymbol like '%s' and c.tradedIn like '%s'";
-//        for (StockEntity entity : category.getEntities()) {
-//            String tickerSymbol = entity.getTickerSymbol();
-//            String tradedIn = entity.getTradedIn();
-//            String query = String.format(queryString, tickerSymbol, tradedIn);
-//            StockEntity foundEntity = entityManager.createQuery(query, StockEntity.class).getSingleResult();
-//            assertNotNull(foundEntity);
-//            assertTrue(foundEntity.getUuid().equals(entity.getUuid()));
-//        }
-//    }
+    private static Logger logger = LoggerFactory.getLogger("TestStockEntityInitialization");
 
-    public void testStockEntityInitializationProcedure() throws Exception {
+    // "STAND_ALONE_TEST_STOCKS" is for running test regularly
+    // "TEST_STOCKS" is what all test-routines with hazelcast use
+    private String jpaModuleName = "STOCKS"; // is the life database
 
-        // "STAND_ALONE_TEST_STOCKS" is for running test regularly
-        // "TEST_STOCKS" is what all test-routines with hazelcast use
-        String jpaModuleName = "STOCKS"; // is the life database
+    public void testInitializedDatabase() throws Exception {
+
+        Injector injector = createInjector(jpaModuleName);
+        EntityManager entityManager = injector.getInstance(EntityManager.class);
+        StockQuoteDataStore store = new StockQuoteDataStore();
+
+        Query query = entityManager.createQuery("SELECT g FROM StockGroup AS g");
+        List<StockGroup> groups = query.getResultList();
+        assertNotNull("result may not be null", groups);
+        assertTrue("resultset may not be empty", !groups.isEmpty());
+
+        Set<String> uuids = new HashSet<>();
+        StockGroup group = groups.iterator().next();
+        Set<StockEntity> entities = group.getEntities();
+        for (StockEntity entity : entities) {
+            Set<StockQuote> quotes = entity.getQuotes();
+            if (quotes == null || quotes.isEmpty()) {
+                logger.info("Entity " + entity.getTickerSymbol() + " has no quotes- trying to add");
+                quotes = store.retrieveQuotesFor(entity.getTickerSymbol());
+                if (quotes != null && !quotes.isEmpty()) {
+
+                    entityManager.getTransaction().begin();
+                    entity.setQuotes(quotes);
+                    entityManager.merge(entity);
+//                    entityManager.flush();
+                    entityManager.getTransaction().commit();
+
+                    uuids.add(entity.getUuid());
+                    logger.info("Added " + quotes.size() + " quotes to " + entity.getTickerSymbol());
+                }
+            } else {
+                logger.info("Entity " + entity.getTickerSymbol() + " has already " + entity.getQuotes().size() + " quotes in database");
+            }
+        }
+
+        // now we read the entities with the uuids which we saved and check their quotes
+        for (String uuid : uuids) {
+
+            StockEntity entity = entityManager.find(StockEntity.class, uuid);
+            assertNotNull("there has to be an entity", entity);
+            assertNotNull("entity has to have quotes", entity.getQuotes());
+            assertTrue("there has to be quotes", !entity.getQuotes().isEmpty());
+
+        }
+
+    }
+
+    public void estStockEntityInitializationProcedure() throws Exception {
         //String jpaModuleName = "STAND_ALONE_TEST_STOCKS";
         Injector injector = createInjector(jpaModuleName);
         EntityManager entityManager = injector.getInstance(EntityManager.class);
         StockEntityInitialization procedure = new StockEntityInitialization();
+        procedure.addQuotes = false;
         procedure.setEntityManager(entityManager);
 
         String[] listings = {StockEntityInitialization.S_AND_P_500_LISTING
@@ -89,7 +111,6 @@ public class TestStockEntityInitialization extends TestCase {
         for (String listingName : listings) {
             procedure.setGroupName(listingName);
             procedure.setSelectedFile(listingName);
-            procedure.addQuotes = false;
 
             procedure.execute();
             Integer recordsCreated = (Integer) procedure.getProcedureDescription().getProcedureResults().getNamedResult(NUMBER_OF_RECORDS_CREATED).getValue();

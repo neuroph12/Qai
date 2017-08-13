@@ -97,7 +97,7 @@ public class StockEntity implements Serializable, AcceptsVisitors {
 
     // eager fetch so that they can be serialized along in the hazelcast-maps
     @OrderBy("quoteDate")
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "tickerSymbol") //
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // , mappedBy = "tickerSymbol"
     //@JoinColumn(name = "tickerSymbol", nullable = false, insertable = false, updatable = false)
     private Set<StockQuote> quotes;
 

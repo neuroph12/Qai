@@ -28,7 +28,6 @@ import qube.qai.user.User;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,9 +45,6 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
 
     @Inject
     private EntityManager entityManager;
-
-    @Inject
-    private EntityManagerFactory entityManagerFactory;
 
     private int hitsPerPage = 0;
 
@@ -166,21 +162,23 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
 
         for (StockEntity entity : entities) {
             Set<StockQuote> quotes = entity.getQuotes();
-            //entityManager.getTransaction().begin();
             if (quotes == null || quotes.isEmpty()) {
                 StockQuoteDataStore store = new StockQuoteDataStore();
-                quotes = store.retrieveQuotesFor(searchString);
-//                for (StockQuote quote : quotes) {
-//                    entityManager.persist(quote);
-//                }
+                quotes = store.retrieveQuotesFor(entity.getTickerSymbol().trim());
                 if (quotes != null && !quotes.isEmpty()) {
                     entity.setQuotes(quotes);
+                    //entityManager.getTransaction().begin();
+                    for (StockQuote quote : quotes) {
+                        entityManager.persist(quote);
+                    }
                     entityManager.persist(entity);
+                    //entityManager.flush();
+                    //entityManager.getTransaction().commit();
                     logger.info("Added " + quotes.size() + " quotes for " + entity.getName());
+                } else {
+                    logger.info("Already " + quotes.size() + " quotes stored in database for " + entity.getName());
                 }
             }
-            //entityManager.flush();
-            //entityManager.getTransaction().commit();
         }
 
 

@@ -183,7 +183,7 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
         // and commit the transaction
         entityManager.flush();
         entityManager.getTransaction().commit();
-
+        info("persisted group: '" + group.getName() + "' with: '" + group.getEntities().size() + " entities");
         // now we are done and can change the flag
         numberOfRecords = count - 1;
         info("read " + (count - 1) + " rows from csv-file");
@@ -221,6 +221,9 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
             Statement statement = stmtIt.next();
             String name = statement.getPredicate().getLocalName();
             String value = statement.getObject().asLiteral().getValue().toString();
+            if (StringUtils.isNotBlank(value)) {
+                value = value.trim();
+            }
 
             info(name + ": " + value);
 
