@@ -45,7 +45,7 @@ public class StockQuoteDataStore implements DataStore {
             for (GoogleSymbol.Data data : symbol.getHistoricalPrices()) {
                 Date date = new Date(data.getKey().toTimeInMillis(CalendarDateUnit.DAY));
                 StockQuote quote = new StockQuote();
-                quote.setTickerSymbol(symbol.getSymbol());
+                quote.setTickerSymbol(quoteName);
                 quote.setQuoteDate(date);
                 quote.setAdjustedClose(data.close);
                 quote.setClose(data.close);
@@ -53,7 +53,9 @@ public class StockQuoteDataStore implements DataStore {
                 quote.setLow(data.low);
                 quote.setOpen(data.open);
                 quote.setVolume(data.volume);
-                quotes.add(quote);
+                if (quote.getQuoteDate() != null) {
+                    quotes.add(quote);
+                }
             }
         } catch (Exception e) {
             logger.error("Ticker symbol: '" + quoteName + "' does not exist", e);

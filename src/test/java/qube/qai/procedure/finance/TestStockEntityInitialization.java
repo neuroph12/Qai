@@ -68,9 +68,14 @@ public class TestStockEntityInitialization extends TestCase {
                 if (quotes != null && !quotes.isEmpty()) {
 
                     entityManager.getTransaction().begin();
+                    for (StockQuote quote : quotes) {
+                        quote.setParentUUID(entity.getUuid());
+                        entityManager.persist(quote);
+                    }
+
                     entity.setQuotes(quotes);
                     entityManager.merge(entity);
-//                    entityManager.flush();
+                    entityManager.flush();
                     entityManager.getTransaction().commit();
 
                     uuids.add(entity.getUuid());
@@ -128,22 +133,22 @@ public class TestStockEntityInitialization extends TestCase {
         assertTrue("resultset may not be empty", !groups.isEmpty());
 
         //StockQuoteDataStore store = new StockQuoteDataStore();
-        StockGroup group = groups.iterator().next();
-        Set<StockEntity> entities = group.getEntities();
-        for (StockEntity entity : entities) {
-            log("'" + group.getName() + "' entity: '" + entity.getName() + "'");
-            log("'" + entity.getName() + "' quotes is empty: '" + entity.getQuotes().isEmpty() + "'");
-            /*if (entity.getQuotes() == null || entity.getQuotes().isEmpty()) {
-                entityManager.getTransaction().begin();
-                Set<StockQuote> quotes = store.retrieveQuotesFor(entity.getTickerSymbol());
-                if (quotes != null && !quotes.isEmpty()) {
-                    entity.setQuotes(quotes);
-                    entityManager.persist(entity);
-                }
-                entityManager.getTransaction().commit();
-            }*/
-
-        }
+//        StockGroup group = groups.iterator().next();
+//        Set<StockEntity> entities = group.getEntities();
+//        for (StockEntity entity : entities) {
+//            log("'" + group.getName() + "' entity: '" + entity.getName() + "'");
+//            log("'" + entity.getName() + "' quotes is empty: '" + entity.getQuotes().isEmpty() + "'");
+//            if (entity.getQuotes() == null || entity.getQuotes().isEmpty()) {
+//                entityManager.getTransaction().begin();
+//                Set<StockQuote> quotes = store.retrieveQuotesFor(entity.getTickerSymbol());
+//                if (quotes != null && !quotes.isEmpty()) {
+//                    entity.setQuotes(quotes);
+//                    entityManager.persist(entity);
+//                }
+//                entityManager.getTransaction().commit();
+//            }
+//
+//        }
 
 
     }

@@ -37,6 +37,9 @@ public class StockQuote implements Serializable, AcceptsVisitors {
     @Column(name = "uuid")
     private String uuid;
 
+    @Column(name = "parentUUID", nullable = false)
+    private String parentUUID;
+
     @Column(name = "tickerSymbol", nullable = false)
     private String tickerSymbol;
 
@@ -84,6 +87,14 @@ public class StockQuote implements Serializable, AcceptsVisitors {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getParentUUID() {
+        return parentUUID;
+    }
+
+    public void setParentUUID(String parentUUID) {
+        this.parentUUID = parentUUID;
     }
 
     public String getTickerSymbol() {
@@ -168,7 +179,7 @@ public class StockQuote implements Serializable, AcceptsVisitors {
             return false;
         }
         StockQuote other = (StockQuote) obj;
-        return new EqualsBuilder().append(quoteDate, other.quoteDate).append(tickerSymbol, other.tickerSymbol).build();
+        return new EqualsBuilder().append(uuid, other.uuid).build();
     }
 
 }

@@ -164,23 +164,25 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
             Set<StockQuote> quotes = entity.getQuotes();
             if (quotes == null || quotes.isEmpty()) {
                 StockQuoteDataStore store = new StockQuoteDataStore();
-                quotes = store.retrieveQuotesFor(entity.getTickerSymbol().trim());
+                String symbol = entity.getTickerSymbol().trim();
+                entity.setTickerSymbol(symbol);
+                quotes = store.retrieveQuotesFor(symbol);
                 if (quotes != null && !quotes.isEmpty()) {
                     entity.setQuotes(quotes);
-                    //entityManager.getTransaction().begin();
+                    entityManager.getTransaction().begin();
                     for (StockQuote quote : quotes) {
+                        quote.setParentUUID(entity.getUuid());
                         entityManager.persist(quote);
                     }
-                    entityManager.persist(entity);
-                    //entityManager.flush();
-                    //entityManager.getTransaction().commit();
+                    entityManager.merge(entity);
+                    entityManager.flush();
+                    entityManager.getTransaction().commit();
                     logger.info("Added " + quotes.size() + " quotes for " + entity.getName());
                 } else {
                     logger.info("Already " + quotes.size() + " quotes stored in database for " + entity.getName());
                 }
             }
         }
-
 
         for (StockEntity entity : entities) {
             SearchResult r = new SearchResult(STOCK_ENTITIES, entity.getTickerSymbol(), entity.getUuid(), entity.getName(), 1.0);
