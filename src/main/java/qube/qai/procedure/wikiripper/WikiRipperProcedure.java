@@ -42,12 +42,9 @@ public class WikiRipperProcedure extends Procedure {
     private Boolean isWiktionary;
 
     // file to rip the wiki-data from
-    //private String fileToRipName = "/media/rainbird/ALEPH/wiki-data/enwiktionary-20150413-pages-articles-multistream.xml";
-    //private String fileToRipName = "/media/rainbird/ALEPH/wiki-data/enwiki-20150403-pages-articles.xml";
     private String fileToRipName;
+
     // file to archive the ripped articles at
-    //private String fileToArchiveName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
-    //private String fileToArchiveName = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
     private String fileToArchiveName;
 
     // mainly for testing reasons
@@ -59,15 +56,18 @@ public class WikiRipperProcedure extends Procedure {
     public void execute() {
 
         if (StringUtils.isEmpty(fileToRipName)) {
-            fileToRipName = (String) getInputValueOf(INPUT_FILENAME);
+            error("Inputs are blank- " + INPUT_FILENAME + " is missing");
+            throw new IllegalArgumentException("Inputs are blank- can't execute without input or target directory");
         }
 
         if (StringUtils.isEmpty(fileToArchiveName)) {
-            fileToArchiveName = (String) getInputValueOf(INPUT_TARGET_FILENAME);
+            error("Inputs are blank- " + INPUT_TARGET_FILENAME + " is missing");
+            throw new IllegalArgumentException("Inputs are blank- can't execute without input or target directory");
         }
 
         if (isWiktionary == null) {
-            isWiktionary = (Boolean) getInputValueOf(INPUT_IS_WIKTIONARY);
+            error("Inputs are blank- " + INPUT_IS_WIKTIONARY + " is missing");
+            throw new IllegalArgumentException("Inputs are blank- can't execute without input or target directory");
         }
 
         ripWikiFile();
@@ -76,9 +76,27 @@ public class WikiRipperProcedure extends Procedure {
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_FILENAME));
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_TARGET_FILENAME));
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_IS_WIKTIONARY));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<String>(INPUT_FILENAME) {
+            @Override
+            public void setValue(String value) {
+                super.setValue(value);
+                fileToRipName = value;
+            }
+        });
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<String>(INPUT_TARGET_FILENAME) {
+            @Override
+            public void setValue(String value) {
+                super.setValue(value);
+                fileToArchiveName = value;
+            }
+        });
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<Boolean>(INPUT_IS_WIKTIONARY, MIMETYPE_BOOLEAN) {
+            @Override
+            public void setValue(Boolean value) {
+                super.setValue(value);
+                isWiktionary = value;
+            }
+        });
     }
 
     public void ripWikiFile() {

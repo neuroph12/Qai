@@ -50,10 +50,10 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(FROM));
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(CRITERIA));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(SORTED_ITEMS));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(AVERAGE_TIME_SEQUENCE));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(FROM, MIMETYPE_TIME_SEQUENCE_MAP));
+        //getProcedureDescription().getProcedureInputs().addInput(new ValueNode(CRITERIA));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(SORTED_ITEMS, MIMETYPE_TIME_SEQUENCE_MAP));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(AVERAGE_TIME_SEQUENCE, MIMETYPE_TIME_SERIES));
 //        arguments = new Arguments(FROM, CRITERIA);
 //        arguments.putResultNames(SORTED_ITEMS, AVERAGE_TIME_SEQUENCE);
     }
@@ -137,8 +137,4 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
         }
     }
 
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

@@ -58,9 +58,9 @@ public class SelectionProcedure extends Procedure {
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(PARAMEETER_ASSIIGN_TO));
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(PARAMEETER_ASSIIGN_FROM));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(POINTER_OR_DATA_VALUE));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(PARAMEETER_ASSIIGN_TO, MIMETYPE_SEARCH_RESULT));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(PARAMEETER_ASSIIGN_FROM, MIMETYPE_SEARCH_RESULT));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(POINTER_OR_DATA_VALUE, MIMETYPE_PROCEDURE));
     }
 
     @Override

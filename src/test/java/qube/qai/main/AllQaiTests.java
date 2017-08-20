@@ -156,8 +156,10 @@ public class AllQaiTests extends TestCase {
         //suite.addTestSuite(TestDistributedSearchServices.class);
         //suite.addTestSuite(TestDistributedDataService.class);
         suite.addTestSuite(TestDistributedProcedureRunnerService.class);
-        suite.addTestSuite(TestYouNMeNAllDistributed.class);
+
+        // these are more or less integration tests-
         suite.addTestSuite(TestHowFairAreMarketsDistributed.class);
+        suite.addTestSuite(TestYouNMeNAllDistributed.class);
         suite.addTestSuite(TestTextTranslationDistributed.class);
 
         // util

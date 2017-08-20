@@ -84,9 +84,9 @@ public class AttachProcedure extends Procedure {
     public void buildArguments() {
 //        arguments = new Arguments();
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_ATTACH));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(INPUT_ATTATCH_TO));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(RELATION));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_ATTACH, MIMETYPE_SEARCH_RESULT));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(INPUT_ATTATCH_TO, MIMETYPE_SEARCH_RESULT));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(RELATION, MIMETYPE_STRING));
     }
 
     public SelectionOperator getAttach() {

@@ -187,9 +187,9 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_TARGET_FILENAME));
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_INDEX_DIRECTORY));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(INPUT_INDEX_DIRECTORY));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_TARGET_FILENAME, MIMETYPE_STRING));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_INDEX_DIRECTORY, MIMETYPE_STRING));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(INPUT_INDEX_DIRECTORY, MIMETYPE_STRING));
     }
 
     public String getIndexDirectory() {

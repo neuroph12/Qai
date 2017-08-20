@@ -88,11 +88,32 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_FILENAME));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(GROUP_NAME));
-        //getProcedureDescription().getProcedureResults().addResult(new ValueNode(GROUP));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(NUMBER_OF_RECORDS));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(NUMBER_OF_RECORDS_CREATED));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<String>(INPUT_FILENAME) {
+            @Override
+            public void setValue(String value) {
+                super.setValue(value);
+                selectedFile = value;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<String>(GROUP_NAME) {
+            @Override
+            public void setValue(String value) {
+                super.setValue(value);
+                groupName = value;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<Number>(NUMBER_OF_RECORDS, MIMETYPE_NUMBER) {
+            @Override
+            public Number getValue() {
+                return numberOfRecords;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<Number>(NUMBER_OF_RECORDS_CREATED, MIMETYPE_NUMBER) {
+            @Override
+            public Number getValue() {
+                return numberOfRecordsCreated;
+            }
+        });
     }
 
     @Override
@@ -105,8 +126,8 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
         createCheckAndInsertStockEntitesFromFile();
 
         // after all is done and said, these are the results we are expected to record
-        setResultValueOf(GROUP_NAME, groupName);
-        setResultValueOf(NUMBER_OF_RECORDS_CREATED, numberOfRecordsCreated);
+        //setResultValueOf(GROUP_NAME, groupName);
+        //setResultValueOf(NUMBER_OF_RECORDS_CREATED, numberOfRecordsCreated);
         hasExecuted = true;
     }
 

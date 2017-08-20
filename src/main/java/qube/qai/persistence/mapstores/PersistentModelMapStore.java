@@ -121,6 +121,7 @@ public class PersistentModelMapStore implements MapStore {
             }
 
             dataset.end();
+
             return found;
         } catch (NotFoundException e) {
             return null;

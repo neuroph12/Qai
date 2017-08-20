@@ -33,6 +33,12 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
     public static String DESCRIPTION = "Analyses the distribution of the numbers in the matrix, " +
             "and in its eigen-vectors, as far as they exist, using eigen-value decomposition";
 
+    private Matrix matrix;
+
+    private Metrics dataMetrics;
+
+    private Metrics matrixMetrics;
+
     /**
      * Runs statistical analysis on the given matrix
      */
@@ -43,9 +49,25 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_MATRIX));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(MATRIX_METRICS));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(MATRIX_DATA_METRICS));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<Matrix>(INPUT_MATRIX, MIMETYPE_MATRIX) {
+            @Override
+            public void setValue(Matrix value) {
+                super.setValue(value);
+                matrix = value;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<Metrics>(MATRIX_METRICS, MIMETYPE_METRICS) {
+            @Override
+            public Metrics getValue() {
+                return matrixMetrics;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<Metrics>(MATRIX_DATA_METRICS, MIMETYPE_METRICS) {
+            @Override
+            public Metrics getValue() {
+                return dataMetrics;
+            }
+        });
     }
 
     @Override
@@ -53,8 +75,6 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
 
         executeInputProcedures();
 
-        // first get the selector
-        Matrix matrix = (Matrix) getInputValueOf(INPUT_MATRIX);
         if (matrix == null || matrix.getMatrix() == null) {
             error("Input matrix has not been initialized properly: null value");
             return;
@@ -62,12 +82,10 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
 
         List elements = matrix.getMatrix().toListOfElements();
         Statistics stats = new Statistics(elements.toArray());
-        Metrics dataMetrics = stats.buildMetrics();
-        Metrics matrixMetrics = matrix.buildMetrics();
+        dataMetrics = stats.buildMetrics();
+        matrixMetrics = matrix.buildMetrics();
 
         info("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");
-        setResultValueOf(MATRIX_DATA_METRICS, dataMetrics);
-        setResultValueOf(MATRIX_METRICS, matrixMetrics);
     }
 
 }

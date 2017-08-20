@@ -26,6 +26,12 @@ public class CreateUserProcedure extends Procedure {
 
     public static String DESCRIPTION = "Creates a new user in the system";
 
+    private String username;
+
+    private String password;
+
+    private String uuid;
+
     public CreateUserProcedure() {
         super(NAME);
     }
@@ -38,8 +44,25 @@ public class CreateUserProcedure extends Procedure {
     @Override
     protected void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(USER_NAME));
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(PASSWORD));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(USER_UUID));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<String>(USER_NAME) {
+            @Override
+            public void setValue(String value) {
+                super.setValue(value);
+                username = value;
+            }
+        });
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<String>(PASSWORD) {
+            @Override
+            public void setValue(String value) {
+                super.setValue(value);
+                password = value;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<String>(USER_UUID) {
+            @Override
+            public String getValue() {
+                return uuid;
+            }
+        });
     }
 }

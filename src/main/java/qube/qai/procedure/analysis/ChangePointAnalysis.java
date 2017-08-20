@@ -37,19 +37,25 @@ public class ChangePointAnalysis extends Procedure {
         super(NAME);
     }
 
-    /**
-     * runs change-point analysis of a given time-series
-     */
-//    public ChangePointAnalysis(Procedure procedure) {
-//        super(NAME, procedure);
-//    }
+    private TimeSequence timeSequence;
 
+    Collection<ChangePointMarker> markers;
 
     @Override
     protected void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_TIME_SEQUENCE));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(CHANGE_POINTS));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<TimeSequence>(INPUT_TIME_SEQUENCE, MIMETYPE_TIME_SERIES) {
+            @Override
+            public void setValue(TimeSequence value) {
+                timeSequence = value;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<Collection<ChangePointMarker>>(CHANGE_POINTS, MIMETYPE_CHANGE_POINT_MARKER) {
+            @Override
+            public Collection<ChangePointMarker> getValue() {
+                return markers;
+            }
+        });
     }
 
     @Override
@@ -57,10 +63,9 @@ public class ChangePointAnalysis extends Procedure {
 
         executeInputProcedures();
 
-        // first get the selector
-        TimeSequence timeSequence = (TimeSequence) getInputValueOf(INPUT_TIME_SEQUENCE);
         if (timeSequence == null) {
             error("Input time-series has not been initialized properly: null value");
+            return;
         }
 
         ChangepointAdapter changepointAdapter = new ChangepointAdapter();
@@ -73,7 +78,7 @@ public class ChangePointAnalysis extends Procedure {
         }
 
         Collection<ChangepointAdapter.ChangePoint> resultChangepoints = changepointAdapter.collectChangePoints(data);
-        Collection<ChangePointMarker> markers = new ArrayList<ChangePointMarker>();
+        markers = new ArrayList<ChangePointMarker>();
 
         for (ChangepointAdapter.ChangePoint point : resultChangepoints) {
             int index = point.getIndex();
@@ -83,8 +88,7 @@ public class ChangePointAnalysis extends Procedure {
             markers.add(marker);
         }
 
-        info("adding '" + CHANGE_POINTS + "' to return values");
-        setResultValueOf(CHANGE_POINTS, markers);
+        info("finished '" + CHANGE_POINTS + "' analysis with " + markers.size() + " change-points detected");
     }
 
     /**

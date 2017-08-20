@@ -132,8 +132,19 @@ public class StockQuoteRetriever extends Procedure {
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(TICKER_SYMBOL));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(NUMBER_OF_INSERTS));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<String>(TICKER_SYMBOL) {
+            @Override
+            public void setValue(String value) {
+                super.setValue(value);
+                tickerSymbol = value;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<Number>(NUMBER_OF_INSERTS, MIMETYPE_NUMBER) {
+            @Override
+            public Number getValue() {
+                return numberOfInserts;
+            }
+        });
     }
 
     public static long getNumberOfInserts() {

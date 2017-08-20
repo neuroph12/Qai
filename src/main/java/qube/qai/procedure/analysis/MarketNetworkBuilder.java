@@ -23,8 +23,8 @@ import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.nodes.ValueNode;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -37,50 +37,31 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
 
     public static String DESCRIPTION = "Creates and trains a neural-network out of the quotes of the stocks given";
 
-    public static String INPUT_STOCK_ENTITY_COLLECTION = "input stock entity collection";
 
-    public static String TRAINED_NEURAL_NETWORK = "trained neural network";
+    private Collection<StockEntity> entities;
+
+    private BasicNetworkTrainer trainer;
+
+    private NeuralNetwork network;
 
     public MarketNetworkBuilder() {
         super(NAME);
     }
 
-//    public MarketNetworkBuilder(Procedure procedure) {
-//        super(NAME, procedure);
-//    }
-
-    private BasicNetworkTrainer trainer;
-
-    /**
-     * calls execute method to train the network
-     * and returns result of that
-     *
-     * @param source
-     * @return
-     */
-    public Network buildNetwork(SelectionOperator source) {
-
-//        arguments.setArgument(INPUT_STOCK_ENTITY_COLLECTION, source);
-//        execute();
-//
-//        return (Network) getArguments().getResult(TRAINED_NEURAL_NETWORK);
-        return null;
-    }
-
     @Override
     public void execute() {
 
-        SelectionOperator<Collection> selectionOperator = null; //arguments.getSelector(INPUT_STOCK_ENTITY_COLLECTION);
-        Collection<StockEntity> entities = selectionOperator.getData();
+        if (entities == null || entities.isEmpty()) {
+            error("The list of stock-entites is empty- returning");
+            return;
+        }
+
         HashMap<String, Collection> trainingData = new HashMap<String, Collection>();
-        NeuralNetwork network = new NeuralNetwork(entities.size());
+        network = new NeuralNetwork(entities.size());
         for (StockEntity entity : entities) {
             Network.Vertex vertex = new Network.Vertex(entity.getTickerSymbol());
             // while we are at it we collect the data here as well
-            Collection<StockQuote> quotes = new ArrayList<>(); // removed reference
-            // to deprecated interface which was not working anyways
-            // so whatever was happening here will no wbe broken
-            // if there are no available quotes, skip it and remove from list
+            Collection<StockQuote> quotes = entity.getQuotes();
             if (quotes != null || !quotes.isEmpty()) {
                 network.addVertex(vertex);
                 trainingData.put(entity.getTickerSymbol(), quotes);
@@ -92,38 +73,33 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
         trainer.createTrainingSet(trainingData);
         trainer.trainNetwork();
 
-//        arguments.addResult(TRAINED_NEURAL_NETWORK, network);
+        info("Market-network builder ended with: " + TRAINED_NEURAL_NETWORK);
     }
 
-    /**
-     * tickerSymbol is something like {{tradedIn|symbol}}
-     *
-     * @param
-     * @return
-     */
-//    private void correctTickerSymbol(StockEntity entity) {
-//        String tradedIn = StringUtils.substringBetween(entity.getTickerSymbol(), "{{", "|");
-//        String ticker = StringUtils.substringBetween(entity.getTickerSymbol(), "|", "}}");
-//
-//        entity.setTickerSymbol(ticker);
-//        entity.setTradedIn(tradedIn);
-//    }
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-//        arguments = new Arguments(INPUT_STOCK_ENTITY_COLLECTION);
-//        arguments.putResultNames(NETWORK_METRICS,
-//                AVERAGE_TIME_SEQUENCE,
-//                CHANGE_POINTS,
-//                TRAINED_NEURAL_NETWORK);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<Collection<StockEntity>>(INPUT_STOCK_ENTITY_COLLECTION, MIMETYPE_STOCK_ENITIY_LIST) {
+            @Override
+            public void setValue(Collection<StockEntity> value) {
+                entities = value;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<NeuralNetwork>(TRAINED_NEURAL_NETWORK, MIMETYPE_NEURAL_NETWORK) {
+            @Override
+            public NeuralNetwork getValue() {
+                return network;
+            }
+        });
+    }
+
+    @Override
+    public Network buildNetwork(SelectionOperator source) {
+        return null;
     }
 
     public BasicNetworkTrainer getTrainer() {
         return trainer;
     }
 
-//    @thewebsemantic.Id
-//    public String getUuid() {
-//        return this.uuid;
-//    }
 }

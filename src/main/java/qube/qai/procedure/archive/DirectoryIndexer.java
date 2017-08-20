@@ -135,8 +135,8 @@ public class DirectoryIndexer extends Procedure implements ProcedureConstants {
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(DIRECTORY_TO_INDEX));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(INDEX_DIRECTORY));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(DIRECTORY_TO_INDEX, MIMETYPE_STRING));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(INDEX_DIRECTORY, MIMETYPE_STRING));
     }
 
     public String getDirectoryToIndex() {

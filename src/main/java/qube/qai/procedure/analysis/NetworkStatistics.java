@@ -29,6 +29,10 @@ public class NetworkStatistics extends Procedure implements ProcedureConstants {
 
     public static String DESCRIPTION = "Calculates the metrics for the given network";
 
+    private Network network;
+
+    private Metrics metrics;
+
     /**
      * builds a network from a given matrix and displays
      * the network along with its statistical properties.
@@ -40,8 +44,18 @@ public class NetworkStatistics extends Procedure implements ProcedureConstants {
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_NETWORK));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(NETWORK_METRICS));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<Network>(INPUT_NETWORK, MIMETYPE_NETWORK) {
+            @Override
+            public void setValue(Network value) {
+                network = value;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<Metrics>(NETWORK_METRICS, MIMETYPE_METRICS) {
+            @Override
+            public Metrics getValue() {
+                return metrics;
+            }
+        });
     }
 
     @Override
@@ -49,13 +63,13 @@ public class NetworkStatistics extends Procedure implements ProcedureConstants {
 
         executeInputProcedures();
 
-        Network network = (Network) getInputValueOf(INPUT_NETWORK);
+        //network = (Network) getInputValueOf(INPUT_NETWORK);
         if (network == null) {
             error("Input network has not been initialized properly: null value");
             return;
         }
 
-        Metrics metrics = network.buildMetrics();
+        metrics = network.buildMetrics();
         info("adding " + NETWORK_METRICS + " to return values");
         setResultValueOf(NETWORK_METRICS, metrics);
     }

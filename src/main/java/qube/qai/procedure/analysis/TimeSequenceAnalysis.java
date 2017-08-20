@@ -30,6 +30,10 @@ public class TimeSequenceAnalysis extends Procedure implements ProcedureConstant
 
     private static String DESCRIPTION = "This is a procedure to analyze a given time series.";
 
+    private TimeSequence timeSequence;
+
+    private Metrics metrics;
+
     /**
      * this is a procedure to analyze a given time series
      * statistical:
@@ -44,8 +48,19 @@ public class TimeSequenceAnalysis extends Procedure implements ProcedureConstant
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_TIME_SEQUENCE));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(TIME_SEQUENCE_METRICS));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<TimeSequence>(INPUT_TIME_SEQUENCE, MIMETYPE_TIME_SERIES) {
+            @Override
+            public void setValue(TimeSequence value) {
+                super.setValue(value);
+                timeSequence = value;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<Metrics>(TIME_SEQUENCE_METRICS, MIMETYPE_METRICS) {
+            @Override
+            public Metrics getValue() {
+                return metrics;
+            }
+        });
     }
 
     @Override
@@ -53,16 +68,13 @@ public class TimeSequenceAnalysis extends Procedure implements ProcedureConstant
 
         executeInputProcedures();
 
-        // first get the selector
-        TimeSequence timeSequence = (TimeSequence) getInputValueOf(INPUT_TIME_SEQUENCE);
         if (timeSequence == null) {
             error("Input time-series has not been initialized properly: null value");
         }
 
         Number[] data = timeSequence.toArray();
         Statistics stats = new Statistics(data);
-        Metrics metrics = stats.buildMetrics();
-        info("adding '" + TIME_SEQUENCE_METRICS + "' to return values");
-        setResultValueOf(TIME_SEQUENCE_METRICS, metrics);
+        metrics = stats.buildMetrics();
+        info("Time-sequence-analysis ended with '" + TIME_SEQUENCE_METRICS);
     }
 }

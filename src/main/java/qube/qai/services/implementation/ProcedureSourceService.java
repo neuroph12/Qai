@@ -108,7 +108,7 @@ public class ProcedureSourceService implements ProcedureSourceInterface {
             arguments.setArgument(NeuralNetworkForwardPropagation.INPUT_START_VECTOR, startVectorSelector);
 
             List<String> names = new ArrayList<String>();
-            String[] nameStrings = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eightth", "nineth", "tenth"};
+            String[] nameStrings = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "nineth", "tenth"};
             for (String n : nameStrings) {
                 names.add(n);
             }

@@ -15,13 +15,10 @@
 package qube.qai.procedure.analysis;
 
 import qube.qai.data.Metrics;
-import qube.qai.data.SelectionOperator;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.nodes.ValueNode;
-
-import java.util.Collection;
 
 /**
  * Created by rainbird on 11/28/15.
@@ -34,7 +31,9 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
             "does a statistical analysis of the weights, " +
             "their network structure, etc.";
 
-    private SelectionOperator<Collection<NeuralNetwork>> networkSelectionOperator;
+    private NeuralNetwork neuralNetwork;
+
+    private Metrics metrics;
 
     public NeuralNetworkAnalysis() {
         super(NAME);
@@ -43,8 +42,19 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_NEURAL_NETWORK));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(NETWORK_METRICS));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<NeuralNetwork>(INPUT_NEURAL_NETWORK, MIMETYPE_NEURAL_NETWORK) {
+            @Override
+            public void setValue(NeuralNetwork value) {
+                super.setValue(value);
+                neuralNetwork = value;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<Metrics>(NETWORK_METRICS, MIMETYPE_METRICS) {
+            @Override
+            public Metrics getValue() {
+                return metrics;
+            }
+        });
     }
 
     @Override
@@ -52,16 +62,13 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
 
         executeInputProcedures();
 
-        NeuralNetwork neuralNetwork = (NeuralNetwork) getInputValueOf(INPUT_NEURAL_NETWORK);
         if (neuralNetwork == null) {
             error("Input neural-network has not been initialized properly: null value");
             return;
         }
 
-        Metrics metrics = neuralNetwork.buildMetrics();
+        metrics = neuralNetwork.buildMetrics();
         info("adding '" + NETWORK_METRICS + "' to return values");
-        //info("adding '" + NETWORK_METRICS + "' and '" + MATRIX_METRICS + "' to return values");
-        setResultValueOf(NETWORK_METRICS, metrics);
 
     }
 
