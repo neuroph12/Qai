@@ -32,11 +32,11 @@ import java.util.Set;
 @Singleton
 public class ProcedureRunner implements ProcedureRunnerInterface {
 
-    private static Logger logger = LoggerFactory.getLogger("ExecutionService");
+    private static Logger logger = LoggerFactory.getLogger("ProcedureRunner");
 
-    public static final String SERVICE_NAME = "ProcedureRunnerService";
+    public static final String SERVICE_NAME = "ProcedureRunner";
 
-    @Inject //@Named("HAZELCAST_CLIENT")
+    @Inject
     private HazelcastInstance hazelcastInstance;
 
     private Map<String, ProcedureState> procedures;

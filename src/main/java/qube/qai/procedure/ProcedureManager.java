@@ -17,8 +17,8 @@ package qube.qai.procedure;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IExecutorService;
 import com.hazelcast.core.Message;
-import qube.qai.message.MessageListener;
 import qube.qai.message.MessageQueue;
+import qube.qai.message.QaiMessageListener;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.inject.Inject;
@@ -28,9 +28,7 @@ import java.util.Map;
 /**
  * Created by rainbird on 11/27/15.
  */
-public class ProcedureManager extends MessageListener {
-
-    private static String QAI_PROCEDURES = "QAI_PROCEDURES";
+public class ProcedureManager extends QaiMessageListener {
 
     @Inject
     private MessageQueue messageQueue;
@@ -38,7 +36,7 @@ public class ProcedureManager extends MessageListener {
     @Inject
     private UUIDService uuidService;
 
-    @Inject //@Named("HAZELCAST_CLIENT")
+    @Inject
     private HazelcastInstance hazelcastInstance;
 
     private static ProcedureManager procedureManager;
@@ -64,7 +62,7 @@ public class ProcedureManager extends MessageListener {
     public String addProcedure(Procedure procedure) {
         String uuid = uuidService.createUUIDString();
 
-        IExecutorService executorService = hazelcastInstance.getExecutorService(QAI_PROCEDURES);
+        IExecutorService executorService = hazelcastInstance.getExecutorService(procedureTopicName);
         executorService.submit(procedure);
 
         procedures.put(uuid, new ProcedureWithState(ProcedureStates.READY, procedure));
@@ -86,6 +84,11 @@ public class ProcedureManager extends MessageListener {
     @Override
     public void onMessage(Message message) {
         //message.
+    }
+
+    @Override
+    public void initialize() {
+
     }
 
     class ProcedureWithState {

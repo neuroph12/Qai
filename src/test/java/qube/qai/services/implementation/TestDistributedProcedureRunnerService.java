@@ -23,7 +23,11 @@ public class TestDistributedProcedureRunnerService extends QaiTestBase {
 
     public void testDistributedProcedures() throws Exception {
 
-        // oh this will be fun :-)
+        DistributedProcedureListener procedureListener = new DistributedProcedureListener();
+
+        assertNotNull("initialization failed- no hazelcast-instance", procedureListener.hazelcastInstance);
+        assertNotNull("initialization failed- no procedure-runner subclass", procedureListener.procedureRunner);
+
         fail("test is not yet implemented");
     }
 }

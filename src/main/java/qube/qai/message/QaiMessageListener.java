@@ -19,20 +19,24 @@ import com.hazelcast.core.Message;
 /**
  * Created by rainbird on 11/27/15.
  */
-public abstract class MessageListener implements com.hazelcast.core.MessageListener {
+public abstract class QaiMessageListener implements com.hazelcast.core.MessageListener {
+
+    public static String procedureTopicName = "Procedures";
 
     private String uuid;
 
-    public MessageListener() {
+    public QaiMessageListener() {
+    }
+
+    public QaiMessageListener(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getUUID() {
         return uuid;
     }
 
-    public MessageListener(String uuid) {
-        this.uuid = uuid;
-    }
-
     public abstract void onMessage(Message message);
+
+    public abstract void initialize();
 }

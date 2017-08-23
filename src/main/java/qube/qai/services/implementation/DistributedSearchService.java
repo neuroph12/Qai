@@ -17,9 +17,9 @@ package qube.qai.services.implementation;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.Message;
-import com.hazelcast.core.MessageListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.message.QaiMessageListener;
 import qube.qai.services.SearchResultSink;
 import qube.qai.services.SearchServiceInterface;
 
@@ -30,7 +30,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 1/6/16.
  */
-public class DistributedSearchService implements SearchServiceInterface, MessageListener {
+public class DistributedSearchService extends QaiMessageListener implements SearchServiceInterface {
 
     private Logger logger = LoggerFactory.getLogger("DistributedSearchService");
 
@@ -42,30 +42,24 @@ public class DistributedSearchService implements SearchServiceInterface, Message
     @Inject
     private SearchResultSink resultSink;
 
-    protected String searchTopicName;
-
     protected Collection<SearchResult> results;
 
     protected int maxTryNumber = 10;
 
-//    protected boolean useSink = false;
-
-    protected boolean resultsReturned = false;
-
     protected boolean interrupt = false;
-
 
     protected boolean initialized = false;
 
     public DistributedSearchService(String searchTopicName) {
-        this.searchTopicName = searchTopicName;
+        this.context = searchTopicName;
     }
 
+    @Override
     public void initialize() {
 
-        logger.info("Initializing DistributedSearchService: " + searchTopicName);
+        logger.info("Initializing DistributedSearchService: " + context);
 
-        ITopic topic = hazelcastInstance.getTopic(searchTopicName);
+        ITopic topic = hazelcastInstance.getTopic(context);
         topic.addMessageListener(this);
 
         initialized = true;
@@ -80,7 +74,7 @@ public class DistributedSearchService implements SearchServiceInterface, Message
         // first set the results to null
         results = null;
 
-        ITopic<SearchRequest> topic = hazelcastInstance.getTopic(searchTopicName);
+        ITopic<SearchRequest> topic = hazelcastInstance.getTopic(context);
         SearchRequest request = new SearchRequest(searchString, fieldName, hitsPerPage);
         topic.publish(request);
 
@@ -113,14 +107,6 @@ public class DistributedSearchService implements SearchServiceInterface, Message
 
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
-    }
-
-    public String getSearchTopicName() {
-        return searchTopicName;
-    }
-
-    public void setSearchTopicName(String searchTopicName) {
-        this.searchTopicName = searchTopicName;
     }
 
     public int getMaxTryNumber() {

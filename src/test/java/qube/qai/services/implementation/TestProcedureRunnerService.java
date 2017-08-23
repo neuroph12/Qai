@@ -18,7 +18,6 @@ import com.hazelcast.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
-import qube.qai.message.MessageListener;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.analysis.MatrixStatistics;
 import qube.qai.services.ProcedureRunnerInterface;
@@ -159,9 +158,9 @@ public class TestProcedureRunnerService extends QaiTestBase {
         }
     }
 
-    public void restBasicMessaging() throws Exception {
+    /*public void restBasicMessaging() throws Exception {
 
-        MessageListener listener = new MessageListener() {
+        QaiMessageListener listener = new QaiMessageListener() {
             @Override
             public void onMessage(Message message) {
                 System.out.println("message received: " + message.getMessageObject());
@@ -172,7 +171,7 @@ public class TestProcedureRunnerService extends QaiTestBase {
         itopic.addMessageListener(listener);
 
         itopic.publish("talking with myself...");
-    }
+    }*/
 
     /**
      * well, this is interesting to see happening, really

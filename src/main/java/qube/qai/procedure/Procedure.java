@@ -36,6 +36,7 @@ import qube.qai.procedure.nodes.ProcedureInputs;
 import qube.qai.procedure.nodes.ProcedureResults;
 import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.utils.AttachProcedure;
+import qube.qai.procedure.utils.CreateUserProcedure;
 import qube.qai.procedure.utils.SelectionProcedure;
 import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.services.implementation.DataSelectorFactory;
@@ -111,6 +112,7 @@ public abstract class Procedure extends ConcatenationNode
 
         // utils
         classes.add(AttachProcedure.class);
+        classes.add(CreateUserProcedure.class);
         classes.add(SelectionProcedure.class);
         classes.add(SimpleProcedure.class);
 

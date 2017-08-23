@@ -138,6 +138,20 @@ public class ProcedureLibrary {
         }
     };
 
+    public static ProcedureTemplate<MarketNetworkBuilder> marketNetworkBuilderTemplate = new ProcedureTemplate<MarketNetworkBuilder>() {
+        @Override
+        public MarketNetworkBuilder createProcedure() {
+            return new MarketNetworkBuilder();
+        }
+    };
+
+    public static ProcedureTemplate<SortingPercentilesProcedure> sortingPercentilesTemplate = new ProcedureTemplate<SortingPercentilesProcedure>() {
+        @Override
+        public SortingPercentilesProcedure createProcedure() {
+            return new SortingPercentilesProcedure();
+        }
+    };
+
     public static ProcedureTemplate[] allTemplates = new ProcedureTemplate[]{
             simpleTemplate,
             matrixStatisticsTemplate,
@@ -153,13 +167,16 @@ public class ProcedureLibrary {
             wikiRipperTemplate,
             attachTemplate,
             selectionTemplate,
-            createUserTemplate
+            createUserTemplate,
+            marketNetworkBuilderTemplate,
+            sortingPercentilesTemplate,
     };
 
     public static Map<String, ProcedureTemplate> templateMap = new TreeMap<>();
 
 
     public static ProcedureTemplate getNamedProcedureTemplate(String name) {
+
         if (templateMap.isEmpty()) {
             templateMap.put(SimpleProcedure.NAME, simpleTemplate);
             templateMap.put(MatrixStatistics.NAME, matrixStatisticsTemplate);
@@ -176,6 +193,8 @@ public class ProcedureLibrary {
             templateMap.put(AttachProcedure.NAME, attachTemplate);
             templateMap.put(SelectionProcedure.NAME, selectionTemplate);
             templateMap.put(CreateUserProcedure.NAME, createUserTemplate);
+            templateMap.put(MarketNetworkBuilder.NAME, marketNetworkBuilderTemplate);
+            templateMap.put(SortingPercentilesProcedure.NAME, sortingPercentilesTemplate);
         }
 
         return templateMap.get(name);
