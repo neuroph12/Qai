@@ -3,6 +3,8 @@ in order to prepare raspberries there is a row of things which need be done
 check the mounted disks with
 df -h
 
+umount /dev/sdX1
+
 this is the command to install the image on sd-card
 sudo dd bs=4M if=2015-11-21-raspbian-jessie.img of=/dev/mmcblk0
 with the newer version of raspbian
