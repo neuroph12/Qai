@@ -70,6 +70,10 @@ public class MapDataProvider implements QaiDataProvider {
     @Override
     public void putData(String uuid, Object data) {
         IMap map = hazelcastInstance.getMap(context);
-        map.put(uuid, data);
+        if (map.containsKey(uuid)) {
+            map.replace(uuid, data);
+        } else {
+            map.put(uuid, data);
+        }
     }
 }

@@ -43,7 +43,8 @@ public class TestDatabaseMapStores extends TestCase {
 
     public void testUserMapStore() throws Exception {
 
-        Injector injector = createInjector("STAND_ALONE_TEST_USERS");
+        String injectorname = "STAND_ALONE_TEST_USERS"; // "USERS_MYSQL"
+        Injector injector = createInjector(injectorname);
 
         DatabaseMapStore mapStore = new DatabaseMapStore(User.class);
         injector.injectMembers(mapStore);
@@ -288,6 +289,13 @@ public class TestDatabaseMapStores extends TestCase {
             }
             return stockInjector;
         } else if ("STAND_ALONE_TEST_USERS".equals(name)) {
+            if (userInjector == null) {
+                userInjector = Guice.createInjector(new JpaPersistModule(name));
+                PersistService service = userInjector.getInstance(PersistService.class);
+                service.start();
+            }
+            return userInjector;
+        } else if ("USERS_MYSQL".equals(name)) {
             if (userInjector == null) {
                 userInjector = Guice.createInjector(new JpaPersistModule(name));
                 PersistService service = userInjector.getInstance(PersistService.class);

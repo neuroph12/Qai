@@ -396,7 +396,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     public static Injector getJpaUsersInjector() {
 
         if (jpaUsersInjector == null) {
-            jpaUsersInjector = Guice.createInjector(new JpaPersistModule("USERS"));
+            jpaUsersInjector = Guice.createInjector(new JpaPersistModule("USERS_HSQLDB"));
             PersistService service = jpaUsersInjector.getInstance(PersistService.class);
             service.start();
         }

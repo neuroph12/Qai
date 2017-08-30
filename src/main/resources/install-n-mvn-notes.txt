@@ -9,6 +9,8 @@ this is the command to install the image on sd-card
 sudo dd bs=4M if=2015-11-21-raspbian-jessie.img of=/dev/mmcblk0
 with the newer version of raspbian
 sudo dd bs=4M if=2016-05-27-raspbian-jessie.img of=/dev/mmcblk0
+with the even newer version
+sudo dd bs=4M if=2017-08-16-raspbian-stretch.img of=/dev/mmcblk0
 
 copying the image back somewhere will work with dd again, this time the other way round
 sudo bs=4M if=/dev/mmcblk0 of=custom-image.img
@@ -73,12 +75,12 @@ in order to have larger memory for the JVM
 latest configuration of boxes in intranet
 192.168.1.2	- modelserver
 192.168.1.3 - weber
-192.168.1.4 - services-server
+192.168.1.4 - services-server jenkins/wiki
 192.168.1.5 - qoanserver
 192.168.1.6 - zenpunk
-192.168.1.7 - qainode
+192.168.1.7 - qainode- mysql database-server/artifactory
 
-qoan-server operates on
+qoan-server operates on- not right
 http://192.168.1.5:8080
 
 qai-node operates on

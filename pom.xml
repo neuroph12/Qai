@@ -183,6 +183,39 @@
             <version>${hsqldb.version}</version>
         </dependency>
 
+        <!-- MySQL database driver -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>6.0.6</version>
+        </dependency>
+
+        <!-- hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.3.0.Final</version>
+        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>org.hibernate.javax.persistence</groupId>-->
+        <!--<artifactId>hibernate-jpa-2.1-api</artifactId>-->
+        <!--<version>${hibernate-jpa.version}</version>-->
+        <!--</dependency>-->
+
+        <!-- i am not so sure about this -->
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
+        </dependency>
+
         <!-- a really cool parser-framework.
         forget about parser generators, just program the parser as if it were a BNF -->
         <dependency>
@@ -290,25 +323,6 @@
             <artifactId>commons-compress</artifactId>
             <version>${apache-commons-compress.version}</version>
         </dependency>
-
-        <!-- hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>4.3.0.Final</version>
-        </dependency>
-
-        <!--<dependency>-->
-        <!--<groupId>org.hibernate.javax.persistence</groupId>-->
-        <!--<artifactId>hibernate-jpa-2.1-api</artifactId>-->
-        <!--<version>${hibernate-jpa.version}</version>-->
-        <!--</dependency>-->
 
         <!-- UUID-generator -->
         <dependency>
