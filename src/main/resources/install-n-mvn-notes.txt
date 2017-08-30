@@ -80,6 +80,9 @@ latest configuration of boxes in intranet
 192.168.1.6 - zenpunk
 192.168.1.7 - qainode- mysql database-server/artifactory
 
+-> remember to change mysql-server settings in /etc/mysql/my.cnf
+-> has to be changed to:                        bind-address = 0.0.0.0
+
 qoan-server operates on- not right
 http://192.168.1.5:8080
 
