@@ -14,22 +14,9 @@
 
 package qube.qai.security;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import qube.qai.main.QaiSecurityModule;
-import qube.qai.main.QaiTestBase;
+import qube.qai.user.User;
 
-public class TestQaiSecurity extends QaiTestBase {
+public interface QaiSecurity {
 
-    public void testQaiSecurityModule() throws Exception {
-
-
-        Injector injector = Guice.createInjector(new QaiSecurityModule());
-
-        QaiSecurityManager security = new QaiSecurityManager();
-        injector.injectMembers(security);
-
-        assertNotNull("there has to be a security to begin with", security);
-
-    }
+    User authenticateUser(String username, String password) throws QaiAuthenticationException;
 }

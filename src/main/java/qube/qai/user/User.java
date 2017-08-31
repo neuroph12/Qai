@@ -33,19 +33,19 @@ public class User implements Serializable {
     @Id
     @thewebsemantic.Id
     @Column(name = "uuid")
-    private String uuid;
+    protected String uuid;
 
     @Column(name = "username")
-    private String username;
+    protected String username;
 
     @Column(name = "password")
-    private String password;
+    protected String password;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<Session> sessions = new HashSet<>();
+    protected Set<Session> sessions = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<Role> roles = new HashSet<>();
+    protected Set<Role> roles = new HashSet<>();
 
     public User() {
         this.uuid = UUIDService.uuidString();

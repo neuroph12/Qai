@@ -113,6 +113,42 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-guice</artifactId>
             <version>${apache-shiro.version}</version>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.inject</groupId>
+                    <artifactId>guice</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.inject.extensions</groupId>
+                    <artifactId>guice-multibindings</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.inject.extensions</groupId>
+                    <artifactId>guice-assistedinject</artifactId>
+                </exclusion>
+            </exclusions>
+
+        </dependency>
+        <!-- Guice is pretty important after all -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+
+        <!-- Guice-persist for JPA integration -->
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-persist</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.inject.extensions/guice-multibindings -->
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-multibindings</artifactId>
+            <version>${guice.version}</version>
         </dependency>
 
         <!-- Tika does parsing and Lucene does search and indexing -->
@@ -148,19 +184,6 @@
             <version>${opennlp.version}</version>
         </dependency>
 
-        <!-- Guice is pretty important after all -->
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
-
-        <!-- Guice-persist for JPA integration -->
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-persist</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
 
         <!-- Guice-config for using external configurations -->
         <!--<dependency>-->

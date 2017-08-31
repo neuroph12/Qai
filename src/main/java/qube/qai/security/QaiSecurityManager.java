@@ -14,22 +14,23 @@
 
 package qube.qai.security;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import qube.qai.main.QaiSecurityModule;
-import qube.qai.main.QaiTestBase;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.mgt.SecurityManager;
+import qube.qai.user.User;
 
-public class TestQaiSecurity extends QaiTestBase {
+import javax.inject.Inject;
 
-    public void testQaiSecurityModule() throws Exception {
+public class QaiSecurityManager implements QaiSecurity {
 
+    @Inject
+    private SecurityManager securityManager;
 
-        Injector injector = Guice.createInjector(new QaiSecurityModule());
+    @Override
+    public User authenticateUser(String username, String password) throws QaiAuthenticationException {
 
-        QaiSecurityManager security = new QaiSecurityManager();
-        injector.injectMembers(security);
+        AuthenticationToken token = null;
+        QaiSaltedAuthentificationInfo info = (QaiSaltedAuthentificationInfo) securityManager.authenticate(token);
 
-        assertNotNull("there has to be a security to begin with", security);
-
+        return info.getUser();
     }
 }

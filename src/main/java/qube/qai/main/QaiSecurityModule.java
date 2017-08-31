@@ -34,6 +34,6 @@ public class QaiSecurityModule extends ShiroModule {
 
     @Provides
     Ini loadShiroIni() {
-        return Ini.fromResourcePath("classpath:shiro.ini");
+        return Ini.fromResourcePath("classpath:qube/qai/main/shiro.ini");
     }
 }

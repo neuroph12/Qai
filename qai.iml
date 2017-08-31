@@ -73,7 +73,12 @@
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shiro:shiro-event:1.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shiro:shiro-guice:1.4.0" level="project" />
-    <orderEntry type="library" name="Maven: com.google.inject.extensions:guice-multibindings:3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.inject:guice:4.1.0" level="project" />
+    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava:19.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.inject.extensions:guice-persist:4.1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.inject.extensions:guice-multibindings:4.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tika:tika-parsers:1.10" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tika:tika-core:1.10" level="project" />
     <orderEntry type="library" name="Maven: org.gagravarr:vorbis-java-tika:0.6" level="project" />
@@ -138,8 +143,6 @@
     <orderEntry type="library" name="Maven: edu.ucar:httpservices:4.5.5" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.2.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpmime:4.2.6" level="project" />
-    <orderEntry type="library" name="Maven: com.google.guava:guava:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:1.3.9" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-csv:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.sis.core:sis-utility:0.5" level="project" />
     <orderEntry type="library" name="Maven: org.apache.sis.storage:sis-netcdf:0.5" level="project" />
@@ -154,10 +157,6 @@
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-queries:5.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-sandbox:5.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.opennlp:opennlp-tools:1.6.0" level="project" />
-    <orderEntry type="library" name="Maven: com.google.inject:guice:4.1.0" level="project" />
-    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
-    <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.google.inject.extensions:guice-persist:4.1.0" level="project" />
     <orderEntry type="library" name="Maven: com.hazelcast:hazelcast-all:3.8.2" level="project" />
     <orderEntry type="library" name="Maven: org.hsqldb:hsqldb:2.3.4" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:6.0.6" level="project" />
