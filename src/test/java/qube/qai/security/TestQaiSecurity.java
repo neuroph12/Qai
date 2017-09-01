@@ -31,5 +31,7 @@ public class TestQaiSecurity extends QaiTestBase {
 
         assertNotNull("there has to be a security to begin with", security);
 
+//        fail("this was just the initialization which went alright, rest of the test need to be implemented");
+
     }
 }

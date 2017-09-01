@@ -44,9 +44,10 @@ public class TestStockEntityInitialization extends TestCase {
 
     // "STAND_ALONE_TEST_STOCKS" is for running test regularly
     // "TEST_STOCKS" is what all test-routines with hazelcast use
-    private String jpaModuleName = "STOCKS"; // is the life database
+    // "STOCKS_HSQLDB" is what all test-routines with hazelcast use
+    private String jpaModuleName = "STOCKS_MYSQL"; // is the life database
 
-    public void testInitializedDatabase() throws Exception {
+    public void estInitializedDatabase() throws Exception {
 
         Injector injector = createInjector(jpaModuleName);
         EntityManager entityManager = injector.getInstance(EntityManager.class);
@@ -98,7 +99,7 @@ public class TestStockEntityInitialization extends TestCase {
 
     }
 
-    public void estStockEntityInitializationProcedure() throws Exception {
+    public void testStockEntityInitializationProcedure() throws Exception {
         //String jpaModuleName = "STAND_ALONE_TEST_STOCKS";
         Injector injector = createInjector(jpaModuleName);
         EntityManager entityManager = injector.getInstance(EntityManager.class);
@@ -107,9 +108,9 @@ public class TestStockEntityInitialization extends TestCase {
         procedure.setEntityManager(entityManager);
 
         String[] listings = {StockEntityInitialization.S_AND_P_500_LISTING
-                //, StockEntityInitialization.NYSE_LISTING
+                , StockEntityInitialization.NYSE_LISTING
 //                , StockEntityInitialization.OTHER_LISTED_ENTITIES
-//                , StockEntityInitialization.NASDAQ_LISTING
+                , StockEntityInitialization.NASDAQ_LISTING
         };
 
         //int overallCount = 0;

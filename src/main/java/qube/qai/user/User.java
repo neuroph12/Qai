@@ -47,6 +47,9 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     protected Set<Role> roles = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    protected Set<Permission> permissions = new HashSet<>();
+
     public User() {
         this.uuid = UUIDService.uuidString();
     }
@@ -72,10 +75,13 @@ public class User implements Serializable {
     }
 
     public void addRole(Role role) {
-        if (role.getUser() != null || !uuid.equals(role.getUser())) {
-            role.setUser(this);
-        }
+        role.setUser(this);
         roles.add(role);
+    }
+
+    public void addPermission(Permission permission) {
+        permission.setUser(this);
+        permissions.add(permission);
     }
 
     public Session createSession() {
@@ -130,6 +136,18 @@ public class User implements Serializable {
 
     public Set<Session> getSessions() {
         return sessions;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     public void setSessions(Set<Session> sessions) {

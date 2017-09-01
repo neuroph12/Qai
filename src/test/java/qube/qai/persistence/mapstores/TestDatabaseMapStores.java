@@ -26,6 +26,7 @@ import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.services.implementation.UUIDService;
+import qube.qai.user.Permission;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
@@ -55,12 +56,17 @@ public class TestDatabaseMapStores extends TestCase {
         Role role = new Role(user, "DO_ALL_ROLE", "this role will allow you to do everything");
         user.addRole(role);
 
+        Permission permission = new Permission("Do all permission");
+        user.addPermission(permission);
+
         mapStore.store(user.getUuid(), user);
 
         User readUser = (User) mapStore.load(user.getUuid());
         assertNotNull(readUser);
         assertTrue(user.equals(readUser));
         assertTrue(!user.getSessions().isEmpty());
+        assertTrue(!user.getRoles().isEmpty());
+        assertTrue(!user.getPermissions().isEmpty());
         Session readSession = readUser.getSessions().iterator().next();
         assertTrue(session.equals(readSession));
         mapStore.delete(user.getUuid());
@@ -71,9 +77,10 @@ public class TestDatabaseMapStores extends TestCase {
     }
 
 
-    public void estStockQuoteMapStore() throws Exception {
+    public void testStockQuoteMapStore() throws Exception {
 
-        Injector injector = createInjector("STAND_ALONE_TEST_STOCKS");
+        // "STAND_ALONE_TEST_STOCKS"
+        Injector injector = createInjector("TEST_STOCKS_MYSQL");
 
         DatabaseMapStore mapStore = new DatabaseMapStore(StockQuote.class);
         injector.injectMembers(mapStore);
@@ -109,14 +116,15 @@ public class TestDatabaseMapStores extends TestCase {
     /**
      * @throws Exception
      */
-    public void estStockEntityMapStore() throws Exception {
+    public void testStockEntityMapStore() throws Exception {
 
-        Injector injector = createInjector("STAND_ALONE_TEST_STOCKS");
+        // "STAND_ALONE_TEST_STOCKS"
+        Injector injector = createInjector("TEST_STOCKS_MYSQL");
 
         DatabaseMapStore mapStore = new DatabaseMapStore(StockEntity.class);
         injector.injectMembers(mapStore);
 
-        int number = 100;
+        int number = 50;
         Map<String, StockEntity> entityMap = new HashMap<String, StockEntity>();
         for (int i = 0; i < number; i++) {
             String name = "entity(" + i + ")";
@@ -302,6 +310,13 @@ public class TestDatabaseMapStores extends TestCase {
                 service.start();
             }
             return userInjector;
+        } else if ("TEST_STOCKS_MYSQL".equals(name)) {
+            if (stockInjector == null) {
+                stockInjector = Guice.createInjector(new JpaPersistModule(name));
+                PersistService service = stockInjector.getInstance(PersistService.class);
+                service.start();
+            }
+            return stockInjector;
         }
         return null;
     }

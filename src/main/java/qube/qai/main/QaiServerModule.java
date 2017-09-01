@@ -386,7 +386,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     public static Injector getJpaStocksInjector() {
 
         if (jpaStocksInjector == null) {
-            jpaStocksInjector = Guice.createInjector(new JpaPersistModule("STOCKS"));
+            jpaStocksInjector = Guice.createInjector(new JpaPersistModule("STOCKS_MYSQL"));
             PersistService service = jpaStocksInjector.getInstance(PersistService.class);
             service.start();
         }
@@ -396,7 +396,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     public static Injector getJpaUsersInjector() {
 
         if (jpaUsersInjector == null) {
-            jpaUsersInjector = Guice.createInjector(new JpaPersistModule("USERS_HSQLDB"));
+            jpaUsersInjector = Guice.createInjector(new JpaPersistModule("USERS_MYSQL"));
             PersistService service = jpaUsersInjector.getInstance(PersistService.class);
             service.start();
         }

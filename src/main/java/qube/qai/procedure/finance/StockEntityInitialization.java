@@ -138,7 +138,7 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
         StockQuoteDataStore store = new StockQuoteDataStore();
 
         // begin the transaction in the database
-        entityManager.getTransaction().begin();
+//        entityManager.getTransaction().begin();
         StockGroup group = new StockGroup();
         group.setName(groupName);
 
@@ -199,15 +199,22 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
         }
 
         // now save the group we have just created
-        entityManager.persist(group);
-        // write the rest of data- this writes the entries in relation-table
-        // and commit the transaction
-        entityManager.flush();
-        entityManager.getTransaction().commit();
-        info("persisted group: '" + group.getName() + "' with: '" + group.getEntities().size() + " entities");
-        // now we are done and can change the flag
-        numberOfRecords = count - 1;
-        info("read " + (count - 1) + " rows from csv-file");
+        try {
+            entityManager.persist(group);
+            // write the rest of data- this writes the entries in relation-table
+            // and commit the transaction
+//            entityManager.flush();
+//            entityManager.getTransaction().commit();
+            info("persisted group: '" + group.getName() + "' with: '" + group.getEntities().size() + " entities");
+            // now we are done and can change the flag
+            numberOfRecords = count - 1;
+            info("read " + (count - 1) + " rows from csv-file");
+        } catch (Exception e) {
+            error("StockEntityInitializationProcedure interrupted with exception", e);
+//            if (entityManager.getTransaction().isActive()) {
+//                entityManager.close();
+//            }
+        }
     }
 
     public StockEntity findStockEntityDatabaseCopy(StockEntity entity) {
