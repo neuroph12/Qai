@@ -15,13 +15,11 @@
 package qube.qai.persistence.search;
 
 import junit.framework.TestCase;
-import org.apache.jena.rdf.model.Model;
 import qube.qai.persistence.mapstores.TestDatabaseMapStores;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.Role;
 import qube.qai.user.User;
 
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -79,13 +77,13 @@ public class TestModelSearchServices extends TestCase {
         user.addRole(new Role(user, "user role", "just another role"));
         user.addRole(new Role(user, "test role", "test role"));
 
-        Model userModel = User.userAsModel(user);
+        /*Model userModel = User.userAsModel(user);
         assertNotNull("returned model may not be null", userModel);
 
         StringWriter writer = new StringWriter();
         userModel.write(writer);
 
-        log(writer.toString());
+        log(writer.toString());*/
     }
 
     private void log(String message) {

@@ -47,12 +47,12 @@ public class StockQuoteDataStore implements DataStore {
                 StockQuote quote = new StockQuote();
                 quote.setTickerSymbol(quoteName);
                 quote.setQuoteDate(date);
-                quote.setAdjustedClose(data.close);
-                quote.setClose(data.close);
-                quote.setHigh(data.high);
-                quote.setLow(data.low);
-                quote.setOpen(data.open);
-                quote.setVolume(data.volume);
+                if (!Double.isNaN(data.close)) quote.setAdjustedClose(data.close);
+                if (!Double.isNaN(data.close)) quote.setClose(data.close);
+                if (!Double.isNaN(data.high)) quote.setHigh(data.high);
+                if (!Double.isNaN(data.low)) quote.setLow(data.low);
+                if (!Double.isNaN(data.open)) quote.setOpen(data.open);
+                if (!Double.isNaN(data.volume)) quote.setVolume(data.volume);
                 if (quote.getQuoteDate() != null) {
                     quotes.add(quote);
                 }

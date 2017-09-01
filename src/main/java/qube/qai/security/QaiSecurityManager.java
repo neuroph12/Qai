@@ -19,11 +19,15 @@ import org.apache.shiro.mgt.SecurityManager;
 import qube.qai.user.User;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 public class QaiSecurityManager implements QaiSecurity {
 
     @Inject
     private SecurityManager securityManager;
+
+    @Inject
+    private EntityManager entityManager;
 
     @Override
     public User authenticateUser(String username, String password) throws QaiAuthenticationException {
@@ -32,5 +36,13 @@ public class QaiSecurityManager implements QaiSecurity {
         QaiSaltedAuthentificationInfo info = (QaiSaltedAuthentificationInfo) securityManager.authenticate(token);
 
         return info.getUser();
+    }
+
+    public String createUser(String username, String password) {
+        User user = new User(username, password);
+
+        entityManager.persist(user);
+
+        return user.getUuid();
     }
 }

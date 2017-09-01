@@ -14,9 +14,6 @@
 
 package qube.qai.user;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Resource;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
@@ -41,6 +38,9 @@ public class User implements Serializable {
     @Column(name = "password")
     protected String password;
 
+    @Column(name = "passwordSalt")
+    protected String passwordSalt;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     protected Set<Session> sessions = new HashSet<>();
 
@@ -52,6 +52,7 @@ public class User implements Serializable {
 
     public User() {
         this.uuid = UUIDService.uuidString();
+        this.passwordSalt = UUIDService.uuidString();
     }
 
     public User(String username, String password) {
@@ -91,7 +92,7 @@ public class User implements Serializable {
         return session;
     }
 
-    public static Model userAsModel(User user) {
+    /*public static Model userAsModel(User user) {
 
         Model model = ModelFactory.createDefaultModel();
 
@@ -128,7 +129,7 @@ public class User implements Serializable {
         }
 
         return model;
-    }
+    }*/
 
     public Set<Role> getRoles() {
         return roles;
@@ -168,6 +169,14 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public void setPasswordSalt(String passwordSalt) {
+        this.passwordSalt = passwordSalt;
     }
 
     public String getUuid() {
