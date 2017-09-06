@@ -16,19 +16,29 @@ package qube.qai.security;
 
 import org.apache.shiro.authc.*;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
+import qube.qai.main.QaiServerModule;
 import qube.qai.user.User;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.Set;
 
 public class QaiRealm extends JdbcRealm {
 
-    @Inject
+    //    @Inject
     private EntityManager entityManager;
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+
+        // self-inoculation in case it has not been done for us
+        if (entityManager == null) {
+            QaiServerModule.getJpaUsersInjector().injectMembers(this);
+
+        }
 
         UsernamePasswordToken userPassToken = (UsernamePasswordToken) token;
         String username = userPassToken.getUsername();
@@ -45,5 +55,20 @@ public class QaiRealm extends JdbcRealm {
 
         return info;
 
+    }
+
+    @Override
+    protected Set<String> getRoleNamesForUser(Connection conn, String username) throws SQLException {
+        return super.getRoleNamesForUser(conn, username);
+    }
+
+    @Override
+    protected Set<String> getPermissions(Connection conn, String username, Collection<String> roleNames) throws SQLException {
+        return super.getPermissions(conn, username, roleNames);
+    }
+
+    @Override
+    protected String getSaltForUser(String username) {
+        return super.getSaltForUser(username);
     }
 }

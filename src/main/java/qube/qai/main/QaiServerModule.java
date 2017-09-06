@@ -116,6 +116,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     private static Injector jpaUsersInjector;
 
+    static JpaPersistModule userJpaModule;
+
     private SearchServiceInterface stocksSearchService;
 
     private SearchServiceInterface userSearchService;
@@ -382,6 +384,12 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
         return proceduresSearchListener;
     }*/
+    public JpaPersistModule getUserJpaModule() {
+        if (userJpaModule == null) {
+            new JpaPersistModule("STOCKS_MYSQL");
+        }
+        return userJpaModule;
+    }
 
     public static Injector getJpaStocksInjector() {
 
@@ -396,7 +404,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     public static Injector getJpaUsersInjector() {
 
         if (jpaUsersInjector == null) {
-            jpaUsersInjector = Guice.createInjector(new JpaPersistModule("USERS_MYSQL"));
+            userJpaModule = new JpaPersistModule("USERS_MYSQL");
+            jpaUsersInjector = Guice.createInjector(userJpaModule);
             PersistService service = jpaUsersInjector.getInstance(PersistService.class);
             service.start();
         }

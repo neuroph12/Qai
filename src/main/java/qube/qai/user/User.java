@@ -32,11 +32,14 @@ public class User implements Serializable {
     @Column(name = "uuid")
     protected String uuid;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, unique = true)
     protected String username;
 
     @Column(name = "password")
     protected String password;
+
+    @Column(name = "email")
+    protected String email;
 
     @Column(name = "passwordSalt")
     protected String passwordSalt;
@@ -161,6 +164,14 @@ public class User implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

@@ -18,6 +18,7 @@ import com.google.inject.Provides;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.guice.ShiroModule;
 import org.apache.shiro.realm.text.IniRealm;
+import qube.qai.security.QaiRealm;
 
 /**
  * Created by rainbird on 7/19/17.
@@ -30,10 +31,14 @@ public class QaiSecurityModule extends ShiroModule {
         } catch (NoSuchMethodException e) {
             addError(e);
         }
+
+        this.bindRealm().to(QaiRealm.class);
     }
 
     @Provides
     Ini loadShiroIni() {
         return Ini.fromResourcePath("classpath:qube/qai/main/shiro.ini");
     }
+
+
 }

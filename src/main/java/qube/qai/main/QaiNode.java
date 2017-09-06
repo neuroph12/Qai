@@ -60,7 +60,8 @@ public class QaiNode {
 
             qaiServer = new QaiServerModule(properties);
             QaiModule qaiModule = new QaiModule();
-            injector = Guice.createInjector(qaiServer, qaiModule);
+            QaiSecurityModule qaiSecurityModule = new QaiSecurityModule();
+            injector = Guice.createInjector(qaiServer, qaiModule, qaiSecurityModule);
 
         } catch (IOException e) {
             logger.error("Error while loading configuration file: " + CONFIG_FILE_NAME, e);
