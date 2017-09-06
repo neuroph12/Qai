@@ -14,8 +14,6 @@
 
 package qube.qai.security;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -23,7 +21,6 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
-import qube.qai.main.QaiSecurityModule;
 import qube.qai.main.QaiTestBase;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.Permission;
@@ -68,10 +65,9 @@ public class TestQaiRealm extends QaiTestBase {
         assertTrue("delete all permission missing", atrInfo.getObjectPermissions().contains(new Permission("delete all")));
     }
 
-    public void estSecutrity() throws Exception {
+    public void testSecutrity() throws Exception {
 
-        Injector securityInjector = Guice.createInjector(new QaiSecurityModule());
-        org.apache.shiro.mgt.SecurityManager securityManager = securityInjector.getInstance(org.apache.shiro.mgt.SecurityManager.class);
+        org.apache.shiro.mgt.SecurityManager securityManager = injector.getInstance(org.apache.shiro.mgt.SecurityManager.class);
         SecurityUtils.setSecurityManager(securityManager);
 
         QaiRealm realm = new QaiRealm();
