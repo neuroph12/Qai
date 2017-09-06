@@ -43,6 +43,12 @@ public class Role implements Serializable {
     public Role() {
         this.uuid = UUIDService.uuidString();
         this.name = "dummy_role";
+        this.description = "user role";
+    }
+
+    public Role(String name) {
+        this();
+        this.name = name;
     }
 
     public Role(User user, String name, String description) {
@@ -86,7 +92,7 @@ public class Role implements Serializable {
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        return name.hashCode();
     }
 
     /**

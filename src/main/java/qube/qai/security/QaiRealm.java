@@ -14,61 +14,157 @@
 
 package qube.qai.security;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import com.hazelcast.query.EntryObject;
+import com.hazelcast.query.Predicate;
+import com.hazelcast.query.PredicateBuilder;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
-import qube.qai.main.QaiServerModule;
+import org.apache.shiro.subject.PrincipalCollection;
+import qube.qai.main.QaiConstants;
+import qube.qai.services.implementation.UUIDService;
+import qube.qai.user.Permission;
+import qube.qai.user.Role;
 import qube.qai.user.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 public class QaiRealm extends JdbcRealm {
 
-    //    @Inject
-    private EntityManager entityManager;
+    @Inject
+    private HazelcastInstance hazelcastInstance;
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 
-        // self-inoculation in case it has not been done for us
-        if (entityManager == null) {
-            QaiServerModule.getJpaUsersInjector().injectMembers(this);
+        UsernamePasswordToken upToken = (UsernamePasswordToken) token;
+        String username = upToken.getUsername();
+        String password = new String(upToken.getPassword());
 
+        User user = findUser(username);
+        if (user == null) {
+            throw new AuthenticationException("Username or password not right for '" + username + "'");
+        } else if (!user.getPassword().equals(password)) {
+            throw new AuthenticationException("Username or password not right for '" + username + "'");
         }
 
-        UsernamePasswordToken userPassToken = (UsernamePasswordToken) token;
-        String username = userPassToken.getUsername();
-        String password = new String(userPassToken.getPassword());
-
-        String queryString = "SELECT user FROM User AS user WHERE user.username = :username AND user.password = :password";
-        Query query = entityManager.createQuery(queryString).setParameter("username", username).setParameter("password", password);
-        User user = (User) query.getSingleResult();
-
-        SaltedAuthenticationInfo info = null;
-        if (user != null) {
-            info = new QaiSaltedAuthentificationInfo(username, user.getPassword());
-        }
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), getName());
 
         return info;
-
     }
 
+    /**
+     * this function loads user authorization data from "userManager" data source (database)
+     * User, Role are custom POJOs (beans) and are loaded from database.
+     * WildcardPermission implements shiros Permission interface, so my permissions in database gets accepted by shiro security
+     **/
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals) {
+
+        Set<String> roles = new HashSet<>();
+        Set<org.apache.shiro.authz.Permission> permissions = new HashSet<>();
+        Collection<User> principalsList = principals.byType(User.class);
+
+        if (principalsList.isEmpty()) {
+            throw new AuthorizationException("Empty principals list!");
+        }
+        //LOADING STUFF FOR PRINCIPAL
+        for (User userPrincipal : principalsList) {
+
+            User user = findUser(userPrincipal.getUsername());
+
+            Set<Role> userRoles = user.getRoles();
+            for (Role r : userRoles) {
+                roles.add(r.getName());
+            }
+            for (Permission p : user.getPermissions()) {
+                permissions.add(p);
+            }
+        }
+        //THIS IS THE MAIN CODE YOU NEED TO DO !!!!
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
+        info.setRoles(roles); //fill in roles
+        info.setObjectPermissions(permissions); //add permisions (MUST IMPLEMENT SHIRO PERMISSION INTERFACE)
+
+        return info;
+    }
     @Override
     protected Set<String> getRoleNamesForUser(Connection conn, String username) throws SQLException {
-        return super.getRoleNamesForUser(conn, username);
+        User user = findUser(username);
+        if (user == null) {
+            return null;
+        }
+        Set<String> rolenames = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            rolenames.add(role.getName());
+        }
+        return rolenames;
     }
 
     @Override
     protected Set<String> getPermissions(Connection conn, String username, Collection<String> roleNames) throws SQLException {
-        return super.getPermissions(conn, username, roleNames);
+        User user = findUser(username);
+        if (user == null) {
+            return null;
+        }
+        Set<String> permissions = new HashSet<>();
+        for (Permission permission : user.getPermissions()) {
+            permissions.add(permission.getName());
+        }
+
+        return permissions;
     }
 
     @Override
     protected String getSaltForUser(String username) {
-        return super.getSaltForUser(username);
+        User user = findUser(username);
+        if (user != null) {
+            return user.getUuid();
+        }
+        return UUIDService.uuidString();
+    }
+
+    public User findUser(String username) {
+
+        IMap<String, User> userMap = hazelcastInstance.getMap(QaiConstants.USERS);
+        EntryObject e = new PredicateBuilder().getEntryObject();
+        Predicate predicate = e.get("username").equal(username);
+
+        Collection<User> users = userMap.values(predicate);
+
+        if (users == null || users.isEmpty()) {
+            return null;
+        }
+
+        if (users.size() != 1) {
+            throw new IllegalStateException("there are more than one user with username: " + username);
+        }
+
+        return users.iterator().next();
+    }
+
+    public User createUser(String username, String password, String rolename, String... permissions) {
+
+        User user = findUser(username);
+        if (user == null) {
+            user = new User(username, password);
+            user.addRole(new Role(rolename));
+            for (String permission : permissions) {
+                user.addPermission(new Permission(permission));
+            }
+            IMap<String, User> userMap = hazelcastInstance.getMap(QaiConstants.USERS);
+            userMap.put(user.getUuid(), user);
+        }
+
+        return user;
     }
 }

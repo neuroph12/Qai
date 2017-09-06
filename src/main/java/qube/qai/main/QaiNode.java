@@ -91,7 +91,4 @@ public class QaiNode {
         qaiNode.startServices();
     }
 
-    //public static Injector getInjector() {
-    //    return injector;
-    //}
 }

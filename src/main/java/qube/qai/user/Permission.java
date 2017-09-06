@@ -17,9 +17,10 @@ package qube.qai.user;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Permission {
+public class Permission implements Serializable, org.apache.shiro.authz.Permission {
 
     @Id
     @thewebsemantic.Id
@@ -40,6 +41,12 @@ public class Permission {
     public Permission(String name) {
         this();
         this.name = name;
+    }
+
+    @Override
+    public boolean implies(org.apache.shiro.authz.Permission p) {
+        String other = ((Permission) p).getName();
+        return this.name.equalsIgnoreCase(other);
     }
 
     public User getUser() {
@@ -64,5 +71,21 @@ public class Permission {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Permission) {
+            Permission p = (Permission) obj;
+            if (name.equals(p.name)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
