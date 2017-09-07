@@ -38,7 +38,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class QaiRealm extends JdbcRealm {
+public class QaiRealm extends JdbcRealm implements QaiSecurity {
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -166,5 +166,14 @@ public class QaiRealm extends JdbcRealm {
         }
 
         return user;
+    }
+
+    public void removeUser(String username) {
+
+        User user = findUser(username);
+        if (user != null) {
+            IMap<String, User> userMap = hazelcastInstance.getMap(QaiConstants.USERS);
+            userMap.remove(user.getUuid(), user);
+        }
     }
 }

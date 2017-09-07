@@ -14,9 +14,7 @@
 
 package qube.qai.security;
 
-import qube.qai.user.User;
-
 public interface QaiSecurity {
 
-    User authenticateUser(String username, String password) throws QaiAuthenticationException;
+
 }

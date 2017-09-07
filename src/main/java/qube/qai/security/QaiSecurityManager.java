@@ -29,7 +29,6 @@ public class QaiSecurityManager implements QaiSecurity {
     @Inject
     private EntityManager entityManager;
 
-    @Override
     public User authenticateUser(String username, String password) throws QaiAuthenticationException {
 
         AuthenticationToken token = null;

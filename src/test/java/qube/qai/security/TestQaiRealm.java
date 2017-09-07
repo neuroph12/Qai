@@ -63,6 +63,8 @@ public class TestQaiRealm extends QaiTestBase {
         assertTrue("do all permission missing", atrInfo.getObjectPermissions().contains(new Permission("do all")));
         assertTrue("see all permission missing", atrInfo.getObjectPermissions().contains(new Permission("see all")));
         assertTrue("delete all permission missing", atrInfo.getObjectPermissions().contains(new Permission("delete all")));
+
+        realm.removeUser(username);
     }
 
     public void testSecutrity() throws Exception {
