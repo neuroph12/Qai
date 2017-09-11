@@ -76,9 +76,8 @@ latest configuration of boxes in intranet
 192.168.1.2	- modelserver
 192.168.1.3 - weber
 192.168.1.4 - services-server jenkins/wiki
-192.168.1.5 - qoanserver
-192.168.1.6 - zenpunk
 192.168.1.7 - qainode- mysql database-server/artifactory
+192.168.1.8 - stann
 
 MySql-server and related things
 remember to change mysql-server settings in /etc/mysql/my.cnf
