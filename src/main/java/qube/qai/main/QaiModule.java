@@ -20,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.message.MessageQueue;
 import qube.qai.message.MessageQueueInterface;
+import qube.qai.security.QaiSecurity;
+import qube.qai.security.QaiSecurityManager;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SelectorFactoryInterface;
@@ -82,6 +84,8 @@ public class QaiModule extends AbstractModule {
         bind(ProcedureRunnerInterface.class).to(ProcedureRunner.class);
 
         bind(MessageQueueInterface.class).to(MessageQueue.class);
+
+        bind(QaiSecurity.class).to(QaiSecurityManager.class);
 
         // stockEntityDataStore
         //bind(DataStore.class).annotatedWith(Names.named("StockEntities")).to(StockEntityDataStore.class);

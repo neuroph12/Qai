@@ -18,7 +18,10 @@ import com.hazelcast.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
+import qube.qai.security.QaiSecurity;
 import qube.qai.services.ProcedureRunnerInterface;
+import qube.qai.user.Permission;
+import qube.qai.user.User;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -36,8 +39,13 @@ public class ProcedureRunner implements ProcedureRunnerInterface {
 
     public static final String SERVICE_NAME = "ProcedureRunner";
 
+    public static Permission CAN_EXECUTE = new Permission("Can Execute");
+
     @Inject
     private HazelcastInstance hazelcastInstance;
+
+    @Inject
+    private QaiSecurity security;
 
     private Map<String, ProcedureState> procedures;
 
@@ -53,6 +61,13 @@ public class ProcedureRunner implements ProcedureRunnerInterface {
             uuid = UUIDService.uuidString();
             procedure.setUuid(uuid);
             logger.error("procedure without uuid- assigning new: " + uuid);
+        }
+
+        User user = procedure.getUser();
+        if (!security.hasPermission(user, CAN_EXECUTE)) {
+            logger.info("User: '" + user + "' does not have the required crendential for running procedure '"
+                    + procedure.getProcedureName() + "', execution interrupted!");
+            return;
         }
 
         ProcedureState state = new ProcedureState(STATE.RUNNING);

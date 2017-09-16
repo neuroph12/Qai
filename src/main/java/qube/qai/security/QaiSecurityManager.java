@@ -14,34 +14,28 @@
 
 package qube.qai.security;
 
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import qube.qai.user.Permission;
 import qube.qai.user.User;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 
 public class QaiSecurityManager implements QaiSecurity {
 
     @Inject
-    private SecurityManager securityManager;
+    private QaiRealm realm;
 
-    @Inject
-    private EntityManager entityManager;
+    @Override
+    public boolean hasPermission(User user, Permission permission) {
 
-    public User authenticateUser(String username, String password) throws QaiAuthenticationException {
-
-        AuthenticationToken token = null;
-        QaiSaltedAuthentificationInfo info = (QaiSaltedAuthentificationInfo) securityManager.authenticate(token);
-
-        return info.getUser();
-    }
-
-    public String createUser(String username, String password) {
-        User user = new User(username, password);
-
-        entityManager.persist(user);
-
-        return user.getUuid();
+        PrincipalCollection principalCollection = new SimplePrincipalCollection();
+        ((SimplePrincipalCollection) principalCollection).add(user, realm.getName());
+        AuthorizationInfo info = realm.doGetAuthorizationInfo(principalCollection);
+        if (info != null) {
+            return info.getObjectPermissions().contains(permission);
+        }
+        return false;
     }
 }

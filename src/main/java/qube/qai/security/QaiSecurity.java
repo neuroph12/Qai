@@ -14,7 +14,11 @@
 
 package qube.qai.security;
 
+import qube.qai.user.Permission;
+import qube.qai.user.User;
+
 public interface QaiSecurity {
 
+    boolean hasPermission(User user, Permission permission);
 
 }

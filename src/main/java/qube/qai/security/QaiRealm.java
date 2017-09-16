@@ -38,7 +38,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class QaiRealm extends JdbcRealm implements QaiSecurity {
+public class QaiRealm extends JdbcRealm {
 
     @Inject
     private HazelcastInstance hazelcastInstance;

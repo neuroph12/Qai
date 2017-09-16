@@ -41,12 +41,11 @@ public class DatabaseMapStore implements MapStore {
         this.entityManager = entityManager;
     }
 
-    //@TODO i am not sure if having a transaction here is really a good thing
     @Override
     public void store(Object key, Object value) {
-        //entityManager.getTransaction().begin();
+        entityManager.getTransaction().begin();
         entityManager.persist(baseClass.cast(value));
-        //entityManager.getTransaction().commit();
+        entityManager.getTransaction().commit();
     }
 
     @Override
@@ -57,14 +56,13 @@ public class DatabaseMapStore implements MapStore {
         }
     }
 
-    //@TODO i am not sure if having a transaction here is really a good thing
     @Override
     public void delete(Object key) {
         Object target = load(key);
         if (target != null) {
-            //entityManager.getTransaction().begin();
+            entityManager.getTransaction().begin();
             entityManager.remove(baseClass.cast(target));
-            //entityManager.getTransaction().commit();
+            entityManager.getTransaction().commit();
         }
     }
 
