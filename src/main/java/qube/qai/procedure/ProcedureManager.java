@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * Created by rainbird on 11/27/15.
  */
-public class ProcedureManager extends QaiMessageListener {
+public class ProcedureManager extends QaiMessageListener implements ProcedureManagerInterface {
 
     @Inject
     private MessageQueue messageQueue;
@@ -59,6 +59,7 @@ public class ProcedureManager extends QaiMessageListener {
         procedures = new HashMap<String, ProcedureWithState>();
     }
 
+    @Override
     public String addProcedure(Procedure procedure) {
         String uuid = uuidService.createUUIDString();
 
@@ -70,6 +71,7 @@ public class ProcedureManager extends QaiMessageListener {
         return uuid;
     }
 
+    @Override
     public void startProcedure(String uuid) {
         if (!procedures.containsKey(uuid)) {
             throw new IllegalArgumentException("Procedure: " + uuid + " has never been registered");
