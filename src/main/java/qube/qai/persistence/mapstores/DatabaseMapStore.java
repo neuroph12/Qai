@@ -15,17 +15,23 @@
 package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.MapStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by rainbird on 1/14/17.
  */
 public class DatabaseMapStore implements MapStore {
+
+    private Logger logger = LoggerFactory.getLogger("DatabaseMapStore");
 
     @Inject
     private EntityManager entityManager;
@@ -46,6 +52,7 @@ public class DatabaseMapStore implements MapStore {
         entityManager.getTransaction().begin();
         entityManager.persist(baseClass.cast(value));
         entityManager.getTransaction().commit();
+        logger.info("Stored object: " + value.toString() + " successfully");
     }
 
     @Override
@@ -63,6 +70,7 @@ public class DatabaseMapStore implements MapStore {
             entityManager.getTransaction().begin();
             entityManager.remove(baseClass.cast(target));
             entityManager.getTransaction().commit();
+            logger.info("Deleted object: " + key + " successfully");
         }
     }
 
@@ -75,7 +83,9 @@ public class DatabaseMapStore implements MapStore {
 
     @Override
     public Object load(Object key) {
-        return entityManager.find(baseClass, key);
+        Object found = entityManager.find(baseClass, key);
+        logger.info("Retrieving object: " + baseClass + ":" + key + " successfully");
+        return found;
     }
 
     @Override
@@ -90,7 +100,14 @@ public class DatabaseMapStore implements MapStore {
 
     @Override
     public Iterable loadAllKeys() {
-        return null;
+        Query query = entityManager.createQuery("SELECT o.uuid FROM " + baseClass.getSimpleName() + " AS o");
+        List list = query.getResultList();
+        if (list != null) {
+            logger.info("Retrieving all-keys for: " + baseClass + " with " + list.size() + " keys");
+        } else {
+            logger.info("Retrieving all-keys for: " + baseClass + " with no keys");
+        }
+        return list;
     }
 
     public Class getBaseClass() {
