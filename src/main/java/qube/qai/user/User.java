@@ -44,7 +44,7 @@ public class User implements Serializable {
     @Column(name = "passwordSalt")
     protected String passwordSalt;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     protected Set<Session> sessions = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
