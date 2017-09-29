@@ -28,6 +28,8 @@ import qube.qai.persistence.DummyQaiDataProvider;
 import qube.qai.persistence.MapDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
+import qube.qai.security.QaiSecurity;
+import qube.qai.security.QaiTestSecurityManager;
 import qube.qai.services.*;
 import qube.qai.services.implementation.*;
 
@@ -88,6 +90,8 @@ public class QaiTestModule extends AbstractModule {
 
         // messageQueue
         bind(MessageQueueInterface.class).to(MessageQueue.class);
+
+        bind(QaiSecurity.class).to(QaiTestSecurityManager.class);
     }
 
     @Provides

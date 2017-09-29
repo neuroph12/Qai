@@ -14,24 +14,13 @@
 
 package qube.qai.security;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import qube.qai.main.QaiTestBase;
-import qube.qai.main.QaiTestSecurityModule;
+import qube.qai.user.Permission;
+import qube.qai.user.User;
 
-public class TestQaiSecurity extends QaiTestBase {
+public class QaiTestSecurityManager implements QaiSecurity {
 
-    public void testQaiSecurityModule() throws Exception {
-
-
-        Injector injector = Guice.createInjector(new QaiTestSecurityModule());
-
-        QaiSecurityManager security = new QaiSecurityManager();
-        injector.injectMembers(security);
-
-        assertNotNull("there has to be a security to begin with", security);
-
-//        fail("this was just the initialization which went alright, rest of the test need to be implemented");
-
+    @Override
+    public boolean hasPermission(User user, Permission permission) {
+        return true;
     }
 }

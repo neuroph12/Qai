@@ -36,7 +36,7 @@ public class QaiTestBase extends TestCase implements QaiConstants {
     protected void setUp() throws Exception {
         super.setUp();
 
-        injector = Guice.createInjector(new QaiTestModule(), new QaiSecurityModule());
+        injector = Guice.createInjector(new QaiTestModule(), new QaiTestSecurityModule());
         injector.injectMembers(this);
     }
 

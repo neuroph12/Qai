@@ -48,8 +48,8 @@ public class QaiTestNode extends QaiTestModule {
         // other Qai dependent services and things lie in QaiModule
         //QaiTestModule qaiTestModule = new QaiTestModule();
         QaiTestServerModule qaiTestServer = new QaiTestServerModule();
-
-        injector = Guice.createInjector(qaiTestServer);
+        QaiTestSecurityModule qaiTestSecurity = new QaiTestSecurityModule();
+        injector = Guice.createInjector(qaiTestServer, qaiTestSecurity);
 
         // this looks crazy but just works...
         injector.injectMembers(qaiTestServer);
