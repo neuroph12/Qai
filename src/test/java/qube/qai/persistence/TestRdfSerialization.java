@@ -24,13 +24,8 @@ import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
 import qube.qai.persistence.mapstores.TestDatabaseMapStores;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.analysis.*;
-import qube.qai.procedure.archive.DirectoryIndexer;
-import qube.qai.procedure.archive.WikiArchiveIndexer;
-import qube.qai.procedure.finance.StockEntityInitialization;
-import qube.qai.procedure.finance.StockQuoteRetriever;
-import qube.qai.procedure.utils.SelectionProcedure;
-import qube.qai.procedure.utils.SimpleProcedure;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
@@ -183,18 +178,12 @@ public class TestRdfSerialization extends TestCase {
 
         Collection<Procedure> procedures = new ArrayList<>();
 
-        procedures.add(new ChangePointAnalysis());
-        procedures.add(new MarketNetworkBuilder());
-        procedures.add(new MatrixStatistics());
-        procedures.add(new NeuralNetworkAnalysis());
-        procedures.add(new NeuralNetworkForwardPropagation());
-        procedures.add(new SortingPercentilesProcedure());
-        procedures.add(new DirectoryIndexer());
-        procedures.add(new WikiArchiveIndexer());
-        procedures.add(new StockEntityInitialization());
-        procedures.add(new StockQuoteRetriever());
-        procedures.add(new SelectionProcedure());
-        procedures.add(new SimpleProcedure());
+        Collection<String> procNames = ProcedureLibrary.templateMap.keySet();
+        for (String name : procNames) {
+            ProcedureTemplate template = ProcedureLibrary.getNamedProcedureTemplate(name);
+            Procedure proc = template.createProcedure();
+            procedures.add(proc);
+        }
 
         return procedures;
     }

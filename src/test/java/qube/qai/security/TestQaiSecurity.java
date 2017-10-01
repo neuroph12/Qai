@@ -24,7 +24,9 @@ public class TestQaiSecurity extends QaiTestBase {
     public void testQaiSecurityModule() throws Exception {
 
 
-        Injector injector = Guice.createInjector(new QaiTestSecurityModule());
+        Injector securityInjector = Guice.createInjector(new QaiTestSecurityModule());
+
+        assertNotNull("security injector has not been created", securityInjector);
 
         QaiSecurityManager security = new QaiSecurityManager();
         injector.injectMembers(security);

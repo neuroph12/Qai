@@ -49,10 +49,14 @@ public class DatabaseMapStore implements MapStore {
 
     @Override
     public void store(Object key, Object value) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(baseClass.cast(value));
-        entityManager.getTransaction().commit();
-        logger.info("Stored object: " + value.toString() + " successfully");
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.persist(baseClass.cast(value));
+            entityManager.getTransaction().commit();
+            logger.info("Stored object: " + value.toString() + " successfully");
+        } catch (Exception e) {
+            logger.error("error while storing " + value, e);
+        }
     }
 
     @Override
@@ -65,12 +69,16 @@ public class DatabaseMapStore implements MapStore {
 
     @Override
     public void delete(Object key) {
-        Object target = load(key);
-        if (target != null) {
-            entityManager.getTransaction().begin();
-            entityManager.remove(baseClass.cast(target));
-            entityManager.getTransaction().commit();
-            logger.info("Deleted object: " + key + " successfully");
+        try {
+            Object target = load(key);
+            if (target != null) {
+                entityManager.getTransaction().begin();
+                entityManager.remove(baseClass.cast(target));
+                entityManager.getTransaction().commit();
+                logger.info("Deleted object: " + key + " successfully");
+            }
+        } catch (Exception e) {
+            logger.error("Error while deleting " + baseClass.getSimpleName() + " with uuid: " + key, e);
         }
     }
 
@@ -83,8 +91,13 @@ public class DatabaseMapStore implements MapStore {
 
     @Override
     public Object load(Object key) {
-        Object found = entityManager.find(baseClass, key);
-        logger.info("Retrieving object: " + baseClass + ":" + key + " successfully");
+        Object found = null;
+        try {
+            found = entityManager.find(baseClass, key);
+            logger.info("Retrieving object: " + baseClass.getSimpleName() + " with key: " + key + " successfully");
+        } catch (Exception e) {
+            logger.error("Retrieving object: " + baseClass.getSimpleName() + " with key: " + key + " went wrong with error", e);
+        }
         return found;
     }
 
@@ -103,9 +116,9 @@ public class DatabaseMapStore implements MapStore {
         Query query = entityManager.createQuery("SELECT o.uuid FROM " + baseClass.getSimpleName() + " AS o");
         List list = query.getResultList();
         if (list != null) {
-            logger.info("Retrieving all-keys for: " + baseClass + " with " + list.size() + " keys");
+            logger.info("Retrieving all-keys for: " + baseClass.getSimpleName() + " with " + list.size() + " keys");
         } else {
-            logger.info("Retrieving all-keys for: " + baseClass + " with no keys");
+            logger.info("Retrieving all-keys for: " + baseClass.getSimpleName() + " with no keys");
         }
         return list;
     }

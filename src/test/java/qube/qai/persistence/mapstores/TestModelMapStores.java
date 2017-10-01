@@ -17,8 +17,9 @@ package qube.qai.persistence.mapstores;
 import junit.framework.TestCase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
-import qube.qai.persistence.TestRdfSerialization;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
@@ -165,8 +166,11 @@ public class TestModelMapStores extends TestCase {
         mapStore.init();
 
         Collection<String> uuids = new ArrayList<>();
-        Collection<Procedure> procedures = TestRdfSerialization.generateAllProcedures();
-        for (Procedure procedure : procedures) {
+        //Collection<Procedure> procedures = TestRdfSerialization.generateAllProcedures();
+        Collection<String> procedureNames = ProcedureLibrary.templateMap.keySet();
+        for (String name : procedureNames) {
+            ProcedureTemplate template = ProcedureLibrary.getNamedProcedureTemplate(name);
+            Procedure procedure = template.createProcedure();
             String uuid = procedure.getUuid();
             uuids.add(uuid);
             mapStore.store(uuid, procedure);
