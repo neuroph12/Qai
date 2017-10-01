@@ -463,7 +463,7 @@ public class QaiTestServerModule extends AbstractModule {
 
     public static Injector initUsersInjector() {
         if (usersInjector == null) {
-            usersInjector = Guice.createInjector(new JpaPersistModule("TEST_USERS"));
+            usersInjector = Guice.createInjector(new JpaPersistModule("TEST_USERS_MYSQL"));
             PersistService service = usersInjector.getInstance(PersistService.class);
             service.start();
         }
@@ -473,7 +473,7 @@ public class QaiTestServerModule extends AbstractModule {
 
     public static Injector initStocksInjector() {
         if (stocksInjector == null) {
-            stocksInjector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
+            stocksInjector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS_MYSQL"));
             PersistService service = stocksInjector.getInstance(PersistService.class);
             service.start();
         }

@@ -49,7 +49,7 @@
         <encog.version>3.3.0</encog.version>
         <opennlp.version>1.6.0</opennlp.version>
 
-        <jparsec.version>2.2.1</jparsec.version>
+        <jparsec.version>3.0</jparsec.version>
         <xstream.version>1.4.9</xstream.version>
         <milyn-smooks.version>1.6</milyn-smooks.version>
         <jsoup.version>1.9.2</jsoup.version>
