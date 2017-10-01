@@ -80,7 +80,6 @@ public abstract class Procedure extends ConcatenationNode
     public Procedure(String name) {
         this();
         this.name = new Name(name);
-        buildArguments();
     }
 
     /**
