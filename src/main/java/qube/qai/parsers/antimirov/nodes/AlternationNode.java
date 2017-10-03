@@ -21,6 +21,7 @@ import qube.qai.parsers.antimirov.Inequality;
 import qube.qai.parsers.antimirov.NoWellformedTypeException;
 
 import java.util.Hashtable;
+import java.util.List;
 
 
 /**
@@ -41,6 +42,10 @@ public final class AlternationNode extends BaseNode {
 
     public AlternationNode() {
         this.name = new Name(Name.ALTERNATION);
+    }
+
+    public AlternationNode(List<BaseNode> children) {
+        // @TODO implement constructor
     }
 
     /**

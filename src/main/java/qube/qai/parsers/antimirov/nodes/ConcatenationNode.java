@@ -18,6 +18,7 @@ package qube.qai.parsers.antimirov.nodes;
 import qube.qai.parsers.antimirov.*;
 
 import java.util.Hashtable;
+import java.util.List;
 
 
 /**
@@ -40,6 +41,10 @@ public class ConcatenationNode
 
     public ConcatenationNode() {
         this.name = new Name(Name.CONCATENATION);
+    }
+
+    public ConcatenationNode(List<BaseNode> children) {
+        // @TODO implement constructor
     }
 
     /**

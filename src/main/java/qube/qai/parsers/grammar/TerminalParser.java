@@ -1,0 +1,39 @@
+/*
+ * Copyright 2017 Qoan Software Association. All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+
+package qube.qai.parsers.grammar;
+
+import org.jparsec.*;
+
+public final class TerminalParser {
+
+    private static final String[] OPERATORS = {"*", "+", "?", "|", "::=", "(", ")"};
+    private static final Terminals TERMS = Terminals.operators(OPERATORS);
+    private static final Parser<Void> COMMENT = Scanners.lineComment("#");
+    private static final Parser<String> LITERAL = Parsers.or(
+            Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER,
+            Terminals.StringLiteral.SINGLE_QUOTE_TOKENIZER);
+    private static final Parser<?> IDENT = Terminals.Identifier.TOKENIZER;
+    static final Parser<?> TOKENIZER = Parsers.<Object>or(TERMS.tokenizer(), LITERAL, IDENT);
+    static final Indentation INDENTATION = new Indentation();
+
+    static Parser<?> term(String name) {
+        return TERMS.token(name);
+    }
+
+    static <T> T parse(Parser<T> parser, String source) {
+        return parser.from(INDENTATION.lexer(TOKENIZER, Indentation.WHITESPACES.or(COMMENT).many()))
+                .parse(source);
+    }
+}

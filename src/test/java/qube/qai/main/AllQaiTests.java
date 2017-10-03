@@ -20,38 +20,38 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.TestTimeSequence;
+import qube.qai.data.TimeSequenceTest;
 import qube.qai.data.analysis.TestChangepointAdapter;
 import qube.qai.data.selectors.TestHazelcastSelectors;
-import qube.qai.matrix.TestMatrix;
-import qube.qai.network.TestNetwork;
-import qube.qai.network.TestNeuralNetwork;
-import qube.qai.network.TestWikiNetwork;
-import qube.qai.network.neural.trainer.TestNeuralNetworkTraining;
-import qube.qai.network.semantic.TestSemanticNetworkBuilder;
-import qube.qai.parsers.TestAntimirovParser;
-import qube.qai.parsers.TestWikiIntegration;
-import qube.qai.parsers.antimirov.nodes.TestNodeVisitors;
-import qube.qai.parsers.maths.TestMathParser;
-import qube.qai.persistence.TestRdfSerialization;
-import qube.qai.persistence.TestResourceData;
+import qube.qai.matrix.MatrixTest;
+import qube.qai.network.NetworkTest;
+import qube.qai.network.NeuralNetworkTest;
+import qube.qai.network.WikiNetworkTest;
+import qube.qai.network.neural.trainer.NeuralNetworkTrainingTest;
+import qube.qai.network.semantic.SemanticNetworkBuilderTest;
+import qube.qai.parsers.WikiIntegrationTest;
+import qube.qai.parsers.antimirov.nodes.NodeVisitorsTest;
+import qube.qai.parsers.grammar.GrammarParserTest;
+import qube.qai.parsers.maths.MathParserTest;
+import qube.qai.persistence.RdfSerializationTest;
+import qube.qai.persistence.ResourceDataTest;
 import qube.qai.persistence.mapstores.*;
-import qube.qai.persistence.search.TestDatabaseSearchService;
-import qube.qai.persistence.search.TestModelSearchServices;
-import qube.qai.procedure.analysis.TestAnalysisProcedures;
-import qube.qai.procedure.analysis.TestMarketNetworkBuilder;
-import qube.qai.procedure.archive.TestArchiveProcedures;
-import qube.qai.procedure.archive.TestDirectoryIndexer;
-import qube.qai.procedure.archive.TestWikiArchiveIndexer;
-import qube.qai.procedure.finance.TestFinanceProcedures;
-import qube.qai.procedure.finance.TestStockEntityInitialization;
-import qube.qai.procedure.finance.TestStockQuoteRetriever;
-import qube.qai.procedure.nodes.TestProcedureInputsAndResults;
-import qube.qai.procedure.utils.TestUtilProcedures;
-import qube.qai.procedure.utils.TestWikiSearch;
-import qube.qai.procedure.visitor.TestProcedureVisitors;
-import qube.qai.procedure.wikiripper.TestWikiRipperProcedure;
-import qube.qai.security.TestQaiSecurity;
+import qube.qai.persistence.search.DatabaseSearchServiceTest;
+import qube.qai.persistence.search.ModelSearchServicesTest;
+import qube.qai.procedure.analysis.AnalysisProceduresTest;
+import qube.qai.procedure.analysis.MarketNetworkBuilderTest;
+import qube.qai.procedure.archive.ArchiveProceduresTest;
+import qube.qai.procedure.archive.DirectoryIndexerTest;
+import qube.qai.procedure.archive.WikiArchiveIndexerTest;
+import qube.qai.procedure.finance.FinanceProceduresTest;
+import qube.qai.procedure.finance.StockEntityInitializationTest;
+import qube.qai.procedure.finance.StockQuoteRetrieverTest;
+import qube.qai.procedure.nodes.ProcedureInputsAndResultsTest;
+import qube.qai.procedure.utils.UtilProceduresTest;
+import qube.qai.procedure.utils.WikiSearchTest;
+import qube.qai.procedure.visitor.ProcedureVisitorsTest;
+import qube.qai.procedure.wikiripper.WikiRipperProcedureTest;
+import qube.qai.security.QaiSecurityTest;
 import qube.qai.services.implementation.*;
 
 /**
@@ -86,81 +86,82 @@ public class AllQaiTests extends TestCase {
 //        suite.addTestSuite(TestStockEntityDataStore.class);
 
         // matrix
-        suite.addTestSuite(TestMatrix.class);
-        suite.addTestSuite(TestTimeSequence.class);
+        suite.addTestSuite(MatrixTest.class);
+        suite.addTestSuite(TimeSequenceTest.class);
 
         // network
-        suite.addTestSuite(TestNetwork.class);
-        suite.addTestSuite(TestNeuralNetwork.class);
-        suite.addTestSuite(TestNeuralNetworkTraining.class);
-        suite.addTestSuite(TestSemanticNetworkBuilder.class);
-        suite.addTestSuite(TestWikiNetwork.class);
+        suite.addTestSuite(NetworkTest.class);
+        suite.addTestSuite(NeuralNetworkTest.class);
+        suite.addTestSuite(NeuralNetworkTrainingTest.class);
+        suite.addTestSuite(SemanticNetworkBuilderTest.class);
+        suite.addTestSuite(WikiNetworkTest.class);
 
         // parsers
-        suite.addTestSuite(TestWikiIntegration.class);
-        suite.addTestSuite(TestAntimirovParser.class);
+        suite.addTestSuite(WikiIntegrationTest.class);
+        //suite.addTestSuite(TestAntimirovParser.class);
+        suite.addTestSuite(GrammarParserTest.class);
 
-        suite.addTestSuite(TestMathParser.class);
+        suite.addTestSuite(MathParserTest.class);
 
         // parsers.antimirov.nodes
-        suite.addTestSuite(TestNodeVisitors.class);
+        suite.addTestSuite(NodeVisitorsTest.class);
 
         // persistence
-        suite.addTestSuite(TestResourceData.class);
-        suite.addTestSuite(TestRdfSerialization.class);
+        suite.addTestSuite(ResourceDataTest.class);
+        suite.addTestSuite(RdfSerializationTest.class);
 
         // persistence.mapstores
-        suite.addTestSuite(TestMapStores.class);
-        suite.addTestSuite(TestHazelcastMaps.class);
-        suite.addTestSuite(TestIndexedDirectoryMapStore.class);
-        suite.addTestSuite(TestDatabaseMapStores.class);
-        suite.addTestSuite(TestModelMapStores.class);
+        suite.addTestSuite(MapStoreTest.class);
+        suite.addTestSuite(HazelcastMapsTest.class);
+        suite.addTestSuite(IndexedDirectoryMapStoreTest.class);
+        suite.addTestSuite(DatabaseMapStoresTest.class);
+        suite.addTestSuite(ModelMapStoresTest.class);
 
 
         // persistence.search
-        suite.addTestSuite(TestModelSearchServices.class);
-        suite.addTestSuite(TestDatabaseSearchService.class);
+        suite.addTestSuite(ModelSearchServicesTest.class);
+        suite.addTestSuite(DatabaseSearchServiceTest.class);
 
         // procedure
-        suite.addTestSuite(TestProcedureInputsAndResults.class);
-        suite.addTestSuite(TestWikiArchiveIndexer.class);
-        suite.addTestSuite(TestWikiRipperProcedure.class);
+        suite.addTestSuite(ProcedureInputsAndResultsTest.class);
+        suite.addTestSuite(WikiArchiveIndexerTest.class);
+        suite.addTestSuite(WikiRipperProcedureTest.class);
 
         // procedure.analysis
-        suite.addTestSuite(TestAnalysisProcedures.class);
-        suite.addTestSuite(TestMarketNetworkBuilder.class);
+        suite.addTestSuite(AnalysisProceduresTest.class);
+        suite.addTestSuite(MarketNetworkBuilderTest.class);
 
         // procedure.archive
-        suite.addTestSuite(TestArchiveProcedures.class);
-        suite.addTestSuite(TestDirectoryIndexer.class);
+        suite.addTestSuite(ArchiveProceduresTest.class);
+        suite.addTestSuite(DirectoryIndexerTest.class);
 //        suite.addTestSuite(TestSparqlIndexer.class);
 
         // procedure.finance
-        suite.addTestSuite(TestFinanceProcedures.class);
-        suite.addTestSuite(TestStockEntityInitialization.class);
-        suite.addTestSuite(TestStockQuoteRetriever.class);
+        suite.addTestSuite(FinanceProceduresTest.class);
+        suite.addTestSuite(StockEntityInitializationTest.class);
+        suite.addTestSuite(StockQuoteRetrieverTest.class);
 
         // procedure.visitor
-        suite.addTestSuite(TestProcedureVisitors.class);
+        suite.addTestSuite(ProcedureVisitorsTest.class);
 
         // procedure.utils
-        suite.addTestSuite(TestUtilProcedures.class);
-        suite.addTestSuite(TestWikiSearch.class);
+        suite.addTestSuite(UtilProceduresTest.class);
+        suite.addTestSuite(WikiSearchTest.class);
 
         // security
-        suite.addTestSuite(TestQaiSecurity.class);
+        suite.addTestSuite(QaiSecurityTest.class);
 
         // services.implementation
-        suite.addTestSuite(TestUUIDGenerator.class);
-        suite.addTestSuite(TestProcedureRunnerService.class);
+        suite.addTestSuite(UUIDGeneratorTest.class);
+        suite.addTestSuite(ProcedureRunnerServiceTest.class);
         //suite.addTestSuite(TestDistributedSearchServices.class);
         //suite.addTestSuite(TestDistributedDataService.class);
-        suite.addTestSuite(TestDistributedProcedureRunnerService.class);
+        suite.addTestSuite(DistributedProcedureRunnerServiceTest.class);
 
         // these are more or less integration tests-
-        suite.addTestSuite(TestHowFairAreMarketsDistributed.class);
-        suite.addTestSuite(TestYouNMeNAllDistributed.class);
-        suite.addTestSuite(TestTextTranslationDistributed.class);
+        suite.addTestSuite(HowFairAreMarketsDistributedTest.class);
+        suite.addTestSuite(YouNMeNAllDistributedTest.class);
+        suite.addTestSuite(TextTranslationDistributedTest.class);
 
         // util
         //suite.addTestSuite(TestProcedureToRdfConverter.class);

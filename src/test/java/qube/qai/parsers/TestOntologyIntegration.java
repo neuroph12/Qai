@@ -15,7 +15,7 @@
 package qube.qai.parsers;
 
 import junit.framework.TestCase;
-import org.codehaus.jparsec.Parser;
+import org.jparsec.Parser;
 
 /**
  * Created by rainbird on 1/29/16.
