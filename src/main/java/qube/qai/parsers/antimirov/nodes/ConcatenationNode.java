@@ -44,7 +44,9 @@ public class ConcatenationNode
     }
 
     public ConcatenationNode(List<BaseNode> children) {
-        // @TODO implement constructor
+        for (BaseNode child : children) {
+            addChild(child);
+        }
     }
 
     /**

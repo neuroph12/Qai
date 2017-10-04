@@ -35,7 +35,7 @@ public class GrammarParser {
     static Function<String, BaseNode> createIdent = new Function<String, BaseNode>() {
         @Override
         public BaseNode apply(String s) {
-            return new Node(new Name(s));
+            return new NameNode(new Name(s));
         }
     };
 

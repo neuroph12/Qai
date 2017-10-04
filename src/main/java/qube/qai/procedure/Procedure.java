@@ -118,15 +118,6 @@ public abstract class Procedure extends ConcatenationNode
         return classes;
     }
 
-    public void addChild(Procedure child) {
-        child.setParent(this);
-        if (getSecondChild() instanceof EmptyNode) {
-            setSecondChild(child);
-        } else {
-            ConcatenationNode concat = new ConcatenationNode(getSecondChild(), child);
-            setSecondChild(concat);
-        }
-    }
 
     protected Object getInputValueOf(String name) {
         Object value = null;

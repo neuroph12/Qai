@@ -109,6 +109,18 @@ public abstract class BaseNode implements VisitableNode, Serializable {
         return data;
     }
 
+    public void addChild(BaseNode child) {
+        child.setParent(this);
+        if (getFirstChild() == null) {
+            setFirstChild(child);
+        } else if (getSecondChild() == null) {
+            setSecondChild(child);
+        } else {
+            ConcatenationNode concat = new ConcatenationNode(getSecondChild(), child);
+            setSecondChild(concat);
+        }
+    }
+
     /**
      * Returns the name of the type. If type has no name,
      * <code>null</code> is returned.

@@ -45,7 +45,9 @@ public final class AlternationNode extends BaseNode {
     }
 
     public AlternationNode(List<BaseNode> children) {
-        // @TODO implement constructor
+        for (BaseNode child : children) {
+            addChild(child);
+        }
     }
 
     /**

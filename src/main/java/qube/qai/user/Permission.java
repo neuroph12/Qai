@@ -75,14 +75,14 @@ public class Permission implements Serializable, org.apache.shiro.authz.Permissi
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return uuid.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Permission) {
             Permission p = (Permission) obj;
-            if (name.equals(p.name)) {
+            if (name != null && name.equals(p.name)) {
                 return true;
             }
         }
