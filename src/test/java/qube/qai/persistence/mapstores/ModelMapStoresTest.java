@@ -167,7 +167,7 @@ public class ModelMapStoresTest extends TestCase {
 
         Collection<String> uuids = new ArrayList<>();
         //Collection<Procedure> procedures = TestRdfSerialization.generateAllProcedures();
-        Collection<String> procedureNames = ProcedureLibrary.templateMap.keySet();
+        Collection<String> procedureNames = ProcedureLibrary.getTemplateMap().keySet();
         for (String name : procedureNames) {
             ProcedureTemplate template = ProcedureLibrary.getNamedProcedureTemplate(name);
             Procedure procedure = template.createProcedure();

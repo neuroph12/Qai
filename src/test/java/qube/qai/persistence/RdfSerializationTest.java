@@ -177,7 +177,7 @@ public class RdfSerializationTest extends TestCase {
 
         Collection<Procedure> procedures = new ArrayList<>();
 
-        Collection<String> procNames = ProcedureLibrary.templateMap.keySet();
+        Collection<String> procNames = ProcedureLibrary.getTemplateMap().keySet();
         for (String name : procNames) {
             ProcedureTemplate template = ProcedureLibrary.getNamedProcedureTemplate(name);
             Procedure proc = template.createProcedure();

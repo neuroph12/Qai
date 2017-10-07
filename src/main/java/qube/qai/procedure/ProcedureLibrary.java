@@ -172,11 +172,9 @@ public class ProcedureLibrary {
             sortingPercentilesTemplate,
     };
 
-    public static Map<String, ProcedureTemplate> templateMap = new TreeMap<>();
+    private static Map<String, ProcedureTemplate> templateMap = new TreeMap<>();
 
-
-    public static ProcedureTemplate getNamedProcedureTemplate(String name) {
-
+    public static Map<String, ProcedureTemplate> getTemplateMap() {
         if (templateMap.isEmpty()) {
             templateMap.put(SimpleProcedure.NAME, simpleTemplate);
             templateMap.put(MatrixStatistics.NAME, matrixStatisticsTemplate);
@@ -196,7 +194,10 @@ public class ProcedureLibrary {
             templateMap.put(MarketNetworkBuilder.NAME, marketNetworkBuilderTemplate);
             templateMap.put(SortingPercentilesProcedure.NAME, sortingPercentilesTemplate);
         }
+        return templateMap;
+    }
 
-        return templateMap.get(name);
+    public static ProcedureTemplate getNamedProcedureTemplate(String name) {
+        return getTemplateMap().get(name);
     }
 }

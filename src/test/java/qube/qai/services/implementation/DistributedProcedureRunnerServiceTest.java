@@ -14,20 +14,91 @@
 
 package qube.qai.services.implementation;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import com.hazelcast.core.ITopic;
 import qube.qai.main.QaiTestBase;
+import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.services.ProcedureRunnerInterface;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by rainbird on 1/11/16.
  */
 public class DistributedProcedureRunnerServiceTest extends QaiTestBase {
 
+    @Inject
+    private HazelcastInstance hazelcastInstance;
+
     public void testDistributedProcedures() throws Exception {
 
         DistributedProcedureListener procedureListener = new DistributedProcedureListener();
+        injector.injectMembers(procedureListener);
 
         assertNotNull("initialization failed- no hazelcast-instance", procedureListener.hazelcastInstance);
         assertNotNull("initialization failed- no procedure-runner subclass", procedureListener.procedureRunner);
 
-        fail("test is not yet implemented");
+        List<String> uuidList = new ArrayList<String>();
+        for (String name : ProcedureLibrary.getTemplateMap().keySet()) {
+            Procedure procedure = ProcedureLibrary.getNamedProcedureTemplate(name).createProcedure();
+            String uuid = procedure.getUuid();
+            uuidList.add(uuid);
+            logger.info("submitting procedure " + uuid);
+            procedureListener.submitProcedure(procedure);
+        }
+
+        int procedureCount = 0;
+        for (String uuid : uuidList) {
+            ProcedureRunnerInterface.STATE state = procedureListener.queryState(uuid);
+            logger.info("procedure uuid " + uuid + " has state " + state);
+            if (ProcedureRunnerInterface.STATE.COMPLETE.equals(state)) {
+                logger.info("procedure with uuid: '" + uuid + "' is already complete now checking results");
+                IMap<String, Procedure> procedures = hazelcastInstance.getMap("PROCEDURES");
+                Procedure procedure = procedures.get(uuid);
+                // @TODO this is a point, you know...
+                //assertNotNull("if actually done, there has to be a procedure", procedure);
+                //assertTrue("procedure state must be right", procedure.hasExecuted());
+                if (procedure != null) {
+                    procedureCount++;
+                }
+            }
+        }
+
+        logger.info("of " + uuidList.size() + " procedures " + procedureCount + " are already accounted for");
+
+        // and we try it another way as well
+        int dryCount = 0;
+        int endCount = 0;
+        for (String uuid : uuidList) {
+            IMap<String, Procedure> procedures = hazelcastInstance.getMap("PROCEDURES");
+            Procedure procedure = procedures.get(uuid);
+            if (procedure != null) {
+                logger.info("procedure found in map?!? must have finished without telling...");
+                dryCount++;
+                if (procedure.hasExecuted()) {
+                    endCount++;
+                }
+            }
+        }
+
+        logger.info("found " + dryCount + " of the procedures in map, " + endCount + " finished processing");
+
+        // and yet another try- this time i will send the messages myself
+        for (String uuid : uuidList) {
+            ITopic itopic = hazelcastInstance.getTopic(uuid);
+            logger.info("sending interrupted message to: " + uuid);
+            itopic.publish(Procedure.PROCESS_INTERRUPTED);
+        }
+
+        // and now we really have to check the states
+        for (String uuid : uuidList) {
+            ProcedureRunnerInterface.STATE state = procedureListener.queryState(uuid);
+            logger.info("procedure uuid " + uuid + " has state " + state);
+            assertTrue("if messaging is working state has to be interrupted", ProcedureRunnerInterface.STATE.INTERRUPTED.equals(state));
+        }
     }
 }
