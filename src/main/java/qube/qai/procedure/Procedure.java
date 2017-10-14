@@ -198,14 +198,18 @@ public abstract class Procedure extends ConcatenationNode
             // and the hat-trick now
             if (hazelcastInstance != null) {
                 IMap procedures = hazelcastInstance.getMap(PROCEDURES);
-                // @TODO consider how you really want to do this...
-                //procedures.put(uuid, this);
+                if (procedures.get(uuid) != null) {
+                    procedures.replace(uuid, this);
+                }
                 info("procedure has been serialized in map with uuid: " + uuid);
             } else {
                 error("no hazelcast-instance to add a copy to- procedure " + uuid + " has not been serialized...");
             }
         } catch (Exception e) {
-            error("exception during execution of '" + uuid + "'. terminated...", e);
+            hasExecuted = true;
+            String message = "exception during execution of '" + uuid + "'. executed with error...";
+            sendMessageError(message);
+            error(message, e);
         }
     }
 

@@ -17,6 +17,7 @@ package qube.qai.services.implementation;
 import com.hazelcast.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.main.QaiConstants;
 import qube.qai.procedure.Procedure;
 import qube.qai.security.QaiSecurity;
 import qube.qai.services.ProcedureRunnerInterface;
@@ -74,6 +75,11 @@ public class ProcedureRunner implements ProcedureRunnerInterface {
         ITopic itopic = hazelcastInstance.getTopic(uuid);
         itopic.addMessageListener(state);
         procedures.put(uuid, state);
+
+        IMap<String, Procedure> procMap = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
+        if (procMap.get(uuid) == null) {
+            procMap.put(uuid, procedure);
+        }
 
         IExecutorService executor = hazelcastInstance.getExecutorService(SERVICE_NAME);
         executor.execute(procedure);

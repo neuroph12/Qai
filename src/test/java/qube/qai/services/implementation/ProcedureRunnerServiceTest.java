@@ -19,14 +19,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.procedure.analysis.MatrixStatistics;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.ProcedureSourceInterface;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by rainbird on 12/22/15.
@@ -97,9 +99,9 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
 
         // create some procedures and see what happens
         List<String> uuidList = new ArrayList<String>();
-        Collection<Class> procedureNames = Procedure.knownSubClasses();
-        for (Class name : procedureNames) {
-            Procedure procedure = (Procedure) name.newInstance();
+        Map<String, ProcedureTemplate> templateMap = ProcedureLibrary.getTemplateMap();
+        for (String name : templateMap.keySet()) {
+            Procedure procedure = templateMap.get(name).createProcedure();
             String uuid = procedure.getUuid();
             uuidList.add(uuid);
             logger.info("submitting procedure " + uuid);
@@ -115,8 +117,8 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
                 logger.info("procedure with uuid: '" + uuid + "' is already complete now checking results");
                 IMap<String, Procedure> procedures = hazelcastInstance.getMap("PROCEDURES");
                 Procedure procedure = procedures.get(uuid);
-                // @TODO this is a point, you know...
-                //assertNotNull("if actually done, there has to be a procedure", procedure);
+                assertNotNull("if actually done, there has to be a procedure", procedure);
+                // @TODO
                 //assertTrue("procedure state must be right", procedure.hasExecuted());
                 if (procedure != null) {
                     procedureCount++;

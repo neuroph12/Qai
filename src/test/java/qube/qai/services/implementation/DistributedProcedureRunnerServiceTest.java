@@ -17,6 +17,7 @@ package qube.qai.services.implementation;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.ITopic;
+import qube.qai.main.QaiConstants;
 import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureLibrary;
@@ -57,10 +58,9 @@ public class DistributedProcedureRunnerServiceTest extends QaiTestBase {
             logger.info("procedure uuid " + uuid + " has state " + state);
             if (ProcedureRunnerInterface.STATE.COMPLETE.equals(state)) {
                 logger.info("procedure with uuid: '" + uuid + "' is already complete now checking results");
-                IMap<String, Procedure> procedures = hazelcastInstance.getMap("PROCEDURES");
+                IMap<String, Procedure> procedures = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
                 Procedure procedure = procedures.get(uuid);
-                // @TODO this is a point, you know...
-                //assertNotNull("if actually done, there has to be a procedure", procedure);
+                assertNotNull("if actually done, there has to be a procedure", procedure);
                 //assertTrue("procedure state must be right", procedure.hasExecuted());
                 if (procedure != null) {
                     procedureCount++;
@@ -74,7 +74,7 @@ public class DistributedProcedureRunnerServiceTest extends QaiTestBase {
         int dryCount = 0;
         int endCount = 0;
         for (String uuid : uuidList) {
-            IMap<String, Procedure> procedures = hazelcastInstance.getMap("PROCEDURES");
+            IMap<String, Procedure> procedures = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
             Procedure procedure = procedures.get(uuid);
             if (procedure != null) {
                 logger.info("procedure found in map?!? must have finished without telling...");
