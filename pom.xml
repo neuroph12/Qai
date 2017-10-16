@@ -46,7 +46,7 @@
 
         <ojalgo.version>39.0</ojalgo.version>
         <bliki.version>3.0.19</bliki.version>
-        <encog.version>3.3.0</encog.version>
+        <encog.version>3.4</encog.version>
         <opennlp.version>1.6.0</opennlp.version>
 
         <jparsec.version>3.0</jparsec.version>
@@ -92,6 +92,12 @@
             <groupId>org.encog</groupId>
             <artifactId>encog-core</artifactId>
             <version>${encog.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>grph</groupId>
+            <artifactId>grph</artifactId>
+            <version>1.10.8</version>
         </dependency>
 
         <!-- ojalgo for matrix things -->
@@ -423,6 +429,11 @@
     </build>
 
     <repositories>
+        <repository>
+            <id>lhogie.i3s.maven.repo</id>
+            <name>Luc Hogie Maven repository</name>
+            <url>http://www.i3s.unice.fr/~hogie/maven_repository/</url>
+        </repository>
         <!--<repository>-->
         <!--<id>central</id>-->
         <!--<url>http://192.168.1.4:8081/artifactory/libs-release-local</url>-->
