@@ -14,7 +14,6 @@
 
 package qube.qai.network.semantic;
 
-import info.bliki.wiki.filter.PlainTextConverter;
 import info.bliki.wiki.model.WikiModel;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
@@ -46,8 +45,18 @@ public class SemanticNetworkBuilder implements NetworkBuilder {
         Graph graph = new Graph();
         Network network = new SemanticNetwork();
         String wikiContent = wikiArticle.getContent();
-        WikiModel wikiModel = new WikiModel("${image}", "${title}");
-        String plainText = wikiModel.render(new PlainTextConverter(), wikiContent);
+        //WikiModel wikiModel = new WikiModel("${image}", "${title}");
+        WikiModel wikiModel =
+                new WikiModel("./VAADIN/tmp/${image}",
+                        "./VAADIN/tmp/${title}");
+        String plainText = null;
+        try {
+            plainText = wikiModel.render("This is a simple [[Hello World]] wiki tag");
+        } catch (IOException e) {
+            logger.error("Exception during wiki-to-text conversion", e);
+            return null;
+        }
+        //String plainText = WikiModel.toHtml(wikiContent);
         Tokenizer tokenizer = createTokenizer();
 
         // i think, we will have to run two passes- one for creating graph
