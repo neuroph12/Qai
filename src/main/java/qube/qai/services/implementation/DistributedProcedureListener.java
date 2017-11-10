@@ -31,10 +31,10 @@ public class DistributedProcedureListener extends QaiMessageListener implements 
     private Logger logger = LoggerFactory.getLogger("DistributedProcedureListener");
 
     @Inject
-    HazelcastInstance hazelcastInstance;
+    protected HazelcastInstance hazelcastInstance;
 
     @Inject
-    ProcedureRunnerInterface procedureRunner;
+    protected ProcedureRunnerInterface procedureRunner;
 
     private boolean initialized = false;
 

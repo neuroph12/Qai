@@ -12,13 +12,13 @@
  *
  */
 
-package qube.qai.network;
+package qube.qai.network.wiki;
 
 import com.google.inject.name.Named;
 import grph.oo.ObjectGrph;
 import grph.oo.ObjectPath;
 import qube.qai.main.QaiTestBase;
-import qube.qai.network.wiki.WikiNetwork;
+import qube.qai.network.Network;
 import qube.qai.persistence.DummyQaiDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;

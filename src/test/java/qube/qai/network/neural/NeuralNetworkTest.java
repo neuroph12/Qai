@@ -12,7 +12,7 @@
  *
  */
 
-package qube.qai.network;
+package qube.qai.network.neural;
 
 import junit.framework.TestCase;
 import org.encog.Encog;
@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
-import qube.qai.network.neural.NeuralNetwork;
 
 /**
  * Created by rainbird on 11/23/15.

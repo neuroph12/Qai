@@ -56,7 +56,11 @@ public class ProcedureRunner implements ProcedureRunnerInterface {
 
     public void submitProcedure(Procedure procedure) {
 
-        // before we submit we note down the
+        // before we submit we make note of the incoming request
+        String startMessage = String.format("Start-request for procedure: '%s' with uuid: '%s' has been received",
+                procedure.getProcedureName(), procedure.getUuid());
+        logger.info(startMessage);
+
         String uuid = procedure.getUuid();
         if (uuid == null) {
             uuid = UUIDService.uuidString();
@@ -66,8 +70,9 @@ public class ProcedureRunner implements ProcedureRunnerInterface {
 
         User user = procedure.getUser();
         if (!security.hasPermission(user, CAN_EXECUTE)) {
-            logger.info("User: '" + user + "' does not have the required crendential for running procedure '"
-                    + procedure.getProcedureName() + "', execution interrupted!");
+            String rightViolation = String.format("User: '%s' does not have the required crenential for running procedure '%s', execution interrupted!",
+                    user, procedure.getProcedureName());
+            logger.info(rightViolation);
             return;
         }
 
@@ -83,6 +88,9 @@ public class ProcedureRunner implements ProcedureRunnerInterface {
 
         IExecutorService executor = hazelcastInstance.getExecutorService(SERVICE_NAME);
         executor.execute(procedure);
+
+        String allOK = String.format("Procedure '%s' with uuid: '%s' has been started successfully...", procedure.getProcedureName(), procedure.getUuid());
+        logger.info(allOK);
 
     }
 

@@ -12,33 +12,20 @@
  *
  */
 
-package qube.qai.message;
+package qube.qai.procedure.utils;
 
-import com.hazelcast.core.Message;
-import qube.qai.services.implementation.UUIDService;
+import qube.qai.procedure.Procedure;
 
-/**
- * Created by rainbird on 11/27/15.
- */
-public abstract class QaiMessageListener implements com.hazelcast.core.MessageListener {
+public class ForEachProcedure extends Procedure {
 
-    public static String procedureTopicName = "Procedures";
 
-    private String uuid;
+    @Override
+    public void execute() {
 
-    public QaiMessageListener() {
-        this.uuid = UUIDService.uuidString();
     }
 
-    public QaiMessageListener(String uuid) {
-        this.uuid = uuid;
+    @Override
+    protected void buildArguments() {
+
     }
-
-    public String getUUID() {
-        return uuid;
-    }
-
-    public abstract void onMessage(Message message);
-
-    public abstract void initialize();
 }

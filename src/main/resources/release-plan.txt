@@ -1,0 +1,55 @@
+
+Qoan release plan- and features which are planned
+
+release-version:
+    which happens to be the current version and will be released when the simulations
+run and the results can be represented on screen. which means, there will be a few additional
+decorator classes which will be displaying plots and charts, the networks, etc.
+
+this is in fact the release which will be corresponding the homework assignment, "how fair are the
+markets?" and is therefore supposed to be ending with the release of the article as well.
+
+pre-stann version:
+    here the following two homework assignments "everyone we know" and "machine-translation" will
+be addressed. in order to do "everyone we know" assignment, network queries to dbpedia and to internet
+molecule-databases will be implemented. those results will be integrated to the system, so that dbpedia
+queries can result with wikipedia-articles which are already stored in the system etc.
+
+integration of remote-search results to local classes will mean, there will have to be a chemical
+compound representation in the system, a serializable compound-object, which will also be connected to
+chemical reaction-networks. this will indeed be the point where the chemical reaction-netowrks will be
+introuced to the system.
+
+the rest of the pre-stann release will be concerned with upgrading lucene to latest version and using
+queries to create the semantic-networks, in two different variations, obviously. in addition to that, i
+would also like to see integration of search- and indexing-services for pdf-file directories.
+
+stann-version:
+    this is the point where the parsers for maths-equations and all that will be coming in. indeed two
+ different parsers will be required- they are already in the code, which just means, those will be completed
+ to parse mathematical equations from pdf-files and wiki-articles.
+
+ the overall idea being, by reading and interpreting the data in a given set of scientific-articles a
+ chemical reaction-network is to be created and trained to make molecular dynamical simulations of certain
+ compounds... a reaction-network. the basis for the work will be taken from mainly the latest article i have
+ found on the topic and the homework assignment corresponding is called "md-simulations of bacterial
+ ribosome performed by self-learning system".
+
+ in order to do that, i will have to be able to parse the mathematical expressions in their grammatical
+ ast-tress, as well as their procedural definitions. the base ast-tree classes used in the project are based
+ on antimirov-calculus application of pattern-matching and proving, which will be used as basis for a
+ re-writing rule engine which will be used to simulate the specialized networks which are represented by these
+ ast-trees and executed by them as well.
+
+ upon completion of stann-version of Qoan, all of the four homework assignments will have been adressed. all
+ of the homework assignments are selected to make use of a different things, represented in mathematical
+ network formalism and usage of the formalism.
+
+ there would be many more neural-network applications which could be added upon the existing. image
+ and voice recognition modules would really be the first thing to begin with... for instance, as we are sure
+ combining those with other networks already present in the overall system, would lead to very interesting
+ applications.
+
+ although those additions and extensions can be easily added to the system, the focus will indeed be laid
+ in integrating recurrent neural-networks into the system and attempting to make use of them in mapping
+ sequences to their corresponding network representations.

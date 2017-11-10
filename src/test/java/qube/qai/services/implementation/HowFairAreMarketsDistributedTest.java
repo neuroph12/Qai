@@ -16,12 +16,43 @@ package qube.qai.services.implementation;
 
 import qube.qai.main.QaiTestBase;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Created by rainbird on 1/12/16.
  */
 public class HowFairAreMarketsDistributedTest extends QaiTestBase {
 
+    /**
+     * if we were to write the procedure we want to test in our grammar form
+     * <p>
+     * marketNetwork := (for-each network-builder epoch)
+     * <p>
+     * epoch := (slice (change-point-analysis (select "average"
+     * (statistical-analysis (for-each fetch-quotes-for
+     * (for-each find-entities-of (search-results)))))
+     * <p>
+     * // these are then the results which we want to see when done.
+     * (for-each entropy-analysis (for-each forward-propagation marketNetwork)
+     *
+     * @throws Exception
+     */
     public void testHowFairAreMarkets() throws Exception {
-        fail("the procedure has to be tested before it is run after all");
+
+        // this is the beginning point of the proposed procedure
+        Collection<SearchResult> results = getSearchResults();
+
+        MarketBuilderSim sim = new MarketBuilderSim(results);
+        injector.injectMembers(sim);
+
+        // and go ahead and check hte results.
+
     }
+
+    private Collection<SearchResult> getSearchResults() {
+        Collection<SearchResult> results = new ArrayList<>();
+        return results;
+    }
+
 }
