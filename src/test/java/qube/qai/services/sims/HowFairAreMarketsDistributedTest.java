@@ -12,9 +12,10 @@
  *
  */
 
-package qube.qai.services.implementation;
+package qube.qai.services.sims;
 
 import qube.qai.main.QaiTestBase;
+import qube.qai.services.implementation.SearchResult;
 
 import java.util.ArrayList;
 import java.util.Collection;

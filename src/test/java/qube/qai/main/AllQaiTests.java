@@ -55,6 +55,7 @@ import qube.qai.procedure.visitor.ProcedureVisitorsTest;
 import qube.qai.procedure.wikiripper.WikiRipperProcedureTest;
 import qube.qai.security.QaiSecurityTest;
 import qube.qai.services.implementation.*;
+import qube.qai.services.sims.HowFairAreMarketsDistributedTest;
 
 /**
  * Created by rainbird on 5/26/16.

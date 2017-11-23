@@ -23,7 +23,7 @@ import qube.qai.procedure.nodes.TestProcedureBase;
  */
 public class UtilProceduresTest extends TestProcedureBase {
 
-    public void testRelateProcedure() throws Exception {
+    public void testAttachProcedure() throws Exception {
 
         AttachProcedure procedure = ProcedureLibrary.attachTemplate.createProcedure();
 
@@ -61,6 +61,37 @@ public class UtilProceduresTest extends TestProcedureBase {
 
         //checkProcedureResults(description);
     }
+
+    public void testForEachProcedure() throws Exception {
+
+        /**
+         * @TODO this is in fact just the beginning, obviously security is an issue.
+         * as the for-each procedures will actually be spawning children
+         * procedures the user-settings and user-rights has to be tested as well
+         * particularly for this procedure security is also an issue
+         */
+
+        ForEachProcedure procedure = new ForEachProcedure();
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be an description", description);
+
+        fail("Security issues are not yet tested!");
+    }
+
+    public void testSliceProcedure() throws Exception {
+
+        /**
+         * @TODO obviously this test is entirely missing
+         */
+
+        SliceProcedure procedure = new SliceProcedure();
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be an description", description);
+
+        fail("rest of the class is not yet tested!");
+    }
+
 
     public void testCreateUserProcedure() throws Exception {
 

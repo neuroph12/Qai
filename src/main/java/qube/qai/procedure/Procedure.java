@@ -310,4 +310,12 @@ public abstract class Procedure extends ConcatenationNode
     public String getProcedureName() {
         return this.getName().getName();
     }
+
+    public String getUserName() {
+        if (user != null) {
+            return user.getUsername();
+        } else {
+            return "-";
+        }
+    }
 }

@@ -12,7 +12,7 @@
  *
  */
 
-package qube.qai.services.implementation;
+package qube.qai.services.sims;
 
 import com.hazelcast.core.Message;
 import org.apache.commons.lang.StringUtils;
@@ -27,6 +27,10 @@ import qube.qai.procedure.finance.StockQuoteRetriever;
 import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.utils.ForEachProcedure;
 import qube.qai.procedure.utils.SliceProcedure;
+import qube.qai.services.implementation.DistributedProcedureListener;
+import qube.qai.services.implementation.DistributedSearchService;
+import qube.qai.services.implementation.SearchResult;
+import qube.qai.services.implementation.UUIDService;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -75,6 +79,10 @@ public class MarketBuilderSim extends DistributedProcedureListener implements Qa
         if (mesasgeObject instanceof DistributedSearchService.SearchRequest) {
 
         }
+    }
+
+    private boolean isQuoteRetrievalComplete() {
+        return false;
     }
 
     public void runSimulations() {
