@@ -61,8 +61,6 @@ public class NetworkStatistics extends Procedure implements ProcedureConstants {
     @Override
     public void execute() {
 
-        executeInputProcedures();
-
         //network = (Network) getInputValueOf(INPUT_NETWORK);
         if (network == null) {
             error("Input network has not been initialized properly: null value");

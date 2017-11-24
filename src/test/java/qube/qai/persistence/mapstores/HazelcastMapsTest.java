@@ -22,6 +22,8 @@ import qube.qai.persistence.ResourceData;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.UUIDServiceInterface;
@@ -156,12 +158,12 @@ public class HazelcastMapsTest extends QaiTestBase {
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
         IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURES);
-        Collection<Class> procedureClasses = Procedure.knownSubClasses();
+        //Collection<Class> procedureClasses = Procedure.knownSubClasses();
 
         // first get a hold of the procedures
         List<String> uuidList = new ArrayList<String>();
-        for (Class klass : procedureClasses) {
-            Procedure procedure = (Procedure) klass.newInstance();
+        for (ProcedureTemplate template : ProcedureLibrary.getTemplateMap().values()) {
+            Procedure procedure = template.createProcedure();
             String uuid = procedure.getUuid();
             if (StringUtils.isBlank(uuid)) {
                 uuid = uuidService.createUUIDString();

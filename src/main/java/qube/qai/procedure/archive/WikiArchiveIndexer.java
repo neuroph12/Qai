@@ -83,7 +83,7 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
     @Override
     public void execute() {
 
-        executeInputProcedures();
+        //executeInputProcedures();
 
         if (StringUtils.isEmpty(indexDirectory)) {
             indexDirectory = (String) getInputValueOf(INPUT_INDEX_DIRECTORY);

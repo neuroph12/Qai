@@ -27,7 +27,6 @@ import qube.qai.procedure.event.ProcedureInterrupted;
 import qube.qai.procedure.event.ProcedureStarted;
 import qube.qai.services.ProcedureManagerInterface;
 import qube.qai.services.ProcedureRunnerInterface;
-import qube.qai.user.Permission;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -41,11 +40,7 @@ public class ProcedureRunner implements ProcedureRunnerInterface, QaiConstants, 
 
     private static Logger logger = LoggerFactory.getLogger("ProcedureRunner");
 
-    public static final String SERVICE_NAME = "ProcedureRunner";
 
-    public static final String TOPIC_NAME = "Procedure_Runner_Messages";
-
-    public static Permission CAN_EXECUTE = new Permission("Can_Execute");
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -58,7 +53,6 @@ public class ProcedureRunner implements ProcedureRunnerInterface, QaiConstants, 
     private ITopic<ProcedureEvent> itopic;
 
     public ProcedureRunner() {
-
     }
 
     public void init() {

@@ -119,8 +119,6 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
     @Override
     public void execute() {
 
-        executeInputProcedures();
-
         //pathToCsvFiles = (String) getInputValueOf(INPUT_FILENAME);
 
         createCheckAndInsertStockEntitesFromFile();

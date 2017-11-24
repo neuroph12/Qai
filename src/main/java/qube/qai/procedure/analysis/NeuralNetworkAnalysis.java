@@ -60,8 +60,6 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
     @Override
     public void execute() {
 
-        executeInputProcedures();
-
         if (neuralNetwork == null) {
             error("Input neural-network has not been initialized properly: null value");
             return;

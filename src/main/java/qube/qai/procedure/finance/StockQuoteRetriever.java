@@ -60,8 +60,6 @@ public class StockQuoteRetriever extends Procedure {
     @Override
     public void execute() {
 
-        executeInputProcedures();
-
         // first get the selector
         if (StringUtils.isEmpty(tickerSymbol)) {
             tickerSymbol = (String) getInputValueOf(INPUT_TIME_SEQUENCE);

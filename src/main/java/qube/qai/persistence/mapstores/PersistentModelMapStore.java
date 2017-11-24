@@ -23,6 +23,7 @@ import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureLibrary;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
@@ -139,7 +140,7 @@ public class PersistentModelMapStore implements MapStore {
      */
     private Object checkProcedureTypes(Object key) {
         Object found = null;
-        for (Class klass : Procedure.knownSubClasses()) {
+        for (Class klass : ProcedureLibrary.getTemplateMap().keySet()) {
             try {
                 found = reader.load(klass, key);
             } catch (NotFoundException e) {

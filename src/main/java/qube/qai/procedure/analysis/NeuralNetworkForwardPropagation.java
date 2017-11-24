@@ -69,8 +69,6 @@ public class NeuralNetworkForwardPropagation extends Procedure implements Proced
     @Override
     public void execute() {
 
-        executeInputProcedures();
-
         NeuralNetwork neuralNetwork = (NeuralNetwork) getInputValueOf(INPUT_NEURAL_NETWORK);
         Vector inputVector = (Vector) getInputValueOf(INPUT_START_VECTOR);
         List<String> names = (List<String>) getInputValueOf(INPUT_NAMES);

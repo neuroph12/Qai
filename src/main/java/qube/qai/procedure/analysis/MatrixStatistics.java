@@ -73,8 +73,6 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
     @Override
     public void execute() {
 
-        executeInputProcedures();
-
         if (matrix == null || matrix.getMatrix() == null) {
             error("Input matrix has not been initialized properly: null value");
             return;

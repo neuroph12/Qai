@@ -61,8 +61,6 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
     @Override
     public void execute() {
 
-        executeInputProcedures();
-
         Map<String, SelectionOperator> timeSeriesMap = (Map<String, SelectionOperator>) getInputValueOf(FROM);
         Map<String, Statistics> statisticsMap = new TreeMap<String, Statistics>();
 

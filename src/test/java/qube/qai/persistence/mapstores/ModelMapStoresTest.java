@@ -166,10 +166,7 @@ public class ModelMapStoresTest extends TestCase {
         mapStore.init();
 
         Collection<String> uuids = new ArrayList<>();
-        //Collection<Procedure> procedures = TestRdfSerialization.generateAllProcedures();
-        Collection<String> procedureNames = ProcedureLibrary.getTemplateMap().keySet();
-        for (String name : procedureNames) {
-            ProcedureTemplate template = ProcedureLibrary.getNamedProcedureTemplate(name);
+        for (ProcedureTemplate template : ProcedureLibrary.getTemplateMap().values()) {
             Procedure procedure = template.createProcedure();
             String uuid = procedure.getUuid();
             uuids.add(uuid);

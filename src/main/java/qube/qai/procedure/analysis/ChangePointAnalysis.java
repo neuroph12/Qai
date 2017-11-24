@@ -61,8 +61,6 @@ public class ChangePointAnalysis extends Procedure {
     @Override
     public void execute() {
 
-        executeInputProcedures();
-
         if (timeSequence == null) {
             error("Input time-series has not been initialized properly: null value");
             return;

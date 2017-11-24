@@ -66,8 +66,6 @@ public class TimeSequenceAnalysis extends Procedure implements ProcedureConstant
     @Override
     public void execute() {
 
-        executeInputProcedures();
-
         if (timeSequence == null) {
             error("Input time-series has not been initialized properly: null value");
         }

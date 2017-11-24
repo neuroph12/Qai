@@ -24,6 +24,10 @@ import java.util.Set;
  */
 public interface ProcedureRunnerInterface {
 
+    String SERVICE_NAME = "ProcedureRunner";
+
+    String TOPIC_NAME = "Procedure_Runner_Messages";
+
     void submitProcedure(Procedure procedure);
 
     ProcedureConstants.ProcedureState queryState(String uuid);

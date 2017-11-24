@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2017 Qoan Software Association. All rights reserved.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +20,7 @@ import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
 import qube.qai.procedure.finance.StockEntityInitialization;
 import qube.qai.procedure.finance.StockQuoteRetriever;
-import qube.qai.procedure.utils.AttachProcedure;
-import qube.qai.procedure.utils.CreateUserProcedure;
-import qube.qai.procedure.utils.SelectionProcedure;
-import qube.qai.procedure.utils.SimpleProcedure;
+import qube.qai.procedure.utils.*;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
 import java.util.Map;
@@ -152,7 +150,76 @@ public class ProcedureLibrary {
         }
     };
 
-    public static ProcedureTemplate[] allTemplates = new ProcedureTemplate[]{
+    public static ProcedureTemplate<SliceProcedure> sliceTemplate = new ProcedureTemplate<SliceProcedure>() {
+        @Override
+        public SliceProcedure createProcedure() {
+            return new SliceProcedure();
+        }
+    };
+
+    public static ProcedureTemplate<ForEachProcedure> forEachTemplate = new ProcedureTemplate<ForEachProcedure>() {
+        @Override
+        public ForEachProcedure createProcedure() {
+            return new ForEachProcedure();
+        }
+    };
+
+
+    public static Map<Class, ProcedureTemplate> getTemplateMap() {
+
+        Map<Class, ProcedureTemplate> templateMap = new TreeMap<>();
+
+        templateMap.put(SimpleProcedure.class, simpleTemplate);
+        templateMap.put(MatrixStatistics.class, matrixStatisticsTemplate);
+        templateMap.put(ChangePointAnalysis.class, changePointAnalysisTemplate);
+        templateMap.put(TimeSequenceAnalysis.class, timeSequenceAnalysisTemplate);
+        templateMap.put(NetworkStatistics.class, networkStatisticstemplate);
+        templateMap.put(NeuralNetworkAnalysis.class, neuralNetworkAnalysisTemplate);
+        templateMap.put(NeuralNetworkForwardPropagation.class, forwardPropagationTemplate);
+        templateMap.put(DirectoryIndexer.class, directoryIndexerTemplate);
+        templateMap.put(WikiArchiveIndexer.class, wikiArchiveIndexerTemplate);
+        templateMap.put(StockEntityInitialization.class, stockEntityInitializationTemplate);
+        templateMap.put(StockQuoteRetriever.class, stockQuoteRetriverTemplate);
+        templateMap.put(WikiRipperProcedure.class, wikiRipperTemplate);
+        templateMap.put(AttachProcedure.class, attachTemplate);
+        templateMap.put(SelectionProcedure.class, selectionTemplate);
+        templateMap.put(CreateUserProcedure.class, createUserTemplate);
+        templateMap.put(MarketNetworkBuilder.class, marketNetworkBuilderTemplate);
+        templateMap.put(SortingPercentilesProcedure.class, sortingPercentilesTemplate);
+        templateMap.put(SliceProcedure.class, sliceTemplate);
+        templateMap.put(ForEachProcedure.class, forEachTemplate);
+
+        return templateMap;
+    }
+
+    public static Map<String, ProcedureTemplate> getTemplateNameMap() {
+
+        Map<String, ProcedureTemplate> templateMap = new TreeMap<>();
+
+        templateMap.put(SimpleProcedure.NAME, simpleTemplate);
+        templateMap.put(MatrixStatistics.NAME, matrixStatisticsTemplate);
+        templateMap.put(ChangePointAnalysis.NAME, changePointAnalysisTemplate);
+        templateMap.put(TimeSequenceAnalysis.NAME, timeSequenceAnalysisTemplate);
+        templateMap.put(NetworkStatistics.NAME, networkStatisticstemplate);
+        templateMap.put(NeuralNetworkAnalysis.NAME, neuralNetworkAnalysisTemplate);
+        templateMap.put(NeuralNetworkForwardPropagation.NAME, forwardPropagationTemplate);
+        templateMap.put(DirectoryIndexer.NAME, directoryIndexerTemplate);
+        templateMap.put(WikiArchiveIndexer.NAME, wikiArchiveIndexerTemplate);
+        templateMap.put(StockEntityInitialization.NAME, stockEntityInitializationTemplate);
+        templateMap.put(StockQuoteRetriever.NAME, stockQuoteRetriverTemplate);
+        templateMap.put(WikiRipperProcedure.NAME, wikiRipperTemplate);
+        templateMap.put(AttachProcedure.NAME, attachTemplate);
+        templateMap.put(SelectionProcedure.NAME, selectionTemplate);
+        templateMap.put(CreateUserProcedure.NAME, createUserTemplate);
+        templateMap.put(MarketNetworkBuilder.NAME, marketNetworkBuilderTemplate);
+        templateMap.put(SortingPercentilesProcedure.NAME, sortingPercentilesTemplate);
+        templateMap.put(SliceProcedure.NAME, sliceTemplate);
+        templateMap.put(ForEachProcedure.NAME, forEachTemplate);
+
+        return templateMap;
+    }
+
+    /*public static ProcedureTemplate[] allTemplates = new ProcedureTemplate[]{
             simpleTemplate,
             matrixStatisticsTemplate,
             changePointAnalysisTemplate,
@@ -170,34 +237,54 @@ public class ProcedureLibrary {
             createUserTemplate,
             marketNetworkBuilderTemplate,
             sortingPercentilesTemplate,
-    };
+            sliceTemplate,
+            forEachTemplate
+    };*/
 
-    private static Map<String, ProcedureTemplate> templateMap = new TreeMap<>();
+    //private static Map<String, ProcedureTemplate> templateMap = new TreeMap<>();
 
-    public static Map<String, ProcedureTemplate> getTemplateMap() {
-        if (templateMap.isEmpty()) {
-            templateMap.put(SimpleProcedure.NAME, simpleTemplate);
-            templateMap.put(MatrixStatistics.NAME, matrixStatisticsTemplate);
-            templateMap.put(ChangePointAnalysis.NAME, changePointAnalysisTemplate);
-            templateMap.put(TimeSequenceAnalysis.NAME, timeSequenceAnalysisTemplate);
-            templateMap.put(NetworkStatistics.NAME, networkStatisticstemplate);
-            templateMap.put(NeuralNetworkAnalysis.NAME, neuralNetworkAnalysisTemplate);
-            templateMap.put(NeuralNetworkForwardPropagation.NAME, forwardPropagationTemplate);
-            templateMap.put(DirectoryIndexer.NAME, directoryIndexerTemplate);
-            templateMap.put(WikiArchiveIndexer.NAME, wikiArchiveIndexerTemplate);
-            templateMap.put(StockEntityInitialization.NAME, stockEntityInitializationTemplate);
-            templateMap.put(StockQuoteRetriever.NAME, stockQuoteRetriverTemplate);
-            templateMap.put(WikiRipperProcedure.NAME, wikiRipperTemplate);
-            templateMap.put(AttachProcedure.NAME, attachTemplate);
-            templateMap.put(SelectionProcedure.NAME, selectionTemplate);
-            templateMap.put(CreateUserProcedure.NAME, createUserTemplate);
-            templateMap.put(MarketNetworkBuilder.NAME, marketNetworkBuilderTemplate);
-            templateMap.put(SortingPercentilesProcedure.NAME, sortingPercentilesTemplate);
-        }
-        return templateMap;
-    }
 
-    public static ProcedureTemplate getNamedProcedureTemplate(String name) {
+    /*public static ProcedureTemplate getNamedProcedureTemplate(String name) {
         return getTemplateMap().get(name);
-    }
+    }*/
+
+    /**
+     * All known implementing sub-classes
+     *
+     * @return
+     */
+    /*public static Collection<Class> knownSubClasses() {
+
+        Collection<Class> classes = new ArrayList<>();
+
+        // analysis
+        classes.add(SimpleProcedure.class);
+        classes.add(MatrixStatistics.class);
+        classes.add(ChangePointAnalysis.class);
+        classes.add(TimeSequenceAnalysis.class);
+        classes.add(NetworkStatistics.class);
+        classes.add(NeuralNetworkAnalysis.class);
+        classes.add(NeuralNetworkForwardPropagation.class);
+        classes.add(DirectoryIndexer.class);
+        classes.add(WikiArchiveIndexer.class);
+        classes.add(StockEntityInitialization.class);
+        classes.add(WikiRipperProcedure.class);
+
+        classes.add(MarketNetworkBuilder.class);
+        classes.add(SortingPercentilesProcedure.class);
+        classes.add(TimeSequenceAnalysis.class);
+
+        // archive
+
+        // finance
+        classes.add(StockQuoteRetriever.class);
+
+        // utils
+        classes.add(AttachProcedure.class);
+        classes.add(CreateUserProcedure.class);
+        classes.add(SelectionProcedure.class);
+
+        return classes;
+    }*/
+
 }

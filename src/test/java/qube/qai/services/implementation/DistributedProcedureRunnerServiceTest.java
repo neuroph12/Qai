@@ -22,6 +22,7 @@ import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureTemplate;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -46,8 +47,8 @@ public class DistributedProcedureRunnerServiceTest extends QaiTestBase {
         assertNotNull("initialization failed- no procedure-runner subclass", procedureListener.procedureRunner);
 
         List<String> uuidList = new ArrayList<String>();
-        for (String name : ProcedureLibrary.getTemplateMap().keySet()) {
-            Procedure procedure = ProcedureLibrary.getNamedProcedureTemplate(name).createProcedure();
+        for (ProcedureTemplate template : ProcedureLibrary.getTemplateMap().values()) {
+            Procedure procedure = template.createProcedure();
             String uuid = procedure.getUuid();
             uuidList.add(uuid);
             logger.info("submitting procedure " + uuid);

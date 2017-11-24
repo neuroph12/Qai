@@ -22,6 +22,7 @@ import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.UUIDServiceInterface;
@@ -100,7 +101,7 @@ public class TestHazelcastSelectors extends QaiTestBase {
         IMap<String, Procedure> procedures = hazelcastInstance.getMap(PROCEDURE_SOURCE);
 
         List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
-        Collection<Class> procedureNames = Procedure.knownSubClasses();
+        Collection<Class> procedureNames = ProcedureLibrary.getTemplateMap().keySet();
         for (Class name : procedureNames) {
             Procedure procedure = (Procedure) name.newInstance();
             assertNotNull("procedure should not be null", procedure);

@@ -100,9 +100,9 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
 
         // create some procedures and see what happens
         List<String> uuidList = new ArrayList<String>();
-        Map<String, ProcedureTemplate> templateMap = ProcedureLibrary.getTemplateMap();
-        for (String name : templateMap.keySet()) {
-            Procedure procedure = templateMap.get(name).createProcedure();
+        Map<Class, ProcedureTemplate> templateMap = ProcedureLibrary.getTemplateMap();
+        for (ProcedureTemplate template : templateMap.values()) {
+            Procedure procedure = template.createProcedure();
             String uuid = procedure.getUuid();
             uuidList.add(uuid);
             logger.info("submitting procedure " + uuid);

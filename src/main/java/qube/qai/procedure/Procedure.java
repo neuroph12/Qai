@@ -26,27 +26,20 @@ import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
 import qube.qai.parsers.antimirov.nodes.EmptyNode;
 import qube.qai.parsers.antimirov.nodes.Name;
-import qube.qai.procedure.analysis.*;
-import qube.qai.procedure.archive.DirectoryIndexer;
-import qube.qai.procedure.archive.WikiArchiveIndexer;
-import qube.qai.procedure.finance.StockEntityInitialization;
-import qube.qai.procedure.finance.StockQuoteRetriever;
+import qube.qai.procedure.event.ProcedureEnded;
+import qube.qai.procedure.event.ProcedureError;
+import qube.qai.procedure.event.ProcedureInterrupted;
 import qube.qai.procedure.nodes.ProcedureDescription;
 import qube.qai.procedure.nodes.ProcedureInputs;
 import qube.qai.procedure.nodes.ProcedureResults;
 import qube.qai.procedure.nodes.ValueNode;
-import qube.qai.procedure.utils.AttachProcedure;
-import qube.qai.procedure.utils.CreateUserProcedure;
-import qube.qai.procedure.utils.SelectionProcedure;
-import qube.qai.procedure.utils.SimpleProcedure;
+import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.User;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by rainbird on 11/27/15.
@@ -85,86 +78,6 @@ public abstract class Procedure extends ConcatenationNode
     }
 
     /**
-     * All known implementing sub-classes
-     *
-     * @return
-     */
-    public static Collection<Class> knownSubClasses() {
-
-        Collection<Class> classes = new ArrayList<>();
-
-        // analysis
-        classes.add(ChangePointAnalysis.class);
-        classes.add(MarketNetworkBuilder.class);
-        classes.add(MatrixStatistics.class);
-        classes.add(NetworkStatistics.class);
-        classes.add(NeuralNetworkAnalysis.class);
-        classes.add(NeuralNetworkForwardPropagation.class);
-        classes.add(SortingPercentilesProcedure.class);
-        classes.add(TimeSequenceAnalysis.class);
-
-        // archive
-        classes.add(DirectoryIndexer.class);
-        classes.add(WikiArchiveIndexer.class);
-
-        // finance
-        classes.add(StockEntityInitialization.class);
-        classes.add(StockQuoteRetriever.class);
-
-        // utils
-        classes.add(AttachProcedure.class);
-        classes.add(CreateUserProcedure.class);
-        classes.add(SelectionProcedure.class);
-        classes.add(SimpleProcedure.class);
-
-        return classes;
-    }
-
-
-    protected Object getInputValueOf(String name) {
-        Object value = null;
-        ValueNode nameNode = getProcedureInputs().getNamedInput(name);
-        if (nameNode != null) {
-            value = nameNode.getValue();
-        }
-        return value;
-    }
-
-    protected void setResultValueOf(String name, Object value) {
-        BaseNode nameNode = getProcedureResults().getNamedResult(name);
-        if (nameNode == null) {
-            throw new IllegalArgumentException("No result value with name: '" + name + "'");
-        }
-        nameNode.setFirstChild(new ValueNode(name, value));
-    }
-
-    protected void executeInputProcedures() {
-        Collection<String> names = getProcedureInputs().getInputNames();
-        for (String name : names) {
-            ValueNode node = getProcedureInputs().getNamedInput(name);
-            BaseNode child = node.getFirstChild();
-            if (child != null && child instanceof Procedure) {
-                Procedure procedure = (Procedure) child;
-                if (!procedure.hasExecuted()) {
-                    procedure.execute();
-                }
-            }
-        }
-    }
-
-    public String getDescriptionText() {
-        return ((ProcedureDescription) getFirstChild()).getDescription();
-    }
-
-    public ProcedureInputs getProcedureInputs() {
-        return (ProcedureInputs) getFirstChild().getFirstChild();
-    }
-
-    public ProcedureResults getProcedureResults() {
-        return (ProcedureResults) getFirstChild().getSecondChild();
-    }
-
-    /**
      * this is what procedures do after all
      */
     public abstract void execute();
@@ -182,10 +95,6 @@ public abstract class Procedure extends ConcatenationNode
      * when the procedure is about to be called
      */
     protected abstract void buildArguments();
-
-    protected SelectionOperator createSelector(Object data) {
-        return selectorFactory.buildSelector(NAME, uuid, data);
-    }
 
     public final void run() {
         try {
@@ -215,26 +124,74 @@ public abstract class Procedure extends ConcatenationNode
         }
     }
 
-    private void sendMessage(String message) {
+    private void sendMessage(ProcedureEvent event) {
         if (hazelcastInstance != null) {
-            ITopic itopic = hazelcastInstance.getTopic(uuid);
-            itopic.publish(message);
-            info("message has been successfully sent: " + message);
+            ITopic<ProcedureEvent> itopic = hazelcastInstance.getTopic(ProcedureRunnerInterface.TOPIC_NAME);
+            itopic.publish(event);
+            info("messageOf: '" + event.ofState() + "' event has been successfully sent");
         } else {
             error("no hazelcast-instance to send ok message to");
         }
     }
 
     protected void sendMessageOK() {
-        sendMessage(PROCESS_ENDED);
+        sendMessage(new ProcedureEnded(uuid));
     }
 
     protected void sendMessageError(String message) {
-        sendMessage(PROCESS_ERROR);
+        sendMessage(new ProcedureError(uuid, message));
     }
 
     protected void sendMessageInterrupted() {
-        sendMessage(PROCESS_INTERRUPTED);
+        sendMessage(new ProcedureInterrupted(uuid));
+    }
+
+
+    protected Object getInputValueOf(String name) {
+        Object value = null;
+        ValueNode nameNode = getProcedureInputs().getNamedInput(name);
+        if (nameNode != null) {
+            value = nameNode.getValue();
+        }
+        return value;
+    }
+
+    protected void setResultValueOf(String name, Object value) {
+        BaseNode nameNode = getProcedureResults().getNamedResult(name);
+        if (nameNode == null) {
+            throw new IllegalArgumentException("No result value with name: '" + name + "'");
+        }
+        nameNode.setFirstChild(new ValueNode(name, value));
+    }
+
+    /*protected void executeInputProcedures() {
+        Collection<String> names = getProcedureInputs().getInputNames();
+        for (String name : names) {
+            ValueNode node = getProcedureInputs().getNamedInput(name);
+            BaseNode child = node.getFirstChild();
+            if (child != null && child instanceof Procedure) {
+                Procedure procedure = (Procedure) child;
+                if (!procedure.hasExecuted()) {
+                    procedure.execute();
+                }
+            }
+        }
+    }*/
+
+    public String getDescriptionText() {
+        return ((ProcedureDescription) getFirstChild()).getDescription();
+    }
+
+    public ProcedureInputs getProcedureInputs() {
+        return (ProcedureInputs) getFirstChild().getFirstChild();
+    }
+
+    public ProcedureResults getProcedureResults() {
+        return (ProcedureResults) getFirstChild().getSecondChild();
+    }
+
+    protected SelectionOperator createSelector(Object data) {
+        return selectorFactory.buildSelector(NAME, uuid, data);
     }
 
 
