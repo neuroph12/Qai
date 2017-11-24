@@ -12,33 +12,15 @@
  *
  */
 
-package qube.qai.procedure.utils;
+package qube.qai.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
 
-/**
- * Created by rainbird on 12/27/15.
- */
-public class SimpleProcedure extends Procedure {
+public interface ProcedureManagerInterface {
 
-    private Logger logger = LoggerFactory.getLogger("SimpleProcedure");
+    String registerProcedure(Procedure procedure);
 
-    public static String NAME = "Simple Procedure";
+    boolean isProcedureAndUserAuthorized(Procedure procedure);
 
-    public SimpleProcedure() {
-        super(NAME);
-    }
-
-    @Override
-    public void execute() {
-        logger.info("SimpleProcedure: '" + getUuid() + "' successfully executed!");
-    }
-
-    @Override
-    public void buildArguments() {
-//        arguments = new Arguments();
-    }
 
 }

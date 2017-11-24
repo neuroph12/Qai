@@ -12,27 +12,11 @@
  *
  */
 
-package qube.qai.services;
+package qube.qai.procedure;
 
-import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureConstants;
+public interface ProcedureEvent {
 
-import java.util.Set;
+    String ofProcedure();
 
-/**
- * Created by rainbird on 12/22/15.
- */
-public interface ProcedureRunnerInterface {
-
-    void submitProcedure(Procedure procedure);
-
-    ProcedureConstants.ProcedureState queryState(String uuid);
-
-    Set<String> getStartedProcedures();
-
-//    void processEvent(Procedure procedure, ProcedureError error);
-//
-//    void processEvent(Procedure procedure, ProcedureStarted started);
-//
-//    void processEvent(Procedure procedure, ProcedureEnded ended);
+    ProcedureConstants.ProcedureState ofState();
 }

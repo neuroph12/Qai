@@ -28,6 +28,7 @@ import qube.qai.persistence.DummyQaiDataProvider;
 import qube.qai.persistence.MapDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
+import qube.qai.procedure.ProcedureManager;
 import qube.qai.security.QaiSecurity;
 import qube.qai.security.QaiTestSecurityManager;
 import qube.qai.services.*;
@@ -50,6 +51,8 @@ public class QaiTestModule extends AbstractModule {
     private static String NODE_NAME = "QaiTestNode";
 
     protected HazelcastInstance hazelcastInstance;
+
+    private ProcedureManager procedureManager;
 
     private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
     //private static String wikipediaDirectory = "/media/pi/BET/wiki-archives/wikipedia_en.index";
@@ -142,37 +145,16 @@ public class QaiTestModule extends AbstractModule {
         return searchService;
     }
 
-    /**
-     * StockQuotesSearchService
-     * @return
-     */
-//    @Provides @com.google.inject.name.Named("Stock_Quotes")
-//    SearchServiceInterface provideStockQuoteSearchService() {
-//
-//        // create an injector for initializing JPA-Module & start the service
-//        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_STOCKS"));
-//        PersistService persistService = injector.getInstance(PersistService.class);
-//        persistService.start();
-//
-//        StockQuoteSearchService searchService = new StockQuoteSearchService();
-//        injector.injectMembers(searchService);
-//
-//        return  searchService;
-//    }
+    @Provides
+    @Singleton
+    ProcedureManagerInterface provideProcedureManager() {
 
-    /**
-     * RdfTripleSearchService
-     * @return
-     */
-//    @Provides @Named("Dbpedia_en")
-//    SearchServiceInterface provideDbpediaSearchService() {
-//
-//        Injector injector = Guice.createInjector(new JpaPersistModule("TEST_DBPEDIA"));
-//        PersistService service = injector.getInstance(PersistService.class);
-//        service.start();
-//
-//        RDFTriplesSearchService searchService = new RDFTriplesSearchService();
-//        injector.injectMembers(searchService);
-//        return searchService;
-//    }
+        if (hazelcastInstance == null) {
+            hazelcastInstance = provideHazelcastInstance();
+        }
+
+        procedureManager = ProcedureManager.getInstance(hazelcastInstance);
+        return procedureManager;
+    }
+
 }

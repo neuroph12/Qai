@@ -70,6 +70,8 @@ public abstract class Procedure extends ConcatenationNode
 
     protected boolean hasExecuted = false;
 
+    protected ProcedureState state = ProcedureState.TEMPLATE;
+
     public Procedure() {
         super(new ProcedureDescription(), new EmptyNode());
         this.name = new Name(NAME);
@@ -318,4 +320,13 @@ public abstract class Procedure extends ConcatenationNode
             return "-";
         }
     }
+
+    public ProcedureState getState() {
+        return state;
+    }
+
+    public void setState(ProcedureState state) {
+        this.state = state;
+    }
+
 }

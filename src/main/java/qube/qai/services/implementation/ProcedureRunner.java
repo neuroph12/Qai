@@ -19,39 +19,58 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiConstants;
 import qube.qai.procedure.Procedure;
-import qube.qai.security.QaiSecurity;
+import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ProcedureEvent;
+import qube.qai.procedure.event.ProcedureEnded;
+import qube.qai.procedure.event.ProcedureError;
+import qube.qai.procedure.event.ProcedureInterrupted;
+import qube.qai.procedure.event.ProcedureStarted;
+import qube.qai.services.ProcedureManagerInterface;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.user.Permission;
-import qube.qai.user.User;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * Created by rainbird on 12/22/15.
  */
 @Singleton
-public class ProcedureRunner implements ProcedureRunnerInterface {
+public class ProcedureRunner implements ProcedureRunnerInterface, QaiConstants, ProcedureConstants, MessageListener<ProcedureEvent> {
 
     private static Logger logger = LoggerFactory.getLogger("ProcedureRunner");
 
     public static final String SERVICE_NAME = "ProcedureRunner";
 
-    public static Permission CAN_EXECUTE = new Permission("Can Execute");
+    public static final String TOPIC_NAME = "Procedure_Runner_Messages";
+
+    public static Permission CAN_EXECUTE = new Permission("Can_Execute");
 
     @Inject
     private HazelcastInstance hazelcastInstance;
 
     @Inject
-    private QaiSecurity security;
+    private ProcedureManagerInterface procedureManager;
 
-    private Map<String, ProcedureState> procedures;
+    private IMap<String, Procedure> procedures;
+
+    private ITopic<ProcedureEvent> itopic;
 
     public ProcedureRunner() {
-        this.procedures = new HashMap<String, ProcedureState>();
+
+    }
+
+    public void init() {
+
+        if (hazelcastInstance == null) {
+            throw new IllegalStateException("There has to be a HazelcastInstance available- aborting.");
+        }
+
+        procedures = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
+        itopic = hazelcastInstance.getTopic(TOPIC_NAME);
+        itopic.addMessageListener(this);
+
     }
 
     public void submitProcedure(Procedure procedure) {
@@ -68,22 +87,16 @@ public class ProcedureRunner implements ProcedureRunnerInterface {
             logger.error("procedure without uuid- assigning new: " + uuid);
         }
 
-        User user = procedure.getUser();
-        if (!security.hasPermission(user, CAN_EXECUTE)) {
-            String rightViolation = String.format("User: '%s' does not have the required crenential for running procedure '%s', execution interrupted!",
-                    user, procedure.getProcedureName());
+        if (!procedureManager.isProcedureAndUserAuthorized(procedure)) {
+            String rightViolation = String.format("Procedure '%s' with '%s' does not have the required credentials for execution!",
+                    procedure.getProcedureName(), procedure.getUuid());
             logger.info(rightViolation);
             return;
         }
 
-        ProcedureState state = new ProcedureState(STATE.RUNNING);
-        ITopic itopic = hazelcastInstance.getTopic(uuid);
-        itopic.addMessageListener(state);
-        procedures.put(uuid, state);
 
-        IMap<String, Procedure> procMap = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
-        if (procMap.get(uuid) == null) {
-            procMap.put(uuid, procedure);
+        if (procedures.containsKey(uuid)) {
+            procedures.replace(uuid, procedure);
         }
 
         IExecutorService executor = hazelcastInstance.getExecutorService(SERVICE_NAME);
@@ -94,45 +107,59 @@ public class ProcedureRunner implements ProcedureRunnerInterface {
 
     }
 
+    @Override
+    public void onMessage(Message<ProcedureEvent> message) {
+        ProcedureEvent event = message.getMessageObject();
+
+        String uuid = event.ofProcedure();
+        if (!procedures.containsKey(uuid)) {
+            logger.error("Unaccounted procedure has been detected! uuid: " + uuid);
+            return;
+        }
+
+        Procedure procedure = procedures.get(uuid);
+        processEvent(procedure, event);
+
+    }
+
+    public void processEvent(Procedure procedure, ProcedureInterrupted interrupted) {
+        procedure.setState(ProcedureState.INTERRUPTED);
+        logger.info("procedure uuid: " + interrupted.ofProcedure() + " has been interrupted");
+    }
+
+    public void processEvent(Procedure procedure, ProcedureError error) {
+        procedure.setState(ProcedureConstants.ProcedureState.ERROR);
+        logger.error("procedure uuid: " + error.ofProcedure() + " with error: " + error.getMessage());
+    }
+
+    public void processEvent(Procedure procedure, ProcedureStarted started) {
+        procedure.setState(ProcedureConstants.ProcedureState.STARTED);
+        logger.info("procedure uuid: " + started.ofProcedure() + " has been started");
+    }
+
+    public void processEvent(Procedure procedure, ProcedureEnded ended) {
+        procedure.setState(ProcedureConstants.ProcedureState.ENDED);
+        logger.info("procedure uuid: " + ended.ofProcedure() + " ended");
+    }
+
+    private void processEvent(Procedure procedure, ProcedureEvent event) {
+        // should never be coming here
+        logger.info("procedure uuid: " + event.ofProcedure() + " ended up in the wrong method call... how is this possible!?!");
+    }
+
     public Set<String> getStartedProcedures() {
         return procedures.keySet();
     }
 
-    public STATE queryState(String uuid) {
-        ProcedureState state = procedures.get(uuid);
-        if (state != null) {
-            return state.getState();
+    @Override
+    public ProcedureState queryState(String uuid) {
+
+        Procedure procedure = procedures.get(uuid);
+        if (procedure == null) {
+            logger.error("procedure uuid: " + uuid + "' is ot registered");
+            throw new IllegalStateException("procedure with uuid: '" + uuid + "' is not registered");
+
         }
-        return null;
-    }
-
-    class ProcedureState implements MessageListener {
-
-        public STATE state;
-        public String message;
-
-        public ProcedureState(STATE state) {
-            this.state = state;
-        }
-
-        public void onMessage(Message message) {
-            String content = (String) message.getMessageObject();
-            if (Procedure.PROCESS_ENDED.equals(content)) {
-                state = STATE.COMPLETE;
-            } else if (Procedure.PROCESS_INTERRUPTED.equals(content)) {
-                state = STATE.INTERRUPTED;
-            } else if (Procedure.PROCESS_ERROR.equals(content)) {
-                state = STATE.ERROR;
-            }
-            logger.info("message received: " + content);
-        }
-
-        public STATE getState() {
-            return state;
-        }
-
-        public void setState(STATE state) {
-            this.state = state;
-        }
+        return procedure.getState();
     }
 }

@@ -12,11 +12,26 @@
  *
  */
 
-package qube.qai.procedure;
+package qube.qai.procedure.event;
 
-public interface ProcedureManagerInterface {
+import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ProcedureEvent;
 
-    String addProcedure(Procedure procedure);
+public class ProcedureEnded implements ProcedureEvent {
 
-    void startProcedure(String uuid);
+    private String uuid;
+
+    public ProcedureEnded(String uuid) {
+        this.uuid = uuid;
+    }
+
+    @Override
+    public String ofProcedure() {
+        return uuid;
+    }
+
+    @Override
+    public ProcedureConstants.ProcedureState ofState() {
+        return ProcedureConstants.ProcedureState.ENDED;
+    }
 }

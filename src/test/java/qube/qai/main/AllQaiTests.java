@@ -54,7 +54,11 @@ import qube.qai.procedure.utils.WikiSearchTest;
 import qube.qai.procedure.visitor.ProcedureVisitorsTest;
 import qube.qai.procedure.wikiripper.WikiRipperProcedureTest;
 import qube.qai.security.QaiSecurityTest;
-import qube.qai.services.implementation.*;
+import qube.qai.services.ProcedureManagerTest;
+import qube.qai.services.implementation.ProcedureRunnerServiceTest;
+import qube.qai.services.implementation.TextTranslationDistributedTest;
+import qube.qai.services.implementation.UUIDGeneratorTest;
+import qube.qai.services.implementation.YouNMeNAllDistributedTest;
 import qube.qai.services.sims.HowFairAreMarketsDistributedTest;
 
 /**
@@ -128,6 +132,7 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(DatabaseSearchServiceTest.class);
 
         // procedure
+        suite.addTestSuite(ProcedureManagerTest.class);
         suite.addTestSuite(ProcedureInputsAndResultsTest.class);
         suite.addTestSuite(WikiArchiveIndexerTest.class);
         suite.addTestSuite(WikiRipperProcedureTest.class);
@@ -161,7 +166,7 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(ProcedureRunnerServiceTest.class);
         //suite.addTestSuite(TestDistributedSearchServices.class);
         //suite.addTestSuite(TestDistributedDataService.class);
-        suite.addTestSuite(DistributedProcedureRunnerServiceTest.class);
+        //suite.addTestSuite(DistributedProcedureRunnerServiceTest.class);
 
         // these are more or less integration tests-
         suite.addTestSuite(HowFairAreMarketsDistributedTest.class);

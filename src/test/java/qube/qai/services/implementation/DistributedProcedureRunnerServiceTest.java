@@ -20,8 +20,8 @@ import com.hazelcast.core.ITopic;
 import qube.qai.main.QaiConstants;
 import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureLibrary;
-import qube.qai.services.ProcedureRunnerInterface;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -29,7 +29,9 @@ import java.util.List;
 
 /**
  * Created by rainbird on 1/11/16.
+ * @Deprecated
  */
+@Deprecated
 public class DistributedProcedureRunnerServiceTest extends QaiTestBase {
 
     @Inject
@@ -54,9 +56,9 @@ public class DistributedProcedureRunnerServiceTest extends QaiTestBase {
 
         int procedureCount = 0;
         for (String uuid : uuidList) {
-            ProcedureRunnerInterface.STATE state = procedureListener.queryState(uuid);
+            ProcedureConstants.ProcedureState state = procedureListener.queryState(uuid);
             logger.info("procedure uuid " + uuid + " has state " + state);
-            if (ProcedureRunnerInterface.STATE.COMPLETE.equals(state)) {
+            if (ProcedureConstants.ProcedureState.ENDED.equals(state)) {
                 logger.info("procedure with uuid: '" + uuid + "' is already complete now checking results");
                 IMap<String, Procedure> procedures = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
                 Procedure procedure = procedures.get(uuid);
@@ -96,9 +98,9 @@ public class DistributedProcedureRunnerServiceTest extends QaiTestBase {
 
         // and now we really have to check the states
         for (String uuid : uuidList) {
-            ProcedureRunnerInterface.STATE state = procedureListener.queryState(uuid);
+            ProcedureConstants.ProcedureState state = procedureListener.queryState(uuid);
             logger.info("procedure uuid " + uuid + " has state " + state);
-            assertTrue("if messaging is working state has to be interrupted", ProcedureRunnerInterface.STATE.INTERRUPTED.equals(state));
+            assertTrue("if messaging is working state has to be interrupted", ProcedureConstants.ProcedureState.INTERRUPTED.equals(state));
         }
     }
 }

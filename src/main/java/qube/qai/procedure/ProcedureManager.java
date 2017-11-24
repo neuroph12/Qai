@@ -14,24 +14,23 @@
 
 package qube.qai.procedure;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IExecutorService;
-import com.hazelcast.core.Message;
-import qube.qai.message.MessageQueue;
+import com.hazelcast.core.*;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import qube.qai.main.QaiConstants;
 import qube.qai.message.QaiMessageListener;
+import qube.qai.services.ProcedureManagerInterface;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by rainbird on 11/27/15.
  */
 public class ProcedureManager extends QaiMessageListener implements ProcedureManagerInterface {
 
-    @Inject
-    private MessageQueue messageQueue;
+    private Logger logger = LoggerFactory.getLogger("ProcedureMaanager");
 
     @Inject
     private UUIDService uuidService;
@@ -41,46 +40,70 @@ public class ProcedureManager extends QaiMessageListener implements ProcedureMan
 
     private static ProcedureManager procedureManager;
 
-    private Map<String, ProcedureWithState> procedures;
+    private IMap<String, Procedure> procedures;
 
-    private enum ProcedureStates {READY, STARTED, ENDED, ERROR}
+    private IExecutorService executorService;
 
-    public static ProcedureManager getInstance() {
-        if (procedureManager != null) {
-            return procedureManager;
-        }
+    private ITopic<String> topic;
 
-        procedureManager = new ProcedureManager();
+    private String messageSubmitted = "Procedure %s with uuid: '%s' is ready to be started";
 
-        return procedureManager;
-    }
+    private String messageStarted = "Procedure %s with uuid: '%s' has been started";
 
-    public ProcedureManager() {
-        procedures = new HashMap<String, ProcedureWithState>();
+    public ProcedureManager(HazelcastInstance hazelcastInstance) {
+        this.hazelcastInstance = hazelcastInstance;
     }
 
     @Override
-    public String addProcedure(Procedure procedure) {
-        String uuid = uuidService.createUUIDString();
+    public String registerProcedure(Procedure procedure) {
 
-        IExecutorService executorService = hazelcastInstance.getExecutorService(procedureTopicName);
+        String uuid = procedure.getUuid();
+        // this should never really happen- just to make sure
+        if (StringUtils.isBlank(uuid)) {
+            uuid = uuidService.createUUIDString();
+            procedure.setUuid(uuid);
+        }
+
+        procedures = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
+        // check is there is already a copy in the map, put one if neccessary
+        if (!procedures.containsKey(uuid)) {
+            procedures.put(uuid, procedure);
+        }
+
         executorService.submit(procedure);
 
-        procedures.put(uuid, new ProcedureWithState(ProcedureStates.READY, procedure));
+        procedure.setState(Procedure.ProcedureState.READY);
+        procedures.replace(uuid, procedure);
+
+        logger.info(String.format(messageSubmitted, procedure.getProcedureName(), procedure.getUuid()));
 
         return uuid;
     }
 
-    @Override
+    /*@Override
     public void startProcedure(String uuid) {
+
         if (!procedures.containsKey(uuid)) {
             throw new IllegalArgumentException("Procedure: " + uuid + " has never been registered");
         }
 
-        // send the message to the procedure to start running
-        messageQueue.sendMessage(uuid, "Begin");
-        procedures.get(uuid).setState(ProcedureStates.STARTED);
+        // submit the procedure for execution
+        Procedure procedure = procedures.get(uuid);
+        procedure.setState(ProcedureConstants.ProcedureState.STARTED);
+        procedures.replace(uuid, procedure);
 
+        executorService.executeOnAllMembers(procedure);
+
+        // log submission of the procedure
+        String message = String.format(messageStarted, procedure.getProcedureName(), procedure.getUuid());
+        logger.info(message);
+        topic.publish(message);
+
+    }*/
+
+    @Override
+    public boolean isProcedureAndUserAuthorized(Procedure procedure) {
+        return false;
     }
 
     @Override
@@ -88,36 +111,34 @@ public class ProcedureManager extends QaiMessageListener implements ProcedureMan
         //message.
     }
 
-    @Override
-    public void initialize() {
+    /**
+     * Singleton instance of the class
+     *
+     * @return procedureManager
+     */
+    public static ProcedureManager getInstance(HazelcastInstance hazelcastInstance) {
 
+        if (procedureManager != null) {
+            return procedureManager;
+        }
+
+        procedureManager = new ProcedureManager(hazelcastInstance);
+        procedureManager.initialize();
+
+        return procedureManager;
     }
 
-    class ProcedureWithState {
-
-        ProcedureStates state;
-
-        Procedure procedure;
-
-        public ProcedureWithState(ProcedureStates state, Procedure procedure) {
-            this.state = state;
-            this.procedure = procedure;
+    @Override
+    public void initialize() {
+        if (hazelcastInstance == null) {
+            throw new IllegalStateException("No HazealcastInstance to work with- aborting");
         }
+        procedures = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
+        executorService = hazelcastInstance.getExecutorService(procedureTopicName);
+        topic = hazelcastInstance.getTopic(QaiConstants.PROCEDURES);
+    }
 
-        public ProcedureStates getState() {
-            return state;
-        }
-
-        public void setState(ProcedureStates state) {
-            this.state = state;
-        }
-
-        public Procedure getProcedure() {
-            return procedure;
-        }
-
-        public void setProcedure(Procedure procedure) {
-            this.procedure = procedure;
-        }
+    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
+        this.hazelcastInstance = hazelcastInstance;
     }
 }

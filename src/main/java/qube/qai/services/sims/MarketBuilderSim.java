@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiConstants;
+import qube.qai.message.QaiMessageListener;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
 import qube.qai.procedure.analysis.MarketNetworkBuilder;
@@ -27,20 +28,24 @@ import qube.qai.procedure.finance.StockQuoteRetriever;
 import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.utils.ForEachProcedure;
 import qube.qai.procedure.utils.SliceProcedure;
-import qube.qai.services.implementation.DistributedProcedureListener;
+import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.implementation.DistributedSearchService;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.services.implementation.UUIDService;
 
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MarketBuilderSim extends DistributedProcedureListener implements QaiConstants {
+public class MarketBuilderSim extends QaiMessageListener implements QaiConstants {
 
     private Logger logger = LoggerFactory.getLogger("MarketBuilderSim");
 
     private String NAME = "Market-Building & Stock-Market Simulation: [%s]";
+
+    @Inject
+    private ProcedureRunnerInterface procedureRunner;
 
     private Collection<SearchResult> searchResults;
 
@@ -56,6 +61,11 @@ public class MarketBuilderSim extends DistributedProcedureListener implements Qa
         }
         procedureTopicName = NAME;
         this.searchResults = searchResults;
+    }
+
+    @Override
+    public void initialize() {
+
     }
 
     /**
@@ -81,7 +91,8 @@ public class MarketBuilderSim extends DistributedProcedureListener implements Qa
         }
     }
 
-    private boolean isQuoteRetrievalComplete() {
+    private boolean isQuoteRetrievalComplete(Message message) {
+
         return false;
     }
 

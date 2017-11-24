@@ -12,33 +12,26 @@
  *
  */
 
-package qube.qai.procedure.utils;
+package qube.qai.procedure.event;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ProcedureEvent;
 
-/**
- * Created by rainbird on 12/27/15.
- */
-public class SimpleProcedure extends Procedure {
+public class ProcedureReady implements ProcedureEvent {
 
-    private Logger logger = LoggerFactory.getLogger("SimpleProcedure");
+    private String uuid;
 
-    public static String NAME = "Simple Procedure";
-
-    public SimpleProcedure() {
-        super(NAME);
+    public ProcedureReady(String uuid) {
+        this.uuid = uuid;
     }
 
     @Override
-    public void execute() {
-        logger.info("SimpleProcedure: '" + getUuid() + "' successfully executed!");
+    public String ofProcedure() {
+        return uuid;
     }
 
     @Override
-    public void buildArguments() {
-//        arguments = new Arguments();
+    public ProcedureConstants.ProcedureState ofState() {
+        return ProcedureConstants.ProcedureState.READY;
     }
-
 }

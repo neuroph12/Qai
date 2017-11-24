@@ -19,6 +19,8 @@ package qube.qai.procedure;
  */
 public interface ProcedureConstants {
 
+    enum ProcedureState {TEMPLATE, READY, STARTED, ENDED, INTERRUPTED, ERROR}
+
     String INPUT_TIME_SEQUENCE = "time-sequence";
 
     String INPUT_NETWORK = "network";

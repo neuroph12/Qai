@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.procedure.analysis.MatrixStatistics;
@@ -75,10 +76,10 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
         Thread.sleep(5000);
 
         // ok, we are now assuming that something might have happened
-        ProcedureRunnerInterface.STATE state = procedureRunner.queryState(uuid);
+        ProcedureConstants.ProcedureState state = procedureRunner.queryState(uuid);
         logger.info("procedure state is: " + state);
         assertNotNull("there has to be at least a state", state);
-        assertTrue("this usually works", ProcedureRunnerInterface.STATE.COMPLETE.equals(state));
+        assertTrue("this usually works", ProcedureConstants.ProcedureState.ENDED.equals(state));
 
         // we then try to read the procedure from map
         IMap<String, Procedure> procedureMap = hazelcastInstance.getMap("PROCEDURES");
@@ -92,7 +93,7 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
         Thread.sleep(1000); // maybe if we wait a bit...
         state = procedureRunner.queryState(uuid);
         logger.info("after changing the state has become: " + state);
-        assertTrue("state has been changed to interrupted", ProcedureRunnerInterface.STATE.INTERRUPTED.equals(state));
+        assertTrue("state has been changed to interrupted", ProcedureConstants.ProcedureState.INTERRUPTED.equals(state));
     }
 
     public void testExecutionService() throws Exception {
@@ -111,9 +112,9 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
         // now we want to see what happened with out procedures
         int procedureCount = 0;
         for (String uuid : uuidList) {
-            ProcedureRunnerInterface.STATE state = procedureRunner.queryState(uuid);
+            ProcedureConstants.ProcedureState state = procedureRunner.queryState(uuid);
             logger.info("procedure uuid " + uuid + " has state " + state);
-            if (ProcedureRunnerInterface.STATE.COMPLETE.equals(state)) {
+            if (ProcedureConstants.ProcedureState.ENDED.equals(state)) {
                 logger.info("procedure with uuid: '" + uuid + "' is already complete now checking results");
                 IMap<String, Procedure> procedures = hazelcastInstance.getMap("PROCEDURES");
                 Procedure procedure = procedures.get(uuid);
@@ -154,9 +155,9 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
 
         // and now we really have to check the states
         for (String uuid : uuidList) {
-            ProcedureRunnerInterface.STATE state = procedureRunner.queryState(uuid);
+            ProcedureConstants.ProcedureState state = procedureRunner.queryState(uuid);
             logger.info("procedure uuid " + uuid + " has state " + state);
-            assertTrue("if messaging is working state has to be interrupted", ProcedureRunnerInterface.STATE.INTERRUPTED.equals(state));
+            assertTrue("if messaging is working state has to be interrupted", ProcedureConstants.ProcedureState.INTERRUPTED.equals(state));
         }
     }
 

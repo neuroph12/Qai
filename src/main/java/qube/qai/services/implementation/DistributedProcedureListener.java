@@ -21,11 +21,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.message.QaiMessageListener;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureConstants;
 import qube.qai.services.ProcedureRunnerInterface;
 
 import javax.inject.Inject;
 import java.util.Set;
 
+/**
+ * @Deprecated will be removed without any substitutes... no need for this class
+ */
+@Deprecated
 public class DistributedProcedureListener extends QaiMessageListener implements ProcedureRunnerInterface {
 
     private Logger logger = LoggerFactory.getLogger("DistributedProcedureListener");
@@ -70,7 +75,7 @@ public class DistributedProcedureListener extends QaiMessageListener implements 
     }
 
     @Override
-    public STATE queryState(String uuid) {
+    public ProcedureConstants.ProcedureState queryState(String uuid) {
         return procedureRunner.queryState(uuid);
     }
 
