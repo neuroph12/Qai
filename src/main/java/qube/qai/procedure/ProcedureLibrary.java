@@ -23,6 +23,7 @@ import qube.qai.procedure.finance.StockQuoteRetriever;
 import qube.qai.procedure.utils.*;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -167,7 +168,7 @@ public class ProcedureLibrary {
 
     public static Map<Class, ProcedureTemplate> getTemplateMap() {
 
-        Map<Class, ProcedureTemplate> templateMap = new TreeMap<>();
+        Map<Class, ProcedureTemplate> templateMap = new HashMap<>();
 
         templateMap.put(SimpleProcedure.class, simpleTemplate);
         templateMap.put(MatrixStatistics.class, matrixStatisticsTemplate);

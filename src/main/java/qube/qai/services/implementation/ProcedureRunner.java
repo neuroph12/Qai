@@ -21,10 +21,6 @@ import qube.qai.main.QaiConstants;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureEvent;
-import qube.qai.procedure.event.ProcedureEnded;
-import qube.qai.procedure.event.ProcedureError;
-import qube.qai.procedure.event.ProcedureInterrupted;
-import qube.qai.procedure.event.ProcedureStarted;
 import qube.qai.services.ProcedureManagerInterface;
 import qube.qai.services.ProcedureRunnerInterface;
 
@@ -36,11 +32,15 @@ import java.util.Set;
  * Created by rainbird on 12/22/15.
  */
 @Singleton
-public class ProcedureRunner implements ProcedureRunnerInterface, QaiConstants, ProcedureConstants, MessageListener<ProcedureEvent> {
+public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandlerInterface, QaiConstants, ProcedureConstants, MessageListener<ProcedureEvent> {
 
     private static Logger logger = LoggerFactory.getLogger("ProcedureRunner");
 
+    private static String startMessageTemplate = "Start-request for procedure: '%s' with uuid: '%s' has been received";
 
+    private static String unauthorizedMessageTemplate = "Procedure '%s' with '%s' does not have the required credentials for execution!";
+
+    private static String procStartedMessageTemplate = "Procedure '%s' with uuid: '%s' has been started successfully...";
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -70,7 +70,7 @@ public class ProcedureRunner implements ProcedureRunnerInterface, QaiConstants, 
     public void submitProcedure(Procedure procedure) {
 
         // before we submit we make note of the incoming request
-        String startMessage = String.format("Start-request for procedure: '%s' with uuid: '%s' has been received",
+        String startMessage = String.format(startMessageTemplate,
                 procedure.getProcedureName(), procedure.getUuid());
         logger.info(startMessage);
 
@@ -82,7 +82,7 @@ public class ProcedureRunner implements ProcedureRunnerInterface, QaiConstants, 
         }
 
         if (!procedureManager.isProcedureAndUserAuthorized(procedure)) {
-            String rightViolation = String.format("Procedure '%s' with '%s' does not have the required credentials for execution!",
+            String rightViolation = String.format(unauthorizedMessageTemplate,
                     procedure.getProcedureName(), procedure.getUuid());
             logger.info(rightViolation);
             return;
@@ -96,13 +96,14 @@ public class ProcedureRunner implements ProcedureRunnerInterface, QaiConstants, 
         IExecutorService executor = hazelcastInstance.getExecutorService(SERVICE_NAME);
         executor.execute(procedure);
 
-        String allOK = String.format("Procedure '%s' with uuid: '%s' has been started successfully...", procedure.getProcedureName(), procedure.getUuid());
+        String allOK = String.format(procStartedMessageTemplate, procedure.getProcedureName(), procedure.getUuid());
         logger.info(allOK);
 
     }
 
     @Override
     public void onMessage(Message<ProcedureEvent> message) {
+
         ProcedureEvent event = message.getMessageObject();
 
         String uuid = event.ofProcedure();
@@ -112,33 +113,9 @@ public class ProcedureRunner implements ProcedureRunnerInterface, QaiConstants, 
         }
 
         Procedure procedure = procedures.get(uuid);
-        processEvent(procedure, event);
+        procedureManager.processEvent(procedure, event);
+        //processEvent(procedure, event);
 
-    }
-
-    public void processEvent(Procedure procedure, ProcedureInterrupted interrupted) {
-        procedure.setState(ProcedureState.INTERRUPTED);
-        logger.info("procedure uuid: " + interrupted.ofProcedure() + " has been interrupted");
-    }
-
-    public void processEvent(Procedure procedure, ProcedureError error) {
-        procedure.setState(ProcedureConstants.ProcedureState.ERROR);
-        logger.error("procedure uuid: " + error.ofProcedure() + " with error: " + error.getMessage());
-    }
-
-    public void processEvent(Procedure procedure, ProcedureStarted started) {
-        procedure.setState(ProcedureConstants.ProcedureState.STARTED);
-        logger.info("procedure uuid: " + started.ofProcedure() + " has been started");
-    }
-
-    public void processEvent(Procedure procedure, ProcedureEnded ended) {
-        procedure.setState(ProcedureConstants.ProcedureState.ENDED);
-        logger.info("procedure uuid: " + ended.ofProcedure() + " ended");
-    }
-
-    private void processEvent(Procedure procedure, ProcedureEvent event) {
-        // should never be coming here
-        logger.info("procedure uuid: " + event.ofProcedure() + " ended up in the wrong method call... how is this possible!?!");
     }
 
     public Set<String> getStartedProcedures() {

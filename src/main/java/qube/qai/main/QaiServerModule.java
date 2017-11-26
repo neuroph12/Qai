@@ -27,6 +27,8 @@ import qube.qai.persistence.*;
 import qube.qai.persistence.mapstores.*;
 import qube.qai.persistence.search.DatabaseSearchService;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureManager;
+import qube.qai.services.ProcedureManagerInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
 import qube.qai.user.Role;
@@ -128,6 +130,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     private SearchServiceInterface wiktionarySearchService;
 
+    private ProcedureManagerInterface procedureManager;
+
     private Properties properties;
 
     private Set<String> localServices = new HashSet<>();
@@ -141,6 +145,21 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
         // for the time being nothing to do here.
 
+    }
+
+    @Provides
+    protected ProcedureManagerInterface provideProcedureManager() {
+
+        if (hazelcastInstance == null) {
+            hazelcastInstance = provideHazelcastInstance();
+        }
+
+        if (procedureManager == null) {
+            procedureManager = new ProcedureManager(hazelcastInstance);
+            //((ProcedureManager) procedureManager).initialize();
+        }
+
+        return procedureManager;
     }
 
     /**

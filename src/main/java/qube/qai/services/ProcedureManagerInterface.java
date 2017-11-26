@@ -15,6 +15,11 @@
 package qube.qai.services;
 
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureEvent;
+import qube.qai.procedure.event.ProcedureEnded;
+import qube.qai.procedure.event.ProcedureError;
+import qube.qai.procedure.event.ProcedureInterrupted;
+import qube.qai.procedure.event.ProcedureStarted;
 
 public interface ProcedureManagerInterface {
 
@@ -22,5 +27,13 @@ public interface ProcedureManagerInterface {
 
     boolean isProcedureAndUserAuthorized(Procedure procedure);
 
+    void processEvent(Procedure procedure, ProcedureInterrupted interrupted);
 
+    void processEvent(Procedure procedure, ProcedureError error);
+
+    void processEvent(Procedure procedure, ProcedureStarted started);
+
+    void processEvent(Procedure procedure, ProcedureEnded ended);
+
+    void processEvent(Procedure procedure, ProcedureEvent event);
 }

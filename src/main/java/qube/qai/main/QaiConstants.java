@@ -36,6 +36,8 @@ public interface QaiConstants {
 
     public String PROCEDURES = "Procedures";
 
+    public String PROCEDURE_TEMPLATES = "ProcedureTemplates";
+
     public String WIKIPEDIA = "Wikipedia_en";
 
     //@Named("PROCEDURE_BASE_DIRECTORY")

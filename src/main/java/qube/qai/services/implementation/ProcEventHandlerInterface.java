@@ -12,24 +12,9 @@
  *
  */
 
-package qube.qai.services;
+package qube.qai.services.implementation;
 
-import qube.qai.main.QaiTestBase;
-import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureLibrary;
+public interface ProcEventHandlerInterface {
 
-import javax.inject.Inject;
 
-public class ProcedureManagerTest extends QaiTestBase {
-
-    @Inject
-    private ProcedureManagerInterface procedureManager;
-
-    public void testProcedureManager() throws Exception {
-
-        Procedure procedure = ProcedureLibrary.simpleTemplate.createProcedure();
-        procedureManager.registerProcedure(procedure);
-
-        //procedureManager.startProcedure(procedure.getUuid());
-    }
 }
