@@ -27,36 +27,27 @@ import java.util.*;
  */
 public class TimeSequence<T extends Number> implements Serializable {
 
-    private TreeSet<TimeSequenceEntry> entries;
+    private TreeMap<Date, T> entries;
 
     public TimeSequence() {
-        entries = new TreeSet<TimeSequenceEntry>(new DateComparator());
+        entries = new TreeMap<>();
     }
 
     public void add(Date date, T value) {
-        entries.add(new TimeSequenceEntry(date, value));
+        entries.put(date, value);
     }
 
     public T getValue(Date date) {
-        T value = null;
-        for (TimeSequenceEntry entry : entries) {
-            if (date.equals(entry.date)) {
-                value = entry.entry;
-                break;
-            }
-        }
-        return value;
+        return entries.get(date);
     }
 
-    public Iterator<T> iterator() {
-        return new TimeSeriesIterator<T>();
-    }
+
 
     public Date[] toDates() {
         Date[] dates = new Date[entries.size()];
         int count = 0;
-        for (TimeSequenceEntry entry : entries) {
-            dates[count] = entry.getDate();
+        for (Date date : entries.keySet()) {
+            dates[count] = date;
             count++;
         }
         return dates;
@@ -65,14 +56,18 @@ public class TimeSequence<T extends Number> implements Serializable {
     public T[] toArray() {
         T[] array = (T[]) Array.newInstance(Number.class, entries.size());
         int count = 0;
-        for (TimeSequenceEntry entry : entries) {
-            array[count] = entry.getEntry();
+        for (Date date : entries.keySet()) {
+            array[count] = entries.get(date);
             count++;
         }
         return array;
     }
 
-    class TimeSeriesIterator<T> implements Serializable, Iterator<T> {
+    public Iterator<T> iterator() {
+        return entries.values().iterator();
+    }
+
+    /*class TimeSeriesIterator<T> implements Serializable, Iterator<T> {
 
         private Iterator<TimeSequenceEntry> iterator;
 
@@ -128,7 +123,12 @@ public class TimeSequence<T extends Number> implements Serializable {
         }
     }
 
+    public Iterator<T> iterator() {
+        return new TimeSeriesIterator<T>();
+    }*/
+
     public static TimeSequence<Double> createTimeSeries(Date start, Date end) {
+
         TimeSequence timeSequence = new TimeSequence();
         DateTime startDate = new DateTime(start);
         DateTime endDate = new DateTime(end);

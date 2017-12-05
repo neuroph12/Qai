@@ -19,30 +19,32 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiConstants;
-import qube.qai.message.QaiMessageListener;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
 import qube.qai.procedure.analysis.MarketNetworkBuilder;
 import qube.qai.procedure.analysis.SortingPercentilesProcedure;
 import qube.qai.procedure.finance.StockQuoteRetriever;
-import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.utils.ForEachProcedure;
 import qube.qai.procedure.utils.SliceProcedure;
 import qube.qai.services.ProcedureRunnerInterface;
-import qube.qai.services.implementation.DistributedSearchService;
+import qube.qai.services.SimulationService;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.inject.Inject;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-public class MarketBuilderSim extends QaiMessageListener implements QaiConstants {
+import static qube.qai.procedure.ProcedureConstants.FROM;
+
+public class MarketBuilderSim implements SimulationService, QaiConstants {
 
     private Logger logger = LoggerFactory.getLogger("MarketBuilderSim");
 
     private String NAME = "Market-Building & Stock-Market Simulation: [%s]";
+
+    private String uuid;
+
+    private String procedureTopicName = "Market-Builder Simulation";
 
     @Inject
     private ProcedureRunnerInterface procedureRunner;
@@ -54,49 +56,24 @@ public class MarketBuilderSim extends QaiMessageListener implements QaiConstants
     public MarketBuilderSim(Collection<SearchResult> searchResults) {
         super();
         this.searchResults = searchResults;
-        if (StringUtils.isEmpty(this.getUUID())) {
+        if (StringUtils.isEmpty(getUuid())) {
             NAME = String.format(NAME, UUIDService.uuidString());
         } else {
-            NAME = String.format(NAME, this.getUUID());
+            NAME = String.format(NAME, getUuid());
         }
         procedureTopicName = NAME;
         this.searchResults = searchResults;
     }
 
-    @Override
-    public void initialize() {
 
-    }
-
-    /**
-     * if we were to write the procedure we want to test in our grammar form
-     * <p>
-     * marketNetwork := (for-each network-builder epoch)
-     * <p>
-     * epoch := (slice (change-point-analysis (select "average"
-     * (statistical-analysis (for-each fetch-quotes-for
-     * (for-each find-entities-of (search-results)))))
-     * <p>
-     * // these are then the results which we want to see when done.
-     * (for-each entropy-analysis (for-each forward-propagation marketNetwork)
-     */
-    @Override
-    public void onMessage(Message message) {
-
-
-        Object mesasgeObject = message.getMessageObject();
-
-        if (mesasgeObject instanceof DistributedSearchService.SearchRequest) {
-
-        }
-    }
 
     private boolean isQuoteRetrievalComplete(Message message) {
 
         return false;
     }
 
-    public void runSimulations() {
+    @Override
+    public void runSimulation() {
 
         // first start with downloading the data and making sure you have them up to date
         retrieveQuotesUUIDs = new HashSet<>();
@@ -106,9 +83,12 @@ public class MarketBuilderSim extends QaiMessageListener implements QaiConstants
             retrieveQuotesUUIDs.add(retriever.getUuid());
             procedureRunner.submitProcedure(retriever);
         }
+
+        Map map = new HashMap();
         // this will sort the values and sort them, while calculating their averages as well- which is what we actually need.
         SortingPercentilesProcedure sorter = ProcedureLibrary.sortingPercentilesTemplate.createProcedure();
-        retrieveEach.getProcedureInputs().getNamedInput("whatever").setValue(new ValueNode("Values", searchResults));
+        sorter.getProcedureInputs().getNamedInput(FROM).setValue(map);
+        //retrieveEach.getProcedureInputs().getNamedInput("whatever").setValue(new ValueNode("Values", searchResults));
         procedureRunner.submitProcedure(sorter);
 
 
@@ -131,5 +111,22 @@ public class MarketBuilderSim extends QaiMessageListener implements QaiConstants
         //assertNotNull("You have to create a procedure ", builderProc);
 
         procedureRunner.submitProcedure(forEach);
+    }
+
+    @Override
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getProcedureTopicName() {
+        return procedureTopicName;
+    }
+
+    public void setProcedureTopicName(String procedureTopicName) {
+        this.procedureTopicName = procedureTopicName;
     }
 }

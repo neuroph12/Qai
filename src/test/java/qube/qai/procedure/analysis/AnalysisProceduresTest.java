@@ -14,6 +14,7 @@
 
 package qube.qai.procedure.analysis;
 
+import qube.qai.data.SelectionOperator;
 import qube.qai.data.TimeSequence;
 import qube.qai.matrix.Matrix;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
@@ -26,7 +27,9 @@ import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.services.ProcedureSourceInterface;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by rainbird on 11/30/15.
@@ -116,6 +119,10 @@ public class AnalysisProceduresTest extends TestProcedureBase {
         checkProcedureInputs(description);
 
         checkProcedureResults(description);
+
+        String[] quoteNames = {"GOOG", "APP", "whatever..."};
+
+        Map<String, SelectionOperator> timeSeriesMap = new HashMap<>();
     }
 
     /**

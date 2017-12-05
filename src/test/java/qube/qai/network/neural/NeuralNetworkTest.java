@@ -234,8 +234,8 @@ public class NeuralNetworkTest extends TestCase {
 
     protected void log(String message) {
         if (debug) {
-            //System.out.println(message);
-            logger.info(message);
+            System.out.println(message);
+            //logger.info(message);
         }
     }
 }

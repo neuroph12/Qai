@@ -19,6 +19,8 @@ import org.encog.ml.data.MLDataPair;
 import org.joda.time.DateTime;
 import org.ojalgo.random.Normal;
 import org.ojalgo.random.RandomNumber;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.data.TimeSequence;
 import qube.qai.matrix.Matrix;
 import qube.qai.network.neural.NeuralNetwork;
@@ -31,10 +33,12 @@ import java.util.*;
  */
 public class NeuralNetworkTrainingTest extends TestCase {
 
-    private boolean debug = true;
+    private Logger logger = LoggerFactory.getLogger("NeuralNetworkTrainingTest");
 
-    public void restNetworkTraining() throws Exception {
-        String[] names = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "nineth", "tenth"};
+    String[] names = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "nineth", "tenth"};
+
+    public void testNetworkTraining() throws Exception {
+
         Map<String, TimeSequence> timeSeriesMap = createTimeSeriesMap(names);
         assertNotNull(timeSeriesMap);
 
@@ -65,7 +69,7 @@ public class NeuralNetworkTrainingTest extends TestCase {
     }
 
     public void testNetworkTrainingWithStockQuotes() throws Exception {
-        String[] names = {"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "nineth", "tenth"};
+
         Map<String, Collection> dataMap = createStockQuoteMap(names);
 
         NeuralNetwork network = new NeuralNetwork(names.length);
@@ -92,12 +96,14 @@ public class NeuralNetworkTrainingTest extends TestCase {
     }
 
     private List<Date> createDates() {
+
         Date start = DateTime.parse("2015-1-1").toDate();
         Date end = DateTime.parse("2015-12-31").toDate();
         return TimeSequence.createDates(start, end);
     }
 
     private Map<String, Collection> createStockQuoteMap(String... names) {
+
         Map<String, Collection> map = new HashMap<String, Collection>();
         RandomNumber generator = new Normal(0.5, 0.1);
         DateTime start = DateTime.parse("2015-1-1");
@@ -119,6 +125,7 @@ public class NeuralNetworkTrainingTest extends TestCase {
     }
 
     private Map<String, TimeSequence> createTimeSeriesMap(String... names) {
+
         Map<String, TimeSequence> timeSeriesMap = new HashMap<String, TimeSequence>();
         for (String name : names) {
             Date start = DateTime.parse("2015-1-1").toDate();
@@ -130,8 +137,8 @@ public class NeuralNetworkTrainingTest extends TestCase {
     }
 
     private void log(String message) {
-        if (debug) {
-            System.out.println(message);
-        }
+        // the bloody slf4j
+        //logger.info(message);
+        System.out.println(message);
     }
 }
