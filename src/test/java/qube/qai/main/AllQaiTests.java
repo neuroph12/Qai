@@ -30,7 +30,6 @@ import qube.qai.network.neural.NeuralNetworkTest;
 import qube.qai.network.neural.trainer.NeuralNetworkTrainingTest;
 import qube.qai.network.semantic.SemanticNetworkBuilderTest;
 import qube.qai.network.syntax.SyntaxNetworkBuilderTest;
-import qube.qai.network.wiki.WikiNetworkTest;
 import qube.qai.parsers.WikiIntegrationTest;
 import qube.qai.parsers.antimirov.nodes.NodeVisitorsTest;
 import qube.qai.parsers.grammar.GrammarParserTest;
@@ -102,8 +101,6 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(NeuralNetworkTrainingTest.class);
         suite.addTestSuite(SemanticNetworkBuilderTest.class);
         suite.addTestSuite(SyntaxNetworkBuilderTest.class);
-        suite.addTestSuite(WikiNetworkTest.class);
-        suite.addTestSuite(SemanticNetworkBuilderTest.class);
         suite.addTestSuite(FormalNetworkTest.class);
 
         // parsers
