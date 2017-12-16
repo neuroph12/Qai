@@ -17,7 +17,6 @@ package qube.qai.persistence.mapstores;
 import com.hazelcast.core.HazelcastInstance;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.ResourceData;
@@ -33,7 +32,8 @@ import javax.inject.Named;
  */
 public class IndexedDirectoryMapStoreTest extends QaiTestBase {
 
-    private static Logger logger = LoggerFactory.getLogger("TestTarballMapStore");
+    @Inject
+    private Logger logger;
 
     private static String wikiArticleName = "Charles Darwin.xml";
     private static String wikipediaResourceDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";

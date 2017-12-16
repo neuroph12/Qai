@@ -16,7 +16,6 @@ package qube.qai.parsers;
 
 import com.hazelcast.core.HazelcastInstance;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
@@ -33,7 +32,8 @@ import java.util.Set;
  */
 public class WikiIntegrationTest extends QaiTestBase {
 
-    private static Logger logger = LoggerFactory.getLogger("TestWikiArticleIntegration");
+    @Inject
+    private Logger logger;
 
     private String stockListingPage = "Lists of companies by stock exchange listing.xml";
 

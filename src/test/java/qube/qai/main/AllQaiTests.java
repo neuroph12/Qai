@@ -55,10 +55,11 @@ import qube.qai.procedure.visitor.ProcedureVisitorsTest;
 import qube.qai.procedure.wikiripper.WikiRipperProcedureTest;
 import qube.qai.security.QaiSecurityTest;
 import qube.qai.services.implementation.ProcedureRunnerServiceTest;
-import qube.qai.services.implementation.TextTranslationDistributedTest;
 import qube.qai.services.implementation.UUIDGeneratorTest;
-import qube.qai.services.implementation.YouNMeNAllDistributedTest;
 import qube.qai.services.sims.HowFairAreMarketsDistributedTest;
+import qube.qai.services.sims.MDSimsOfBiochemicalReactions;
+import qube.qai.services.sims.TextTranslationDistributedTest;
+import qube.qai.services.sims.YouNMeNAllDistributedTest;
 
 /**
  * Created by rainbird on 5/26/16.
@@ -167,9 +168,11 @@ public class AllQaiTests extends TestCase {
         //suite.addTestSuite(DistributedProcedureRunnerServiceTest.class);
 
         // these are more or less integration tests-
+        // or rather the homework assignments expressed in code form
         suite.addTestSuite(HowFairAreMarketsDistributedTest.class);
         suite.addTestSuite(YouNMeNAllDistributedTest.class);
         suite.addTestSuite(TextTranslationDistributedTest.class);
+        suite.addTestSuite(MDSimsOfBiochemicalReactions.class);
 
         // util
         //suite.addTestSuite(TestProcedureToRdfConverter.class);

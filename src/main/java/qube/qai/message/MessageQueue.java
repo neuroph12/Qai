@@ -18,7 +18,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.MessageListener;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.HashSet;
@@ -29,9 +28,10 @@ import java.util.Set;
  */
 public class MessageQueue implements MessageQueueInterface {
 
-    private static Logger logger = LoggerFactory.getLogger("MessageQueue");
+    @Inject
+    private Logger logger;
 
-    @Inject //@Named("HAZELCAST_CLIENT")
+    @Inject
     private HazelcastInstance hazelcastInstance;
 
     private Set<String> topics = new HashSet<String>();

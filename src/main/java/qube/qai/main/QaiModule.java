@@ -92,6 +92,11 @@ public class QaiModule extends AbstractModule {
 
     }
 
+    @Provides
+    Logger provideLogger() {
+        return LoggerFactory.getLogger("Qai");
+    }
+
     /**
      * @return
      * @TODO this was mainly for test reasons, i think it is now time to remove it

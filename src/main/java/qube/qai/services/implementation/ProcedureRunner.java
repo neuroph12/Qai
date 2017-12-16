@@ -16,7 +16,6 @@ package qube.qai.services.implementation;
 
 import com.hazelcast.core.*;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiConstants;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
@@ -34,7 +33,8 @@ import java.util.Set;
 @Singleton
 public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandlerInterface, QaiConstants, ProcedureConstants, MessageListener<ProcedureEvent> {
 
-    private static Logger logger = LoggerFactory.getLogger("ProcedureRunner");
+    @Inject
+    private Logger logger;
 
     private static String startMessageTemplate = "Start-request for procedure: '%s' with uuid: '%s' has been received";
 

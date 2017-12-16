@@ -14,8 +14,6 @@
 
 package qube.qai.network.semantic;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.network.Network;
 
 /**
@@ -23,7 +21,7 @@ import qube.qai.network.Network;
  */
 public class SemanticNetwork extends Network {
 
-    private static Logger logger = LoggerFactory.getLogger("SemanticNetwork");
+    //private static Logger logger = LoggerFactory.getLogger("SemanticNetwork");
 
     private boolean debug = false;
 

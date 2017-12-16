@@ -32,6 +32,7 @@ import java.util.Map;
  */
 public class ModelMapStore implements MapStore {
 
+
     private static Logger logger = LoggerFactory.getLogger("ModelMapStore");
 
     private Class baseClass;
