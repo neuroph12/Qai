@@ -98,6 +98,11 @@ public class QaiTestModule extends AbstractModule {
     }
 
     @Provides
+    Logger provideLogger() {
+        return LoggerFactory.getLogger("QaiTest");
+    }
+
+    @Provides
     public QaiDataProvider provideDataProvider() {
         return new DummyQaiDataProvider();
     }
