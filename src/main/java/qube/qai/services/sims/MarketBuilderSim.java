@@ -17,7 +17,6 @@ package qube.qai.services.sims;
 import com.hazelcast.core.Message;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiConstants;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
@@ -38,7 +37,8 @@ import static qube.qai.procedure.ProcedureConstants.FROM;
 
 public class MarketBuilderSim implements SimulationService, QaiConstants {
 
-    private Logger logger = LoggerFactory.getLogger("MarketBuilderSim");
+    @Inject
+    private Logger logger;
 
     private String NAME = "Market-Building & Stock-Market Simulation: [%s]";
 

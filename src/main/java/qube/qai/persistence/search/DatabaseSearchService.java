@@ -16,6 +16,7 @@ package qube.qai.persistence.search;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.main.QaiConstants;
 import qube.qai.persistence.StockEntity;
@@ -38,8 +39,7 @@ import java.util.Set;
  */
 public class DatabaseSearchService implements SearchServiceInterface, QaiConstants {
 
-    @Inject
-    private Logger logger;
+    private Logger logger = LoggerFactory.getLogger("DatabaseSearchService");
 
     private String context;
 

@@ -87,7 +87,7 @@ public class ProcedureManager implements ProcedureManagerInterface {
         procedure.setState(Procedure.ProcedureState.READY);
         procedures.replace(uuid, procedure);
 
-        logger.info(String.format(messageSubmitted, procedure.getUuid()));
+        logger.info(String.format(messageSubmitted, procedure.getProcedureName(), procedure.getUuid()));
 
         return uuid;
     }

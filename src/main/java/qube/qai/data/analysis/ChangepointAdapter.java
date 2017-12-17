@@ -70,14 +70,14 @@ public class ChangepointAdapter {
 
     private ChangePoint convert(DataPoint dataPoint) {
 
-        ChangePoint changePoint = new ChangePoint();
-        changePoint.index = dataPoint.getIndex();
-        changePoint.x = dataPoint.getX();
-        changePoint.y = dataPoint.getY();
-        changePoint.probability = dataPoint.getProbability();
-        changePoint.removed = dataPoint.isRemoved();
-        changePoint.checked = dataPoint.isChecked();
-        changePoint.value = dataPoint.isValue();
+        ChangePoint changePoint = new ChangePoint(dataPoint);
+//        changePoint.index = dataPoint.getIndex();
+//        changePoint.x = dataPoint.getX();
+//        changePoint.y = dataPoint.getY();
+//        changePoint.probability = dataPoint.getProbability();
+//        changePoint.removed = dataPoint.isRemoved();
+//        changePoint.checked = dataPoint.isChecked();
+//        changePoint.value = dataPoint.isValue();
 
         return changePoint;
     }
@@ -90,6 +90,19 @@ public class ChangepointAdapter {
         private boolean removed;
         private boolean checked;
         private boolean value;
+
+        public ChangePoint() {
+        }
+
+        public ChangePoint(DataPoint dataPoint) {
+            this.index = dataPoint.getIndex();
+            this.x = dataPoint.getX();
+            this.y = dataPoint.getY();
+            this.probability = dataPoint.getProbability();
+            this.removed = dataPoint.isRemoved();
+            this.checked = dataPoint.isChecked();
+            this.value = dataPoint.isValue();
+        }
 
         public int getIndex() {
             return index;

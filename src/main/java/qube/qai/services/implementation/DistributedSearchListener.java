@@ -18,6 +18,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.Message;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import qube.qai.message.QaiMessageListener;
 import qube.qai.services.SearchServiceInterface;
 
@@ -29,8 +30,7 @@ import java.util.Collection;
  */
 public class DistributedSearchListener extends QaiMessageListener {
 
-    @Inject
-    private Logger logger;
+    private Logger logger = LoggerFactory.getLogger("DatabaseSearchService");
 
     @Inject
     private HazelcastInstance hazelcastInstance;
