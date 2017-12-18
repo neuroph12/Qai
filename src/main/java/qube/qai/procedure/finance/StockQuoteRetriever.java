@@ -14,18 +14,14 @@
 
 package qube.qai.procedure.finance;
 
-import org.apache.commons.lang3.StringUtils;
 import org.ojalgo.finance.data.YahooSymbol;
 import org.ojalgo.type.CalendarDateUnit;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.nodes.ValueNode;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -38,20 +34,16 @@ public class StockQuoteRetriever extends Procedure {
 
     public static String NAME = "Stock Quote Retriever Procedure";
 
-    public static String DESCRIPTION = "Retrieves the stock quotes for given list of stock entities " +
+    public static String DESCRIPTION = "Retrieves the stock quotes for given entity " +
             "and updates them to the latest stand";
 
-    public static String TICKER_SYMBOL = "tickerSymbol";
+    public static String STOCK_ENTITY = "StockEntity";
 
     public static String NUMBER_OF_INSERTS = "numberOfInserts";
 
-    public static long numberOfInserts;
+    public long numberOfInserts = 0;
 
-    private String tickerSymbol;
-
-    @Inject
-    @Named("STOCKS")
-    private EntityManager entityManager;
+    private QaiDataProvider<StockEntity> entityProvider;
 
     public StockQuoteRetriever() {
         super(NAME);
@@ -61,45 +53,46 @@ public class StockQuoteRetriever extends Procedure {
     public void execute() {
 
         // first get the selector
-        if (StringUtils.isEmpty(tickerSymbol)) {
-            tickerSymbol = (String) getInputValueOf(INPUT_TIME_SEQUENCE);
+        if (entityProvider == null) {
+            entityProvider = (QaiDataProvider<StockEntity>) getInputValueOf(STOCK_ENTITY);
         }
 
-        if (StringUtils.isEmpty(tickerSymbol)) {
-            throw new RuntimeException("There has to be a ticker-symbol to update");
+        if (entityProvider == null) {
+            throw new RuntimeException("There has to be a entityProvider to update");
         }
 
         //entityManager.getTransaction().begin();
 
-        StockEntity entity = retrieveEntityForTickerSymbol(tickerSymbol);
+        StockEntity entity = entityProvider.getData();
         if (entity == null) {
-            error("An entity with tickerSymbol: '" + tickerSymbol + "' could not be found- skipping!");
+            error("An entity with not be found- skipping!");
+            throw new RuntimeException("An entity could not be found- skipping!");
         }
 
-        Collection<StockQuote> quotes = retrieveQuotesFor(tickerSymbol);
+        Collection<StockQuote> quotes = retrieveQuotesFor(entity.getTickerSymbol());
         Set<StockQuote> entityQuotes = entity.getQuotes();
         for (StockQuote quote : quotes) {
             if (!entityQuotes.contains(quote)) {
-                entityManager.persist(quote);
                 entity.addQuote(quote);
-                entityManager.persist(quote);
                 numberOfInserts++;
             }
         }
 
-        entityManager.persist(entity);
+        if (numberOfInserts > 0) {
+            entityProvider.putData(entity.getUuid(), entity);
+        }
 
         setResultValueOf(NUMBER_OF_INSERTS, numberOfInserts);
     }
 
-    private StockEntity retrieveEntityForTickerSymbol(String tickerSymbol) {
+    /*private StockEntity retrieveEntityForTickerSymbol(String tickerSymbol) {
 
         String searchString = "select o from StockEntity o where o.tickerSymbol like '" + tickerSymbol + "'";
         Query query = entityManager.createQuery(searchString);
         StockEntity entity = (StockEntity) query.getSingleResult();
 
         return entity;
-    }
+    }*/
 
     private Collection<StockQuote> retrieveQuotesFor(String stockName) {
 
@@ -130,11 +123,11 @@ public class StockQuoteRetriever extends Procedure {
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<String>(TICKER_SYMBOL) {
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<QaiDataProvider<StockEntity>>(STOCK_ENTITY) {
             @Override
-            public void setValue(String value) {
+            public void setValue(QaiDataProvider<StockEntity> value) {
                 super.setValue(value);
-                tickerSymbol = value;
+                entityProvider = value;
             }
         });
         getProcedureDescription().getProcedureResults().addResult(new ValueNode<Number>(NUMBER_OF_INSERTS, MIMETYPE_NUMBER) {
@@ -145,27 +138,23 @@ public class StockQuoteRetriever extends Procedure {
         });
     }
 
-    public static long getNumberOfInserts() {
+    /**
+     * @return
+     * @TODO is there a reason for this?!?
+     */
+    public long getNumberOfInserts() {
         return numberOfInserts;
     }
+//
+//    public void setNumberOfInserts(long numberOfInserts) {
+//        StockQuoteRetriever.numberOfInserts = numberOfInserts;
+//    }
 
-    public static void setNumberOfInserts(long numberOfInserts) {
-        StockQuoteRetriever.numberOfInserts = numberOfInserts;
+    public QaiDataProvider<StockEntity> getEntityProvider() {
+        return entityProvider;
     }
 
-    public String getTickerSymbol() {
-        return tickerSymbol;
-    }
-
-    public void setTickerSymbol(String tickerSymbol) {
-        this.tickerSymbol = tickerSymbol;
-    }
-
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public void setEntityProvider(QaiDataProvider<StockEntity> entityProvider) {
+        this.entityProvider = entityProvider;
     }
 }

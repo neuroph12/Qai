@@ -14,18 +14,12 @@
 
 package qube.qai.procedure.finance;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.persist.PersistService;
-import com.google.inject.persist.jpa.JpaPersistModule;
 import junit.framework.TestCase;
+import qube.qai.persistence.DummyQaiDataProvider;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.ProcedureLibrary;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.Set;
 
 /**
  * Created by rainbird on 3/11/17.
@@ -35,23 +29,18 @@ public class StockQuoteRetrieverTest extends TestCase {
 
     public void testStockQuoteRetriever() throws Exception {
 
-        Injector injector = createInjector();
-        EntityManager entityManager = injector.getInstance(EntityManager.class);
+        //Injector injector = createInjector();
+        //EntityManager entityManager = injector.getInstance(EntityManager.class);
         StockQuoteRetriever retriever = ProcedureLibrary.stockQuoteRetriverTemplate.createProcedure();
-        retriever.setEntityManager(entityManager);
-
         String tickerSymbol = "GOOG";
-        retriever.setTickerSymbol(tickerSymbol);
+        StockEntity entity = new StockEntity();
+        entity.setTickerSymbol(tickerSymbol);
+        QaiDataProvider<StockEntity> provider = new DummyQaiDataProvider<StockEntity>(entity);
+        retriever.setEntityProvider(provider);
+
         retriever.execute();
 
-        String queryString = "select o from StockEntity o where o.tickerSymbol like '" + tickerSymbol + "'";
-        Query query = entityManager.createQuery(queryString);
-        StockEntity entity = (StockEntity) query.getSingleResult();
-        Set<StockQuote> quotes = entity.getQuotes();
-        assertNotNull("there has to be quotes now", quotes);
-        assertTrue("the list may not be empty", !quotes.isEmpty());
-
-        for (StockQuote quote : quotes) {
+        for (StockQuote quote : entity.getQuotes()) {
             log(quote.getTickerSymbol() + " $" + quote.getAdjustedClose() + " on: " + quote.getQuoteDate());
         }
     }
@@ -60,10 +49,4 @@ public class StockQuoteRetrieverTest extends TestCase {
         System.out.println(message);
     }
 
-    private Injector createInjector() {
-        Injector injector = Guice.createInjector(new JpaPersistModule("STAND_ALONE_TEST_STOCKS"));
-        PersistService service = injector.getInstance(PersistService.class);
-        service.start();
-        return injector;
-    }
 }

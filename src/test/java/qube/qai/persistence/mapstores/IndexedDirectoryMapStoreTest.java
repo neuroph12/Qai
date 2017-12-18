@@ -15,6 +15,7 @@
 package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import qube.qai.main.QaiTestBase;
@@ -63,12 +64,13 @@ public class IndexedDirectoryMapStoreTest extends QaiTestBase {
         IndexedDirectoryMapStore mapStore = new IndexedDirectoryMapStore(wikipediaResourceDirectory, wikipediaResourceIndexDirectory);
         mapStore.setSearchService(directorySearchService);
 
-        WikiArticle article = wikiArticleDataProvider.getData(wikiArticleName);
-        assertNotNull("seriously?!?", article);
+        IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
+        WikiArticle wikiArticle = wikiMap.get(wikiArticleName);
+        assertNotNull("seriously?!?", wikiArticle);
 
         //log(article.getContent());
 
-        if (article.getContent().contains(wikiFileFormatStart)) {
+        if (wikiArticle.getContent().contains(wikiFileFormatStart)) {
             logger.info("we are good- found some resources to look for");
         } else {
             logger.info("no file reference in this article- nothing to search for");
@@ -77,7 +79,7 @@ public class IndexedDirectoryMapStoreTest extends QaiTestBase {
 
         int foundCount = 0;
         int notFoundCount = 0;
-        String[] filenames = StringUtils.substringsBetween(article.getContent(), wikiFileFormatStart, wikiFileFormatEnd);
+        String[] filenames = StringUtils.substringsBetween(wikiArticle.getContent(), wikiFileFormatStart, wikiFileFormatEnd);
         for (String key : filenames) {
             logger.info("currently checking file: " + key);
             ResourceData result = mapStore.load(key);

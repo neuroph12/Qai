@@ -79,7 +79,7 @@ public class SemanticNetworkBuilder implements NetworkBuilder {
             if (article == null && wikiModel == null) {
                 try {
                     String filename = title + ".xml";
-                    article = dataProvider.getData(filename);
+                    article = dataProvider.getData();
                     wikiModel = createModel(article);
                 } catch (Exception e) {
                     log("Exception while loading: '" + title + "', removing from graph");

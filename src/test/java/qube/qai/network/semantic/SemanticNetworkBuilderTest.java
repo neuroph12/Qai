@@ -15,6 +15,8 @@
 package qube.qai.network.semantic;
 
 import com.google.inject.name.Named;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import grph.oo.ObjectGrph;
 import grph.oo.ObjectPath;
 import qube.qai.data.SelectionOperator;
@@ -44,6 +46,9 @@ public class SemanticNetworkBuilderTest extends QaiTestBase {
     }
 
     @Inject
+    private HazelcastInstance hazelcastInstance;
+
+    @Inject
     @Named("Wiktionary_en")
     private SearchServiceInterface wikipediaSearchService;
 
@@ -64,14 +69,15 @@ public class SemanticNetworkBuilderTest extends QaiTestBase {
      *
      * @throws Exception
      */
-    public void restWikiNetwork() throws Exception {
+    public void testWikiNetwork() throws Exception {
 
         Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
         assertNotNull("there has to be a result for the search", results);
 
         String filename = results.iterator().next().getUuid();
         log("name for the test case: " + filename);
-        WikiArticle wikiArticle = (WikiArticle) wikiDataProvider.getData(filename);
+        IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
+        WikiArticle wikiArticle = wikiMap.get(filename);
         assertNotNull("there has to be a wiki-article", wikiArticle);
 
         // now feed it to wiki-network class and build a network

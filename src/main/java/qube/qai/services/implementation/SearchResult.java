@@ -14,8 +14,11 @@
 
 package qube.qai.services.implementation;
 
+import com.hazelcast.core.HazelcastInstance;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import qube.qai.persistence.MapDataProvider;
+import qube.qai.persistence.QaiDataProvider;
 
 import java.io.Serializable;
 
@@ -43,6 +46,14 @@ public class SearchResult implements Serializable {
         this.uuid = uuid;
         this.description = description;
         this.relevance = relevance;
+    }
+
+    public QaiDataProvider toProvider(HazelcastInstance hazelcastInstance) {
+        return new MapDataProvider(context, uuid, hazelcastInstance);
+    }
+
+    public QaiDataProvider toProvider() {
+        return new MapDataProvider(context, uuid);
     }
 
     public String getContext() {

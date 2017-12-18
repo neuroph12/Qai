@@ -14,16 +14,19 @@
 
 package qube.qai.procedure.analysis;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import org.encog.ml.data.MLDataPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.SelectionOperator;
 import qube.qai.data.selectors.DataSelectionOperator;
-import qube.qai.data.stores.StockEntityDataStore;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockGroup;
 
+import javax.inject.Inject;
 import java.util.*;
 
 /**
@@ -32,7 +35,9 @@ import java.util.*;
 public class MarketNetworkBuilderTest extends QaiTestBase {
 
     private Logger logger = LoggerFactory.getLogger("MarketNetworkBuilderTest");
-    private String SnP500Page = "List of S&P 500 companies.xml";
+
+    @Inject
+    private HazelcastInstance hazelcastInstance;
 
     /**
      * well this is actually pretty much it...
@@ -42,10 +47,19 @@ public class MarketNetworkBuilderTest extends QaiTestBase {
 
         int numberOfEntities = 10;
         String[] names = new String[numberOfEntities];
-        StockEntityDataStore dataStore = new StockEntityDataStore();
-        injector.injectMembers(dataStore);
 
-        Collection<StockEntity> entityList = dataStore.fetchEntitesOf(SnP500Page);
+        IMap<String, StockGroup> groupMap = hazelcastInstance.getMap(STOCK_GROUPS);
+        assertTrue("", !groupMap.values().isEmpty());
+        StockGroup groupPicked = null;
+        for (StockGroup group : groupMap.values()) {
+            if (!group.getEntities().isEmpty()) {
+                groupPicked = group;
+                break;
+            }
+        }
+
+        assertNotNull("there has to be a group with some members", groupMap);
+        Collection<StockEntity> entityList = groupPicked.getEntities();
 
         // now we have the list of entities with which we want to build
         // the network for, we can simply pick, say 100 of them

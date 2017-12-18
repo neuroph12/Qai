@@ -14,6 +14,7 @@
 
 package qube.qai.persistence;
 
+
 import qube.qai.services.implementation.SearchResult;
 
 /**
@@ -23,7 +24,7 @@ public interface QaiDataProvider<T> {
 
     void setContext(String context);
 
-    T getData(String uuid);
+    T getData();
 
     T brokerSearchResult(SearchResult result);
 

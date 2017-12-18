@@ -30,7 +30,6 @@ import qube.qai.network.neural.NeuralNetworkTest;
 import qube.qai.network.neural.trainer.NeuralNetworkTrainingTest;
 import qube.qai.network.semantic.SemanticNetworkBuilderTest;
 import qube.qai.network.syntax.SyntaxNetworkBuilderTest;
-import qube.qai.parsers.WikiIntegrationTest;
 import qube.qai.parsers.antimirov.nodes.NodeVisitorsTest;
 import qube.qai.parsers.grammar.GrammarParserTest;
 import qube.qai.parsers.maths.MathParserTest;
@@ -80,6 +79,7 @@ public class AllQaiTests extends TestCase {
      * @return
      */
     public static Test suite() {
+
         TestSuite suite = new TestSuite("All Tests");
 
         // data.analysis
@@ -105,10 +105,9 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(FormalNetworkTest.class);
 
         // parsers
-        suite.addTestSuite(WikiIntegrationTest.class);
+        //suite.addTestSuite(WikiIntegrationTest.class);
         //suite.addTestSuite(TestAntimirovParser.class);
         suite.addTestSuite(GrammarParserTest.class);
-
         suite.addTestSuite(MathParserTest.class);
 
         // parsers.antimirov.nodes

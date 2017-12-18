@@ -19,16 +19,20 @@ import qube.qai.services.implementation.SearchResult;
 /**
  * Created by rainbird on 6/28/17.
  */
-public class DummyQaiDataProvider implements QaiDataProvider {
+public class DummyQaiDataProvider<T> implements QaiDataProvider<T> {
 
     private String context;
 
-    private Object data;
+    private T data;
 
     public DummyQaiDataProvider() {
     }
 
-    public DummyQaiDataProvider(String context, Object data) {
+    public DummyQaiDataProvider(T data) {
+        this.data = data;
+    }
+
+    public DummyQaiDataProvider(String context, T data) {
         this.context = context;
         this.data = data;
     }
@@ -38,31 +42,26 @@ public class DummyQaiDataProvider implements QaiDataProvider {
         return context;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 
     @Override
     public void setContext(String context) {
+        this.context = context;
+    }
+
+    @Override
+    public void putData(String uuid, T data) {
 
     }
 
     @Override
-    public Object getData(String uuid) {
+    public T brokerSearchResult(SearchResult result) {
         return null;
-    }
-
-    @Override
-    public Object brokerSearchResult(SearchResult result) {
-        return null;
-    }
-
-    @Override
-    public void putData(String uuid, Object data) {
-
     }
 }

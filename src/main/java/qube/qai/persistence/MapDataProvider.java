@@ -16,7 +16,10 @@ package qube.qai.persistence;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import org.apache.commons.lang3.StringUtils;
 import qube.qai.services.implementation.SearchResult;
+
+import javax.inject.Inject;
 
 /**
  * Created by rainbird on 6/28/17.
@@ -25,15 +28,25 @@ public class MapDataProvider implements QaiDataProvider {
 
     private String context;
 
+    private String uuid;
+
+    @Inject
     private HazelcastInstance hazelcastInstance;
+
+    public MapDataProvider(String context, String uuid, HazelcastInstance hazelcastInstance) {
+        this.context = context;
+        this.uuid = uuid;
+        this.hazelcastInstance = hazelcastInstance;
+    }
 
     public MapDataProvider(String context, HazelcastInstance hazelcastInstance) {
         this.context = context;
         this.hazelcastInstance = hazelcastInstance;
     }
 
-    public MapDataProvider(String context) {
+    public MapDataProvider(String context, String uuid) {
         this.context = context;
+        this.uuid = uuid;
     }
 
     @Override
@@ -42,17 +55,25 @@ public class MapDataProvider implements QaiDataProvider {
     }
 
     @Override
-    public Object getData(String uuid) {
-        IMap map = hazelcastInstance.getMap(context);
-        return map.get(uuid);
+    public Object getData() {
+        if (hazelcastInstance == null
+                || StringUtils.isBlank(context)
+                || StringUtils.isBlank(uuid)) {
+            throw new IllegalArgumentException("Setup is incomplete cannot broker data!");
+        }
+
+        return hazelcastInstance.getMap(context).get(uuid);
     }
 
     @Override
     public Object brokerSearchResult(SearchResult result) {
-        if (!context.equals(result.getContext())) {
-            context = result.getContext();
+        if (hazelcastInstance == null
+                || StringUtils.isBlank(result.getUuid())
+                || StringUtils.isBlank(result.getContext())) {
+            throw new IllegalArgumentException("Setup is incomplete cannot broker data!");
         }
-        return getData(result.getUuid());
+
+        return hazelcastInstance.getMap(result.getContext()).get(result.getUuid());
     }
 
     public String getContext() {

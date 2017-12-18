@@ -16,14 +16,13 @@ package qube.qai.network.syntax;
 
 
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import qube.qai.data.Metrics;
 import qube.qai.data.SelectionOperator;
 import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.Network;
 import qube.qai.network.semantic.SemanticNetwork;
-import qube.qai.persistence.DummyQaiDataProvider;
-import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -44,15 +43,11 @@ public class SyntaxNetworkBuilderTest extends QaiTestBase {
     @Named("Wiktionary_en")
     private SearchServiceInterface wikipediaSearchService;
 
-    //@Inject
-    //@Named("Wikipedia_en")
-    private QaiDataProvider<WikiArticle> wikiArticleProvider;
-
-    @Override
+/*    @Override
     protected void setUp() throws Exception {
         super.setUp();
-        wikiArticleProvider = new DummyQaiDataProvider(WIKIPEDIA, new WikiArticle());
-    }
+        //wikiArticleProvider = new DummyQaiDataProvider(WIKIPEDIA, new WikiArticle());
+    }*/
 
     /**
      * this is in order to test the semantic network building algorithms
@@ -67,7 +62,8 @@ public class SyntaxNetworkBuilderTest extends QaiTestBase {
 
         String filename = results.iterator().next().getUuid();
         log("name for the test case: " + filename);
-        WikiArticle wikiArticle = (WikiArticle) wikiArticleProvider.getData(filename);
+        IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
+        WikiArticle wikiArticle = wikiMap.get(filename);
         assertNotNull("there has to be a wiki-article for " + filename, wikiArticle);
 
         SyntaxNetworkBuilder builder = new SyntaxNetworkBuilder();
@@ -86,7 +82,8 @@ public class SyntaxNetworkBuilderTest extends QaiTestBase {
 
         String filename = results.iterator().next().getUuid();
         log("name for the test case: " + filename);
-        WikiArticle wikiArticle = (WikiArticle) wikiArticleProvider.getData(filename);
+        IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
+        WikiArticle wikiArticle = wikiMap.get(filename);
         assertNotNull("there has to be a wiki-article for: " + filename, wikiArticle);
 
         SyntaxNetworkBuilder builder = new SyntaxNetworkBuilder();
