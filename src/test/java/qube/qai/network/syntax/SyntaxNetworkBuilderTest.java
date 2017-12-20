@@ -57,6 +57,7 @@ public class SyntaxNetworkBuilderTest extends QaiTestBase {
      * @throws Exception
      */
     public void testSemanticNetwork() throws Exception {
+
         Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
         assertNotNull("there has to be a result for the search", results);
 

@@ -37,9 +37,19 @@ public class SemanticNetworkBuilderTest extends QaiTestBase {
 
     public void testSemanticNetwork() throws Exception {
 
-        SemanticNetworkBuilder builder = new SemanticNetworkBuilder();
+        Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
+        assertNotNull("there has to be a result for the search", results);
 
-        SemanticNetwork network = (SemanticNetwork) builder.buildNetwork(null);
+        String filename = results.iterator().next().getUuid();
+        log("name for the test case: " + filename);
+
+        IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
+        WikiArticle wikiArticle = wikiMap.get(filename);
+        assertNotNull("there has to be a wiki-article", wikiArticle);
+
+        SemanticNetworkBuilder builder = new SemanticNetworkBuilder();
+        SelectionOperator wikiProvider = new DataSelectionOperator(wikiArticle);
+        SemanticNetwork network = (SemanticNetwork) builder.buildNetwork(wikiProvider);
         assertNotNull(network);
 
         fail("for the time being there is no implementation for the whole- regard this as a TODO message");

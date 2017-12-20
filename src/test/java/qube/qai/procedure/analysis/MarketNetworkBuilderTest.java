@@ -49,9 +49,10 @@ public class MarketNetworkBuilderTest extends QaiTestBase {
         String[] names = new String[numberOfEntities];
 
         IMap<String, StockGroup> groupMap = hazelcastInstance.getMap(STOCK_GROUPS);
-        assertTrue("", !groupMap.values().isEmpty());
+        assertTrue("there has to be a group to loaded", !groupMap.keySet().isEmpty());
         StockGroup groupPicked = null;
-        for (StockGroup group : groupMap.values()) {
+        for (String groupKey : groupMap.keySet()) {
+            StockGroup group = groupMap.get(groupKey);
             if (!group.getEntities().isEmpty()) {
                 groupPicked = group;
                 break;

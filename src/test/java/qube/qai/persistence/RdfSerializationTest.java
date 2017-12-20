@@ -99,7 +99,11 @@ public class RdfSerializationTest extends TestCase {
         assertTrue("the sessions has to be equal", session.equals(storedSession));
     }
 
-    public void testRdfSerializationOfAntimirovNodes() throws Exception {
+    /**
+     * @throws Exception
+     * @TODO i think this test is superfluous- check!
+     */
+    public void restRdfSerializationOfAntimirovNodes() throws Exception {
 
         // we make it easy for ourself creating the ast-tree
         BaseNode parsedNode = parseExpression("(foo baz[integer] bar[double])");
@@ -122,7 +126,11 @@ public class RdfSerializationTest extends TestCase {
         assertTrue("the nodes must be equal", parsedNode.equals(storedNode));
     }
 
-    public void testRdfSerializationOfProcedures() throws Exception {
+    /**
+     * @throws Exception
+     * @TODO i am not sure whether or not this is relevant- therefore setting to rest for the moment
+     */
+    public void restRdfSerializationOfProcedures() throws Exception {
 
         Model model = ModelFactory.createDefaultModel();
         Bean2RDF writer = new Bean2RDF(model);

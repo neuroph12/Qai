@@ -14,7 +14,7 @@
 
 package qube.qai.procedure.finance;
 
-import org.ojalgo.finance.data.YahooSymbol;
+import org.ojalgo.finance.data.GoogleSymbol;
 import org.ojalgo.type.CalendarDateUnit;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
@@ -97,15 +97,15 @@ public class StockQuoteRetriever extends Procedure {
     private Collection<StockQuote> retrieveQuotesFor(String stockName) {
 
         Collection<StockQuote> quotes = new ArrayList<StockQuote>();
-        YahooSymbol symbol = new YahooSymbol(stockName);
+        GoogleSymbol symbol = new GoogleSymbol(stockName);
 
         try {
-            for (YahooSymbol.Data data : symbol.getHistoricalPrices()) {
+            for (GoogleSymbol.Data data : symbol.getHistoricalPrices()) {
                 Date date = new Date(data.getKey().toTimeInMillis(CalendarDateUnit.DAY));
                 StockQuote quote = new StockQuote();
                 quote.setTickerSymbol(symbol.getSymbol());
                 quote.setQuoteDate(date);
-                quote.setAdjustedClose(data.adjustedClose);
+                //quote.setAdjustedClose(data.adjustedClose);
                 quote.setClose(data.close);
                 quote.setHigh(data.high);
                 quote.setLow(data.low);
