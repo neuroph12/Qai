@@ -77,6 +77,8 @@ public interface ProcedureConstants {
 
     String NUMBER_OF_INSERTS = "numberOfInserts";
 
+    String TARGET_COLLECTION = "TARGET_COLLECTION";
+
     String PROCEDURE_TEMPLATE = "PROCEDURE_TEMPLATE";
 
     String TARGET_INPUT_NAME = "TARGET_INPUT_NAME";

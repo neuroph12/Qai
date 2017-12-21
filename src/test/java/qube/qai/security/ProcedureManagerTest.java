@@ -12,10 +12,12 @@
  *
  */
 
-package qube.qai.procedure;
+package qube.qai.security;
 
 import qube.qai.main.QaiTestBase;
-import qube.qai.services.ProcedureManagerInterface;
+import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.user.User;
 
 import javax.inject.Inject;
 
@@ -26,8 +28,10 @@ public class ProcedureManagerTest extends QaiTestBase {
 
     public void testProcedureManager() throws Exception {
 
+        User user = new User();
         Procedure procedure = ProcedureLibrary.simpleTemplate.createProcedure();
-        procedureManager.registerProcedure(procedure);
+        procedure.setUser(user);
+        assertTrue("with this setting we expect no result", !procedureManager.isProcedureAndUserAuthorized(procedure));
 
         //procedureManager.startProcedure(procedure.getUuid());
     }

@@ -37,10 +37,6 @@ public class StockQuoteRetriever extends Procedure {
     public static String DESCRIPTION = "Retrieves the stock quotes for given entity " +
             "and updates them to the latest stand";
 
-    //public static String STOCK_ENTITY = "StockEntity";
-
-    //public static String NUMBER_OF_INSERTS = "numberOfInserts";
-
     public long numberOfInserts = 0;
 
     private QaiDataProvider<StockEntity> entityProvider;
@@ -86,16 +82,8 @@ public class StockQuoteRetriever extends Procedure {
 
         String tmpl = "Fetched: %d new entries for ticker-symbol '%s'";
         info(String.format(tmpl, numberOfInserts, entity.getTickerSymbol()));
+
     }
-
-    /*private StockEntity retrieveEntityForTickerSymbol(String tickerSymbol) {
-
-        String searchString = "select o from StockEntity o where o.tickerSymbol like '" + tickerSymbol + "'";
-        Query query = entityManager.createQuery(searchString);
-        StockEntity entity = (StockEntity) query.getSingleResult();
-
-        return entity;
-    }*/
 
     private Collection<StockQuote> retrieveQuotesFor(String stockName) {
 
@@ -142,17 +130,9 @@ public class StockQuoteRetriever extends Procedure {
         });
     }
 
-    /**
-     * @return
-     * @TODO is there a reason for this to be static?!?
-     */
     public long getNumberOfInserts() {
         return numberOfInserts;
     }
-//
-//    public void setNumberOfInserts(long numberOfInserts) {
-//        StockQuoteRetriever.numberOfInserts = numberOfInserts;
-//    }
 
     public QaiDataProvider<StockEntity> getEntityProvider() {
         return entityProvider;

@@ -19,6 +19,7 @@ import qube.qai.persistence.DummyQaiDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureTemplate;
+import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.services.ProcedureRunnerInterface;
 
 import javax.inject.Inject;
@@ -32,10 +33,6 @@ public class ForEach extends Procedure {
             "collection of objects which will be passed to each of the procedures and those will be forwarded " +
             "to ProcedureRunner for execution. If no procedure template has been supplied, in its simplest form this " +
             "procedure can be used simply to pass collections to other procedures which need a collection input.";
-
-//    public static String PROCEDURE_TEMPLATE = "PROCEDURE_TEMPLATE";
-//
-//    public static String TARGET_INPUT_NAME = "TARGET_INPUT_NAME";
 
     @Inject
     private ProcedureRunnerInterface procedureRunner;
@@ -55,15 +52,36 @@ public class ForEach extends Procedure {
         super(NAME);
     }
 
-//    public ForEach(QaiDataProvider<Collection> targetCollectionProvider, String targetInputName, ProcedureTemplate template) {
-//        this.targetCollectionProvider = targetCollectionProvider;
-//        this.targetInputName = targetInputName;
-//        this.template = template;
-//    }
-
     @Override
     protected void buildArguments() {
-
+        getProcedureDescription().setDescription(DESCRIPTION);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<QaiDataProvider<Collection>>(TARGET_COLLECTION) {
+            @Override
+            public void setValue(QaiDataProvider<Collection> value) {
+                super.setValue(value);
+                targetCollectionProvider = value;
+            }
+        });
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<String>(TARGET_INPUT_NAME) {
+            @Override
+            public void setValue(String value) {
+                super.setValue(value);
+                targetInputName = value;
+            }
+        });
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<ProcedureTemplate>(PROCEDURE_TEMPLATE) {
+            @Override
+            public void setValue(ProcedureTemplate value) {
+                super.setValue(value);
+                template = value;
+            }
+        });
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode<QaiDataProvider<Collection>>(TARGET_COLLECTION) {
+            @Override
+            public QaiDataProvider<Collection> getValue() {
+                return targetCollectionProvider;
+            }
+        });
     }
 
     @Override

@@ -42,9 +42,6 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
     @Inject
     private ProcedureRunnerInterface procedureRunner;
 
-//    @Inject
-//    private ProcedureSourceInterface procedureSource;
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();

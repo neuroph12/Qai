@@ -27,10 +27,11 @@ import qube.qai.message.MessageQueueInterface;
 import qube.qai.persistence.MapDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
-import qube.qai.procedure.ProcedureManager;
-import qube.qai.security.QaiSecurity;
-import qube.qai.security.QaiTestSecurityManager;
-import qube.qai.services.*;
+import qube.qai.security.*;
+import qube.qai.services.ProcedureRunnerInterface;
+import qube.qai.services.SearchServiceInterface;
+import qube.qai.services.SelectorFactoryInterface;
+import qube.qai.services.UUIDServiceInterface;
 import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.ProcedureRunner;
 import qube.qai.services.implementation.UUIDService;
@@ -97,6 +98,8 @@ public class QaiTestModule extends AbstractModule {
         bind(MessageQueueInterface.class).to(MessageQueue.class);
 
         bind(QaiSecurity.class).to(QaiTestSecurityManager.class);
+
+        bind(ProcedureManagerInterface.class).to(TestProcedureManager.class);
     }
 
     @Provides

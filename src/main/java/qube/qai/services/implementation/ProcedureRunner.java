@@ -20,7 +20,7 @@ import qube.qai.main.QaiConstants;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureEvent;
-import qube.qai.services.ProcedureManagerInterface;
+import qube.qai.security.ProcedureManagerInterface;
 import qube.qai.services.ProcedureRunnerInterface;
 
 import javax.inject.Inject;
@@ -125,12 +125,20 @@ public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandl
     @Override
     public ProcedureState queryState(String uuid) {
 
+        if (procedures == null && hazelcastInstance == null) {
+            throw new IllegalStateException("No HazelcastInstance supplied- severe configuration error!");
+        }
+
+        if (procedures == null) {
+            procedures = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
+        }
+
         Procedure procedure = procedures.get(uuid);
         if (procedure == null) {
             logger.error("procedure uuid: " + uuid + "' is ot registered");
             throw new IllegalStateException("procedure with uuid: '" + uuid + "' is not registered");
-
         }
+
         return procedure.getState();
     }
 }

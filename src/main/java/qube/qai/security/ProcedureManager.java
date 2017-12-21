@@ -12,7 +12,7 @@
  *
  */
 
-package qube.qai.procedure;
+package qube.qai.security;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
@@ -20,11 +20,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiConstants;
+import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureConstants;
+import qube.qai.procedure.ProcedureEvent;
 import qube.qai.procedure.event.ProcedureEnded;
 import qube.qai.procedure.event.ProcedureError;
 import qube.qai.procedure.event.ProcedureInterrupted;
 import qube.qai.procedure.event.ProcedureStarted;
-import qube.qai.services.ProcedureManagerInterface;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.inject.Inject;

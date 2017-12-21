@@ -12,7 +12,7 @@
  *
  */
 
-package qube.qai.services;
+package qube.qai.security;
 
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureEvent;
