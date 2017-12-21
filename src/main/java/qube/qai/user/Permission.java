@@ -35,6 +35,10 @@ public class Permission implements Serializable, org.apache.shiro.authz.Permissi
     private User user;
 
     public Permission() {
+        makeUUID();
+    }
+
+    private void makeUUID() {
         this.uuid = UUIDService.uuidString();
     }
 
@@ -75,6 +79,9 @@ public class Permission implements Serializable, org.apache.shiro.authz.Permissi
 
     @Override
     public int hashCode() {
+        if (uuid == null) {
+            makeUUID();
+        }
         return uuid.hashCode();
     }
 

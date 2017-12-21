@@ -216,6 +216,10 @@ public class AnalysisProceduresTest extends TestProcedureBase {
         checkProcedureInputs(description);
 
         checkProcedureResults(description);
+
+        // now we do the real testing here-
+        // we're supposed to pass a set of stock-entities which it should be working on
+        // and visualize the results in a time-series chart.
     }
 
     /**

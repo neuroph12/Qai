@@ -23,7 +23,7 @@ import qube.qai.procedure.analysis.ChangePointAnalysis;
 import qube.qai.procedure.analysis.MarketNetworkBuilder;
 import qube.qai.procedure.analysis.SortingPercentilesProcedure;
 import qube.qai.procedure.finance.StockQuoteRetriever;
-import qube.qai.procedure.utils.ForEachProcedure;
+import qube.qai.procedure.utils.ForEach;
 import qube.qai.procedure.utils.SliceProcedure;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.SimulationService;
@@ -77,7 +77,7 @@ public class MarketBuilderSim implements SimulationService, QaiConstants {
 
         // first start with downloading the data and making sure you have them up to date
         retrieveQuotesUUIDs = new HashSet<>();
-        ForEachProcedure retrieveEach = new ForEachProcedure();
+        ForEach retrieveEach = new ForEach();
         for (SearchResult result : searchResults) {
             StockQuoteRetriever retriever = ProcedureLibrary.stockQuoteRetriverTemplate.createProcedure();
             retrieveQuotesUUIDs.add(retriever.getUuid());
@@ -104,7 +104,7 @@ public class MarketBuilderSim implements SimulationService, QaiConstants {
 
         MarketNetworkBuilder builderProc = ProcedureLibrary.marketNetworkBuilderTemplate.createProcedure();
 
-        ForEachProcedure forEach = new ForEachProcedure();
+        ForEach forEach = new ForEach();
         forEach.addChild(slicer);
         forEach.addChild(builderProc);
 

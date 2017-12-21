@@ -19,12 +19,20 @@ import qube.qai.persistence.DummyQaiDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
+import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.utils.ForEach;
+import qube.qai.services.ProcedureRunnerInterface;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * Created by rainbird on 3/11/17.
  */
-public class StockQuoteRetrieverTest extends TestCase {
+public class StockQuoteRetrieverTest extends TestCase implements ProcedureConstants {
 
 
     public void testStockQuoteRetriever() throws Exception {
@@ -43,6 +51,52 @@ public class StockQuoteRetrieverTest extends TestCase {
         for (StockQuote quote : entity.getQuotes()) {
             log(quote.getTickerSymbol() + " $" + quote.getAdjustedClose() + " on: " + quote.getQuoteDate());
         }
+    }
+
+    public void testWithForEach() throws Exception {
+
+        Collection<StockEntity> entities = new ArrayList<>();
+
+        StockEntity goog = new StockEntity();
+        goog.setTickerSymbol("GOOG");
+        entities.add(goog);
+
+        StockEntity aapl = new StockEntity();
+        aapl.setTickerSymbol("AAPL");
+        entities.add(aapl);
+
+        StockEntity msft = new StockEntity();
+        msft.setTickerSymbol("MSFT");
+        entities.add(msft);
+
+        QaiDataProvider<Collection> dataProvider = new DummyQaiDataProvider<>(entities);
+
+        ForEach forEach = ProcedureLibrary.forEachTemplate.createProcedure();
+        forEach.setTemplate(ProcedureLibrary.stockQuoteRetriverTemplate);
+        forEach.setTargetInputName(STOCK_ENTITY);
+        forEach.setTargetCollectionProvider(dataProvider);
+
+        ProcedureRunnerInterface dummyRunner = new ProcedureRunnerInterface() {
+            @Override
+            public void submitProcedure(Procedure procedure) {
+                String messTmpl = "Procedure: '%s' has been submitted";
+                log(String.format(messTmpl, procedure.getProcedureName()));
+                procedure.execute();
+            }
+
+            @Override
+            public ProcedureState queryState(String uuid) {
+                return null;
+            }
+
+            @Override
+            public Set<String> getStartedProcedures() {
+                return null;
+            }
+        };
+        forEach.setProcedureRunner(dummyRunner);
+
+        forEach.execute();
     }
 
     private void log(String message) {

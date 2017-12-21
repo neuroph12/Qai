@@ -14,9 +14,14 @@
 
 package qube.qai.procedure.utils;
 
+import qube.qai.persistence.DummyQaiDataProvider;
+import qube.qai.persistence.QaiDataProvider;
+import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.nodes.ProcedureDescription;
 import qube.qai.procedure.nodes.TestProcedureBase;
+
+import java.util.Collection;
 
 /**
  * Created by rainbird on 3/12/17.
@@ -71,12 +76,16 @@ public class UtilProceduresTest extends TestProcedureBase {
          * particularly for this procedure security is also an issue
          */
 
-        ForEachProcedure procedure = new ForEachProcedure();
+        ForEach procedure = new ForEach();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be an description", description);
 
         fail("Security issues are not yet tested!");
+
+        Collection<StockEntity> stockEntities = null;
+        QaiDataProvider<Collection<StockEntity>> entityProvider = new DummyQaiDataProvider<>(stockEntities);
+
     }
 
     public void testSliceProcedure() throws Exception {

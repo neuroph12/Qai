@@ -73,6 +73,14 @@ public interface ProcedureConstants {
 
     String USER_UUID = "USER_UUID";
 
+    String STOCK_ENTITY = "STOCK_ENTITY";
+
+    String NUMBER_OF_INSERTS = "numberOfInserts";
+
+    String PROCEDURE_TEMPLATE = "PROCEDURE_TEMPLATE";
+
+    String TARGET_INPUT_NAME = "TARGET_INPUT_NAME";
+
     String MIMETYPE_STRING = "MIMETYPE_STRING";
 
     String MIMETYPE_NUMBER = "MIMETYPE_NUMBER";

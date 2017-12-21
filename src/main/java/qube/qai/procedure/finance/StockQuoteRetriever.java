@@ -37,9 +37,9 @@ public class StockQuoteRetriever extends Procedure {
     public static String DESCRIPTION = "Retrieves the stock quotes for given entity " +
             "and updates them to the latest stand";
 
-    public static String STOCK_ENTITY = "StockEntity";
+    //public static String STOCK_ENTITY = "StockEntity";
 
-    public static String NUMBER_OF_INSERTS = "numberOfInserts";
+    //public static String NUMBER_OF_INSERTS = "numberOfInserts";
 
     public long numberOfInserts = 0;
 
@@ -83,6 +83,9 @@ public class StockQuoteRetriever extends Procedure {
         }
 
         setResultValueOf(NUMBER_OF_INSERTS, numberOfInserts);
+
+        String tmpl = "Fetched: %d new entries for ticker-symbol '%s'";
+        info(String.format(tmpl, numberOfInserts, entity.getTickerSymbol()));
     }
 
     /*private StockEntity retrieveEntityForTickerSymbol(String tickerSymbol) {
@@ -106,6 +109,7 @@ public class StockQuoteRetriever extends Procedure {
                 quote.setTickerSymbol(symbol.getSymbol());
                 quote.setQuoteDate(date);
                 //quote.setAdjustedClose(data.adjustedClose);
+                quote.setAdjustedClose(data.close);
                 quote.setClose(data.close);
                 quote.setHigh(data.high);
                 quote.setLow(data.low);
@@ -140,7 +144,7 @@ public class StockQuoteRetriever extends Procedure {
 
     /**
      * @return
-     * @TODO is there a reason for this?!?
+     * @TODO is there a reason for this to be static?!?
      */
     public long getNumberOfInserts() {
         return numberOfInserts;

@@ -30,7 +30,7 @@ import java.util.TreeMap;
 /**
  * Created by rainbird on 7/14/17.
  */
-public class ProcedureLibrary {
+public class ProcedureLibrary implements ProcedureConstants {
 
     public static ProcedureTemplate<SimpleProcedure> simpleTemplate = new ProcedureTemplate<SimpleProcedure>() {
         @Override
@@ -145,9 +145,15 @@ public class ProcedureLibrary {
     };
 
     public static ProcedureTemplate<SortingPercentilesProcedure> sortingPercentilesTemplate = new ProcedureTemplate<SortingPercentilesProcedure>() {
+
         @Override
         public SortingPercentilesProcedure createProcedure() {
-            return new SortingPercentilesProcedure();
+            SortingPercentilesProcedure procedure = new SortingPercentilesProcedure();
+            ForEach forEach = new ForEach();
+            forEach.getProcedureDescription().getProcedureInputs().getNamedInput(PROCEDURE_TEMPLATE).setValue(stockQuoteRetriverTemplate);
+            forEach.getProcedureDescription().getProcedureInputs().getNamedInput(TARGET_INPUT_NAME).setValue(STOCK_ENTITY);
+            procedure.getProcedureDescription().getProcedureInputs().getNamedInput(FROM).setValue(forEach);
+            return procedure;
         }
     };
 
@@ -158,10 +164,10 @@ public class ProcedureLibrary {
         }
     };
 
-    public static ProcedureTemplate<ForEachProcedure> forEachTemplate = new ProcedureTemplate<ForEachProcedure>() {
+    public static ProcedureTemplate<ForEach> forEachTemplate = new ProcedureTemplate<ForEach>() {
         @Override
-        public ForEachProcedure createProcedure() {
-            return new ForEachProcedure();
+        public ForEach createProcedure() {
+            return new ForEach();
         }
     };
 
@@ -188,7 +194,7 @@ public class ProcedureLibrary {
         templateMap.put(MarketNetworkBuilder.class, marketNetworkBuilderTemplate);
         templateMap.put(SortingPercentilesProcedure.class, sortingPercentilesTemplate);
         templateMap.put(SliceProcedure.class, sliceTemplate);
-        templateMap.put(ForEachProcedure.class, forEachTemplate);
+        templateMap.put(ForEach.class, forEachTemplate);
 
         return templateMap;
     }
@@ -215,7 +221,7 @@ public class ProcedureLibrary {
         templateMap.put(MarketNetworkBuilder.NAME, marketNetworkBuilderTemplate);
         templateMap.put(SortingPercentilesProcedure.NAME, sortingPercentilesTemplate);
         templateMap.put(SliceProcedure.NAME, sliceTemplate);
-        templateMap.put(ForEachProcedure.NAME, forEachTemplate);
+        templateMap.put(ForEach.NAME, forEachTemplate);
 
         return templateMap;
     }
