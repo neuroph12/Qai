@@ -16,7 +16,6 @@ package qube.qai.persistence.mapstores;
 
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.WikiArticle;
-import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 
@@ -29,8 +28,8 @@ import java.util.Collection;
  */
 public class MapStoreTest extends QaiTestBase {
 
-    @Inject
-    private ProcedureSourceInterface procedureSource;
+//    @Inject
+//    private ProcedureSourceInterface procedureSource;
 
     @Inject
     @Named("Wikipedia_en")

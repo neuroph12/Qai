@@ -31,7 +31,10 @@ import qube.qai.procedure.ProcedureManager;
 import qube.qai.security.QaiSecurity;
 import qube.qai.security.QaiTestSecurityManager;
 import qube.qai.services.*;
-import qube.qai.services.implementation.*;
+import qube.qai.services.implementation.DataSelectorFactory;
+import qube.qai.services.implementation.ProcedureRunner;
+import qube.qai.services.implementation.UUIDService;
+import qube.qai.services.implementation.WikiSearchService;
 
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -85,7 +88,7 @@ public class QaiTestModule extends AbstractModule {
         bind(UUIDServiceInterface.class).to(UUIDService.class);
 
         // ProcedureSource
-        bind(ProcedureSourceInterface.class).to(TestProcedureSourceService.class);
+        //bind(ProcedureSourceInterface.class).to(TestProcedureSourceService.class);
 
         // executorService
         bind(ProcedureRunnerInterface.class).to(ProcedureRunner.class);

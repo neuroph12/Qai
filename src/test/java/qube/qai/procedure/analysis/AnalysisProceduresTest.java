@@ -24,9 +24,7 @@ import qube.qai.procedure.nodes.ProcedureDescription;
 import qube.qai.procedure.nodes.TestProcedureBase;
 import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.utils.SimpleProcedure;
-import qube.qai.services.ProcedureSourceInterface;
 
-import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -38,8 +36,8 @@ public class AnalysisProceduresTest extends TestProcedureBase {
 
     //Logger logger = LoggerFactory.getLogger("AnalysisProceduresTest");
 
-    @Inject
-    private ProcedureSourceInterface procedureSource;
+    //@Inject
+    //private ProcedureSourceInterface procedureSource;
 
     private boolean debug = true;
 

@@ -16,6 +16,13 @@ package qube.qai.network.wiki;
 
 import qube.qai.network.Network;
 
+/**
+ * this class represents how the wiki-articles ar erelated with each other.
+ * and will be useful, later in the porject when dbpedia.org and sparql-queries there
+ * will be integrated in the project, to make use of sparql-queries as well as the ontology
+ * which has already been created in dbpedia, based on the wikipedia information... a very
+ * complete ontology, which will be useful.
+ */
 public class WikiNetwork extends Network {
 
 }

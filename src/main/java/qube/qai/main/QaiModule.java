@@ -23,10 +23,8 @@ import qube.qai.message.MessageQueueInterface;
 import qube.qai.security.QaiSecurity;
 import qube.qai.security.QaiSecurityManager;
 import qube.qai.services.ProcedureRunnerInterface;
-import qube.qai.services.ProcedureSourceInterface;
 import qube.qai.services.SelectorFactoryInterface;
 import qube.qai.services.UUIDServiceInterface;
-import qube.qai.services.implementation.CachedProcedureSourceService;
 import qube.qai.services.implementation.HazelcastSelectorFactory;
 import qube.qai.services.implementation.ProcedureRunner;
 import qube.qai.services.implementation.UUIDService;
@@ -101,10 +99,10 @@ public class QaiModule extends AbstractModule {
      * @return
      * @TODO this was mainly for test reasons, i think it is now time to remove it
      */
-    @Provides
+    /*@Provides
     ProcedureSourceInterface provideProcedureSourceInterface() {
         return CachedProcedureSourceService.getInstance();
-    }
+    }*/
 
     /**
      * used mainly in procedures themselves so that procedures can

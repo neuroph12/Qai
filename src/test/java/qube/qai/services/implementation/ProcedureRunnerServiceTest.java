@@ -22,9 +22,7 @@ import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.ProcedureTemplate;
-import qube.qai.procedure.analysis.MatrixStatistics;
 import qube.qai.services.ProcedureRunnerInterface;
-import qube.qai.services.ProcedureSourceInterface;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -44,8 +42,8 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
     @Inject
     private ProcedureRunnerInterface procedureRunner;
 
-    @Inject
-    private ProcedureSourceInterface procedureSource;
+//    @Inject
+//    private ProcedureSourceInterface procedureSource;
 
     @Override
     protected void setUp() throws Exception {
@@ -59,7 +57,7 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
     public void restProcedureExecution() throws Exception {
 
         // pick a procedure... any procedure
-        Procedure procedure = procedureSource.getProcedureWithName(MatrixStatistics.NAME);
+        Procedure procedure = null; //procedureSource.getProcedureWithName(MatrixStatistics.NAME);
         String uuid = procedure.getUuid();
         logger.info("starting procedure: " + uuid);
 
