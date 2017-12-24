@@ -39,6 +39,7 @@ import qube.qai.persistence.ResourceDataTest;
 import qube.qai.persistence.mapstores.*;
 import qube.qai.persistence.search.DatabaseSearchServiceTest;
 import qube.qai.persistence.search.ModelSearchServicesTest;
+import qube.qai.procedure.ProcedureLibraryTest;
 import qube.qai.procedure.analysis.AnalysisProceduresTest;
 import qube.qai.procedure.analysis.MarketNetworkBuilderTest;
 import qube.qai.procedure.archive.ArchiveProceduresTest;
@@ -46,7 +47,7 @@ import qube.qai.procedure.archive.DirectoryIndexerTest;
 import qube.qai.procedure.archive.WikiArchiveIndexerTest;
 import qube.qai.procedure.finance.FinanceProceduresTest;
 import qube.qai.procedure.finance.StockEntityInitializationTest;
-import qube.qai.procedure.finance.StockQuoteRetrieverTest;
+import qube.qai.procedure.finance.StockQuoteUpdaterTest;
 import qube.qai.procedure.nodes.ProcedureInputsAndResultsTest;
 import qube.qai.procedure.utils.UtilProceduresTest;
 import qube.qai.procedure.utils.WikiSearchTest;
@@ -132,6 +133,7 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(DatabaseSearchServiceTest.class);
 
         // procedure
+        suite.addTestSuite(ProcedureLibraryTest.class);
         suite.addTestSuite(ProcedureManagerTest.class);
         suite.addTestSuite(ProcedureInputsAndResultsTest.class);
         suite.addTestSuite(WikiArchiveIndexerTest.class);
@@ -149,7 +151,7 @@ public class AllQaiTests extends TestCase {
         // procedure.finance
         suite.addTestSuite(FinanceProceduresTest.class);
         suite.addTestSuite(StockEntityInitializationTest.class);
-        suite.addTestSuite(StockQuoteRetrieverTest.class);
+        suite.addTestSuite(StockQuoteUpdaterTest.class);
 
         // procedure.visitor
         suite.addTestSuite(ProcedureVisitorsTest.class);

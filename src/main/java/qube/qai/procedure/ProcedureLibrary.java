@@ -19,7 +19,7 @@ import qube.qai.procedure.analysis.*;
 import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
 import qube.qai.procedure.finance.StockEntityInitialization;
-import qube.qai.procedure.finance.StockQuoteRetriever;
+import qube.qai.procedure.finance.StockQuoteUpdater;
 import qube.qai.procedure.utils.*;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
@@ -102,10 +102,20 @@ public class ProcedureLibrary implements ProcedureConstants {
         }
     };
 
-    public static ProcedureTemplate<StockQuoteRetriever> stockQuoteRetriverTemplate = new ProcedureTemplate<StockQuoteRetriever>() {
+    public static ProcedureTemplate<StockQuoteUpdater> plainStockQuoteUpdater = new ProcedureTemplate<StockQuoteUpdater>() {
         @Override
-        public StockQuoteRetriever createProcedure() {
-            return new StockQuoteRetriever();
+        public StockQuoteUpdater createProcedure() {
+            return new StockQuoteUpdater();
+        }
+    };
+
+    public static ProcedureTemplate<ForEach> stockQuoteRetriverTemplate = new ProcedureTemplate<ForEach>() {
+        @Override
+        public ForEach createProcedure() {
+            ForEach forEach = new ForEach();
+            forEach.setTargetInputName(STOCK_ENTITY);
+            forEach.setTemplate(plainStockQuoteUpdater);
+            return forEach;
         }
     };
 
@@ -144,16 +154,28 @@ public class ProcedureLibrary implements ProcedureConstants {
         }
     };
 
-    public static ProcedureTemplate<SortingPercentilesProcedure> sortingPercentilesTemplate = new ProcedureTemplate<SortingPercentilesProcedure>() {
-
+    private static ProcedureTemplate<SortingPercentilesProcedure> plainSortingPercentiles = new ProcedureTemplate<SortingPercentilesProcedure>() {
         @Override
         public SortingPercentilesProcedure createProcedure() {
+            return new SortingPercentilesProcedure();
+        }
+    };
+
+    /**
+     * remember this is a template which is meant to be executed with the
+     * input from the gui-layer, in this case a collection of pointers to
+     * stock-entities whose quotes need first updated
+     */
+    public static ProcedureTemplate<ForEach> sortingPercentilesTemplate = new ProcedureTemplate<ForEach>() {
+
+        @Override
+        public ForEach createProcedure() {
             SortingPercentilesProcedure procedure = new SortingPercentilesProcedure();
             ForEach forEach = new ForEach();
-            forEach.getProcedureDescription().getProcedureInputs().getNamedInput(PROCEDURE_TEMPLATE).setValue(stockQuoteRetriverTemplate);
+            forEach.getProcedureDescription().getProcedureInputs().getNamedInput(PROCEDURE_TEMPLATE).setValue(plainStockQuoteUpdater);
             forEach.getProcedureDescription().getProcedureInputs().getNamedInput(TARGET_INPUT_NAME).setValue(STOCK_ENTITY);
             procedure.getProcedureDescription().getProcedureInputs().getNamedInput(FROM).setValue(forEach);
-            return procedure;
+            return forEach;
         }
     };
 
@@ -186,7 +208,7 @@ public class ProcedureLibrary implements ProcedureConstants {
         templateMap.put(DirectoryIndexer.class, directoryIndexerTemplate);
         templateMap.put(WikiArchiveIndexer.class, wikiArchiveIndexerTemplate);
         templateMap.put(StockEntityInitialization.class, stockEntityInitializationTemplate);
-        templateMap.put(StockQuoteRetriever.class, stockQuoteRetriverTemplate);
+        templateMap.put(StockQuoteUpdater.class, stockQuoteRetriverTemplate);
         templateMap.put(WikiRipperProcedure.class, wikiRipperTemplate);
         templateMap.put(AttachProcedure.class, attachTemplate);
         templateMap.put(SelectionProcedure.class, selectionTemplate);
@@ -213,7 +235,7 @@ public class ProcedureLibrary implements ProcedureConstants {
         templateMap.put(DirectoryIndexer.NAME, directoryIndexerTemplate);
         templateMap.put(WikiArchiveIndexer.NAME, wikiArchiveIndexerTemplate);
         templateMap.put(StockEntityInitialization.NAME, stockEntityInitializationTemplate);
-        templateMap.put(StockQuoteRetriever.NAME, stockQuoteRetriverTemplate);
+        templateMap.put(StockQuoteUpdater.NAME, stockQuoteRetriverTemplate);
         templateMap.put(WikiRipperProcedure.NAME, wikiRipperTemplate);
         templateMap.put(AttachProcedure.NAME, attachTemplate);
         templateMap.put(SelectionProcedure.NAME, selectionTemplate);
@@ -284,7 +306,7 @@ public class ProcedureLibrary implements ProcedureConstants {
         // archive
 
         // finance
-        classes.add(StockQuoteRetriever.class);
+        classes.add(StockQuoteUpdater.class);
 
         // utils
         classes.add(AttachProcedure.class);

@@ -19,6 +19,7 @@ import com.google.inject.Injector;
 import com.hazelcast.core.HazelcastInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.services.implementation.GuiceManagedContext;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -51,6 +52,8 @@ public class QaiTestNode extends QaiTestModule {
         QaiTestSecurityModule qaiTestSecurity = new QaiTestSecurityModule();
         injector = Guice.createInjector(qaiTestServer, qaiTestSecurity);
 
+        GuiceManagedContext managedContext = injector.getInstance(GuiceManagedContext.class);
+        provideHazelcastConfig(managedContext);
         // this looks crazy but just works...
         injector.injectMembers(qaiTestServer);
 

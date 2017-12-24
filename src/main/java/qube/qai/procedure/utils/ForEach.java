@@ -14,18 +14,22 @@
 
 package qube.qai.procedure.utils;
 
+import com.hazelcast.core.HazelcastInstance;
 import org.apache.commons.lang3.StringUtils;
 import qube.qai.persistence.DummyQaiDataProvider;
+import qube.qai.persistence.MapDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureTemplate;
+import qube.qai.procedure.SpawningProcedure;
 import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.services.ProcedureRunnerInterface;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collection;
 
-public class ForEach extends Procedure {
+public class ForEach extends Procedure implements SpawningProcedure {
 
     public static String NAME = "For-Each Iterator Procedure";
 
@@ -35,13 +39,21 @@ public class ForEach extends Procedure {
             "procedure can be used simply to pass collections to other procedures which need a collection input.";
 
     @Inject
-    private ProcedureRunnerInterface procedureRunner;
+    private transient ProcedureRunnerInterface procedureRunner;
+
+    @Inject
+    private transient HazelcastInstance hazelcastInstance;
 
     protected QaiDataProvider<Collection> targetCollectionProvider;
 
     protected String targetInputName;
 
     protected ProcedureTemplate template;
+
+    // set to false only if data actually gets attached to procedure templates
+    protected boolean childrenExceuted = true;
+
+    protected Collection<QaiDataProvider<Procedure>> spawnedProcedures;
 
     /**
      * A procedure which applies given procedure template to each element in the given
@@ -50,6 +62,7 @@ public class ForEach extends Procedure {
      */
     public ForEach() {
         super(NAME);
+        this.spawnedProcedures = new ArrayList<>();
     }
 
     @Override
@@ -111,11 +124,42 @@ public class ForEach extends Procedure {
                 QaiDataProvider provider = new DummyQaiDataProvider(param);
                 procedure.getProcedureDescription().getProcedureInputs().getNamedInput(targetInputName).setValue(provider);
                 procedureRunner.submitProcedure(procedure);
+
+                // create and keep a reference to the spawned procedure
+                QaiDataProvider<Procedure> procedureProvider = new MapDataProvider(hazelcastInstance, PROCEDURES, procedure.getUuid());
+                spawnedProcedures.add(procedureProvider);
                 String templStr = "Child procedure: '%s' with UUID: '%s' with input param: '%s' with value: '%s' has been submitted";
                 info(String.format(templStr, procedure.getProcedureName(), procedure.getUuid(), targetInputName, param));
             }
+            // children have been spawned and we'll know only when we actually check them
+            childrenExceuted = false;
         }
 
+    }
+
+    /**
+     * this is not merely a getter-
+     * method has to have reference to hazelcase instance
+     * in order to work
+     *
+     * @return
+     */
+    @Override
+    public boolean haveChildrenExceuted() {
+
+        // if not already set go ahead and check all spawned procedures
+        // to see whether they have executed or not
+        if (!childrenExceuted && !spawnedProcedures.isEmpty()) {
+
+            boolean isAllExecuted = false;
+            for (QaiDataProvider<Procedure> procedure : spawnedProcedures) {
+                isAllExecuted = procedure.getData().hasExecuted();
+            }
+
+            childrenExceuted = isAllExecuted;
+        }
+
+        return childrenExceuted;
     }
 
     public QaiDataProvider<Collection> getTargetCollectionProvider() {

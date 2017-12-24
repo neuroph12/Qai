@@ -22,7 +22,7 @@ import qube.qai.procedure.analysis.*;
 import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
 import qube.qai.procedure.finance.StockEntityInitialization;
-import qube.qai.procedure.finance.StockQuoteRetriever;
+import qube.qai.procedure.finance.StockQuoteUpdater;
 import qube.qai.procedure.utils.SelectionProcedure;
 import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
@@ -119,8 +119,8 @@ public class ModelCreatingVisitor implements NodeVisitor {
             procedure = new WikiArchiveIndexer();
         } else if (StockEntityInitialization.NAME.equals(name)) {
             procedure = new StockEntityInitialization();
-        } else if (StockQuoteRetriever.NAME.equals(name)) {
-            procedure = new StockQuoteRetriever();
+        } else if (StockQuoteUpdater.NAME.equals(name)) {
+            procedure = new StockQuoteUpdater();
         } else if (WikiRipperProcedure.NAME.equals(name)) {
             procedure = new WikiRipperProcedure();
         } else if (SelectionProcedure.NAME.equals(name)) {

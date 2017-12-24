@@ -17,10 +17,12 @@ package qube.qai.persistence;
 
 import qube.qai.services.implementation.SearchResult;
 
+import java.io.Serializable;
+
 /**
  * Created by rainbird on 6/28/17.
  */
-public interface QaiDataProvider<T> {
+public interface QaiDataProvider<T> extends Serializable {
 
     void setContext(String context);
 

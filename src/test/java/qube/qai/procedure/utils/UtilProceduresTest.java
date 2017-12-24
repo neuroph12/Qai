@@ -19,14 +19,14 @@ import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.nodes.ProcedureDescription;
-import qube.qai.procedure.nodes.TestProcedureBase;
+import qube.qai.procedure.nodes.ProcedureTestBase;
 
 import java.util.Collection;
 
 /**
  * Created by rainbird on 3/12/17.
  */
-public class UtilProceduresTest extends TestProcedureBase {
+public class UtilProceduresTest extends ProcedureTestBase {
 
     public void testAttachProcedure() throws Exception {
 

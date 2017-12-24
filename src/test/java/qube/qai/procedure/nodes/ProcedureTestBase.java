@@ -23,7 +23,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 4/7/17.
  */
-public class TestProcedureBase extends TestCase {
+public class ProcedureTestBase extends TestCase {
 
     private boolean debug = true;
 

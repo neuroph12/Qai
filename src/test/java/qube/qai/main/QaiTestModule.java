@@ -20,6 +20,7 @@ import com.google.inject.Singleton;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ManagedContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.message.MessageQueue;
@@ -54,6 +55,8 @@ public class QaiTestModule extends AbstractModule {
     private static String NODE_NAME = "QaiTestNode";
 
     protected HazelcastInstance hazelcastInstance;
+
+    protected ClientConfig clientConfig;
 
     private ProcedureManager procedureManager;
 
@@ -115,7 +118,7 @@ public class QaiTestModule extends AbstractModule {
     @Provides
     @Named("Wikipedia_en")
     public QaiDataProvider<WikiArticle> provideWikiDataProvider() {
-        QaiDataProvider<WikiArticle> wikiProvider = new MapDataProvider("Wikipedia_en", hazelcastInstance);
+        QaiDataProvider<WikiArticle> wikiProvider = new MapDataProvider(hazelcastInstance, WIKIPEDIA);
         return wikiProvider;
     }
 
@@ -126,12 +129,18 @@ public class QaiTestModule extends AbstractModule {
             return hazelcastInstance;
         }
 
-        ClientConfig clientConfig = new ClientConfig();
-        //clientConfig.setInstanceName(NODE_NAME);
-        clientConfig.getNetworkConfig().addAddress("127.0.0.1:5701");
+
         hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
 
         return hazelcastInstance;
+    }
+
+    public ClientConfig provideHazelcastConfig(ManagedContext managedContext) {
+        clientConfig = new ClientConfig();
+        //clientConfig.setInstanceName(NODE_NAME);
+        clientConfig.setManagedContext(managedContext);
+        clientConfig.getNetworkConfig().addAddress("127.0.0.1:5701");
+        return clientConfig;
     }
 
     @Provides
@@ -154,16 +163,16 @@ public class QaiTestModule extends AbstractModule {
         return searchService;
     }
 
-    @Provides
-    @Singleton
-    ProcedureManagerInterface provideProcedureManager() {
-
-        if (hazelcastInstance == null) {
-            hazelcastInstance = provideHazelcastInstance();
-        }
-
-        procedureManager = ProcedureManager.getInstance(hazelcastInstance);
-        return procedureManager;
-    }
+//    @Provides
+//    @Singleton
+//    ProcedureManagerInterface provideProcedureManager() {
+//
+//        if (hazelcastInstance == null) {
+//            hazelcastInstance = provideHazelcastInstance();
+//        }
+//
+//        procedureManager = ProcedureManager.getInstance(hazelcastInstance);
+//        return procedureManager;
+//    }
 
 }

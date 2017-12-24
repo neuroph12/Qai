@@ -16,12 +16,12 @@ package qube.qai.procedure.archive;
 
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.nodes.ProcedureDescription;
-import qube.qai.procedure.nodes.TestProcedureBase;
+import qube.qai.procedure.nodes.ProcedureTestBase;
 
 /**
  * Created by rainbird on 4/7/17.
  */
-public class ArchiveProceduresTest extends TestProcedureBase {
+public class ArchiveProceduresTest extends ProcedureTestBase {
 
     public void testDirectoryIndexer() throws Exception {
 

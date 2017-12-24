@@ -21,8 +21,6 @@ import qube.qai.main.QaiConstants;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
 import qube.qai.procedure.analysis.MarketNetworkBuilder;
-import qube.qai.procedure.analysis.SortingPercentilesProcedure;
-import qube.qai.procedure.finance.StockQuoteRetriever;
 import qube.qai.procedure.utils.ForEach;
 import qube.qai.procedure.utils.SliceProcedure;
 import qube.qai.services.ProcedureRunnerInterface;
@@ -32,8 +30,6 @@ import qube.qai.services.implementation.UUIDService;
 
 import javax.inject.Inject;
 import java.util.*;
-
-import static qube.qai.procedure.ProcedureConstants.FROM;
 
 public class MarketBuilderSim implements SimulationService, QaiConstants {
 
@@ -78,18 +74,19 @@ public class MarketBuilderSim implements SimulationService, QaiConstants {
         // first start with downloading the data and making sure you have them up to date
         retrieveQuotesUUIDs = new HashSet<>();
         ForEach retrieveEach = new ForEach();
-        for (SearchResult result : searchResults) {
-            StockQuoteRetriever retriever = ProcedureLibrary.stockQuoteRetriverTemplate.createProcedure();
+        /*for (SearchResult result : searchResults) {
+            //StockQuoteUpdater retriever = ProcedureLibrary.stockQuoteRetriverTemplate.createProcedure();
             retrieveQuotesUUIDs.add(retriever.getUuid());
             procedureRunner.submitProcedure(retriever);
-        }
+        }*/
 
         Map map = new HashMap();
         // this will sort the values and sort them, while calculating their averages as well- which is what we actually need.
-        SortingPercentilesProcedure sorter = ProcedureLibrary.sortingPercentilesTemplate.createProcedure();
-        sorter.getProcedureInputs().getNamedInput(FROM).setValue(map);
-        //retrieveEach.getProcedureInputs().getNamedInput("whatever").setValue(new ValueNode("Values", searchResults));
-        procedureRunner.submitProcedure(sorter);
+        // @TODO get this right this works differenty now
+//        SortingPercentilesProcedure sorter = ProcedureLibrary.sortingPercentilesTemplate.createProcedure();
+//        sorter.getProcedureInputs().getNamedInput(FROM).setValue(map);
+//        //retrieveEach.getProcedureInputs().getNamedInput("whatever").setValue(new ValueNode("Values", searchResults));
+//        procedureRunner.submitProcedure(sorter);
 
 
         ChangePointAnalysis changePoint = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();

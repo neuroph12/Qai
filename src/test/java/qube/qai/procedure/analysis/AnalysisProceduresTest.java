@@ -21,7 +21,7 @@ import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.nodes.ProcedureDescription;
-import qube.qai.procedure.nodes.TestProcedureBase;
+import qube.qai.procedure.nodes.ProcedureTestBase;
 import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.utils.SimpleProcedure;
 
@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  * Created by rainbird on 11/30/15.
  */
-public class AnalysisProceduresTest extends TestProcedureBase {
+public class AnalysisProceduresTest extends ProcedureTestBase {
 
     //Logger logger = LoggerFactory.getLogger("AnalysisProceduresTest");
 

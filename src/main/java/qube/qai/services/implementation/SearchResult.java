@@ -49,7 +49,7 @@ public class SearchResult implements Serializable {
     }
 
     public QaiDataProvider toProvider(HazelcastInstance hazelcastInstance) {
-        return new MapDataProvider(context, uuid, hazelcastInstance);
+        return new MapDataProvider(hazelcastInstance, context, uuid);
     }
 
     public QaiDataProvider toProvider() {

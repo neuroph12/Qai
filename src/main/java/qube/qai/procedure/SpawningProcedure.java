@@ -14,13 +14,7 @@
 
 package qube.qai.procedure;
 
-import java.io.Serializable;
+public interface SpawningProcedure {
 
-/**
- * Created by rainbird on 7/14/17.
- */
-public interface ProcedureTemplate<P extends Procedure> extends Serializable {
-
-    P createProcedure();
-
+    boolean haveChildrenExceuted();
 }

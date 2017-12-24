@@ -30,18 +30,18 @@ import java.util.Set;
 /**
  * Created by rainbird on 11/19/15.
  */
-public class StockQuoteRetriever extends Procedure {
+public class StockQuoteUpdater extends Procedure {
 
-    public static String NAME = "Stock Quote Retriever Procedure";
+    public static String NAME = "Stock Quote Updating Procedure";
 
-    public static String DESCRIPTION = "Retrieves the stock quotes for given entity " +
-            "and updates them to the latest stand";
+    public static String DESCRIPTION = "Updates the stock quotes for given entity " +
+            "to the latest stand";
 
     public long numberOfInserts = 0;
 
     private QaiDataProvider<StockEntity> entityProvider;
 
-    public StockQuoteRetriever() {
+    public StockQuoteUpdater() {
         super(NAME);
     }
 

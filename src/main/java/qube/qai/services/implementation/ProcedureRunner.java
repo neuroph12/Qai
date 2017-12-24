@@ -88,6 +88,9 @@ public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandl
             return;
         }
 
+        if (procedures == null) {
+            procedures = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
+        }
 
         if (procedures.containsKey(uuid)) {
             procedures.replace(uuid, procedure);

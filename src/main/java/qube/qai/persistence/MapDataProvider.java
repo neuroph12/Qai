@@ -33,15 +33,15 @@ public class MapDataProvider implements QaiDataProvider {
     @Inject
     private HazelcastInstance hazelcastInstance;
 
-    public MapDataProvider(String context, String uuid, HazelcastInstance hazelcastInstance) {
+    public MapDataProvider(HazelcastInstance hazelcastInstance, String context, String uuid) {
+        this.hazelcastInstance = hazelcastInstance;
         this.context = context;
         this.uuid = uuid;
-        this.hazelcastInstance = hazelcastInstance;
     }
 
-    public MapDataProvider(String context, HazelcastInstance hazelcastInstance) {
-        this.context = context;
+    public MapDataProvider(HazelcastInstance hazelcastInstance, String context) {
         this.hazelcastInstance = hazelcastInstance;
+        this.context = context;
     }
 
     public MapDataProvider(String context, String uuid) {

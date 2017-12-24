@@ -32,14 +32,14 @@ import java.util.Set;
 /**
  * Created by rainbird on 3/11/17.
  */
-public class StockQuoteRetrieverTest extends TestCase implements ProcedureConstants {
+public class StockQuoteUpdaterTest extends TestCase implements ProcedureConstants {
 
 
     public void testStockQuoteRetriever() throws Exception {
 
         //Injector injector = createInjector();
         //EntityManager entityManager = injector.getInstance(EntityManager.class);
-        StockQuoteRetriever retriever = ProcedureLibrary.stockQuoteRetriverTemplate.createProcedure();
+        StockQuoteUpdater retriever = ProcedureLibrary.plainStockQuoteUpdater.createProcedure();
         String tickerSymbol = "GOOG";
         StockEntity entity = new StockEntity();
         entity.setTickerSymbol(tickerSymbol);
@@ -55,6 +55,45 @@ public class StockQuoteRetrieverTest extends TestCase implements ProcedureConsta
 
     public void testWithForEach() throws Exception {
 
+        Collection<StockEntity> entities = createTestEntites();
+
+        QaiDataProvider<Collection> dataProvider = new DummyQaiDataProvider<>(entities);
+
+        ForEach forEach = ProcedureLibrary.forEachTemplate.createProcedure();
+        forEach.setTemplate(ProcedureLibrary.plainStockQuoteUpdater);
+        forEach.setTargetInputName(STOCK_ENTITY);
+        forEach.setTargetCollectionProvider(dataProvider);
+
+        ProcedureRunnerInterface dummyRunner = new ProcedureRunnerInterface() {
+            @Override
+            public void submitProcedure(Procedure procedure) {
+                String messTmpl = "Procedure: '%s' has been submitted";
+                log(String.format(messTmpl, procedure.getProcedureName()));
+                procedure.execute();
+
+            }
+
+            @Override
+            public ProcedureState queryState(String uuid) {
+                return null;
+            }
+
+            @Override
+            public Set<String> getStartedProcedures() {
+                return null;
+            }
+        };
+
+        forEach.setProcedureRunner(dummyRunner);
+
+        forEach.execute();
+
+        // this depends on hazelcast-instance
+        //forEach.isChildrenExceuted();
+    }
+
+    private Collection<StockEntity> createTestEntites() {
+
         Collection<StockEntity> entities = new ArrayList<>();
 
         StockEntity goog = new StockEntity();
@@ -69,34 +108,7 @@ public class StockQuoteRetrieverTest extends TestCase implements ProcedureConsta
         msft.setTickerSymbol("MSFT");
         entities.add(msft);
 
-        QaiDataProvider<Collection> dataProvider = new DummyQaiDataProvider<>(entities);
-
-        ForEach forEach = ProcedureLibrary.forEachTemplate.createProcedure();
-        forEach.setTemplate(ProcedureLibrary.stockQuoteRetriverTemplate);
-        forEach.setTargetInputName(STOCK_ENTITY);
-        forEach.setTargetCollectionProvider(dataProvider);
-
-        ProcedureRunnerInterface dummyRunner = new ProcedureRunnerInterface() {
-            @Override
-            public void submitProcedure(Procedure procedure) {
-                String messTmpl = "Procedure: '%s' has been submitted";
-                log(String.format(messTmpl, procedure.getProcedureName()));
-                procedure.execute();
-            }
-
-            @Override
-            public ProcedureState queryState(String uuid) {
-                return null;
-            }
-
-            @Override
-            public Set<String> getStartedProcedures() {
-                return null;
-            }
-        };
-        forEach.setProcedureRunner(dummyRunner);
-
-        forEach.execute();
+        return entities;
     }
 
     private void log(String message) {
