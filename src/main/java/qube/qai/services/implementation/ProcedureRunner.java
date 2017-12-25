@@ -94,6 +94,8 @@ public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandl
 
         if (procedures.containsKey(uuid)) {
             procedures.replace(uuid, procedure);
+        } else {
+            procedures.put(uuid, procedure);
         }
 
         IExecutorService executor = hazelcastInstance.getExecutorService(SERVICE_NAME);

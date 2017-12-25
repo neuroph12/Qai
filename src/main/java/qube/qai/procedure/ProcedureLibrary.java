@@ -15,6 +15,7 @@
 
 package qube.qai.procedure;
 
+import qube.qai.network.wiki.WikiNetworkBuilder;
 import qube.qai.procedure.analysis.*;
 import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
@@ -109,7 +110,7 @@ public class ProcedureLibrary implements ProcedureConstants {
         }
     };
 
-    public static ProcedureTemplate<ForEach> stockQuoteRetriverTemplate = new ProcedureTemplate<ForEach>() {
+    public static ProcedureTemplate<ForEach> stockQuoteUpdaterTemplate = new ProcedureTemplate<ForEach>() {
         @Override
         public ForEach createProcedure() {
             ForEach forEach = new ForEach();
@@ -172,7 +173,7 @@ public class ProcedureLibrary implements ProcedureConstants {
         public ForEach createProcedure() {
             SortingPercentilesProcedure procedure = new SortingPercentilesProcedure();
             ForEach forEach = new ForEach();
-            forEach.getProcedureDescription().getProcedureInputs().getNamedInput(PROCEDURE_TEMPLATE).setValue(plainStockQuoteUpdater);
+            forEach.getProcedureDescription().getProcedureInputs().getNamedInput(PROCEDURE_TEMPLATE).setValue(stockQuoteUpdaterTemplate);
             forEach.getProcedureDescription().getProcedureInputs().getNamedInput(TARGET_INPUT_NAME).setValue(STOCK_ENTITY);
             procedure.getProcedureDescription().getProcedureInputs().getNamedInput(FROM).setValue(forEach);
             return forEach;
@@ -193,6 +194,12 @@ public class ProcedureLibrary implements ProcedureConstants {
         }
     };
 
+    public static ProcedureTemplate<WikiNetworkBuilder> wikiNetworkBuilderProcedureTemplate = new ProcedureTemplate<WikiNetworkBuilder>() {
+        @Override
+        public WikiNetworkBuilder createProcedure() {
+            return new WikiNetworkBuilder();
+        }
+    };
 
     public static Map<Class, ProcedureTemplate> getTemplateMap() {
 
@@ -208,7 +215,7 @@ public class ProcedureLibrary implements ProcedureConstants {
         templateMap.put(DirectoryIndexer.class, directoryIndexerTemplate);
         templateMap.put(WikiArchiveIndexer.class, wikiArchiveIndexerTemplate);
         templateMap.put(StockEntityInitialization.class, stockEntityInitializationTemplate);
-        templateMap.put(StockQuoteUpdater.class, stockQuoteRetriverTemplate);
+        templateMap.put(StockQuoteUpdater.class, stockQuoteUpdaterTemplate);
         templateMap.put(WikiRipperProcedure.class, wikiRipperTemplate);
         templateMap.put(AttachProcedure.class, attachTemplate);
         templateMap.put(SelectionProcedure.class, selectionTemplate);
@@ -235,7 +242,7 @@ public class ProcedureLibrary implements ProcedureConstants {
         templateMap.put(DirectoryIndexer.NAME, directoryIndexerTemplate);
         templateMap.put(WikiArchiveIndexer.NAME, wikiArchiveIndexerTemplate);
         templateMap.put(StockEntityInitialization.NAME, stockEntityInitializationTemplate);
-        templateMap.put(StockQuoteUpdater.NAME, stockQuoteRetriverTemplate);
+        templateMap.put(StockQuoteUpdater.NAME, stockQuoteUpdaterTemplate);
         templateMap.put(WikiRipperProcedure.NAME, wikiRipperTemplate);
         templateMap.put(AttachProcedure.NAME, attachTemplate);
         templateMap.put(SelectionProcedure.NAME, selectionTemplate);
@@ -259,7 +266,7 @@ public class ProcedureLibrary implements ProcedureConstants {
             directoryIndexerTemplate,
             wikiArchiveIndexerTemplate,
             stockEntityInitializationTemplate,
-            stockQuoteRetriverTemplate,
+            stockQuoteUpdaterTemplate,
             wikiRipperTemplate,
             attachTemplate,
             selectionTemplate,

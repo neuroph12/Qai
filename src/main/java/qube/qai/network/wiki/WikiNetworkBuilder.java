@@ -17,8 +17,23 @@ package qube.qai.network.wiki;
 import qube.qai.data.SelectionOperator;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
+import qube.qai.procedure.Procedure;
 
-public class WikiNetworkBuilder implements NetworkBuilder {
+public class WikiNetworkBuilder extends Procedure implements NetworkBuilder {
+
+
+    @Override
+    public void execute() {
+
+    }
+
+    @Override
+    protected void buildArguments() {
+
+    }
+
+    public WikiNetworkBuilder() {
+    }
 
     @Override
     public Network buildNetwork(SelectionOperator source) {

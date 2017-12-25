@@ -21,6 +21,8 @@ import qube.qai.persistence.DummyQaiDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
+import qube.qai.procedure.analysis.ChangePointAnalysis;
+import qube.qai.procedure.analysis.MarketNetworkBuilder;
 import qube.qai.procedure.utils.ForEach;
 import qube.qai.services.ProcedureRunnerInterface;
 
@@ -42,40 +44,54 @@ public class ProcedureLibraryTest extends QaiTestBase {
     @Inject
     private ProcedureRunnerInterface procedureRunner;
 
+
+    public void testMarketNetworkBuilder() throws Exception {
+
+        MarketNetworkBuilder networkBuilder = ProcedureLibrary.marketNetworkBuilderTemplate.createProcedure();
+        assertNotNull(networkBuilder);
+
+        fail("implement the rest of the test");
+    }
+
+    public void testChangePointAnalysis() throws Exception {
+
+        ChangePointAnalysis changePointAnalysis = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();
+        assertNotNull(changePointAnalysis);
+
+        fail("implement the rest of the test");
+    }
+
     public void testSortingPercentilesTemplate() throws Exception {
+
+        Set<StockEntity> pickedEntities = pickRandomFrom(5);
+
+        assertNotNull("entitites must have been initialized", pickedEntities);
+        assertTrue("there has to be entities", !pickedEntities.isEmpty());
+
+        QaiDataProvider<Collection> entityProvider = new DummyQaiDataProvider<>(pickedEntities);
 
         ForEach forEach = ProcedureLibrary.sortingPercentilesTemplate.createProcedure();
         assertNotNull("duh!", forEach);
 
+        forEach.setTargetCollectionProvider(entityProvider);
+
         procedureRunner.submitProcedure(forEach);
 
         IMap<String, Procedure> procedures = hazelcastInstance.getMap(PROCEDURES);
-//        procedures.put(forEach.getUuid(), forEach);
+
         Procedure procedure = procedures.get(forEach.getUuid());
         assertNotNull("there has to be a persisted procedure ", procedure);
         assertTrue("procedure must have run by now", procedure.hasExecuted());
     }
 
-    public void estStockQuoteRetrieverTemplate() throws Exception {
+    public void testStockQuoteRetrieverTemplate() throws Exception {
 
-        ForEach foreach = ProcedureLibrary.stockQuoteRetriverTemplate.createProcedure();
+        ForEach foreach = ProcedureLibrary.stockQuoteUpdaterTemplate.createProcedure();
         assertNotNull("duh!", foreach);
 
-        IMap<String, StockGroup> groupMap = hazelcastInstance.getMap(STOCK_GROUPS);
-        assertTrue("there has to be some groups", !groupMap.keySet().isEmpty());
-        Set<StockEntity> pickedEntities = null;
-        for (String uuid : groupMap.keySet()) {
-            StockGroup group = groupMap.get(uuid);
-            // check whether the group has entities and delete it if not
-            if (group.getEntities().isEmpty()) {
-                groupMap.delete(group);
-                String message = String.format("StockGroup '%s' has no entities- deleting", group.getName());
-                log(message);
-            }
 
-            pickedEntities = pickRandomFrom(5, group.getEntities());
-            break;
-        }
+        Set<StockEntity> pickedEntities = pickRandomFrom(5);
+
         assertNotNull("entitites must have been initialized", pickedEntities);
         assertTrue("there has to be entities", !pickedEntities.isEmpty());
 
@@ -87,18 +103,33 @@ public class ProcedureLibraryTest extends QaiTestBase {
         for (StockEntity entity : pickedEntities) {
             names += entity.getTickerSymbol() + " ";
         }
-        log("Have successfully submitted update pricedure for " + names);
+        log("Have successfully submitted update procedure for " + names);
     }
 
-    private Set<StockEntity> pickRandomFrom(int size, Set<StockEntity> entities) {
+    private Set<StockEntity> pickRandomFrom(int size) {
 
         Set<StockEntity> picked = new HashSet<>();
+        IMap<String, StockGroup> groupMap = hazelcastInstance.getMap(STOCK_GROUPS);
+        assertTrue("there has to be some groups", !groupMap.keySet().isEmpty());
 
-        for (StockEntity entity : entities) {
-            picked.add(entity);
-            if (picked.size() >= size) {
-                break;
+        for (String uuid : groupMap.keySet()) {
+            StockGroup group = groupMap.get(uuid);
+            // check whether the group has entities and delete it if not
+
+            if (group.getEntities().isEmpty()) {
+                groupMap.delete(group);
+                String message = String.format("StockGroup '%s' has no entities- deleting", group.getName());
+                log(message);
             }
+
+            for (StockEntity entity : group.getEntities()) {
+                picked.add(entity);
+                if (picked.size() >= size) {
+                    break;
+                }
+            }
+
+            break;
         }
 
         return picked;

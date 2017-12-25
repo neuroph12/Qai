@@ -75,7 +75,7 @@ public class MarketBuilderSim implements SimulationService, QaiConstants {
         retrieveQuotesUUIDs = new HashSet<>();
         ForEach retrieveEach = new ForEach();
         /*for (SearchResult result : searchResults) {
-            //StockQuoteUpdater retriever = ProcedureLibrary.stockQuoteRetriverTemplate.createProcedure();
+            //StockQuoteUpdater retriever = ProcedureLibrary.stockQuoteUpdaterTemplate.createProcedure();
             retrieveQuotesUUIDs.add(retriever.getUuid());
             procedureRunner.submitProcedure(retriever);
         }*/
