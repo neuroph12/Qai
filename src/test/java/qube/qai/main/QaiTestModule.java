@@ -20,7 +20,6 @@ import com.google.inject.Singleton;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ManagedContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.message.MessageQueue;
@@ -33,10 +32,7 @@ import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.SelectorFactoryInterface;
 import qube.qai.services.UUIDServiceInterface;
-import qube.qai.services.implementation.DataSelectorFactory;
-import qube.qai.services.implementation.ProcedureRunner;
-import qube.qai.services.implementation.UUIDService;
-import qube.qai.services.implementation.WikiSearchService;
+import qube.qai.services.implementation.*;
 
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -135,9 +131,11 @@ public class QaiTestModule extends AbstractModule {
         return hazelcastInstance;
     }
 
-    public ClientConfig provideHazelcastConfig(ManagedContext managedContext) {
+    @Provides
+    public ClientConfig provideHazelcastConfig() {
         clientConfig = new ClientConfig();
         //clientConfig.setInstanceName(NODE_NAME);
+        GuiceManagedContext managedContext = new GuiceManagedContext();
         clientConfig.setManagedContext(managedContext);
         clientConfig.getNetworkConfig().addAddress("127.0.0.1:5701");
         return clientConfig;

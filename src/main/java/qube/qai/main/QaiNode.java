@@ -19,6 +19,7 @@ import com.google.inject.Injector;
 import com.hazelcast.core.HazelcastInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.services.QaiInjectorService;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -68,7 +69,8 @@ public class QaiNode {
             throw new RuntimeException("Configuration file: '" + CONFIG_FILE_NAME + "' could not be found- have to exit!");
         }
 
-
+        // so that the singleton is initialized
+        QaiInjectorService injectorService = new QaiInjectorService(injector);
         // self inoculation...
         injector.injectMembers(this);
 

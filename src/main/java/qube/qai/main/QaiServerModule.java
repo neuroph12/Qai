@@ -31,6 +31,7 @@ import qube.qai.security.ProcedureManager;
 import qube.qai.security.ProcedureManagerInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.DirectorySearchService;
+import qube.qai.services.implementation.GuiceManagedContext;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
@@ -440,6 +441,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         }
 
         Config hazelcastConfig = new Config(NODE_NAME);
+        GuiceManagedContext managedContext = new GuiceManagedContext();
+        hazelcastConfig.setManagedContext(managedContext);
 
         // create stock-groups map-store
         if ("true".equals(properties.getProperty(CREATE_STOCK_GROUPS))) {

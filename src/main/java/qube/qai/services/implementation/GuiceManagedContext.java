@@ -14,30 +14,24 @@
 
 package qube.qai.services.implementation;
 
-import com.google.inject.Injector;
 import com.hazelcast.core.ManagedContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
+import qube.qai.services.QaiInjectorService;
 
 public class GuiceManagedContext implements ManagedContext {
 
     private Logger logger = LoggerFactory.getLogger("GuiceManagedContext");
 
-    private final Injector injector;
-
-    @Inject
-    public GuiceManagedContext(Injector injector) {
-        this.injector = injector;
+    public GuiceManagedContext() {
     }
 
     @Override
     public Object initialize(Object instance) {
         String message = "GuiceManagedContext injecting members of: " + instance;
-        System.out.println(message);
+        //System.out.println(message);
         logger.info(message);
-        injector.injectMembers(instance);
+        QaiInjectorService.getInstance().injectMembers(instance);
         return instance;
     }
 

@@ -19,7 +19,7 @@ import com.google.inject.Injector;
 import com.hazelcast.core.HazelcastInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.services.implementation.GuiceManagedContext;
+import qube.qai.services.QaiInjectorService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -52,12 +52,15 @@ public class QaiTestNode extends QaiTestModule {
         QaiTestSecurityModule qaiTestSecurity = new QaiTestSecurityModule();
         injector = Guice.createInjector(qaiTestServer, qaiTestSecurity);
 
-        GuiceManagedContext managedContext = injector.getInstance(GuiceManagedContext.class);
-        provideHazelcastConfig(managedContext);
+        //GuiceManagedContext managedContext = injector.getInstance(GuiceManagedContext.class);
+        //provideHazelcastConfig(managedContext);
         // this looks crazy but just works...
         injector.injectMembers(qaiTestServer);
 
         injector.injectMembers(this);
+
+        // so that the singleton is initialized
+        QaiInjectorService injectorService = new QaiInjectorService(injector);
 
         // the whole configuration takes place in guice
         // and the main instance is then distributed via injection
