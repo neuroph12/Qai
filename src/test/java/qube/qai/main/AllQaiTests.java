@@ -25,6 +25,7 @@ import qube.qai.data.analysis.TestChangepointAdapter;
 import qube.qai.data.selectors.TestHazelcastSelectors;
 import qube.qai.matrix.MatrixTest;
 import qube.qai.network.NetworkTest;
+import qube.qai.network.finance.FinanceNetworkBuilderTest;
 import qube.qai.network.formal.FormalNetworkTest;
 import qube.qai.network.neural.NeuralNetworkTest;
 import qube.qai.network.neural.trainer.NeuralNetworkTrainingTest;
@@ -41,7 +42,6 @@ import qube.qai.persistence.search.DatabaseSearchServiceTest;
 import qube.qai.persistence.search.ModelSearchServicesTest;
 import qube.qai.procedure.ProcedureLibraryTest;
 import qube.qai.procedure.analysis.AnalysisProceduresTest;
-import qube.qai.procedure.analysis.MarketNetworkBuilderTest;
 import qube.qai.procedure.archive.ArchiveProceduresTest;
 import qube.qai.procedure.archive.DirectoryIndexerTest;
 import qube.qai.procedure.archive.WikiArchiveIndexerTest;
@@ -141,7 +141,7 @@ public class AllQaiTests extends TestCase {
 
         // procedure.analysis
         suite.addTestSuite(AnalysisProceduresTest.class);
-        suite.addTestSuite(MarketNetworkBuilderTest.class);
+        suite.addTestSuite(FinanceNetworkBuilderTest.class);
 
         // procedure.archive
         suite.addTestSuite(ArchiveProceduresTest.class);

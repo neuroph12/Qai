@@ -180,6 +180,12 @@ public class ModelMapStoresTest extends TestCase {
 
     }
 
+    public void testPersistentNetworkMapStore() throws Exception {
+
+        // @TODO this test is missing
+        fail("implementation of the test missing");
+    }
+
     private void log(String message) {
         System.out.println(message);
     }

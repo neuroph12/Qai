@@ -12,7 +12,7 @@
  *
  */
 
-package qube.qai.procedure.analysis;
+package qube.qai.network.finance;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
@@ -32,9 +32,9 @@ import java.util.*;
 /**
  * Created by rainbird on 12/25/15.
  */
-public class MarketNetworkBuilderTest extends QaiTestBase {
+public class FinanceNetworkBuilderTest extends QaiTestBase {
 
-    private Logger logger = LoggerFactory.getLogger("MarketNetworkBuilderTest");
+    private Logger logger = LoggerFactory.getLogger("FinanceNetworkBuilderTest");
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -69,7 +69,7 @@ public class MarketNetworkBuilderTest extends QaiTestBase {
         logger.info("picked entities: " + array2String(names));
 
         SelectionOperator<Collection> selectionOperator = new DataSelectionOperator<Collection>(workingSet);
-        MarketNetworkBuilder networkBuilder = new MarketNetworkBuilder();
+        FinanceNetworkBuilder networkBuilder = new FinanceNetworkBuilder();
         injector.injectMembers(networkBuilder);
         NeuralNetwork network = (NeuralNetwork) networkBuilder.buildNetwork(selectionOperator);
         assertNotNull("duh!", network);

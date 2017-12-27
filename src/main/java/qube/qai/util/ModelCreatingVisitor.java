@@ -16,6 +16,7 @@ package qube.qai.util;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
+import qube.qai.network.finance.FinanceNetworkBuilder;
 import qube.qai.parsers.antimirov.nodes.*;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.analysis.*;
@@ -101,8 +102,8 @@ public class ModelCreatingVisitor implements NodeVisitor {
 
         if (ChangePointAnalysis.NAME.equals(name)) {
             procedure = new ChangePointAnalysis();
-        } else if (MarketNetworkBuilder.NAME.equals(name)) {
-            procedure = new MarketNetworkBuilder();
+        } else if (FinanceNetworkBuilder.NAME.equals(name)) {
+            procedure = new FinanceNetworkBuilder();
         } else if (MatrixStatistics.NAME.equals(name)) {
             procedure = new MatrixStatistics();
         } else if (NetworkStatistics.NAME.equals(name)) {

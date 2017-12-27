@@ -12,7 +12,7 @@
  *
  */
 
-package qube.qai.procedure.analysis;
+package qube.qai.network.finance;
 
 import qube.qai.data.SelectionOperator;
 import qube.qai.network.Network;
@@ -31,7 +31,7 @@ import java.util.HashMap;
 /**
  * Created by rainbird on 12/25/15.
  */
-public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, ProcedureConstants {
+public class FinanceNetworkBuilder extends Procedure implements NetworkBuilder, ProcedureConstants {
 
     public static String NAME = "Market Network Builder";
 
@@ -44,7 +44,7 @@ public class MarketNetworkBuilder extends Procedure implements NetworkBuilder, P
 
     private NeuralNetwork network;
 
-    public MarketNetworkBuilder() {
+    public FinanceNetworkBuilder() {
         super(NAME);
     }
 

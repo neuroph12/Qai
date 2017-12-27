@@ -15,6 +15,7 @@
 
 package qube.qai.procedure;
 
+import qube.qai.network.finance.FinanceNetworkBuilder;
 import qube.qai.network.wiki.WikiNetworkBuilder;
 import qube.qai.procedure.analysis.*;
 import qube.qai.procedure.archive.DirectoryIndexer;
@@ -148,10 +149,10 @@ public class ProcedureLibrary implements ProcedureConstants {
         }
     };
 
-    public static ProcedureTemplate<MarketNetworkBuilder> marketNetworkBuilderTemplate = new ProcedureTemplate<MarketNetworkBuilder>() {
+    public static ProcedureTemplate<FinanceNetworkBuilder> marketNetworkBuilderTemplate = new ProcedureTemplate<FinanceNetworkBuilder>() {
         @Override
-        public MarketNetworkBuilder createProcedure() {
-            return new MarketNetworkBuilder();
+        public FinanceNetworkBuilder createProcedure() {
+            return new FinanceNetworkBuilder();
         }
     };
 
@@ -194,7 +195,7 @@ public class ProcedureLibrary implements ProcedureConstants {
         }
     };
 
-    public static ProcedureTemplate<WikiNetworkBuilder> wikiNetworkBuilderProcedureTemplate = new ProcedureTemplate<WikiNetworkBuilder>() {
+    public static ProcedureTemplate<WikiNetworkBuilder> wikiNetworkBuilderTemplate = new ProcedureTemplate<WikiNetworkBuilder>() {
         @Override
         public WikiNetworkBuilder createProcedure() {
             return new WikiNetworkBuilder();
@@ -220,11 +221,11 @@ public class ProcedureLibrary implements ProcedureConstants {
         templateMap.put(AttachProcedure.class, attachTemplate);
         templateMap.put(SelectionProcedure.class, selectionTemplate);
         templateMap.put(CreateUserProcedure.class, createUserTemplate);
-        templateMap.put(MarketNetworkBuilder.class, marketNetworkBuilderTemplate);
+        templateMap.put(FinanceNetworkBuilder.class, marketNetworkBuilderTemplate);
         templateMap.put(SortingPercentilesProcedure.class, sortingPercentilesTemplate);
         templateMap.put(SliceProcedure.class, sliceTemplate);
         templateMap.put(ForEach.class, forEachTemplate);
-
+        templateMap.put(WikiNetworkBuilder.class, wikiNetworkBuilderTemplate);
         return templateMap;
     }
 
@@ -247,7 +248,7 @@ public class ProcedureLibrary implements ProcedureConstants {
         templateMap.put(AttachProcedure.NAME, attachTemplate);
         templateMap.put(SelectionProcedure.NAME, selectionTemplate);
         templateMap.put(CreateUserProcedure.NAME, createUserTemplate);
-        templateMap.put(MarketNetworkBuilder.NAME, marketNetworkBuilderTemplate);
+        templateMap.put(FinanceNetworkBuilder.NAME, marketNetworkBuilderTemplate);
         templateMap.put(SortingPercentilesProcedure.NAME, sortingPercentilesTemplate);
         templateMap.put(SliceProcedure.NAME, sliceTemplate);
         templateMap.put(ForEach.NAME, forEachTemplate);
@@ -306,7 +307,7 @@ public class ProcedureLibrary implements ProcedureConstants {
         classes.add(StockEntityInitialization.class);
         classes.add(WikiRipperProcedure.class);
 
-        classes.add(MarketNetworkBuilder.class);
+        classes.add(FinanceNetworkBuilder.class);
         classes.add(SortingPercentilesProcedure.class);
         classes.add(TimeSequenceAnalysis.class);
 

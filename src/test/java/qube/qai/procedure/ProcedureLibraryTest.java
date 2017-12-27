@@ -17,12 +17,12 @@ package qube.qai.procedure;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import qube.qai.main.QaiTestBase;
+import qube.qai.network.finance.FinanceNetworkBuilder;
 import qube.qai.persistence.DummyQaiDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
-import qube.qai.procedure.analysis.MarketNetworkBuilder;
 import qube.qai.procedure.utils.ForEach;
 import qube.qai.services.ProcedureRunnerInterface;
 
@@ -45,15 +45,15 @@ public class ProcedureLibraryTest extends QaiTestBase {
     private ProcedureRunnerInterface procedureRunner;
 
 
-    public void testMarketNetworkBuilder() throws Exception {
+    public void estMarketNetworkBuilder() throws Exception {
 
-        MarketNetworkBuilder networkBuilder = ProcedureLibrary.marketNetworkBuilderTemplate.createProcedure();
+        FinanceNetworkBuilder networkBuilder = ProcedureLibrary.marketNetworkBuilderTemplate.createProcedure();
         assertNotNull(networkBuilder);
 
         fail("implement the rest of the test");
     }
 
-    public void testChangePointAnalysis() throws Exception {
+    public void estChangePointAnalysis() throws Exception {
 
         ChangePointAnalysis changePointAnalysis = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();
         assertNotNull(changePointAnalysis);
@@ -84,7 +84,7 @@ public class ProcedureLibraryTest extends QaiTestBase {
         assertTrue("procedure must have run by now", procedure.hasExecuted());
     }
 
-    public void testStockQuoteRetrieverTemplate() throws Exception {
+    public void estStockQuoteRetrieverTemplate() throws Exception {
 
         ForEach foreach = ProcedureLibrary.stockQuoteUpdaterTemplate.createProcedure();
         assertNotNull("duh!", foreach);

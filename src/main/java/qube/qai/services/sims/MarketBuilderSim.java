@@ -18,9 +18,9 @@ import com.hazelcast.core.Message;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import qube.qai.main.QaiConstants;
+import qube.qai.network.finance.FinanceNetworkBuilder;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
-import qube.qai.procedure.analysis.MarketNetworkBuilder;
 import qube.qai.procedure.utils.ForEach;
 import qube.qai.procedure.utils.SliceProcedure;
 import qube.qai.services.ProcedureRunnerInterface;
@@ -99,7 +99,7 @@ public class MarketBuilderSim implements SimulationService, QaiConstants {
 //                changePoint.getProcedureResults().getNamedResult(CHANGE_POINTS),
 //                slicer.getProcedureInputs().getNamedInput("INTERVALS"));
 
-        MarketNetworkBuilder builderProc = ProcedureLibrary.marketNetworkBuilderTemplate.createProcedure();
+        FinanceNetworkBuilder builderProc = ProcedureLibrary.marketNetworkBuilderTemplate.createProcedure();
 
         ForEach forEach = new ForEach();
         forEach.addChild(slicer);

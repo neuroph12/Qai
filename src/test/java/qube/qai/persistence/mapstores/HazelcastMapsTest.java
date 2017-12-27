@@ -39,9 +39,6 @@ import java.util.List;
  */
 public class HazelcastMapsTest extends QaiTestBase {
 
-//    @Inject
-//    private ProcedureSourceInterface procedureSource;
-
     @Inject
     private UUIDServiceInterface uuidService;
 
@@ -81,7 +78,7 @@ public class HazelcastMapsTest extends QaiTestBase {
 
     public void testHazelcastWikipediaArticles() throws Exception {
 
-        String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock market"};
+        String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock finance"};
 
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
@@ -98,7 +95,7 @@ public class HazelcastMapsTest extends QaiTestBase {
 
     public void testHazelcastWiktionaryArticles() throws Exception {
 
-        String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock market"};
+        String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock finance"};
 
         assertNotNull("for the moment this is already a test :-)", hazelcastInstance);
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
@@ -210,6 +207,11 @@ public class HazelcastMapsTest extends QaiTestBase {
             ResourceData found = wiktionaryResources.get(filename);
             assertNotNull("has to be there something", found);
         }
+    }
+
+    public void testNetworkMaps() throws Exception {
+
+        // @TODO this test is still missing,
     }
 
     /**

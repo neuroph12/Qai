@@ -47,7 +47,7 @@ public class MapStoreTest extends QaiTestBase {
     public void testWikiArticleMapStore() throws Exception {
 
         // well, this is all there is to it really...
-        String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock market"};
+        String[] someWikiArticles = {"mickey mouse", "mouse", "crow", "stock finance"};
 
         WikiArticleMapStore mapStore = new WikiArticleMapStore(testWikiArchive);
         for (String name : someWikiArticles) {
