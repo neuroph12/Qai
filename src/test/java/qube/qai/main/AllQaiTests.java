@@ -151,6 +151,7 @@ public class AllQaiTests extends TestCase {
         // procedure.finance
         suite.addTestSuite(FinanceProceduresTest.class);
         suite.addTestSuite(StockEntityInitializationTest.class);
+        suite.addTestSuite(StockEntityInitializationTest.class);
         suite.addTestSuite(StockQuoteUpdaterTest.class);
 
         // procedure.visitor

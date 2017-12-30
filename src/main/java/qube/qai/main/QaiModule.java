@@ -42,15 +42,15 @@ public class QaiModule extends AbstractModule {
 
     public static final String CONFIG_FILE_NAME = "config_dev.properties";
 
-//    private static String wiktionaryDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
+//    private static String wiktionaryDirectory = "/media/rainbird/GIMEL/wiki-archives/wiktionary_en.index";
 //
-//    private static String wiktionaryZipFileName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+//    private static String wiktionaryZipFileName = "/media/rainbird/GIMEL/wiki-archives/wiktionary_en.zip";
 //
-//    private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
+//    private static String wikipediaDirectory = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.index";
 //
-//    private static String wikipediaResources = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
+//    private static String wikipediaResources = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources";
 //
-//    private static String wikipediaZipFileName = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+//    private static String wikipediaZipFileName = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.zip";
 
     //@InjectConfig(value = "PERSISTENCE_BASE")
     public String PERSISTENCE_BASE;

@@ -30,7 +30,7 @@ public class UtilProceduresTest extends ProcedureTestBase {
 
     public void testAttachProcedure() throws Exception {
 
-        AttachProcedure procedure = ProcedureLibrary.attachTemplate.createProcedure();
+        Attach procedure = ProcedureLibrary.attachTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -43,7 +43,7 @@ public class UtilProceduresTest extends ProcedureTestBase {
 
     public void testSelectionProcedure() throws Exception {
 
-        SelectionProcedure procedure = ProcedureLibrary.selectionTemplate.createProcedure();
+        SelectOut procedure = ProcedureLibrary.selectionTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -94,7 +94,7 @@ public class UtilProceduresTest extends ProcedureTestBase {
          * @TODO obviously this test is entirely missing
          */
 
-        SliceProcedure procedure = new SliceProcedure();
+        SliceIntervals procedure = new SliceIntervals();
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be an description", description);
 
@@ -104,7 +104,7 @@ public class UtilProceduresTest extends ProcedureTestBase {
 
     public void testCreateUserProcedure() throws Exception {
 
-        CreateUserProcedure procedure = ProcedureLibrary.createUserTemplate.createProcedure();
+        CreateUser procedure = ProcedureLibrary.createUserTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);

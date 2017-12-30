@@ -63,6 +63,10 @@ public class TimeSequence<T extends Number> implements Serializable {
         return array;
     }
 
+    public Set<Date> dates() {
+        return entries.keySet();
+    }
+
     public Iterator<T> iterator() {
         return entries.values().iterator();
     }

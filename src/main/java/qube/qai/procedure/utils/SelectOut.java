@@ -20,7 +20,7 @@ import qube.qai.procedure.nodes.ValueNode;
 /**
  * Created by rainbird on 12/27/15.
  */
-public class SelectionProcedure extends Procedure {
+public class SelectOut extends Procedure {
 
     public static String NAME = "Selection Procedure";
 
@@ -41,15 +41,15 @@ public class SelectionProcedure extends Procedure {
      * represents user preparing, or choosing a certain
      * input for the children to process
      */
-    public SelectionProcedure() {
+    public SelectOut() {
         super(NAME);
     }
 
-    public SelectionProcedure(ValueNode targetValue) {
+    public SelectOut(ValueNode targetValue) {
         valueTo = targetValue;
     }
 
-    public SelectionProcedure(ValueNode valueFrom, ValueNode valueTo) {
+    public SelectOut(ValueNode valueFrom, ValueNode valueTo) {
         this();
         this.valueFrom = valueFrom;
         this.valueTo = valueTo;

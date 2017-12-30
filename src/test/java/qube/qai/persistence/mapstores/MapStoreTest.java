@@ -37,7 +37,7 @@ public class MapStoreTest extends QaiTestBase {
 
     private String testDirectory = "./test/procedures/";
 
-    private String testWikiArchive = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    private String testWikiArchive = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.zip";
 
     /**
      * test wiki-article map-store

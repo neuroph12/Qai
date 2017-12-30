@@ -52,9 +52,9 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
 
     public static String NUMBER_OF_RECORDS_CREATED = "NUMBER_OF_RECORDS_CREATED";
 
-    private static String pathToCsvFiles = "/media/rainbird/ALEPH/datasets/";
+    private static String pathToCsvFiles = "/media/rainbird/GIMEL/datasets/";
 
-    private static String namespace = "file:///media/rainbird/ALEPH/datasets/";
+    private static String namespace = "file:///media/rainbird/GIMEL/datasets/";
 
     public static String S_AND_P_500_LISTING = "S&P_500_constituents_financials.csv";
 

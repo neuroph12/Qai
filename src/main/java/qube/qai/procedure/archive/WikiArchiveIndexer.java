@@ -58,11 +58,11 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
     public static String INPUT_TARGET_FILENAME = "TARGET_FILENAME";
     public static String INPUT_INDEX_DIRECTORY = "INDEX_DIRECTORY";
 
-    //public String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
-    //public String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
+    //public String indexDirectory = "/media/rainbird/GIMEL/wiki-archives/wiktionary_en.index";
+    //public String indexDirectory = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.index";
     private String indexDirectory;
-    //public String targetFilename = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
-    //public String targetFilename = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    //public String targetFilename = "/media/rainbird/GIMEL/wiki-archives/wiktionary_en.zip";
+    //public String targetFilename = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.zip";
 
     public String targetFilename;
 

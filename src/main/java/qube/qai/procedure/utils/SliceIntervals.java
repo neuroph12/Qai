@@ -15,8 +15,23 @@
 package qube.qai.procedure.utils;
 
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.SpawningProcedure;
+import qube.qai.procedure.analysis.ChangePointAnalysis;
+import qube.qai.procedure.analysis.SortPercentiles;
 
-public class SliceProcedure extends Procedure {
+public class SliceIntervals extends Procedure implements SpawningProcedure {
+
+    private ChangePointAnalysis changePoint;
+
+    private SortPercentiles sortPercentiles;
+
+    /**
+     * @TODO pretty much everything is missing here
+     * this is where the slices which will be used for neural-network training
+     * will be prepared.
+     */
+    public SliceIntervals() {
+    }
 
     @Override
     public void execute() {
@@ -26,5 +41,10 @@ public class SliceProcedure extends Procedure {
     @Override
     protected void buildArguments() {
 
+    }
+
+    @Override
+    public boolean haveChildrenExceuted() {
+        return false;
     }
 }

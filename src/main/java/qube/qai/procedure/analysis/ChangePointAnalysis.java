@@ -16,6 +16,8 @@ package qube.qai.procedure.analysis;
 
 import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.ChangepointAdapter;
+import qube.qai.persistence.QaiDataProvider;
+import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.nodes.ValueNode;
 
@@ -39,7 +41,9 @@ public class ChangePointAnalysis extends Procedure {
 
     private TimeSequence timeSequence;
 
-    Collection<ChangePointMarker> markers;
+    private QaiDataProvider<StockEntity> entityProvider;
+
+    private Collection<ChangePointMarker> markers;
 
     @Override
     protected void buildArguments() {
@@ -87,6 +91,22 @@ public class ChangePointAnalysis extends Procedure {
         }
 
         info("finished '" + CHANGE_POINTS + "' analysis with " + markers.size() + " change-points detected");
+    }
+
+    public QaiDataProvider<StockEntity> getEntityProvider() {
+        return entityProvider;
+    }
+
+    public void setEntityProvider(QaiDataProvider<StockEntity> entityProvider) {
+        this.entityProvider = entityProvider;
+    }
+
+    public Collection<ChangePointMarker> getMarkers() {
+        return markers;
+    }
+
+    public void setMarkers(Collection<ChangePointMarker> markers) {
+        this.markers = markers;
     }
 
     /**

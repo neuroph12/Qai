@@ -15,30 +15,35 @@
 package qube.qai.network.finance;
 
 import qube.qai.data.SelectionOperator;
+import qube.qai.data.TimeSequence;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.network.neural.trainer.BasicNetworkTrainer;
-import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.nodes.ValueNode;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by rainbird on 12/25/15.
  */
 public class FinanceNetworkBuilder extends Procedure implements NetworkBuilder, ProcedureConstants {
 
-    public static String NAME = "Market Network Builder";
+    public static String NAME = "Finance-Network Builder";
 
     public static String DESCRIPTION = "Creates and trains a neural-network out of the quotes of the stocks given";
 
+    private Map<String, TimeSequence> timeSequenceMap;
 
-    private Collection<StockEntity> entities;
+    private Date startDate;
+
+    private Date endDate;
+
+    private Set<Date> allDates;
 
     private BasicNetworkTrainer trainer;
 
@@ -51,26 +56,16 @@ public class FinanceNetworkBuilder extends Procedure implements NetworkBuilder, 
     @Override
     public void execute() {
 
-        if (entities == null || entities.isEmpty()) {
-            error("The list of stock-entites is empty- returning");
-            return;
-        }
-
-        HashMap<String, Collection> trainingData = new HashMap<String, Collection>();
-        network = new NeuralNetwork(entities.size());
-        for (StockEntity entity : entities) {
-            Network.Vertex vertex = new Network.Vertex(entity.getTickerSymbol());
-            // while we are at it we collect the data here as well
-            Collection<StockQuote> quotes = entity.getQuotes();
-            if (quotes != null || !quotes.isEmpty()) {
-                network.addVertex(vertex);
-                trainingData.put(entity.getTickerSymbol(), quotes);
-            }
+        if (timeSequenceMap == null
+                || startDate == null
+                || endDate == null
+                || allDates == null) {
+            throw new IllegalStateException("Procedure has not been initialized right- stopping execution!");
         }
 
         // well, here goes nothing
         trainer = new BasicNetworkTrainer(network);
-        trainer.createTrainingSet(trainingData);
+        trainer.createTrainingSet(startDate, endDate, allDates, timeSequenceMap);
         trainer.trainNetwork();
 
         info("Market-network builder ended with: " + TRAINED_NEURAL_NETWORK);
@@ -79,18 +74,58 @@ public class FinanceNetworkBuilder extends Procedure implements NetworkBuilder, 
     @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<Collection<StockEntity>>(INPUT_STOCK_ENTITY_COLLECTION, MIMETYPE_STOCK_ENITIY_LIST) {
+        /*getProcedureDescription().getProcedureInputs().addInput(new ValueNode<Collection<StockEntity>>(INPUT_STOCK_ENTITY_COLLECTION, MIMETYPE_STOCK_ENITIY_LIST) {
             @Override
             public void setValue(Collection<StockEntity> value) {
                 entities = value;
             }
-        });
+        });*/
         getProcedureDescription().getProcedureResults().addResult(new ValueNode<NeuralNetwork>(TRAINED_NEURAL_NETWORK, MIMETYPE_NEURAL_NETWORK) {
             @Override
             public NeuralNetwork getValue() {
                 return network;
             }
         });
+    }
+
+    public Map<String, TimeSequence> getTimeSequenceMap() {
+        return timeSequenceMap;
+    }
+
+    public void setTimeSequenceMap(Map<String, TimeSequence> timeSequenceMap) {
+        this.timeSequenceMap = timeSequenceMap;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public NeuralNetwork getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(NeuralNetwork network) {
+        this.network = network;
+    }
+
+    public static String getNAME() {
+        return NAME;
+    }
+
+    public static void setNAME(String NAME) {
+        FinanceNetworkBuilder.NAME = NAME;
     }
 
     @Override

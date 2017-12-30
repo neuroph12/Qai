@@ -37,8 +37,8 @@ public class IndexedDirectoryMapStoreTest extends QaiTestBase {
     private Logger logger;
 
     private static String wikiArticleName = "Charles Darwin.xml";
-    private static String wikipediaResourceDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
-    private static String wikipediaResourceIndexDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
+    private static String wikipediaResourceDirectory = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources";
+    private static String wikipediaResourceIndexDirectory = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources.index";
     // [[File:...|thumb|...]] is how you define an image in wiki-format
     private static String wikiFileFormatStart = "[[File:";
     private static String wikiFileFormatEnd = "|";

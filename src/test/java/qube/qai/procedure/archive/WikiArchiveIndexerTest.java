@@ -56,13 +56,13 @@ public class WikiArchiveIndexerTest extends TestCase {
 
     public void restWikiRipAndIndex() throws Exception {
 
-//        String wikiToRip = "/media/rainbird/ALEPH/wiki-data/dewiki-20151226-pages-articles.xml";
-//        String archiveToCreate = "/media/rainbird/ALEPH/wiki-archives/wikipedia_de.zip";
-//        String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_de.index";
+//        String wikiToRip = "/media/rainbird/GIMEL/wiki-data/dewiki-20151226-pages-articles.xml";
+//        String archiveToCreate = "/media/rainbird/GIMEL/wiki-archives/wikipedia_de.zip";
+//        String indexDirectory = "/media/rainbird/GIMEL/wiki-archives/wikipedia_de.index";
 
-        String wikiToRip = "/media/rainbird/ALEPH/wiki-data/dewiktionary-20151226-pages-articles.xml";
-        String archiveToCreate = "/media/rainbird/ALEPH/wiki-archives/wiktionary_de.zip";
-        String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_de.index";
+        String wikiToRip = "/media/rainbird/GIMEL/wiki-data/dewiktionary-20151226-pages-articles.xml";
+        String archiveToCreate = "/media/rainbird/GIMEL/wiki-archives/wiktionary_de.zip";
+        String indexDirectory = "/media/rainbird/GIMEL/wiki-archives/wiktionary_de.index";
 
         WikiRipperProcedure ripperProcedure = new WikiRipperProcedure();
         SelectionOperator<String> fileanmeSelectionOperator = new DataSelectionOperator<String>(wikiToRip);

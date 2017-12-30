@@ -30,12 +30,12 @@ import java.util.Iterator;
  */
 public class TestCsvFileSearchService extends TestCase {
 
-    private String pathToCsvFiles = "/media/rainbird/ALEPH/datasets/";
+    private String pathToCsvFiles = "/media/rainbird/GIMEL/datasets/";
     private String sNp500File = "S&P_500_constituents_financials.csv";
     private String otherListedFile = "other-listed.csv";
     private String nasdaqFile = "nasdaq-listed.csv";
     private String nyseFile = "nyse-listed.csv";
-    private String namespace = "file:///media/rainbird/ALEPH/datasets/S&P_500_constituents_financials.csv";
+    private String namespace = "file:///media/rainbird/GIMEL/datasets/S&P_500_constituents_financials.csv";
     private String rowPropertyName = "http://w3c/future-csv-vocab/row";
 
     @Override
@@ -211,7 +211,7 @@ public class TestCsvFileSearchService extends TestCase {
             log("names: " + count + " "+ name);
         }
 
-        String namespace = "file:///media/rainbird/ALEPH/datasets/S&P_500_constituents_financials.csv";
+        String namespace = "file:///media/rainbird/GIMEL/datasets/S&P_500_constituents_financials.csv";
         Property pName = csvModel.getProperty(namespace, "#Name");
         Property pSymbol = csvModel.getProperty(namespace, "#Symbol");
         Property pSector = csvModel.getProperty(namespace, "#Sector");

@@ -62,30 +62,30 @@ public class QaiTestServerModule extends AbstractModule {
 
     private static final String PROCEDURES = "Procedures";
 
-    private String PERSISTENCE_BASE = "/media/rainbird/ALEPH/qai-persistence.db";
+    private String PERSISTENCE_BASE = "/media/rainbird/GIMEL/qai-persistence.db";
     // private String PERSISTENCE_BASE = "/media/pi/BET/qai-persistence.db";
 
-    private static final String MODEL_BASE_DIRECTORY = "/media/rainbird/ALEPH/qai-persistence.db/test_model_persistence";
+    private static final String MODEL_BASE_DIRECTORY = "/media/rainbird/GIMEL/qai-persistence.db/test_model_persistence";
 
     private static final String WIKIPEDIA = "Wikipedia_en";
 
-    private static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    private static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.zip";
     //private static final String WIKIPEDIA_ARCHIVE = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
 
     private static final String WIKTIONARY = "Wiktionary_en";
 
-    private static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    private static final String WIKTIONARY_ARCHIVE = "/media/rainbird/GIMEL/wiki-archives/wiktionary_en.zip";
     //private static final String WIKTIONARY_ARCHIVE = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
 
     public static final String WIKIPEDIA_RESOURCES = "WikiResources_en";
 
-    public String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
+    public String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources";
 
-    public String WIKIPEDIA_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
+    public String WIKIPEDIA_RESOURCE_INDEX = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources.index";
 
-    public String USER_MODEL_DIRECTORY = "/media/rainbird/ALEPH/qai-persistence.db/test_user_model";
+    public String USER_MODEL_DIRECTORY = "/media/rainbird/GIMEL/qai-persistence.db/test_user_model";
 
-    public String PROCEDURE_MODEL_DIRECTORY = "/media/rainbird/ALEPH/qai-persistence.db/test_procedure_model";
+    public String PROCEDURE_MODEL_DIRECTORY = "/media/rainbird/GIMEL/qai-persistence.db/test_procedure_model";
 
     private HazelcastInstance hazelcastInstance;
 

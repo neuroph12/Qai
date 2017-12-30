@@ -23,6 +23,7 @@ import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
+import qube.qai.procedure.finance.SequenceCollectionAverager;
 import qube.qai.procedure.utils.ForEach;
 import qube.qai.services.ProcedureRunnerInterface;
 
@@ -47,7 +48,7 @@ public class ProcedureLibraryTest extends QaiTestBase {
 
     public void estMarketNetworkBuilder() throws Exception {
 
-        FinanceNetworkBuilder networkBuilder = ProcedureLibrary.marketNetworkBuilderTemplate.createProcedure();
+        FinanceNetworkBuilder networkBuilder = ProcedureLibrary.financeNetworkBuilderTemplate.createProcedure();
         assertNotNull(networkBuilder);
 
         fail("implement the rest of the test");
@@ -55,13 +56,47 @@ public class ProcedureLibraryTest extends QaiTestBase {
 
     public void estChangePointAnalysis() throws Exception {
 
-        ChangePointAnalysis changePointAnalysis = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();
-        assertNotNull(changePointAnalysis);
+        Set<StockEntity> entities = pickRandomFrom(1);
+        assertTrue("there has to be a stock entity", !entities.isEmpty());
 
-        fail("implement the rest of the test");
+        ChangePointAnalysis changePointAnalysis = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();
+        assertNotNull("duh!", changePointAnalysis);
+
+        QaiDataProvider<StockEntity> provider = new DummyQaiDataProvider<>(entities.iterator().next());
+        changePointAnalysis.setEntityProvider(provider);
+
+        procedureRunner.submitProcedure(changePointAnalysis);
+
+        IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURES);
+        Procedure copy = procedureMap.get(changePointAnalysis.getUuid());
+        assertNotNull("there has to be a copy and all that", copy);
+        Collection markers = ((ChangePointAnalysis) copy).getMarkers();
+        assertNotNull("if the procedure has actually been executed and save there have to be markers", markers);
     }
 
-    public void testSortingPercentilesTemplate() throws Exception {
+    public void testSequenceAverager() throws Exception {
+
+        Set<StockEntity> entities = pickRandomFrom(10);
+        assertTrue("there has to be a stock entity", !entities.isEmpty());
+
+        SequenceCollectionAverager procedure = ProcedureLibrary.sequenceAveragerTemplate.createProcedure();
+        assertNotNull("duh!", procedure);
+
+        QaiDataProvider<Collection> provider = new DummyQaiDataProvider<>(entities);
+        ForEach forEach = new ForEach();
+        forEach.setTargetCollectionProvider(provider);
+        procedure.setCollectorForEach(forEach);
+
+        procedureRunner.submitProcedure(procedure);
+    }
+
+    /**
+     * right now i don't see how this is required
+     *
+     * @throws Exception
+     */
+    @Deprecated
+    public void estSortingPercentilesTemplate() throws Exception {
 
         Set<StockEntity> pickedEntities = pickRandomFrom(5);
 
@@ -77,9 +112,9 @@ public class ProcedureLibraryTest extends QaiTestBase {
 
         procedureRunner.submitProcedure(forEach);
 
-        IMap<String, Procedure> procedures = hazelcastInstance.getMap(PROCEDURES);
+        IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURES);
 
-        Procedure procedure = procedures.get(forEach.getUuid());
+        Procedure procedure = procedureMap.get(forEach.getUuid());
         assertNotNull("there has to be a persisted procedure ", procedure);
         assertTrue("procedure must have run by now", procedure.hasExecuted());
     }

@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import qube.qai.procedure.analysis.MatrixStatistics;
 import qube.qai.procedure.analysis.NetworkStatistics;
 import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
-import qube.qai.procedure.utils.SelectionProcedure;
+import qube.qai.procedure.utils.SelectOut;
 
 /**
  * Created by rainbird on 12/1/15.
@@ -34,7 +34,7 @@ public class ProcedureVisitorsTest extends TestCase {
     public void testSimpleProcedureVisitor() throws Exception {
 
         // test the simple visitor on network analysis
-        SelectionProcedure selection = new SelectionProcedure();
+        SelectOut selection = new SelectOut();
         MatrixStatistics matrix = new MatrixStatistics();
         NetworkStatistics network = new NetworkStatistics();
         network.setFirstChild(matrix);

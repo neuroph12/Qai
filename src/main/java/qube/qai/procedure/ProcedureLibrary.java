@@ -20,6 +20,7 @@ import qube.qai.network.wiki.WikiNetworkBuilder;
 import qube.qai.procedure.analysis.*;
 import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
+import qube.qai.procedure.finance.SequenceCollectionAverager;
 import qube.qai.procedure.finance.StockEntityInitialization;
 import qube.qai.procedure.finance.StockQuoteUpdater;
 import qube.qai.procedure.utils.*;
@@ -128,38 +129,45 @@ public class ProcedureLibrary implements ProcedureConstants {
         }
     };
 
-    public static ProcedureTemplate<AttachProcedure> attachTemplate = new ProcedureTemplate<AttachProcedure>() {
+    public static ProcedureTemplate<Attach> attachTemplate = new ProcedureTemplate<Attach>() {
         @Override
-        public AttachProcedure createProcedure() {
-            return new AttachProcedure();
+        public Attach createProcedure() {
+            return new Attach();
         }
     };
 
-    public static ProcedureTemplate<SelectionProcedure> selectionTemplate = new ProcedureTemplate<SelectionProcedure>() {
+    public static ProcedureTemplate<SelectOut> selectionTemplate = new ProcedureTemplate<SelectOut>() {
         @Override
-        public SelectionProcedure createProcedure() {
-            return new SelectionProcedure();
+        public SelectOut createProcedure() {
+            return new SelectOut();
         }
     };
 
-    public static ProcedureTemplate<CreateUserProcedure> createUserTemplate = new ProcedureTemplate<CreateUserProcedure>() {
+    public static ProcedureTemplate<CreateUser> createUserTemplate = new ProcedureTemplate<CreateUser>() {
         @Override
-        public CreateUserProcedure createProcedure() {
-            return new CreateUserProcedure();
+        public CreateUser createProcedure() {
+            return new CreateUser();
         }
     };
 
-    public static ProcedureTemplate<FinanceNetworkBuilder> marketNetworkBuilderTemplate = new ProcedureTemplate<FinanceNetworkBuilder>() {
+    public static ProcedureTemplate<FinanceNetworkBuilder> financeNetworkBuilderTemplate = new ProcedureTemplate<FinanceNetworkBuilder>() {
         @Override
         public FinanceNetworkBuilder createProcedure() {
             return new FinanceNetworkBuilder();
         }
     };
 
-    private static ProcedureTemplate<SortingPercentilesProcedure> plainSortingPercentiles = new ProcedureTemplate<SortingPercentilesProcedure>() {
+    public static ProcedureTemplate<SequenceCollectionAverager> sequenceAveragertemplate = new ProcedureTemplate<SequenceCollectionAverager>() {
         @Override
-        public SortingPercentilesProcedure createProcedure() {
-            return new SortingPercentilesProcedure();
+        public SequenceCollectionAverager createProcedure() {
+            return new SequenceCollectionAverager();
+        }
+    };
+
+    private static ProcedureTemplate<SortPercentiles> plainSortingPercentiles = new ProcedureTemplate<SortPercentiles>() {
+        @Override
+        public SortPercentiles createProcedure() {
+            return new SortPercentiles();
         }
     };
 
@@ -168,11 +176,12 @@ public class ProcedureLibrary implements ProcedureConstants {
      * input from the gui-layer, in this case a collection of pointers to
      * stock-entities whose quotes need first updated
      */
+    @Deprecated
     public static ProcedureTemplate<ForEach> sortingPercentilesTemplate = new ProcedureTemplate<ForEach>() {
 
         @Override
         public ForEach createProcedure() {
-            SortingPercentilesProcedure procedure = new SortingPercentilesProcedure();
+            SortPercentiles procedure = new SortPercentiles();
             ForEach forEach = new ForEach();
             forEach.getProcedureDescription().getProcedureInputs().getNamedInput(PROCEDURE_TEMPLATE).setValue(stockQuoteUpdaterTemplate);
             forEach.getProcedureDescription().getProcedureInputs().getNamedInput(TARGET_INPUT_NAME).setValue(STOCK_ENTITY);
@@ -181,10 +190,17 @@ public class ProcedureLibrary implements ProcedureConstants {
         }
     };
 
-    public static ProcedureTemplate<SliceProcedure> sliceTemplate = new ProcedureTemplate<SliceProcedure>() {
+    public static ProcedureTemplate<SliceIntervals> sliceTemplate = new ProcedureTemplate<SliceIntervals>() {
         @Override
-        public SliceProcedure createProcedure() {
-            return new SliceProcedure();
+        public SliceIntervals createProcedure() {
+            return new SliceIntervals();
+        }
+    };
+
+    public static ProcedureTemplate<SequenceCollectionAverager> sequenceAveragerTemplate = new ProcedureTemplate<SequenceCollectionAverager>() {
+        @Override
+        public SequenceCollectionAverager createProcedure() {
+            return new SequenceCollectionAverager();
         }
     };
 
@@ -218,12 +234,12 @@ public class ProcedureLibrary implements ProcedureConstants {
         templateMap.put(StockEntityInitialization.class, stockEntityInitializationTemplate);
         templateMap.put(StockQuoteUpdater.class, stockQuoteUpdaterTemplate);
         templateMap.put(WikiRipperProcedure.class, wikiRipperTemplate);
-        templateMap.put(AttachProcedure.class, attachTemplate);
-        templateMap.put(SelectionProcedure.class, selectionTemplate);
-        templateMap.put(CreateUserProcedure.class, createUserTemplate);
-        templateMap.put(FinanceNetworkBuilder.class, marketNetworkBuilderTemplate);
-        templateMap.put(SortingPercentilesProcedure.class, sortingPercentilesTemplate);
-        templateMap.put(SliceProcedure.class, sliceTemplate);
+        templateMap.put(Attach.class, attachTemplate);
+        templateMap.put(SelectOut.class, selectionTemplate);
+        templateMap.put(CreateUser.class, createUserTemplate);
+        templateMap.put(FinanceNetworkBuilder.class, financeNetworkBuilderTemplate);
+        templateMap.put(SortPercentiles.class, sortingPercentilesTemplate);
+        templateMap.put(SliceIntervals.class, sliceTemplate);
         templateMap.put(ForEach.class, forEachTemplate);
         templateMap.put(WikiNetworkBuilder.class, wikiNetworkBuilderTemplate);
         return templateMap;
@@ -245,12 +261,12 @@ public class ProcedureLibrary implements ProcedureConstants {
         templateMap.put(StockEntityInitialization.NAME, stockEntityInitializationTemplate);
         templateMap.put(StockQuoteUpdater.NAME, stockQuoteUpdaterTemplate);
         templateMap.put(WikiRipperProcedure.NAME, wikiRipperTemplate);
-        templateMap.put(AttachProcedure.NAME, attachTemplate);
-        templateMap.put(SelectionProcedure.NAME, selectionTemplate);
-        templateMap.put(CreateUserProcedure.NAME, createUserTemplate);
-        templateMap.put(FinanceNetworkBuilder.NAME, marketNetworkBuilderTemplate);
-        templateMap.put(SortingPercentilesProcedure.NAME, sortingPercentilesTemplate);
-        templateMap.put(SliceProcedure.NAME, sliceTemplate);
+        templateMap.put(Attach.NAME, attachTemplate);
+        templateMap.put(SelectOut.NAME, selectionTemplate);
+        templateMap.put(CreateUser.NAME, createUserTemplate);
+        templateMap.put(FinanceNetworkBuilder.NAME, financeNetworkBuilderTemplate);
+        templateMap.put(SortPercentiles.NAME, sortingPercentilesTemplate);
+        templateMap.put(SliceIntervals.NAME, sliceTemplate);
         templateMap.put(ForEach.NAME, forEachTemplate);
 
         return templateMap;
@@ -272,7 +288,7 @@ public class ProcedureLibrary implements ProcedureConstants {
             attachTemplate,
             selectionTemplate,
             createUserTemplate,
-            marketNetworkBuilderTemplate,
+            financeNetworkBuilderTemplate,
             sortingPercentilesTemplate,
             sliceTemplate,
             forEachTemplate
@@ -308,7 +324,7 @@ public class ProcedureLibrary implements ProcedureConstants {
         classes.add(WikiRipperProcedure.class);
 
         classes.add(FinanceNetworkBuilder.class);
-        classes.add(SortingPercentilesProcedure.class);
+        classes.add(SortPercentiles.class);
         classes.add(TimeSequenceAnalysis.class);
 
         // archive
@@ -317,9 +333,9 @@ public class ProcedureLibrary implements ProcedureConstants {
         classes.add(StockQuoteUpdater.class);
 
         // utils
-        classes.add(AttachProcedure.class);
-        classes.add(CreateUserProcedure.class);
-        classes.add(SelectionProcedure.class);
+        classes.add(Attach.class);
+        classes.add(CreateUser.class);
+        classes.add(SelectOut.class);
 
         return classes;
     }*/

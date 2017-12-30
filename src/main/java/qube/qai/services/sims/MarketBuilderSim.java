@@ -22,7 +22,7 @@ import qube.qai.network.finance.FinanceNetworkBuilder;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
 import qube.qai.procedure.utils.ForEach;
-import qube.qai.procedure.utils.SliceProcedure;
+import qube.qai.procedure.utils.SliceIntervals;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.SimulationService;
 import qube.qai.services.implementation.SearchResult;
@@ -83,23 +83,23 @@ public class MarketBuilderSim implements SimulationService, QaiConstants {
         Map map = new HashMap();
         // this will sort the values and sort them, while calculating their averages as well- which is what we actually need.
         // @TODO get this right this works differenty now
-//        SortingPercentilesProcedure sorter = ProcedureLibrary.sortingPercentilesTemplate.createProcedure();
+//        SortPercentiles sorter = ProcedureLibrary.sortingPercentilesTemplate.createProcedure();
 //        sorter.getProcedureInputs().getNamedInput(FROM).setValue(map);
 //        //retrieveEach.getProcedureInputs().getNamedInput("whatever").setValue(new ValueNode("Values", searchResults));
 //        procedureRunner.submitProcedure(sorter);
 
 
         ChangePointAnalysis changePoint = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();
-//        SelectionProcedure selectChanges = new SelectionProcedure(
+//        SelectOut selectChanges = new SelectOut(
 //                sorter.getProcedureResults().getNamedResult(AVERAGE_TIME_SEQUENCE),
 //                changePoint.getProcedureInputs().getNamedInput(INPUT_TIME_SEQUENCE));
 
-        SliceProcedure slicer = new SliceProcedure();
-//        SelectionProcedure selectChangePoints = new SelectionProcedure(
+        SliceIntervals slicer = new SliceIntervals();
+//        SelectOut selectChangePoints = new SelectOut(
 //                changePoint.getProcedureResults().getNamedResult(CHANGE_POINTS),
 //                slicer.getProcedureInputs().getNamedInput("INTERVALS"));
 
-        FinanceNetworkBuilder builderProc = ProcedureLibrary.marketNetworkBuilderTemplate.createProcedure();
+        FinanceNetworkBuilder builderProc = ProcedureLibrary.financeNetworkBuilderTemplate.createProcedure();
 
         ForEach forEach = new ForEach();
         forEach.addChild(slicer);

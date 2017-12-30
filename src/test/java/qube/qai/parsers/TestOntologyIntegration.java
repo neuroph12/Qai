@@ -22,9 +22,9 @@ import org.jparsec.Parser;
  */
 public class TestOntologyIntegration extends TestCase {
 
-    private String owlFile = "/media/rainbird/ALEPH/wiki-archives/dbpedia_2014.owl";
-    private String propertiesFile = "/media/rainbird/ALEPH/wiki-archives/mappingbased_properties_en.ttl";
-    private String personsFile = "/media/rainbird/ALEPH/wiki-archives/persondata_en.ttl";
+    private String owlFile = "/media/rainbird/GIMEL/wiki-archives/dbpedia_2014.owl";
+    private String propertiesFile = "/media/rainbird/GIMEL/wiki-archives/mappingbased_properties_en.ttl";
+    private String personsFile = "/media/rainbird/GIMEL/wiki-archives/persondata_en.ttl";
 
     /**
      * here we want to see how apache Jena works and how useful
@@ -56,7 +56,7 @@ public class TestOntologyIntegration extends TestCase {
      */
     public void testDirectIntegration() throws Exception {
         String createTable = "CREATE TEXT TABLE PersonData (Subject String, Predicate String, Object String)";
-        String assignFile = "SET TABLE PersonData SOURCE \"/media/rainbird/ALEPH/wiki-archives/persondata_en.ttl;fs=\\space\" [DESC]";
+        String assignFile = "SET TABLE PersonData SOURCE \"/media/rainbird/GIMEL/wiki-archives/persondata_en.ttl;fs=\\space\" [DESC]";
 
     }
 

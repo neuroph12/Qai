@@ -199,13 +199,13 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
 
 
     /**
-     * do the testing for the SortingPercentilesProcedure class
+     * do the testing for the SortPercentiles class
      *
      * @throws Exception
      */
     public void testSortingPercentilesProcedure() throws Exception {
 
-        SortingPercentilesProcedure procedure = new SortingPercentilesProcedure();
+        SortPercentiles procedure = new SortPercentiles();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);

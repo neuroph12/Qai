@@ -24,7 +24,7 @@ import qube.qai.procedure.archive.DirectoryIndexer;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
 import qube.qai.procedure.finance.StockEntityInitialization;
 import qube.qai.procedure.finance.StockQuoteUpdater;
-import qube.qai.procedure.utils.SelectionProcedure;
+import qube.qai.procedure.utils.SelectOut;
 import qube.qai.procedure.utils.SimpleProcedure;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
@@ -98,7 +98,7 @@ public class ModelCreatingVisitor implements NodeVisitor {
     public static BaseNode createNodeFromName(String name) {
 
         BaseNode procedure = null;
-        SelectionProcedure selection = new SelectionProcedure();
+        SelectOut selection = new SelectOut();
 
         if (ChangePointAnalysis.NAME.equals(name)) {
             procedure = new ChangePointAnalysis();
@@ -112,8 +112,8 @@ public class ModelCreatingVisitor implements NodeVisitor {
             procedure = new NeuralNetworkAnalysis();
         } else if (NeuralNetworkForwardPropagation.NAME.equals(name)) {
             procedure = new NeuralNetworkForwardPropagation();
-        } else if (SortingPercentilesProcedure.NAME.equals(name)) {
-            procedure = new SortingPercentilesProcedure();
+        } else if (SortPercentiles.NAME.equals(name)) {
+            procedure = new SortPercentiles();
         } else if (DirectoryIndexer.NAME.equals(name)) {
             procedure = new DirectoryIndexer();
         } else if (WikiArchiveIndexer.NAME.equals(name)) {
@@ -124,8 +124,8 @@ public class ModelCreatingVisitor implements NodeVisitor {
             procedure = new StockQuoteUpdater();
         } else if (WikiRipperProcedure.NAME.equals(name)) {
             procedure = new WikiRipperProcedure();
-        } else if (SelectionProcedure.NAME.equals(name)) {
-            procedure = new SelectionProcedure();
+        } else if (SelectOut.NAME.equals(name)) {
+            procedure = new SelectOut();
         } else if (SimpleProcedure.NAME.equals(name)) {
             procedure = new SimpleProcedure();
         }

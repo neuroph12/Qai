@@ -25,11 +25,11 @@ public class DirectoryIndexerTest extends QaiTestBase {
 
     private Logger logger = LoggerFactory.getLogger("DirectoryIndexerTest");
 
-    private static String wikipediaResourceDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
-    private static String wikipediaResourceIndexDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
+    private static String wikipediaResourceDirectory = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources";
+    private static String wikipediaResourceIndexDirectory = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources.index";
 
-    private static String wiktionaryResourceDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources";
-    private static String wiktionaryResourceIndexDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources.index";
+    private static String wiktionaryResourceDirectory = "/media/rainbird/GIMEL/wiki-archives/wiktionary_en.resources";
+    private static String wiktionaryResourceIndexDirectory = "/media/rainbird/GIMEL/wiki-archives/wiktionary_en.resources.index";
 
     private static String testResourceDirectory = "test/dummy.resources";
     private static String testResourceIndexDirectory = "test/dummy.resources.index";

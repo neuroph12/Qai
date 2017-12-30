@@ -14,22 +14,22 @@
 
 package qube.qai.procedure.analysis;
 
-import qube.qai.data.SelectionOperator;
 import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.Statistics;
+import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.nodes.ValueNode;
+import qube.qai.procedure.utils.ForEach;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by rainbird on 12/2/15.
+ * @Deprecated do i really need this information already at this point?
  */
-public class SortingPercentilesProcedure extends Procedure implements ProcedureConstants {
+@Deprecated
+public class SortPercentiles extends Procedure implements ProcedureConstants {
 
     public static String NAME = "Sorting Percentiles Procedure";
 
@@ -37,12 +37,18 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
             "but for the beginning, it will be taking time-series, and sorting them in order of their mean" +
             "values. top and bottom ten and the mean will be the results.";
 
+    private ForEach collectingForEach;
+
+    private TimeSequence averageSeries;
+
+    private String[] sortedUUIDs;
+
     /**
      * Selects out the specified items out of a given collection
      * but for the beginning, it will be taking time-series, and sorting them in order of their mean
      * values. top and bottom ten and the mean will be the results.
      */
-    public SortingPercentilesProcedure() {
+    public SortPercentiles() {
         super(NAME);
     }
 
@@ -61,18 +67,19 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
     @Override
     public void execute() {
 
-        Map<String, SelectionOperator> timeSeriesMap = (Map<String, SelectionOperator>) getInputValueOf(FROM);
+        //Map<String, SelectionOperator> timeSeriesMap = (Map<String, SelectionOperator>) getInputValueOf(FROM);
+        Collection<StockEntity> entities = collectingForEach.getTargetCollectionProvider().getData();
         Map<String, Statistics> statisticsMap = new TreeMap<String, Statistics>();
 
         Date[] dates = null;
         Number[] averages = null;
         int count = 0;
         // now do the actual Statistics calculation for each entry
-        for (String name : timeSeriesMap.keySet()) {
+        for (StockEntity entity : entities) {
 
             debug("Now calculating the statistics of: " + name + " the " + count + "th entry");
 
-            TimeSequence timeSequence = (TimeSequence) timeSeriesMap.get(name).getData();
+            TimeSequence timeSequence = (TimeSequence) entity.getQuotes();
             Number[] values = timeSequence.toArray();
 
             // keep copy of the first items to be used later
@@ -89,14 +96,14 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
             // now do the statistics calculation
             Statistics stats = new Statistics(values);
             stats.calculate();
-            statisticsMap.put(name, stats);
+            //statisticsMap.put(name, stats);
 
             count++;
         }
 
         // now divide each element with the number of time-series to find their average
         TimeSequence<Double> averageSeries = new TimeSequence<Double>();
-        double factor = timeSeriesMap.size();
+        double factor = entities.size();
         for (int i = 0; i < averages.length; i++) {
             averages[i] = averages[i].doubleValue() / factor;
             if (dates.length > i) {
@@ -135,4 +142,11 @@ public class SortingPercentilesProcedure extends Procedure implements ProcedureC
         }
     }
 
+    public ForEach getCollectingForEach() {
+        return collectingForEach;
+    }
+
+    public void setCollectingForEach(ForEach collectingForEach) {
+        this.collectingForEach = collectingForEach;
+    }
 }

@@ -20,7 +20,7 @@ import qube.qai.procedure.nodes.ValueNode;
 /**
  * Created by rainbird on 7/14/17.
  */
-public class CreateUserProcedure extends Procedure {
+public class CreateUser extends Procedure {
 
     public static String NAME = "Create User Procedure";
 
@@ -32,7 +32,7 @@ public class CreateUserProcedure extends Procedure {
 
     private String uuid;
 
-    public CreateUserProcedure() {
+    public CreateUser() {
         super(NAME);
     }
 

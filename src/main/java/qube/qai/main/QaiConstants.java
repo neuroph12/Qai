@@ -50,13 +50,13 @@ public interface QaiConstants {
     //    @Inject
 //    @Named("WIKIPEDIA_ARCHIVE")
     public String WIKIPEDIA_ARCHIVE = "WIKIPEDIA_ARCHIVE";
-    //public static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
+    //public static final String WIKIPEDIA_ARCHIVE = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.zip";
     //public static final String WIKIPEDIA_ARCHIVE = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
 
     //    @Inject
 //    @Named("WIKIPEDIA_DIRECTORY")
     public String WIKIPEDIA_DIRECTORY = "WIKIPEDIA_DIRECTORY";
-    //public static final String WIKIPEDIA_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
+    //public static final String WIKIPEDIA_DIRECTORY = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.index";
     //public static final String WIKIPEDIA_DIRECTORY = "/media/pi/BET/wiki-archives/wikipedia_en.index";
 
     public String WIKIPEDIA_RESOURCES = "WikiResources_en";
@@ -67,35 +67,35 @@ public interface QaiConstants {
 
     //@Named("WIKIPEDIA_RESOURCE_DIRECTORY")
     public String WIKIPEDIA_RESOURCE_DIRECTORY = "WIKIPEDIA_RESOURCE_DIRECTORY";
-    //public static final String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
+    //public static final String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources";
     //public static final String WIKIPEDIA_RESOURCE_DIRECTORY = "/media/pi/BET/wiki-archives/wikipedia_en.resources";
 
     //@Named("WIKIPEDIA_RESOURCE_INDEX")
     public String WIKIPEDIA_RESOURCE_INDEX = "WIKIPEDIA_RESOURCE_INDEX";
-    //public static final String WIKIPEDIA_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
+    //public static final String WIKIPEDIA_RESOURCE_INDEX = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources.index";
     //public static final String WIKIPEDIA_RESOURCE_INDEX = "/media/pi/BET/wiki-archives/wikipedia_en.resources.index";
 
     public String WIKTIONARY = "Wiktionary_en";
 
     //@InjectConfig(value = "WIKTIONARY_ARCHIVE")
     public String WIKTIONARY_ARCHIVE = "WIKTIONARY_ARCHIVE";
-    //public static final String WIKTIONARY_ARCHIVE = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
+    //public static final String WIKTIONARY_ARCHIVE = "/media/rainbird/GIMEL/wiki-archives/wiktionary_en.zip";
     //public static final String WIKTIONARY_ARCHIVE = "/media/pi/BET/wiki-archives/wiktionary_en.zip";
 
     //@InjectConfig("WIKTIONARY_DIRECTORY")
     public String WIKTIONARY_DIRECTORY = "WIKTIONARY_DIRECTORY";
-    //public static final String WIKTIONARY_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
+    //public static final String WIKTIONARY_DIRECTORY = "/media/rainbird/GIMEL/wiki-archives/wiktionary_en.index";
     //public static final String WIKTIONARY_DIRECTORY = "/media/pi/BET/wiki-archives/wiktionary_en.index";
 
     public String WIKTIONARY_RESOURCES = "WiktionaryResources";
 
     //@InjectConfig(value = "WIKTIONARY_RESOURCE_DIRECTORY")
     public String WIKTIONARY_RESOURCE_DIRECTORY = "WIKTIONARY_RESOURCE_DIRECTORY";
-    //public static final String WIKTIONARY_RESOURCE_DIRECTORY = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources";
+    //public static final String WIKTIONARY_RESOURCE_DIRECTORY = "/media/rainbird/GIMEL/wiki-archives/wiktionary_en.resources";
     //public static final String WIKTIONARY_RESOURCE_DIRECTORY = "/media/pi/BET/wiki-archives/wiktionary_en.resources";
 
     //@InjectConfig(value = "WIKTIONARY_RESOURCE_INDEX")
     public String WIKTIONARY_RESOURCE_INDEX = "WIKTIONARY_RESOURCE_INDEX";
-    //public static final String WIKTIONARY_RESOURCE_INDEX = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.resources.index";
+    //public static final String WIKTIONARY_RESOURCE_INDEX = "/media/rainbird/GIMEL/wiki-archives/wiktionary_en.resources.index";
     //public static final String WIKTIONARY_RESOURCE_INDEX = "/media/pi/BET/wiki-archives/wiktionary_en.resources.index";
 }

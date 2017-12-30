@@ -22,7 +22,7 @@ import qube.qai.procedure.nodes.ValueNode;
 /**
  * Created by rainbird on 3/11/17.
  */
-public class AttachProcedure extends Procedure {
+public class Attach extends Procedure {
 
     public static String NAME = "Attach Procedure";
 
@@ -49,7 +49,7 @@ public class AttachProcedure extends Procedure {
      * stock-entities, and charts and plots of data which have already been
      * generated and so on.
      */
-    public AttachProcedure() {
+    public Attach() {
         super(NAME);
     }
 
