@@ -86,14 +86,14 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
         Encog.getInstance().shutdown();
     }
 
-//    public void createTrainingSet(Map<String, Collection> trainingData) {
-//
-//        List<Date> dates = new ArrayList<Date>();
-//        Map<Date, double[]> dataSet = spliceToDates(trainingData, dates);
-//        createTrainingSet(dates, dataSet);
-//
-//    }
-
+    /**
+     * this method has to be called before the training can be
+     *
+     * @param startDate
+     * @param endDate
+     * @param dates
+     * @param sequenceMap
+     */
     public void createTrainingSet(Date startDate, Date endDate, Set<Date> dates, Map<String, TimeSequence> sequenceMap) {
 
         trainingSet = new BasicMLDataSet();

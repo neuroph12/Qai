@@ -40,7 +40,6 @@ import qube.qai.persistence.ResourceDataTest;
 import qube.qai.persistence.mapstores.*;
 import qube.qai.persistence.search.DatabaseSearchServiceTest;
 import qube.qai.persistence.search.ModelSearchServicesTest;
-import qube.qai.procedure.ProcedureLibraryTest;
 import qube.qai.procedure.analysis.AnalysisProceduresTest;
 import qube.qai.procedure.archive.ArchiveProceduresTest;
 import qube.qai.procedure.archive.DirectoryIndexerTest;
@@ -133,7 +132,7 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(DatabaseSearchServiceTest.class);
 
         // procedure
-        suite.addTestSuite(ProcedureLibraryTest.class);
+        //suite.addTestSuite(ProcedureLibraryTest.class);
         suite.addTestSuite(ProcedureManagerTest.class);
         suite.addTestSuite(ProcedureInputsAndResultsTest.class);
         suite.addTestSuite(WikiArchiveIndexerTest.class);
@@ -150,7 +149,6 @@ public class AllQaiTests extends TestCase {
 
         // procedure.finance
         suite.addTestSuite(FinanceProceduresTest.class);
-        suite.addTestSuite(StockEntityInitializationTest.class);
         suite.addTestSuite(StockEntityInitializationTest.class);
         suite.addTestSuite(StockQuoteUpdaterTest.class);
 

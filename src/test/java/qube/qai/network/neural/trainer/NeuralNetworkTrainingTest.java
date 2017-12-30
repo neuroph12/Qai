@@ -45,7 +45,7 @@ public class NeuralNetworkTrainingTest extends TestCase {
         NeuralNetwork network = new NeuralNetwork(names.length);
         BasicNetworkTrainer trainer = new BasicNetworkTrainer(network);
         List<Date> dates = createDates();
-        Map<Date, double[]> dataSet = trainer.spliceToDates(dates, timeSeriesMap);
+       /* Map<Date, double[]> dataSet = trainer.spliceToDates(dates, timeSeriesMap);
         // create the network and train the thing- remember this is 10 random entities
         trainer.createTrainingSet(dates, dataSet);
 
@@ -58,7 +58,7 @@ public class NeuralNetworkTrainingTest extends TestCase {
                 log("output: " + output[i]);
                 log("ideal: " + pair.getIdeal().getData(i));
             }
-        }
+        }*/
 
         // now we want to see the adjacency-matrix values
         network.buildAdjacencyMatrix();
@@ -74,7 +74,7 @@ public class NeuralNetworkTrainingTest extends TestCase {
 
         NeuralNetwork network = new NeuralNetwork(names.length);
         BasicNetworkTrainer trainer = new BasicNetworkTrainer(network);
-        trainer.createTrainingSet(dataMap);
+        /*trainer.createTrainingSet(dataMap);*/
 
         trainer.trainNetwork();
         for (MLDataPair pair : trainer.getTrainingSet()) {

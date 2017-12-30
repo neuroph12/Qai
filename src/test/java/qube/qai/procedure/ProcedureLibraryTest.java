@@ -36,7 +36,9 @@ import java.util.Set;
  * this is meant to be the collection tests for the templates which are created
  * by the ProcedureLibrary- those will be the used in the user interface directly
  * after all, therefore making this close to a integration test
+ * @Deprecated moved the whole test to Qoan-Module so that it can serve the integration test role there properly
  */
+@Deprecated
 public class ProcedureLibraryTest extends QaiTestBase {
 
     @Inject
