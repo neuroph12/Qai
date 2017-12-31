@@ -118,9 +118,14 @@ public class SequenceCollectionAverager extends Procedure {
             childEntity.addQuote(avgQuote);
         }
 
-
+        Iterator<Date> allDatesIt = allDates.iterator();
+        Date startDate = allDatesIt.next();
+        Date endDate = null;
+        while (allDatesIt.hasNext()) {
+            endDate = allDatesIt.next();
+        }
         // when all done and said, save the child stock-entity
-        String desc = String.format(descTemplate, getUuid());
+        String desc = String.format(descTemplate, startDate, endDate, getUuid());
         childEntity.setSecFilings(desc);
         String name = String.format(nameTemplate, tickersBuffer.toString());
         IMap<String, StockEntity> entityIMap = hazelcastInstance.getMap(QaiConstants.STOCK_ENTITIES);
