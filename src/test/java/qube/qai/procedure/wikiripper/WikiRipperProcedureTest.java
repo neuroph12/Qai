@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.SelectionOperator;
 import qube.qai.data.selectors.DataSelectionOperator;
-import qube.qai.procedure.ProcedureLibrary;
 
 import java.io.File;
 
@@ -40,7 +39,7 @@ public class WikiRipperProcedureTest extends TestCase {
      */
     public void testWikiRipper() throws Exception {
 
-        WikiRipperProcedure ripperProcedure = ProcedureLibrary.wikiRipperTemplate.createProcedure();
+        WikiRipperProcedure ripperProcedure = new WikiRipperProcedure();
         ripperProcedure.setFileToRipName(dummyWikiArchiveName);
         ripperProcedure.setFileToArchiveName(dummyWikiFileName);
         ripperProcedure.setWiktionary(false);

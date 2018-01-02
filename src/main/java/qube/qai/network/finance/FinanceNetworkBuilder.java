@@ -72,6 +72,11 @@ public class FinanceNetworkBuilder extends Procedure implements NetworkBuilder, 
     }
 
     @Override
+    public Procedure createInstance() {
+        return new FinanceNetworkBuilder();
+    }
+
+    @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
         /*getProcedureDescription().getProcedureInputs().addInput(new ValueNode<Collection<StockEntity>>(INPUT_STOCK_ENTITY_COLLECTION, MIMETYPE_STOCK_ENITIY_LIST) {

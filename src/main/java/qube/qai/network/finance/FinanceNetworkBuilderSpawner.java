@@ -14,11 +14,14 @@
 
 package qube.qai.network.finance;
 
+import com.hazelcast.core.IMap;
 import qube.qai.data.TimeSequence;
+import qube.qai.main.QaiConstants;
 import qube.qai.persistence.DummyQaiDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.SpawningProcedure;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
 import qube.qai.procedure.finance.SequenceCollectionAverager;
 import qube.qai.procedure.utils.ForEach;
@@ -31,7 +34,11 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-public class FinanceNetworkBuilderSpawner extends Procedure {
+public class FinanceNetworkBuilderSpawner extends Procedure implements SpawningProcedure {
+
+    public static final String NAME = "Finance-Netowrk Spawner";
+
+    public static final String DESCRIPTION = "This creates finance networks out of given set of finance-entities";
 
     private QaiDataProvider<Collection> entityProvider;
 
@@ -99,7 +106,30 @@ public class FinanceNetworkBuilderSpawner extends Procedure {
     }
 
     @Override
+    public Procedure createInstance() {
+        return new FinanceNetworkBuilderSpawner();
+    }
+
+    @Override
     protected void buildArguments() {
 
+    }
+
+    @Override
+    public boolean haveChildrenExceuted() {
+        boolean isAllExec = true;
+
+        IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
+        for (String uuid : spawnedProcedureUUIDS) {
+            Procedure child = procedureMap.get(uuid);
+            isAllExec = child.hasExecuted();
+        }
+
+        return isAllExec;
+    }
+
+    @Override
+    public Set<String> getSpawnedProcedureUUIDs() {
+        return spawnedProcedureUUIDS;
     }
 }

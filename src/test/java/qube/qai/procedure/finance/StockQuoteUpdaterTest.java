@@ -59,7 +59,7 @@ public class StockQuoteUpdaterTest extends TestCase implements ProcedureConstant
 
         QaiDataProvider<Collection> dataProvider = new DummyQaiDataProvider<>(entities);
 
-        ForEach forEach = ProcedureLibrary.forEachTemplate.createProcedure();
+        ForEach forEach = new ForEach();
         forEach.setTemplate(ProcedureLibrary.plainStockQuoteUpdater);
         forEach.setTargetInputName(STOCK_ENTITY);
         forEach.setTargetCollectionProvider(dataProvider);

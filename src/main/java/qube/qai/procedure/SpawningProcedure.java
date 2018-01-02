@@ -14,7 +14,12 @@
 
 package qube.qai.procedure;
 
+import java.util.Set;
+
 public interface SpawningProcedure {
 
     boolean haveChildrenExceuted();
+
+    Set<String> getSpawnedProcedureUUIDs();
+
 }

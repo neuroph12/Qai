@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiTestBase;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureLibraryInterface;
 import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.services.ProcedureRunnerInterface;
 
@@ -38,6 +38,10 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
 
     @Inject
     private HazelcastInstance hazelcastInstance;
+
+    @Inject
+    private ProcedureLibraryInterface procedureLibrary;
+
 
     @Inject
     private ProcedureRunnerInterface procedureRunner;
@@ -95,7 +99,7 @@ public class ProcedureRunnerServiceTest extends QaiTestBase {
 
         // create some procedures and see what happens
         List<String> uuidList = new ArrayList<String>();
-        Map<Class, ProcedureTemplate> templateMap = ProcedureLibrary.getTemplateMap();
+        Map<Class, ProcedureTemplate> templateMap = procedureLibrary.getTemplateMap();
         for (ProcedureTemplate template : templateMap.values()) {
             Procedure procedure = template.createProcedure();
             String uuid = procedure.getUuid();

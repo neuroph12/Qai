@@ -22,7 +22,7 @@ import qube.qai.persistence.ResourceData;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureLibraryInterface;
 import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.UUIDServiceInterface;
@@ -52,6 +52,9 @@ public class HazelcastMapsTest extends QaiTestBase {
 
     @Inject
     private HazelcastInstance hazelcastInstance;
+
+    @Inject
+    private ProcedureLibraryInterface procedureLibrary;
 
     private static String STOCK_ENTITIES = "StockEntities";
     private static String PROCEDURES = "Procedures";
@@ -158,7 +161,7 @@ public class HazelcastMapsTest extends QaiTestBase {
 
         // first get a hold of the procedures
         List<String> uuidList = new ArrayList<String>();
-        for (ProcedureTemplate template : ProcedureLibrary.getTemplateMap().values()) {
+        for (ProcedureTemplate template : procedureLibrary.getTemplateMap().values()) {
             Procedure procedure = template.createProcedure();
             String uuid = procedure.getUuid();
             if (StringUtils.isBlank(uuid)) {

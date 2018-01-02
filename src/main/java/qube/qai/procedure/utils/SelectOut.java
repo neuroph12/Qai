@@ -79,6 +79,11 @@ public class SelectOut extends Procedure {
 
     }
 
+    @Override
+    public Procedure createInstance() {
+        return new SelectOut();
+    }
+
     public ValueNode getValueFrom() {
         return valueFrom;
     }

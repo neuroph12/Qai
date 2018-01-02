@@ -23,7 +23,7 @@ import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
 import qube.qai.persistence.mapstores.DatabaseMapStoresTest;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureLibraryInterface;
 import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
@@ -32,6 +32,7 @@ import thewebsemantic.Bean2RDF;
 import thewebsemantic.RDF2Bean;
 import thewebsemantic.Sparql;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -42,6 +43,9 @@ import java.util.Date;
 public class RdfSerializationTest extends TestCase {
 
     private static Logger logger = LoggerFactory.getLogger("RdfSerializationTest");
+
+    @Inject
+    private ProcedureLibraryInterface procedureLibrary;
 
     public void testRedSerializationOfStocks() throws Exception {
 
@@ -181,11 +185,11 @@ public class RdfSerializationTest extends TestCase {
 
     }
 
-    public static Collection<Procedure> generateAllProcedures() {
+    public Collection<Procedure> generateAllProcedures() {
 
         Collection<Procedure> procedures = new ArrayList<>();
 
-        for (ProcedureTemplate template : ProcedureLibrary.getTemplateMap().values()) {
+        for (ProcedureTemplate template : procedureLibrary.getTemplateMap().values()) {
             Procedure proc = template.createProcedure();
             procedures.add(proc);
         }

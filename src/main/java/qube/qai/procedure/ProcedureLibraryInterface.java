@@ -14,17 +14,11 @@
 
 package qube.qai.procedure;
 
-import java.io.Serializable;
+import qube.qai.main.QaiConstants;
 
-/**
- * Created by rainbird on 7/14/17.
- */
-public interface ProcedureTemplate<P extends Procedure> extends Serializable {
+import java.util.Map;
 
-    P createProcedure();
+public interface ProcedureLibraryInterface extends QaiConstants {
 
-    String getProcedureName();
-
-    String getProcedureDescription();
-
+    Map<Class, ProcedureTemplate> getTemplateMap();
 }

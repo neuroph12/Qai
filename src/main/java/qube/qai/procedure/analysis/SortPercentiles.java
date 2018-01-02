@@ -121,6 +121,11 @@ public class SortPercentiles extends Procedure implements ProcedureConstants {
         setResultValueOf(AVERAGE_TIME_SEQUENCE, sortedTimeSeries);
     }
 
+    @Override
+    public Procedure createInstance() {
+        return new SortPercentiles();
+    }
+
     /**
      * class for sorting the map entities after their
      * statistical averages

@@ -37,6 +37,11 @@ public class SimpleProcedure extends Procedure {
     }
 
     @Override
+    public Procedure createInstance() {
+        return new SimpleProcedure();
+    }
+
+    @Override
     public void buildArguments() {
 //        arguments = new Arguments();
     }

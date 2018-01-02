@@ -71,4 +71,9 @@ public class NetworkStatistics extends Procedure implements ProcedureConstants {
         info("adding " + NETWORK_METRICS + " to return values");
         setResultValueOf(NETWORK_METRICS, metrics);
     }
+
+    @Override
+    public Procedure createInstance() {
+        return new NetworkStatistics();
+    }
 }

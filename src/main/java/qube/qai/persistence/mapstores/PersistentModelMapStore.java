@@ -23,11 +23,12 @@ import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureLibraryInterface;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +53,9 @@ public class PersistentModelMapStore implements MapStore {
     private Bean2RDF writer;
 
     private RDF2Bean reader;
+
+    @Inject
+    private ProcedureLibraryInterface procedureLibrary;
 
     public PersistentModelMapStore(Class baseClass, String directoryName) {
         this.baseClass = baseClass;
@@ -140,7 +144,7 @@ public class PersistentModelMapStore implements MapStore {
      */
     private Object checkProcedureTypes(Object key) {
         Object found = null;
-        for (Class klass : ProcedureLibrary.getTemplateMap().keySet()) {
+        for (Class klass : procedureLibrary.getTemplateMap().keySet()) {
             try {
                 found = reader.load(klass, key);
             } catch (NotFoundException e) {

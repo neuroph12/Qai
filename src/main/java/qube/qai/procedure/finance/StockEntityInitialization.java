@@ -129,6 +129,11 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
         hasExecuted = true;
     }
 
+    @Override
+    public Procedure createInstance() {
+        return new StockEntityInitialization();
+    }
+
     public void createCheckAndInsertStockEntitesFromFile() {
 
         String filename = pathToCsvFiles + selectedFile; //otherListedFile; //nyseFile ;

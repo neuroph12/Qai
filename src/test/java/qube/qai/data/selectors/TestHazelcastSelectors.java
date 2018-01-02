@@ -22,7 +22,7 @@ import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureLibraryInterface;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.UUIDServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -54,6 +54,9 @@ public class TestHazelcastSelectors extends QaiTestBase {
     @Inject
     @Named("Wiktionary_en")
     private SearchServiceInterface wiktionarySearch;
+
+    @Inject
+    private ProcedureLibraryInterface procedureLibrary;
 
     private String STOCK_ENTITIES = "StockEntities";
     private String PROCEDURE_SOURCE = "Procedures";
@@ -100,7 +103,7 @@ public class TestHazelcastSelectors extends QaiTestBase {
         IMap<String, Procedure> procedures = hazelcastInstance.getMap(PROCEDURE_SOURCE);
 
         List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
-        Collection<Class> procedureNames = ProcedureLibrary.getTemplateMap().keySet();
+        Collection<Class> procedureNames = procedureLibrary.getTemplateMap().keySet();
         for (Class name : procedureNames) {
             Procedure procedure = (Procedure) name.newInstance();
             assertNotNull("procedure should not be null", procedure);

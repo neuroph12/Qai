@@ -93,6 +93,11 @@ public class ChangePointAnalysis extends Procedure {
         info("finished '" + CHANGE_POINTS + "' analysis with " + markers.size() + " change-points detected");
     }
 
+    @Override
+    public Procedure createInstance() {
+        return new ChangePointAnalysis();
+    }
+
     public QaiDataProvider<StockEntity> getEntityProvider() {
         return entityProvider;
     }

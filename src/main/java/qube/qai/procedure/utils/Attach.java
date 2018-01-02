@@ -65,6 +65,11 @@ public class Attach extends Procedure {
         setResultValueOf(RELATION, statement);
     }
 
+    @Override
+    public Procedure createInstance() {
+        return new Attach();
+    }
+
     private Statement createStatement() {
 
         if (attach == null || attachTo == null) {

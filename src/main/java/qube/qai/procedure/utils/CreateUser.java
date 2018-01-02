@@ -42,6 +42,11 @@ public class CreateUser extends Procedure {
     }
 
     @Override
+    public Procedure createInstance() {
+        return new CreateUser();
+    }
+
+    @Override
     protected void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
         getProcedureDescription().getProcedureInputs().addInput(new ValueNode<String>(USER_NAME) {

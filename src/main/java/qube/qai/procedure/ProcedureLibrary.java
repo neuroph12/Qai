@@ -16,120 +16,24 @@
 package qube.qai.procedure;
 
 import qube.qai.network.finance.FinanceNetworkBuilder;
+import qube.qai.network.finance.FinanceNetworkBuilderSpawner;
 import qube.qai.network.wiki.WikiNetworkBuilder;
-import qube.qai.procedure.analysis.*;
-import qube.qai.procedure.archive.DirectoryIndexer;
-import qube.qai.procedure.archive.WikiArchiveIndexer;
+import qube.qai.procedure.analysis.ChangePointAnalysis;
+import qube.qai.procedure.analysis.SortPercentiles;
 import qube.qai.procedure.finance.SequenceCollectionAverager;
-import qube.qai.procedure.finance.StockEntityInitialization;
 import qube.qai.procedure.finance.StockQuoteUpdater;
-import qube.qai.procedure.utils.*;
-import qube.qai.procedure.wikiripper.WikiRipperProcedure;
+import qube.qai.procedure.utils.ForEach;
+import qube.qai.procedure.utils.SliceIntervals;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Created by rainbird on 7/14/17.
  */
-public class ProcedureLibrary implements ProcedureConstants {
+public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureConstants {
 
-    public static ProcedureTemplate<SimpleProcedure> simpleTemplate = new ProcedureTemplate<SimpleProcedure>() {
-        @Override
-        public SimpleProcedure createProcedure() {
-            return new SimpleProcedure();
-        }
-    };
-
-    public static ProcedureTemplate<MatrixStatistics> matrixStatisticsTemplate = new ProcedureTemplate<MatrixStatistics>() {
-        @Override
-        public MatrixStatistics createProcedure() {
-            return new MatrixStatistics();
-        }
-    };
-
-    public static ProcedureTemplate<ChangePointAnalysis> changePointAnalysisTemplate = new ProcedureTemplate<ChangePointAnalysis>() {
-        @Override
-        public ChangePointAnalysis createProcedure() {
-            return new ChangePointAnalysis();
-        }
-    };
-
-    public static ProcedureTemplate<TimeSequenceAnalysis> timeSequenceAnalysisTemplate = new ProcedureTemplate<TimeSequenceAnalysis>() {
-        @Override
-        public TimeSequenceAnalysis createProcedure() {
-            return new TimeSequenceAnalysis();
-        }
-    };
-
-    public static ProcedureTemplate<NetworkStatistics> networkStatisticstemplate = new ProcedureTemplate<NetworkStatistics>() {
-        @Override
-        public NetworkStatistics createProcedure() {
-            return new NetworkStatistics();
-        }
-    };
-
-    public static ProcedureTemplate<NeuralNetworkAnalysis> neuralNetworkAnalysisTemplate = new ProcedureTemplate<NeuralNetworkAnalysis>() {
-        @Override
-        public NeuralNetworkAnalysis createProcedure() {
-            return new NeuralNetworkAnalysis();
-        }
-    };
-
-    public static ProcedureTemplate<NeuralNetworkForwardPropagation> forwardPropagationTemplate = new ProcedureTemplate<NeuralNetworkForwardPropagation>() {
-        @Override
-        public NeuralNetworkForwardPropagation createProcedure() {
-            return new NeuralNetworkForwardPropagation();
-        }
-    };
-
-    public static ProcedureTemplate<DirectoryIndexer> directoryIndexerTemplate = new ProcedureTemplate<DirectoryIndexer>() {
-        @Override
-        public DirectoryIndexer createProcedure() {
-            return new DirectoryIndexer();
-        }
-    };
-
-    public static ProcedureTemplate<WikiArchiveIndexer> wikiArchiveIndexerTemplate = new ProcedureTemplate<WikiArchiveIndexer>() {
-        @Override
-        public WikiArchiveIndexer createProcedure() {
-            return new WikiArchiveIndexer();
-        }
-    };
-
-    public static ProcedureTemplate<StockEntityInitialization> stockEntityInitializationTemplate = new ProcedureTemplate<StockEntityInitialization>() {
-        @Override
-        public StockEntityInitialization createProcedure() {
-            return new StockEntityInitialization();
-        }
-    };
-
-    public static ProcedureTemplate<StockQuoteUpdater> plainStockQuoteUpdater = new ProcedureTemplate<StockQuoteUpdater>() {
-        @Override
-        public StockQuoteUpdater createProcedure() {
-            return new StockQuoteUpdater();
-        }
-    };
-
-    public static ProcedureTemplate<ForEach> stockQuoteUpdaterTemplate = new ProcedureTemplate<ForEach>() {
-        @Override
-        public ForEach createProcedure() {
-            ForEach forEach = new ForEach();
-            forEach.setTargetInputName(STOCK_ENTITY);
-            forEach.setTemplate(plainStockQuoteUpdater);
-            return forEach;
-        }
-    };
-
-    public static ProcedureTemplate<WikiRipperProcedure> wikiRipperTemplate = new ProcedureTemplate<WikiRipperProcedure>() {
-        @Override
-        public WikiRipperProcedure createProcedure() {
-            return new WikiRipperProcedure();
-        }
-    };
-
-    public static ProcedureTemplate<Attach> attachTemplate = new ProcedureTemplate<Attach>() {
+    /*public static ProcedureTemplate<Attach> attachTemplate = new ProcedureTemplate<Attach>() {
         @Override
         public Attach createProcedure() {
             return new Attach();
@@ -150,10 +54,113 @@ public class ProcedureLibrary implements ProcedureConstants {
         }
     };
 
+    private static ProcedureTemplate<SortPercentiles> plainSortingPercentiles = new ProcedureTemplate<SortPercentiles>() {
+        @Override
+        public SortPercentiles createProcedure() {
+            return new SortPercentiles();
+        }
+    };
+
+    public static ProcedureTemplate<StockEntityInitialization> stockEntityInitializationTemplate = new ProcedureTemplate<StockEntityInitialization>() {
+        @Override
+        public StockEntityInitialization createProcedure() {
+            return new StockEntityInitialization();
+        }
+    };
+
+    public static ProcedureTemplate<WikiRipperProcedure> wikiRipperTemplate = new ProcedureTemplate<WikiRipperProcedure>() {
+        @Override
+        public WikiRipperProcedure createProcedure() {
+            return new WikiRipperProcedure();
+        }
+    };*/
+
+    public static ProcedureTemplate<StockQuoteUpdater> plainStockQuoteUpdater = new ProcedureTemplate<StockQuoteUpdater>() {
+        @Override
+        public StockQuoteUpdater createProcedure() {
+            return new StockQuoteUpdater();
+        }
+
+        @Override
+        public String getProcedureName() {
+            return StockQuoteUpdater.NAME;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return StockQuoteUpdater.DESCRIPTION;
+        }
+    };
+
+    public static ProcedureTemplate<ForEach> stockQuoteUpdaterTemplate = new ProcedureTemplate<ForEach>() {
+        @Override
+        public ForEach createProcedure() {
+            ForEach forEach = new ForEach();
+            forEach.setTargetInputName(STOCK_ENTITY);
+            forEach.setTemplate(plainStockQuoteUpdater);
+            return forEach;
+        }
+
+        @Override
+        public String getProcedureName() {
+            return StockQuoteUpdater.NAME;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return StockQuoteUpdater.DESCRIPTION;
+        }
+    };
+
+    public static ProcedureTemplate<ChangePointAnalysis> changePointAnalysisTemplate = new ProcedureTemplate<ChangePointAnalysis>() {
+        @Override
+        public ChangePointAnalysis createProcedure() {
+            return new ChangePointAnalysis();
+        }
+
+        @Override
+        public String getProcedureName() {
+            return ChangePointAnalysis.NAME;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return ChangePointAnalysis.DESCRIPTION;
+        }
+    };
+
+    public static ProcedureTemplate<FinanceNetworkBuilderSpawner> financeNetworkBuilderSpawnerTemplate = new ProcedureTemplate<FinanceNetworkBuilderSpawner>() {
+        @Override
+        public FinanceNetworkBuilderSpawner createProcedure() {
+            //ForEach
+            return null;
+        }
+
+        @Override
+        public String getProcedureName() {
+            return FinanceNetworkBuilderSpawner.NAME;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return FinanceNetworkBuilderSpawner.DESCRIPTION;
+        }
+    };
+
     public static ProcedureTemplate<FinanceNetworkBuilder> financeNetworkBuilderTemplate = new ProcedureTemplate<FinanceNetworkBuilder>() {
         @Override
         public FinanceNetworkBuilder createProcedure() {
             return new FinanceNetworkBuilder();
+        }
+
+        @Override
+        public String getProcedureName() {
+            return FinanceNetworkBuilder.NAME;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return FinanceNetworkBuilder.DESCRIPTION;
         }
     };
 
@@ -162,14 +169,18 @@ public class ProcedureLibrary implements ProcedureConstants {
         public SequenceCollectionAverager createProcedure() {
             return new SequenceCollectionAverager();
         }
-    };
 
-    private static ProcedureTemplate<SortPercentiles> plainSortingPercentiles = new ProcedureTemplate<SortPercentiles>() {
         @Override
-        public SortPercentiles createProcedure() {
-            return new SortPercentiles();
+        public String getProcedureName() {
+            return SequenceCollectionAverager.NAME;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return SequenceCollectionAverager.DESCRIPTION;
         }
     };
+
 
     /**
      * remember this is a template which is meant to be executed with the
@@ -188,12 +199,32 @@ public class ProcedureLibrary implements ProcedureConstants {
             procedure.getProcedureDescription().getProcedureInputs().getNamedInput(FROM).setValue(forEach);
             return forEach;
         }
+
+        @Override
+        public String getProcedureName() {
+            return SortPercentiles.NAME;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return SortPercentiles.DESCRIPTION;
+        }
     };
 
     public static ProcedureTemplate<SliceIntervals> sliceTemplate = new ProcedureTemplate<SliceIntervals>() {
         @Override
         public SliceIntervals createProcedure() {
             return new SliceIntervals();
+        }
+
+        @Override
+        public String getProcedureName() {
+            return null;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return null;
         }
     };
 
@@ -202,75 +233,98 @@ public class ProcedureLibrary implements ProcedureConstants {
         public SequenceCollectionAverager createProcedure() {
             return new SequenceCollectionAverager();
         }
+
+        @Override
+        public String getProcedureName() {
+            return null;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return null;
+        }
     };
 
-    public static ProcedureTemplate<ForEach> forEachTemplate = new ProcedureTemplate<ForEach>() {
+    /*public static ProcedureTemplate<ForEach> forEachTemplate = new ProcedureTemplate<ForEach>() {
         @Override
         public ForEach createProcedure() {
             return new ForEach();
         }
-    };
+    };*/
 
     public static ProcedureTemplate<WikiNetworkBuilder> wikiNetworkBuilderTemplate = new ProcedureTemplate<WikiNetworkBuilder>() {
         @Override
         public WikiNetworkBuilder createProcedure() {
             return new WikiNetworkBuilder();
         }
+
+        @Override
+        public String getProcedureName() {
+            return null;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return null;
+        }
     };
 
-    public static Map<Class, ProcedureTemplate> getTemplateMap() {
+    @Override
+    public Map<Class, ProcedureTemplate> getTemplateMap() {
 
         Map<Class, ProcedureTemplate> templateMap = new HashMap<>();
 
-        templateMap.put(SimpleProcedure.class, simpleTemplate);
-        templateMap.put(MatrixStatistics.class, matrixStatisticsTemplate);
+        //templateMap.put(SimpleProcedure.class, simpleTemplate);
+        //templateMap.put(MatrixStatistics.class, matrixStatisticsTemplate);
+        //templateMap.put(TimeSequenceAnalysis.class, timeSequenceAnalysisTemplate);
+        //templateMap.put(NetworkStatistics.class, networkStatisticstemplate);
+        //templateMap.put(NeuralNetworkAnalysis.class, neuralNetworkAnalysisTemplate);
+        //templateMap.put(NeuralNetworkForwardPropagation.class, forwardPropagationTemplate);
+        //templateMap.put(DirectoryIndexer.class, directoryIndexerTemplate);
+        //templateMap.put(WikiArchiveIndexer.class, wikiArchiveIndexerTemplate);
+        //templateMap.put(StockEntityInitialization.class, stockEntityInitializationTemplate);
+        //templateMap.put(WikiRipperProcedure.class, wikiRipperTemplate);
+        //templateMap.put(Attach.class, attachTemplate);
+        //templateMap.put(SelectOut.class, selectionTemplate);
+        //templateMap.put(CreateUser.class, createUserTemplate);
+        //templateMap.put(SortPercentiles.class, sortingPercentilesTemplate);
+        //templateMap.put(ForEach.class, forEachTemplate);
+
         templateMap.put(ChangePointAnalysis.class, changePointAnalysisTemplate);
-        templateMap.put(TimeSequenceAnalysis.class, timeSequenceAnalysisTemplate);
-        templateMap.put(NetworkStatistics.class, networkStatisticstemplate);
-        templateMap.put(NeuralNetworkAnalysis.class, neuralNetworkAnalysisTemplate);
-        templateMap.put(NeuralNetworkForwardPropagation.class, forwardPropagationTemplate);
-        templateMap.put(DirectoryIndexer.class, directoryIndexerTemplate);
-        templateMap.put(WikiArchiveIndexer.class, wikiArchiveIndexerTemplate);
-        templateMap.put(StockEntityInitialization.class, stockEntityInitializationTemplate);
         templateMap.put(StockQuoteUpdater.class, stockQuoteUpdaterTemplate);
-        templateMap.put(WikiRipperProcedure.class, wikiRipperTemplate);
-        templateMap.put(Attach.class, attachTemplate);
-        templateMap.put(SelectOut.class, selectionTemplate);
-        templateMap.put(CreateUser.class, createUserTemplate);
         templateMap.put(FinanceNetworkBuilder.class, financeNetworkBuilderTemplate);
-        templateMap.put(SortPercentiles.class, sortingPercentilesTemplate);
         templateMap.put(SliceIntervals.class, sliceTemplate);
-        templateMap.put(ForEach.class, forEachTemplate);
         templateMap.put(WikiNetworkBuilder.class, wikiNetworkBuilderTemplate);
-        return templateMap;
-    }
-
-    public static Map<String, ProcedureTemplate> getTemplateNameMap() {
-
-        Map<String, ProcedureTemplate> templateMap = new TreeMap<>();
-
-        templateMap.put(SimpleProcedure.NAME, simpleTemplate);
-        templateMap.put(MatrixStatistics.NAME, matrixStatisticsTemplate);
-        templateMap.put(ChangePointAnalysis.NAME, changePointAnalysisTemplate);
-        templateMap.put(TimeSequenceAnalysis.NAME, timeSequenceAnalysisTemplate);
-        templateMap.put(NetworkStatistics.NAME, networkStatisticstemplate);
-        templateMap.put(NeuralNetworkAnalysis.NAME, neuralNetworkAnalysisTemplate);
-        templateMap.put(NeuralNetworkForwardPropagation.NAME, forwardPropagationTemplate);
-        templateMap.put(DirectoryIndexer.NAME, directoryIndexerTemplate);
-        templateMap.put(WikiArchiveIndexer.NAME, wikiArchiveIndexerTemplate);
-        templateMap.put(StockEntityInitialization.NAME, stockEntityInitializationTemplate);
-        templateMap.put(StockQuoteUpdater.NAME, stockQuoteUpdaterTemplate);
-        templateMap.put(WikiRipperProcedure.NAME, wikiRipperTemplate);
-        templateMap.put(Attach.NAME, attachTemplate);
-        templateMap.put(SelectOut.NAME, selectionTemplate);
-        templateMap.put(CreateUser.NAME, createUserTemplate);
-        templateMap.put(FinanceNetworkBuilder.NAME, financeNetworkBuilderTemplate);
-        templateMap.put(SortPercentiles.NAME, sortingPercentilesTemplate);
-        templateMap.put(SliceIntervals.NAME, sliceTemplate);
-        templateMap.put(ForEach.NAME, forEachTemplate);
 
         return templateMap;
     }
+
+//    public static Map<String, ProcedureTemplate> getTemplateNameMap() {
+//
+//        Map<String, ProcedureTemplate> templateMap = new TreeMap<>();
+//
+//        templateMap.put(SimpleProcedure.NAME, simpleTemplate);
+//        templateMap.put(MatrixStatistics.NAME, matrixStatisticsTemplate);
+//        templateMap.put(ChangePointAnalysis.NAME, changePointAnalysisTemplate);
+//        templateMap.put(TimeSequenceAnalysis.NAME, timeSequenceAnalysisTemplate);
+//        templateMap.put(NetworkStatistics.NAME, networkStatisticstemplate);
+//        templateMap.put(NeuralNetworkAnalysis.NAME, neuralNetworkAnalysisTemplate);
+//        templateMap.put(NeuralNetworkForwardPropagation.NAME, forwardPropagationTemplate);
+//        templateMap.put(DirectoryIndexer.NAME, directoryIndexerTemplate);
+//        templateMap.put(WikiArchiveIndexer.NAME, wikiArchiveIndexerTemplate);
+//        templateMap.put(StockEntityInitialization.NAME, stockEntityInitializationTemplate);
+//        templateMap.put(StockQuoteUpdater.NAME, stockQuoteUpdaterTemplate);
+//        templateMap.put(WikiRipperProcedure.NAME, wikiRipperTemplate);
+//        templateMap.put(Attach.NAME, attachTemplate);
+//        templateMap.put(SelectOut.NAME, selectionTemplate);
+//        templateMap.put(CreateUser.NAME, createUserTemplate);
+//        templateMap.put(FinanceNetworkBuilder.NAME, financeNetworkBuilderTemplate);
+//        templateMap.put(SortPercentiles.NAME, sortingPercentilesTemplate);
+//        templateMap.put(SliceIntervals.NAME, sliceTemplate);
+//        templateMap.put(ForEach.NAME, forEachTemplate);
+//
+//        return templateMap;
+//    }
 
     /*public static ProcedureTemplate[] allTemplates = new ProcedureTemplate[]{
             simpleTemplate,

@@ -14,7 +14,6 @@
 
 package qube.qai.procedure.archive;
 
-import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.nodes.ProcedureDescription;
 import qube.qai.procedure.nodes.ProcedureTestBase;
 
@@ -25,7 +24,7 @@ public class ArchiveProceduresTest extends ProcedureTestBase {
 
     public void testDirectoryIndexer() throws Exception {
 
-        DirectoryIndexer procedure = ProcedureLibrary.directoryIndexerTemplate.createProcedure();
+        DirectoryIndexer procedure = new DirectoryIndexer();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -38,7 +37,7 @@ public class ArchiveProceduresTest extends ProcedureTestBase {
 
     public void testWikiArchiveIndexer() throws Exception {
 
-        WikiArchiveIndexer procedure = ProcedureLibrary.wikiArchiveIndexerTemplate.createProcedure();
+        WikiArchiveIndexer procedure = new WikiArchiveIndexer();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);

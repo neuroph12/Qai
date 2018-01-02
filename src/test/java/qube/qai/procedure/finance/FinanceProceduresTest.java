@@ -15,17 +15,23 @@
 package qube.qai.procedure.finance;
 
 import qube.qai.main.QaiTestBase;
-import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureLibraryInterface;
 import qube.qai.procedure.nodes.ProcedureDescription;
+
+import javax.inject.Inject;
 
 /**
  * Created by rainbird on 4/7/17.
  */
 public class FinanceProceduresTest extends QaiTestBase {
 
+
+    @Inject
+    private ProcedureLibraryInterface procedureLibrary;
+
     public void testStockEntityInitialization() throws Exception {
 
-        StockEntityInitialization procedure = ProcedureLibrary.stockEntityInitializationTemplate.createProcedure();
+        StockEntityInitialization procedure = null; //procedureLibrary.stockEntityInitializationTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);

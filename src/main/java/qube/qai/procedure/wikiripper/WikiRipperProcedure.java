@@ -74,6 +74,11 @@ public class WikiRipperProcedure extends Procedure {
     }
 
     @Override
+    public Procedure createInstance() {
+        return new WikiRipperProcedure();
+    }
+
+    @Override
     public void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
         getProcedureDescription().getProcedureInputs().addInput(new ValueNode<String>(INPUT_FILENAME) {

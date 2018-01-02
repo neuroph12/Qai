@@ -28,6 +28,11 @@ public class WikiNetworkBuilder extends Procedure implements NetworkBuilder {
     }
 
     @Override
+    public Procedure createInstance() {
+        return new WikiNetworkBuilder();
+    }
+
+    @Override
     protected void buildArguments() {
 
     }

@@ -56,7 +56,7 @@ public class ProcedureLibraryTest extends QaiTestBase {
         fail("implement the rest of the test");
     }
 
-    public void estChangePointAnalysis() throws Exception {
+    public void testChangePointAnalysis() throws Exception {
 
         Set<StockEntity> entities = pickRandomFrom(1);
         assertTrue("there has to be a stock entity", !entities.isEmpty());
@@ -98,7 +98,7 @@ public class ProcedureLibraryTest extends QaiTestBase {
      * @throws Exception
      */
     @Deprecated
-    public void estSortingPercentilesTemplate() throws Exception {
+    public void testSortingPercentilesTemplate() throws Exception {
 
         Set<StockEntity> pickedEntities = pickRandomFrom(5);
 
@@ -121,7 +121,7 @@ public class ProcedureLibraryTest extends QaiTestBase {
         assertTrue("procedure must have run by now", procedure.hasExecuted());
     }
 
-    public void estStockQuoteRetrieverTemplate() throws Exception {
+    public void testStockQuoteRetrieverTemplate() throws Exception {
 
         ForEach foreach = ProcedureLibrary.stockQuoteUpdaterTemplate.createProcedure();
         assertNotNull("duh!", foreach);

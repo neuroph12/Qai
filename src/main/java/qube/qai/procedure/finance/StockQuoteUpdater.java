@@ -85,6 +85,11 @@ public class StockQuoteUpdater extends Procedure {
 
     }
 
+    @Override
+    public Procedure createInstance() {
+        return new StockQuoteUpdater();
+    }
+
     private Collection<StockQuote> retrieveQuotesFor(String stockName) {
 
         Collection<StockQuote> quotes = new ArrayList<StockQuote>();

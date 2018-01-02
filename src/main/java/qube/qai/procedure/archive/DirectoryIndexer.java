@@ -107,6 +107,11 @@ public class DirectoryIndexer extends Procedure implements ProcedureConstants {
         }
     }
 
+    @Override
+    public Procedure createInstance() {
+        return new DirectoryIndexer();
+    }
+
     private void indexFilesIn(File directory, IndexWriter writer) throws IOException {
 
         File[] files = directory.listFiles();

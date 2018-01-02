@@ -49,6 +49,8 @@ public abstract class Procedure extends ConcatenationNode
 
     public static String NAME = "Procedure";
 
+    public static String DESCRIPTION = "Description of the procedure";
+
     @Inject
     protected transient DataSelectorFactory selectorFactory;
 
@@ -81,6 +83,8 @@ public abstract class Procedure extends ConcatenationNode
      * this is what procedures do after all
      */
     public abstract void execute();
+
+    public abstract Procedure createInstance();
 
     /**
      * hook for visitors

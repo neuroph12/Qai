@@ -70,4 +70,9 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
 
     }
 
+    @Override
+    public Procedure createInstance() {
+        return new NeuralNetworkAnalysis();
+    }
+
 }

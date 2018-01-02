@@ -75,4 +75,9 @@ public class TimeSequenceAnalysis extends Procedure implements ProcedureConstant
         metrics = stats.buildMetrics();
         info("Time-sequence-analysis ended with '" + TIME_SEQUENCE_METRICS);
     }
+
+    @Override
+    public Procedure createInstance() {
+        return new TimeSequenceAnalysis();
+    }
 }

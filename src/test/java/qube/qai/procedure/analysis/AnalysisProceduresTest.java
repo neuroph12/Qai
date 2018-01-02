@@ -48,7 +48,7 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
      */
     public void testProcedureInputs() throws Exception {
 
-        SimpleProcedure simple = ProcedureLibrary.simpleTemplate.createProcedure();
+        SimpleProcedure simple = new SimpleProcedure();
         String name = ProcedureConstants.INPUT_MATRIX;
         Matrix matrix = Matrix.createMatrix(true, 100, 100);
         simple.getProcedureDescription().getProcedureResults().addResult(new ValueNode(name, matrix));
@@ -68,7 +68,7 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
      */
     public void testMatrixStatistics() throws Exception {
 
-        MatrixStatistics procedure = ProcedureLibrary.matrixStatisticsTemplate.createProcedure();
+        MatrixStatistics procedure = new MatrixStatistics();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("arguments may not be null", description);
@@ -108,7 +108,7 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
      */
     public void testTimeSeriesAnalysis() throws Exception {
 
-        TimeSequenceAnalysis procedure = ProcedureLibrary.timeSequenceAnalysisTemplate.createProcedure();
+        TimeSequenceAnalysis procedure = new TimeSequenceAnalysis();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -130,7 +130,7 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
      */
     public void testNetworkStatistics() throws Exception {
 
-        NetworkStatistics procedure = ProcedureLibrary.networkStatisticstemplate.createProcedure();
+        NetworkStatistics procedure = new NetworkStatistics();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -146,7 +146,7 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
      */
     public void testNeuralNetworkAnalysis() throws Exception {
 
-        NeuralNetworkAnalysis procedure = ProcedureLibrary.neuralNetworkAnalysisTemplate.createProcedure();
+        NeuralNetworkAnalysis procedure = new NeuralNetworkAnalysis();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -164,7 +164,7 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
      */
     public void testNeuralNetworkForwardPropagation() throws Exception {
 
-        NeuralNetworkForwardPropagation procedure = ProcedureLibrary.forwardPropagationTemplate.createProcedure();
+        NeuralNetworkForwardPropagation procedure = new NeuralNetworkForwardPropagation();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);

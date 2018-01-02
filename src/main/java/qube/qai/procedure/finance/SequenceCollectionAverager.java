@@ -38,6 +38,10 @@ public class SequenceCollectionAverager extends Procedure {
 
     private Map<String, TimeSequence> sequenceMap;
 
+    private Date startDate;
+
+    private Date endDate;
+
     private Set<Date> allDates;
 
     private Set<String> allUUIDs;
@@ -119,22 +123,51 @@ public class SequenceCollectionAverager extends Procedure {
         }
 
         Iterator<Date> allDatesIt = allDates.iterator();
-        Date startDate = allDatesIt.next();
-        Date endDate = null;
+        startDate = allDatesIt.next();
         while (allDatesIt.hasNext()) {
             endDate = allDatesIt.next();
         }
         // when all done and said, save the child stock-entity
+        String name = String.format(nameTemplate, tickersBuffer.toString());
+        childEntity.setName(name);
         String desc = String.format(descTemplate, startDate, endDate, getUuid());
         childEntity.setSecFilings(desc);
-        String name = String.format(nameTemplate, tickersBuffer.toString());
         IMap<String, StockEntity> entityIMap = hazelcastInstance.getMap(QaiConstants.STOCK_ENTITIES);
         entityIMap.put(getUuid(), childEntity);
     }
 
     @Override
+    public Procedure createInstance() {
+        return new SequenceCollectionAverager();
+    }
+
+    @Override
     protected void buildArguments() {
 
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Set<String> getAllUUIDs() {
+        return allUUIDs;
+    }
+
+    public void setAllUUIDs(Set<String> allUUIDs) {
+        this.allUUIDs = allUUIDs;
     }
 
     public Set<Date> getAllDates() {

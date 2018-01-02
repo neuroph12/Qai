@@ -86,4 +86,9 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
         info("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");
     }
 
+    @Override
+    public Procedure createInstance() {
+        return new MatrixStatistics();
+    }
+
 }

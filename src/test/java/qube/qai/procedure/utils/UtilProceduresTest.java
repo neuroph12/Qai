@@ -17,7 +17,6 @@ package qube.qai.procedure.utils;
 import qube.qai.persistence.DummyQaiDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
-import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.nodes.ProcedureDescription;
 import qube.qai.procedure.nodes.ProcedureTestBase;
 
@@ -30,7 +29,7 @@ public class UtilProceduresTest extends ProcedureTestBase {
 
     public void testAttachProcedure() throws Exception {
 
-        Attach procedure = ProcedureLibrary.attachTemplate.createProcedure();
+        Attach procedure = new Attach();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -43,7 +42,7 @@ public class UtilProceduresTest extends ProcedureTestBase {
 
     public void testSelectionProcedure() throws Exception {
 
-        SelectOut procedure = ProcedureLibrary.selectionTemplate.createProcedure();
+        SelectOut procedure = new SelectOut();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -56,7 +55,7 @@ public class UtilProceduresTest extends ProcedureTestBase {
 
     public void testSimpleProcedure() throws Exception {
 
-        SimpleProcedure procedure = ProcedureLibrary.simpleTemplate.createProcedure();
+        SimpleProcedure procedure = new SimpleProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
@@ -104,7 +103,7 @@ public class UtilProceduresTest extends ProcedureTestBase {
 
     public void testCreateUserProcedure() throws Exception {
 
-        CreateUser procedure = ProcedureLibrary.createUserTemplate.createProcedure();
+        CreateUser procedure = new CreateUser();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);

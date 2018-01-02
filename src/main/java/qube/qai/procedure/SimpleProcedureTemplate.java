@@ -14,17 +14,27 @@
 
 package qube.qai.procedure;
 
-import java.io.Serializable;
 
-/**
- * Created by rainbird on 7/14/17.
- */
-public interface ProcedureTemplate<P extends Procedure> extends Serializable {
+public class SimpleProcedureTemplate<P extends Procedure> implements ProcedureTemplate<P> {
 
-    P createProcedure();
+    private P procedure;
 
-    String getProcedureName();
+    public SimpleProcedureTemplate(P procedure) {
+        this.procedure = procedure;
+    }
 
-    String getProcedureDescription();
+    @Override
+    public P createProcedure() {
+        return (P) procedure.createInstance();
+    }
 
+    @Override
+    public String getProcedureName() {
+        return procedure.NAME;
+    }
+
+    @Override
+    public String getProcedureDescription() {
+        return procedure.DESCRIPTION;
+    }
 }
