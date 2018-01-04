@@ -15,7 +15,6 @@
 
 package qube.qai.procedure;
 
-import qube.qai.network.finance.FinanceNetworkBuilder;
 import qube.qai.network.finance.FinanceNetworkBuilderSpawner;
 import qube.qai.network.wiki.WikiNetworkBuilder;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
@@ -23,7 +22,6 @@ import qube.qai.procedure.analysis.SortPercentiles;
 import qube.qai.procedure.finance.SequenceCollectionAverager;
 import qube.qai.procedure.finance.StockQuoteUpdater;
 import qube.qai.procedure.utils.ForEach;
-import qube.qai.procedure.utils.SliceIntervals;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,24 +71,69 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
         public WikiRipperProcedure createProcedure() {
             return new WikiRipperProcedure();
         }
-    };*/
+    };
 
-    public static ProcedureTemplate<StockQuoteUpdater> plainStockQuoteUpdater = new ProcedureTemplate<StockQuoteUpdater>() {
+    public static ProcedureTemplate<SliceIntervals> sliceTemplate = new ProcedureTemplate<SliceIntervals>() {
         @Override
-        public StockQuoteUpdater createProcedure() {
-            return new StockQuoteUpdater();
+        public SliceIntervals createProcedure() {
+            return new SliceIntervals();
         }
 
         @Override
         public String getProcedureName() {
-            return StockQuoteUpdater.NAME;
+            return null;
         }
 
         @Override
         public String getProcedureDescription() {
-            return StockQuoteUpdater.DESCRIPTION;
+            return null;
         }
     };
+
+    public static ProcedureTemplate<SequenceCollectionAverager> sequenceAveragerTemplate = new ProcedureTemplate<SequenceCollectionAverager>() {
+        @Override
+        public SequenceCollectionAverager createProcedure() {
+            return new SequenceCollectionAverager();
+        }
+
+        @Override
+        public String getProcedureName() {
+            return null;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return null;
+        }
+    };
+
+    public static ProcedureTemplate<ForEach> forEachTemplate = new ProcedureTemplate<ForEach>() {
+        @Override
+        public ForEach createProcedure() {
+            return new ForEach();
+        }
+    };
+
+    public static ProcedureTemplate<FinanceNetworkBuilder> financeNetworkBuilderTemplate = new ProcedureTemplate<FinanceNetworkBuilder>() {
+        @Override
+        public FinanceNetworkBuilder createProcedure() {
+            return new FinanceNetworkBuilder();
+        }
+
+        @Override
+        public String getProcedureName() {
+            return FinanceNetworkBuilder.NAME;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return FinanceNetworkBuilder.DESCRIPTION;
+        }
+    };*/
+
+
+    private static ProcedureTemplate<StockQuoteUpdater> plainStockQuoteUpdater = new SimpleProcedureTemplate<StockQuoteUpdater>(new StockQuoteUpdater());
+    ;
 
     public static ProcedureTemplate<ForEach> stockQuoteUpdaterTemplate = new ProcedureTemplate<ForEach>() {
         @Override
@@ -147,22 +190,6 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
         }
     };
 
-    public static ProcedureTemplate<FinanceNetworkBuilder> financeNetworkBuilderTemplate = new ProcedureTemplate<FinanceNetworkBuilder>() {
-        @Override
-        public FinanceNetworkBuilder createProcedure() {
-            return new FinanceNetworkBuilder();
-        }
-
-        @Override
-        public String getProcedureName() {
-            return FinanceNetworkBuilder.NAME;
-        }
-
-        @Override
-        public String getProcedureDescription() {
-            return FinanceNetworkBuilder.DESCRIPTION;
-        }
-    };
 
     public static ProcedureTemplate<SequenceCollectionAverager> sequenceAveragertemplate = new ProcedureTemplate<SequenceCollectionAverager>() {
         @Override
@@ -211,46 +238,7 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
         }
     };
 
-    public static ProcedureTemplate<SliceIntervals> sliceTemplate = new ProcedureTemplate<SliceIntervals>() {
-        @Override
-        public SliceIntervals createProcedure() {
-            return new SliceIntervals();
-        }
 
-        @Override
-        public String getProcedureName() {
-            return null;
-        }
-
-        @Override
-        public String getProcedureDescription() {
-            return null;
-        }
-    };
-
-    public static ProcedureTemplate<SequenceCollectionAverager> sequenceAveragerTemplate = new ProcedureTemplate<SequenceCollectionAverager>() {
-        @Override
-        public SequenceCollectionAverager createProcedure() {
-            return new SequenceCollectionAverager();
-        }
-
-        @Override
-        public String getProcedureName() {
-            return null;
-        }
-
-        @Override
-        public String getProcedureDescription() {
-            return null;
-        }
-    };
-
-    /*public static ProcedureTemplate<ForEach> forEachTemplate = new ProcedureTemplate<ForEach>() {
-        @Override
-        public ForEach createProcedure() {
-            return new ForEach();
-        }
-    };*/
 
     public static ProcedureTemplate<WikiNetworkBuilder> wikiNetworkBuilderTemplate = new ProcedureTemplate<WikiNetworkBuilder>() {
         @Override
@@ -289,11 +277,12 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
         //templateMap.put(CreateUser.class, createUserTemplate);
         //templateMap.put(SortPercentiles.class, sortingPercentilesTemplate);
         //templateMap.put(ForEach.class, forEachTemplate);
+        //templateMap.put(FinanceNetworkBuilder.class, financeNetworkBuilderTemplate);
+        //templateMap.put(SliceIntervals.class, sliceTemplate);
 
         templateMap.put(ChangePointAnalysis.class, changePointAnalysisTemplate);
         templateMap.put(StockQuoteUpdater.class, stockQuoteUpdaterTemplate);
-        templateMap.put(FinanceNetworkBuilder.class, financeNetworkBuilderTemplate);
-        templateMap.put(SliceIntervals.class, sliceTemplate);
+        templateMap.put(SequenceCollectionAverager.class, sequenceAveragertemplate);
         templateMap.put(WikiNetworkBuilder.class, wikiNetworkBuilderTemplate);
 
         return templateMap;

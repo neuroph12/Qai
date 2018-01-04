@@ -27,6 +27,8 @@ import qube.qai.persistence.*;
 import qube.qai.persistence.mapstores.*;
 import qube.qai.persistence.search.DatabaseSearchService;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureLibraryInterface;
 import qube.qai.security.ProcedureManager;
 import qube.qai.security.ProcedureManagerInterface;
 import qube.qai.services.SearchServiceInterface;
@@ -145,7 +147,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     protected void configure() {
 
         // for the time being nothing to do here.
-
+        bind(ProcedureLibraryInterface.class).to(ProcedureLibrary.class);
     }
 
     @Provides

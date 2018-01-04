@@ -3,7 +3,8 @@ in order to prepare raspberries there is a row of things which need be done
 check the mounted disks with
 df -h
 
-umount /dev/sdX1
+usually
+umount /dev/mmcblk0p1
 
 this is the command to install the image on sd-card
 sudo dd bs=4M if=2015-11-21-raspbian-jessie.img of=/dev/mmcblk0
@@ -75,9 +76,12 @@ in order to have larger memory for the JVM
 latest configuration of boxes in intranet
 192.168.1.2	- modelserver
 192.168.1.3 - weber
-192.168.1.4 - services-server jenkins/wiki
+192.168.1.4 - services-server wiki
 192.168.1.7 - qainode- mysql database-server/artifactory
-192.168.1.8 - stann
+192.168.1.8 - jenkins (mysql-local, jenkins, artifactory)
+192.168.1.9 - stann
+192.168.1.10- qoanserver
+192.168.1.11- wednesday
 
 MySql-server and related things
 remember to change mysql-server settings in /etc/mysql/my.cnf

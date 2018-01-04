@@ -18,10 +18,8 @@ import junit.framework.TestCase;
 import qube.qai.persistence.DummyQaiDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
-import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.utils.ForEach;
 import qube.qai.services.ProcedureRunnerInterface;
 
@@ -39,7 +37,7 @@ public class StockQuoteUpdaterTest extends TestCase implements ProcedureConstant
 
         //Injector injector = createInjector();
         //EntityManager entityManager = injector.getInstance(EntityManager.class);
-        StockQuoteUpdater retriever = ProcedureLibrary.plainStockQuoteUpdater.createProcedure();
+        /*StockQuoteUpdater retriever = ProcedureLibrary.plainStockQuoteUpdater.createProcedure();
         String tickerSymbol = "GOOG";
         StockEntity entity = new StockEntity();
         entity.setTickerSymbol(tickerSymbol);
@@ -50,7 +48,7 @@ public class StockQuoteUpdaterTest extends TestCase implements ProcedureConstant
 
         for (StockQuote quote : entity.getQuotes()) {
             log(quote.getTickerSymbol() + " $" + quote.getAdjustedClose() + " on: " + quote.getQuoteDate());
-        }
+        }*/
     }
 
     public void testWithForEach() throws Exception {
@@ -60,7 +58,7 @@ public class StockQuoteUpdaterTest extends TestCase implements ProcedureConstant
         QaiDataProvider<Collection> dataProvider = new DummyQaiDataProvider<>(entities);
 
         ForEach forEach = new ForEach();
-        forEach.setTemplate(ProcedureLibrary.plainStockQuoteUpdater);
+        //forEach.setTemplate(ProcedureLibrary.plainStockQuoteUpdater);
         forEach.setTargetInputName(STOCK_ENTITY);
         forEach.setTargetCollectionProvider(dataProvider);
 

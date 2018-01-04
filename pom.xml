@@ -61,11 +61,11 @@
     <dependencies>
         <!-- GRPH graph-library- added directly as a jar,
         because maven doesn't download the thing out of some reason -->
-        <dependency>
+        <!--<dependency>
             <groupId>grph</groupId>
             <artifactId>grph.all</artifactId>
             <version>1.6.29</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>qube.samsroad</groupId>
