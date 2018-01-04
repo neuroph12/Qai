@@ -279,11 +279,11 @@
             <type>pom</type>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.jena</groupId>
-            <artifactId>jena-csv</artifactId>
-            <version>3.2.0</version>
-        </dependency>
+        <!-- <dependency>
+             <groupId>org.apache.jena</groupId>
+             <artifactId>jena-csv</artifactId>
+             <version>3.2.0</version>
+         </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.apache.jena/jena-text -->
         <!--<dependency>-->
@@ -300,11 +300,11 @@
 
 
         <!-- https://mvnrepository.com/artifact/com.thewebsemantic/jenabean -->
-        <!--<dependency>-->
-        <!--<groupId>com.thewebsemantic</groupId>-->
-        <!--<artifactId>jenabean</artifactId>-->
-        <!--<version>1.1</version>-->
-        <!--</dependency>-->
+        <!--<dependency>
+            <groupId>com.thewebsemantic</groupId>
+            <artifactId>jenabean</artifactId>
+            <version>1.0.6</version>
+        </dependency>-->
 
         <!-- -->
         <!--<dependency>-->

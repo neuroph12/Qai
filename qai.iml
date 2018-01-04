@@ -29,26 +29,12 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../qoan/lib/samsroad-1.0.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/grph-1.6.29-big.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-javadoc.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-sources.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-javadoc.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-sources.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/thewebsemantic-1.1.jar!/" />
-          <root url="jar://$MODULE_DIR$/lib/thewebsemantic-1.1-src.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
           <root url="jar://$MODULE_DIR$/../qoan/lib/samsroad-1.0.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/grph-1.6.29-big.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-javadoc.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-pdf-3.0.19-sources.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-javadoc.jar!/" />
-          <root url="jar://$MODULE_DIR$/../qoan/lib/bliki-core-3.0.19-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/thewebsemantic-1.1-src.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -204,9 +190,6 @@
     <orderEntry type="library" name="Maven: org.apache.thrift:libthrift:0.9.3" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.7.21" level="project" />
     <orderEntry type="library" name="Maven: org.apache.jena:jena-rdfconnection:3.2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.jena:jena-csv:3.2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.jena:jena-cmds:3.2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.21" level="project" />
     <orderEntry type="library" name="Maven: org.milyn:milyn-smooks-all:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.milyn:milyn-commons:1.6" level="project" />
     <orderEntry type="library" name="Maven: javassist:javassist:3.10.0.GA" level="project" />

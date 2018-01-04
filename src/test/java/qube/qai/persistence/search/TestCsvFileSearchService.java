@@ -15,7 +15,6 @@
 package qube.qai.persistence.search;
 
 import junit.framework.TestCase;
-import org.apache.jena.propertytable.graph.GraphCSV;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
@@ -104,7 +103,7 @@ public class TestCsvFileSearchService extends TestCase {
 
     public void restCsvFileModel() throws Exception {
 
-        String filename = pathToCsvFiles + sNp500File;
+       /* String filename = pathToCsvFiles + sNp500File;
         Model csvModel = ModelFactory.createModelForGraph(new GraphCSV(filename));
         log("model size: " + csvModel.size());
 //        csvModel.write(System.out);
@@ -126,7 +125,7 @@ public class TestCsvFileSearchService extends TestCase {
                 log("property: '" + predicate + "' -> '" + stmt.getObject().asLiteral().getValue() + "'");
             }
             log("=================================================================");
-        }
+        }*/
     }
 
     public void restCsvFileSparql() throws Exception {
