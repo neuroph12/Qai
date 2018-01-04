@@ -68,6 +68,12 @@
         </dependency>-->
 
         <dependency>
+            <groupId>com.thewebsemantic</groupId>
+            <artifactId>jenabean</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>qube.samsroad</groupId>
             <artifactId>samsroad</artifactId>
             <version>1.0</version>

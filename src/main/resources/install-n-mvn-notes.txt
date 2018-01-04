@@ -52,6 +52,7 @@ these have been eliminated already
 # mvn install:install-file -Dfile=./lib/bliki-core-3.0.19.jar -DgroupId=info.bliki.wiki -DartifactId=bliki-core -Dversion=3.0.19 -Dpackaging=jar
 # mvn install:install-file -Dfile=./lib/bliki-pdf-3.0.19.jar -DgroupId=info.bliki.pdf -DartifactId=bliki-pdf -Dversion=3.0.19 -Dpackaging=jar
 # mvn install:install-file -Dfile=./lib/grph-1.6.29-big.jar -DgroupId=grph -DartifactId=grph.all -Dversion=1.6.29 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/thewebsemantic-1.1.jar -DgroupId=com.thewebsemnatic -DartifactId=jenabean -Dversion=1.1 -Dpackaging=jar
 mvn install:install-file -Dfile=./lib/samsroad-1.0.jar -DgroupId=qube.samsroad -DartifactId=samsroad -Dversion=1.0 -Dpackaging=jar
 
 you'll need to install Qai in order to satisfy Qoan's dependency- do it with skip-test option!

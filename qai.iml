@@ -38,6 +38,7 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: com.thewebsemantic:jenabean:1.1" level="project" />
     <orderEntry type="library" name="Maven: qube.samsroad:samsroad:1.0" level="project" />
     <orderEntry type="library" name="Maven: info.bliki.wiki:bliki-core:3.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.3.6" level="project" />
