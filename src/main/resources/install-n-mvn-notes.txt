@@ -51,8 +51,8 @@ everything to come from maven-repository
 these have been eliminated already
 # mvn install:install-file -Dfile=./lib/bliki-core-3.0.19.jar -DgroupId=info.bliki.wiki -DartifactId=bliki-core -Dversion=3.0.19 -Dpackaging=jar
 # mvn install:install-file -Dfile=./lib/bliki-pdf-3.0.19.jar -DgroupId=info.bliki.pdf -DartifactId=bliki-pdf -Dversion=3.0.19 -Dpackaging=jar
-# mvn install:install-file -Dfile=./lib/grph-1.6.29-big.jar -DgroupId=grph -DartifactId=grph.all -Dversion=1.6.29 -Dpackaging=jar
-mvn install:install-file -Dfile=./lib/thewebsemantic-1.1.jar -DgroupId=com.thewebsemnatic -DartifactId=jenabean -Dversion=1.1 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/grph-2.1.2-big.jar -DgroupId=grph -DartifactId=grph -Dversion=2.1.2 -Dpackaging=jar
+mvn install:install-file -Dfile=./lib/thewebsemantic-1.1.jar -DgroupId=com.thewebsemantic -DartifactId=jenabean -Dversion=1.1 -Dpackaging=jar
 mvn install:install-file -Dfile=./lib/samsroad-1.0.jar -DgroupId=qube.samsroad -DartifactId=samsroad -Dversion=1.0 -Dpackaging=jar
 
 you'll need to install Qai in order to satisfy Qoan's dependency- do it with skip-test option!
@@ -76,11 +76,11 @@ in order to have larger memory for the JVM
 -Xmx1024M -Xss128M -XX:-UseGCOverheadLimit -XX:+CMSClassUnloadingEnabled
 
 latest configuration of boxes in intranet
-192.168.1.2	- modelserver
-192.168.1.3 - weber
+#192.168.1.2	- modelserver
+#192.168.1.3 - weber
 192.168.1.4 - services-server wiki
-192.168.1.7 - qainode- mysql database-server/artifactory
-192.168.1.8 - jenkins (mysql-local, jenkins, artifactory)
+192.168.1.7 - database-server mysql/artifactory
+192.168.1.8 - jenkins (jenkins)
 192.168.1.9 - stann
 192.168.1.10- qoanserver
 192.168.1.11- wednesday
@@ -116,6 +116,7 @@ on services-server running:
 jam-wiki:
 http://192.168.1.4:8081/wiki
 
-jenkins (will be moved to another server later on)
-http://192.168.1.4:8081/jenkins/
+jenkins [ 192.168.1.8 ]
 
+artifactory
+http://192.168.1.7:8081/artifactory/webapp

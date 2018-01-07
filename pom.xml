@@ -59,13 +59,6 @@
     </properties>
 
     <dependencies>
-        <!-- GRPH graph-library- added directly as a jar,
-        because maven doesn't download the thing out of some reason -->
-        <!--<dependency>
-            <groupId>grph</groupId>
-            <artifactId>grph.all</artifactId>
-            <version>1.6.29</version>
-        </dependency>-->
 
         <dependency>
             <groupId>com.thewebsemantic</groupId>
@@ -104,7 +97,7 @@
         <dependency>
             <groupId>grph</groupId>
             <artifactId>grph</artifactId>
-            <version>1.10.8</version>
+            <version>2.1.2</version>
         </dependency>
 
         <!-- ojalgo for matrix things -->
@@ -441,34 +434,8 @@
             <name>Luc Hogie Maven repository</name>
             <url>http://www.i3s.unice.fr/~hogie/maven_repository/</url>
         </repository>
-        <!--<repository>-->
-        <!--<id>central</id>-->
-        <!--<url>http://192.168.1.4:8081/artifactory/libs-release-local</url>-->
-        <!--<snapshots>-->
-        <!--<enabled>false</enabled>-->
-        <!--</snapshots>-->
-        <!--</repository>-->
-        <!--<repository>-->
-        <!--<id>snapshots</id>-->
-        <!--<url>http://192.168.1.4:8081/artifactory/libs-snapshot-local</url>-->
-        <!--<releases>-->
-        <!--<enabled>false</enabled>-->
-        <!--</releases>-->
-        <!--</repository>-->
-        <!--<repository>-->
-        <!--<id>release</id>-->
-        <!--<url>http://192.168.1.4:8081/artifactory/ext-release-local</url>-->
-        <!--<releases>-->
-        <!--<enabled>false</enabled>-->
-        <!--</releases>-->
-        <!--</repository>-->
-        <!--<repository>-->
-        <!--<id>local-lib</id>-->
-        <!--<url>http://192.168.1.4:8081/artifactory/libs-release-local</url>-->
-        <!--<releases>-->
-        <!--<enabled>false</enabled>-->
-        <!--</releases>-->
-        <!--</repository>-->
+
+
     </repositories>
 
     <pluginRepositories>
