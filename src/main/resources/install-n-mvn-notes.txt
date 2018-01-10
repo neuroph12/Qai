@@ -63,10 +63,10 @@ maven's dependency tree can be checked:
 mvn dependency:tree -Dverbose -Dincludes=commons-collections
 
 when done with compiling and installing the whole- in order to run Qoan-server
-mvn exec:java -Dexec.mainClass="qube.qoan.server.WebServer"
+mvn exec:java -Dexec.mainClass="qube.qoan.server.WebServer" -o
 
 or Qai-node
-mvn exec:java -Dexec.mainClass="qube.qai.main.QaiNode"
+mvn exec:java -Dexec.mainClass="qube.qai.main.QaiNode" -o
 
 // these are for getting the latest copy of the whole
 git pull rainbird@192.168.1.6:/home/rainbird/projects/work/qai
