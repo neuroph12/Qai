@@ -82,8 +82,10 @@ latest configuration of boxes in intranet
 192.168.1.7 - database-server mysql/artifactory
 192.168.1.8 - jenkins (jenkins)
 192.168.1.9 - stann
-192.168.1.10- qoanserver
+192.168.1.10- qoansday
 192.168.1.11- wednesday
+192.168.1.13- monday
+192.168.1.14- tuesday
 
 MySql-server and related things
 remember to change mysql-server settings in /etc/mysql/my.cnf

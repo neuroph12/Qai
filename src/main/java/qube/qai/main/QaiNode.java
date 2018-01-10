@@ -39,6 +39,12 @@ public class QaiNode {
 
     private String NODE_NAME = "QaiNode";
 
+    // this is where the different configration can be loadaed
+    private String PROPERTIES_FILE = "qube/qai/main/config_monday.properties";
+    //private String PROPERTIES_FILE = "qube/qai/main/config_tuesday.properties";
+    //private String PROPERTIES_FILE = "qube/qai/main/config_wednesday.properties";
+    //private String PROPERTIES_FILE = "qube/qai/main/config_dev.properties";
+
     @Inject
     private HazelcastInstance hazelcastInstance;
 
@@ -56,7 +62,7 @@ public class QaiNode {
             Properties properties = new Properties();
 
             ClassLoader loader = QaiServerModule.class.getClassLoader();
-            URL url = loader.getResource("qube/qai/main/config_dev.properties");
+            URL url = loader.getResource(PROPERTIES_FILE);
             properties.load(url.openStream());
 
             qaiServer = new QaiServerModule(properties);

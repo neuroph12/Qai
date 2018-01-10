@@ -455,4 +455,12 @@
         <!--</pluginRepository>-->
     </pluginRepositories>
 
+    <distributionManagement>
+        <repository>
+            <id>artifactory.repo</id>
+            <name>Qoan Project Repository</name>
+            <url>http://192.168.1.7:8081/artifactory/libs-snapshot-local</url>
+        </repository>
+    </distributionManagement>
+
 </project>
