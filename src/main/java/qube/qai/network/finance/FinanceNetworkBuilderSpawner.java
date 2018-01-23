@@ -17,14 +17,13 @@ package qube.qai.network.finance;
 import com.hazelcast.core.IMap;
 import qube.qai.data.TimeSequence;
 import qube.qai.main.QaiConstants;
-import qube.qai.persistence.DummyQaiDataProvider;
+import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.SpawningProcedure;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
 import qube.qai.procedure.finance.SequenceCollectionAverager;
-import qube.qai.procedure.utils.ForEach;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.QaiInjectorService;
 
@@ -69,9 +68,9 @@ public class FinanceNetworkBuilderSpawner extends Procedure implements SpawningP
 
         averager = new SequenceCollectionAverager();
         QaiInjectorService.getInstance().injectMembers(averager);
-        ForEach forEach = new ForEach();
-        forEach.setTargetCollectionProvider(entityProvider);
-        averager.setCollectorForEach(forEach);
+//        ForEach forEach = new ForEach();
+//        forEach.setTargetCollectionProvider(entityProvider);
+//        averager.setSelect(forEach);
 
         averager.execute();
 
@@ -80,7 +79,7 @@ public class FinanceNetworkBuilderSpawner extends Procedure implements SpawningP
 
         StockEntity averageEntity = averager.getChildEntity();
         changePoint = new ChangePointAnalysis();
-        changePoint.setEntityProvider(new DummyQaiDataProvider<>(averageEntity));
+        changePoint.setEntityProvider(new DataProvider<>(averageEntity));
         QaiInjectorService.getInstance().injectMembers(changePoint);
 
         changePoint.execute();

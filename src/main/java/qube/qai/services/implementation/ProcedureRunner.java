@@ -38,7 +38,7 @@ public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandl
 
     private static String startMessageTemplate = "Start-request for procedure: '%s' with uuid: '%s' has been received";
 
-    private static String unauthorizedMessageTemplate = "Procedure '%s' with '%s' does not have the required credentials for execution!";
+    private static String unauthorizedMessageTemplate = "Procedure '%s' with '%s' submitted by '%s' does not have the required credentials for execution!";
 
     private static String procStartedMessageTemplate = "Procedure '%s' with uuid: '%s' has been started successfully...";
 
@@ -83,7 +83,7 @@ public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandl
 
         if (!procedureManager.isProcedureAndUserAuthorized(procedure)) {
             String rightViolation = String.format(unauthorizedMessageTemplate,
-                    procedure.getProcedureName(), procedure.getUuid());
+                    procedure.getProcedureName(), procedure.getUuid(), procedure.getUser());
             logger.info(rightViolation);
             return;
         }
@@ -94,8 +94,10 @@ public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandl
 
         if (procedures.containsKey(uuid)) {
             procedures.replace(uuid, procedure);
+            logger.info("procedure " + procedure.getProcedureName() + " was already in database- replacing");
         } else {
             procedures.put(uuid, procedure);
+            logger.info("procedure " + procedure.getProcedureName() + " was not found- creating");
         }
 
         IExecutorService executor = hazelcastInstance.getExecutorService(SERVICE_NAME);

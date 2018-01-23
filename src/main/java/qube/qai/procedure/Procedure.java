@@ -222,6 +222,22 @@ public abstract class Procedure extends ConcatenationNode
         return (ProcedureDescription) getFirstChild();
     }
 
+    public static String getNAME() {
+        return NAME;
+    }
+
+    public static void setNAME(String name) {
+        Procedure.NAME = name;
+    }
+
+    public static String getDESCRIPTION() {
+        return DESCRIPTION;
+    }
+
+    public static void setDESCRIPTION(String description) {
+        Procedure.DESCRIPTION = description;
+    }
+
     public User getUser() {
         return user;
     }
@@ -278,7 +294,7 @@ public abstract class Procedure extends ConcatenationNode
         if (user != null) {
             return user.getUsername();
         } else {
-            return "-";
+            return "n/a";
         }
     }
 

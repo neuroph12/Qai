@@ -63,10 +63,10 @@ maven's dependency tree can be checked:
 mvn dependency:tree -Dverbose -Dincludes=commons-collections
 
 when done with compiling and installing the whole- in order to run Qoan-server
-mvn exec:java -Dexec.mainClass="qube.qoan.server.WebServer" -o
+mvn -o exec:java -Dexec.mainClass="qube.qoan.server.WebServer"
 
 or Qai-node
-mvn exec:java -Dexec.mainClass="qube.qai.main.QaiNode" -o
+mvn -o exec:java -Dexec.mainClass="qube.qai.main.QaiNode"
 
 // these are for getting the latest copy of the whole
 git pull rainbird@192.168.1.6:/home/rainbird/projects/work/qai
@@ -77,15 +77,15 @@ in order to have larger memory for the JVM
 
 latest configuration of boxes in intranet
 #192.168.1.2	- modelserver
-#192.168.1.3 - weber
-192.168.1.4 - services-server wiki
-192.168.1.7 - database-server mysql/artifactory
-192.168.1.8 - jenkins (jenkins)
-192.168.1.9 - stann
-192.168.1.10- qoansday
-192.168.1.11- wednesday
-192.168.1.13- monday
-192.168.1.14- tuesday
+#192.168.1.3    - weber
+192.168.1.4     - services-server wiki
+192.168.1.7     - database-server mysql/artifactory
+192.168.1.8     - jenkins (jenkins)
+192.168.1.9     - stann
+192.168.1.10    - qoansday
+192.168.1.11    - wednesday
+192.168.1.13    - monday
+192.168.1.14    - tuesday
 
 MySql-server and related things
 remember to change mysql-server settings in /etc/mysql/my.cnf

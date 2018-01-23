@@ -46,7 +46,7 @@ public class SyntaxNetworkBuilderTest extends QaiTestBase {
 /*    @Override
     protected void setUp() throws Exception {
         super.setUp();
-        //wikiArticleProvider = new DummyQaiDataProvider(WIKIPEDIA, new WikiArticle());
+        //wikiArticleProvider = new DataProvider(WIKIPEDIA, new WikiArticle());
     }*/
 
     /**

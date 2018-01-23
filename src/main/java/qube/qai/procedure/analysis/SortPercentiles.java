@@ -16,6 +16,7 @@ package qube.qai.procedure.analysis;
 
 import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.Statistics;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
@@ -68,17 +69,18 @@ public class SortPercentiles extends Procedure implements ProcedureConstants {
     public void execute() {
 
         //Map<String, SelectionOperator> timeSeriesMap = (Map<String, SelectionOperator>) getInputValueOf(FROM);
-        Collection<StockEntity> entities = collectingForEach.getTargetCollectionProvider().getData();
+        Collection<QaiDataProvider> entityProviders = collectingForEach.getProviderCollection();
         Map<String, Statistics> statisticsMap = new TreeMap<String, Statistics>();
 
         Date[] dates = null;
         Number[] averages = null;
         int count = 0;
         // now do the actual Statistics calculation for each entry
-        for (StockEntity entity : entities) {
+        for (QaiDataProvider<StockEntity> provider : entityProviders) {
 
             debug("Now calculating the statistics of: " + name + " the " + count + "th entry");
 
+            StockEntity entity = provider.getData();
             TimeSequence timeSequence = (TimeSequence) entity.getQuotes();
             Number[] values = timeSequence.toArray();
 
@@ -103,7 +105,7 @@ public class SortPercentiles extends Procedure implements ProcedureConstants {
 
         // now divide each element with the number of time-series to find their average
         TimeSequence<Double> averageSeries = new TimeSequence<Double>();
-        double factor = entities.size();
+        double factor = entityProviders.size();
         for (int i = 0; i < averages.length; i++) {
             averages[i] = averages[i].doubleValue() / factor;
             if (dates.length > i) {

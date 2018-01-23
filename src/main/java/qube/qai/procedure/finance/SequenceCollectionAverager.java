@@ -18,10 +18,11 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import qube.qai.data.TimeSequence;
 import qube.qai.main.QaiConstants;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.utils.ForEach;
+import qube.qai.procedure.utils.Select;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -34,7 +35,7 @@ public class SequenceCollectionAverager extends Procedure {
 
     private StockEntity childEntity;
 
-    private ForEach collectorForEach;
+    private Select select;
 
     private Map<String, TimeSequence> sequenceMap;
 
@@ -60,15 +61,11 @@ public class SequenceCollectionAverager extends Procedure {
     @Override
     public void execute() {
 
-        if (collectorForEach == null || collectorForEach.getTargetCollectionProvider() == null) {
+        if (select == null || select.getProviders() == null) {
             throw new IllegalStateException("Procedure has not been set-up right, no data to work with. Have to terminate");
         }
 
-        if (!collectorForEach.haveChildrenExceuted()) {
-            collectorForEach.execute();
-        }
-
-        Collection<StockEntity> entities = collectorForEach.getTargetCollectionProvider().getData();
+        Collection<QaiDataProvider> providers = select.getProviders();
         allUUIDs = new LinkedHashSet<>();
         allDates = new TreeSet<>();
         childEntity = new StockEntity();
@@ -77,9 +74,10 @@ public class SequenceCollectionAverager extends Procedure {
         // first collect all dates
         sequenceMap = new HashMap<>();
         StringBuffer tickersBuffer = new StringBuffer();
-        for (Iterator<StockEntity> it = entities.iterator(); it.hasNext(); ) {
+        for (Iterator<QaiDataProvider> it = providers.iterator(); it.hasNext(); ) {
 
-            StockEntity entity = it.next();
+            QaiDataProvider<StockEntity> provider = it.next();
+            StockEntity entity = provider.getData();
 
             // first begin with noting the ticker symbol
             allUUIDs.add(entity.getUuid());
@@ -194,11 +192,11 @@ public class SequenceCollectionAverager extends Procedure {
         this.childEntity = childEntity;
     }
 
-    public ForEach getCollectorForEach() {
-        return collectorForEach;
+    public Select getSelect() {
+        return select;
     }
 
-    public void setCollectorForEach(ForEach collectorForEach) {
-        this.collectorForEach = collectorForEach;
+    public void setSelect(Select select) {
+        this.select = select;
     }
 }

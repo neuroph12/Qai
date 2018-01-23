@@ -108,7 +108,7 @@ public class QaiTestModule extends AbstractModule {
 
 //    @Provides
 //    public QaiDataProvider provideDataProvider() {
-//        return new DummyQaiDataProvider();
+//        return new DataProvider();
 //    }
 
     @Provides

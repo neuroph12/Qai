@@ -15,7 +15,7 @@
 package qube.qai.procedure.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import qube.qai.persistence.DummyQaiDataProvider;
+import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureTemplate;
@@ -43,7 +43,9 @@ public class ForEach extends Procedure implements SpawningProcedure {
 //    @Inject
 //    private transient HazelcastInstance hazelcastInstance;
 
-    protected QaiDataProvider<Collection> targetCollectionProvider;
+    protected Select select;
+
+    protected Collection<QaiDataProvider> providerCollection;
 
     protected String targetInputName;
 
@@ -67,11 +69,11 @@ public class ForEach extends Procedure implements SpawningProcedure {
     @Override
     protected void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<QaiDataProvider<Collection>>(TARGET_COLLECTION) {
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<Select>(TARGET_COLLECTION) {
             @Override
-            public void setValue(QaiDataProvider<Collection> value) {
+            public void setValue(Select value) {
                 super.setValue(value);
-                targetCollectionProvider = value;
+                select = value;
             }
         });
         getProcedureDescription().getProcedureInputs().addInput(new ValueNode<String>(TARGET_INPUT_NAME) {
@@ -88,12 +90,12 @@ public class ForEach extends Procedure implements SpawningProcedure {
                 template = value;
             }
         });
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode<QaiDataProvider<Collection>>(TARGET_COLLECTION) {
-            @Override
-            public QaiDataProvider<Collection> getValue() {
-                return targetCollectionProvider;
-            }
-        });
+//        getProcedureDescription().getProcedureResults().addResult(new Select(TARGET_COLLECTION) {
+//            @Override
+//            public Select getValue() {
+//                return select;
+//            }
+//        });
     }
 
     @Override
@@ -117,10 +119,13 @@ public class ForEach extends Procedure implements SpawningProcedure {
                 throw new IllegalArgumentException(message);
             }
 
-            Collection objects = targetCollectionProvider.getData();
-            for (Object param : objects) {
+            if (providerCollection == null) {
+                providerCollection = select.getProviders();
+            }
+
+            for (QaiDataProvider param : providerCollection) {
                 Procedure procedure = template.createProcedure();
-                QaiDataProvider provider = new DummyQaiDataProvider(param);
+                QaiDataProvider provider = new DataProvider(param.getData());
                 procedure.getProcedureDescription().getProcedureInputs().getNamedInput(targetInputName).setValue(provider);
                 procedureRunner.submitProcedure(procedure);
 
@@ -175,12 +180,25 @@ public class ForEach extends Procedure implements SpawningProcedure {
         return spawnedProcedureUUIDs;
     }
 
-    public QaiDataProvider<Collection> getTargetCollectionProvider() {
-        return targetCollectionProvider;
+    public Collection<QaiDataProvider> getProviderCollection() {
+
+        if (providerCollection == null) {
+            providerCollection = select.getProviders();
+        }
+
+        return providerCollection;
     }
 
-    public void setTargetCollectionProvider(QaiDataProvider<Collection> targetCollectionProvider) {
-        this.targetCollectionProvider = targetCollectionProvider;
+    public void setProviderCollection(Collection<QaiDataProvider> providerCollection) {
+        this.providerCollection = providerCollection;
+    }
+
+    public Select getSelect() {
+        return select;
+    }
+
+    public void setSelect(Select select) {
+        this.select = select;
     }
 
     public String getTargetInputName() {

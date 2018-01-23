@@ -15,7 +15,7 @@
 package qube.qai.procedure.finance;
 
 import junit.framework.TestCase;
-import qube.qai.persistence.DummyQaiDataProvider;
+import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
@@ -41,7 +41,7 @@ public class StockQuoteUpdaterTest extends TestCase implements ProcedureConstant
         String tickerSymbol = "GOOG";
         StockEntity entity = new StockEntity();
         entity.setTickerSymbol(tickerSymbol);
-        QaiDataProvider<StockEntity> provider = new DummyQaiDataProvider<StockEntity>(entity);
+        QaiDataProvider<StockEntity> provider = new DataProvider<StockEntity>(entity);
         retriever.setEntityProvider(provider);
 
         retriever.execute();
@@ -55,12 +55,12 @@ public class StockQuoteUpdaterTest extends TestCase implements ProcedureConstant
 
         Collection<StockEntity> entities = createTestEntites();
 
-        QaiDataProvider<Collection> dataProvider = new DummyQaiDataProvider<>(entities);
+        QaiDataProvider<Collection> dataProvider = new DataProvider<>(entities);
 
         ForEach forEach = new ForEach();
         //forEach.setTemplate(ProcedureLibrary.plainStockQuoteUpdater);
         forEach.setTargetInputName(STOCK_ENTITY);
-        forEach.setTargetCollectionProvider(dataProvider);
+        //forEach.setTargetCollectionProvider(dataProvider);
 
         ProcedureRunnerInterface dummyRunner = new ProcedureRunnerInterface() {
             @Override

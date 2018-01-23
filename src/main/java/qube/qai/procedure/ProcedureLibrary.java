@@ -22,6 +22,7 @@ import qube.qai.procedure.analysis.SortPercentiles;
 import qube.qai.procedure.finance.SequenceCollectionAverager;
 import qube.qai.procedure.finance.StockQuoteUpdater;
 import qube.qai.procedure.utils.ForEach;
+import qube.qai.procedure.utils.Select;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -135,23 +136,39 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
     private static ProcedureTemplate<StockQuoteUpdater> plainStockQuoteUpdater = new SimpleProcedureTemplate<StockQuoteUpdater>(new StockQuoteUpdater());
     ;
 
-    public static ProcedureTemplate<ForEach> stockQuoteUpdaterTemplate = new ProcedureTemplate<ForEach>() {
+
+    public static ProcedureTemplate<WikiNetworkBuilder> wikiNetworkBuilderTemplate = new ProcedureTemplate<WikiNetworkBuilder>() {
         @Override
-        public ForEach createProcedure() {
-            ForEach forEach = new ForEach();
-            forEach.setTargetInputName(STOCK_ENTITY);
-            forEach.setTemplate(plainStockQuoteUpdater);
-            return forEach;
+        public WikiNetworkBuilder createProcedure() {
+            return new WikiNetworkBuilder();
         }
 
         @Override
         public String getProcedureName() {
-            return StockQuoteUpdater.NAME;
+            return null;
         }
 
         @Override
         public String getProcedureDescription() {
-            return StockQuoteUpdater.DESCRIPTION;
+            return null;
+        }
+    };
+
+    public static ProcedureTemplate<FinanceNetworkBuilderSpawner> financeNetworkBuilderTemplate = new ProcedureTemplate<FinanceNetworkBuilderSpawner>() {
+        @Override
+        public FinanceNetworkBuilderSpawner createProcedure() {
+            //ForEach
+            return null;
+        }
+
+        @Override
+        public String getProcedureName() {
+            return FinanceNetworkBuilderSpawner.NAME;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return FinanceNetworkBuilderSpawner.DESCRIPTION;
         }
     };
 
@@ -172,29 +189,15 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
         }
     };
 
-    public static ProcedureTemplate<FinanceNetworkBuilderSpawner> financeNetworkBuilderSpawnerTemplate = new ProcedureTemplate<FinanceNetworkBuilderSpawner>() {
+    public static ProcedureTemplate<Select> sequenceAveragerTemplate = new ProcedureTemplate<Select>() {
         @Override
-        public FinanceNetworkBuilderSpawner createProcedure() {
-            //ForEach
-            return null;
-        }
+        public Select createProcedure() {
+            SequenceCollectionAverager averager = new SequenceCollectionAverager();
+            Select select = new Select();
 
-        @Override
-        public String getProcedureName() {
-            return FinanceNetworkBuilderSpawner.NAME;
-        }
+            averager.setSelect(select);
 
-        @Override
-        public String getProcedureDescription() {
-            return FinanceNetworkBuilderSpawner.DESCRIPTION;
-        }
-    };
-
-
-    public static ProcedureTemplate<SequenceCollectionAverager> sequenceAveragertemplate = new ProcedureTemplate<SequenceCollectionAverager>() {
-        @Override
-        public SequenceCollectionAverager createProcedure() {
-            return new SequenceCollectionAverager();
+            return select;
         }
 
         @Override
@@ -214,7 +217,6 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
      * input from the gui-layer, in this case a collection of pointers to
      * stock-entities whose quotes need first updated
      */
-    @Deprecated
     public static ProcedureTemplate<ForEach> sortingPercentilesTemplate = new ProcedureTemplate<ForEach>() {
 
         @Override
@@ -239,21 +241,23 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
     };
 
 
-
-    public static ProcedureTemplate<WikiNetworkBuilder> wikiNetworkBuilderTemplate = new ProcedureTemplate<WikiNetworkBuilder>() {
+    public static ProcedureTemplate<ForEach> stockQuoteUpdaterTemplate = new ProcedureTemplate<ForEach>() {
         @Override
-        public WikiNetworkBuilder createProcedure() {
-            return new WikiNetworkBuilder();
+        public ForEach createProcedure() {
+            ForEach forEach = new ForEach();
+            forEach.setTargetInputName(STOCK_ENTITY);
+            forEach.setTemplate(plainStockQuoteUpdater);
+            return forEach;
         }
 
         @Override
         public String getProcedureName() {
-            return null;
+            return StockQuoteUpdater.NAME;
         }
 
         @Override
         public String getProcedureDescription() {
-            return null;
+            return StockQuoteUpdater.DESCRIPTION;
         }
     };
 
@@ -280,10 +284,12 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
         //templateMap.put(FinanceNetworkBuilder.class, financeNetworkBuilderTemplate);
         //templateMap.put(SliceIntervals.class, sliceTemplate);
 
-        templateMap.put(ChangePointAnalysis.class, changePointAnalysisTemplate);
-        templateMap.put(StockQuoteUpdater.class, stockQuoteUpdaterTemplate);
-        templateMap.put(SequenceCollectionAverager.class, sequenceAveragertemplate);
         templateMap.put(WikiNetworkBuilder.class, wikiNetworkBuilderTemplate);
+        templateMap.put(Procedure.class, financeNetworkBuilderTemplate);
+        templateMap.put(ChangePointAnalysis.class, changePointAnalysisTemplate);
+        templateMap.put(SequenceCollectionAverager.class, sequenceAveragerTemplate);
+        templateMap.put(SortPercentiles.class, sortingPercentilesTemplate);
+        templateMap.put(StockQuoteUpdater.class, stockQuoteUpdaterTemplate);
 
         return templateMap;
     }

@@ -14,7 +14,7 @@
 
 package qube.qai.procedure.utils;
 
-import qube.qai.persistence.DummyQaiDataProvider;
+import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.nodes.ProcedureDescription;
@@ -83,7 +83,7 @@ public class UtilProceduresTest extends ProcedureTestBase {
         fail("Security issues are not yet tested!");
 
         Collection<StockEntity> stockEntities = null;
-        QaiDataProvider<Collection<StockEntity>> entityProvider = new DummyQaiDataProvider<>(stockEntities);
+        QaiDataProvider<Collection<StockEntity>> entityProvider = new DataProvider<>(stockEntities);
 
     }
 

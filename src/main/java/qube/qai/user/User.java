@@ -213,4 +213,23 @@ public class User implements Serializable {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        String rolesStr = "[";
+        if (roles != null && !roles.isEmpty()) {
+            for (Role role : roles) {
+                rolesStr += role.getName() + " ";
+            }
+        }
+        rolesStr += "] ";
+        String permStr = "[";
+        if (permissions != null && !permissions.isEmpty()) {
+            for (Permission permission : permissions) {
+                permStr += permission.getName() + " ";
+            }
+        }
+        permStr += "]";
+        return username + " " + rolesStr + permStr;
+    }
 }
