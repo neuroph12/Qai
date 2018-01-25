@@ -27,9 +27,7 @@ import java.util.*;
 
 /**
  * Created by rainbird on 12/2/15.
- * @Deprecated do i really need this information already at this point?
  */
-@Deprecated
 public class SortPercentiles extends Procedure implements ProcedureConstants {
 
     public static String NAME = "Sorting Percentiles Procedure";

@@ -137,28 +137,32 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
     ;
 
 
-    public static ProcedureTemplate<WikiNetworkBuilder> wikiNetworkBuilderTemplate = new ProcedureTemplate<WikiNetworkBuilder>() {
+    public static ProcedureTemplate<Select> wikiNetworkBuilderTemplate = new ProcedureTemplate<Select>() {
         @Override
-        public WikiNetworkBuilder createProcedure() {
-            return new WikiNetworkBuilder();
+        public Select createProcedure() {
+
+            Select select = new Select();
+
+            return select;
         }
 
         @Override
         public String getProcedureName() {
-            return null;
+            return WikiNetworkBuilder.NAME;
         }
 
         @Override
         public String getProcedureDescription() {
-            return null;
+            return WikiNetworkBuilder.DESCRIPTION;
         }
     };
 
-    public static ProcedureTemplate<FinanceNetworkBuilderSpawner> financeNetworkBuilderTemplate = new ProcedureTemplate<FinanceNetworkBuilderSpawner>() {
+    public static ProcedureTemplate<Select> financeNetworkBuilderTemplate = new ProcedureTemplate<Select>() {
         @Override
-        public FinanceNetworkBuilderSpawner createProcedure() {
-            //ForEach
-            return null;
+        public Select createProcedure() {
+
+            Select select = new Select();
+            return select;
         }
 
         @Override
@@ -172,10 +176,18 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
         }
     };
 
-    public static ProcedureTemplate<ChangePointAnalysis> changePointAnalysisTemplate = new ProcedureTemplate<ChangePointAnalysis>() {
+    public static ProcedureTemplate<Select> changePointAnalysisTemplate = new ProcedureTemplate<Select>() {
         @Override
-        public ChangePointAnalysis createProcedure() {
-            return new ChangePointAnalysis();
+        public Select createProcedure() {
+
+
+            ForEach forEach = new ForEach();
+
+            ChangePointAnalysis changePoint = new ChangePointAnalysis();
+            Select select = new Select();
+
+
+            return select;
         }
 
         @Override
@@ -192,9 +204,9 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
     public static ProcedureTemplate<Select> sequenceAveragerTemplate = new ProcedureTemplate<Select>() {
         @Override
         public Select createProcedure() {
+
             SequenceCollectionAverager averager = new SequenceCollectionAverager();
             Select select = new Select();
-
             averager.setSelect(select);
 
             return select;
@@ -217,16 +229,19 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
      * input from the gui-layer, in this case a collection of pointers to
      * stock-entities whose quotes need first updated
      */
-    public static ProcedureTemplate<ForEach> sortingPercentilesTemplate = new ProcedureTemplate<ForEach>() {
+    public static ProcedureTemplate<Select> sortingPercentilesTemplate = new ProcedureTemplate<Select>() {
 
         @Override
-        public ForEach createProcedure() {
+        public Select createProcedure() {
+            Select select = new Select();
             SortPercentiles procedure = new SortPercentiles();
             ForEach forEach = new ForEach();
             forEach.getProcedureDescription().getProcedureInputs().getNamedInput(PROCEDURE_TEMPLATE).setValue(stockQuoteUpdaterTemplate);
             forEach.getProcedureDescription().getProcedureInputs().getNamedInput(TARGET_INPUT_NAME).setValue(STOCK_ENTITY);
             procedure.getProcedureDescription().getProcedureInputs().getNamedInput(FROM).setValue(forEach);
-            return forEach;
+            //return forEach;
+
+            return select;
         }
 
         @Override
@@ -241,13 +256,13 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
     };
 
 
-    public static ProcedureTemplate<ForEach> stockQuoteUpdaterTemplate = new ProcedureTemplate<ForEach>() {
+    public static ProcedureTemplate<Select> stockQuoteUpdaterTemplate = new ProcedureTemplate<Select>() {
         @Override
-        public ForEach createProcedure() {
-            ForEach forEach = new ForEach();
-            forEach.setTargetInputName(STOCK_ENTITY);
-            forEach.setTemplate(plainStockQuoteUpdater);
-            return forEach;
+        public Select createProcedure() {
+            Select procedure = new Select();
+
+
+            return procedure;
         }
 
         @Override

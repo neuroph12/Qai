@@ -23,6 +23,7 @@ import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.nodes.ProcedureDescription;
 import qube.qai.procedure.nodes.ProcedureTestBase;
 import qube.qai.procedure.nodes.ValueNode;
+import qube.qai.procedure.utils.Select;
 import qube.qai.procedure.utils.SimpleProcedure;
 
 import java.util.HashMap;
@@ -89,7 +90,7 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
 
     public void testChangePointAnalysis() throws Exception {
 
-        ChangePointAnalysis procedure = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();
+        Select procedure = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);

@@ -78,14 +78,14 @@ in order to have larger memory for the JVM
 latest configuration of boxes in intranet
 #192.168.1.2	- modelserver
 #192.168.1.3    - weber
-192.168.1.4     - services-server wiki
-192.168.1.7     - database-server mysql/artifactory
-192.168.1.8     - jenkins (jenkins)
-192.168.1.9     - stann
-192.168.1.10    - qoansday
-192.168.1.11    - wednesday
-192.168.1.13    - monday
-192.168.1.14    - tuesday
+192.168.0.206    - services-server wiki
+192.168.0.249    - database-server mysql/artifactory
+192.168.0.66     - jenkins (jenkins)
+192.168.0.108    - stann
+192.168.0.248    - qoansday
+192.168.0.199    - monday
+192.168.0.241    - tuesday
+192.168.0.164    - wednesday
 
 MySql-server and related things
 remember to change mysql-server settings in /etc/mysql/my.cnf

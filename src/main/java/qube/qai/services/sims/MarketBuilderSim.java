@@ -19,8 +19,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import qube.qai.main.QaiConstants;
 import qube.qai.procedure.ProcedureLibrary;
-import qube.qai.procedure.analysis.ChangePointAnalysis;
 import qube.qai.procedure.utils.ForEach;
+import qube.qai.procedure.utils.Select;
 import qube.qai.procedure.utils.SliceIntervals;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.SimulationService;
@@ -88,7 +88,7 @@ public class MarketBuilderSim implements SimulationService, QaiConstants {
 //        procedureRunner.submitProcedure(sorter);
 
 
-        ChangePointAnalysis changePoint = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();
+        Select changePoint = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();
 //        SelectOut selectChanges = new SelectOut(
 //                sorter.getProcedureResults().getNamedResult(AVERAGE_TIME_SEQUENCE),
 //                changePoint.getProcedureInputs().getNamedInput(INPUT_TIME_SEQUENCE));
