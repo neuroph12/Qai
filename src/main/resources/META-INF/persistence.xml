@@ -68,7 +68,7 @@
             <property name="hibernate.id.new_generator_mappings" value="true"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:mysql://192.168.1.7:3306/users?createDatabaseIfNotExist=true"/>
+                      value="jdbc:mysql://192.168.0.249:3306/users?createDatabaseIfNotExist=true"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value="sa"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
@@ -108,7 +108,7 @@
             <property name="hibernate.id.new_generator_mappings" value="true"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:mysql://192.168.1.7:3306/test_users?createDatabaseIfNotExist=true"/>
+                      value="jdbc:mysql://192.168.0.249:3306/test_users?createDatabaseIfNotExist=true"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value="sa"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
@@ -269,7 +269,7 @@
             <property name="hibernate.id.new_generator_mappings" value="true"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:mysql://192.168.1.7:3306/test_stocks?createDatabaseIfNotExist=true"/>
+                      value="jdbc:mysql://192.168.0.249:3306/test_stocks?createDatabaseIfNotExist=true"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value="sa"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
@@ -308,7 +308,7 @@
             <property name="hibernate.id.new_generator_mappings" value="true"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:mysql://192.168.1.7:3306/stocks?createDatabaseIfNotExist=true"/>
+                      value="jdbc:mysql://192.168.0.249:3306/stocks?createDatabaseIfNotExist=true"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value="sa"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
