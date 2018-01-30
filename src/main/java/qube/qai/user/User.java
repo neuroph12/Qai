@@ -216,7 +216,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        String rolesStr = "[";
+        /*String rolesStr = "[";
         if (roles != null && !roles.isEmpty()) {
             for (Role role : roles) {
                 rolesStr += role.getName() + " ";
@@ -230,6 +230,7 @@ public class User implements Serializable {
             }
         }
         permStr += "]";
-        return username + " " + rolesStr + permStr;
+        return username + " " + rolesStr + permStr;*/
+        return String.format("%s [%s]", username, uuid);
     }
 }
