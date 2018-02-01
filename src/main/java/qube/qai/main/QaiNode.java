@@ -26,8 +26,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
-import static qube.qai.main.QaiServerModule.CONFIG_FILE_NAME;
-
 /**
  * Created by rainbird on 11/9/15.
  */
@@ -71,8 +69,8 @@ public class QaiNode {
             injector = Guice.createInjector(qaiServer, qaiModule, qaiSecurityModule);
 
         } catch (IOException e) {
-            logger.error("Error while loading configuration file: " + CONFIG_FILE_NAME, e);
-            throw new RuntimeException("Configuration file: '" + CONFIG_FILE_NAME + "' could not be found- have to exit!");
+            logger.error("Error while loading configuration file: " + PROPERTIES_FILE, e);
+            throw new RuntimeException("Configuration file: '" + PROPERTIES_FILE + "' could not be found- have to exit!");
         }
 
         // so that the singleton is initialized

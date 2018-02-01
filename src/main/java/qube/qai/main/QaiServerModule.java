@@ -52,7 +52,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     private static Logger logger = LoggerFactory.getLogger("QaiServerModule");
 
-    public static final String CONFIG_FILE_NAME = "/home/rainbird/projects/work/qai/src/main/resources/qube/qai/main/config_dev.properties";
+    //@InjectConfig(value = "NODE_NAME")
+    public String NODE_NAME = "QaiNode";
 
     //@InjectConfig(value = "CREATE_STOCK_ENTITIES")
     public String CREATE_STOCK_ENTITIES = "CREATE_STOCK_ENTITIES";
@@ -443,6 +444,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         }
 
         Config hazelcastConfig = new Config(NODE_NAME);
+        hazelcastConfig.setInstanceName(NODE_NAME);
         GuiceManagedContext managedContext = new GuiceManagedContext();
         hazelcastConfig.setManagedContext(managedContext);
 
