@@ -55,9 +55,13 @@ mvn install:install-file -Dfile=./lib/grph-2.1.2-big.jar -DgroupId=grph -Dartifa
 mvn install:install-file -Dfile=./lib/thewebsemantic-1.1.jar -DgroupId=com.thewebsemantic -DartifactId=jenabean -Dversion=1.1 -Dpackaging=jar
 mvn install:install-file -Dfile=./lib/samsroad-1.0.jar -DgroupId=qube.samsroad -DartifactId=samsroad -Dversion=1.0 -Dpackaging=jar
 
-you'll need to install Qai in order to satisfy Qoan's dependency- do it with skip-test option!
+# you'll need to install Qai in order to satisfy Qoan's dependency- do it with skip-test option!
 mvn install -Dmaven.test.skip=true
 mvn install -DskipTests=true
+
+# once compiled deploy the thing and upload the libraries to the artifactory
+mvn deoploy
+mvn -Dmdep.copyPom=true dependency:copy-dependencies
 
 maven's dependency tree can be checked:
 mvn dependency:tree -Dverbose -Dincludes=commons-collections
