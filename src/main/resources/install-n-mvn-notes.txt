@@ -123,6 +123,9 @@ http://192.168.0.206:8081/wiki
 
 jenkins [ 192.168.0.66 ]
 http://192.168.0.66:8080/jenkins/
+the java-path
+JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
+MAVEN_HOME=/usr/share/maven
 
 artifactory
 http://192.168.0.249:8081/artifactory
