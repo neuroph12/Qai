@@ -55,6 +55,10 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     //@InjectConfig(value = "NODE_NAME")
     public String NODE_NAME = "QaiNode";
 
+    private String GRID_PASSWORD = "p4ssw0rd";
+
+    private String GRID_NAME = "Qai-Nodes";
+
     //@InjectConfig(value = "CREATE_STOCK_ENTITIES")
     public String CREATE_STOCK_ENTITIES = "CREATE_STOCK_ENTITIES";
 
@@ -443,83 +447,87 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             return hazelcastInstance;
         }
 
-        Config hazelcastConfig = new Config(NODE_NAME);
-        hazelcastConfig.setInstanceName(NODE_NAME);
+        Config config = new Config(NODE_NAME);
+        //config.getNetworkConfig().setSmartRouting(true);
+        //config.getNetworkConfig().setRedoOperation(true);
+        config.getGroupConfig().setPassword(GRID_PASSWORD);
+        config.getGroupConfig().setName(GRID_NAME);
+        config.setInstanceName(NODE_NAME);
         GuiceManagedContext managedContext = new GuiceManagedContext();
-        hazelcastConfig.setManagedContext(managedContext);
+        config.setManagedContext(managedContext);
 
         // create stock-groups map-store
         if ("true".equals(properties.getProperty(CREATE_STOCK_GROUPS))) {
-            createStockGroupsConfig(hazelcastConfig);
+            createStockGroupsConfig(config);
             localServices.add(STOCK_GROUPS);
         }
 
         // create Stock_Entities map-store
         if ("true".equals(properties.getProperty(CREATE_STOCK_ENTITIES))) {
-            createStockEntitiesConfig(hazelcastConfig);
+            createStockEntitiesConfig(config);
             localServices.add(STOCK_ENTITIES);
         }
 
         // create StockQuotes map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_STOCK_QUOTES))) {
-            createStockQuotesConfig(hazelcastConfig);
+            createStockQuotesConfig(config);
             localServices.add(STOCK_QUOTES);
         }
 
         // create Procedures map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_PROCEDURES))) {
-            createProceduresConfig(hazelcastConfig);
+            createProceduresConfig(config);
             localServices.add(PROCEDURES);
         }
 
         // create Wikipedia map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKIPEDIA))) {
-            createWikipediaConfig(hazelcastConfig);
+            createWikipediaConfig(config);
             localServices.add(WIKIPEDIA);
         }
 
         // create Wikipedia-Resources map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKIPEDIA_RESOURCES))) {
-            createWikipediaResourcesConfig(hazelcastConfig);
+            createWikipediaResourcesConfig(config);
             localServices.add(WIKIPEDIA_RESOURCES);
         }
 
         // create Wiktionary map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKTIONARY))) {
-            createWiktionaryConfig(hazelcastConfig);
+            createWiktionaryConfig(config);
             localServices.add(WIKTIONARY);
         }
 
         // create Wiktionary-Resources map-store
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_WIKTIONARY_RESOURCES))) {
-            createWiktionaryResourceConfig(hazelcastConfig);
+            createWiktionaryResourceConfig(config);
             // interesting that this doesn't really exist :)
         }
 
         // create User database and Hazelcast map
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USERS))) {
-            createUsersMapConfig(hazelcastConfig);
+            createUsersMapConfig(config);
             localServices.add(USERS);
         }
 
         // create UserRoles and Hazelcast map
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USER_ROLES))) {
-            createUserRolesConfig(hazelcastConfig);
+            createUserRolesConfig(config);
             localServices.add(USER_ROLES);
         }
 
         // create UserSessions
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_USER_SESSIONS))) {
-            createUserSessionsConfig(hazelcastConfig);
+            createUserSessionsConfig(config);
             localServices.add(USER_SESSIONS);
         }
 
         if ("true".equalsIgnoreCase(properties.getProperty(CREATE_UPLOAD_DIRECTORY))) {
-            createUploadDirectoryConfig(hazelcastConfig);
+            createUploadDirectoryConfig(config);
             localServices.add(PDF_FILE_RESOURCES);
         }
         // now we are ready to get an instance
-        hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastConfig);
+        hazelcastInstance = Hazelcast.newHazelcastInstance(config);
         return hazelcastInstance;
     }
 

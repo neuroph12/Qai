@@ -43,8 +43,10 @@ public class QaiInjectorService {
 
     public void injectMembers(Object instance) {
         if (injector == null) {
-            throw new IllegalStateException("No instance ");
+            throw new IllegalStateException("No injector instance ");
         }
-        injector.injectMembers(instance);
+        if (instance != null) {
+            injector.injectMembers(instance);
+        }
     }
 }

@@ -35,8 +35,8 @@ public class IndexedDirectoryMapStore implements MapStore<String, ResourceData> 
 
     private long checkedFileCount = 0;
 
-    private String directoryToIndex = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources";
-    private String indexDirectory = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources.index";
+    private String directoryToIndex = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources";
+    private String indexDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.resources.index";
 
     @Inject
     private SearchServiceInterface searchService;

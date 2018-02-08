@@ -37,7 +37,7 @@
             <property name="hibernate.id.new_generator_mappings" value="true"/>
             <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
             <property name="hibernate.connection.url"
-                      value="jdbc:hsqldb:/media/rainbird/GIMEL/qai-persistence.db/users/"/>
+                      value="jdbc:hsqldb:/media/rainbird/ALEPH/qai-persistence.db/users/"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
@@ -148,7 +148,7 @@
             <property name="hibernate.id.new_generator_mappings" value="true"/>
             <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
             <property name="hibernate.connection.url"
-                      value="jdbc:hsqldb:/media/rainbird/GIMEL/qai-persistence.db/test_users/"/>
+                      value="jdbc:hsqldb:/media/rainbird/ALEPH/qai-persistence.db/test_users/"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
@@ -179,7 +179,7 @@
             <property name="hibernate.id.new_generator_mappings" value="true"/>
             <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
             <property name="hibernate.connection.url"
-                      value="jdbc:hsqldb:/media/rainbird/GIMEL/qai-persistence.db/stand_alone_test_users/"/>
+                      value="jdbc:hsqldb:/media/rainbird/ALEPH/qai-persistence.db/stand_alone_test_users/"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
@@ -209,7 +209,7 @@
             <property name="hibernate.id.new_generator_mappings" value="true"/>
             <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
             <property name="hibernate.connection.url"
-                      value="jdbc:hsqldb:/media/rainbird/GIMEL/qai-persistence.db/stocks/"/>
+                      value="jdbc:hsqldb:/media/rainbird/ALEPH/qai-persistence.db/stocks/"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
@@ -239,7 +239,7 @@
             <property name="hibernate.id.new_generator_mappings" value="true"/>
             <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
             <property name="hibernate.connection.url"
-                      value="jdbc:hsqldb:/media/rainbird/GIMEL/qai-persistence.db/test_stocks/"/>
+                      value="jdbc:hsqldb:/media/rainbird/ALEPH/qai-persistence.db/test_stocks/"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
@@ -347,7 +347,7 @@
             <property name="hibernate.id.new_generator_mappings" value="true"/>
             <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
             <property name="hibernate.connection.url"
-                      value="jdbc:hsqldb:/media/rainbird/GIMEL/qai-persistence.db/stand_alone_test_stocks/"/>
+                      value="jdbc:hsqldb:/media/rainbird/ALEPH/qai-persistence.db/stand_alone_test_stocks/"/>
             <property name="hibernate.connection.username" value="sa"/>
             <property name="hibernate.connection.password" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
