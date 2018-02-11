@@ -145,7 +145,9 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
         for (StockGroup group : stockGroups) {
             String idString = group.getUuid();
             SearchResult result = new SearchResult(STOCK_GROUPS, group.getName(), idString, group.getDescription(), 1.0);
-            results.add(result);
+            if (!results.contains(result)) {
+                results.add(result);
+            }
         }
     }
 
