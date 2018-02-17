@@ -81,8 +81,8 @@ in order to have larger memory for the JVM
 
 latest configuration of boxes in intranet
 
-192.168.0.242
-192.168.0.206    - services-server wiki
+192.168.0.242    - weber
+192.168.0.206    - services-server wiki redirect
 192.168.0.249    - database-server mysql/artifactory
 192.168.0.66     - jenkins (jenkins)
 192.168.0.108    - stann
