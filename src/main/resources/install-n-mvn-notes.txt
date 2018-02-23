@@ -31,7 +31,7 @@ when that all is done (setup new password, etc) in order to install maven
 https://www.xianic.net/post/installing-maven-on-the-raspberry-pi/
 
 it turns this is not right- media is mounted automatically on:
-/media/pi/BET (or whatever)
+/media/pi/ALEPH (or whatever)
 
 but to see where things are and so on:
 sudo blkid
@@ -82,7 +82,8 @@ in order to have larger memory for the JVM
 latest configuration of boxes in intranet
 
 192.168.0.242    - weber
-192.168.0.206    - services-server wiki redirect
+                 - gatekeeper apache-redirect mail-server mysql
+192.168.0.206    - wiki-server wiki
 192.168.0.249    - database-server mysql/artifactory
 192.168.0.66     - jenkins (jenkins)
 192.168.0.108    - stann
