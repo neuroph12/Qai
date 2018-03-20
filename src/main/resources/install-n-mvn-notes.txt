@@ -81,7 +81,6 @@ in order to have larger memory for the JVM
 
 latest configuration of boxes in intranet
 
-192.168.0.242    - weber
 192.168.0.109    - gatekeeper apache-redirect mail-server mysql
 192.168.0.206    - wiki-server wiki
 192.168.0.249    - database-server mysql/artifactory

@@ -71,7 +71,7 @@ public class DatabaseSearchServiceTest extends TestCase {
 
     public void testStocksDatabaseSearchService() throws Exception {
 
-        // create the entity-manager and inject to the search-service
+        // create the entity-manager and inject to the wiki-service
         String jpaModuleName = "STAND_ALONE_TEST_STOCKS";
         Injector injector = createInjector(jpaModuleName);
         EntityManager entityManager = injector.getInstance(EntityManager.class);

@@ -73,7 +73,7 @@ public class IndexedDirectoryMapStoreTest extends QaiTestBase {
         if (wikiArticle.getContent().contains(wikiFileFormatStart)) {
             logger.info("we are good- found some resources to look for");
         } else {
-            logger.info("no file reference in this article- nothing to search for");
+            logger.info("no file reference in this article- nothing to wiki for");
             fail("pick a wiki-article with some images in it for crying out loud!?!");
         }
 
@@ -97,7 +97,7 @@ public class IndexedDirectoryMapStoreTest extends QaiTestBase {
             }
         }
 
-        logger.info("at the end of the search found: " + foundCount + " and not found: " + notFoundCount);
+        logger.info("at the end of the wiki found: " + foundCount + " and not found: " + notFoundCount);
     }
 
 }

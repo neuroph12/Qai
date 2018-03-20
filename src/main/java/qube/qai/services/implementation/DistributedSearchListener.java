@@ -46,12 +46,12 @@ public class DistributedSearchListener extends QaiMessageListener {
     public void initialize() {
 
         if (hazelcastInstance == null || searchService == null) {
-            throw new RuntimeException("Hazelcast instance or the search service to be employed are not configured right- exiting");
+            throw new RuntimeException("Hazelcast instance or the wiki service to be employed are not configured right- exiting");
         }
 
         ITopic topic = hazelcastInstance.getTopic(topicName);
         topic.addMessageListener(this);
-        logger.info("Registered listener for '" + topicName + "' search-service");
+        logger.info("Registered listener for '" + topicName + "' wiki-service");
     }
 
     @Override

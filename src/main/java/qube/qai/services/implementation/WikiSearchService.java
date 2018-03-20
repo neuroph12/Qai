@@ -49,6 +49,8 @@ public class WikiSearchService implements SearchServiceInterface {
 
     private Directory directory;
 
+    private DirectoryReader reader;
+
     private boolean isInitialized = false;
 
     public WikiSearchService() {
@@ -72,7 +74,9 @@ public class WikiSearchService implements SearchServiceInterface {
             if (!file.exists() || !file.isDirectory()) {
                 throw new RuntimeException("Directory: " + INDEX_DIRECTORY + " either does not exist, or is not a directory!");
             }
+
             directory = FSDirectory.open(file.toPath(), NoLockFactory.INSTANCE);
+            reader = DirectoryReader.open(directory);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -82,7 +86,7 @@ public class WikiSearchService implements SearchServiceInterface {
     }
 
     /* Sample application for searching an index
-     * adapting the code for doing search and returning the contents of
+     * adapting the code for doing wiki and returning the contents of
      * the documents which are picked for reading
     */
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
@@ -102,19 +106,19 @@ public class WikiSearchService implements SearchServiceInterface {
             // Build a Query object
             Query query = new QueryParser(fieldName, new StandardAnalyzer()).parse(searchString);
 
-            DirectoryReader reader = DirectoryReader.open(directory);
+            // reader = DirectoryReader.open(directory);
 
             IndexSearcher searcher = new IndexSearcher(reader);
             TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
             searcher.search(query, collector);
-            logger.debug("total hits: " + collector.getTotalHits());
+            logger.info("total hits: " + collector.getTotalHits());
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc hit : hits) {
                 Document doc = reader.document(hit.doc);
                 String desc = "Search term: '" + searchString + "'";
                 SearchResult result = new SearchResult(context, doc.get("title"), doc.get("file"), desc, hit.score);
                 results.add(result);
-                logger.debug(doc.get("file") + ": title: " + doc.get("title") + " (" + hit.score + ")");
+                logger.info(doc.get("file") + ": title: " + doc.get("title") + " (" + hit.score + ")");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -152,6 +156,14 @@ public class WikiSearchService implements SearchServiceInterface {
 
     public void setContext(String context) {
         this.context = context;
+    }
+
+    public boolean isInitialized() {
+        return isInitialized;
+    }
+
+    public void setInitialized(boolean initialized) {
+        isInitialized = initialized;
     }
 
     class AbsoluteDirectory extends Directory {

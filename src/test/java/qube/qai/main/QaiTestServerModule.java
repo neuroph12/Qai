@@ -459,7 +459,7 @@ public class QaiTestServerModule extends AbstractModule {
         // now we are ready to get an instance
         hazelcastInstance = Hazelcast.newHazelcastInstance(config);
 
-        // now start the search-listeners
+        // now start the wiki-listeners
         //userSearchListener = QaiServerModule.provideUsersSearchListener(hazelcastInstance);
 
         return hazelcastInstance;

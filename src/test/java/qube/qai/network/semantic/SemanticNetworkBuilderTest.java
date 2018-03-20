@@ -38,7 +38,7 @@ public class SemanticNetworkBuilderTest extends QaiTestBase {
     public void testSemanticNetwork() throws Exception {
 
         Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
-        assertNotNull("there has to be a result for the search", results);
+        assertNotNull("there has to be a result for the wiki", results);
 
         String filename = results.iterator().next().getUuid();
         log("name for the test case: " + filename);
@@ -82,7 +82,7 @@ public class SemanticNetworkBuilderTest extends QaiTestBase {
     public void testWikiNetwork() throws Exception {
 
         Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
-        assertNotNull("there has to be a result for the search", results);
+        assertNotNull("there has to be a result for the wiki", results);
 
         String filename = results.iterator().next().getUuid();
         log("name for the test case: " + filename);

@@ -35,7 +35,7 @@ import java.util.Set;
 
 public class FinanceNetworkBuilderSpawner extends Procedure implements SpawningProcedure {
 
-    public static final String NAME = "Finance-Netowrk Spawner";
+    public static final String NAME = "Finance-Network Spawner";
 
     public static final String DESCRIPTION = "This creates finance networks out of given set of finance-entities";
 

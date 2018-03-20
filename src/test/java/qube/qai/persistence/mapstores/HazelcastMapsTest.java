@@ -87,7 +87,7 @@ public class HazelcastMapsTest extends QaiTestBase {
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
         IMap<String, WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKIPEDIA);
-        // again- we first do the search and demand the article
+        // again- we first do the wiki and demand the article
         for (String name : someWikiArticles) {
             Collection<SearchResult> results = wikipediaSearch.searchInputString(name, "title", 100);
             SearchResult result = results.iterator().next();
@@ -104,7 +104,7 @@ public class HazelcastMapsTest extends QaiTestBase {
         logger.info("have hazelcastInstance with name: '" + hazelcastInstance.getName() + "'");
 
         IMap<String, WikiArticle> wikiArticles = hazelcastInstance.getMap(WIKTIONARY);
-        // again- we first do the search and demand the article
+        // again- we first do the wiki and demand the article
         for (String name : someWikiArticles) {
             Collection<SearchResult> results = wiktionarySearch.searchInputString(name, "title", 100);
             SearchResult result = results.iterator().next();

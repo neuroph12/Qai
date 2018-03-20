@@ -172,7 +172,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     /**
      * WiktionarySearchService
-     * returns the distributed search service for wiktionary
+     * returns the distributed wiki service for wiktionary
      * and starts the listener service which will broker the requests
      *
      * @return
@@ -203,7 +203,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     /**
      * WikipediaSearchService
-     * returns the distributed search service for wikipedia
+     * returns the distributed wiki service for wikipedia
      * and starts the listener service which will broker the requests
      *
      * @return
@@ -234,7 +234,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     /**
      * WikiResourcesSearchService
-     * returns the distributed search service for WikiResources
+     * returns the distributed wiki service for WikiResources
      * and starts the listener service which will broker the requests
      * @return
      */
@@ -260,7 +260,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     /**
      * StockQuotesSearchService
-     * returns the distributed search service for wikipedia
+     * returns the distributed wiki service for wikipedia
      * and starts the listener service which will broker the requests
      *
      * @return
@@ -298,7 +298,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     /**
      * StockQuotesSearchService
-     * returns the distributed search service for wikipedia
+     * returns the distributed wiki service for wikipedia
      * and starts the listener service which will broker the requests
      *
      * @return
@@ -336,7 +336,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     /**
      * StockQuotesSearchService
-     * returns the distributed search service for wikipedia
+     * returns the distributed wiki service for wikipedia
      * and starts the listener service which will broker the requests
      *
      * @return
@@ -362,7 +362,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     /**
      * UsersSearchService
-     * returns the distributed search service for wikipedia
+     * returns the distributed wiki service for wikipedia
      * and starts the listener service which will broker the requests
      *
      * @return
@@ -388,7 +388,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     /**
      * ProceduresSearchService
-     * returns the distributed search service for wikipedia
+     * returns the distributed wiki service for wikipedia
      * and starts the listener service which will broker the requests
      *
      * @return

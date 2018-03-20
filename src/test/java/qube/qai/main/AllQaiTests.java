@@ -56,6 +56,7 @@ import qube.qai.security.ProcedureManagerTest;
 import qube.qai.security.QaiSecurityTest;
 import qube.qai.services.implementation.ProcedureRunnerServiceTest;
 import qube.qai.services.implementation.UUIDGeneratorTest;
+import qube.qai.services.implementation.WikiSearchServiceTest;
 import qube.qai.services.sims.HowFairAreMarketsDistributedTest;
 import qube.qai.services.sims.MDSimsOfBiochemicalReactions;
 import qube.qai.services.sims.TextTranslationDistributedTest;
@@ -127,9 +128,10 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(ModelMapStoresTest.class);
 
 
-        // persistence.search
+        // persistence.wiki
         suite.addTestSuite(ModelSearchServicesTest.class);
         suite.addTestSuite(DatabaseSearchServiceTest.class);
+        suite.addTestSuite(WikiSearchServiceTest.class);
 
         // procedure
         //suite.addTestSuite(ProcedureLibraryTest.class);

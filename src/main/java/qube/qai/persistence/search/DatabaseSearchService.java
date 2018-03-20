@@ -52,7 +52,7 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
         if (entityManager == null) {
             throw new RuntimeException("Missing EntityManager- initialization failed");
         }
-        logger.info("Databease search-service: '" + context + "' has been initialized");
+        logger.info("Databease wiki-service: '" + context + "' has been initialized");
     }
 
     public DatabaseSearchService() {
@@ -84,7 +84,7 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
             searchStockQuotes(searchString, fieldName, results);
         }
 
-        logger.info("Databease search-service: '" + context + "' brokering search: '" + searchString + "' with " + results.size() + " results");
+        logger.info("Databease wiki-service: '" + context + "' brokering wiki: '" + searchString + "' with " + results.size() + " results");
 
         return results;
     }

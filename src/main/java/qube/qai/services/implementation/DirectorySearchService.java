@@ -89,12 +89,12 @@ public class DirectorySearchService implements SearchServiceInterface {
                 logger.info(doc.get(FIELD_FILE) + " (" + hit.score + ")");
             }
         } catch (IOException e) {
-            logger.error("IOException during search: ", e);
+            logger.error("IOException during wiki: ", e);
         } catch (ParseException e) {
-            logger.error("ParseException during search: ", e);
+            logger.error("ParseException during wiki: ", e);
         }
 
-        logger.info("DirectorySearchService: " + context + " brokered " + results.size() + " for search: '" + searchString + "'");
+        logger.info("DirectorySearchService: " + context + " brokered " + results.size() + " for wiki: '" + searchString + "'");
 
         return results;
     }

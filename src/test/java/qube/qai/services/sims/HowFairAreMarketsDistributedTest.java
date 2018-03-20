@@ -32,7 +32,7 @@ public class HowFairAreMarketsDistributedTest extends QaiTestBase {
      * <p>
      * epoch := (slice (change-point-analysis (select "average"
      * (statistical-analysis (for-each fetch-quotes-for
-     * (for-each find-entities-of (search-results)))))
+     * (for-each find-entities-of (wiki-results)))))
      * <p>
      * // these are then the results which we want to see when done.
      * (for-each entropy-analysis (for-each forward-propagation marketNetwork)

@@ -157,7 +157,7 @@
             <version>${guice.version}</version>
         </dependency>
 
-        <!-- Tika does parsing and Lucene does search and indexing -->
+        <!-- Tika does parsing and Lucene does wiki and indexing -->
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers</artifactId>

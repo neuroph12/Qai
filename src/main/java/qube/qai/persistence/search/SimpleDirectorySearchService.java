@@ -49,8 +49,8 @@ public class SimpleDirectorySearchService implements SearchServiceInterface, Qai
 
         File file = new File(directoryName);
         if (!file.exists()) {
-            //throw new IllegalArgumentException("Directory initialization failed- can't search without directory. '" + directoryName + "' does not exist");
-            logger.error("Directory initialization failed- can't search without directory. '" + directoryName + "' does not exist");
+            //throw new IllegalArgumentException("Directory initialization failed- can't wiki without directory. '" + directoryName + "' does not exist");
+            logger.error("Directory initialization failed- can't wiki without directory. '" + directoryName + "' does not exist");
             return results;
         }
 
@@ -58,7 +58,7 @@ public class SimpleDirectorySearchService implements SearchServiceInterface, Qai
             results.add(new SearchResult(context, name, name, "directory listing", 1.0));
         }
 
-        logger.info("Simple-Directory search-service: '" + context + "' brokering search: '" + searchString + "' with " + results.size() + " results");
+        logger.info("Simple-Directory wiki-service: '" + context + "' brokering wiki: '" + searchString + "' with " + results.size() + " results");
 
         return results;
     }
