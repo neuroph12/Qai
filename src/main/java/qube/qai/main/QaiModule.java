@@ -38,10 +38,6 @@ public class QaiModule extends AbstractModule {
 
     private Logger logger = LoggerFactory.getLogger("Qai-Module");
 
-    public static final String CONFIG_FILE_NAME = "config_dev.properties";
-
-    public String PERSISTENCE_BASE;
-
     private static final ThreadLocal<EntityManager> entityManagerCache = new ThreadLocal<EntityManager>();
 
     @Override
