@@ -74,7 +74,7 @@ public class QaiNode {
         }
 
         // so that the singleton is initialized
-        QaiInjectorService injectorService = new QaiInjectorService(injector);
+        QaiInjectorService.getInstance().setInjector(injector);
         // self inoculation...
         injector.injectMembers(this);
 

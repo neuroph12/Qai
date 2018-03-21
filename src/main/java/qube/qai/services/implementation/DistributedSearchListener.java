@@ -39,6 +39,8 @@ public class DistributedSearchListener extends QaiMessageListener {
 
     private String topicName;
 
+    private Collection<SearchResult> lastResults;
+
     public DistributedSearchListener(String topicName) {
         this.topicName = topicName;
     }
@@ -61,16 +63,20 @@ public class DistributedSearchListener extends QaiMessageListener {
 
         if (mesasgeObject instanceof DistributedSearchService.SearchRequest) {
             DistributedSearchService.SearchRequest request = (DistributedSearchService.SearchRequest) mesasgeObject;
-            Collection<SearchResult> results = searchService.searchInputString(request.searchString, request.fieldName, request.hitsPerPage);
-            if (results != null && !results.isEmpty()) {
+            lastResults = searchService.searchInputString(request.searchString, request.fieldName, request.hitsPerPage);
+            if (lastResults != null && !lastResults.isEmpty()) {
                 ITopic<Collection> topic = hazelcastInstance.getTopic(topicName);
-                topic.publish(results);
-                logger.info("Search in '" + topicName + "' : '" + request.searchString + "' brokered with " + results.size() + " results");
+                topic.publish(lastResults);
+                logger.info("Search in '" + topicName + "' : '" + request.searchString + "' brokered with " + lastResults.size() + " results");
             } else {
                 logger.info("Search in '" + topicName + "' : '" + request.searchString + "' returned no results ");
             }
         }
 
+    }
+
+    public Collection<SearchResult> getLastResults() {
+        return lastResults;
     }
 
     public void setSearchService(SearchServiceInterface searchService) {
@@ -80,10 +86,6 @@ public class DistributedSearchListener extends QaiMessageListener {
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
     }
-
-   /* public static void setLogger(Logger logger) {
-        DistributedSearchListener.logger = logger;
-    }*/
 
     public void setTopicName(String topicName) {
         this.topicName = topicName;

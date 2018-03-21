@@ -69,7 +69,8 @@ public class ModelSearchService implements SearchServiceInterface, QaiConstants 
     public void init() {
 
         if (StringUtils.isEmpty(directoryName)) {
-            throw new IllegalArgumentException("there has to be a diretory to settle in!");
+            String message = "'" + directoryName + "' could not be found. There has to ba a directory to settle in!";
+            throw new IllegalArgumentException(message);
         }
 
         dataset = TDBFactory.createDataset(directoryName);

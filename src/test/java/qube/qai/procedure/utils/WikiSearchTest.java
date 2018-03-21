@@ -28,19 +28,38 @@ import java.util.Collection;
 public class WikiSearchTest extends QaiTestBase {
 
     @Inject
+    @Named("Wikikipedia_en")
+    private SearchServiceInterface wikiSearchService;
+
+    @Inject
     @Named("Wiktionary_en")
-    private SearchServiceInterface searchService;
+    private SearchServiceInterface wiktionarySearchService;
+
 
     /**
      * @throws Exception
      * @TODO this test needs improvement- start with injecting the constants
      */
-    public void testSearch() throws Exception {
+    public void testWikiSearch() throws Exception {
 
         // do some searching and display results...
         String[] searchList = {"test", "mouse", "silly"};
         for (String search : searchList) {
-            Collection<SearchResult> results = searchService.searchInputString(search, "title", 100);
+            Collection<SearchResult> results = wikiSearchService.searchInputString(search, "title", 100);
+            assertTrue("no results", results != null && !results.isEmpty());
+            for (SearchResult result : results) {
+                logger.info("searching: '" + search + "' resulted: '" + result.getContext() + "' with " + result.getRelevance() + "% relevance");
+            }
+        }
+
+    }
+
+    public void testWiktionarySearch() throws Exception {
+
+        // do some searching and display results...
+        String[] searchList = {"test", "mouse", "silly"};
+        for (String search : searchList) {
+            Collection<SearchResult> results = wiktionarySearchService.searchInputString(search, "title", 100);
             assertTrue("no results", results != null && !results.isEmpty());
             for (SearchResult result : results) {
                 logger.info("searching: '" + search + "' resulted: '" + result.getContext() + "' with " + result.getRelevance() + "% relevance");

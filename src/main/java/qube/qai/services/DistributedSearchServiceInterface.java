@@ -14,16 +14,11 @@
 
 package qube.qai.services;
 
-import qube.qai.services.implementation.SearchResult;
+public interface DistributedSearchServiceInterface extends SearchServiceInterface {
 
-import java.util.Collection;
+    String getContext();
 
-/**
- * Created by rainbird on 6/29/17.
- */
-public interface SearchResultSink {
+    void initialize();
 
-    void delayedResults(Collection<SearchResult> results);
-
-    void doSearch(String searchString);
+    void searchInputString(SearchResultSink searchSink, String searchString, String fieldName, int hitsPerPage);
 }

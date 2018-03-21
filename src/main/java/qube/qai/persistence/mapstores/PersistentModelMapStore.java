@@ -67,7 +67,8 @@ public class PersistentModelMapStore implements MapStore {
         logger.info("Initializing PersistentModelMapStore for directory: " + directoryName);
 
         if (StringUtils.isEmpty(directoryName)) {
-            throw new IllegalArgumentException("there has to be a diretory to settle in!");
+            String message = "'" + directoryName + "' could be found. There has to be a diretory to settle in!";
+            throw new IllegalArgumentException(message);
         }
 
         dataset = TDBFactory.createDataset(directoryName);

@@ -20,8 +20,8 @@ import com.hazelcast.core.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.message.QaiMessageListener;
+import qube.qai.services.DistributedSearchServiceInterface;
 import qube.qai.services.SearchResultSink;
-import qube.qai.services.SearchServiceInterface;
 
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -30,7 +30,7 @@ import java.util.Collection;
 /**
  * Created by rainbird on 1/6/16.
  */
-public class DistributedSearchService extends QaiMessageListener implements SearchServiceInterface {
+public class DistributedSearchService extends QaiMessageListener implements DistributedSearchServiceInterface {
 
     private Logger logger = LoggerFactory.getLogger("DistributedSearchService");
 
@@ -38,9 +38,6 @@ public class DistributedSearchService extends QaiMessageListener implements Sear
 
     @Inject
     protected HazelcastInstance hazelcastInstance;
-
-    @Inject
-    private SearchResultSink resultSink;
 
     protected Collection<SearchResult> results;
 
@@ -50,8 +47,11 @@ public class DistributedSearchService extends QaiMessageListener implements Sear
 
     protected boolean initialized = false;
 
-    public DistributedSearchService(String searchTopicName) {
+    private SearchResultSink resultSink;
+
+    public DistributedSearchService(String searchTopicName, HazelcastInstance hazelcastInstance) {
         this.context = searchTopicName;
+        this.hazelcastInstance = hazelcastInstance;
     }
 
     @Override
@@ -67,18 +67,17 @@ public class DistributedSearchService extends QaiMessageListener implements Sear
 
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
-
         if (!initialized) {
             initialize();
         }
-        // first set the results to null
+
         results = null;
 
         ITopic<SearchRequest> topic = hazelcastInstance.getTopic(context);
         SearchRequest request = new SearchRequest(searchString, fieldName, hitsPerPage);
         topic.publish(request);
 
-        int count = 0;
+        /*int count = 0;
         try {
             while (results == null) {
                 Thread.sleep(100);
@@ -89,9 +88,25 @@ public class DistributedSearchService extends QaiMessageListener implements Sear
             }
         } catch (InterruptedException e) {
             logger.error("Interrupted with exception: " + e.getMessage());
-        }
+        }*/
 
         return results;
+    }
+
+    @Override
+    public void searchInputString(SearchResultSink searchSink, String searchString, String fieldName, int hitsPerPage) {
+
+        if (!initialized) {
+            initialize();
+        }
+
+        // first set the results to null
+        resultSink = searchSink;
+
+        ITopic<SearchRequest> topic = hazelcastInstance.getTopic(context);
+        SearchRequest request = new SearchRequest(searchString, fieldName, hitsPerPage);
+        topic.publish(request);
+
     }
 
     @Override
@@ -100,7 +115,7 @@ public class DistributedSearchService extends QaiMessageListener implements Sear
         if (messageObject instanceof Collection) {
             results = (Collection<SearchResult>) messageObject;
             if (resultSink != null) {
-                resultSink.addResults(results);
+                resultSink.delayedResults(results);
             }
         }
     }

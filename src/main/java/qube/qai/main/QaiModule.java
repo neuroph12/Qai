@@ -34,28 +34,13 @@ import javax.persistence.EntityManager;
 /**
  * Created by rainbird on 11/9/15.
  */
-//@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
-//@BindConfig(value = "qube/qai/main/config_deploy", syntax = Syntax.PROPERTIES)
 public class QaiModule extends AbstractModule {
 
     private Logger logger = LoggerFactory.getLogger("Qai-Module");
 
     public static final String CONFIG_FILE_NAME = "config_dev.properties";
 
-//    private static String wiktionaryDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";
-//
-//    private static String wiktionaryZipFileName = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.zip";
-//
-//    private static String wikipediaDirectory = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.index";
-//
-//    private static String wikipediaResources = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.resources";
-//
-//    private static String wikipediaZipFileName = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.zip";
-
-    //@InjectConfig(value = "PERSISTENCE_BASE")
     public String PERSISTENCE_BASE;
-
-    //private static String stockQuotesDirectory = "data/stockquotes/";
 
     private static final ThreadLocal<EntityManager> entityManagerCache = new ThreadLocal<EntityManager>();
 
@@ -96,15 +81,6 @@ public class QaiModule extends AbstractModule {
     }
 
     /**
-     * @return
-     * @TODO this was mainly for test reasons, i think it is now time to remove it
-     */
-    /*@Provides
-    ProcedureSourceInterface provideProcedureSourceInterface() {
-        return CachedProcedureSourceService.getInstance();
-    }*/
-
-    /**
      * used mainly in procedures themselves so that procedures can
      * get their data from hazelcast and return their data via hazelcast as well
      *
@@ -118,77 +94,4 @@ public class QaiModule extends AbstractModule {
         return selectorfactory;
     }
 
-    /**
-     * EntityManagerFactory is used in HsqlDBMapStores
-     * and only there... StockEntities, RDFTriples and StockQuotes
-     * @return
-     */
-//    @Provides @Singleton @Named("STOCKS")
-//    public EntityManagerFactory provideStocksDBEntityManagerFactory() {
-//        Map<String, String> properties = new HashMap<String, String>();
-//        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
-//        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE);
-//        properties.put("hibernate.connection.username", "sa");
-//        properties.put("hibernate.connection.password", "");
-//        properties.put("hibernate.connection.pool_size", "1");
-//        properties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-//        properties.put("hibernate.hbm2ddl.auto", "create");
-//
-//        properties.put("current_session_context_class", "org.hibernate.context.ManagedSessionContext");
-//        properties.put("hibernate.cache.use_second_level_cache", "false");
-//        properties.put("hibernate.cache.use_query_cache", "false");
-//        properties.put("cache.provider_class", "org.hibernate.cache.NoCacheProvider");
-//        properties.put("show_sql", "true");
-//
-//        return Persistence.createEntityManagerFactory("STOCKS", properties);
-//    }
-
-//    @Provides @Singleton @Named("PERSONDATA_EN")
-//    public EntityManagerFactory providePersondataEnEntityManagerFactory() {
-//        Map<String, String> properties = new HashMap<String, String>();
-//        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
-//        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE + "persondata_en/");
-//        properties.put("hibernate.connection.username", "sa");
-//        properties.put("hibernate.connection.password", "");
-//        properties.put("hibernate.connection.pool_size", "1");
-//        properties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-//        properties.put("hibernate.hbm2ddl.auto", "create");
-//
-//        properties.put("current_session_context_class", "org.hibernate.context.ManagedSessionContext");
-//        properties.put("hibernate.cache.use_second_level_cache", "false");
-//        properties.put("hibernate.cache.use_query_cache", "false");
-//        properties.put("cache.provider_class", "org.hibernate.cache.NoCacheProvider");
-//        properties.put("show_sql", "true");
-//
-//        return Persistence.createEntityManagerFactory("persondata_en", properties);
-//    }
-
-//    @Provides @Singleton @Named("DBPEDIA_EN")
-//    public EntityManagerFactory provideDbPediaEnEntityManagerFactory() {
-//        Map<String, String> properties = new HashMap<String, String>();
-//        properties.put("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
-//        properties.put("hibernate.connection.url", "jdbc:hsqldb:" + PERSISTENCE_BASE + "/dbpedia_en/");
-//        properties.put("hibernate.connection.username", "sa");
-//        properties.put("hibernate.connection.password", "");
-//        properties.put("hibernate.connection.pool_size", "1");
-//        properties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-//        properties.put("hibernate.hbm2ddl.auto", "create");
-//
-//        properties.put("current_session_context_class", "org.hibernate.context.ManagedSessionContext");
-//        properties.put("hibernate.cache.use_second_level_cache", "false");
-//        properties.put("hibernate.cache.use_query_cache", "false");
-//        properties.put("cache.provider_class", "org.hibernate.cache.NoCacheProvider");
-//        properties.put("show_sql", "true");
-//
-//        return Persistence.createEntityManagerFactory("dbpedia_en", properties);
-//    }
-
-//    @Provides
-//    public EntityManager provideEntityManager(EntityManagerFactory entityManagerFactory) {
-//        EntityManager entityManager = entityManagerCache.get();
-//        if (entityManager == null) {
-//            entityManagerCache.set(entityManager = entityManagerFactory.createEntityManager());
-//        }
-//        return entityManager;
-//    }
 }

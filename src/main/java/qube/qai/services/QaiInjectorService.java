@@ -22,15 +22,15 @@ public class QaiInjectorService {
 
     private static QaiInjectorService instance;
 
-    public QaiInjectorService(Injector injector) {
-        this.injector = injector;
-        instance = this;
+    private QaiInjectorService() {
     }
+
 
     public static QaiInjectorService getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("No instance ");
+            instance = new QaiInjectorService();
         }
+
         return instance;
     }
 
@@ -48,5 +48,9 @@ public class QaiInjectorService {
         if (instance != null) {
             injector.injectMembers(instance);
         }
+    }
+
+    public void setInjector(Injector injector) {
+        this.injector = injector;
     }
 }
