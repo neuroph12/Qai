@@ -46,50 +46,36 @@ import java.util.Set;
 /**
  * Created by rainbird on 11/26/15.
  */
-//@BindConfig(value = "qube/qai/main/config_dev", syntax = Syntax.PROPERTIES)
-//@BindConfig(value = "qube/qai/main/config_deploy", syntax = Syntax.PROPERTIES)
 public class QaiServerModule extends AbstractModule implements QaiConstants {
 
     private static Logger logger = LoggerFactory.getLogger("QaiServerModule");
 
-    //@InjectConfig(value = "NODE_NAME")
-    public String NODE_NAME = "QaiNode";
+    public String NODE_NAME = "NODE_NAME";
 
-    private String GRID_PASSWORD = "p4ssw0rd";
+    public String GRID_NAME = "GRID_NAME";
 
-    private String GRID_NAME = "Qai-Nodes";
+    public String GRID_PASSWORD = "GRID_PASSWORD";
 
-    //@InjectConfig(value = "CREATE_STOCK_ENTITIES")
     public String CREATE_STOCK_ENTITIES = "CREATE_STOCK_ENTITIES";
 
-    //@InjectConfig(value = "CREATE_STOCK_QUOTES")
     public String CREATE_STOCK_QUOTES = "CREATE_STOCK_QUOTES";
 
-    //@InjectConfig(value = "CREATE_PROCEDURES")
     public String CREATE_PROCEDURES = "CREATE_PROCEDURES";
 
-    //@InjectConfig(value = "CREATE_PROCEDURES")
     public String CREATE_STOCK_GROUPS = "CREATE_STOCK_GROUPS";
 
-    //@InjectConfig(value = "CREATE_WIKIPEDIA")
     public String CREATE_WIKIPEDIA = "CREATE_WIKIPEDIA";
 
-    //@InjectConfig(value = "CREATE_WIKIPEDIA_RESOURCES")
     public String CREATE_WIKIPEDIA_RESOURCES = "CREATE_WIKIPEDIA_RESOURCES";
 
-    //@InjectConfig(value = "CREATE_WIKTIONARY")
     public String CREATE_WIKTIONARY = "CREATE_WIKTIONARY";
 
-    //@InjectConfig(value = "CREATE_WIKTIONARY_RESOURCES")
     public String CREATE_WIKTIONARY_RESOURCES = "CREATE_WIKTIONARY_RESOURCES";
 
-    //@InjectConfig(value = "CREATE_USERS")
     public String CREATE_USERS = "CREATE_USERS";
 
-    //@InjectConfig(value = "CREATE_USER_SESSIONS")
     public String CREATE_USER_SESSIONS = "CREATE_USER_SESSIONS";
 
-    //@InjectConfig(value = "CREATE_USER_ROLES")
     public String CREATE_USER_ROLES = "CREATE_USER_ROLES";
 
     public String CREATE_UPLOAD_DIRECTORY = "CREATE_UPLOAD_DIRECTORY";
@@ -447,12 +433,13 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             return hazelcastInstance;
         }
 
-        Config config = new Config(NODE_NAME);
+        Config config = new Config(properties.getProperty(NODE_NAME));
         //config.getNetworkConfig().setSmartRouting(true);
         //config.getNetworkConfig().setRedoOperation(true);
-        config.getGroupConfig().setPassword(GRID_PASSWORD);
-        config.getGroupConfig().setName(GRID_NAME);
-        config.setInstanceName(NODE_NAME);
+        //config.setInstanceName(NODE_NAME);
+        config.getGroupConfig().setName(properties.getProperty(GRID_NAME));
+        config.getGroupConfig().setPassword(properties.getProperty(GRID_PASSWORD));
+
         GuiceManagedContext managedContext = new GuiceManagedContext();
         config.setManagedContext(managedContext);
 
