@@ -37,8 +37,8 @@ public class QaiNode {
 
     // this is where the different configration can be loadaed
     //private String PROPERTIES_FILE = "qube/qai/main/config_monday.properties";
-    private String PROPERTIES_FILE = "qube/qai/main/config_tuesday.properties";
-    //private String PROPERTIES_FILE = "qube/qai/main/config_wednesday.properties";
+    //private String PROPERTIES_FILE = "qube/qai/main/config_tuesday.properties";
+    private String PROPERTIES_FILE = "qube/qai/main/config_wednesday.properties";
     //private String PROPERTIES_FILE = "qube/qai/main/config_dev.properties";
 
     @Inject
