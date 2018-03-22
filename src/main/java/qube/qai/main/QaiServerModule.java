@@ -826,7 +826,7 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             mapStoreConfig = new MapStoreConfig();
         }
 
-        procedureMapStore = new PersistentModelMapStore(Procedure.class, properties.getProperty(properties.getProperty(PROCEDURE_MODEL_DIRECTORY)));
+        procedureMapStore = new PersistentModelMapStore(Procedure.class, properties.getProperty(PROCEDURE_MODEL_DIRECTORY));
         ((PersistentModelMapStore) procedureMapStore).init();
 
         mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
