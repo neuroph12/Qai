@@ -67,6 +67,7 @@ public class DistributedSearchService extends QaiMessageListener implements Dist
 
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
+
         if (!initialized) {
             initialize();
         }
