@@ -117,6 +117,8 @@ public class DistributedSearchService extends QaiMessageListener implements Dist
             results = (Collection<SearchResult>) messageObject;
             if (resultSink != null) {
                 resultSink.delayedResults(results);
+                String logMessage = String.format("'%s' delivered search-results to'%s'", getContext(), resultSink.getName());
+                logger.info(logMessage);
             }
         }
     }

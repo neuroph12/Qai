@@ -23,6 +23,10 @@ import java.util.Collection;
  */
 public interface SearchResultSink {
 
+    String getContext();
+
+    String getName();
+
     void delayedResults(Collection<SearchResult> results);
 
     void doSearch(String searchString);
