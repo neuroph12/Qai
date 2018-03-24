@@ -60,7 +60,7 @@ public class QaiTestNode extends QaiTestModule {
         injector.injectMembers(this);
 
         // so that the singleton is initialized
-        QaiInjectorService.getInstance().setInjector(injector);
+        QaiInjectorService.createInstance(injector);
 
         // the whole configuration takes place in guice
         // and the main instance is then distributed via injection

@@ -22,13 +22,19 @@ public class QaiInjectorService {
 
     private static QaiInjectorService instance;
 
-    private QaiInjectorService() {
+    private QaiInjectorService(Injector injectorInstance) {
+        injector = injectorInstance;
     }
 
+    public static QaiInjectorService createInstance(Injector injectorInstance) {
+        instance = new QaiInjectorService(injectorInstance);
+
+        return instance;
+    }
 
     public static QaiInjectorService getInstance() {
         if (instance == null) {
-            instance = new QaiInjectorService();
+            throw new IllegalStateException("No instance has been initialized!");
         }
 
         return instance;
@@ -50,7 +56,4 @@ public class QaiInjectorService {
         }
     }
 
-    public void setInjector(Injector injector) {
-        this.injector = injector;
-    }
 }
