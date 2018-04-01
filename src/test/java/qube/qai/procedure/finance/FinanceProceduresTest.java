@@ -16,13 +16,14 @@ package qube.qai.procedure.finance;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import org.slf4j.Logger;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.ProcedureLibraryInterface;
 import qube.qai.procedure.nodes.ProcedureDescription;
-import qube.qai.procedure.utils.Select;
+import qube.qai.procedure.utils.SelectForEach;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.implementation.SearchResult;
 
@@ -35,6 +36,9 @@ import java.util.Iterator;
  * Created by rainbird on 4/7/17.
  */
 public class FinanceProceduresTest extends QaiTestBase {
+
+    @Inject
+    private Logger logger;
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -62,7 +66,7 @@ public class FinanceProceduresTest extends QaiTestBase {
 
         int numberToPick = 10;
 
-        Select procedure = ProcedureLibrary.stockQuoteUpdaterTemplate.createProcedure();
+        SelectForEach procedure = ProcedureLibrary.stockQuoteUpdaterTemplate.createProcedure();
 
         Collection<SearchResult> searchResults = new ArrayList<>();
 
@@ -82,6 +86,9 @@ public class FinanceProceduresTest extends QaiTestBase {
             }
             break;
         }
+
+        assertNotNull("there has to be search results", searchResults);
+        assertTrue("there has to be search results", !searchResults.isEmpty() && searchResults.size() == numberToPick);
         procedure.setResults(searchResults);
 
         ProcedureDescription description = procedure.getProcedureDescription();

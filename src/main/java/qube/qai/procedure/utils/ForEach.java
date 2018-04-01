@@ -43,7 +43,7 @@ public class ForEach extends Procedure implements SpawningProcedure {
 //    @Inject
 //    private transient HazelcastInstance hazelcastInstance;
 
-    protected Select select;
+    protected SelectForEach select;
 
     protected Collection<QaiDataProvider> providerCollection;
 
@@ -69,9 +69,9 @@ public class ForEach extends Procedure implements SpawningProcedure {
     @Override
     protected void buildArguments() {
         getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<Select>(TARGET_COLLECTION) {
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<SelectForEach>(TARGET_COLLECTION) {
             @Override
-            public void setValue(Select value) {
+            public void setValue(SelectForEach value) {
                 super.setValue(value);
                 select = value;
             }
@@ -90,9 +90,9 @@ public class ForEach extends Procedure implements SpawningProcedure {
                 template = value;
             }
         });
-//        getProcedureDescription().getProcedureResults().addResult(new Select(TARGET_COLLECTION) {
+//        getProcedureDescription().getProcedureResults().addResult(new SelectForEach(TARGET_COLLECTION) {
 //            @Override
-//            public Select getValue() {
+//            public SelectForEach getValue() {
 //                return select;
 //            }
 //        });
@@ -195,11 +195,11 @@ public class ForEach extends Procedure implements SpawningProcedure {
         this.providerCollection = providerCollection;
     }
 
-    public Select getSelect() {
+    public SelectForEach getSelect() {
         return select;
     }
 
-    public void setSelect(Select select) {
+    public void setSelect(SelectForEach select) {
         this.select = select;
     }
 

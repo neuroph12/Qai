@@ -70,6 +70,9 @@ public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandl
 
     public void submitProcedure(Procedure procedure) {
 
+        // is this right?
+
+
         // before we submit we make note of the incoming request
         String startMessage = String.format(startMessageTemplate,
                 procedure.getProcedureName(), procedure.getUuid());

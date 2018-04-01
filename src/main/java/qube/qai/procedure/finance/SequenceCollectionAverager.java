@@ -22,7 +22,7 @@ import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.utils.Select;
+import qube.qai.procedure.utils.SelectForEach;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -35,7 +35,7 @@ public class SequenceCollectionAverager extends Procedure {
 
     private StockEntity childEntity;
 
-    private Select select;
+    private SelectForEach select;
 
     private Map<String, TimeSequence> sequenceMap;
 
@@ -61,9 +61,9 @@ public class SequenceCollectionAverager extends Procedure {
     @Override
     public void execute() {
 
-        if (select == null || select.getProviders() == null) {
+        /*if (select == null || select.getProviders() == null) {
             throw new IllegalStateException("Procedure has not been set-up right, no data to work with. Have to terminate");
-        }
+        }*/
 
         //Collection<QaiDataProvider> providers = select.getProviders();
         Collection<QaiDataProvider> providers = new ArrayList<>();
@@ -193,11 +193,11 @@ public class SequenceCollectionAverager extends Procedure {
         this.childEntity = childEntity;
     }
 
-    public Select getSelect() {
+    public SelectForEach getSelect() {
         return select;
     }
 
-    public void setSelect(Select select) {
+    public void setSelect(SelectForEach select) {
         this.select = select;
     }
 }
