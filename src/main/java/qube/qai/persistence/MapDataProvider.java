@@ -66,6 +66,17 @@ public class MapDataProvider implements QaiDataProvider {
     }
 
     @Override
+    public Object getData(String uuid) {
+        if (hazelcastInstance == null
+                || StringUtils.isBlank(context)
+                || StringUtils.isBlank(uuid)) {
+            throw new IllegalArgumentException("Setup is incomplete cannot broker data!");
+        }
+
+        return hazelcastInstance.getMap(context).get(uuid);
+    }
+
+    @Override
     public Object brokerSearchResult(SearchResult result) {
         if (hazelcastInstance == null
                 || StringUtils.isBlank(result.getUuid())

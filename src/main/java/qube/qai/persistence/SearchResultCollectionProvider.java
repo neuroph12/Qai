@@ -58,6 +58,17 @@ public class SearchResultCollectionProvider<T extends Collection> implements Qai
         return values;
     }
 
+    /**
+     * as this class is meant only for picking collection results....
+     *
+     * @param uuid
+     * @return
+     */
+    @Override
+    public T getData(String uuid) {
+        return null;
+    }
+
     @Override
     public T brokerSearchResult(SearchResult result) {
         return getData();

@@ -33,7 +33,8 @@
         <lucene.version>5.3.1</lucene.version>
         <tika.version>1.10</tika.version>
         <!-- 3.6.3 seems not to work with map-stores, therefore stay with the 3.5.4 -->
-        <hazelcast.version>3.8.6</hazelcast.version>
+        <!--<hazelcast.version>3.6.3</hazelcast.version>-->
+        <hazelcast.version>3.9.3</hazelcast.version>
         <!--<hazelcast.version>3.5.4</hazelcast.version>-->
 
         <guice.version>4.1.0</guice.version>

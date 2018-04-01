@@ -27,6 +27,8 @@ import qube.qai.message.MessageQueueInterface;
 import qube.qai.persistence.MapDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureLibraryInterface;
 import qube.qai.security.*;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.SearchServiceInterface;
@@ -48,7 +50,13 @@ public class QaiTestModule extends AbstractModule {
 
     private Logger logger = LoggerFactory.getLogger("QaiTestModule");
 
-    private static String NODE_NAME = "QaiTestNode";
+    private String NODE_NAME = "DevNode";
+
+    private String GRID_NAME = "DevGrid";
+
+    private String GRID_PASSWORD = "p4ssw0rd";
+
+    private String CONNECT_TO = "192.168.0.108:5701";
 
     protected HazelcastInstance hazelcastInstance;
 
@@ -99,6 +107,8 @@ public class QaiTestModule extends AbstractModule {
         bind(QaiSecurity.class).to(QaiTestSecurityManager.class);
 
         bind(ProcedureManagerInterface.class).to(TestProcedureManager.class);
+
+        bind(ProcedureLibraryInterface.class).to(ProcedureLibrary.class);
     }
 
     @Provides
@@ -131,13 +141,17 @@ public class QaiTestModule extends AbstractModule {
         return hazelcastInstance;
     }
 
+
     @Provides
     public ClientConfig provideHazelcastConfig() {
         clientConfig = new ClientConfig();
+        clientConfig.setInstanceName(NODE_NAME);
         //clientConfig.setInstanceName(NODE_NAME);
         GuiceManagedContext managedContext = new GuiceManagedContext();
         clientConfig.setManagedContext(managedContext);
-        clientConfig.getNetworkConfig().addAddress("127.0.0.1:5701");
+        clientConfig.getNetworkConfig().addAddress(CONNECT_TO);
+        //clientConfig.getGroupConfig().setName(GRID_NAME);
+        //clientConfig.getGroupConfig().setPassword(GRID_PASSWORD);
         return clientConfig;
     }
 

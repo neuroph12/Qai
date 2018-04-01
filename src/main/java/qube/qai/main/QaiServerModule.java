@@ -157,6 +157,60 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
     }
 
     /**
+     * DataProviders
+     */
+
+    @Provides
+    QaiDataProvider<User> providePUserProvider() {
+        QaiDataProvider<User> provider = new MapDataProvider(hazelcastInstance, USERS);
+        return provider;
+    }
+
+    @Provides
+    QaiDataProvider<Procedure> provideProcedureProvider() {
+        QaiDataProvider<Procedure> provider = new MapDataProvider(hazelcastInstance, PROCEDURES);
+        return provider;
+    }
+
+    @Provides
+    QaiDataProvider<StockGroup> provideStockGroupProvider() {
+        QaiDataProvider<StockGroup> provider = new MapDataProvider(hazelcastInstance, STOCK_GROUPS);
+        return provider;
+    }
+
+    @Provides
+    QaiDataProvider<StockEntity> provideStockEntityProvider() {
+        QaiDataProvider<StockEntity> provider = new MapDataProvider(hazelcastInstance, STOCK_ENTITIES);
+        return provider;
+    }
+
+    @Provides
+    QaiDataProvider<StockQuote> provideStockQuoteProvider() {
+        QaiDataProvider<StockQuote> provider = new MapDataProvider(hazelcastInstance, STOCK_QUOTES);
+        return provider;
+    }
+
+    @Provides
+    QaiDataProvider<WikiArticle> provideWikiArticleData() {
+        QaiDataProvider<WikiArticle> provider = new MapDataProvider(hazelcastInstance, WIKIPEDIA);
+        return provider;
+    }
+
+    @Provides
+    @Named("WikiResources_en")
+    QaiDataProvider<ResourceData> provideWikiResourceProvider() {
+        QaiDataProvider<ResourceData> provider = new MapDataProvider(hazelcastInstance, WIKIPEDIA_RESOURCES);
+        return provider;
+    }
+
+    @Provides
+    @Named("PdfFileResources")
+    QaiDataProvider<ResourceData> providePdfResourceProvider() {
+        QaiDataProvider<ResourceData> provider = new MapDataProvider(hazelcastInstance, PDF_FILE_RESOURCES);
+        return provider;
+    }
+
+    /**
      * WiktionarySearchService
      * returns the distributed wiki service for wiktionary
      * and starts the listener service which will broker the requests
@@ -437,8 +491,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
         //config.getNetworkConfig().setSmartRouting(true);
         //config.getNetworkConfig().setRedoOperation(true);
         //config.setInstanceName(NODE_NAME);
-        config.getGroupConfig().setName(properties.getProperty(GRID_NAME));
-        config.getGroupConfig().setPassword(properties.getProperty(GRID_PASSWORD));
+        //config.getGroupConfig().setName(properties.getProperty(GRID_NAME));
+        //config.getGroupConfig().setPassword(properties.getProperty(GRID_PASSWORD));
 
         GuiceManagedContext managedContext = new GuiceManagedContext();
         config.setManagedContext(managedContext);

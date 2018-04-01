@@ -26,6 +26,7 @@ import qube.qai.services.ProcedureRunnerInterface;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Set;
+import java.util.concurrent.Future;
 
 /**
  * Created by rainbird on 12/22/15.
@@ -92,19 +93,20 @@ public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandl
             procedures = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
         }
 
+        IExecutorService executor = hazelcastInstance.getExecutorService(SERVICE_NAME);
+        Future futureResult = executor.submit(procedure);
+
+        String allOK = String.format(procStartedMessageTemplate, procedure.getProcedureName(), procedure.getUuid());
+        logger.info(allOK);
+
         if (procedures.containsKey(uuid)) {
+            procedure.setState(ProcedureState.STARTED);
             procedures.replace(uuid, procedure);
             logger.info("procedure " + procedure.getProcedureName() + " was already in database- replacing");
         } else {
             procedures.put(uuid, procedure);
             logger.info("procedure " + procedure.getProcedureName() + " was not found- creating");
         }
-
-        IExecutorService executor = hazelcastInstance.getExecutorService(SERVICE_NAME);
-        executor.execute(procedure);
-
-        String allOK = String.format(procStartedMessageTemplate, procedure.getProcedureName(), procedure.getUuid());
-        logger.info(allOK);
 
     }
 

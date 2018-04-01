@@ -96,7 +96,8 @@ public class ProcedureManager implements ProcedureManagerInterface {
 
     @Override
     public boolean isProcedureAndUserAuthorized(Procedure procedure) {
-        return false;
+        // @TODO implement this method to work right
+        return true;
     }
 
     @Override

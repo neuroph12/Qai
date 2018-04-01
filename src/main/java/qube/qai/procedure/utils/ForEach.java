@@ -120,7 +120,8 @@ public class ForEach extends Procedure implements SpawningProcedure {
             }
 
             if (providerCollection == null) {
-                providerCollection = select.getProviders();
+                //providerCollection = select.getProviders();
+                throw new IllegalStateException("Providers are missing! Aborting procedure.");
             }
 
             for (QaiDataProvider param : providerCollection) {
@@ -183,7 +184,8 @@ public class ForEach extends Procedure implements SpawningProcedure {
     public Collection<QaiDataProvider> getProviderCollection() {
 
         if (providerCollection == null) {
-            providerCollection = select.getProviders();
+            //providerCollection = select.getProviders();
+            throw new IllegalStateException("No providers set");
         }
 
         return providerCollection;

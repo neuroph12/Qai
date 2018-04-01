@@ -19,10 +19,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.sparql.JenaTransactionException;
 import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureLibraryInterface;
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
@@ -83,11 +83,21 @@ public class PersistentModelMapStore implements MapStore {
 
     @Override
     public void store(Object key, Object value) {
+
         logger.info("Storing object: " + value + " with key: " + key);
-        dataset.begin(ReadWrite.WRITE);
-        writer.save(baseClass.cast(value));
-        dataset.commit();
-        dataset.end();
+
+        try {
+
+            dataset.begin(ReadWrite.WRITE);
+            writer.save(baseClass.cast(value));
+            dataset.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            dataset.end();
+        }
     }
 
     @Override
@@ -99,12 +109,24 @@ public class PersistentModelMapStore implements MapStore {
 
     @Override
     public void delete(Object key) {
+
         logger.info("Deleting object with key: " + key);
+
         Object toDelete = load(key);
-        dataset.begin(ReadWrite.WRITE);
-        writer.delete(baseClass.cast(toDelete));
-        dataset.commit();
-        dataset.end();
+
+        try {
+
+            dataset.begin(ReadWrite.WRITE);
+            writer.delete(baseClass.cast(toDelete));
+            dataset.commit();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        } finally {
+
+            dataset.end();
+        }
     }
 
     @Override
@@ -116,22 +138,34 @@ public class PersistentModelMapStore implements MapStore {
 
     @Override
     public Object load(Object key) {
+
         logger.info("Loading object with key: " + key);
+
         try {
             dataset.begin(ReadWrite.WRITE);
             Object found = null;
-            if (baseClass.isAssignableFrom(Procedure.class)) {
+            found = reader.load(baseClass, key);
+            /*if (baseClass.isAssignableFrom(Procedure.class)) {
                 found = checkProcedureTypes(key);
             } else {
                 found = reader.load(baseClass, key);
-            }
-
-            dataset.end();
+            }*/
 
             return found;
+
         } catch (NotFoundException e) {
+
             return null;
+
+        } catch (JenaTransactionException e) {
+
+            return null;
+
+        } finally {
+
+            dataset.end();
         }
+
     }
 
     /**
@@ -144,17 +178,25 @@ public class PersistentModelMapStore implements MapStore {
      * @return
      */
     private Object checkProcedureTypes(Object key) {
+
         Object found = null;
+
         for (Class klass : procedureLibrary.getTemplateMap().keySet()) {
+
             try {
+
                 found = reader.load(klass, key);
+
             } catch (NotFoundException e) {
+
                 continue;
             }
+
             if (found != null) {
                 break;
             }
         }
+
         return found;
     }
 

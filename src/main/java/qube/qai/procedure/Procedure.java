@@ -26,6 +26,7 @@ import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
 import qube.qai.parsers.antimirov.nodes.EmptyNode;
 import qube.qai.parsers.antimirov.nodes.Name;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.procedure.event.ProcedureEnded;
 import qube.qai.procedure.event.ProcedureError;
 import qube.qai.procedure.event.ProcedureInterrupted;
@@ -55,9 +56,13 @@ public abstract class Procedure extends ConcatenationNode
     protected transient DataSelectorFactory selectorFactory;
 
     @Inject
+    protected QaiDataProvider<User> userProvider;
+
+    @Inject
     protected transient HazelcastInstance hazelcastInstance;
 
-    protected User user;
+    //protected User user;
+    protected String userUUID;
 
     protected long duration;
 
@@ -239,11 +244,11 @@ public abstract class Procedure extends ConcatenationNode
     }
 
     public User getUser() {
-        return user;
+        return userProvider.getData(userUUID);
     }
 
     public void setUser(User user) {
-        this.user = user;
+        this.userUUID = user.getUuid();
     }
 
     public double getProgressPercentage() {
@@ -291,8 +296,8 @@ public abstract class Procedure extends ConcatenationNode
     }
 
     public String getUserName() {
-        if (user != null) {
-            return user.getUsername();
+        if (userUUID != null) {
+            return userProvider.getData().getUsername();
         } else {
             return "n/a";
         }

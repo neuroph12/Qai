@@ -15,16 +15,14 @@
 package qube.qai.procedure.utils;
 
 import com.hazelcast.core.HazelcastInstance;
-import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
-import qube.qai.persistence.SearchResultProvider;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 public class Select extends Procedure {
 
@@ -37,12 +35,14 @@ public class Select extends Procedure {
 
     private Collection<SearchResult> results;
 
-    private Collection<QaiDataProvider> providers;
+    private Map<String, QaiDataProvider> providers;
+
+    private Procedure provideFor;
 
     @Override
     public void execute() {
 
-        if (providers == null) {
+        /*if (providers == null) {
 
             providers = new ArrayList<>();
             for (SearchResult result : results) {
@@ -55,7 +55,18 @@ public class Select extends Procedure {
                 }
                 providers.add(provider);
             }
+        }*/
+
+        if (provideFor == null) {
+            throw new IllegalStateException("Select procedure has to child to provide for! Exiting");
         }
+
+
+        for (String name : providers.keySet()) {
+            provideFor.getProcedureDescription().getProcedureInputs().getNamedInput(name).setValue(providers.get(name));
+        }
+
+        provideFor.execute();
     }
 
     @Override
@@ -77,7 +88,7 @@ public class Select extends Procedure {
         this.results = results;
     }
 
-    public Collection<QaiDataProvider> getProviders() {
+    /*public Collection<QaiDataProvider> getProviders() {
 
         if ((results != null || !results.isEmpty())
                 && (providers == null || providers.isEmpty())) {
@@ -99,5 +110,20 @@ public class Select extends Procedure {
             providers.add(provider);
         }
     }
+*/
+    public Procedure getProvideFor() {
+        return provideFor;
+    }
 
+    public void setProvideFor(Procedure provideFor) {
+        this.provideFor = provideFor;
+    }
+
+    public Map<String, QaiDataProvider> getProviders() {
+        return providers;
+    }
+
+    public void setProviders(Map<String, QaiDataProvider> providers) {
+        this.providers = providers;
+    }
 }

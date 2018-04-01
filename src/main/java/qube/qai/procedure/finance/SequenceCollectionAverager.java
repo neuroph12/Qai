@@ -65,7 +65,8 @@ public class SequenceCollectionAverager extends Procedure {
             throw new IllegalStateException("Procedure has not been set-up right, no data to work with. Have to terminate");
         }
 
-        Collection<QaiDataProvider> providers = select.getProviders();
+        //Collection<QaiDataProvider> providers = select.getProviders();
+        Collection<QaiDataProvider> providers = new ArrayList<>();
         allUUIDs = new LinkedHashSet<>();
         allDates = new TreeSet<>();
         childEntity = new StockEntity();

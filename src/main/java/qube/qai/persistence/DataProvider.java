@@ -46,6 +46,11 @@ public class DataProvider<T> implements QaiDataProvider<T> {
         return data;
     }
 
+    @Override
+    public T getData(String uuid) {
+        return data;
+    }
+
     public void setData(T data) {
         this.data = data;
     }

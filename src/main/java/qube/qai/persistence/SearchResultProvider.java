@@ -55,6 +55,17 @@ public class SearchResultProvider<T> implements QaiDataProvider<T> {
     }
 
     @Override
+    public T getData(String uuid) {
+
+        if (data == null) {
+            IMap<String, T> map = hazelcastInstance.getMap(result.getContext());
+            data = map.get(uuid);
+        }
+
+        return data;
+    }
+
+    @Override
     public T brokerSearchResult(SearchResult result) {
         IMap<String, T> map = hazelcastInstance.getMap(result.getContext());
         return map.get(result.getUuid());

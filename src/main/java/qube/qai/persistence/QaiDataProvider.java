@@ -28,6 +28,8 @@ public interface QaiDataProvider<T> extends Serializable {
 
     T getData();
 
+    T getData(String uuid);
+
     T brokerSearchResult(SearchResult result);
 
     void putData(String uuid, T data);
