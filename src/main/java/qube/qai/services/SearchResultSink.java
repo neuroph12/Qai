@@ -30,4 +30,7 @@ public interface SearchResultSink {
     void delayedResults(Collection<SearchResult> results);
 
     void doSearch(String searchString);
+
+    Collection<SearchResult> getCurrentResult();
+
 }

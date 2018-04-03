@@ -28,7 +28,7 @@ import java.util.Collection;
 public class WikiSearchTest extends QaiTestBase {
 
     @Inject
-    @Named("Wikikipedia_en")
+    @Named("Wikipedia_en")
     private SearchServiceInterface wikiSearchService;
 
     @Inject

@@ -64,10 +64,10 @@ public class QaiTestModule extends AbstractModule {
 
     private ProcedureManager procedureManager;
 
-    private static String wikipediaDirectory = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.index";
+    private static String wikipediaDirectory = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.index";
     //private static String wikipediaDirectory = "/media/pi/BET/wiki-archives/wikipedia_en.index";
 
-    private static String wikipediaZipFileName = "/media/rainbird/GIMEL/wiki-archives/wikipedia_en.zip";
+    private static String wikipediaZipFileName = "/media/rainbird/ALEPH/wiki-archives/wikipedia_en.zip";
     //private static String wikipediaZipFileName = "/media/pi/BET/wiki-archives/wikipedia_en.zip";
 
     private static String wiktionaryDirectory = "/media/rainbird/ALEPH/wiki-archives/wiktionary_en.index";

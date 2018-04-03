@@ -16,7 +16,6 @@ package qube.qai.data.selectors;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import org.apache.commons.lang3.StringUtils;
 import qube.qai.data.SelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
@@ -100,28 +99,20 @@ public class TestHazelcastSelectors extends QaiTestBase {
      */
     public void testHazelcastProcedures() throws Exception {
 
-        IMap<String, Procedure> procedures = hazelcastInstance.getMap(PROCEDURE_SOURCE);
+        Collection<SelectionOperator> operators = new ArrayList<>();
+        IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(PROCEDURE_SOURCE);
 
-        List<SelectionOperator> selectionOperators = new ArrayList<SelectionOperator>();
-        Collection<Class> procedureNames = procedureLibrary.getTemplateMap().keySet();
-        for (Class name : procedureNames) {
-            Procedure procedure = (Procedure) name.newInstance();
-            assertNotNull("procedure should not be null", procedure);
-            String uuid = procedure.getUuid();
-            if (StringUtils.isBlank(uuid)) {
-                uuid = uuidService.createUUIDString();
-                procedure.setUuid(uuid);
-            }
-            SelectionOperator<Procedure> selectionOperator = new HazelcastSelectionOperator<Procedure>(PROCEDURE_SOURCE, uuid);
-            procedures.put(uuid, procedure);
-            selectionOperators.add(selectionOperator);
+        for (String uuid : procedureMap.keySet()) {
+            Procedure procedure = procedureMap.get(uuid);
+            assertNotNull("procedure may not be null", procedure);
+            SelectionOperator<Procedure> operator = new HazelcastSelectionOperator<Procedure>(PROCEDURES, uuid);
+            operators.add(operator);
         }
 
-        // now after putting everything in hazelcast we should be able to read them as well
-        for (SelectionOperator selectionOperator : selectionOperators) {
-            injector.injectMembers(selectionOperator);
-            Procedure procedure = (Procedure) selectionOperator.getData();
-            assertNotNull("there has to be a procedure", procedure);
+        for (SelectionOperator<Procedure> operator : operators) {
+            Procedure procedure = operator.getData();
+            assertNotNull("the operator has to return a value", procedure);
+
         }
     }
 
