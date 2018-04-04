@@ -23,6 +23,7 @@ import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
+import qube.qai.procedure.Procedure;
 import qube.qai.services.SearchServiceInterface;
 
 import javax.inject.Inject;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
-public class SemanticNetworkBuilder implements NetworkBuilder {
+public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder {
 
     private boolean debug = true;
 
@@ -149,5 +150,20 @@ public class SemanticNetworkBuilder implements NetworkBuilder {
         if (debug) {
             System.out.println(message);
         }
+    }
+
+    @Override
+    public void execute() {
+        buildNetwork(null);
+    }
+
+    @Override
+    public Procedure createInstance() {
+        return new SemanticNetworkBuilder();
+    }
+
+    @Override
+    protected void buildArguments() {
+
     }
 }

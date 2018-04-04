@@ -25,9 +25,9 @@ import qube.qai.procedure.nodes.ValueNode;
  */
 public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstants {
 
-    public static String NAME = "Neural-Network Analysis";
+    public String NAME = "Neural-Network Analysis";
 
-    public static String DESCRIPTION = "Neural-network analysis " +
+    public String DESCRIPTION = "Neural-network analysis " +
             "does a statistical analysis of the weights, " +
             "their network structure, etc.";
 
@@ -36,7 +36,7 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
     private Metrics metrics;
 
     public NeuralNetworkAnalysis() {
-        super(NAME);
+        super("Neural-Network Analysis");
     }
 
     @Override

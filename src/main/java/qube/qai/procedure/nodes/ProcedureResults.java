@@ -44,12 +44,14 @@ public class ProcedureResults extends ConcatenationNode {
         }
     }
 
+    @Deprecated
     public ValueNode getNamedResult(String name) {
         NameSearchingVisitor visitor = new NameSearchingVisitor();
         childrenAccept(visitor, name);
         return visitor.getFirstFound();
     }
 
+    @Deprecated
     public Collection<String> getResultNames() {
         NameCollectingVisitor visitor = new NameCollectingVisitor();
         childrenAccept(visitor, null);

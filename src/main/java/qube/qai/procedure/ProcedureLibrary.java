@@ -15,13 +15,14 @@
 
 package qube.qai.procedure;
 
-import qube.qai.network.finance.FinanceNetworkBuilderSpawner;
+import qube.qai.network.finance.FinanceNetworkBuilder;
+import qube.qai.network.semantic.SemanticNetworkBuilder;
+import qube.qai.network.syntax.SyntaxNetworkBuilder;
 import qube.qai.network.wiki.WikiNetworkBuilder;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
-import qube.qai.procedure.analysis.SortPercentiles;
-import qube.qai.procedure.finance.SequenceCollectionAverager;
+import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
+import qube.qai.procedure.analysis.NeuralNetworkForwardPropagation;
 import qube.qai.procedure.finance.StockQuoteUpdater;
-import qube.qai.procedure.utils.ForEach;
 import qube.qai.procedure.utils.SelectForEach;
 
 import java.util.HashMap;
@@ -132,292 +133,257 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
         }
     };*/
 
+    private static ProcedureTemplate<SelectForEach> semanticNetworkBuiderTemplate = new ProcedureTemplate<SelectForEach>() {
 
-    private static ProcedureTemplate<StockQuoteUpdater> plainStockQuoteUpdater = new SimpleProcedureTemplate<StockQuoteUpdater>(new StockQuoteUpdater());
-    ;
+        private String name = "Semantic-network Builder";
 
-
-    public static ProcedureTemplate<SelectForEach> wikiNetworkBuilderTemplate = new ProcedureTemplate<SelectForEach>() {
-        @Override
-        public SelectForEach createProcedure() {
-
-            SelectForEach select = new SelectForEach();
-
-            return select;
-        }
-
-        @Override
-        public String getProcedureName() {
-            return WikiNetworkBuilder.NAME;
-        }
-
-        @Override
-        public String getProcedureDescription() {
-            return WikiNetworkBuilder.DESCRIPTION;
-        }
-    };
-
-    public static ProcedureTemplate<SelectForEach> financeNetworkBuilderTemplate = new ProcedureTemplate<SelectForEach>() {
-        @Override
-        public SelectForEach createProcedure() {
-
-            SelectForEach select = new SelectForEach();
-            return select;
-        }
-
-        @Override
-        public String getProcedureName() {
-            return FinanceNetworkBuilderSpawner.NAME;
-        }
-
-        @Override
-        public String getProcedureDescription() {
-            return FinanceNetworkBuilderSpawner.DESCRIPTION;
-        }
-    };
-
-    public static ProcedureTemplate<SelectForEach> changePointAnalysisTemplate = new ProcedureTemplate<SelectForEach>() {
-        @Override
-        public SelectForEach createProcedure() {
-
-
-            ForEach forEach = new ForEach();
-
-            ChangePointAnalysis changePoint = new ChangePointAnalysis();
-            SelectForEach select = new SelectForEach();
-
-
-            return select;
-        }
-
-        @Override
-        public String getProcedureName() {
-            return ChangePointAnalysis.NAME;
-        }
-
-        @Override
-        public String getProcedureDescription() {
-            return ChangePointAnalysis.DESCRIPTION;
-        }
-    };
-
-    public static ProcedureTemplate<SelectForEach> sequenceAveragerTemplate = new ProcedureTemplate<SelectForEach>() {
-        @Override
-        public SelectForEach createProcedure() {
-
-            SequenceCollectionAverager averager = new SequenceCollectionAverager();
-            SelectForEach select = new SelectForEach();
-            averager.setSelect(select);
-
-            return select;
-        }
-
-        @Override
-        public String getProcedureName() {
-            return SequenceCollectionAverager.NAME;
-        }
-
-        @Override
-        public String getProcedureDescription() {
-            return SequenceCollectionAverager.DESCRIPTION;
-        }
-    };
-
-
-    /**
-     * remember this is a template which is meant to be executed with the
-     * input from the gui-layer, in this case a collection of pointers to
-     * stock-entities whose quotes need first updated
-     */
-    public static ProcedureTemplate<SelectForEach> sortingPercentilesTemplate = new ProcedureTemplate<SelectForEach>() {
+        private String desc = "Drop in the wiki-articles or pdf-documents from which you want to create a semantic network. " +
+                "These networks will be used for shortest-path algorithms required, which will be used " +
+                "for machine translation tasks.";
 
         @Override
         public SelectForEach createProcedure() {
-            SelectForEach select = new SelectForEach();
-            SortPercentiles procedure = new SortPercentiles();
-            ForEach forEach = new ForEach();
-            forEach.getProcedureDescription().getProcedureInputs().getNamedInput(PROCEDURE_TEMPLATE).setValue(stockQuoteUpdaterTemplate);
-            forEach.getProcedureDescription().getProcedureInputs().getNamedInput(TARGET_INPUT_NAME).setValue(STOCK_ENTITY);
-            procedure.getProcedureDescription().getProcedureInputs().getNamedInput(FROM).setValue(forEach);
-            //return forEach;
 
-            return select;
-        }
-
-        @Override
-        public String getProcedureName() {
-            return SortPercentiles.NAME;
-        }
-
-        @Override
-        public String getProcedureDescription() {
-            return SortPercentiles.DESCRIPTION;
-        }
-    };
-
-
-    public static ProcedureTemplate<SelectForEach> stockQuoteUpdaterTemplate = new ProcedureTemplate<SelectForEach>() {
-        @Override
-        public SelectForEach createProcedure() {
             SelectForEach procedure = new SelectForEach();
-
-            procedure.setProvideFor(new ProcedureTemplate<StockQuoteUpdater>() {
-                @Override
-                public StockQuoteUpdater createProcedure() {
-                    return new StockQuoteUpdater();
-                }
-
-                @Override
-                public String getProcedureName() {
-                    return StockQuoteUpdater.NAME;
-                }
-
-                @Override
-                public String getProcedureDescription() {
-                    return StockQuoteUpdater.DESCRIPTION;
-                }
-            });
+            procedure.setNAME(name);
+            procedure.setDESCRIPTION(desc);
 
             return procedure;
         }
 
         @Override
         public String getProcedureName() {
-            return StockQuoteUpdater.NAME;
+            return name;
         }
 
         @Override
         public String getProcedureDescription() {
-            return StockQuoteUpdater.DESCRIPTION;
+            return desc;
         }
     };
+
+    private static ProcedureTemplate<SelectForEach> syntaxNetworkBuiderTemplate = new ProcedureTemplate<SelectForEach>() {
+
+        private String name = "Syntax-network Builder";
+
+        private String desc = "Drop in the wiki-articles or pdf-documents from which you want to create a syntactic network. " +
+                "These networks will be used as training-set for training recurrent neural-networks, which will be used " +
+                "for machine translation tasks.";
+
+        @Override
+        public SelectForEach createProcedure() {
+
+            SelectForEach procedure = new SelectForEach();
+            procedure.setNAME(name);
+            procedure.setDESCRIPTION(desc);
+
+            return procedure;
+        }
+
+        @Override
+        public String getProcedureName() {
+            return name;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return desc;
+        }
+    };
+
+
+    private static ProcedureTemplate<SelectForEach> forwardPropagationTemplate = new ProcedureTemplate<SelectForEach>() {
+
+        private String name = "Neural-network forward-propagation";
+
+        private String desc = "Drop in the trained neural-networks for forward-propagation. In case of " +
+                "stock-entity networks, forward propagation will be used for Monte-Carlo simulations " +
+                "in order to make future estimations of the market development.";
+
+        @Override
+        public SelectForEach createProcedure() {
+
+            SelectForEach procedure = new SelectForEach();
+            procedure.setNAME(name);
+            procedure.setDESCRIPTION(desc);
+
+            return procedure;
+        }
+
+        @Override
+        public String getProcedureName() {
+            return name;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return desc;
+        }
+    };
+
+    private static ProcedureTemplate<SelectForEach> neuralNetworkAnalysisTemplate = new ProcedureTemplate<SelectForEach>() {
+
+        private String name = "Neural-network Analysis";
+
+        private String desc = "Drop in the trained neural-networks in order to make statistical analysis of the weights and entropy " +
+                "and their graph representation for additional information.";
+
+        @Override
+        public SelectForEach createProcedure() {
+            SelectForEach procedure = new SelectForEach();
+
+            procedure.setNAME(name);
+            procedure.setDESCRIPTION(desc);
+
+            return procedure;
+        }
+
+        @Override
+        public String getProcedureName() {
+            return name;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return desc;
+        }
+    };
+
+
+    public static ProcedureTemplate<SelectForEach> wikiNetworkBuilderTemplate = new ProcedureTemplate<SelectForEach>() {
+
+        private String name = "Wiki-network Builder";
+
+        private String desc = "Drop in the wiki-articles for which the network should be created in the tab. " +
+                "With the help of this network, the articles can be ranked and related according to their different attributes.";
+
+        @Override
+        public SelectForEach createProcedure() {
+
+            SelectForEach select = new SelectForEach();
+            select.setNAME(name);
+            select.setDESCRIPTION(desc);
+
+            return select;
+        }
+
+        @Override
+        public String getProcedureName() {
+            return name;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return desc;
+        }
+    };
+
+    public static ProcedureTemplate<SelectForEach> financeNetworkBuilderTemplate = new ProcedureTemplate<SelectForEach>() {
+
+        private String name = "Finance-network Builder";
+
+        private String desc = "Drop in the stock-entities from the finance menu here. " +
+                "The routines will take over the job creating and traning the neural-network with their quotes " +
+                "which will be interpreted as a graph. With the help of these graphs the stock-entities can be ranked, " +
+                "as well as entropy of the market around this period will also be estimated. " +
+                "Additionally the so trained neural-networks will also be used for Monte-Carlo simulations to serve as prognosis tool.";
+
+        @Override
+        public SelectForEach createProcedure() {
+
+            SelectForEach select = new SelectForEach();
+            select.setNAME(name);
+            select.setDESCRIPTION(desc);
+
+            return select;
+        }
+
+        @Override
+        public String getProcedureName() {
+            return name;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return desc;
+        }
+    };
+
+    public static ProcedureTemplate<SelectForEach> changePointAnalysisTemplate = new ProcedureTemplate<SelectForEach>() {
+
+        private String name = "Change-point Analysis";
+
+        private String desc = "Drop in the stock-entities for which the analysis should be made. " +
+                "This routine detects change-points in time-series, in this case stock-quotes of the selected stock-entities, to divide them in periods. " +
+                "These periods will be taken as traning-sets with which neural-networks will be trained." +
+                "This way, each trained neural-network with its entropy will be associatied with one such period.";
+
+        @Override
+        public SelectForEach createProcedure() {
+
+
+            SelectForEach select = new SelectForEach();
+            select.setNAME(name);
+            select.setDESCRIPTION(desc);
+
+            return select;
+        }
+
+        @Override
+        public String getProcedureName() {
+            return name;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return desc;
+        }
+    };
+
+    public static ProcedureTemplate<SelectForEach> stockQuoteUpdaterTemplate = new ProcedureTemplate<SelectForEach>() {
+
+        private String name = "Stock-quote Updater";
+
+        private String desc = "Drop the stock-quotes to be updated in the selection tab, " +
+                "the procedure will retrieve the stock-quotes to the latest stand.";
+
+        @Override
+        public SelectForEach createProcedure() {
+
+            SelectForEach procedure = new SelectForEach();
+            procedure.setNAME(name);
+            procedure.setDESCRIPTION(desc);
+
+            return procedure;
+        }
+
+        @Override
+        public String getProcedureName() {
+            return name;
+        }
+
+        @Override
+        public String getProcedureDescription() {
+            return desc;
+        }
+    };
+
 
     @Override
     public Map<Class, ProcedureTemplate> getTemplateMap() {
 
         Map<Class, ProcedureTemplate> templateMap = new HashMap<>();
 
-        //templateMap.put(SimpleProcedure.class, simpleTemplate);
-        //templateMap.put(MatrixStatistics.class, matrixStatisticsTemplate);
-        //templateMap.put(TimeSequenceAnalysis.class, timeSequenceAnalysisTemplate);
-        //templateMap.put(NetworkStatistics.class, networkStatisticstemplate);
-        //templateMap.put(NeuralNetworkAnalysis.class, neuralNetworkAnalysisTemplate);
-        //templateMap.put(NeuralNetworkForwardPropagation.class, forwardPropagationTemplate);
-        //templateMap.put(DirectoryIndexer.class, directoryIndexerTemplate);
-        //templateMap.put(WikiArchiveIndexer.class, wikiArchiveIndexerTemplate);
-        //templateMap.put(StockEntityInitialization.class, stockEntityInitializationTemplate);
-        //templateMap.put(WikiRipperProcedure.class, wikiRipperTemplate);
-        //templateMap.put(Attach.class, attachTemplate);
-        //templateMap.put(SelectOut.class, selectionTemplate);
-        //templateMap.put(CreateUser.class, createUserTemplate);
-        //templateMap.put(SortPercentiles.class, sortingPercentilesTemplate);
-        //templateMap.put(ForEach.class, forEachTemplate);
-        //templateMap.put(FinanceNetworkBuilder.class, financeNetworkBuilderTemplate);
-        //templateMap.put(SliceIntervals.class, sliceTemplate);
-
-        templateMap.put(WikiNetworkBuilder.class, wikiNetworkBuilderTemplate);
-        templateMap.put(Procedure.class, financeNetworkBuilderTemplate);
         templateMap.put(ChangePointAnalysis.class, changePointAnalysisTemplate);
-        templateMap.put(SequenceCollectionAverager.class, sequenceAveragerTemplate);
-        templateMap.put(SortPercentiles.class, sortingPercentilesTemplate);
+        templateMap.put(FinanceNetworkBuilder.class, financeNetworkBuilderTemplate);
+        templateMap.put(NeuralNetworkForwardPropagation.class, forwardPropagationTemplate);
+        templateMap.put(NeuralNetworkAnalysis.class, neuralNetworkAnalysisTemplate);
+        templateMap.put(SemanticNetworkBuilder.class, semanticNetworkBuiderTemplate);
+        templateMap.put(SyntaxNetworkBuilder.class, syntaxNetworkBuiderTemplate);
         templateMap.put(StockQuoteUpdater.class, stockQuoteUpdaterTemplate);
+        templateMap.put(WikiNetworkBuilder.class, wikiNetworkBuilderTemplate);
 
         return templateMap;
     }
-
-//    public static Map<String, ProcedureTemplate> getTemplateNameMap() {
-//
-//        Map<String, ProcedureTemplate> templateMap = new TreeMap<>();
-//
-//        templateMap.put(SimpleProcedure.NAME, simpleTemplate);
-//        templateMap.put(MatrixStatistics.NAME, matrixStatisticsTemplate);
-//        templateMap.put(ChangePointAnalysis.NAME, changePointAnalysisTemplate);
-//        templateMap.put(TimeSequenceAnalysis.NAME, timeSequenceAnalysisTemplate);
-//        templateMap.put(NetworkStatistics.NAME, networkStatisticstemplate);
-//        templateMap.put(NeuralNetworkAnalysis.NAME, neuralNetworkAnalysisTemplate);
-//        templateMap.put(NeuralNetworkForwardPropagation.NAME, forwardPropagationTemplate);
-//        templateMap.put(DirectoryIndexer.NAME, directoryIndexerTemplate);
-//        templateMap.put(WikiArchiveIndexer.NAME, wikiArchiveIndexerTemplate);
-//        templateMap.put(StockEntityInitialization.NAME, stockEntityInitializationTemplate);
-//        templateMap.put(StockQuoteUpdater.NAME, stockQuoteUpdaterTemplate);
-//        templateMap.put(WikiRipperProcedure.NAME, wikiRipperTemplate);
-//        templateMap.put(Attach.NAME, attachTemplate);
-//        templateMap.put(SelectOut.NAME, selectionTemplate);
-//        templateMap.put(CreateUser.NAME, createUserTemplate);
-//        templateMap.put(FinanceNetworkBuilder.NAME, financeNetworkBuilderTemplate);
-//        templateMap.put(SortPercentiles.NAME, sortingPercentilesTemplate);
-//        templateMap.put(SliceIntervals.NAME, sliceTemplate);
-//        templateMap.put(ForEach.NAME, forEachTemplate);
-//
-//        return templateMap;
-//    }
-
-    /*public static ProcedureTemplate[] allTemplates = new ProcedureTemplate[]{
-            simpleTemplate,
-            matrixStatisticsTemplate,
-            changePointAnalysisTemplate,
-            timeSequenceAnalysisTemplate,
-            networkStatisticstemplate,
-            neuralNetworkAnalysisTemplate,
-            forwardPropagationTemplate,
-            directoryIndexerTemplate,
-            wikiArchiveIndexerTemplate,
-            stockEntityInitializationTemplate,
-            stockQuoteUpdaterTemplate,
-            wikiRipperTemplate,
-            attachTemplate,
-            selectionTemplate,
-            createUserTemplate,
-            financeNetworkBuilderTemplate,
-            sortingPercentilesTemplate,
-            sliceTemplate,
-            forEachTemplate
-    };*/
-
-    //private static Map<String, ProcedureTemplate> templateMap = new TreeMap<>();
-
-
-    /*public static ProcedureTemplate getNamedProcedureTemplate(String name) {
-        return getTemplateMap().get(name);
-    }*/
-
-    /**
-     * All known implementing sub-classes
-     *
-     * @return
-     */
-    /*public static Collection<Class> knownSubClasses() {
-
-        Collection<Class> classes = new ArrayList<>();
-
-        // analysis
-        classes.add(SimpleProcedure.class);
-        classes.add(MatrixStatistics.class);
-        classes.add(ChangePointAnalysis.class);
-        classes.add(TimeSequenceAnalysis.class);
-        classes.add(NetworkStatistics.class);
-        classes.add(NeuralNetworkAnalysis.class);
-        classes.add(NeuralNetworkForwardPropagation.class);
-        classes.add(DirectoryIndexer.class);
-        classes.add(WikiArchiveIndexer.class);
-        classes.add(StockEntityInitialization.class);
-        classes.add(WikiRipperProcedure.class);
-
-        classes.add(FinanceNetworkBuilder.class);
-        classes.add(SortPercentiles.class);
-        classes.add(TimeSequenceAnalysis.class);
-
-        // archive
-
-        // finance
-        classes.add(StockQuoteUpdater.class);
-
-        // utils
-        classes.add(Attach.class);
-        classes.add(CreateUser.class);
-        classes.add(SelectOut.class);
-
-        return classes;
-    }*/
 
 }

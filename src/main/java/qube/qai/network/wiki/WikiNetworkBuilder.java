@@ -21,6 +21,8 @@ import qube.qai.procedure.Procedure;
 
 public class WikiNetworkBuilder extends Procedure implements NetworkBuilder {
 
+    public String NAME = "Wiki-network Builder";
+
 
     @Override
     public void execute() {

@@ -32,9 +32,9 @@ public class SelectForEach extends Procedure {
     @Inject
     private Logger logger;
 
-    public static String NAME = "SelectForEach";
+    public String NAME = "SelectForEach";
 
-    public static String DESCRIPTION = "SelectForEach SearchResults for other procedures";
+    public String DESCRIPTION = "SelectForEach SearchResults for other procedures";
 
     @Inject
     private ProcedureRunnerInterface procedureRunner;

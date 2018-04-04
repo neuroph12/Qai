@@ -31,9 +31,9 @@ import java.util.Map;
  */
 public class NeuralNetworkForwardPropagation extends Procedure implements ProcedureConstants {
 
-    public static String NAME = "Neural-network forward-propagation";
+    public String NAME = "Neural-network forward-propagation";
 
-    public static String DESCRIPTION = "Calls forward-propagation routine of the " +
+    public String DESCRIPTION = "Calls forward-propagation routine of the " +
             "given neural-network with a given starting matrix to given number of steps.";
 
     public static String INPUT_START_VECTOR = "start vector";
@@ -47,7 +47,7 @@ public class NeuralNetworkForwardPropagation extends Procedure implements Proced
      * for anyone interested
      */
     public NeuralNetworkForwardPropagation() {
-        super(NAME);
+        super("Neural-network forward-propagation");
     }
 
 

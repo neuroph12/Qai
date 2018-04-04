@@ -26,6 +26,7 @@ import qube.qai.network.Graph;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
 import qube.qai.persistence.WikiArticle;
+import qube.qai.procedure.Procedure;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +34,7 @@ import java.io.InputStream;
 /**
  * Created by rainbird on 12/24/15.
  */
-public class SyntaxNetworkBuilder implements NetworkBuilder {
+public class SyntaxNetworkBuilder extends Procedure implements NetworkBuilder {
 
     private static Logger logger = LoggerFactory.getLogger("SyntaxNetworkBuilder");
 
@@ -160,5 +161,20 @@ public class SyntaxNetworkBuilder implements NetworkBuilder {
         }
 
         return tokenizer;
+    }
+
+    @Override
+    public void execute() {
+        buildNetwork(null);
+    }
+
+    @Override
+    public Procedure createInstance() {
+        return new SyntaxNetworkBuilder();
+    }
+
+    @Override
+    protected void buildArguments() {
+
     }
 }

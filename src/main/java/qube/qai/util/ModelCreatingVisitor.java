@@ -16,17 +16,9 @@ package qube.qai.util;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
-import qube.qai.network.finance.FinanceNetworkBuilder;
 import qube.qai.parsers.antimirov.nodes.*;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.analysis.*;
-import qube.qai.procedure.archive.DirectoryIndexer;
-import qube.qai.procedure.archive.WikiArchiveIndexer;
-import qube.qai.procedure.finance.StockEntityInitialization;
-import qube.qai.procedure.finance.StockQuoteUpdater;
 import qube.qai.procedure.utils.SelectOut;
-import qube.qai.procedure.utils.SimpleProcedure;
-import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
 /**
  * Created by rainbird on 1/28/17.
@@ -100,7 +92,7 @@ public class ModelCreatingVisitor implements NodeVisitor {
         BaseNode procedure = null;
         SelectOut selection = new SelectOut();
 
-        if (ChangePointAnalysis.NAME.equals(name)) {
+        /*if (ChangePointAnalysis.NAME.equals(name)) {
             procedure = new ChangePointAnalysis();
         } else if (FinanceNetworkBuilder.NAME.equals(name)) {
             procedure = new FinanceNetworkBuilder();
@@ -128,7 +120,7 @@ public class ModelCreatingVisitor implements NodeVisitor {
             procedure = new SelectOut();
         } else if (SimpleProcedure.NAME.equals(name)) {
             procedure = new SimpleProcedure();
-        }
+        }*/
 
         return procedure;
     }

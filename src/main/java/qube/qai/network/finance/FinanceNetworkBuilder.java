@@ -33,9 +33,9 @@ import java.util.Set;
  */
 public class FinanceNetworkBuilder extends Procedure implements NetworkBuilder, ProcedureConstants {
 
-    public static String NAME = "Finance-Network Builder";
+    public String NAME = "Finance-Network Builder";
 
-    public static String DESCRIPTION = "Creates and trains a neural-network out of the quotes of the stocks given";
+    public String DESCRIPTION = "Creates and trains a neural-network out of the quotes of the stocks given";
 
     private Map<String, TimeSequence> timeSequenceMap;
 
@@ -50,7 +50,7 @@ public class FinanceNetworkBuilder extends Procedure implements NetworkBuilder, 
     private NeuralNetwork network;
 
     public FinanceNetworkBuilder() {
-        super(NAME);
+        super("Finance-Network Builder");
     }
 
     @Override
@@ -123,14 +123,6 @@ public class FinanceNetworkBuilder extends Procedure implements NetworkBuilder, 
 
     public void setNetwork(NeuralNetwork network) {
         this.network = network;
-    }
-
-    public static String getNAME() {
-        return NAME;
-    }
-
-    public static void setNAME(String NAME) {
-        FinanceNetworkBuilder.NAME = NAME;
     }
 
     @Override

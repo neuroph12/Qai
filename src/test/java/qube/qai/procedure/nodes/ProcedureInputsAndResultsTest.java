@@ -15,14 +15,6 @@
 package qube.qai.procedure.nodes;
 
 import junit.framework.TestCase;
-import qube.qai.procedure.Procedure;
-import qube.qai.procedure.analysis.ChangePointAnalysis;
-import qube.qai.procedure.analysis.MatrixStatistics;
-import qube.qai.procedure.analysis.NetworkStatistics;
-import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
-import qube.qai.procedure.utils.SimpleProcedure;
-
-import java.util.Collection;
 
 /**
  * Created by rainbird on 3/30/17.
@@ -76,7 +68,7 @@ public class ProcedureInputsAndResultsTest extends TestCase {
         return node;
     }
 
-    public void testInputParameters() throws Exception {
+    /*public void testInputParameters() throws Exception {
         ProcedureInputs inputs = new ProcedureInputs();
 
         inputs.addInput(new ValueNode(SimpleProcedure.NAME, new SimpleProcedure()));
@@ -115,7 +107,7 @@ public class ProcedureInputsAndResultsTest extends TestCase {
         assertTrue(names.contains(MatrixStatistics.NAME));
         assertTrue(names.contains(NetworkStatistics.NAME));
 
-    }
+    }*/
 
     private void log(String message) {
         System.out.println(message);

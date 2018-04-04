@@ -31,12 +31,13 @@ import java.util.Date;
  */
 public class ChangePointAnalysis extends Procedure {
 
-    public static String NAME = "Change-Point Analysis";
+    public String NAME = "Change-Point Analysis";
 
-    public static String DESCRIPTION = "Analysis for finding likely change points in a time-series";
+    public String DESCRIPTION = "Drop stock-entites from finance list so that they can be analysed for change -points in their" +
+            "quote ";
 
     public ChangePointAnalysis() {
-        super(NAME);
+        super("Change-Point Analysis");
     }
 
     private TimeSequence timeSequence;

@@ -32,17 +32,17 @@ import java.util.Set;
  */
 public class StockQuoteUpdater extends Procedure {
 
-    public static String NAME = "Stock Quote Updating Procedure";
+    public String NAME = "Stock-quote Updater";
 
-    public static String DESCRIPTION = "Updates the stock quotes for given entity " +
-            "to the latest stand";
+    public String DESCRIPTION = "Drop the stock-quotes to be updated in the selection tab, " +
+            "the procedure will retrieve the stock-quotes to the latest stand";
 
     public long numberOfInserts = 0;
 
     private QaiDataProvider<StockEntity> entityProvider;
 
     public StockQuoteUpdater() {
-        super(NAME);
+        super("Stock-quote Updater");
     }
 
     @Override

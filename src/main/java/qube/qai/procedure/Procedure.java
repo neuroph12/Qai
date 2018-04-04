@@ -227,19 +227,19 @@ public abstract class Procedure extends ConcatenationNode
         return (ProcedureDescription) getFirstChild();
     }
 
-    public static String getNAME() {
+    public String getNAME() {
         return NAME;
     }
 
-    public static void setNAME(String name) {
+    public void setNAME(String name) {
         Procedure.NAME = name;
     }
 
-    public static String getDESCRIPTION() {
+    public String getDESCRIPTION() {
         return DESCRIPTION;
     }
 
-    public static void setDESCRIPTION(String description) {
+    public void setDESCRIPTION(String description) {
         Procedure.DESCRIPTION = description;
     }
 
