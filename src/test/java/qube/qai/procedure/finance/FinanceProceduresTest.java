@@ -62,7 +62,7 @@ public class FinanceProceduresTest extends QaiTestBase {
         //checkProcedureResults(description);
     }
 
-    public void testStockQuoteRetriever() throws Exception {
+    public void testStockQuoteUpdaterRemote() throws Exception {
 
         int numberToPick = 10;
 
@@ -98,4 +98,36 @@ public class FinanceProceduresTest extends QaiTestBase {
         procedureRunner.submitProcedure(procedure);
 
     }
+
+    public void testSequenceCollectionAverager() throws Exception {
+
+        // @TODO implement the test
+        fail("not yet implemented ");
+
+    }
+
+    protected Collection<SearchResult> pickStocksToUpdate(int numberToPick) {
+
+        Collection<SearchResult> searchResults = new ArrayList<>();
+
+        IMap<String, StockGroup> stockGroupMap = hazelcastInstance.getMap(STOCK_GROUPS);
+
+        for (String key : stockGroupMap.keySet()) {
+            StockGroup group = stockGroupMap.get(key);
+            Collection<StockEntity> entities = group.getEntities();
+            if (entities == null || entities.isEmpty()) {
+                continue;
+            }
+            Iterator<StockEntity> iterator = entities.iterator();
+            for (int i = 0; i < numberToPick; i++) {
+                StockEntity entity = iterator.next();
+                SearchResult searchResult = new SearchResult(STOCK_ENTITIES, entity.getName(), entity.getUuid(), "", 1.0);
+                searchResults.add(searchResult);
+            }
+            break;
+        }
+
+        return searchResults;
+    }
+
 }

@@ -14,103 +14,102 @@
 
 package qube.qai.procedure.finance;
 
-import junit.framework.TestCase;
-import qube.qai.persistence.DataProvider;
-import qube.qai.persistence.QaiDataProvider;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import org.slf4j.Logger;
+import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
-import qube.qai.procedure.Procedure;
+import qube.qai.persistence.StockGroup;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.utils.ForEach;
-import qube.qai.services.ProcedureRunnerInterface;
+import qube.qai.procedure.ProcedureTemplate;
+import qube.qai.procedure.utils.SelectForEach;
+import qube.qai.services.implementation.SearchResult;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.Iterator;
 
 /**
  * Created by rainbird on 3/11/17.
  */
-public class StockQuoteUpdaterTest extends TestCase implements ProcedureConstants {
+public class StockQuoteUpdaterTest extends QaiTestBase implements ProcedureConstants {
 
+    @Inject
+    private Logger logger;
 
-    public void testStockQuoteRetriever() throws Exception {
+    @Inject
+    private HazelcastInstance hazelcastInstance;
 
-        //Injector injector = createInjector();
-        //EntityManager entityManager = injector.getInstance(EntityManager.class);
-        /*StockQuoteUpdater retriever = ProcedureLibrary.plainStockQuoteUpdater.createProcedure();
-        String tickerSymbol = "GOOG";
-        StockEntity entity = new StockEntity();
-        entity.setTickerSymbol(tickerSymbol);
-        QaiDataProvider<StockEntity> provider = new DataProvider<StockEntity>(entity);
-        retriever.setEntityProvider(provider);
+    public void testStockQuoteUpdater() throws Exception {
 
-        retriever.execute();
+        SelectForEach select = new SelectForEach();
 
-        for (StockQuote quote : entity.getQuotes()) {
-            log(quote.getTickerSymbol() + " $" + quote.getAdjustedClose() + " on: " + quote.getQuoteDate());
-        }*/
-    }
-
-    public void testWithForEach() throws Exception {
-
-        Collection<StockEntity> entities = createTestEntites();
-
-        QaiDataProvider<Collection> dataProvider = new DataProvider<>(entities);
-
-        ForEach forEach = new ForEach();
-        //forEach.setTemplate(ProcedureLibrary.plainStockQuoteUpdater);
-        forEach.setTargetInputName(STOCK_ENTITY);
-        //forEach.setTargetCollectionProvider(dataProvider);
-
-        ProcedureRunnerInterface dummyRunner = new ProcedureRunnerInterface() {
+        ProcedureTemplate<StockQuoteUpdater> template = new ProcedureTemplate<StockQuoteUpdater>() {
             @Override
-            public void submitProcedure(Procedure procedure) {
-                String messTmpl = "Procedure: '%s' has been submitted";
-                log(String.format(messTmpl, procedure.getProcedureName()));
-                procedure.execute();
+            public StockQuoteUpdater createProcedure() {
 
+                StockQuoteUpdater updater = new StockQuoteUpdater();
+
+                return updater;
             }
 
             @Override
-            public ProcedureState queryState(String uuid) {
-                return null;
+            public String getProcedureName() {
+                return "Stock-quote updater";
             }
 
             @Override
-            public Set<String> getStartedProcedures() {
-                return null;
+            public String getProcedureDescription() {
+                return "update the quotes for given procedures";
             }
         };
 
-        forEach.setProcedureRunner(dummyRunner);
+        select.setProvideFor(template);
 
-        forEach.execute();
+        Collection<SearchResult> searchResults = pickStocksToUpdate(10);
 
-        // this depends on hazelcast-instance
-        //forEach.isChildrenExceuted();
+        assertNotNull("there has to be search results", searchResults);
+        assertTrue("there has to be some search results", searchResults.isEmpty());
+
+        StringBuffer stockNames = new StringBuffer();
+        for (SearchResult result : searchResults) {
+            stockNames.append(result.getTitle());
+            stockNames.append(" ");
+        }
+
+        // set the input search-result to the procedure
+        select.setResults(searchResults);
+
+        // now we're ready to start the procedure
+        select.execute();
+
+        logger.info("started execution of procedure with: " + stockNames.toString());
+
     }
 
-    private Collection<StockEntity> createTestEntites() {
+    protected Collection<SearchResult> pickStocksToUpdate(int numberToPick) {
 
-        Collection<StockEntity> entities = new ArrayList<>();
+        Collection<SearchResult> searchResults = new ArrayList<>();
 
-        StockEntity goog = new StockEntity();
-        goog.setTickerSymbol("GOOG");
-        entities.add(goog);
+        IMap<String, StockGroup> stockGroupMap = hazelcastInstance.getMap(STOCK_GROUPS);
 
-        StockEntity aapl = new StockEntity();
-        aapl.setTickerSymbol("AAPL");
-        entities.add(aapl);
+        for (String key : stockGroupMap.keySet()) {
+            StockGroup group = stockGroupMap.get(key);
+            Collection<StockEntity> entities = group.getEntities();
+            if (entities == null || entities.isEmpty()) {
+                continue;
+            }
+            Iterator<StockEntity> iterator = entities.iterator();
+            for (int i = 0; i < numberToPick; i++) {
+                StockEntity entity = iterator.next();
+                SearchResult searchResult = new SearchResult(STOCK_ENTITIES, entity.getName(), entity.getUuid(), "", 1.0);
+                searchResults.add(searchResult);
+            }
+            break;
+        }
 
-        StockEntity msft = new StockEntity();
-        msft.setTickerSymbol("MSFT");
-        entities.add(msft);
-
-        return entities;
-    }
-
-    private void log(String message) {
-        System.out.println(message);
+        return searchResults;
     }
 
 }

@@ -487,11 +487,11 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             return hazelcastInstance;
         }
 
-        Config config = new Config(properties.getProperty(NODE_NAME));
+        Config config = new Config();
         //config.getNetworkConfig().setSmartRouting(true);
         //config.getNetworkConfig().setRedoOperation(true);
         config.setInstanceName(properties.getProperty(NODE_NAME));
-        config.getGroupConfig().setName(properties.getProperty(GRID_NAME));
+        //config.getGroupConfig().setName(properties.getProperty(GRID_NAME));
         //config.getGroupConfig().setPassword(properties.getProperty(GRID_PASSWORD));
 
         GuiceManagedContext managedContext = new GuiceManagedContext();
