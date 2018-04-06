@@ -34,8 +34,8 @@ import qube.qai.persistence.mapstores.IndexedDirectoryMapStore;
 import qube.qai.persistence.mapstores.PersistentModelMapStore;
 import qube.qai.persistence.mapstores.WikiArticleMapStore;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.ProcedureLibraryInterface;
-import qube.qai.procedure.TestProcedureLibrary;
 import qube.qai.services.implementation.DirectorySearchService;
 import qube.qai.services.implementation.DistributedSearchListener;
 import qube.qai.user.User;
@@ -141,7 +141,7 @@ public class QaiTestServerModule extends AbstractModule {
 //
 //        bind(SessionMapStore.class).toInstance(sessionMapStore);
 
-        bind(ProcedureLibraryInterface.class).to(TestProcedureLibrary.class);
+        bind(ProcedureLibraryInterface.class).to(ProcedureLibrary.class);
     }
 
 //    @Provides @Named("STOCKS")

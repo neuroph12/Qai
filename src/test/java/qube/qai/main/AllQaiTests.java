@@ -45,7 +45,6 @@ import qube.qai.procedure.archive.DirectoryIndexerTest;
 import qube.qai.procedure.archive.WikiArchiveIndexerTest;
 import qube.qai.procedure.finance.FinanceProceduresTest;
 import qube.qai.procedure.finance.StockEntityInitializationTest;
-import qube.qai.procedure.finance.StockQuoteUpdaterTest;
 import qube.qai.procedure.nodes.ProcedureInputsAndResultsTest;
 import qube.qai.procedure.utils.UtilProceduresTest;
 import qube.qai.procedure.utils.WikiSearchTest;
@@ -151,7 +150,7 @@ public class AllQaiTests extends TestCase {
         // procedure.finance
         suite.addTestSuite(FinanceProceduresTest.class);
         suite.addTestSuite(StockEntityInitializationTest.class);
-        suite.addTestSuite(StockQuoteUpdaterTest.class);
+
 
         // procedure.visitor
         suite.addTestSuite(ProcedureVisitorsTest.class);

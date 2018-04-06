@@ -61,12 +61,11 @@ public class SequenceCollectionAverager extends Procedure {
     @Override
     public void execute() {
 
-        /*if (select == null || select.getProviders() == null) {
-            throw new IllegalStateException("Procedure has not been set-up right, no data to work with. Have to terminate");
-        }*/
+        if (inputs == null || inputs.isEmpty()) {
+            info("No inputs to process- terminating execution");
+            return;
+        }
 
-        //Collection<QaiDataProvider> providers = select.getProviders();
-        Collection<QaiDataProvider> providers = new ArrayList<>();
         allUUIDs = new LinkedHashSet<>();
         allDates = new TreeSet<>();
         childEntity = new StockEntity();
@@ -75,7 +74,7 @@ public class SequenceCollectionAverager extends Procedure {
         // first collect all dates
         sequenceMap = new HashMap<>();
         StringBuffer tickersBuffer = new StringBuffer();
-        for (Iterator<QaiDataProvider> it = providers.iterator(); it.hasNext(); ) {
+        for (Iterator<QaiDataProvider> it = inputs.iterator(); it.hasNext(); ) {
 
             QaiDataProvider<StockEntity> provider = it.next();
             StockEntity entity = provider.getData();

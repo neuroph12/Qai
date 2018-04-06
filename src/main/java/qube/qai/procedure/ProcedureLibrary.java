@@ -274,7 +274,7 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
     /**
      *
      */
-    public static ProcedureTemplate<SelectForEach> stockQuoteUpdaterTemplate = new ProcedureTemplate<SelectForEach>() {
+    public static ProcedureTemplate<SelectForAll> stockQuoteUpdaterTemplate = new ProcedureTemplate<SelectForAll>() {
 
         private String name = "Stock-quote Updater";
 
@@ -282,9 +282,9 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
                 "the procedure will retrieve the stock-quotes to the latest stand.";
 
         @Override
-        public SelectForEach createProcedure() {
+        public SelectForAll createProcedure() {
 
-            SelectForEach procedure = new SelectForEach();
+            SelectForAll procedure = new SelectForAll();
             procedure.setNAME(name);
             procedure.setDESCRIPTION(desc);
 

@@ -20,7 +20,6 @@ import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.nodes.ValueNode;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,8 +38,6 @@ public class StockQuoteUpdater extends Procedure {
 
     public long numberOfInserts = 0;
 
-    private QaiDataProvider<StockEntity> entityProvider;
-
     public StockQuoteUpdater() {
         super("Stock-quote Updater");
     }
@@ -48,40 +45,37 @@ public class StockQuoteUpdater extends Procedure {
     @Override
     public void execute() {
 
-        // first get the selector
-        if (entityProvider == null) {
-            entityProvider = (QaiDataProvider<StockEntity>) getInputValueOf(STOCK_ENTITY);
+        if (inputs == null || inputs.isEmpty()) {
+            info("No inputs to work on, terminating process");
+            return;
         }
 
-        if (entityProvider == null) {
-            throw new RuntimeException("There has to be a entityProvider to update");
-        }
+        for (QaiDataProvider<StockEntity> entityProvider : inputs) {
 
-        //entityManager.getTransaction().begin();
-
-        StockEntity entity = entityProvider.getData();
-        if (entity == null) {
-            error("An entity with not be found- skipping!");
-            throw new RuntimeException("An entity could not be found- skipping!");
-        }
-
-        Collection<StockQuote> quotes = retrieveQuotesFor(entity.getTickerSymbol());
-        Set<StockQuote> entityQuotes = entity.getQuotes();
-        for (StockQuote quote : quotes) {
-            if (!entityQuotes.contains(quote)) {
-                entity.addQuote(quote);
-                numberOfInserts++;
+            StockEntity entity = entityProvider.getData();
+            if (entity == null) {
+                error("An entity with not be found- skipping!");
+                throw new RuntimeException("An entity could not be found- skipping!");
             }
+
+            Collection<StockQuote> quotes = retrieveQuotesFor(entity.getTickerSymbol());
+            Set<StockQuote> entityQuotes = entity.getQuotes();
+            for (StockQuote quote : quotes) {
+                if (!entityQuotes.contains(quote)) {
+                    entity.addQuote(quote);
+                    numberOfInserts++;
+                }
+            }
+
+            if (numberOfInserts > 0) {
+                entityProvider.putData(entity.getUuid(), entity);
+            }
+
+            setResultValueOf(NUMBER_OF_INSERTS, numberOfInserts);
+
+            String tmpl = "Fetched: %d new entries for ticker-symbol '%s'";
+            info(String.format(tmpl, numberOfInserts, entity.getTickerSymbol()));
         }
-
-        if (numberOfInserts > 0) {
-            entityProvider.putData(entity.getUuid(), entity);
-        }
-
-        setResultValueOf(NUMBER_OF_INSERTS, numberOfInserts);
-
-        String tmpl = "Fetched: %d new entries for ticker-symbol '%s'";
-        info(String.format(tmpl, numberOfInserts, entity.getTickerSymbol()));
 
     }
 
@@ -119,31 +113,11 @@ public class StockQuoteUpdater extends Procedure {
 
     @Override
     public void buildArguments() {
-        getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<QaiDataProvider<StockEntity>>(STOCK_ENTITY) {
-            @Override
-            public void setValue(QaiDataProvider<StockEntity> value) {
-                super.setValue(value);
-                entityProvider = value;
-            }
-        });
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode<Number>(NUMBER_OF_INSERTS, MIMETYPE_NUMBER) {
-            @Override
-            public Number getValue() {
-                return numberOfInserts;
-            }
-        });
+
     }
 
     public long getNumberOfInserts() {
         return numberOfInserts;
     }
 
-    public QaiDataProvider<StockEntity> getEntityProvider() {
-        return entityProvider;
-    }
-
-    public void setEntityProvider(QaiDataProvider<StockEntity> entityProvider) {
-        this.entityProvider = entityProvider;
-    }
 }
