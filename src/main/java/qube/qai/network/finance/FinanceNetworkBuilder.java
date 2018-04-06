@@ -27,10 +27,7 @@ import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.QaiInjectorService;
 
 import javax.inject.Inject;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class FinanceNetworkBuilder extends Procedure implements SpawningProcedure {
 
@@ -38,13 +35,11 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
 
     public static final String DESCRIPTION = "This creates finance networks out of given set of finance-entities";
 
-    //private QaiDataProvider<Collection> entityProvider;
-
     private ChangePointAnalysis changePoint;
 
     private SequenceCollectionAverager averager;
 
-    private Set<String> spawnedProcedureUUIDS;
+    private Set<FinanceNetworkTrainer> spawn;
 
     @Inject
     private ProcedureRunnerInterface procedureRunner;
@@ -56,6 +51,7 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
      * found during the change-point analysis.
      */
     public FinanceNetworkBuilder() {
+        this.spawn = new HashSet<>();
     }
 
     @Override
@@ -80,23 +76,34 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
         QaiInjectorService.getInstance().injectMembers(changePoint);
 
         changePoint.execute();
+        Date start = alldates.iterator().next();
         Collection<ChangePointAnalysis.ChangePointMarker> markers = changePoint.getMarkers();
 
-        Date start = alldates.iterator().next();
+        if (markers == null || markers.isEmpty()) {
+            FinanceNetworkTrainer trainer = new FinanceNetworkTrainer();
+            trainer.setParent(this);
+            trainer.setStartDate(start);
+            trainer.setEndDate(null);
+            trainer.setTimeSequenceMap(timeSequenceMap);
 
-        for (ChangePointAnalysis.ChangePointMarker marker : markers) {
+            spawn.add(trainer);
+            procedureRunner.submitProcedure(trainer);
 
-            FinanceNetworkTrainer builder = new FinanceNetworkTrainer();
-            builder.setParent(this);
-            builder.setStartDate(start);
-            builder.setEndDate(marker.getDate());
-            builder.setTimeSequenceMap(timeSequenceMap);
+        } else {
 
-            spawnedProcedureUUIDS.add(builder.getUuid());
+            for (ChangePointAnalysis.ChangePointMarker marker : markers) {
 
-            procedureRunner.submitProcedure(builder);
+                FinanceNetworkTrainer trainer = new FinanceNetworkTrainer();
+                trainer.setParent(this);
+                trainer.setStartDate(start);
+                trainer.setEndDate(marker.getDate());
+                trainer.setTimeSequenceMap(timeSequenceMap);
 
-            start = marker.getDate();
+                spawn.add(trainer);
+                procedureRunner.submitProcedure(trainer);
+
+                start = marker.getDate();
+            }
         }
 
     }
@@ -116,9 +123,9 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
         boolean isAllExec = true;
 
         IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
-        for (String uuid : spawnedProcedureUUIDS) {
-            Procedure child = procedureMap.get(uuid);
-            isAllExec = child.hasExecuted();
+        for (Procedure procedure : spawn) {
+            Procedure child = procedureMap.get(procedure.getUuid());
+            isAllExec &= child.hasExecuted();
         }
 
         return isAllExec;
@@ -126,6 +133,21 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
 
     @Override
     public Set<String> getSpawnedProcedureUUIDs() {
-        return spawnedProcedureUUIDS;
+
+        Set<String> uuids = new TreeSet<>();
+
+        for (Procedure procedure : spawn) {
+            uuids.add(procedure.getUuid());
+        }
+
+        return uuids;
+    }
+
+    public Set<FinanceNetworkTrainer> getSpawn() {
+        return spawn;
+    }
+
+    public void setSpawn(Set<FinanceNetworkTrainer> spawn) {
+        this.spawn = spawn;
     }
 }

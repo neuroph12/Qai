@@ -71,6 +71,7 @@ public abstract class Procedure extends ConcatenationNode
         super(new ProcedureDescription(), new EmptyNode());
         this.name = new Name(NAME);
         this.uuid = UUIDService.uuidString();
+        this.inputs = new ArrayList<>();
     }
 
     public Procedure(String name) {

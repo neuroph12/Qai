@@ -51,7 +51,7 @@ public class FinanceProceduresTest extends QaiTestBase {
     @Inject
     private ProcedureRunnerInterface procedureRunner;
 
-    public void testStockQuoteUpdaterRemote() throws Exception {
+    public void testStockQuoteUpdaterTemplate() throws Exception {
 
         int numberToPick = 10;
 
@@ -87,7 +87,7 @@ public class FinanceProceduresTest extends QaiTestBase {
 
     }
 
-    public void testSequenceAveragerRemote() throws Exception {
+    public void testSequenceAveragerTemplate() throws Exception {
 
         int numberToPick = 10;
 

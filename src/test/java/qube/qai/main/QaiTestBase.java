@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 import junit.textui.TestRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import qube.qai.services.QaiInjectorService;
 
 /**
  * Created by rainbird on 11/19/15.
@@ -37,6 +38,9 @@ public class QaiTestBase extends TestCase implements QaiConstants {
         super.setUp();
 
         injector = Guice.createInjector(new QaiTestModule(), new QaiTestSecurityModule());
+
+        QaiInjectorService.createInstance(injector);
+
         injector.injectMembers(this);
     }
 

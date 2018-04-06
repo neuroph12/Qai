@@ -22,7 +22,6 @@ import qube.qai.network.neural.trainer.BasicNetworkTrainer;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.nodes.ValueNode;
 
 import java.util.Date;
 import java.util.Map;
@@ -58,7 +57,6 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
 
         if (timeSequenceMap == null
                 || startDate == null
-                || endDate == null
                 || allDates == null) {
             throw new IllegalStateException("Procedure has not been initialized right- stopping execution!");
         }
@@ -78,19 +76,7 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
 
     @Override
     public void buildArguments() {
-        getProcedureDescription().setDescription(DESCRIPTION);
-        /*getProcedureDescription().getProcedureInputs().addInput(new ValueNode<Collection<StockEntity>>(INPUT_STOCK_ENTITY_COLLECTION, MIMETYPE_STOCK_ENITIY_LIST) {
-            @Override
-            public void setValue(Collection<StockEntity> value) {
-                entities = value;
-            }
-        });*/
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode<NeuralNetwork>(TRAINED_NEURAL_NETWORK, MIMETYPE_NEURAL_NETWORK) {
-            @Override
-            public NeuralNetwork getValue() {
-                return network;
-            }
-        });
+
     }
 
     public Map<String, TimeSequence> getTimeSequenceMap() {
@@ -127,7 +113,19 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
 
     @Override
     public Network buildNetwork(QaiDataProvider... input) {
-        return null;
+
+        if (input == null || input.length == 0) {
+            info("No inputs given- terminating execution");
+            return null;
+        }
+
+        for (QaiDataProvider provider : input) {
+            inputs.add(provider);
+        }
+
+        execute();
+
+        return network;
     }
 
     public BasicNetworkTrainer getTrainer() {

@@ -140,7 +140,7 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer {
             MLDataPair datapair = new BasicMLDataPair(inData, outData);
             trainingSet.add(datapair);
 
-            if (date.compareTo(endDate) == 0) {
+            if (endDate != null && date.compareTo(endDate) == 0) {
                 break;
             }
 

@@ -53,6 +53,11 @@ public class SelectForEach extends Procedure implements SpawningProcedure {
     @Override
     public void execute() {
 
+        if (results == null || results.isEmpty()) {
+            info("There are no inputs- execution will be terminated");
+            return;
+        }
+
         if (template == null) {
             throw new IllegalStateException("SelectForEach procedure has to child to provide for! Exiting");
         }

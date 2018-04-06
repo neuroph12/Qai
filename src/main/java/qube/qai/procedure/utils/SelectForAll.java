@@ -80,6 +80,11 @@ public class SelectForAll extends Procedure implements SpawningProcedure {
             throw new IllegalStateException("SelectForEach procedure has to child to provide for! Exiting");
         }
 
+        if (results == null || results.isEmpty()) {
+            info("There are no inputs- terminating execution");
+            return;
+        }
+
         spawn = new ArrayList<>();
 
         Procedure procedure = template.createProcedure();

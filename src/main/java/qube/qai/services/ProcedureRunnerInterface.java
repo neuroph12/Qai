@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public interface ProcedureRunnerInterface {
 
-    String SERVICE_NAME = "ProcedureRunner";
+    String SERVICE_NAME = "DEFAULT";
 
     String TOPIC_NAME = "Procedure_Runner_Messages";
 

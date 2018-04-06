@@ -25,13 +25,12 @@ import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
-import qube.qai.procedure.utils.SelectForAll;
-import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by rainbird on 12/25/15.
@@ -47,54 +46,54 @@ public class FinanceNetworkBuilderTest extends QaiTestBase {
      * well this is actually pretty much it...
      * this is almost the moment of truth we have been waiting for...
      */
-    public void testMarketTrainer() throws Exception {
+    public void testMarketBuilder() throws Exception {
 
         int numberOfEntities = 10;
         String[] names = new String[numberOfEntities];
 
-        Collection<SearchResult> workingSet = pickStocks(numberOfEntities);
+        Collection<QaiDataProvider> workingSet = pickStockProviders(numberOfEntities);
 
         logger.info("picked entities: " + array2String(names));
 
-        QaiDataProvider<Collection> selectionOperator = new DataProvider<>(workingSet);
-        FinanceNetworkTrainer networkBuilder = new FinanceNetworkTrainer();
-        injector.injectMembers(networkBuilder);
-        NeuralNetwork network = (NeuralNetwork) networkBuilder.buildNetwork(selectionOperator);
-        assertNotNull("duh!", network);
-
-        network.getVertices();
-
-        // ok now we take a look at the results
-        int displayCount = 0;
-        int maxCount = 10;
-        for (MLDataPair pair : networkBuilder.getTrainer().getTrainingSet()) {
-            double[] output = network.propagate(pair.getInput().getData());
-            StringBuffer buffer = new StringBuffer();
-            for (int i = 0; i < output.length; i++) {
-                buffer.append("entity name: " + names[i]);
-                buffer.append(" input: " + pair.getInput().getData(i));
-                buffer.append(" output: " + output[i]);
-                buffer.append(" ideal: " + pair.getIdeal().getData(i));
-                buffer.append("\n");
-            }
-            logger.info(buffer.toString());
-            if (displayCount >= maxCount) {
-                break;
-            }
-            displayCount++;
-        }
-    }
-
-    public void testFinanceNetworkBuilder() throws Exception {
-
-        SelectForAll select = new SelectForAll();
-
-        Collection<SearchResult> stocks = pickStocks(10);
-
         FinanceNetworkBuilder networkBuilder = new FinanceNetworkBuilder();
+        networkBuilder.setInputs(workingSet);
+
+        injector.injectMembers(networkBuilder);
 
         networkBuilder.execute();
 
+        assertTrue("all must have gone well and execution complete", networkBuilder.hasExecuted());
+
+        Set<FinanceNetworkTrainer> spawn = networkBuilder.getSpawn();
+
+        for (FinanceNetworkTrainer trainer : spawn) {
+
+            NeuralNetwork network = trainer.getNetwork();
+
+            assertNotNull("duh!", network);
+
+            network.getVertices();
+
+            // ok now we take a look at the results
+            int displayCount = 0;
+            int maxCount = 10;
+            for (MLDataPair pair : trainer.getTrainer().getTrainingSet()) {
+                double[] output = network.propagate(pair.getInput().getData());
+                StringBuffer buffer = new StringBuffer();
+                for (int i = 0; i < output.length; i++) {
+                    buffer.append("entity name: " + names[i]);
+                    buffer.append(" input: " + pair.getInput().getData(i));
+                    buffer.append(" output: " + output[i]);
+                    buffer.append(" ideal: " + pair.getIdeal().getData(i));
+                    buffer.append("\n");
+                }
+                logger.info(buffer.toString());
+                if (displayCount >= maxCount) {
+                    break;
+                }
+                displayCount++;
+            }
+        }
     }
 
     private String array2String(String[] names) {
@@ -105,9 +104,9 @@ public class FinanceNetworkBuilderTest extends QaiTestBase {
         return buffer.toString();
     }
 
-    protected Collection<SearchResult> pickStocks(int numberToPick) {
+    protected Collection<QaiDataProvider> pickStockProviders(int numberToPick) {
 
-        Collection<SearchResult> searchResults = new ArrayList<>();
+        Collection<QaiDataProvider> searchResults = new ArrayList<>();
 
         IMap<String, StockGroup> stockGroupMap = hazelcastInstance.getMap(STOCK_GROUPS);
 
@@ -120,8 +119,7 @@ public class FinanceNetworkBuilderTest extends QaiTestBase {
             Iterator<StockEntity> iterator = entities.iterator();
             for (int i = 0; i < numberToPick; i++) {
                 StockEntity entity = iterator.next();
-                SearchResult searchResult = new SearchResult(STOCK_ENTITIES, entity.getName(), entity.getUuid(), "", 1.0);
-                searchResults.add(searchResult);
+                searchResults.add(new DataProvider(entity));
             }
             break;
         }

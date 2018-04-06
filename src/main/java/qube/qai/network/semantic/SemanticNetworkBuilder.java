@@ -44,6 +44,13 @@ public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder 
     @Inject
     private QaiDataProvider<WikiArticle> dataProvider;
 
+    private SemanticNetwork network;
+
+    public SemanticNetworkBuilder() {
+        super("WikiNetworkBuilder");
+        this.titles = new Vector<>();
+    }
+
     /**
      * This network builder, creates the semantic network of a given article based on
      * the index data and only using lucene-queries about the article
@@ -55,10 +62,51 @@ public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder 
     @Override
     public Network buildNetwork(QaiDataProvider... input) {
 
-        SemanticNetwork network = new SemanticNetwork();
+        if (input == null || input.length == 0) {
+            info("There are no inputs- exiting execution");
+            return network;
+        }
 
-        WikiArticle wikiArticle = (WikiArticle) input[0].getData();
-        ;
+        for (QaiDataProvider provider : input) {
+            inputs.add(provider);
+        }
+
+        execute();
+
+        return network;
+    }
+
+    private WikiModel createModel(WikiArticle wikiArticle) {
+        WikiModel wikiModel = new WikiModel("${image}", "${title}");
+
+        try {
+            StringBuilder bufferOut = new StringBuilder();
+            WikiModel.toText(wikiModel, new HTMLConverter(), wikiArticle.getContent(), bufferOut, false, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return wikiModel;
+    }
+
+    private void log(String message) {
+        if (debug) {
+            System.out.println(message);
+        }
+    }
+
+    @Override
+    public void execute() {
+
+        if (inputs == null || inputs.isEmpty()) {
+            info("No inputs- terminating execution.");
+            return;
+        }
+
+        network = new SemanticNetwork();
+
+        WikiArticle wikiArticle = (WikiArticle) inputs.iterator().next().getData();
+
         String wikiTitle = wikiArticle.getTitle();
         titles.add(wikiTitle);
         Network.Vertex baseVertex = new Network.Vertex(wikiTitle);
@@ -129,32 +177,6 @@ public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder 
             existing.clear();
             count++;
         }
-
-        return network;
-    }
-
-    private WikiModel createModel(WikiArticle wikiArticle) {
-        WikiModel wikiModel = new WikiModel("${image}", "${title}");
-
-        try {
-            StringBuilder bufferOut = new StringBuilder();
-            WikiModel.toText(wikiModel, new HTMLConverter(), wikiArticle.getContent(), bufferOut, false, false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return wikiModel;
-    }
-
-    private void log(String message) {
-        if (debug) {
-            System.out.println(message);
-        }
-    }
-
-    @Override
-    public void execute() {
-        buildNetwork(null);
     }
 
     @Override

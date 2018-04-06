@@ -25,33 +25,12 @@ import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
-import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Set;
 
 public class SemanticNetworkBuilderTest extends QaiTestBase {
-
-    public void testSemanticNetwork() throws Exception {
-
-        Collection<SearchResult> results = wikipediaSearchService.searchInputString("mouse", "title", 1);
-        assertNotNull("there has to be a result for the wiki", results);
-
-        String filename = results.iterator().next().getUuid();
-        log("name for the test case: " + filename);
-
-        IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
-        WikiArticle wikiArticle = wikiMap.get(filename);
-        assertNotNull("there has to be a wiki-article", wikiArticle);
-
-        SemanticNetworkBuilder builder = new SemanticNetworkBuilder();
-        QaiDataProvider wikiProvider = new DataProvider(wikiArticle);
-        SemanticNetwork network = (SemanticNetwork) builder.buildNetwork(wikiProvider);
-        assertNotNull(network);
-
-        fail("for the time being there is no implementation for the whole- regard this as a TODO message");
-    }
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -61,6 +40,21 @@ public class SemanticNetworkBuilderTest extends QaiTestBase {
     private SearchServiceInterface wikipediaSearchService;
 
     private QaiDataProvider wikiDataProvider;
+
+    public void testSemanticNetwork() throws Exception {
+
+        String filename = "Mouse.xml";
+        IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
+        WikiArticle wikiArticle = wikiMap.get(filename);
+        assertNotNull("there has to be a wiki-articlef or " + filename, wikiArticle);
+
+        SemanticNetworkBuilder builder = new SemanticNetworkBuilder();
+        QaiDataProvider wikiProvider = new DataProvider(wikiArticle);
+        SemanticNetwork network = (SemanticNetwork) builder.buildNetwork(wikiProvider);
+        assertNotNull(network);
+
+        fail("for the time being there is no implementation for the whole- regard this as a TODO message");
+    }
 
     @Override
     protected void setUp() throws Exception {
@@ -79,14 +73,10 @@ public class SemanticNetworkBuilderTest extends QaiTestBase {
      */
     public void testWikiNetwork() throws Exception {
 
-        Collection<SearchResult> results = wikipediaSearchService.searchInputString("mouse", "title", 1);
-        assertNotNull("there has to be a result for the wiki", results);
-
-        String filename = results.iterator().next().getUuid();
-        log("name for the test case: " + filename);
+        String filename = "Mouse.xml";
         IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
         WikiArticle wikiArticle = wikiMap.get(filename);
-        assertNotNull("there has to be a wiki-article", wikiArticle);
+        assertNotNull("there has to be a wiki-article for " + filename, wikiArticle);
 
         // now feed it to wiki-network class and build a network
         SemanticNetworkBuilder builder = new SemanticNetworkBuilder();

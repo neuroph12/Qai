@@ -15,12 +15,13 @@
 package qube.qai.persistence;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IMap;
 import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
 
-public class SearchResultProvider<T> implements QaiDataProvider<T> {
+public class SearchResultProvider<T> implements QaiDataProvider<T>, HazelcastInstanceAware {
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -79,5 +80,10 @@ public class SearchResultProvider<T> implements QaiDataProvider<T> {
         } else {
             map.put(uuid, data);
         }
+    }
+
+    @Override
+    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
+        this.hazelcastInstance = hazelcastInstance;
     }
 }
