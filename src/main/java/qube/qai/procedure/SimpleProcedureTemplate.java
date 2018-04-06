@@ -19,6 +19,9 @@ public class SimpleProcedureTemplate<P extends Procedure> implements ProcedureTe
 
     private P procedure;
 
+    public SimpleProcedureTemplate() {
+    }
+
     public SimpleProcedureTemplate(P procedure) {
         this.procedure = procedure;
     }
@@ -36,5 +39,13 @@ public class SimpleProcedureTemplate<P extends Procedure> implements ProcedureTe
     @Override
     public String getProcedureDescription() {
         return procedure.DESCRIPTION;
+    }
+
+    public P getProcedure() {
+        return procedure;
+    }
+
+    public void setProcedure(P procedure) {
+        this.procedure = procedure;
     }
 }

@@ -19,15 +19,19 @@ import com.hazelcast.core.IMap;
 import org.encog.ml.data.MLDataPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.SelectionOperator;
-import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.neural.NeuralNetwork;
+import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
+import qube.qai.procedure.utils.SelectForAll;
+import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Created by rainbird on 12/25/15.
@@ -43,33 +47,17 @@ public class FinanceNetworkBuilderTest extends QaiTestBase {
      * well this is actually pretty much it...
      * this is almost the moment of truth we have been waiting for...
      */
-    public void testMarketBuilder() throws Exception {
+    public void testMarketTrainer() throws Exception {
 
         int numberOfEntities = 10;
         String[] names = new String[numberOfEntities];
 
-        IMap<String, StockGroup> groupMap = hazelcastInstance.getMap(STOCK_GROUPS);
-        assertTrue("there has to be a group to loaded", !groupMap.keySet().isEmpty());
-        StockGroup groupPicked = null;
-        for (String groupKey : groupMap.keySet()) {
-            StockGroup group = groupMap.get(groupKey);
-            if (!group.getEntities().isEmpty()) {
-                groupPicked = group;
-                break;
-            }
-        }
+        Collection<SearchResult> workingSet = pickStocks(numberOfEntities);
 
-        assertNotNull("there has to be a group with some members", groupMap);
-        Collection<StockEntity> entityList = groupPicked.getEntities();
-
-        // now we have the list of entities with which we want to build
-        // the network for, we can simply pick, say 100 of them
-        // and make a trial go with the thing
-        Collection<StockEntity> workingSet = pickRandomFrom(numberOfEntities, entityList, names);
         logger.info("picked entities: " + array2String(names));
 
-        SelectionOperator<Collection> selectionOperator = new DataSelectionOperator<Collection>(workingSet);
-        FinanceNetworkBuilder networkBuilder = new FinanceNetworkBuilder();
+        QaiDataProvider<Collection> selectionOperator = new DataProvider<>(workingSet);
+        FinanceNetworkTrainer networkBuilder = new FinanceNetworkTrainer();
         injector.injectMembers(networkBuilder);
         NeuralNetwork network = (NeuralNetwork) networkBuilder.buildNetwork(selectionOperator);
         assertNotNull("duh!", network);
@@ -97,6 +85,18 @@ public class FinanceNetworkBuilderTest extends QaiTestBase {
         }
     }
 
+    public void testFinanceNetworkBuilder() throws Exception {
+
+        SelectForAll select = new SelectForAll();
+
+        Collection<SearchResult> stocks = pickStocks(10);
+
+        FinanceNetworkBuilder networkBuilder = new FinanceNetworkBuilder();
+
+        networkBuilder.execute();
+
+    }
+
     private String array2String(String[] names) {
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < names.length; i++) {
@@ -105,25 +105,27 @@ public class FinanceNetworkBuilderTest extends QaiTestBase {
         return buffer.toString();
     }
 
-    private Collection<StockEntity> pickRandomFrom(int number, Collection<StockEntity> original, String[] names) {
-        Set<StockEntity> picked = new HashSet<StockEntity>();
-        Random random = new Random();
-        int addCount = 0;
-        while (picked.size() < number) {
-            int pick = random.nextInt(original.size());
-            Iterator<StockEntity> it = original.iterator();
-            for (int j = 0; it.hasNext(); j++) {
-                StockEntity entity = it.next();
-                if (j == pick) {
-                    if (picked.add(entity)) {
-                        names[addCount] = entity.getTickerSymbol();
-                        addCount++;
-                        break;
-                    }
-                }
+    protected Collection<SearchResult> pickStocks(int numberToPick) {
+
+        Collection<SearchResult> searchResults = new ArrayList<>();
+
+        IMap<String, StockGroup> stockGroupMap = hazelcastInstance.getMap(STOCK_GROUPS);
+
+        for (String key : stockGroupMap.keySet()) {
+            StockGroup group = stockGroupMap.get(key);
+            Collection<StockEntity> entities = group.getEntities();
+            if (entities == null || entities.isEmpty()) {
+                continue;
             }
+            Iterator<StockEntity> iterator = entities.iterator();
+            for (int i = 0; i < numberToPick; i++) {
+                StockEntity entity = iterator.next();
+                SearchResult searchResult = new SearchResult(STOCK_ENTITIES, entity.getName(), entity.getUuid(), "", 1.0);
+                searchResults.add(searchResult);
+            }
+            break;
         }
 
-        return picked;
+        return searchResults;
     }
 }

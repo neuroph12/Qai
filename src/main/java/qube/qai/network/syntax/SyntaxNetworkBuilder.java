@@ -21,10 +21,10 @@ import opennlp.tools.tokenize.TokenizerModel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.SelectionOperator;
 import qube.qai.network.Graph;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 
@@ -40,9 +40,9 @@ public class SyntaxNetworkBuilder extends Procedure implements NetworkBuilder {
 
     private String opennlp_module_en = "/opennlp/en/en-token.bin";
 
-    public Network buildNetwork(SelectionOperator selectionOperator) {
+    public Network buildNetwork(QaiDataProvider... selectionOperator) {
 
-        WikiArticle wikiArticle = (WikiArticle) selectionOperator.getData();
+        WikiArticle wikiArticle = (WikiArticle) selectionOperator[0].getData();
         Graph graph = new Graph();
         Network network = new SyntaxNetwork();
         String wikiContent = wikiArticle.getContent();

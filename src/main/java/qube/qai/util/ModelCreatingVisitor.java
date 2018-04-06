@@ -18,7 +18,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import qube.qai.parsers.antimirov.nodes.*;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.utils.SelectOut;
+import qube.qai.procedure.utils.SelectForAll;
 
 /**
  * Created by rainbird on 1/28/17.
@@ -90,12 +90,12 @@ public class ModelCreatingVisitor implements NodeVisitor {
     public static BaseNode createNodeFromName(String name) {
 
         BaseNode procedure = null;
-        SelectOut selection = new SelectOut();
+        SelectForAll selection = new SelectForAll();
 
         /*if (ChangePointAnalysis.NAME.equals(name)) {
             procedure = new ChangePointAnalysis();
-        } else if (FinanceNetworkBuilder.NAME.equals(name)) {
-            procedure = new FinanceNetworkBuilder();
+        } else if (FinanceNetworkTrainer.NAME.equals(name)) {
+            procedure = new FinanceNetworkTrainer();
         } else if (MatrixStatistics.NAME.equals(name)) {
             procedure = new MatrixStatistics();
         } else if (NetworkStatistics.NAME.equals(name)) {
@@ -116,8 +116,8 @@ public class ModelCreatingVisitor implements NodeVisitor {
             procedure = new StockQuoteUpdater();
         } else if (WikiRipperProcedure.NAME.equals(name)) {
             procedure = new WikiRipperProcedure();
-        } else if (SelectOut.NAME.equals(name)) {
-            procedure = new SelectOut();
+        } else if (SelectForAll.NAME.equals(name)) {
+            procedure = new SelectForAll();
         } else if (SimpleProcedure.NAME.equals(name)) {
             procedure = new SimpleProcedure();
         }*/

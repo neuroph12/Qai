@@ -18,7 +18,6 @@ import com.google.inject.name.Named;
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringUtils;
-import qube.qai.data.SelectionOperator;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
 import qube.qai.persistence.QaiDataProvider;
@@ -49,16 +48,17 @@ public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder 
      * This network builder, creates the semantic network of a given article based on
      * the index data and only using lucene-queries about the article
      *
-     * @param source
+     * @param input
      * @return
      * @TODO this builder is to be implemented as soon as the lucene-upgrade to the latest version is done
      */
     @Override
-    public Network buildNetwork(SelectionOperator source) {
+    public Network buildNetwork(QaiDataProvider... input) {
 
         SemanticNetwork network = new SemanticNetwork();
 
-        WikiArticle wikiArticle = (WikiArticle) source.getData();
+        WikiArticle wikiArticle = (WikiArticle) input[0].getData();
+        ;
         String wikiTitle = wikiArticle.getTitle();
         titles.add(wikiTitle);
         Network.Vertex baseVertex = new Network.Vertex(wikiTitle);

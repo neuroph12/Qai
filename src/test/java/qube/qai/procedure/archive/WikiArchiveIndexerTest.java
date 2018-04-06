@@ -17,8 +17,8 @@ package qube.qai.procedure.archive;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.SelectionOperator;
-import qube.qai.data.selectors.DataSelectionOperator;
+import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
 
@@ -65,16 +65,16 @@ public class WikiArchiveIndexerTest extends TestCase {
         String indexDirectory = "/media/rainbird/GIMEL/wiki-archives/wiktionary_de.index";
 
         WikiRipperProcedure ripperProcedure = new WikiRipperProcedure();
-        SelectionOperator<String> fileanmeSelectionOperator = new DataSelectionOperator<String>(wikiToRip);
-        SelectionOperator<String> archiveNameSelectionOperator = new DataSelectionOperator<String>(archiveToCreate);
-        SelectionOperator<Boolean> isWiktionarySelectionOperator = new DataSelectionOperator<Boolean>(Boolean.TRUE);
+        QaiDataProvider<String> fileanmeSelectionOperator = new DataProvider<>(wikiToRip);
+        QaiDataProvider<String> archiveNameSelectionOperator = new DataProvider<>(archiveToCreate);
+        QaiDataProvider<Boolean> isWiktionarySelectionOperator = new DataProvider<>(Boolean.TRUE);
 //        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_FILENAME, fileanmeSelectionOperator);
 //        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_TARGET_FILENAME, archiveNameSelectionOperator);
 //        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_IS_WIKTIONARY, isWiktionarySelectionOperator);
 
         WikiArchiveIndexer indexerProcedure = new WikiArchiveIndexer();
         indexerProcedure.getProcedureDescription().getProcedureInputs().addInput(new ValueNode(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, ripperProcedure));
-        SelectionOperator<String> selectionOperator = new DataSelectionOperator<String>(indexDirectory);
+        QaiDataProvider<String> selectionOperator = new DataProvider<>(indexDirectory);
 //        indexerProcedure.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
 
         long start = System.currentTimeMillis();

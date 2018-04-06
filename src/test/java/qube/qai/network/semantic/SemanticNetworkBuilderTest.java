@@ -19,8 +19,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import grph.oo.ObjectGrph;
 import grph.oo.ObjectPath;
-import qube.qai.data.SelectionOperator;
-import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.Network;
 import qube.qai.persistence.DataProvider;
@@ -37,7 +35,7 @@ public class SemanticNetworkBuilderTest extends QaiTestBase {
 
     public void testSemanticNetwork() throws Exception {
 
-        Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
+        Collection<SearchResult> results = wikipediaSearchService.searchInputString("mouse", "title", 1);
         assertNotNull("there has to be a result for the wiki", results);
 
         String filename = results.iterator().next().getUuid();
@@ -48,7 +46,7 @@ public class SemanticNetworkBuilderTest extends QaiTestBase {
         assertNotNull("there has to be a wiki-article", wikiArticle);
 
         SemanticNetworkBuilder builder = new SemanticNetworkBuilder();
-        SelectionOperator wikiProvider = new DataSelectionOperator(wikiArticle);
+        QaiDataProvider wikiProvider = new DataProvider(wikiArticle);
         SemanticNetwork network = (SemanticNetwork) builder.buildNetwork(wikiProvider);
         assertNotNull(network);
 
@@ -81,7 +79,7 @@ public class SemanticNetworkBuilderTest extends QaiTestBase {
      */
     public void testWikiNetwork() throws Exception {
 
-        Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
+        Collection<SearchResult> results = wikipediaSearchService.searchInputString("mouse", "title", 1);
         assertNotNull("there has to be a result for the wiki", results);
 
         String filename = results.iterator().next().getUuid();
@@ -92,7 +90,7 @@ public class SemanticNetworkBuilderTest extends QaiTestBase {
 
         // now feed it to wiki-network class and build a network
         SemanticNetworkBuilder builder = new SemanticNetworkBuilder();
-        SelectionOperator wikiProvider = new DataSelectionOperator(wikiArticle);
+        QaiDataProvider wikiProvider = new DataProvider(wikiArticle);
         //injector.injectMembers(network);
 
         long start = System.currentTimeMillis();

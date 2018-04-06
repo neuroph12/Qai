@@ -42,7 +42,7 @@ public class UtilProceduresTest extends ProcedureTestBase {
 
     public void testSelectionProcedure() throws Exception {
 
-        SelectOut procedure = new SelectOut();
+        SelectForAll procedure = new SelectForAll();
 
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);

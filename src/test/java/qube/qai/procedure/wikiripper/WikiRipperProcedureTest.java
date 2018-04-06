@@ -17,8 +17,8 @@ package qube.qai.procedure.wikiripper;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import qube.qai.data.SelectionOperator;
-import qube.qai.data.selectors.DataSelectionOperator;
+import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.QaiDataProvider;
 
 import java.io.File;
 
@@ -65,9 +65,9 @@ public class WikiRipperProcedureTest extends TestCase {
 
     public static WikiRipperProcedure createTestWikiRipper() {
         WikiRipperProcedure ripperProcedure = new WikiRipperProcedure();
-        SelectionOperator<String> fileanmeSelectionOperator = new DataSelectionOperator<String>(dummyWikiFileName);
-        SelectionOperator<String> archiveNameSelectionOperator = new DataSelectionOperator<String>(dummyWikiArchiveName);
-        SelectionOperator<Boolean> isWiktionarySelectionOperator = new DataSelectionOperator<Boolean>(Boolean.FALSE);
+        QaiDataProvider<String> fileanmeSelectionOperator = new DataProvider<>(dummyWikiFileName);
+        QaiDataProvider<String> archiveNameSelectionOperator = new DataProvider<>(dummyWikiArchiveName);
+        QaiDataProvider<Boolean> isWiktionarySelectionOperator = new DataProvider<>(Boolean.FALSE);
 //        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_FILENAME, fileanmeSelectionOperator);
 //        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_TARGET_FILENAME, archiveNameSelectionOperator);
 //        ripperProcedure.getArguments().setArgument(WikiRipperProcedure.INPUT_IS_WIKTIONARY, isWiktionarySelectionOperator);

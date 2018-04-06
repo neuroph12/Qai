@@ -32,15 +32,17 @@ import qube.qai.procedure.ProcedureLibraryInterface;
 import qube.qai.security.*;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.SearchServiceInterface;
-import qube.qai.services.SelectorFactoryInterface;
 import qube.qai.services.UUIDServiceInterface;
-import qube.qai.services.implementation.*;
+import qube.qai.services.implementation.GuiceManagedContext;
+import qube.qai.services.implementation.ProcedureRunner;
+import qube.qai.services.implementation.UUIDService;
+import qube.qai.services.implementation.WikiSearchService;
+import qube.qai.user.User;
 
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
-import static qube.qai.main.QaiConstants.WIKIPEDIA;
-import static qube.qai.main.QaiConstants.WIKTIONARY;
+import static qube.qai.main.QaiConstants.*;
 
 /**
  * Created by rainbird on 11/19/15.
@@ -156,12 +158,6 @@ public class QaiTestModule extends AbstractModule {
     }
 
     @Provides
-    SelectorFactoryInterface provideSelectorFactoryInterface() {
-        SelectorFactoryInterface selectorfactory = new DataSelectorFactory();
-        return selectorfactory;
-    }
-
-    @Provides
     @Named("Wiktionary_en")
     SearchServiceInterface provideWiktionarySearchServiceInterface() {
         SearchServiceInterface searchService = new WikiSearchService(WIKTIONARY, wiktionaryDirectory, wiktionaryZipFileName);
@@ -175,16 +171,9 @@ public class QaiTestModule extends AbstractModule {
         return searchService;
     }
 
-//    @Provides
-//    @Singleton
-//    ProcedureManagerInterface provideProcedureManager() {
-//
-//        if (hazelcastInstance == null) {
-//            hazelcastInstance = provideHazelcastInstance();
-//        }
-//
-//        procedureManager = ProcedureManager.getInstance(hazelcastInstance);
-//        return procedureManager;
-//    }
-
+    @Provides
+    @Named
+    QaiDataProvider<User> userQaiDataProvider() {
+        return new MapDataProvider(hazelcastInstance, USERS);
+    }
 }

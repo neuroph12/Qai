@@ -122,10 +122,10 @@ public class TestProcedureLibrary implements ProcedureLibraryInterface {
         }
     };
 
-    public static ProcedureTemplate<SelectOut> selectionTemplate = new ProcedureTemplate<SelectOut>() {
+    public static ProcedureTemplate<SelectForAll> selectionTemplate = new ProcedureTemplate<SelectForAll>() {
         @Override
-        public SelectOut createProcedure() {
-            return new SelectOut();
+        public SelectForAll createProcedure() {
+            return new SelectForAll();
         }
     };
 
@@ -136,10 +136,10 @@ public class TestProcedureLibrary implements ProcedureLibraryInterface {
         }
     };
 
-    public static ProcedureTemplate<FinanceNetworkBuilder> financeNetworkBuilderTemplate = new ProcedureTemplate<FinanceNetworkBuilder>() {
+    public static ProcedureTemplate<FinanceNetworkTrainer> financeNetworkBuilderTemplate = new ProcedureTemplate<FinanceNetworkTrainer>() {
         @Override
-        public FinanceNetworkBuilder createProcedure() {
-            return new FinanceNetworkBuilder();
+        public FinanceNetworkTrainer createProcedure() {
+            return new FinanceNetworkTrainer();
         }
     };
 
@@ -222,9 +222,9 @@ public class TestProcedureLibrary implements ProcedureLibraryInterface {
 //        templateMap.put(StockQuoteUpdater.class, stockQuoteUpdaterTemplate);
 //        templateMap.put(WikiRipperProcedure.class, wikiRipperTemplate);
 //        templateMap.put(Attach.class, attachTemplate);
-//        templateMap.put(SelectOut.class, selectionTemplate);
+//        templateMap.put(SelectForAll.class, selectionTemplate);
 //        templateMap.put(CreateUser.class, createUserTemplate);
-//        templateMap.put(FinanceNetworkBuilder.class, financeNetworkBuilderTemplate);
+//        templateMap.put(FinanceNetworkTrainer.class, financeNetworkBuilderTemplate);
 //        //templateMap.put(SortPercentiles.class, sortingPercentilesTemplate);
 //        templateMap.put(SliceIntervals.class, sliceTemplate);
 //        templateMap.put(ForEach.class, forEachTemplate);

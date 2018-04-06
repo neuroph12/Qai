@@ -14,7 +14,6 @@
 
 package qube.qai.procedure.utils;
 
-import org.slf4j.Logger;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.SearchResultProvider;
 import qube.qai.procedure.Procedure;
@@ -22,6 +21,7 @@ import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.procedure.SpawningProcedure;
 import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.services.ProcedureRunnerInterface;
+import qube.qai.services.QaiInjectorService;
 import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
@@ -30,14 +30,18 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SelectForEach extends Procedure implements SpawningProcedure {
+/**
+ * Created by rainbird on 12/27/15.
+ */
+public class SelectForAll extends Procedure implements SpawningProcedure {
 
-    @Inject
-    private Logger logger;
+    public String NAME = "SelectionForAll";
 
-    public String NAME = "SelectForEach";
+    public String DESCRIPTION = "Selects the data input for other procedures";
 
-    public String DESCRIPTION = "SelectForEach SearchResults for other procedures";
+    public static String PARAMEETER_ASSIIGN_TO = "ASSIGN_TO";
+
+    public static String PARAMEETER_ASSIIGN_FROM = "ASSIGN_FROM";
 
     @Inject
     private ProcedureRunnerInterface procedureRunner;
@@ -50,6 +54,25 @@ public class SelectForEach extends Procedure implements SpawningProcedure {
 
     private Collection<Procedure> spawn;
 
+    private boolean executeImmediately;
+
+    /**
+     * this is mainly to pass the children the argument
+     * represents user preparing, or choosing a certain
+     * input for the children to process
+     */
+    public SelectForAll() {
+        super("SelectionForAll");
+    }
+
+    @Override
+    public void buildArguments() {
+        getProcedureDescription().setDescription(DESCRIPTION);
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(PARAMEETER_ASSIIGN_TO, MIMETYPE_SEARCH_RESULT));
+        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(PARAMEETER_ASSIIGN_FROM, MIMETYPE_SEARCH_RESULT));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(POINTER_OR_DATA_VALUE, MIMETYPE_PROCEDURE));
+    }
+
     @Override
     public void execute() {
 
@@ -59,19 +82,23 @@ public class SelectForEach extends Procedure implements SpawningProcedure {
 
         spawn = new ArrayList<>();
 
+        Procedure procedure = template.createProcedure();
+        spawn.add(procedure);
+
         for (SearchResult result : results) {
-
             QaiDataProvider provider = new SearchResultProvider(result);
-            Procedure procedure = template.createProcedure();
             procedure.addInputs(provider);
+        }
 
-            String message = String.format("Spawning '&s' with uuid: '%s' seeded with search context: '%s' and uuid: '%s'",
-                    procedure.getProcedureName(), procedure.getUuid(), result.getContext(), result.getTitle());
-            logger.info(message);
+        if (executeImmediately) {
 
-            // i am really not sure whether this is really neccessary or not... just in case, i guess....
+            QaiInjectorService.getInstance().injectMembers(procedure);
+            procedure.execute();
+
+        } else {
+
             procedureRunner.submitProcedure(procedure);
-            spawn.add(procedure);
+
         }
 
     }
@@ -101,13 +128,7 @@ public class SelectForEach extends Procedure implements SpawningProcedure {
 
     @Override
     public Procedure createInstance() {
-        return null;
-    }
-
-    @Override
-    protected void buildArguments() {
-        getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode(TARGET_COLLECTION, MIMETYPE_SEARCH_RESULT));
+        return new SelectForAll();
     }
 
     public Collection<SearchResult> getResults() {
@@ -126,7 +147,7 @@ public class SelectForEach extends Procedure implements SpawningProcedure {
         this.provideForFieldName = provideForFieldName;
     }
 
-    public ProcedureTemplate getTemplate() {
+    public ProcedureTemplate<Procedure> getTemplate() {
         return template;
     }
 
@@ -136,5 +157,13 @@ public class SelectForEach extends Procedure implements SpawningProcedure {
 
     public Collection<Procedure> getSpawn() {
         return spawn;
+    }
+
+    public void setSpawn(Collection<Procedure> spawn) {
+        this.spawn = spawn;
+    }
+
+    public void setExecuteImmediately(boolean executeImmediately) {
+        this.executeImmediately = executeImmediately;
     }
 }

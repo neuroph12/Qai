@@ -43,6 +43,8 @@ public class StockQuoteUpdaterTest extends QaiTestBase implements ProcedureConst
 
     public void testStockQuoteUpdater() throws Exception {
 
+        int numberToPick = 10;
+
         SelectForEach select = new SelectForEach();
 
         ProcedureTemplate<StockQuoteUpdater> template = new ProcedureTemplate<StockQuoteUpdater>() {
@@ -65,9 +67,9 @@ public class StockQuoteUpdaterTest extends QaiTestBase implements ProcedureConst
             }
         };
 
-        select.setProvideFor(template);
+        select.setTemplate(template);
 
-        Collection<SearchResult> searchResults = pickStocksToUpdate(10);
+        Collection<SearchResult> searchResults = pickStocksToUpdate(numberToPick);
 
         assertNotNull("there has to be search results", searchResults);
         assertTrue("there has to be some search results", searchResults.isEmpty());
@@ -83,6 +85,9 @@ public class StockQuoteUpdaterTest extends QaiTestBase implements ProcedureConst
 
         // now we're ready to start the procedure
         select.execute();
+
+        assertNotNull("there has to be spawned procedures", select.getSpawn());
+        assertTrue("there has to be the same number of spwan as inputs", select.getSpawn().size() == numberToPick);
 
         logger.info("started execution of procedure with: " + stockNames.toString());
 

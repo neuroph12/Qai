@@ -18,11 +18,11 @@ package qube.qai.network.syntax;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import qube.qai.data.Metrics;
-import qube.qai.data.SelectionOperator;
-import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.Network;
 import qube.qai.network.semantic.SemanticNetwork;
+import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -68,7 +68,7 @@ public class SyntaxNetworkBuilderTest extends QaiTestBase {
         assertNotNull("there has to be a wiki-article for " + filename, wikiArticle);
 
         SyntaxNetworkBuilder builder = new SyntaxNetworkBuilder();
-        SelectionOperator<WikiArticle> selectionOperator = new DataSelectionOperator<WikiArticle>(wikiArticle);
+        QaiDataProvider<WikiArticle> selectionOperator = new DataProvider<>(wikiArticle);
         SemanticNetwork semanticNetwork = (SemanticNetwork) builder.buildNetwork(selectionOperator);
 
         logNetwork(semanticNetwork);
@@ -88,7 +88,7 @@ public class SyntaxNetworkBuilderTest extends QaiTestBase {
         assertNotNull("there has to be a wiki-article for: " + filename, wikiArticle);
 
         SyntaxNetworkBuilder builder = new SyntaxNetworkBuilder();
-        SelectionOperator<WikiArticle> selectionOperator = new DataSelectionOperator<WikiArticle>(wikiArticle);
+        QaiDataProvider<WikiArticle> selectionOperator = new DataProvider<>(wikiArticle);
         SemanticNetwork semanticNetwork = (SemanticNetwork) builder.buildNetwork(selectionOperator);
         semanticNetwork.buildAdjacencyMatrix();
         logNetwork(semanticNetwork);

@@ -26,7 +26,6 @@ import qube.qai.services.ProcedureRunnerInterface;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Set;
-import java.util.concurrent.Future;
 
 /**
  * Created by rainbird on 12/22/15.
@@ -70,9 +69,6 @@ public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandl
 
     public void submitProcedure(Procedure procedure) {
 
-        // is this right?
-
-
         // before we submit we make note of the incoming request
         String startMessage = String.format(startMessageTemplate,
                 procedure.getProcedureName(), procedure.getUuid());
@@ -87,7 +83,7 @@ public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandl
 
         if (!procedureManager.isProcedureAndUserAuthorized(procedure)) {
             String rightViolation = String.format(unauthorizedMessageTemplate,
-                    procedure.getProcedureName(), procedure.getUuid(), procedure.getUser());
+                    procedure.getProcedureName(), procedure.getUuid(), procedure.getUserUUID());
             logger.info(rightViolation);
             return;
         }
@@ -97,7 +93,7 @@ public class ProcedureRunner implements ProcedureRunnerInterface, ProcEventHandl
         }
 
         IExecutorService executor = hazelcastInstance.getExecutorService(SERVICE_NAME);
-        Future futureResult = executor.submit(procedure);
+        executor.submit(procedure);
 
         String allOK = String.format(procStartedMessageTemplate, procedure.getProcedureName(), procedure.getUuid());
         logger.info(allOK);

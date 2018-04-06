@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.TimeSequenceTest;
 import qube.qai.data.analysis.TestChangepointAdapter;
-import qube.qai.data.selectors.TestHazelcastSelectors;
 import qube.qai.matrix.MatrixTest;
 import qube.qai.network.NetworkTest;
 import qube.qai.network.finance.FinanceNetworkBuilderTest;
@@ -88,7 +87,7 @@ public class AllQaiTests extends TestCase {
         suite.addTestSuite(TestChangepointAdapter.class);
 
         // data.selectors
-        suite.addTestSuite(TestHazelcastSelectors.class);
+        //suite.addTestSuite(TestHazelcastSelectors.class);
 
         // data.stores
 //        suite.addTestSuite(TestStockQuoteDataStore.class);

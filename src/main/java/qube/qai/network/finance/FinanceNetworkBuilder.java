@@ -14,61 +14,91 @@
 
 package qube.qai.network.finance;
 
-import qube.qai.data.SelectionOperator;
+import com.hazelcast.core.IMap;
 import qube.qai.data.TimeSequence;
-import qube.qai.network.Network;
-import qube.qai.network.NetworkBuilder;
-import qube.qai.network.neural.NeuralNetwork;
-import qube.qai.network.neural.trainer.BasicNetworkTrainer;
+import qube.qai.main.QaiConstants;
+import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.nodes.ValueNode;
+import qube.qai.procedure.SpawningProcedure;
+import qube.qai.procedure.analysis.ChangePointAnalysis;
+import qube.qai.procedure.finance.SequenceCollectionAverager;
+import qube.qai.services.ProcedureRunnerInterface;
+import qube.qai.services.QaiInjectorService;
 
+import javax.inject.Inject;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by rainbird on 12/25/15.
- */
-public class FinanceNetworkBuilder extends Procedure implements NetworkBuilder, ProcedureConstants {
+public class FinanceNetworkBuilder extends Procedure implements SpawningProcedure {
 
-    public String NAME = "Finance-Network Builder";
+    public static final String NAME = "Finance-Network Builder";
 
-    public String DESCRIPTION = "Creates and trains a neural-network out of the quotes of the stocks given";
+    public static final String DESCRIPTION = "This creates finance networks out of given set of finance-entities";
 
-    private Map<String, TimeSequence> timeSequenceMap;
+    //private QaiDataProvider<Collection> entityProvider;
 
-    private Date startDate;
+    private ChangePointAnalysis changePoint;
 
-    private Date endDate;
+    private SequenceCollectionAverager averager;
 
-    private Set<Date> allDates;
+    private Set<String> spawnedProcedureUUIDS;
 
-    private BasicNetworkTrainer trainer;
+    @Inject
+    private ProcedureRunnerInterface procedureRunner;
 
-    private NeuralNetwork network;
-
+    /**
+     * this class does the necessary work of running the averaging
+     * procedure, run the change-point analysis on the average-sequence
+     * and spawn a Network-Builder for each of the intervals
+     * found during the change-point analysis.
+     */
     public FinanceNetworkBuilder() {
-        super("Finance-Network Builder");
     }
 
     @Override
     public void execute() {
 
-        if (timeSequenceMap == null
-                || startDate == null
-                || endDate == null
-                || allDates == null) {
-            throw new IllegalStateException("Procedure has not been initialized right- stopping execution!");
+        if (inputs == null || inputs.isEmpty()) {
+            throw new IllegalStateException("Procedure has not been configured right- no data to work on, terminating!");
         }
 
-        // well, here goes nothing
-        trainer = new BasicNetworkTrainer(network);
-        trainer.createTrainingSet(startDate, endDate, allDates, timeSequenceMap);
-        trainer.trainNetwork();
+        averager = new SequenceCollectionAverager();
+        QaiInjectorService.getInstance().injectMembers(averager);
 
-        info("Market-network builder ended with: " + TRAINED_NEURAL_NETWORK);
+        averager.setInputs(inputs);
+        averager.execute();
+
+        Map<String, TimeSequence> timeSequenceMap = averager.getSequenceMap();
+        Set<Date> alldates = averager.getAllDates();
+
+        StockEntity averageEntity = averager.getChildEntity();
+        changePoint = new ChangePointAnalysis();
+        changePoint.setEntityProvider(new DataProvider<>(averageEntity));
+        QaiInjectorService.getInstance().injectMembers(changePoint);
+
+        changePoint.execute();
+        Collection<ChangePointAnalysis.ChangePointMarker> markers = changePoint.getMarkers();
+
+        Date start = alldates.iterator().next();
+
+        for (ChangePointAnalysis.ChangePointMarker marker : markers) {
+
+            FinanceNetworkTrainer builder = new FinanceNetworkTrainer();
+            builder.setParent(this);
+            builder.setStartDate(start);
+            builder.setEndDate(marker.getDate());
+            builder.setTimeSequenceMap(timeSequenceMap);
+
+            spawnedProcedureUUIDS.add(builder.getUuid());
+
+            procedureRunner.submitProcedure(builder);
+
+            start = marker.getDate();
+        }
+
     }
 
     @Override
@@ -77,61 +107,25 @@ public class FinanceNetworkBuilder extends Procedure implements NetworkBuilder, 
     }
 
     @Override
-    public void buildArguments() {
-        getProcedureDescription().setDescription(DESCRIPTION);
-        /*getProcedureDescription().getProcedureInputs().addInput(new ValueNode<Collection<StockEntity>>(INPUT_STOCK_ENTITY_COLLECTION, MIMETYPE_STOCK_ENITIY_LIST) {
-            @Override
-            public void setValue(Collection<StockEntity> value) {
-                entities = value;
-            }
-        });*/
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode<NeuralNetwork>(TRAINED_NEURAL_NETWORK, MIMETYPE_NEURAL_NETWORK) {
-            @Override
-            public NeuralNetwork getValue() {
-                return network;
-            }
-        });
-    }
+    protected void buildArguments() {
 
-    public Map<String, TimeSequence> getTimeSequenceMap() {
-        return timeSequenceMap;
-    }
-
-    public void setTimeSequenceMap(Map<String, TimeSequence> timeSequenceMap) {
-        this.timeSequenceMap = timeSequenceMap;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public NeuralNetwork getNetwork() {
-        return network;
-    }
-
-    public void setNetwork(NeuralNetwork network) {
-        this.network = network;
     }
 
     @Override
-    public Network buildNetwork(SelectionOperator source) {
-        return null;
+    public boolean haveChildrenExceuted() {
+        boolean isAllExec = true;
+
+        IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
+        for (String uuid : spawnedProcedureUUIDS) {
+            Procedure child = procedureMap.get(uuid);
+            isAllExec = child.hasExecuted();
+        }
+
+        return isAllExec;
     }
 
-    public BasicNetworkTrainer getTrainer() {
-        return trainer;
+    @Override
+    public Set<String> getSpawnedProcedureUUIDs() {
+        return spawnedProcedureUUIDS;
     }
-
 }

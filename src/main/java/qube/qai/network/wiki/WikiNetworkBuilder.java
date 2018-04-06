@@ -14,9 +14,9 @@
 
 package qube.qai.network.wiki;
 
-import qube.qai.data.SelectionOperator;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.procedure.Procedure;
 
 public class WikiNetworkBuilder extends Procedure implements NetworkBuilder {
@@ -43,7 +43,7 @@ public class WikiNetworkBuilder extends Procedure implements NetworkBuilder {
     }
 
     @Override
-    public Network buildNetwork(SelectionOperator source) {
+    public Network buildNetwork(QaiDataProvider... input) {
         return null;
     }
 }

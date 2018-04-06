@@ -15,7 +15,7 @@
 package qube.qai.procedure.utils;
 
 import org.apache.jena.rdf.model.Statement;
-import qube.qai.data.SelectionOperator;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.nodes.ValueNode;
 
@@ -34,9 +34,9 @@ public class Attach extends Procedure {
 
     public static String RELATION = "relation";
 
-    private SelectionOperator attach;
+    private QaiDataProvider attach;
 
-    private SelectionOperator attachTo;
+    private QaiDataProvider attachTo;
 
 //    @Inject
 //    @Named("PROCEDURE")
@@ -94,27 +94,19 @@ public class Attach extends Procedure {
         getProcedureDescription().getProcedureResults().addResult(new ValueNode(RELATION, MIMETYPE_STRING));
     }
 
-    public SelectionOperator getAttach() {
+    public QaiDataProvider getAttach() {
         return attach;
     }
 
-    public void setAttach(SelectionOperator attach) {
+    public void setAttach(QaiDataProvider attach) {
         this.attach = attach;
     }
 
-    public SelectionOperator getAttachTo() {
+    public QaiDataProvider getAttachTo() {
         return attachTo;
     }
 
-    public void setAttachTo(SelectionOperator attachTo) {
+    public void setAttachTo(QaiDataProvider attachTo) {
         this.attachTo = attachTo;
     }
-
-//    public DataServiceInterface getDataService() {
-//        return dataService;
-//    }
-//
-//    public void setDataService(DataServiceInterface dataService) {
-//        this.dataService = dataService;
-//    }
 }

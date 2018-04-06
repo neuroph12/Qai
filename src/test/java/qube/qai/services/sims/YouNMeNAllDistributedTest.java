@@ -14,9 +14,9 @@
 
 package qube.qai.services.sims;
 
-import qube.qai.data.SelectionOperator;
-import qube.qai.data.selectors.DataSelectionOperator;
 import qube.qai.main.QaiTestBase;
+import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.QaiDataProvider;
 import qube.qai.procedure.archive.WikiArchiveIndexer;
 import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.procedure.wikiripper.WikiRipperProcedure;
@@ -45,7 +45,7 @@ public class YouNMeNAllDistributedTest extends QaiTestBase {
         wikiIndexer.setAnalyseLocation(true);
         wikiIndexer.setAnalysePerson(true);
         wikiIndexer.setAnalyseOrganization(true);
-        SelectionOperator<String> selectionOperator = new DataSelectionOperator<String>(dummyIndexDirectory);
+        QaiDataProvider<String> selectionOperator = new DataProvider<>(dummyIndexDirectory);
 //        wikiIndexer.getArguments().setArgument(WikiArchiveIndexer.INPUT_INDEX_DIRECTORY, selectionOperator);
         injector.injectMembers(wikiIndexer);
 

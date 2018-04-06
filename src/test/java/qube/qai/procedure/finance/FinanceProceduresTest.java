@@ -23,6 +23,7 @@ import qube.qai.persistence.StockGroup;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.ProcedureLibraryInterface;
 import qube.qai.procedure.nodes.ProcedureDescription;
+import qube.qai.procedure.utils.SelectForAll;
 import qube.qai.procedure.utils.SelectForEach;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.implementation.SearchResult;
@@ -49,43 +50,13 @@ public class FinanceProceduresTest extends QaiTestBase {
     @Inject
     private ProcedureRunnerInterface procedureRunner;
 
-    public void estStockEntityInitialization() throws Exception {
-
-        StockEntityInitialization procedure = null; //procedureLibrary.stockEntityInitializationTemplate.createProcedure();
-
-        ProcedureDescription description = procedure.getProcedureDescription();
-        assertNotNull("there has to be a description", description);
-        log("description as text: " + description.getDescription());
-
-        //checkProcedureInputs(description);
-
-        //checkProcedureResults(description);
-    }
-
     public void testStockQuoteUpdaterRemote() throws Exception {
 
         int numberToPick = 10;
 
         SelectForEach procedure = ProcedureLibrary.stockQuoteUpdaterTemplate.createProcedure();
 
-        Collection<SearchResult> searchResults = new ArrayList<>();
-
-        IMap<String, StockGroup> stockGroupMap = hazelcastInstance.getMap(STOCK_GROUPS);
-
-        for (String key : stockGroupMap.keySet()) {
-            StockGroup group = stockGroupMap.get(key);
-            Collection<StockEntity> entities = group.getEntities();
-            if (entities == null || entities.isEmpty()) {
-                continue;
-            }
-            Iterator<StockEntity> iterator = entities.iterator();
-            for (int i = 0; i < numberToPick; i++) {
-                StockEntity entity = iterator.next();
-                SearchResult searchResult = new SearchResult(STOCK_ENTITIES, entity.getName(), entity.getUuid(), "", 1.0);
-                searchResults.add(searchResult);
-            }
-            break;
-        }
+        Collection<SearchResult> searchResults = pickStocks(numberToPick);
 
         assertNotNull("there has to be search results", searchResults);
         assertTrue("there has to be search results", !searchResults.isEmpty() && searchResults.size() == numberToPick);
@@ -101,12 +72,25 @@ public class FinanceProceduresTest extends QaiTestBase {
 
     public void testSequenceCollectionAverager() throws Exception {
 
-        // @TODO implement the test
-        fail("not yet implemented ");
+        int numberToPick = 10;
+
+        SelectForAll procedure = ProcedureLibrary.sequenceCollectionAveragerTemplate.createProcedure();
+
+        Collection<SearchResult> searchResults = pickStocks(numberToPick);
+
+        assertNotNull("there has to be search results", searchResults);
+        assertTrue("there has to be search results", !searchResults.isEmpty() && searchResults.size() == numberToPick);
+        procedure.setResults(searchResults);
+
+        ProcedureDescription description = procedure.getProcedureDescription();
+        assertNotNull("there has to be a description", description);
+        log("description as text: " + description.getDescription());
+
+        procedureRunner.submitProcedure(procedure);
 
     }
 
-    protected Collection<SearchResult> pickStocksToUpdate(int numberToPick) {
+    protected Collection<SearchResult> pickStocks(int numberToPick) {
 
         Collection<SearchResult> searchResults = new ArrayList<>();
 

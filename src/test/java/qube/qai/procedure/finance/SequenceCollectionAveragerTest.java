@@ -21,7 +21,7 @@ import qube.qai.main.QaiTestBase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
 import qube.qai.procedure.ProcedureTemplate;
-import qube.qai.procedure.utils.SelectForEach;
+import qube.qai.procedure.utils.SelectForAll;
 import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
@@ -39,7 +39,7 @@ public class SequenceCollectionAveragerTest extends QaiTestBase {
 
     public void testSequenceAverager() throws Exception {
 
-        SelectForEach select = new SelectForEach();
+        SelectForAll select = new SelectForAll();
 
         ProcedureTemplate<SequenceCollectionAverager> template = new ProcedureTemplate<SequenceCollectionAverager>() {
             @Override
@@ -61,7 +61,7 @@ public class SequenceCollectionAveragerTest extends QaiTestBase {
             }
         };
 
-        select.setProvideFor(template);
+        select.setTemplate(template);
 
         Collection<SearchResult> searchResults = pickStocksToUpdate(10);
 
@@ -79,6 +79,9 @@ public class SequenceCollectionAveragerTest extends QaiTestBase {
 
         // now we're ready to start the procedure
         select.execute();
+
+        assertNotNull("there has to be spawned procedures", select.getSpawn());
+        assertTrue("there has to be one spawned procedure", select.getSpawn().size() == 1);
 
         logger.info("started execution of procedure with: " + stockNames.toString());
     }

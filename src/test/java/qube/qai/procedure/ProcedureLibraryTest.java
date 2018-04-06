@@ -38,7 +38,7 @@ public class ProcedureLibraryTest extends QaiTestBase {
 
     public void estMarketNetworkBuilder() throws Exception {
 
-       /* FinanceNetworkBuilder networkBuilder = ProcedureLibrary.financeNetworkBuilderTemplate.createProcedure();
+       /* FinanceNetworkTrainer networkBuilder = ProcedureLibrary.financeNetworkBuilderTemplate.createProcedure();
         assertNotNull(networkBuilder);
 
         fail("implement the rest of the test");*/

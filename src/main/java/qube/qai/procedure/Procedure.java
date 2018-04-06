@@ -21,7 +21,6 @@ import com.hazelcast.core.ITopic;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
-import qube.qai.data.SelectionOperator;
 import qube.qai.parsers.antimirov.nodes.BaseNode;
 import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
 import qube.qai.parsers.antimirov.nodes.EmptyNode;
@@ -35,12 +34,13 @@ import qube.qai.procedure.nodes.ProcedureInputs;
 import qube.qai.procedure.nodes.ProcedureResults;
 import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.services.ProcedureRunnerInterface;
-import qube.qai.services.implementation.DataSelectorFactory;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.User;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by rainbird on 11/27/15.
@@ -52,16 +52,11 @@ public abstract class Procedure extends ConcatenationNode
 
     public static String DESCRIPTION = "Description of the procedure";
 
-    @Inject
-    protected transient DataSelectorFactory selectorFactory;
-
-    @Inject
-    protected QaiDataProvider<User> userProvider;
+    protected Collection<QaiDataProvider> inputs;
 
     @Inject
     protected transient HazelcastInstance hazelcastInstance;
 
-    //protected User user;
     protected String userUUID;
 
     protected long duration;
@@ -76,7 +71,6 @@ public abstract class Procedure extends ConcatenationNode
         super(new ProcedureDescription(), new EmptyNode());
         this.name = new Name(NAME);
         this.uuid = UUIDService.uuidString();
-        buildArguments();
     }
 
     public Procedure(String name) {
@@ -173,20 +167,6 @@ public abstract class Procedure extends ConcatenationNode
         nameNode.setFirstChild(new ValueNode(name, value));
     }
 
-    /*protected void executeInputProcedures() {
-        Collection<String> names = getProcedureInputs().getInputNames();
-        for (String name : names) {
-            ValueNode node = getProcedureInputs().getNamedInput(name);
-            BaseNode child = node.getFirstChild();
-            if (child != null && child instanceof Procedure) {
-                Procedure procedure = (Procedure) child;
-                if (!procedure.hasExecuted()) {
-                    procedure.execute();
-                }
-            }
-        }
-    }*/
-
     public String getDescriptionText() {
         return ((ProcedureDescription) getFirstChild()).getDescription();
     }
@@ -199,13 +179,23 @@ public abstract class Procedure extends ConcatenationNode
         return (ProcedureResults) getFirstChild().getSecondChild();
     }
 
-    protected SelectionOperator createSelector(Object data) {
-        return selectorFactory.buildSelector(NAME, uuid, data);
-    }
-
-
     public boolean haveChildren() {
         return true;
+    }
+
+    public void addInputs(QaiDataProvider... providers) {
+
+        if (providers == null) {
+            return;
+        }
+
+        if (inputs == null) {
+            inputs = new ArrayList<>();
+        }
+
+        for (QaiDataProvider provider : providers) {
+            inputs.add(provider);
+        }
     }
 
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
@@ -241,14 +231,6 @@ public abstract class Procedure extends ConcatenationNode
 
     public void setDESCRIPTION(String description) {
         Procedure.DESCRIPTION = description;
-    }
-
-    public User getUser() {
-        return userProvider.getData(userUUID);
-    }
-
-    public void setUser(User user) {
-        this.userUUID = user.getUuid();
     }
 
     public double getProgressPercentage() {
@@ -295,20 +277,34 @@ public abstract class Procedure extends ConcatenationNode
         return this.getName().getName();
     }
 
-    public String getUserName() {
-        if (userUUID != null) {
-            return userProvider.getData().getUsername();
-        } else {
-            return "n/a";
-        }
-    }
-
     public ProcedureState getState() {
         return state;
     }
 
     public void setState(ProcedureState state) {
         this.state = state;
+    }
+
+    public Collection<QaiDataProvider> getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(Collection<QaiDataProvider> inputs) {
+        this.inputs = inputs;
+    }
+
+    public String getUserUUID() {
+        return userUUID;
+    }
+
+    public void setUserUUID(String userUUID) {
+        this.userUUID = userUUID;
+    }
+
+    public void setUser(User user) {
+        if (user != null) {
+            this.userUUID = user.getUuid();
+        }
     }
 
 }

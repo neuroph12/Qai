@@ -89,16 +89,16 @@ public class MarketBuilderSim implements SimulationService, QaiConstants {
 
 
         SelectForEach changePoint = ProcedureLibrary.changePointAnalysisTemplate.createProcedure();
-//        SelectOut selectChanges = new SelectOut(
+//        SelectForAll selectChanges = new SelectForAll(
 //                sorter.getProcedureResults().getNamedResult(AVERAGE_TIME_SEQUENCE),
 //                changePoint.getProcedureInputs().getNamedInput(INPUT_TIME_SEQUENCE));
 
         SliceIntervals slicer = new SliceIntervals();
-//        SelectOut selectChangePoints = new SelectOut(
+//        SelectForAll selectChangePoints = new SelectForAll(
 //                changePoint.getProcedureResults().getNamedResult(CHANGE_POINTS),
 //                slicer.getProcedureInputs().getNamedInput("INTERVALS"));
 
-        //FinanceNetworkBuilder builderProc = ProcedureLibrary.financeNetworkBuilderTemplate.createProcedure();
+        //FinanceNetworkTrainer builderProc = ProcedureLibrary.financeNetworkBuilderTemplate.createProcedure();
 
         ForEach forEach = new ForEach();
         //forEach.addChild(slicer);
