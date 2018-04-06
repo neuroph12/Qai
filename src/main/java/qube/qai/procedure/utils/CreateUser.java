@@ -18,7 +18,7 @@ import qube.qai.procedure.Procedure;
 import qube.qai.procedure.nodes.ValueNode;
 
 /**
- * Created by rainbird on 7/14/17.
+ * Created by zenpunk on 7/14/17.
  */
 public class CreateUser extends Procedure {
 

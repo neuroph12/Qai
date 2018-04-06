@@ -21,7 +21,7 @@ import qube.qai.parsers.antimirov.nodes.NameNode;
 import static qube.qai.procedure.ProcedureConstants.MIMETYPE_STRING;
 
 /**
- * Created by rainbird on 4/5/17.
+ * Created by zenpunk on 4/5/17.
  */
 public class ValueNode<T extends Object> extends NameNode {
 

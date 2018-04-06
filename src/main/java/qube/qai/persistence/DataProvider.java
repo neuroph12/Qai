@@ -17,7 +17,7 @@ package qube.qai.persistence;
 import qube.qai.services.implementation.SearchResult;
 
 /**
- * Created by rainbird on 6/28/17.
+ * Created by zenpunk on 6/28/17.
  */
 public class DataProvider<T> implements QaiDataProvider<T> {
 

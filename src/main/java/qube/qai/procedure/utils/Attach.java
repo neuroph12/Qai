@@ -20,7 +20,7 @@ import qube.qai.procedure.Procedure;
 import qube.qai.procedure.nodes.ValueNode;
 
 /**
- * Created by rainbird on 3/11/17.
+ * Created by zenpunk on 3/11/17.
  */
 public class Attach extends Procedure {
 

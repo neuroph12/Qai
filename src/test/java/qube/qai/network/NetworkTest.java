@@ -23,7 +23,7 @@ import qube.qai.matrix.Matrix;
 import java.util.Collection;
 
 /**
- * Created by rainbird on 11/24/15.
+ * Created by zenpunk on 11/24/15.
  */
 public class NetworkTest extends TestCase {
 

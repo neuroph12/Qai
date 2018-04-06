@@ -23,7 +23,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 
 /**
- * Created by rainbird on 12/4/15.
+ * Created by zenpunk on 12/4/15.
  */
 public class TimeSequence<T extends Number> implements Serializable {
 

@@ -32,7 +32,7 @@ import javax.inject.Named;
 import java.util.Collection;
 
 /**
- * Created by rainbird on 11/24/15.
+ * Created by zenpunk on 11/24/15.
  */
 public class SyntaxNetworkBuilderTest extends QaiTestBase {
 

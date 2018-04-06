@@ -20,7 +20,7 @@ import qube.qai.procedure.nodes.ValueNode;
 import java.util.ArrayList;
 
 /**
- * Created by rainbird on 4/1/17.
+ * Created by zenpunk on 4/1/17.
  */
 public class NameSearchingVisitor implements NodeVisitor {
 

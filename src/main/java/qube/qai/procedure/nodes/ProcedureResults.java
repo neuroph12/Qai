@@ -23,7 +23,7 @@ import qube.qai.procedure.visitor.NameSearchingVisitor;
 import java.util.Collection;
 
 /**
- * Created by rainbird on 3/30/17.
+ * Created by zenpunk on 3/30/17.
  */
 public class ProcedureResults extends ConcatenationNode {
 

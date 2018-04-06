@@ -40,7 +40,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * Created by rainbird on 11/3/15.
+ * Created by zenpunk on 11/3/15.
  */
 public class WikiArchiveIndexer extends Procedure implements ProcedureConstants {
 

@@ -30,7 +30,7 @@ import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
 
 /**
- * Created by rainbird on 11/23/15.
+ * Created by zenpunk on 11/23/15.
  */
 public class NeuralNetworkTest extends TestCase {
 

@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 import org.jparsec.Parser;
 
 /**
- * Created by rainbird on 1/29/16.
+ * Created by zenpunk on 1/29/16.
  */
 public class TestOntologyIntegration extends TestCase {
 

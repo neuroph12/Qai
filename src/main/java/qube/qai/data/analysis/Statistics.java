@@ -20,7 +20,7 @@ import qube.qai.data.Metrics;
 import java.util.Arrays;
 
 /**
- * Created by rainbird on 12/4/15.
+ * Created by zenpunk on 12/4/15.
  */
 public class Statistics implements MetricTyped {
 

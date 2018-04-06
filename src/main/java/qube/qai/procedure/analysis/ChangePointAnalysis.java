@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * Created by rainbird on 11/28/15.
+ * Created by zenpunk on 11/28/15.
  */
 public class ChangePointAnalysis extends Procedure {
 

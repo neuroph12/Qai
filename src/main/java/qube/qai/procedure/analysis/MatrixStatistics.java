@@ -24,7 +24,7 @@ import qube.qai.procedure.nodes.ValueNode;
 import java.util.List;
 
 /**
- * Created by rainbird on 11/28/15.
+ * Created by zenpunk on 11/28/15.
  */
 public class MatrixStatistics extends Procedure implements ProcedureConstants {
 

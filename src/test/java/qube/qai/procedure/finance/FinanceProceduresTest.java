@@ -82,6 +82,7 @@ public class FinanceProceduresTest extends QaiTestBase {
 
         StockQuoteUpdater updater = new StockQuoteUpdater();
         updater.setInputs(searchResults);
+        updater.execute();
 
         assertTrue("we have completed execution", updater.hasExecuted());
 

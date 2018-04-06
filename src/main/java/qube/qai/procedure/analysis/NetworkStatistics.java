@@ -21,7 +21,7 @@ import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.nodes.ValueNode;
 
 /**
- * Created by rainbird on 11/29/15.
+ * Created by zenpunk on 11/29/15.
  */
 public class NetworkStatistics extends Procedure implements ProcedureConstants {
 

@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.Set;
 
 /**
- * Created by rainbird on 11/19/15.
+ * Created by zenpunk on 11/19/15.
  */
 public class StockQuoteUpdater extends Procedure {
 
@@ -76,6 +76,8 @@ public class StockQuoteUpdater extends Procedure {
             String tmpl = "Fetched: %d new entries for ticker-symbol '%s'";
             info(String.format(tmpl, numberOfInserts, entity.getTickerSymbol()));
         }
+
+        hasExecuted = true;
 
     }
 

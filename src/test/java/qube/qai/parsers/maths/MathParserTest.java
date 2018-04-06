@@ -15,7 +15,7 @@
 package qube.qai.parsers.maths;
 
 /**
- * Created by rainbird on 10/8/16.
+ * Created by zenpunk on 10/8/16.
  */
 
 import junit.framework.TestCase;

@@ -15,7 +15,7 @@
 package qube.qai.data;
 
 /**
- * Created by rainbird on 11/23/15.
+ * Created by zenpunk on 11/23/15.
  */
 public interface SelectorProvider {
 }

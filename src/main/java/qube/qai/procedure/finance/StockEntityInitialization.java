@@ -32,7 +32,7 @@ import javax.persistence.EntityManager;
 import java.util.Set;
 
 /**
- * Created by rainbird on 1/21/17.
+ * Created by zenpunk on 1/21/17.
  */
 public class StockEntityInitialization extends Procedure implements ProcedureConstants {
 

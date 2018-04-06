@@ -27,7 +27,7 @@ import java.net.URL;
 import java.util.Properties;
 
 /**
- * Created by rainbird on 11/9/15.
+ * Created by zenpunk on 11/9/15.
  */
 public class QaiNode {
 

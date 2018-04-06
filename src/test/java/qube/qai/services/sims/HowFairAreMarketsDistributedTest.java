@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Created by rainbird on 1/12/16.
+ * Created by zenpunk on 1/12/16.
  */
 public class HowFairAreMarketsDistributedTest extends QaiTestBase {
 

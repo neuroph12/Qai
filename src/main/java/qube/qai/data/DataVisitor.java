@@ -21,7 +21,7 @@ import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 
 /**
- * Created by rainbird on 12/27/15.
+ * Created by zenpunk on 12/27/15.
  */
 public interface DataVisitor {
 

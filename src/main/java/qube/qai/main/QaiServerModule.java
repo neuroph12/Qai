@@ -44,7 +44,7 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * Created by rainbird on 11/26/15.
+ * Created by zenpunk on 11/26/15.
  */
 public class QaiServerModule extends AbstractModule implements QaiConstants {
 

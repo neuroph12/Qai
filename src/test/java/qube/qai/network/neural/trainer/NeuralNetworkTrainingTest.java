@@ -29,7 +29,7 @@ import qube.qai.persistence.StockQuote;
 import java.util.*;
 
 /**
- * Created by rainbird on 12/13/15.
+ * Created by zenpunk on 12/13/15.
  */
 public class NeuralNetworkTrainingTest extends TestCase {
 

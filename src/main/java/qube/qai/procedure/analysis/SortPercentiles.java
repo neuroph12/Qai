@@ -26,7 +26,7 @@ import qube.qai.procedure.utils.ForEach;
 import java.util.*;
 
 /**
- * Created by rainbird on 12/2/15.
+ * Created by zenpunk on 12/2/15.
  */
 public class SortPercentiles extends Procedure implements ProcedureConstants {
 

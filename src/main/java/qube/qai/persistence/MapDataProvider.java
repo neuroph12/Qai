@@ -22,7 +22,7 @@ import qube.qai.services.implementation.SearchResult;
 import javax.inject.Inject;
 
 /**
- * Created by rainbird on 6/28/17.
+ * Created by zenpunk on 6/28/17.
  */
 public class MapDataProvider implements QaiDataProvider {
 

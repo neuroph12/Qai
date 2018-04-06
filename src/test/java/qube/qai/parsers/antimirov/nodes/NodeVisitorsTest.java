@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 import java.util.logging.Logger;
 
 /**
- * Created by rainbird on 1/27/17.
+ * Created by zenpunk on 1/27/17.
  */
 public class NodeVisitorsTest extends TestCase {
 

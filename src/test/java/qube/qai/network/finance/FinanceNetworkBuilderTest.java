@@ -33,7 +33,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Created by rainbird on 12/25/15.
+ * Created by zenpunk on 12/25/15.
  */
 public class FinanceNetworkBuilderTest extends QaiTestBase {
 

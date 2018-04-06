@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Created by rainbird on 11/27/15.
+ * Created by zenpunk on 11/27/15.
  */
 public abstract class Procedure extends ConcatenationNode
         implements Serializable, Runnable, HazelcastInstanceAware, AcceptsVisitors, ProcedureConstants {
@@ -106,7 +106,9 @@ public abstract class Procedure extends ConcatenationNode
             info("Procedure " + getName() + " has been started, uuid: " + uuid);
             execute();
             duration = System.currentTimeMillis() - start;
-            hasExecuted = true;
+            if (!hasExecuted) {
+                hasExecuted = true;
+            }
             info("Procedure " + getName() + " has been ended normally in " + duration + "ms");
             sendMessageOK();
 

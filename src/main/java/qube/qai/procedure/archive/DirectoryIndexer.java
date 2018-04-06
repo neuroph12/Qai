@@ -35,7 +35,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 /**
- * Created by rainbird on 12/25/15.
+ * Created by zenpunk on 12/25/15.
  */
 public class DirectoryIndexer extends Procedure implements ProcedureConstants {
 

@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by rainbird on 11/28/15.
+ * Created by zenpunk on 11/28/15.
  */
 public class NeuralNetworkForwardPropagation extends Procedure implements ProcedureConstants {
 

@@ -15,7 +15,7 @@
 package qube.qai.data.stores;
 
 /**
- * Created by rainbird on 11/25/15.
+ * Created by zenpunk on 11/25/15.
  */
 @Deprecated
 public interface DataStore {

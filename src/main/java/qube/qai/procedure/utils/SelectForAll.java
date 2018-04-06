@@ -31,7 +31,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by rainbird on 12/27/15.
+ * Created by zenpunk on 12/27/15.
  */
 public class SelectForAll extends Procedure implements SpawningProcedure {
 

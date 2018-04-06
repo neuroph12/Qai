@@ -23,6 +23,7 @@ import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.utils.SelectForEach;
+import qube.qai.services.QaiInjectorService;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -77,6 +78,7 @@ public class SequenceCollectionAverager extends Procedure {
         for (Iterator<QaiDataProvider> it = inputs.iterator(); it.hasNext(); ) {
 
             QaiDataProvider<StockEntity> provider = it.next();
+            QaiInjectorService.getInstance().injectMembers(provider);
             StockEntity entity = provider.getData();
 
             // first begin with noting the ticker symbol
@@ -132,6 +134,8 @@ public class SequenceCollectionAverager extends Procedure {
         childEntity.setSecFilings(desc);
         IMap<String, StockEntity> entityIMap = hazelcastInstance.getMap(QaiConstants.STOCK_ENTITIES);
         entityIMap.put(getUuid(), childEntity);
+
+        hasExecuted = true;
     }
 
     @Override

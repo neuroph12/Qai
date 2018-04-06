@@ -26,7 +26,7 @@ import java.io.*;
 import java.util.zip.ZipOutputStream;
 
 /**
- * Created by rainbird on 11/3/15.
+ * Created by zenpunk on 11/3/15.
  */
 public class WikiRipperProcedure extends Procedure {
 

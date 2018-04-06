@@ -22,7 +22,7 @@ import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.nodes.ValueNode;
 
 /**
- * Created by rainbird on 11/28/15.
+ * Created by zenpunk on 11/28/15.
  */
 public class TimeSequenceAnalysis extends Procedure implements ProcedureConstants {
 

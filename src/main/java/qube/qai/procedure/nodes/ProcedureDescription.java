@@ -18,7 +18,7 @@ import qube.qai.parsers.antimirov.nodes.ConcatenationNode;
 import qube.qai.parsers.antimirov.nodes.Name;
 
 /**
- * Created by rainbird on 3/30/17.
+ * Created by zenpunk on 3/30/17.
  */
 public class ProcedureDescription extends ConcatenationNode {
 

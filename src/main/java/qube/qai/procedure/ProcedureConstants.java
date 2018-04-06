@@ -15,7 +15,7 @@
 package qube.qai.procedure;
 
 /**
- * Created by rainbird on 12/27/15.
+ * Created by zenpunk on 12/27/15.
  */
 public interface ProcedureConstants {
 

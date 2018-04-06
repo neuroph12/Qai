@@ -22,7 +22,7 @@ import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.random.Weibull;
 
 /**
- * Created by rainbird on 11/22/15.
+ * Created by zenpunk on 11/22/15.
  */
 public class MatrixTest extends TestCase {
 

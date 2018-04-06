@@ -32,7 +32,7 @@ import qube.qai.services.implementation.UUIDService;
 import javax.inject.Inject;
 
 /**
- * Created by rainbird on 11/27/15.
+ * Created by zenpunk on 11/27/15.
  */
 public class ProcedureManager implements ProcedureManagerInterface {
 
