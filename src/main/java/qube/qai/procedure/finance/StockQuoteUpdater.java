@@ -89,9 +89,13 @@ public class StockQuoteUpdater extends Procedure {
     private Collection<StockQuote> retrieveQuotesFor(String stockName) {
 
         Collection<StockQuote> quotes = new ArrayList<StockQuote>();
-        GoogleSymbol symbol = new GoogleSymbol(stockName);
+        GoogleSymbol symbol = new GoogleSymbol(stockName.trim());
 
         try {
+            if (symbol == null || symbol.getHistoricalPrices() == null) {
+                error("Ticker symbol: '" + stockName + "' could not be found");
+                return quotes;
+            }
             for (GoogleSymbol.Data data : symbol.getHistoricalPrices()) {
                 Date date = new Date(data.getKey().toTimeInMillis(CalendarDateUnit.DAY));
                 StockQuote quote = new StockQuote();

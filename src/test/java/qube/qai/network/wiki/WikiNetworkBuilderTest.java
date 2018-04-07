@@ -14,14 +14,29 @@
 
 package qube.qai.network.wiki;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import info.bliki.wiki.dump.WikiArticle;
 import qube.qai.main.QaiTestBase;
+import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.QaiDataProvider;
+
+import javax.inject.Inject;
 
 public class WikiNetworkBuilderTest extends QaiTestBase {
+
+    @Inject
+    private HazelcastInstance hazelcastInstance;
 
     public void testWikiNetworkBuilder() throws Exception {
 
         WikiNetworkBuilder builder = new WikiNetworkBuilder();
-        WikiNetwork wikiNetwork = (WikiNetwork) builder.buildNetwork(null);
+
+        String filename = "Mouse.xml";
+        IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
+        QaiDataProvider<WikiArticle> provider = new DataProvider(wikiMap);
+        WikiNetwork wikiNetwork = (WikiNetwork) builder.buildNetwork(provider);
         assertNotNull("duh!", wikiNetwork);
+
     }
 }

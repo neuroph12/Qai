@@ -53,6 +53,9 @@ public class FinanceNetworkBuilderTest extends QaiTestBase {
 
         Collection<QaiDataProvider> workingSet = pickStockProviders(numberOfEntities);
 
+        assertNotNull("there has to be a working set", workingSet);
+        assertTrue("there has to be the right number of elements", !workingSet.isEmpty() && workingSet.size() == numberOfEntities);
+
         logger.info("picked entities: " + array2String(names));
 
         FinanceNetworkBuilder networkBuilder = new FinanceNetworkBuilder();

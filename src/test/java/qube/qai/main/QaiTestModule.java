@@ -133,10 +133,10 @@ public class QaiTestModule extends AbstractModule {
     @Provides
     @Singleton
     public HazelcastInstance provideHazelcastInstance() {
+
         if (hazelcastInstance != null) {
             return hazelcastInstance;
         }
-
 
         hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
 

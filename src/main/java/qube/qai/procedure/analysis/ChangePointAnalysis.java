@@ -18,6 +18,7 @@ import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.ChangepointAdapter;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.nodes.ValueNode;
 
@@ -25,6 +26,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by zenpunk on 11/28/15.
@@ -33,16 +35,13 @@ public class ChangePointAnalysis extends Procedure {
 
     public String NAME = "Change-Point Analysis";
 
-    public String DESCRIPTION = "Drop stock-entites from finance list so that they can be analysed for change -points in their" +
-            "quote ";
+    public String DESCRIPTION = "Drop stock-entites from finance list so that they can be analysed for change-points in their quote.";
 
     public ChangePointAnalysis() {
         super("Change-Point Analysis");
     }
 
     private TimeSequence timeSequence;
-
-    private QaiDataProvider<StockEntity> entityProvider;
 
     private Collection<ChangePointMarker> markers;
 
@@ -66,9 +65,23 @@ public class ChangePointAnalysis extends Procedure {
     @Override
     public void execute() {
 
-        if (timeSequence == null) {
-            error("Input time-series has not been initialized properly: null value");
+        if (inputs.isEmpty()) {
+            info("There are no inputs to work with- terminating execution.");
             return;
+        }
+
+        QaiDataProvider<StockEntity> provider = inputs.iterator().next();
+        StockEntity entity = provider.getData();
+        Set<StockQuote> quotes = entity.getQuotes();
+        if (quotes == null || quotes.isEmpty()) {
+            info("There are no quotes for entity with ticker-symbol: '" +
+                    entity.getTickerSymbol() + "'. No data to work with- terminating execution.");
+            return;
+        }
+
+        timeSequence = new TimeSequence();
+        for (StockQuote quote : quotes) {
+            timeSequence.add(quote.getQuoteDate(), quote.adjustedClose);
         }
 
         ChangepointAdapter changepointAdapter = new ChangepointAdapter();
@@ -92,19 +105,13 @@ public class ChangePointAnalysis extends Procedure {
         }
 
         info("finished '" + CHANGE_POINTS + "' analysis with " + markers.size() + " change-points detected");
+
+        hasExecuted = true;
     }
 
     @Override
     public Procedure createInstance() {
         return new ChangePointAnalysis();
-    }
-
-    public QaiDataProvider<StockEntity> getEntityProvider() {
-        return entityProvider;
-    }
-
-    public void setEntityProvider(QaiDataProvider<StockEntity> entityProvider) {
-        this.entityProvider = entityProvider;
     }
 
     public Collection<ChangePointMarker> getMarkers() {

@@ -28,7 +28,7 @@ import qube.qai.services.QaiInjectorService;
 import javax.inject.Inject;
 import java.util.*;
 
-public class SequenceCollectionAverager extends Procedure {
+public class AverageSequence extends Procedure {
 
     private String descTemplate = "Dates from: %s to %s with childUUID: '%s'";
 
@@ -56,7 +56,7 @@ public class SequenceCollectionAverager extends Procedure {
      * one with the average value of individual inputs- an average for each input
      * in each collection
      */
-    public SequenceCollectionAverager() {
+    public AverageSequence() {
     }
 
     @Override
@@ -140,7 +140,7 @@ public class SequenceCollectionAverager extends Procedure {
 
     @Override
     public Procedure createInstance() {
-        return new SequenceCollectionAverager();
+        return new AverageSequence();
     }
 
     @Override

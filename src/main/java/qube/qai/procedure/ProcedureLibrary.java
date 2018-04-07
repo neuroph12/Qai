@@ -23,7 +23,7 @@ import qube.qai.network.wiki.WikiNetworkBuilder;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
 import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
 import qube.qai.procedure.analysis.NeuralNetworkForwardPropagation;
-import qube.qai.procedure.finance.SequenceCollectionAverager;
+import qube.qai.procedure.finance.AverageSequence;
 import qube.qai.procedure.finance.StockQuoteUpdater;
 import qube.qai.procedure.utils.SelectForAll;
 import qube.qai.procedure.utils.SelectForEach;
@@ -308,11 +308,12 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
     /**
      *
      */
-    public static ProcedureTemplate<SelectForAll> sequenceCollectionAveragerTemplate = new ProcedureTemplate<SelectForAll>() {
+    public static ProcedureTemplate<SelectForAll> averageSequenceTemplate = new ProcedureTemplate<SelectForAll>() {
 
-        private String name = "";
+        private String name = "AverageSequence";
 
-        private String desc = "";
+        private String desc = "Drop the stock-quotes in the selection tab, " +
+                "the procedure will calculate their average time-series.";
 
         @Override
         public SelectForAll createProcedure() {
@@ -322,7 +323,7 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
             select.setNAME(name);
             select.setDESCRIPTION(desc);
 
-            ProcedureTemplate template = new SimpleProcedureTemplate(new SequenceCollectionAverager());
+            ProcedureTemplate template = new SimpleProcedureTemplate(new AverageSequence());
             select.setTemplate(template);
 
             return select;
@@ -349,7 +350,7 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
         templateMap.put(NeuralNetworkForwardPropagation.class, forwardPropagationTemplate);
         templateMap.put(NeuralNetworkAnalysis.class, neuralNetworkAnalysisTemplate);
         templateMap.put(SemanticNetworkBuilder.class, semanticNetworkBuiderTemplate);
-        templateMap.put(SequenceCollectionAverager.class, sequenceCollectionAveragerTemplate);
+        templateMap.put(AverageSequence.class, averageSequenceTemplate);
         templateMap.put(SyntaxNetworkBuilder.class, syntaxNetworkBuiderTemplate);
         templateMap.put(StockQuoteUpdater.class, stockQuoteUpdaterTemplate);
         templateMap.put(WikiNetworkBuilder.class, wikiNetworkBuilderTemplate);

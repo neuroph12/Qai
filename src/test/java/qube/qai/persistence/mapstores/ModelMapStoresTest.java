@@ -18,14 +18,13 @@ import junit.framework.TestCase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureLibraryInterface;
+import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 
-import javax.inject.Inject;
 import java.util.*;
 
 /**
@@ -36,9 +35,6 @@ public class ModelMapStoresTest extends TestCase {
     private String userDirectory = "./test/dummy.user.model.directory";
 
     private String procedureDirectory = "./test/dummy.procedure.model.directory";
-
-    @Inject
-    private ProcedureLibraryInterface procedureLibrary;
 
     public void testUserMapStore() throws Exception {
 
@@ -169,6 +165,8 @@ public class ModelMapStoresTest extends TestCase {
         PersistentModelMapStore mapStore = new PersistentModelMapStore(Procedure.class, procedureDirectory);
         mapStore.init();
 
+        ProcedureLibrary procedureLibrary = new ProcedureLibrary();
+
         Collection<String> uuids = new ArrayList<>();
         for (ProcedureTemplate template : procedureLibrary.getTemplateMap().values()) {
             Procedure procedure = template.createProcedure();
@@ -182,12 +180,6 @@ public class ModelMapStoresTest extends TestCase {
 
         }
 
-    }
-
-    public void testPersistentNetworkMapStore() throws Exception {
-
-        // @TODO this test is missing
-        fail("implementation of the test missing");
     }
 
     private void log(String message) {

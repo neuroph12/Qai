@@ -22,7 +22,7 @@ import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.SpawningProcedure;
 import qube.qai.procedure.analysis.ChangePointAnalysis;
-import qube.qai.procedure.finance.SequenceCollectionAverager;
+import qube.qai.procedure.finance.AverageSequence;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.QaiInjectorService;
 
@@ -37,7 +37,7 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
 
     private ChangePointAnalysis changePoint;
 
-    private SequenceCollectionAverager averager;
+    private AverageSequence averager;
 
     private Set<FinanceNetworkTrainer> spawn;
 
@@ -61,7 +61,7 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
             throw new IllegalStateException("Procedure has not been configured right- no data to work on, terminating!");
         }
 
-        averager = new SequenceCollectionAverager();
+        averager = new AverageSequence();
         QaiInjectorService.getInstance().injectMembers(averager);
 
         averager.setInputs(inputs);
@@ -72,7 +72,7 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
 
         StockEntity averageEntity = averager.getChildEntity();
         changePoint = new ChangePointAnalysis();
-        changePoint.setEntityProvider(new DataProvider<>(averageEntity));
+        changePoint.addInputs(new DataProvider<>(averageEntity));
         QaiInjectorService.getInstance().injectMembers(changePoint);
 
         changePoint.execute();

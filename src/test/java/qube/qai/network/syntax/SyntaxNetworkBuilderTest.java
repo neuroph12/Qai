@@ -25,11 +25,9 @@ import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.services.SearchServiceInterface;
-import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Collection;
 
 /**
  * Created by zenpunk on 11/24/15.
@@ -58,10 +56,11 @@ public class SyntaxNetworkBuilderTest extends QaiTestBase {
      */
     public void testSemanticNetwork() throws Exception {
 
-        Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
-        assertNotNull("there has to be a result for the wiki", results);
-
-        String filename = results.iterator().next().getUuid();
+//        Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
+//        assertNotNull("there has to be a result for the wiki", results);
+//
+//        String filename = results.iterator().next().getUuid();
+        String filename = "Mouse.xml";
         log("name for the test case: " + filename);
         IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
         WikiArticle wikiArticle = wikiMap.get(filename);
@@ -78,11 +77,12 @@ public class SyntaxNetworkBuilderTest extends QaiTestBase {
      * check that the basic properties of the networks are the same
      */
     public void testAdjacencyMatrix() throws Exception {
-        Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
-        assertNotNull("there has to be a result for the wiki", results);
-
-        String filename = results.iterator().next().getUuid();
-        log("name for the test case: " + filename);
+//        Collection<SearchResult> results = wikipediaSearchService.searchInputString("test", "title", 1);
+//        assertNotNull("there has to be a result for the wiki", results);
+//
+//        String filename = results.iterator().next().getUuid();
+//        log("name for the test case: " + filename);
+        String filename = "Mouse.xml";
         IMap<String, WikiArticle> wikiMap = hazelcastInstance.getMap(WIKIPEDIA);
         WikiArticle wikiArticle = wikiMap.get(filename);
         assertNotNull("there has to be a wiki-article for: " + filename, wikiArticle);
