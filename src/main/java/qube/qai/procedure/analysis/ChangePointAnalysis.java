@@ -21,6 +21,7 @@ import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.nodes.ValueNode;
+import qube.qai.services.QaiInjectorService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class ChangePointAnalysis extends Procedure {
         }
 
         QaiDataProvider<StockEntity> provider = inputs.iterator().next();
+        QaiInjectorService.getInstance().injectMembers(provider);
         StockEntity entity = provider.getData();
         Set<StockQuote> quotes = entity.getQuotes();
         if (quotes == null || quotes.isEmpty()) {

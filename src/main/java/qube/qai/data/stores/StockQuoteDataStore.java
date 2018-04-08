@@ -14,7 +14,7 @@
 
 package qube.qai.data.stores;
 
-import org.ojalgo.finance.data.GoogleSymbol;
+import org.ojalgo.finance.data.YahooSymbol;
 import org.ojalgo.type.CalendarDateUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,16 +36,18 @@ public class StockQuoteDataStore implements DataStore {
     public StockQuoteDataStore() {
     }
 
-    public Set<StockQuote> retrieveQuotesFor(String quoteName) {
+    public Set<StockQuote> retrieveQuotesFor(String tickerSymbol) {
 
         Set<StockQuote> quotes = new HashSet<>();
-        GoogleSymbol symbol = new GoogleSymbol(quoteName);
+        //GoogleSymbol symbol = new GoogleSymbol(quoteName);
+        YahooSymbol symbol = new YahooSymbol(tickerSymbol);
 
         try {
-            for (GoogleSymbol.Data data : symbol.getHistoricalPrices()) {
+            //for (GoogleSymbol.Data data : symbol.getHistoricalPrices()) {
+            for (YahooSymbol.Data data : symbol.getHistoricalPrices()) {
                 Date date = new Date(data.getKey().toTimeInMillis(CalendarDateUnit.DAY));
                 StockQuote quote = new StockQuote();
-                quote.setTickerSymbol(quoteName);
+                quote.setTickerSymbol(tickerSymbol);
                 quote.setQuoteDate(date);
                 if (!Double.isNaN(data.close)) quote.setAdjustedClose(data.close);
                 if (!Double.isNaN(data.close)) quote.setClose(data.close);
@@ -58,7 +60,7 @@ public class StockQuoteDataStore implements DataStore {
                 }
             }
         } catch (Exception e) {
-            logger.error("Ticker symbol: '" + quoteName + "' does not exist", e);
+            logger.error("Ticker symbol: '" + tickerSymbol + "' does not exist", e);
         } finally {
             return quotes;
         }

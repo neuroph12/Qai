@@ -45,7 +45,8 @@
         <hibernate-annotations.version>3.5.6-Final</hibernate-annotations.version>
         <hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
 
-        <ojalgo.version>39.0</ojalgo.version>
+        <ojalgo.version>45.0.0</ojalgo.version>
+        <!--<ojalgo.version>39.0</ojalgo.version>-->
         <bliki.version>3.1.0</bliki.version>
         <encog.version>3.4</encog.version>
         <opennlp.version>1.6.0</opennlp.version>
@@ -107,6 +108,13 @@
             <artifactId>ojalgo</artifactId>
             <version>${ojalgo.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.ojalgo</groupId>
+            <artifactId>ojalgo-finance</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
 
         <!-- security and all related -->
         <dependency>

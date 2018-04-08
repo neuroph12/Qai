@@ -164,28 +164,46 @@ public class DatabaseSearchService implements SearchServiceInterface, QaiConstan
 
         for (StockEntity entity : entities) {
             Set<StockQuote> quotes = entity.getQuotes();
+
+            String symbol = entity.getTickerSymbol().trim();
+            StockQuoteDataStore store = new StockQuoteDataStore();
+            Set<StockQuote> freshQuotes = store.retrieveQuotesFor(symbol);
+            if (freshQuotes != null && !freshQuotes.isEmpty()) {
+                continue;
+            }
+
             if (quotes == null || quotes.isEmpty()) {
-                StockQuoteDataStore store = new StockQuoteDataStore();
-                String symbol = entity.getTickerSymbol().trim();
-                quotes = store.retrieveQuotesFor(symbol);
-                if (quotes != null && !quotes.isEmpty()) {
-                    try {
-                        entityManager.getTransaction().begin();
-                        entity.setQuotes(quotes);
-                        for (StockQuote quote : quotes) {
-                            quote.setParentUUID(entity.getUuid());
-                            entityManager.persist(quote);
-                        }
-                        entityManager.merge(entity);
-                        entityManager.flush();
-                        entityManager.getTransaction().commit();
-                        logger.info("Added " + quotes.size() + " quotes for " + entity.getName());
-                    } catch (Exception e) {
-                        logger.error("Error while writing quotes of '" + symbol + "'", e);
-                        entityManager.getTransaction().rollback();
+                try {
+                    entityManager.getTransaction().begin();
+                    entity.setQuotes(quotes);
+                    for (StockQuote quote : quotes) {
+                        quote.setParentUUID(entity.getUuid());
+                        entityManager.persist(quote);
                     }
-                } else {
-                    logger.info("Already " + quotes.size() + " quotes stored in database for " + entity.getName());
+                    entityManager.merge(entity);
+                    entityManager.flush();
+                    entityManager.getTransaction().commit();
+                    logger.info("Added " + quotes.size() + " quotes for " + entity.getName());
+                } catch (Exception e) {
+                    logger.error("Error while writing quotes of '" + symbol + "'", e);
+                    entityManager.getTransaction().rollback();
+                }
+            } else {
+                for (StockQuote quote : freshQuotes) {
+                    if (!quotes.contains(quote)) {
+                        try {
+                            quote.setParentUUID(entity.getUuid());
+                            entityManager.getTransaction().begin();
+                            entityManager.persist(quote);
+                            entityManager.merge(entity);
+                            entityManager.flush();
+                            entityManager.getTransaction().commit();
+                            logger.info("Added " + quotes.size() + " quotes for " + entity.getName());
+                        } catch (Exception e) {
+                            logger.error("Error while writing quotes of '" + symbol + "'", e);
+                            entityManager.getTransaction().rollback();
+                        }
+                    }
                 }
             }
         }

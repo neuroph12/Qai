@@ -18,6 +18,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import qube.qai.data.TimeSequence;
 import qube.qai.main.QaiConstants;
+import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
@@ -90,7 +91,17 @@ public class AverageSequence extends Procedure {
 
             // create the time-sequences which will be used
             TimeSequence<Double> sequence = new TimeSequence<>();
-            Collection<StockQuote> quotes = entity.getQuotes();
+
+            // this does troubles- first update the quotes
+            StockQuoteUpdater updater = new StockQuoteUpdater();
+            QaiInjectorService.getInstance().injectMembers(updater);
+            updater.addInputs(new DataProvider(entity));
+            updater.execute();
+            if (updater.getQuotes() == null || updater.getQuotes().isEmpty()) {
+                info("Quotes for: '" + entity.getTickerSymbol() + "' could not be updated- is symbol correct? Skipping.");
+                break;
+            }
+            Collection<StockQuote> quotes = updater.getQuotes();
             for (StockQuote quote : quotes) {
                 sequence.add(quote.getQuoteDate(), quote.adjustedClose);
             }
@@ -122,10 +133,13 @@ public class AverageSequence extends Procedure {
             childEntity.addQuote(avgQuote);
         }
 
-        Iterator<Date> allDatesIt = allDates.iterator();
-        startDate = allDatesIt.next();
-        while (allDatesIt.hasNext()) {
-            endDate = allDatesIt.next();
+        boolean first = true;
+        for (Date date : allDates) {
+            if (first) {
+                startDate = date;
+                first = false;
+            }
+            endDate = date;
         }
         // when all done and said, save the child stock-entity
         String name = String.format(nameTemplate, tickersBuffer.toString());

@@ -14,13 +14,15 @@
 
 package qube.qai.procedure.finance;
 
-import org.ojalgo.finance.data.GoogleSymbol;
+import com.hazelcast.core.HazelcastInstance;
+import org.ojalgo.finance.data.YahooSymbol;
 import org.ojalgo.type.CalendarDateUnit;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -37,6 +39,11 @@ public class StockQuoteUpdater extends Procedure {
             "the procedure will retrieve the stock-quotes to the latest stand";
 
     public long numberOfInserts = 0;
+
+    private Collection<StockQuote> quotes;
+
+    @Inject
+    private HazelcastInstance hazelcastInstance;
 
     public StockQuoteUpdater() {
         super("Stock-quote Updater");
@@ -58,7 +65,10 @@ public class StockQuoteUpdater extends Procedure {
                 throw new RuntimeException("An entity could not be found- skipping!");
             }
 
-            Collection<StockQuote> quotes = retrieveQuotesFor(entity.getTickerSymbol());
+            Collection<StockQuote> quotes = retrieveQuotesFor(entity.getTickerSymbol().trim());
+            // reload the entity so that its quotes too are at latest form in dataase
+            //IMap<String, StockEntity> entityMap = hazelcastInstance.getMap(STOCK_ENTITY);
+            //entity = entityMap.get(entity.getUuid());
             Set<StockQuote> entityQuotes = entity.getQuotes();
             for (StockQuote quote : quotes) {
                 if (!entityQuotes.contains(quote)) {
@@ -70,8 +80,6 @@ public class StockQuoteUpdater extends Procedure {
             if (numberOfInserts > 0) {
                 entityProvider.putData(entity.getUuid(), entity);
             }
-
-            setResultValueOf(NUMBER_OF_INSERTS, numberOfInserts);
 
             String tmpl = "Fetched: %d new entries for ticker-symbol '%s'";
             info(String.format(tmpl, numberOfInserts, entity.getTickerSymbol()));
@@ -86,23 +94,25 @@ public class StockQuoteUpdater extends Procedure {
         return new StockQuoteUpdater();
     }
 
-    private Collection<StockQuote> retrieveQuotesFor(String stockName) {
+    private Collection<StockQuote> retrieveQuotesFor(String tickerSymbol) {
 
         Collection<StockQuote> quotes = new ArrayList<StockQuote>();
-        GoogleSymbol symbol = new GoogleSymbol(stockName.trim());
+        //GoogleSymbol symbol = new GoogleSymbol(stockName);
+        YahooSymbol symbol = new YahooSymbol(tickerSymbol);
 
         try {
             if (symbol == null || symbol.getHistoricalPrices() == null) {
-                error("Ticker symbol: '" + stockName + "' could not be found");
+                error("Ticker symbol: '" + tickerSymbol + "' could not be found");
                 return quotes;
             }
-            for (GoogleSymbol.Data data : symbol.getHistoricalPrices()) {
+            //for (GoogleSymbol.Data data : symbol.getHistoricalPrices()) {
+            for (YahooSymbol.Data data : symbol.getHistoricalPrices()) {
                 Date date = new Date(data.getKey().toTimeInMillis(CalendarDateUnit.DAY));
                 StockQuote quote = new StockQuote();
                 quote.setTickerSymbol(symbol.getSymbol());
                 quote.setQuoteDate(date);
-                //quote.setAdjustedClose(data.adjustedClose);
-                quote.setAdjustedClose(data.close);
+                quote.setAdjustedClose(data.adjustedClose);
+                //quote.setAdjustedClose(data.close);
                 quote.setClose(data.close);
                 quote.setHigh(data.high);
                 quote.setLow(data.low);
@@ -111,7 +121,7 @@ public class StockQuoteUpdater extends Procedure {
                 quotes.add(quote);
             }
         } catch (Exception e) {
-            error("Ticker symbol: '" + stockName + "' does not exist", e);
+            error("Ticker symbol: '" + tickerSymbol + "' does not exist", e);
         } finally {
             return quotes;
         }
@@ -120,6 +130,10 @@ public class StockQuoteUpdater extends Procedure {
     @Override
     public void buildArguments() {
 
+    }
+
+    public Collection<StockQuote> getQuotes() {
+        return quotes;
     }
 
     public long getNumberOfInserts() {

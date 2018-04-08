@@ -15,7 +15,6 @@
 package qube.qai.matrix;
 
 import junit.framework.TestCase;
-import org.ojalgo.access.Access2D;
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.ComplexMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
@@ -206,14 +205,14 @@ public class MatrixTest extends TestCase {
         final BasicMatrix tmpB = tmpFactory.makeFilled(300, 2, new Weibull(5.0, 2.0));
         // When you create a matrix with random elements you can specify their distribution.
 
-        final BasicMatrix tmpC = tmpB.multiplyLeft(tmpA);
+        //final BasicMatrix tmpC = tmpB.multiplyLeft(tmpA);
         final BasicMatrix tmpD = tmpA.multiply(tmpB);
         // ojAlgo differentiates between multiplying from the left and from the right.
         // The matrices C and D will be equal, but the code executed to calculate them are different.
         // The second alternative, resulting in D, will be MUCH faster!
 
-        final BasicMatrix tmpE = tmpA.add(1000, 19, 3.14);
-        final BasicMatrix tmpF = tmpE.add(10, 270, 2.18);
+        //final BasicMatrix tmpE = tmpA.add(1000, 19, 3.14);
+        //final BasicMatrix tmpF = tmpE.add(10, 270, 2.18);
         // The BasicMatrix interface does not specify a set-method for matrix elements.
         // BasicMatrix instances are immutable.
         // The add(...) method should only be used to modify a small number of elements.
@@ -236,14 +235,14 @@ public class MatrixTest extends TestCase {
         // You do not want to create that array just as an intermediate step towards populating your matrix.
         // Doing it this way is clumsy for larger matrices.
 
-        final Access2D.Builder<PrimitiveMatrix> tmpBuilder = tmpFactory.getBuilder(500, 500);
+        /*final Access2D.Builder<PrimitiveMatrix> tmpBuilder = tmpFactory.getBuilder(500, 500);
         // If you want to individually set many/all elements of a larger matrix you should use the builder.
         for (int j = 0; j < 500; j++) {
             for (int i = 0; i < 500; i++) {
                 tmpBuilder.set(i, j, 100.0 * Math.min(i, j));
             }
         }
-        final BasicMatrix tmpI = tmpBuilder.build();
+        final BasicMatrix tmpI = tmpBuilder.build();*/
         // Now you've seen 4 of the 13 MatrixFactory methods...
 
         final BasicMatrix tmpJ = tmpA.mergeRows(tmpD);

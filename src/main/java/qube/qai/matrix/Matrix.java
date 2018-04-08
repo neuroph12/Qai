@@ -16,7 +16,6 @@ package qube.qai.matrix;
 
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
-import org.ojalgo.matrix.store.PhysicalStore;
 import org.ojalgo.random.Normal;
 import qube.qai.data.MetricTyped;
 import qube.qai.data.Metrics;
@@ -55,13 +54,14 @@ public class Matrix implements Serializable, MetricTyped {
         rows = (int) matrix.countRows();
         columns = (int) matrix.countColumns();
         values = new double[rows][columns];
-        PhysicalStore<Double> primitive = matrix.toPrimitiveStore();
+        // @TODO encog upgrade. take a look and correct
+        /*PhysicalStore<Double> primitive = matrix.toPrimitiveStore();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 values[i][j] = primitive.get(i, j);
             }
 
-        }
+        }*/
         //this.matrix = matrix;
     }
 
@@ -77,7 +77,8 @@ public class Matrix implements Serializable, MetricTyped {
         if (values == null) {
             return null;
         }
-        return matrix().toListOfElements();
+        // @TODO encog updade related take a look
+        return null; //matrix().toListOfElements();
     }
 
     /**
@@ -86,7 +87,8 @@ public class Matrix implements Serializable, MetricTyped {
      * @return
      */
     public double[] toArray() {
-        List<? extends Number> elements = matrix().toListOfElements();
+        // @TODO encog updade related take a look
+        List<? extends Number> elements = null; //matrix().toListOfElements();
         if (elements == null) {
             return null;
         }
@@ -112,7 +114,8 @@ public class Matrix implements Serializable, MetricTyped {
         metrics.putValue("rows", matrix.countRows());
         metrics.putValue("columns", matrix.countColumns());
         metrics.putValue("determinant", matrix.getDeterminant().doubleValue());
-        metrics.putValue("infinity norm", matrix.getInfinityNorm().doubleValue());
+        // @TODO encog updade related take a look
+        //metrics.putValue("infinity norm", matrix.getInfinityNorm().doubleValue());
         metrics.putValue("eigenvalues", matrix.getEigenvalues());
 
         return metrics;
@@ -154,7 +157,8 @@ public class Matrix implements Serializable, MetricTyped {
 
     public List<? extends Number> toListOfElements() {
         if (values != null) {
-            return matrix().toListOfElements();
+            // @TODO encog updade related take a look
+            return null; //matrix().toListOfElements();
         }
         return null;
     }

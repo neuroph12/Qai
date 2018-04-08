@@ -17,8 +17,6 @@ package qube.qai.network.neural;
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
-import org.ojalgo.access.Access2D;
-import org.ojalgo.matrix.PrimitiveMatrix;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
 import qube.qai.network.Network;
@@ -115,7 +113,8 @@ public class NeuralNetwork extends Network {
         double[] array = new double[arrayLength];
         network.encodeToArray(array);
 
-        Access2D.Builder<PrimitiveMatrix> builder = PrimitiveMatrix.FACTORY.getBuilder(size, size);
+        // @TODO encog updade related take a look
+        /*Access2D.Builder<PrimitiveMatrix> builder = PrimitiveMatrix.FACTORY.getBuilder(size, size);
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 int index = j * size + i;
@@ -123,7 +122,7 @@ public class NeuralNetwork extends Network {
             }
         }
 
-        adjacencyMatrix = new Matrix(builder.build());
+        adjacencyMatrix = new Matrix(builder.build());*/
     }
 
     public void buildFromAdjacencyMatrix() {

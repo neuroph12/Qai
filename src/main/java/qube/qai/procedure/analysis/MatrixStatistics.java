@@ -15,13 +15,10 @@
 package qube.qai.procedure.analysis;
 
 import qube.qai.data.Metrics;
-import qube.qai.data.analysis.Statistics;
 import qube.qai.matrix.Matrix;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.nodes.ValueNode;
-
-import java.util.List;
 
 /**
  * Created by zenpunk on 11/28/15.
@@ -78,12 +75,13 @@ public class MatrixStatistics extends Procedure implements ProcedureConstants {
             return;
         }
 
-        List elements = matrix.getMatrix().toListOfElements();
+        // @TODO encog updade related take a look
+        /*List elements = matrix.getMatrix().toListOfElements();
         Statistics stats = new Statistics(elements.toArray());
         dataMetrics = stats.buildMetrics();
         matrixMetrics = matrix.buildMetrics();
 
-        info("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");
+        info("adding '" + MATRIX_METRICS + "' and '" + MATRIX_DATA_METRICS + "' to return values");*/
     }
 
     @Override
