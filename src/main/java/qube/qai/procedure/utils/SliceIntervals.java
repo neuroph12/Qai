@@ -16,14 +16,14 @@ package qube.qai.procedure.utils;
 
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.SpawningProcedure;
-import qube.qai.procedure.analysis.ChangePointAnalysis;
+import qube.qai.procedure.analysis.ChangePoints;
 import qube.qai.procedure.analysis.SortPercentiles;
 
 import java.util.Set;
 
 public class SliceIntervals extends Procedure implements SpawningProcedure {
 
-    private ChangePointAnalysis changePoint;
+    private ChangePoints changePoint;
 
     private SortPercentiles sortPercentiles;
 

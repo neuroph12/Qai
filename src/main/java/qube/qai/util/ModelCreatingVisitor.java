@@ -92,8 +92,8 @@ public class ModelCreatingVisitor implements NodeVisitor {
         BaseNode procedure = null;
         SelectForAll selection = new SelectForAll();
 
-        /*if (ChangePointAnalysis.NAME.equals(name)) {
-            procedure = new ChangePointAnalysis();
+        /*if (ChangePoints.NAME.equals(name)) {
+            procedure = new ChangePoints();
         } else if (FinanceNetworkTrainer.NAME.equals(name)) {
             procedure = new FinanceNetworkTrainer();
         } else if (MatrixStatistics.NAME.equals(name)) {

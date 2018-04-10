@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import qube.qai.data.TimeSequence;
 import qube.qai.network.neural.NeuralNetwork;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +35,7 @@ import java.util.Set;
 /**
  * Created by rainbird on 11/23/15.
  */
-public class BasicNetworkTrainer implements NeuralNetworkTrainer {
+public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
 
     private Logger logger = LoggerFactory.getLogger("BasicNetworkTrainer");
 

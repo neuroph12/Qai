@@ -18,7 +18,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import qube.qai.data.TimeSequence;
 import qube.qai.main.QaiConstants;
-import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
@@ -71,6 +70,8 @@ public class AverageSequence extends Procedure {
         allUUIDs = new LinkedHashSet<>();
         allDates = new TreeSet<>();
         childEntity = new StockEntity();
+        //childEntity.setName(getDisplayName());
+        childEntity.setTickerSymbol(getDisplayName());
         childEntity.setUuid(getUuid());
 
         // first collect all dates
@@ -93,7 +94,7 @@ public class AverageSequence extends Procedure {
             TimeSequence<Double> sequence = new TimeSequence<>();
 
             // this does troubles- first update the quotes
-            StockQuoteUpdater updater = new StockQuoteUpdater();
+            /*StockQuoteUpdater updater = new StockQuoteUpdater();
             QaiInjectorService.getInstance().injectMembers(updater);
             updater.addInputs(new DataProvider(entity));
             updater.execute();
@@ -101,12 +102,16 @@ public class AverageSequence extends Procedure {
                 info("Quotes for: '" + entity.getTickerSymbol() + "' could not be updated- is symbol correct? Skipping.");
                 break;
             }
-            Collection<StockQuote> quotes = updater.getQuotes();
+            Collection<StockQuote> quotes = updater.getQuotes();*/
+            Collection<StockQuote> quotes = entity.getQuotes();
             for (StockQuote quote : quotes) {
                 sequence.add(quote.getQuoteDate(), quote.adjustedClose);
+                if (!allDates.contains(quote.getQuoteDate())) {
+                    allDates.add(quote.getQuoteDate());
+                }
             }
 
-            allDates.addAll(sequence.dates());
+            //allDates.addAll(sequence.dates());
             sequenceMap.put(entity.getTickerSymbol(), sequence);
         }
 
@@ -125,7 +130,7 @@ public class AverageSequence extends Procedure {
             // now we know the sum for the day, we average it
             double avg = sum / count;
             StockQuote avgQuote = new StockQuote();
-            avgQuote.setTickerSymbol(getUuid());
+            avgQuote.setTickerSymbol(getDisplayName());
             avgQuote.setParentUUID(getUuid());
             avgQuote.setQuoteDate(date);
             avgQuote.setAdjustedClose(avg);
@@ -150,6 +155,10 @@ public class AverageSequence extends Procedure {
         entityIMap.put(getUuid(), childEntity);
 
         hasExecuted = true;
+    }
+
+    public String getDisplayName() {
+        return String.format(nameTemplate, getUuid());
     }
 
     @Override

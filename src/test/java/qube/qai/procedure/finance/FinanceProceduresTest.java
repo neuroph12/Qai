@@ -24,7 +24,7 @@ import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.ProcedureLibraryInterface;
-import qube.qai.procedure.analysis.ChangePointAnalysis;
+import qube.qai.procedure.analysis.ChangePoints;
 import qube.qai.procedure.nodes.ProcedureDescription;
 import qube.qai.procedure.utils.SelectForAll;
 import qube.qai.procedure.utils.SelectForEach;
@@ -77,14 +77,14 @@ public class FinanceProceduresTest extends QaiTestBase {
         assertNotNull("there has to be search results", providers);
         assertTrue("there has to be search results", !providers.isEmpty() && providers.size() == numberToPick);
 
-        ChangePointAnalysis changePoint = new ChangePointAnalysis();
+        ChangePoints changePoint = new ChangePoints();
         changePoint.setInputs(providers);
         QaiInjectorService.getInstance().injectMembers(changePoint);
 
         changePoint.execute();
 
         assertTrue("has to mark as executed", changePoint.hasExecuted());
-
+        assertTrue("there has to be some results", changePoint.getMarkers() != null && !changePoint.getMarkers().isEmpty());
     }
 
     public void testStockQuoteUpdaterTemplate() throws Exception {
@@ -122,10 +122,10 @@ public class FinanceProceduresTest extends QaiTestBase {
         updater.execute();
 
         assertTrue("we have completed execution", updater.hasExecuted());
-
+        assertTrue("there has to be some inserts", updater.numberOfInserts >= 0);
     }
 
-    public void testSequenceAveragerTemplate() throws Exception {
+    public void testAverageSequenceTemplate() throws Exception {
 
         int numberToPick = 10;
 
@@ -145,7 +145,7 @@ public class FinanceProceduresTest extends QaiTestBase {
 
     }
 
-    public void testSequenceAverager() throws Exception {
+    public void testAverageSequence() throws Exception {
 
         int numberToPick = 10;
         Collection<QaiDataProvider> searchResults = pickStockProviders(numberToPick);
@@ -160,15 +160,19 @@ public class FinanceProceduresTest extends QaiTestBase {
         }
 
         // set the input search-result to the procedure
-        AverageSequence averager = new AverageSequence();
-        QaiInjectorService.getInstance().injectMembers(averager);
-        averager.setInputs(searchResults);
+        AverageSequence average = new AverageSequence();
+        QaiInjectorService.getInstance().injectMembers(average);
+        average.setInputs(searchResults);
 
         // now we're ready to start the procedure
-        averager.execute();
+        average.execute();
 
-        assertTrue("we have to believe this", averager.hasExecuted());
+        assertTrue("we have to believe this", average.hasExecuted());
         logger.info("started execution of procedure with: " + stockNames.toString());
+
+        assertTrue("There have to dates!", average.getAllDates() != null && !average.getAllDates().isEmpty());
+        assertTrue("There has to be an entity", average.getChildEntity() != null);
+        assertTrue("there have to to be stocks", !average.getChildEntity().getQuotes().isEmpty());
     }
 
     protected Collection<SearchResult> pickStocks(int numberToPick) {

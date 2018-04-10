@@ -21,7 +21,7 @@ import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.SpawningProcedure;
-import qube.qai.procedure.analysis.ChangePointAnalysis;
+import qube.qai.procedure.analysis.ChangePoints;
 import qube.qai.procedure.finance.AverageSequence;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.QaiInjectorService;
@@ -35,11 +35,13 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
 
     public static final String DESCRIPTION = "This creates finance networks out of given set of finance-entities";
 
-    private ChangePointAnalysis changePoint;
+    private ChangePoints changePoint;
 
     private AverageSequence averager;
 
     private Set<FinanceNetworkTrainer> spawn;
+
+    private boolean runChildren = true;
 
     @Inject
     private ProcedureRunnerInterface procedureRunner;
@@ -71,13 +73,17 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
         Set<Date> alldates = averager.getAllDates();
 
         StockEntity averageEntity = averager.getChildEntity();
-        changePoint = new ChangePointAnalysis();
+        changePoint = new ChangePoints();
         changePoint.addInputs(new DataProvider<>(averageEntity));
         QaiInjectorService.getInstance().injectMembers(changePoint);
 
         changePoint.execute();
-        Date start = alldates.iterator().next();
-        Collection<ChangePointAnalysis.ChangePointMarker> markers = changePoint.getMarkers();
+        Date start = new Date();
+        if (alldates != null && !alldates.isEmpty()) {
+            alldates.iterator().next();
+        }
+
+        Collection<ChangePoints.ChangePointMarker> markers = changePoint.getMarkers();
 
         if (markers == null || markers.isEmpty()) {
             FinanceNetworkTrainer trainer = new FinanceNetworkTrainer();
@@ -87,11 +93,16 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
             trainer.setTimeSequenceMap(timeSequenceMap);
 
             spawn.add(trainer);
-            procedureRunner.submitProcedure(trainer);
+            if (runChildren) {
+                QaiInjectorService.getInstance().injectMembers(trainer);
+                trainer.execute();
+            } else {
+                procedureRunner.submitProcedure(trainer);
+            }
 
         } else {
 
-            for (ChangePointAnalysis.ChangePointMarker marker : markers) {
+            for (ChangePoints.ChangePointMarker marker : markers) {
 
                 FinanceNetworkTrainer trainer = new FinanceNetworkTrainer();
                 trainer.setParent(this);
@@ -100,7 +111,12 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
                 trainer.setTimeSequenceMap(timeSequenceMap);
 
                 spawn.add(trainer);
-                procedureRunner.submitProcedure(trainer);
+                if (runChildren) {
+                    QaiInjectorService.getInstance().injectMembers(trainer);
+                    trainer.execute();
+                } else {
+                    procedureRunner.submitProcedure(trainer);
+                }
 
                 start = marker.getDate();
             }
@@ -149,5 +165,29 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
 
     public void setSpawn(Set<FinanceNetworkTrainer> spawn) {
         this.spawn = spawn;
+    }
+
+    public ChangePoints getChangePoint() {
+        return changePoint;
+    }
+
+    public void setChangePoint(ChangePoints changePoint) {
+        this.changePoint = changePoint;
+    }
+
+    public AverageSequence getAverager() {
+        return averager;
+    }
+
+    public void setAverager(AverageSequence averager) {
+        this.averager = averager;
+    }
+
+    public boolean isRunChildren() {
+        return runChildren;
+    }
+
+    public void setRunChildren(boolean runChildren) {
+        this.runChildren = runChildren;
     }
 }

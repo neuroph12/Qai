@@ -32,13 +32,13 @@ import java.util.Set;
 /**
  * Created by zenpunk on 11/28/15.
  */
-public class ChangePointAnalysis extends Procedure {
+public class ChangePoints extends Procedure {
 
     public String NAME = "Change-Point Analysis";
 
-    public String DESCRIPTION = "Drop stock-entites from finance list so that they can be analysed for change-points in their quote.";
+    public String DESCRIPTION = "Drop stock-entities from finance list so that their quotes can be analysed for change-points.";
 
-    public ChangePointAnalysis() {
+    public ChangePoints() {
         super("Change-Point Analysis");
     }
 
@@ -113,7 +113,7 @@ public class ChangePointAnalysis extends Procedure {
 
     @Override
     public Procedure createInstance() {
-        return new ChangePointAnalysis();
+        return new ChangePoints();
     }
 
     public Collection<ChangePointMarker> getMarkers() {

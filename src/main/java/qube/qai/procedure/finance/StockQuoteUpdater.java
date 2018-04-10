@@ -21,6 +21,7 @@ import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
+import qube.qai.services.QaiInjectorService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class StockQuoteUpdater extends Procedure {
         }
 
         for (QaiDataProvider<StockEntity> entityProvider : inputs) {
-
+            QaiInjectorService.getInstance().injectMembers(entityProvider);
             StockEntity entity = entityProvider.getData();
             if (entity == null) {
                 error("An entity with not be found- skipping!");

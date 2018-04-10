@@ -72,7 +72,7 @@ public class ProcedureInputsAndResultsTest extends TestCase {
         ProcedureInputs inputs = new ProcedureInputs();
 
         inputs.addInput(new ValueNode(SimpleProcedure.NAME, new SimpleProcedure()));
-        inputs.addInput(new ValueNode(ChangePointAnalysis.NAME, new ChangePointAnalysis()));
+        inputs.addInput(new ValueNode(ChangePoints.NAME, new ChangePoints()));
         inputs.addInput(new ValueNode(MatrixStatistics.NAME, new MatrixStatistics()));
         inputs.addInput(new ValueNode(NetworkStatistics.NAME, new NetworkStatistics()));
         inputs.addInput(new ValueNode(NeuralNetworkAnalysis.NAME, new NeuralNetworkAnalysis()));
@@ -81,9 +81,9 @@ public class ProcedureInputsAndResultsTest extends TestCase {
         assertNotNull("there has to be a procedure", p1);
         assertTrue("the name has to be right", SimpleProcedure.NAME.equals(p1.getName().getName()));
 
-        Procedure p2 = (Procedure) inputs.getNamedInput(ChangePointAnalysis.NAME).getFirstChild();
+        Procedure p2 = (Procedure) inputs.getNamedInput(ChangePoints.NAME).getFirstChild();
         assertNotNull("there has to be a procedure", p2);
-        assertTrue("the name has to be right", ChangePointAnalysis.NAME.equals(p2.getName().getName()));
+        assertTrue("the name has to be right", ChangePoints.NAME.equals(p2.getName().getName()));
 
         Procedure p3 = (Procedure) inputs.getNamedInput(MatrixStatistics.NAME).getFirstChild();
         assertNotNull("there has to be a procedure", p3);
@@ -103,7 +103,7 @@ public class ProcedureInputsAndResultsTest extends TestCase {
         Collection<String> names = inputs.getInputNames();
         assertNotNull("names may not be null", names);
         assertTrue(names.contains(SimpleProcedure.NAME));
-        assertTrue(names.contains(ChangePointAnalysis.NAME));
+        assertTrue(names.contains(ChangePoints.NAME));
         assertTrue(names.contains(MatrixStatistics.NAME));
         assertTrue(names.contains(NetworkStatistics.NAME));
 
