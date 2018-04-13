@@ -56,7 +56,9 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
 
         statistics.execute();
 
-        checkProcedureResults(statistics.getProcedureDescription());
+        fail("the rest of the test should be implemented");
+
+        //checkProcedureResults(statistics.getProcedureDescription());
     }
 
     /**
@@ -75,13 +77,15 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
         BaseNode matrixIn = description.getProcedureInputs().getNamedInput(ProcedureConstants.INPUT_MATRIX);
         assertNotNull("there has to be an input matrix", matrixIn);
 
-        checkProcedureInputs(description);
+        //checkProcedureInputs(description);
 
         Matrix matrix = Matrix.createMatrix(true, 100, 100);
         description.getProcedureInputs().getNamedInput(ProcedureConstants.INPUT_MATRIX).setFirstChild(new ValueNode("", matrix));
         procedure.execute();
 
-        checkProcedureResults(description);
+        fail("the rest of the test should be implemented");
+
+        //checkProcedureResults(description);
     }
 
 
@@ -93,9 +97,11 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
 
-        checkProcedureInputs(description);
+        fail("the rest of the test should be implemented");
 
-        checkProcedureResults(description);
+        //checkProcedureInputs(description);
+
+        //checkProcedureResults(description);
 
     }
 
@@ -112,9 +118,11 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
 
-        checkProcedureInputs(description);
+        fail("the rest of the test should be implemented");
 
-        checkProcedureResults(description);
+        //checkProcedureInputs(description);
+
+        //checkProcedureResults(description);
 
         String[] quoteNames = {"GOOG", "APP", "whatever..."};
 
@@ -134,9 +142,11 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
 
-        checkProcedureInputs(description);
+        fail("the rest of the test should be implemented");
 
-        checkProcedureResults(description);
+        //checkProcedureInputs(description);
+
+        //checkProcedureResults(description);
     }
 
     /**
@@ -150,9 +160,11 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
 
-        checkProcedureInputs(description);
+        fail("the rest of the test should be implemented");
 
-        checkProcedureResults(description);
+        //checkProcedureInputs(description);
+
+        //checkProcedureResults(description);
     }
 
     /**
@@ -168,9 +180,11 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
 
-        checkProcedureInputs(description);
+        fail("the rest of the test should be implemented");
 
-        checkProcedureResults(description);
+        //checkProcedureInputs(description);
+
+        //checkProcedureResults(description);
 //
 //        Arguments arguments = statistics.getArguments();
 //        assertNotNull("arguments may not be null", arguments);
@@ -209,9 +223,11 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
 
-        checkProcedureInputs(description);
+        fail("the rest of the test should be implemented");
 
-        checkProcedureResults(description);
+        //checkProcedureInputs(description);
+
+        // checkProcedureResults(description);
 
         // now we do the real testing here-
         // we're supposed to pass a set of stock-entities which it should be working on

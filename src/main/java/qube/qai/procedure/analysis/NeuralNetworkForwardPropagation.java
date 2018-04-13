@@ -94,7 +94,7 @@ public class NeuralNetworkForwardPropagation extends Procedure implements Proced
             in = out;
         }
 
-        setResultValueOf(MAP_OF_TIME_SEQUENCE, timeSeriesMap);
+        //setResultValueOf(MAP_OF_TIME_SEQUENCE, timeSeriesMap);
     }
 
     @Override

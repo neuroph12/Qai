@@ -93,7 +93,7 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
         }
         indexZipFileEntries();
 
-        setResultValueOf(INPUT_INDEX_DIRECTORY, indexDirectory);
+        //setResultValueOf(INPUT_INDEX_DIRECTORY, indexDirectory);
     }
 
     @Override

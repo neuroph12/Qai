@@ -16,9 +16,6 @@ package qube.qai.procedure.nodes;
 
 import junit.framework.TestCase;
 import qube.qai.data.Metrics;
-import qube.qai.parsers.antimirov.nodes.BaseNode;
-
-import java.util.Collection;
 
 /**
  * Created by rainbird on 4/7/17.
@@ -36,7 +33,7 @@ public class ProcedureTestBase extends TestCase {
         }
     }
 
-    protected void checkProcedureInputs(ProcedureDescription description) {
+    /*protected void checkProcedureInputs(ProcedureDescription description) {
         Collection<String> names = description.getProcedureInputs().getInputNames();
         assertTrue("there has to be input names", !names.isEmpty());
         for (String name : names) {
@@ -44,9 +41,9 @@ public class ProcedureTestBase extends TestCase {
             assertNotNull("there has to be a node", node);
             log("input named: " + name + " and corresponding node: " + node.toString());
         }
-    }
+    }*/
 
-    protected void checkProcedureResults(ProcedureDescription description) {
+    /*protected void checkProcedureResults(ProcedureDescription description) {
         Collection<String> names = description.getProcedureResults().getResultNames();
         assertTrue("there has to be result names", !names.isEmpty());
         for (String name : names) {
@@ -54,7 +51,7 @@ public class ProcedureTestBase extends TestCase {
             assertNotNull("there has to be a node with name: " + name, node);
             log("result name: " + name + " " + node.toString());
         }
-    }
+    }*/
 
     protected void log(String message) {
         if (debug) {

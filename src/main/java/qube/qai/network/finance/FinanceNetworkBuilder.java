@@ -89,6 +89,7 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
             FinanceNetworkTrainer trainer = new FinanceNetworkTrainer();
             trainer.setParent(this);
             trainer.setStartDate(start);
+            trainer.setAllDates(alldates);
             trainer.setEndDate(null);
             trainer.setTimeSequenceMap(timeSequenceMap);
 
@@ -108,6 +109,7 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
                 trainer.setParent(this);
                 trainer.setStartDate(start);
                 trainer.setEndDate(marker.getDate());
+                trainer.setAllDates(alldates);
                 trainer.setTimeSequenceMap(timeSequenceMap);
 
                 spawn.add(trainer);

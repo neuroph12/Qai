@@ -62,7 +62,7 @@ public class Attach extends Procedure {
 
         Statement statement = createStatement();
         //dataService.save(statement.getModel());
-        setResultValueOf(RELATION, statement);
+        //setResultValueOf(RELATION, statement);
     }
 
     @Override

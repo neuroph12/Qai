@@ -35,9 +35,11 @@ public class UtilProceduresTest extends ProcedureTestBase {
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
 
-        checkProcedureInputs(description);
+        fail("the rest of the test should be implemented");
 
-        checkProcedureResults(description);
+        //checkProcedureInputs(description);
+
+        //checkProcedureResults(description);
     }
 
     public void testSelectionProcedure() throws Exception {
@@ -48,9 +50,11 @@ public class UtilProceduresTest extends ProcedureTestBase {
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
 
-        checkProcedureInputs(description);
+        fail("the rest of the test should be implemented");
 
-        checkProcedureResults(description);
+        //checkProcedureInputs(description);
+
+        //checkProcedureResults(description);
     }
 
     public void testSimpleProcedure() throws Exception {
@@ -60,6 +64,8 @@ public class UtilProceduresTest extends ProcedureTestBase {
         ProcedureDescription description = procedure.getProcedureDescription();
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
+
+        fail("the rest of the test should be implemented");
 
         //checkProcedureInputs(description);
 
@@ -85,6 +91,7 @@ public class UtilProceduresTest extends ProcedureTestBase {
         Collection<StockEntity> stockEntities = null;
         QaiDataProvider<Collection<StockEntity>> entityProvider = new DataProvider<>(stockEntities);
 
+
     }
 
     public void testSliceProcedure() throws Exception {
@@ -109,8 +116,10 @@ public class UtilProceduresTest extends ProcedureTestBase {
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
 
-        checkProcedureInputs(description);
+        fail("the rest of the test should be implemented");
 
-        checkProcedureResults(description);
+        //checkProcedureInputs(description);
+
+        //checkProcedureResults(description);
     }
 }

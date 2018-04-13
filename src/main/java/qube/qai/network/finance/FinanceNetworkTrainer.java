@@ -132,4 +132,12 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
         return trainer;
     }
 
+    public Set<Date> getAllDates() {
+        return allDates;
+    }
+
+    public void setAllDates(Set<Date> allDates) {
+        this.allDates = allDates;
+    }
+
 }

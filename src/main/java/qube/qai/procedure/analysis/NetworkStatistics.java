@@ -69,7 +69,7 @@ public class NetworkStatistics extends Procedure implements ProcedureConstants {
 
         metrics = network.buildMetrics();
         info("adding " + NETWORK_METRICS + " to return values");
-        setResultValueOf(NETWORK_METRICS, metrics);
+        //setResultValueOf(NETWORK_METRICS, metrics);
     }
 
     @Override

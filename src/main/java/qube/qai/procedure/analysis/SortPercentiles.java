@@ -117,8 +117,8 @@ public class SortPercentiles extends Procedure implements ProcedureConstants {
         // and add the results to the arguments
         //arguments.addResult(SORTED_ITEMS, sortedTimeSeries);
         //arguments.addResult(AVERAGE_TIME_SEQUENCE, averageSeries);
-        setResultValueOf(SORTED_ITEMS, sortedTimeSeries);
-        setResultValueOf(AVERAGE_TIME_SEQUENCE, sortedTimeSeries);
+        //setResultValueOf(SORTED_ITEMS, sortedTimeSeries);
+        //setResultValueOf(AVERAGE_TIME_SEQUENCE, sortedTimeSeries);
     }
 
     @Override

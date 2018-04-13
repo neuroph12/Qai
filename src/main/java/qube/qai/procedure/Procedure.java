@@ -162,13 +162,13 @@ public abstract class Procedure extends ConcatenationNode
         return value;
     }
 
-    protected void setResultValueOf(String name, Object value) {
+    /*protected void setResultValueOf(String name, Object value) {
         BaseNode nameNode = getProcedureResults().getNamedResult(name);
         if (nameNode == null) {
             throw new IllegalArgumentException("No result value with name: '" + name + "'");
         }
         nameNode.setFirstChild(new ValueNode(name, value));
-    }
+    }*/
 
     public String getDescriptionText() {
         return ((ProcedureDescription) getFirstChild()).getDescription();

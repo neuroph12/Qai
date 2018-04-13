@@ -30,9 +30,11 @@ public class ArchiveProceduresTest extends ProcedureTestBase {
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
 
-        checkProcedureInputs(description);
+        fail("the rest of the test should be implemented");
 
-        checkProcedureResults(description);
+        //checkProcedureInputs(description);
+
+        //checkProcedureResults(description);
     }
 
     public void testWikiArchiveIndexer() throws Exception {
@@ -43,9 +45,11 @@ public class ArchiveProceduresTest extends ProcedureTestBase {
         assertNotNull("there has to be a description", description);
         log("description as text: " + description.getDescription());
 
-        checkProcedureInputs(description);
+        fail("the rest of the test should be implemented");
 
-        checkProcedureResults(description);
+        //checkProcedureInputs(description);
+
+        //checkProcedureResults(description);
     }
 
 }
