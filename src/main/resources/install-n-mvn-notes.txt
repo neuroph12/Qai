@@ -90,6 +90,8 @@ latest configuration of boxes in intranet
 192.168.0.199    - monday
 192.168.0.241    - tuesday
 192.168.0.164    - wednesday
+192.168.0.234    - thursday
+192.168.0.179    - friday
 
 MySql-server and related things
 remember to change mysql-server settings in /etc/mysql/my.cnf
