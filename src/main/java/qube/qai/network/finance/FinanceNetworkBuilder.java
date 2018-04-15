@@ -124,6 +124,8 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
             }
         }
 
+        hasExecuted = true;
+
     }
 
     @Override

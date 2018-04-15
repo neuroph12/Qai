@@ -106,19 +106,34 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
             dummy++;
         }
 
-        for (Date date : dates) {
+        boolean ignoreDates = false;
+        if (!startDate.before(endDate)) {
+            logger.info("Start date " + startDate.toString() + " is not before end date: " + endDate.toString() + " will ignore dates");
+            ignoreDates = true;
+        }
 
-            if (date.before(startDate)) {
+        Date[] dateArray = new Date[dates.size()];
+        dates.toArray(dateArray);
+
+        for (int i = 0; i < dateArray.length; i++) {
+
+            Date date = dateArray[i];
+            Date nextDate = null;
+            if (i + 1 < dateArray.length) {
+                nextDate = dateArray[i + 1];
+            }
+
+
+            if (!ignoreDates && date.before(startDate)) {
                 continue;
             }
 
             double[] inDoubles = new double[sequenceMap.size()];
             double[] outDoubles = new double[sequenceMap.size()];
             int index = 0;
-            Date nextDate = null;
 
-            for (int i = 0; i < tickerSymbols.length; i++) {
-                TimeSequence sequence = sequenceMap.get(tickerSymbols[i]);
+            for (int j = 0; j < tickerSymbols.length; j++) {
+                TimeSequence sequence = sequenceMap.get(tickerSymbols[j]);
                 if (sequence.getValue(date) != null) {
                     Double inVal = (Double) sequence.getValue(date);
                     if (inVal == null) {
@@ -127,6 +142,9 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
                         inDoubles[index] = inVal;
                     }
 
+                    if (nextDate == null) {
+                        continue;
+                    }
 
                     Double outVal = (Double) sequence.getValue(nextDate);
                     if (outVal == null) {
@@ -141,7 +159,7 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
             MLDataPair datapair = new BasicMLDataPair(inData, outData);
             trainingSet.add(datapair);
 
-            if (endDate != null && date.compareTo(endDate) == 0) {
+            if (!ignoreDates && endDate != null && date.compareTo(endDate) == 0) {
                 break;
             }
 

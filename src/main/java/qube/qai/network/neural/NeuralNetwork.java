@@ -52,6 +52,10 @@ public class NeuralNetwork extends Network {
      * @param size
      */
     public NeuralNetwork(int size) {
+        initializeNetwork(size);
+    }
+
+    public void initializeNetwork(int size) {
         this.size = size;
         network = new BasicNetwork();
         network.addLayer(new BasicLayer(null, false, size));

@@ -54,14 +54,15 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
 
     @Override
     public void execute() {
-
         if (timeSequenceMap == null
                 || startDate == null
-                || allDates == null) {
+                || allDates == null
+                || endDate == null) {
             throw new IllegalStateException("Procedure has not been initialized right- stopping execution!");
         }
 
         // well, here goes nothing
+        network = new NeuralNetwork(timeSequenceMap.size());
         trainer = new BasicNetworkTrainer(network);
         trainer.createTrainingSet(startDate, endDate, allDates, timeSequenceMap);
         trainer.trainNetwork();
