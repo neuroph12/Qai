@@ -19,7 +19,7 @@ import qube.qai.procedure.SpawningProcedure;
 import qube.qai.procedure.analysis.ChangePoints;
 import qube.qai.procedure.analysis.SortPercentiles;
 
-import java.util.Set;
+import java.util.ArrayList;
 
 public class SliceIntervals extends Procedure implements SpawningProcedure {
 
@@ -51,7 +51,7 @@ public class SliceIntervals extends Procedure implements SpawningProcedure {
     }
 
     @Override
-    public Set<String> getSpawnedProcedureUUIDs() {
+    public ArrayList<String> getSpawnedProcedureUUIDs() {
         return null;
     }
 

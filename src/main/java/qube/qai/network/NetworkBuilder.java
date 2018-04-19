@@ -16,10 +16,12 @@ package qube.qai.network;
 
 import qube.qai.persistence.QaiDataProvider;
 
+import java.io.Serializable;
+
 /**
  * Created by rainbird on 12/24/15.
  */
-public interface NetworkBuilder {
+public interface NetworkBuilder extends Serializable {
 
     Network buildNetwork(QaiDataProvider... inputs);
 }

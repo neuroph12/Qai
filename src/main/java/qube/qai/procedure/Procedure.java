@@ -39,7 +39,7 @@ import qube.qai.user.User;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -52,7 +52,7 @@ public abstract class Procedure extends ConcatenationNode
 
     public static String DESCRIPTION = "Description of the procedure";
 
-    protected Collection<QaiDataProvider> inputs;
+    protected QaiDataProvider[] inputs;
 
     @Inject
     protected transient HazelcastInstance hazelcastInstance;
@@ -71,7 +71,7 @@ public abstract class Procedure extends ConcatenationNode
         super(new ProcedureDescription(), new EmptyNode());
         this.name = new Name(NAME);
         this.uuid = UUIDService.uuidString();
-        this.inputs = new ArrayList<>();
+        //this.inputs = new ArrayList<>();
     }
 
     public Procedure(String name) {
@@ -190,14 +190,8 @@ public abstract class Procedure extends ConcatenationNode
 
         if (providers == null) {
             return;
-        }
-
-        if (inputs == null) {
-            inputs = new ArrayList<>();
-        }
-
-        for (QaiDataProvider provider : providers) {
-            inputs.add(provider);
+        } else {
+            inputs = providers;
         }
     }
 
@@ -289,11 +283,16 @@ public abstract class Procedure extends ConcatenationNode
     }
 
     public Collection<QaiDataProvider> getInputs() {
-        return inputs;
+        if (inputs != null) {
+            return Arrays.asList(inputs);
+        }
+        return null;
     }
 
     public void setInputs(Collection<QaiDataProvider> inputs) {
-        this.inputs = inputs;
+        if (inputs != null) {
+            this.inputs = (QaiDataProvider[]) inputs.toArray();
+        }
     }
 
     public String getUserUUID() {

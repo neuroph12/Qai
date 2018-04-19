@@ -18,14 +18,16 @@ import junit.framework.TestCase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureLibrary;
-import qube.qai.procedure.ProcedureTemplate;
+import qube.qai.procedure.analysis.ChangePoints;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by rainbird on 4/6/17.
@@ -63,7 +65,7 @@ public class ModelMapStoresTest extends TestCase {
 
     public void testPersistentUserMapStore() throws Exception {
 
-        PersistentModelMapStore mapStore = new PersistentModelMapStore(User.class, userDirectory);
+        PersistentModelMapStore mapStore = new PersistentModelMapStore(userDirectory, User.class);
         mapStore.init();
 
         User user = DatabaseMapStoresTest.createUser();
@@ -162,10 +164,10 @@ public class ModelMapStoresTest extends TestCase {
      */
     public void testPersistentProcedureMapStore() throws Exception {
 
-        PersistentModelMapStore mapStore = new PersistentModelMapStore(Procedure.class, procedureDirectory);
+        PersistentModelMapStore mapStore = new PersistentModelMapStore(procedureDirectory, ChangePoints.class);
         mapStore.init();
 
-        ProcedureLibrary procedureLibrary = new ProcedureLibrary();
+        /*ProcedureLibrary procedureLibrary = new ProcedureLibrary();
 
         Collection<String> uuids = new ArrayList<>();
         for (ProcedureTemplate template : procedureLibrary.getTemplateMap().values()) {
@@ -176,9 +178,18 @@ public class ModelMapStoresTest extends TestCase {
 
             log("loading procedure of type " + procedure.getName());
             Procedure storedProcedure = (Procedure) mapStore.load(uuid);
-            assertNotNull("there has to be a stored procedure", storedProcedure);
+            String procedureName = template.getProcedureName();
+            assertNotNull("there has to be a stored procedure for " + procedureName, storedProcedure);
 
-        }
+        }*/
+
+        ChangePoints changePoint = new ChangePoints();
+        String uuid = changePoint.getUuid();
+        mapStore.store(uuid, changePoint);
+
+        log("loading procedure of type " + changePoint.getName());
+        Procedure found = (Procedure) mapStore.load(uuid);
+        assertNotNull("there has to be a object stored", found);
 
     }
 

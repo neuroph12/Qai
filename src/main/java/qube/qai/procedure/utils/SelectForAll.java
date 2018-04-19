@@ -27,8 +27,6 @@ import qube.qai.services.implementation.SearchResult;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by zenpunk on 12/27/15.
@@ -46,13 +44,13 @@ public class SelectForAll extends Procedure implements SpawningProcedure {
     @Inject
     private ProcedureRunnerInterface procedureRunner;
 
-    private Collection<SearchResult> results;
+    private ArrayList<SearchResult> results;
 
     private String provideForFieldName;
 
     private ProcedureTemplate template;
 
-    private Collection<Procedure> spawn;
+    private ArrayList<Procedure> spawn;
 
     private boolean executeImmediately;
 
@@ -121,9 +119,9 @@ public class SelectForAll extends Procedure implements SpawningProcedure {
     }
 
     @Override
-    public Set<String> getSpawnedProcedureUUIDs() {
+    public ArrayList<String> getSpawnedProcedureUUIDs() {
 
-        Set<String> uuids = new HashSet<>();
+        ArrayList<String> uuids = new ArrayList<>();
         for (Procedure procedure : spawn) {
             uuids.add(procedure.getUuid());
         }
@@ -136,11 +134,11 @@ public class SelectForAll extends Procedure implements SpawningProcedure {
         return new SelectForAll();
     }
 
-    public Collection<SearchResult> getResults() {
+    public ArrayList<SearchResult> getResults() {
         return results;
     }
 
-    public void setResults(Collection<SearchResult> results) {
+    public void setResults(ArrayList<SearchResult> results) {
         this.results = results;
     }
 
@@ -164,9 +162,9 @@ public class SelectForAll extends Procedure implements SpawningProcedure {
         return spawn;
     }
 
-    public void setSpawn(Collection<Procedure> spawn) {
+    /*public void setSpawn(ArrayList<Procedure> spawn) {
         this.spawn = spawn;
-    }
+    }*/
 
     public void setExecuteImmediately(boolean executeImmediately) {
         this.executeImmediately = executeImmediately;

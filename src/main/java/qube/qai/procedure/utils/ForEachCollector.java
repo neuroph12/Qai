@@ -21,9 +21,9 @@ import qube.qai.procedure.SpawningProcedure;
 import qube.qai.services.ProcedureRunnerInterface;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
-import java.util.TreeSet;
+
 
 public class ForEachCollector extends Procedure implements SpawningProcedure {
 
@@ -71,8 +71,8 @@ public class ForEachCollector extends Procedure implements SpawningProcedure {
     }
 
     @Override
-    public Set<String> getSpawnedProcedureUUIDs() {
-        Set<String> uuids = new TreeSet<>();
+    public ArrayList<String> getSpawnedProcedureUUIDs() {
+        ArrayList<String> uuids = new ArrayList<>();
         uuids.add(targetProcedure.getUuid());
         return uuids;
     }

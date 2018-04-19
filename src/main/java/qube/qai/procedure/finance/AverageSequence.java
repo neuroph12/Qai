@@ -22,7 +22,6 @@ import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.utils.SelectForEach;
 import qube.qai.services.QaiInjectorService;
 
 import javax.inject.Inject;
@@ -36,17 +35,17 @@ public class AverageSequence extends Procedure {
 
     private StockEntity childEntity;
 
-    private SelectForEach select;
+    //private SelectForEach select;
 
-    private Map<String, TimeSequence> sequenceMap;
+    private TreeMap<String, TimeSequence> sequenceMap;
 
     private Date startDate;
 
     private Date endDate;
 
-    private Set<Date> allDates;
+    private TreeSet<Date> allDates;
 
-    private Set<String> allUUIDs;
+    private TreeSet<String> allUUIDs;
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -62,12 +61,12 @@ public class AverageSequence extends Procedure {
     @Override
     public void execute() {
 
-        if (inputs == null || inputs.isEmpty()) {
+        if (getInputs() == null || getInputs().isEmpty()) {
             info("No inputs to process- terminating execution");
             return;
         }
 
-        allUUIDs = new LinkedHashSet<>();
+        allUUIDs = new TreeSet<>();
         allDates = new TreeSet<>();
         childEntity = new StockEntity();
         //childEntity.setName(getDisplayName());
@@ -75,9 +74,9 @@ public class AverageSequence extends Procedure {
         childEntity.setUuid(getUuid());
 
         // first collect all dates
-        sequenceMap = new HashMap<>();
+        sequenceMap = new TreeMap<>();
         StringBuffer tickersBuffer = new StringBuffer();
-        for (Iterator<QaiDataProvider> it = inputs.iterator(); it.hasNext(); ) {
+        for (Iterator<QaiDataProvider> it = getInputs().iterator(); it.hasNext(); ) {
 
             QaiDataProvider<StockEntity> provider = it.next();
             QaiInjectorService.getInstance().injectMembers(provider);
@@ -187,27 +186,27 @@ public class AverageSequence extends Procedure {
         this.endDate = endDate;
     }
 
-    public Set<String> getAllUUIDs() {
+    public TreeSet<String> getAllUUIDs() {
         return allUUIDs;
     }
 
-    public void setAllUUIDs(Set<String> allUUIDs) {
+    public void setAllUUIDs(TreeSet<String> allUUIDs) {
         this.allUUIDs = allUUIDs;
     }
 
-    public Set<Date> getAllDates() {
+    public TreeSet<Date> getAllDates() {
         return allDates;
     }
 
-    public void setAllDates(Set<Date> allDates) {
+    public void setAllDates(TreeSet<Date> allDates) {
         this.allDates = allDates;
     }
 
-    public Map<String, TimeSequence> getSequenceMap() {
+    public TreeMap<String, TimeSequence> getSequenceMap() {
         return sequenceMap;
     }
 
-    public void setSequenceMap(Map<String, TimeSequence> sequenceMap) {
+    public void setSequenceMap(TreeMap<String, TimeSequence> sequenceMap) {
         this.sequenceMap = sequenceMap;
     }
 
@@ -219,11 +218,11 @@ public class AverageSequence extends Procedure {
         this.childEntity = childEntity;
     }
 
-    public SelectForEach getSelect() {
+   /* public SelectForEach getSelect() {
         return select;
     }
 
     public void setSelect(SelectForEach select) {
         this.select = select;
-    }
+    }*/
 }

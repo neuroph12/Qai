@@ -14,46 +14,102 @@
 
 package qube.qai.services.sims;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import qube.qai.main.QaiConstants;
 import qube.qai.main.QaiTestBase;
-import qube.qai.services.implementation.SearchResult;
+import qube.qai.network.finance.FinanceNetworkBuilder;
+import qube.qai.persistence.DataProvider;
+import qube.qai.persistence.QaiDataProvider;
+import qube.qai.persistence.StockEntity;
+import qube.qai.persistence.StockGroup;
+import qube.qai.procedure.Procedure;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import javax.inject.Inject;
+import java.util.*;
 
 /**
  * Created by zenpunk on 1/12/16.
  */
 public class HowFairAreMarketsDistributedTest extends QaiTestBase {
 
+    @Inject
+    private HazelcastInstance hazelcastInstance;
+
+    private int numberOfStockToPick = 10;
+
     /**
-     * if we were to write the procedure we want to test in our grammar form
-     * <p>
-     * marketNetwork := (for-each network-builder epoch)
-     * <p>
-     * epoch := (slice (change-point-analysis (select "average"
-     * (statistical-analysis (for-each fetch-quotes-for
-     * (for-each find-entities-of (wiki-results)))))
-     * <p>
-     * // these are then the results which we want to see when done.
-     * (for-each entropy-analysis (for-each forward-propagation marketNetwork)
      *
-     * @throws Exception
+     * here we want to see how the tests run on the grid
+     * to begin with- persist the results of those
+     * so that the can be displayed on the gui-layer.
      */
     public void testHowFairAreMarkets() throws Exception {
 
         // this is the beginning point of the proposed procedure
-        Collection<SearchResult> results = getSearchResults();
+        int iteratioNumber = 0;
+        Set<String> pickedTickerSymbols = new TreeSet<>();
+        boolean goOn = true;
 
-        MarketBuilderSim sim = new MarketBuilderSim(results);
-        injector.injectMembers(sim);
+        while (goOn) {
+            Collection<QaiDataProvider> entityProviders = pickStockProviders(pickedTickerSymbols, numberOfStockToPick);
+            if (entityProviders == null || entityProviders.isEmpty()) {
+                goOn = false;
+                break;
+            }
+            assertNotNull("entities may not be null", entityProviders);
+            assertTrue("there has to be entities for the test network", !entityProviders.isEmpty());
 
-        // and go ahead and check hte results.
+            StringBuffer nameBuffer = new StringBuffer();
+            // collect the names of the entites we thus far have
+            for (QaiDataProvider<StockEntity> provider : entityProviders) {
+                String tickerSymbol = provider.getData().getTickerSymbol();
+                log("iteration " + iteratioNumber + " adding: '" + tickerSymbol + "' to the entities to be analized");
+                nameBuffer.append(tickerSymbol).append(" ");
+                pickedTickerSymbols.add(tickerSymbol);
+            }
+
+            FinanceNetworkBuilder networkBuilder = new FinanceNetworkBuilder();
+            networkBuilder.setInputs(entityProviders);
+
+            injector.injectMembers(networkBuilder);
+
+            log("Starting sims with: " + nameBuffer.toString());
+
+            networkBuilder.execute();
+
+            log("Procedure with uuid: '" + networkBuilder.getUuid() + "' of iteration " + iteratioNumber + " has completed excution- now saving it in map");
+            IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
+            procedureMap.put(networkBuilder.getUuid(), networkBuilder);
+
+            iteratioNumber++;
+        }
 
     }
 
-    private Collection<SearchResult> getSearchResults() {
-        Collection<SearchResult> results = new ArrayList<>();
-        return results;
+    protected Collection<QaiDataProvider> pickStockProviders(Set<String> pickedTickerSymbols, int numberToPick) {
+
+        Collection<QaiDataProvider> searchResults = new ArrayList<>();
+
+        IMap<String, StockGroup> stockGroupMap = hazelcastInstance.getMap(STOCK_GROUPS);
+
+        for (String key : stockGroupMap.keySet()) {
+            StockGroup group = stockGroupMap.get(key);
+            Collection<StockEntity> entities = group.getEntities();
+            if (entities == null || entities.isEmpty()) {
+                continue;
+            }
+            Iterator<StockEntity> iterator = entities.iterator();
+            for (int i = 0; i < numberToPick; i++) {
+                StockEntity entity = iterator.next();
+                if (!pickedTickerSymbols.contains(entity.getTickerSymbol())) {
+                    searchResults.add(new DataProvider(entity));
+                }
+            }
+            break;
+        }
+
+        return searchResults;
     }
 
 }

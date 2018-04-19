@@ -14,12 +14,13 @@
 
 package qube.qai.procedure;
 
-import java.util.Set;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-public interface SpawningProcedure {
+public interface SpawningProcedure extends Serializable {
 
     boolean haveChildrenExceuted();
 
-    Set<String> getSpawnedProcedureUUIDs();
+    ArrayList<String> getSpawnedProcedureUUIDs();
 
 }

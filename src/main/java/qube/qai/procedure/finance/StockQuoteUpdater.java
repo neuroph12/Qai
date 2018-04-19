@@ -53,12 +53,12 @@ public class StockQuoteUpdater extends Procedure {
     @Override
     public void execute() {
 
-        if (inputs == null || inputs.isEmpty()) {
+        if (getInputs() == null || getInputs().isEmpty()) {
             info("No inputs to work on, terminating process");
             return;
         }
 
-        for (QaiDataProvider<StockEntity> entityProvider : inputs) {
+        for (QaiDataProvider<StockEntity> entityProvider : getInputs()) {
             QaiInjectorService.getInstance().injectMembers(entityProvider);
             StockEntity entity = entityProvider.getData();
             if (entity == null) {

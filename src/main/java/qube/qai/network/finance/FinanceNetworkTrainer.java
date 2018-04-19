@@ -120,10 +120,7 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
             return null;
         }
 
-        for (QaiDataProvider provider : input) {
-            inputs.add(provider);
-        }
-
+        addInputs(input);
         execute();
 
         return network;

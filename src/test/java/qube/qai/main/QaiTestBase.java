@@ -51,8 +51,8 @@ public class QaiTestBase extends TestCase implements QaiConstants {
 
     protected void log(String message) {
         if (debug) {
-            //System.out.println(message);
-            logger.info(message);
+            System.out.println(message);
+            //logger.info(message);
         }
     }
 

@@ -20,12 +20,10 @@ import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.services.QaiInjectorService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
@@ -44,11 +42,11 @@ public class ChangePoints extends Procedure {
 
     private TimeSequence timeSequence;
 
-    private Collection<ChangePointMarker> markers;
+    private ArrayList<ChangePointMarker> markers;
 
     @Override
     protected void buildArguments() {
-        getProcedureDescription().setDescription(DESCRIPTION);
+        /*getProcedureDescription().setDescription(DESCRIPTION);
         getProcedureDescription().getProcedureInputs().addInput(new ValueNode<TimeSequence>(INPUT_TIME_SEQUENCE, MIMETYPE_TIME_SERIES) {
             @Override
             public void setValue(TimeSequence value) {
@@ -60,18 +58,18 @@ public class ChangePoints extends Procedure {
             public Collection<ChangePointMarker> getValue() {
                 return markers;
             }
-        });
+        });*/
     }
 
     @Override
     public void execute() {
 
-        if (inputs.isEmpty()) {
+        if (getInputs() == null || getInputs().isEmpty()) {
             info("There are no inputs to work with- terminating execution.");
             return;
         }
 
-        QaiDataProvider<StockEntity> provider = inputs.iterator().next();
+        QaiDataProvider<StockEntity> provider = getInputs().iterator().next();
         QaiInjectorService.getInstance().injectMembers(provider);
         StockEntity entity = provider.getData();
         Set<StockQuote> quotes = entity.getQuotes();
@@ -95,7 +93,7 @@ public class ChangePoints extends Procedure {
             data[i][1] = rawData[i].doubleValue();
         }
 
-        Collection<ChangepointAdapter.ChangePoint> resultChangepoints = changepointAdapter.collectChangePoints(data);
+        ArrayList<ChangepointAdapter.ChangePoint> resultChangepoints = changepointAdapter.collectChangePoints(data);
         markers = new ArrayList<ChangePointMarker>();
 
         for (ChangepointAdapter.ChangePoint point : resultChangepoints) {
@@ -116,13 +114,13 @@ public class ChangePoints extends Procedure {
         return new ChangePoints();
     }
 
-    public Collection<ChangePointMarker> getMarkers() {
+    public ArrayList<ChangePointMarker> getMarkers() {
         return markers;
     }
 
-    public void setMarkers(Collection<ChangePointMarker> markers) {
+    /*public void setMarkers(ArrayList<ChangePointMarker> markers) {
         this.markers = markers;
-    }
+    }*/
 
     /**
      * marker class to separate the periods

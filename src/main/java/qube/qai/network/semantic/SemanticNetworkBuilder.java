@@ -62,14 +62,7 @@ public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder 
     @Override
     public Network buildNetwork(QaiDataProvider... input) {
 
-        if (input == null || input.length == 0) {
-            info("There are no inputs- exiting execution");
-            return network;
-        }
-
-        for (QaiDataProvider provider : input) {
-            inputs.add(provider);
-        }
+        addInputs(input);
 
         execute();
 
@@ -98,14 +91,14 @@ public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder 
     @Override
     public void execute() {
 
-        if (inputs == null || inputs.isEmpty()) {
+        if (getInputs() == null || getInputs().isEmpty()) {
             info("No inputs- terminating execution.");
             return;
         }
 
         network = new SemanticNetwork();
 
-        WikiArticle wikiArticle = (WikiArticle) inputs.iterator().next().getData();
+        WikiArticle wikiArticle = (WikiArticle) getInputs().iterator().next().getData();
 
         String wikiTitle = wikiArticle.getTitle();
         titles.add(wikiTitle);

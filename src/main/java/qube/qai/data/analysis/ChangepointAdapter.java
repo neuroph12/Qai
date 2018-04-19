@@ -19,7 +19,6 @@ import istu.samsroad.AnalysisSettings;
 import istu.samsroad.data.DataPoint;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Vector;
 
 /**
@@ -36,9 +35,9 @@ public class ChangepointAdapter {
     }
 
     // this is the part which we really need after all
-    public Collection<ChangePoint> collectChangePoints(double[][] data) {
+    public ArrayList<ChangePoint> collectChangePoints(double[][] data) {
 
-        Collection<ChangePoint> result = new ArrayList<ChangePoint>();
+        ArrayList<ChangePoint> result = new ArrayList<ChangePoint>();
 
         analysis = new Analysis(data, settings);
 

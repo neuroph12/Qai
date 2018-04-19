@@ -19,7 +19,6 @@ import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
-import qube.qai.procedure.nodes.ValueNode;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -57,13 +56,13 @@ public class NeuralNetworkForwardPropagation extends Procedure implements Proced
 
     @Override
     public void buildArguments() {
-        getProcedureDescription().setDescription(DESCRIPTION);
+        /*getProcedureDescription().setDescription(DESCRIPTION);
         getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_NEURAL_NETWORK, MIMETYPE_NEURAL_NETWORK));
         getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_START_VECTOR, MIMETYPE_VECTOR));
         getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_START_VECTOR, MIMETYPE_VECTOR));
         getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_NAMES, MIMETYPE_STRING_LIST));
         getProcedureDescription().getProcedureInputs().addInput(new ValueNode(INPUT_DATES_FOR_STEPS, MIMETYPE_DATE_LIST));
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode(MAP_OF_TIME_SEQUENCE, MIMETYPE_TIME_SEQUENCE_MAP));
+        getProcedureDescription().getProcedureResults().addResult(new ValueNode(MAP_OF_TIME_SEQUENCE, MIMETYPE_TIME_SEQUENCE_MAP));*/
     }
 
     @Override

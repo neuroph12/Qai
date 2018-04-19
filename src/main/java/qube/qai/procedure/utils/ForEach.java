@@ -24,9 +24,8 @@ import qube.qai.procedure.nodes.ValueNode;
 import qube.qai.services.ProcedureRunnerInterface;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class ForEach extends Procedure implements SpawningProcedure {
 
@@ -54,7 +53,7 @@ public class ForEach extends Procedure implements SpawningProcedure {
     // set to false only if data actually gets attached to procedure templates
     protected boolean childrenExceuted = true;
 
-    protected Set<String> spawnedProcedureUUIDs;
+    protected ArrayList<String> spawnedProcedureUUIDs;
 
     /**
      * A procedure which applies given procedure template to each element in the given
@@ -63,7 +62,7 @@ public class ForEach extends Procedure implements SpawningProcedure {
      */
     public ForEach() {
         super(NAME);
-        this.spawnedProcedureUUIDs = new TreeSet<>();
+        this.spawnedProcedureUUIDs = new ArrayList<>();
     }
 
     @Override
@@ -177,7 +176,7 @@ public class ForEach extends Procedure implements SpawningProcedure {
     }
 
     @Override
-    public Set<String> getSpawnedProcedureUUIDs() {
+    public ArrayList<String> getSpawnedProcedureUUIDs() {
         return spawnedProcedureUUIDs;
     }
 

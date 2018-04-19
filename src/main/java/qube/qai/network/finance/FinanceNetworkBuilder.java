@@ -39,7 +39,7 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
 
     private AverageSequence averager;
 
-    private Set<FinanceNetworkTrainer> spawn;
+    private ArrayList<FinanceNetworkTrainer> spawn;
 
     private boolean runChildren = true;
 
@@ -53,20 +53,20 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
      * found during the change-point analysis.
      */
     public FinanceNetworkBuilder() {
-        this.spawn = new HashSet<>();
+        this.spawn = new ArrayList<>();
     }
 
     @Override
     public void execute() {
 
-        if (inputs == null || inputs.isEmpty()) {
+        if (getInputs() == null || getInputs().isEmpty()) {
             throw new IllegalStateException("Procedure has not been configured right- no data to work on, terminating!");
         }
 
         averager = new AverageSequence();
         QaiInjectorService.getInstance().injectMembers(averager);
 
-        averager.setInputs(inputs);
+        averager.addInputs(inputs);
         averager.execute();
 
         Map<String, TimeSequence> timeSequenceMap = averager.getSequenceMap();
@@ -83,7 +83,7 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
             alldates.iterator().next();
         }
 
-        Collection<ChangePoints.ChangePointMarker> markers = changePoint.getMarkers();
+        Collection<ChangePoints.ChangePointMarker> markers = null; //changePoint.getMarkers();
 
         if (markers == null || markers.isEmpty()) {
             FinanceNetworkTrainer trainer = new FinanceNetworkTrainer();
@@ -152,9 +152,9 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
     }
 
     @Override
-    public Set<String> getSpawnedProcedureUUIDs() {
+    public ArrayList<String> getSpawnedProcedureUUIDs() {
 
-        Set<String> uuids = new TreeSet<>();
+        ArrayList<String> uuids = new ArrayList<>();
 
         for (Procedure procedure : spawn) {
             uuids.add(procedure.getUuid());
@@ -163,13 +163,13 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
         return uuids;
     }
 
-    public Set<FinanceNetworkTrainer> getSpawn() {
+    public ArrayList<FinanceNetworkTrainer> getSpawn() {
         return spawn;
     }
 
-    public void setSpawn(Set<FinanceNetworkTrainer> spawn) {
+    /*public void setSpawn(Set<FinanceNetworkTrainer> spawn) {
         this.spawn = spawn;
-    }
+    }*/
 
     public ChangePoints getChangePoint() {
         return changePoint;

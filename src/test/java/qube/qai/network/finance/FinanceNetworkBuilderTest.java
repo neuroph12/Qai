@@ -30,7 +30,6 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Created by zenpunk on 12/25/15.
@@ -67,13 +66,15 @@ public class FinanceNetworkBuilderTest extends QaiTestBase {
 
         assertTrue("all must have gone well and execution complete", networkBuilder.hasExecuted());
 
-        Set<FinanceNetworkTrainer> spawn = networkBuilder.getSpawn();
+        ArrayList<FinanceNetworkTrainer> spawn = networkBuilder.getSpawn();
+        assertNotNull("spawn may not be null", spawn);
+        assertTrue("there has to be some spawn", !spawn.isEmpty());
 
         for (FinanceNetworkTrainer trainer : spawn) {
 
             NeuralNetwork network = trainer.getNetwork();
 
-            assertNotNull("duh!", network);
+            assertNotNull("spawn must have trained network", network);
 
             network.getVertices();
 
@@ -90,7 +91,7 @@ public class FinanceNetworkBuilderTest extends QaiTestBase {
                     buffer.append(" ideal: " + pair.getIdeal().getData(i));
                     buffer.append("\n");
                 }
-                logger.info(buffer.toString());
+                log(buffer.toString());
                 if (displayCount >= maxCount) {
                     break;
                 }

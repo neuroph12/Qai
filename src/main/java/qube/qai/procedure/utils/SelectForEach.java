@@ -27,8 +27,6 @@ import qube.qai.services.implementation.SearchResult;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 public class SelectForEach extends Procedure implements SpawningProcedure {
 
@@ -42,13 +40,13 @@ public class SelectForEach extends Procedure implements SpawningProcedure {
     @Inject
     private ProcedureRunnerInterface procedureRunner;
 
-    private Collection<SearchResult> results;
+    private ArrayList<SearchResult> results;
 
     private String provideForFieldName;
 
     private ProcedureTemplate template;
 
-    private Collection<Procedure> spawn;
+    private ArrayList<Procedure> spawn;
 
     @Override
     public void execute() {
@@ -94,9 +92,9 @@ public class SelectForEach extends Procedure implements SpawningProcedure {
     }
 
     @Override
-    public Set<String> getSpawnedProcedureUUIDs() {
+    public ArrayList<String> getSpawnedProcedureUUIDs() {
 
-        Set<String> uuids = new HashSet<>();
+        ArrayList<String> uuids = new ArrayList<>();
         for (Procedure procedure : spawn) {
             uuids.add(procedure.getUuid());
         }
@@ -115,11 +113,11 @@ public class SelectForEach extends Procedure implements SpawningProcedure {
         getProcedureDescription().getProcedureInputs().addInput(new ValueNode(TARGET_COLLECTION, MIMETYPE_SEARCH_RESULT));
     }
 
-    public Collection<SearchResult> getResults() {
+    public ArrayList<SearchResult> getResults() {
         return results;
     }
 
-    public void setResults(Collection<SearchResult> results) {
+    public void setResults(ArrayList<SearchResult> results) {
         this.results = results;
     }
 

@@ -222,7 +222,7 @@ public class QaiTestServerModule extends AbstractModule {
             userMapstoreConfig = new MapStoreConfig();
             userMapstoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.LAZY);
         }
-        userMapStore = new PersistentModelMapStore(User.class, USER_MODEL_DIRECTORY);
+        userMapStore = new PersistentModelMapStore(USER_MODEL_DIRECTORY, User.class);
         ((PersistentModelMapStore) userMapStore).init();
         usersInjector.injectMembers(userMapStore);
         userMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, User>() {
@@ -363,7 +363,7 @@ public class QaiTestServerModule extends AbstractModule {
             logger.info("mapStoreConfig is null... creating one for: " + PROCEDURES);
             procedureMapstoreConfig = new MapStoreConfig();
         }
-        procedureMapStore = new PersistentModelMapStore(Procedure.class, PROCEDURE_MODEL_DIRECTORY);
+        procedureMapStore = new PersistentModelMapStore(PROCEDURE_MODEL_DIRECTORY, Procedure.class);
         ((PersistentModelMapStore) procedureMapStore).init();
         procedureMapstoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {
             public MapLoader<String, Procedure> newMapStore(String mapName, Properties properties) {

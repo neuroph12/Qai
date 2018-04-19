@@ -42,7 +42,7 @@ public class PersistentModelMapStore implements MapStore {
 
     private String directoryName;
 
-    private Class baseClass;
+    private Class[] baseClasses;
 
     private String baseUrl = "http://www.qoan.org/data/";
 
@@ -57,8 +57,8 @@ public class PersistentModelMapStore implements MapStore {
     @Inject
     private ProcedureLibraryInterface procedureLibrary;
 
-    public PersistentModelMapStore(Class baseClass, String directoryName) {
-        this.baseClass = baseClass;
+    public PersistentModelMapStore(String directoryName, Class... baseClass) {
+        this.baseClasses = baseClass;
         this.directoryName = directoryName;
     }
 
@@ -78,6 +78,7 @@ public class PersistentModelMapStore implements MapStore {
         writer = new Bean2RDF(model);
         reader = new RDF2Bean(model);
 
+        dataset.abort();
         dataset.end();
     }
 
@@ -89,7 +90,7 @@ public class PersistentModelMapStore implements MapStore {
         try {
 
             dataset.begin(ReadWrite.WRITE);
-            writer.save(baseClass.cast(value));
+            writer.save(baseClasses[0].cast(value));
             dataset.commit();
 
         } catch (Exception e) {
@@ -117,7 +118,7 @@ public class PersistentModelMapStore implements MapStore {
         try {
 
             dataset.begin(ReadWrite.WRITE);
-            writer.delete(baseClass.cast(toDelete));
+            writer.delete(baseClasses[0].cast(toDelete));
             dataset.commit();
 
         } catch (Exception e) {
@@ -144,18 +145,19 @@ public class PersistentModelMapStore implements MapStore {
         try {
             dataset.begin(ReadWrite.WRITE);
             Object found = null;
-            found = reader.load(baseClass, key);
-            /*if (baseClass.isAssignableFrom(Procedure.class)) {
-                found = checkProcedureTypes(key);
-            } else {
-                found = reader.load(baseClass, key);
-            }*/
+            for (int i = 0; i < baseClasses.length; i++) {
+
+                try {
+                    found = reader.load(baseClasses[i], key);
+                } catch (NotFoundException e) {
+                    continue;
+                }
+                if (found != null) {
+                    break;
+                }
+            }
 
             return found;
-
-        } catch (NotFoundException e) {
-
-            return null;
 
         } catch (JenaTransactionException e) {
 
@@ -163,6 +165,7 @@ public class PersistentModelMapStore implements MapStore {
 
         } finally {
 
+            dataset.abort();
             dataset.end();
         }
 
