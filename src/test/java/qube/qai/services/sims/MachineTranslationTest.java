@@ -16,11 +16,13 @@ package qube.qai.services.sims;
 
 import qube.qai.main.QaiTestBase;
 
-public class MDSimsOfBiochemicalReactions extends QaiTestBase {
+/**
+ * Created by rainbird on 1/12/16.
+ */
+public class MachineTranslationTest extends QaiTestBase {
 
-    public void testMDSimulationsOfBiochemicalReactions() throws Exception {
+    public void testTextTranslation() throws Exception {
 
         fail("procedure has to be tested before worked at the network...");
-
     }
 }

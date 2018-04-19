@@ -111,6 +111,9 @@ public class HowFairAreMarketsTest extends QaiTestBase {
                 if (!pickedTickerSymbols.contains(entity.getTickerSymbol())) {
                     searchResults.add(new DataProvider(entity));
                 }
+                if (searchResults.size() == numberToPick) {
+                    break;
+                }
             }
             break;
         }

@@ -27,7 +27,7 @@ import java.io.File;
 /**
  * Created by rainbird on 1/12/16.
  */
-public class YouNMeNAllDistributedTest extends QaiTestBase {
+public class YouNMeNEveryoneWeKnowTest extends QaiTestBase {
 
     private static String dummyWikiFileName = "/home/rainbird/projects/work/qube/qai/test/testWiki.xml";
     private static String dummyWikiArchiveName = "/home/rainbird/projects/work/qube/qai/test/testWiki.zip";

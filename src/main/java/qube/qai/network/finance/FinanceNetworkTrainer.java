@@ -34,15 +34,12 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
 
     public String DESCRIPTION = "Creates and trains a neural-network out of the quotes of the stocks given";
 
-    //private Map<String, TimeSequence> timeSequenceMap;
-
     private TimeSequence[] sequences;
 
     private Date startDate;
 
     private Date endDate;
 
-    //private Set<Date> allDates;
     private Date[] allDates;
 
     private BasicNetworkTrainer trainer;
@@ -55,6 +52,7 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
 
     @Override
     public void execute() {
+
         if (sequences == null
                 || startDate == null
                 || allDates == null) {
