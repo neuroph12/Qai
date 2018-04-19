@@ -19,121 +19,117 @@ import org.ojalgo.random.Normal;
 import org.ojalgo.random.RandomNumber;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
  * Created by zenpunk on 12/4/15.
  */
-public class TimeSequence<T extends Number> implements Serializable {
+public class TimeSequence implements Serializable {
 
-    private TreeMap<Date, T> entries;
+    private String sequenceOf;
+
+    private TimeEntry[] entries;
 
     public TimeSequence() {
-        entries = new TreeMap<>();
+        entries = new TimeEntry[0];
     }
 
-    public void add(Date date, T value) {
-        entries.put(date, value);
+    public TimeSequence(String sequenceOf) {
+        this();
+        this.sequenceOf = sequenceOf;
     }
 
-    public T getValue(Date date) {
-        return entries.get(date);
+    public void add(Date date, Double value) {
+
+        TreeMap<Date, Double> entryMap = new TreeMap<>();
+        for (TimeEntry entry : entries) {
+            entryMap.put(entry.date, entry.value);
+        }
+        entryMap.put(date, value);
+        entries = new TimeEntry[entryMap.size()];
+
+        int index = 0;
+        for (Date dDate : entryMap.keySet()) {
+            entries[index] = new TimeEntry(dDate, entryMap.get(dDate));
+            index++;
+        }
+    }
+
+    public double getValue(Date date) {
+        for (TimeEntry entry : entries) {
+            if (date.equals(entry.date)) {
+                return entry.value;
+            }
+        }
+        return Double.NaN;
     }
 
 
 
     public Date[] toDates() {
-        Date[] dates = new Date[entries.size()];
+
+        Date[] dates = new Date[entries.length];
         int count = 0;
-        for (Date date : entries.keySet()) {
-            dates[count] = date;
+        for (TimeEntry entry : entries) {
+            dates[count] = entry.date;
             count++;
         }
         return dates;
     }
 
-    public T[] toArray() {
-        T[] array = (T[]) Array.newInstance(Number.class, entries.size());
+    public Double[] toArray() {
+        Double[] array = new Double[entries.length];
         int count = 0;
-        for (Date date : entries.keySet()) {
-            array[count] = entries.get(date);
+        for (TimeEntry entry : entries) {
+            array[count] = entry.value;
             count++;
         }
         return array;
     }
 
     public Set<Date> dates() {
-        return entries.keySet();
+
+        TreeMap<Date, Double> entryMap = new TreeMap<>();
+        for (TimeEntry entry : entries) {
+            entryMap.put(entry.date, entry.value);
+        }
+
+        return entryMap.keySet();
     }
 
-    public Iterator<T> iterator() {
-        return entries.values().iterator();
+    public Iterator<Double> iterator() {
+
+        TreeMap<Date, Double> entryMap = new TreeMap<>();
+        for (TimeEntry entry : entries) {
+            entryMap.put(entry.date, entry.value);
+        }
+
+        return entryMap.values().iterator();
     }
 
-    /*class TimeSeriesIterator<T> implements Serializable, Iterator<T> {
-
-        private Iterator<TimeSequenceEntry> iterator;
-
-        public TimeSeriesIterator() {
-            iterator = entries.iterator();
-        }
-
-        public boolean hasNext() {
-            return iterator.hasNext();
-        }
-
-        public T next() {
-            return (T) iterator.next().getEntry();
-        }
-
-        public void remove() {
-            iterator.remove();
-        }
-
+    public String getSequenceOf() {
+        return sequenceOf;
     }
 
-    class TimeSequenceEntry implements Serializable {
+    public void setSequenceOf(String sequenceOf) {
+        this.sequenceOf = sequenceOf;
+    }
+
+    public static class TimeEntry implements Serializable {
 
         Date date;
-        T entry;
 
-        public TimeSequenceEntry(Date date, T entry) {
+        Double value;
+
+        public TimeEntry(Date date, Double value) {
             this.date = date;
-            this.entry = entry;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-        public T getEntry() {
-            return entry;
-        }
-
-        public void setEntry(T entry) {
-            this.entry = entry;
+            this.value = value;
         }
     }
 
-    class DateComparator implements Serializable, Comparator<TimeSequenceEntry> {
+    public static TimeSequence createTimeSeries(Date start, Date end) {
 
-        public int compare(TimeSequenceEntry o1, TimeSequenceEntry o2) {
-            return o1.date.compareTo(o2.date);
-        }
-    }
-
-    public Iterator<T> iterator() {
-        return new TimeSeriesIterator<T>();
-    }*/
-
-    public static TimeSequence<Double> createTimeSeries(Date start, Date end) {
-
-        TimeSequence timeSequence = new TimeSequence();
+        TimeSequence timeSequence = new TimeSequence("Dummy");
         DateTime startDate = new DateTime(start);
         DateTime endDate = new DateTime(end);
 

@@ -32,18 +32,30 @@ public class TimeSequenceTest extends TestCase {
     public void testTimeSeries() throws Exception {
         Date startDate = DateTime.parse("2015-1-1").toDate();
         Date endDate = DateTime.now().toDate();
-        TimeSequence<Double> timeSequence = TimeSequence.createTimeSeries(startDate, endDate);
+        TimeSequence timeSequence = TimeSequence.createTimeSeries(startDate, endDate);
 
         for (Iterator<Double> iterator = timeSequence.iterator(); iterator.hasNext(); ) {
-            logger.debug("next entry: " + iterator.next());
+            log("next entry: " + iterator.next());
         }
 
         Number[] values = timeSequence.toArray();
         Date[] dates = timeSequence.toDates();
         for (int i = 0; i < values.length; i++) {
-            logger.debug("on date: " + dates[i] + " value: " + values[i].doubleValue());
+            if (i - 1 > 0) {
+                assertTrue("current date must be after next one", dates[i].after(dates[i - 1]));
+            }
+
+            if (i + 1 > values.length) {
+                assertTrue("current date must be before next one", dates[i].before(dates[i + 1]));
+            }
+
+            log("on date: " + dates[i] + " value: " + values[i].doubleValue());
         }
 
+    }
+
+    private void log(String message) {
+        System.out.println(message);
     }
 
 }

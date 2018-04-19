@@ -102,7 +102,7 @@ public class SortPercentiles extends Procedure implements ProcedureConstants {
         }
 
         // now divide each element with the number of time-series to find their average
-        TimeSequence<Double> averageSeries = new TimeSequence<Double>();
+        TimeSequence averageSeries = new TimeSequence("Avg: " + getUuid());
         double factor = entityProviders.size();
         for (int i = 0; i < averages.length; i++) {
             averages[i] = averages[i].doubleValue() / factor;

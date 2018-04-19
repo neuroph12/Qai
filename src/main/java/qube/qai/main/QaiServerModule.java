@@ -29,6 +29,8 @@ import qube.qai.persistence.search.DatabaseSearchService;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureLibrary;
 import qube.qai.procedure.ProcedureLibraryInterface;
+import qube.qai.procedure.utils.SelectForAll;
+import qube.qai.procedure.utils.SelectForEach;
 import qube.qai.security.ProcedureManager;
 import qube.qai.security.ProcedureManagerInterface;
 import qube.qai.services.SearchServiceInterface;
@@ -880,7 +882,8 @@ public class QaiServerModule extends AbstractModule implements QaiConstants {
             mapStoreConfig = new MapStoreConfig();
         }
 
-        procedureMapStore = new PersistentModelMapStore(properties.getProperty(PROCEDURE_MODEL_DIRECTORY), Procedure.class);
+        procedureMapStore = new PersistentModelMapStore(properties.getProperty(PROCEDURE_MODEL_DIRECTORY),
+                Procedure.class, SelectForEach.class, SelectForAll.class);
         ((PersistentModelMapStore) procedureMapStore).init();
 
         mapStoreConfig.setFactoryImplementation(new MapStoreFactory<String, Procedure>() {

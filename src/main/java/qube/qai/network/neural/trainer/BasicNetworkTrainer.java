@@ -29,8 +29,6 @@ import qube.qai.network.neural.NeuralNetwork;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by rainbird on 11/23/15.
@@ -93,16 +91,16 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
      * @param startDate
      * @param endDate
      * @param dates
-     * @param sequenceMap
+     * @param sequences
      */
-    public void createTrainingSet(Date startDate, Date endDate, Set<Date> dates, Map<String, TimeSequence> sequenceMap) {
+    public void createTrainingSet(Date startDate, Date endDate, Date[] dates, TimeSequence[] sequences) {
 
         trainingSet = new BasicMLDataSet();
 
         int dummy = 0;
-        tickerSymbols = new String[sequenceMap.size()];
-        for (String tickerSymbol : sequenceMap.keySet()) {
-            tickerSymbols[dummy] = tickerSymbol;
+        tickerSymbols = new String[sequences.length];
+        for (TimeSequence sequence : sequences) {
+            tickerSymbols[dummy] = sequence.getSequenceOf();
             dummy++;
         }
 
@@ -112,15 +110,13 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
             ignoreDates = true;
         }
 
-        Date[] dateArray = new Date[dates.size()];
-        dates.toArray(dateArray);
 
-        for (int i = 0; i < dateArray.length; i++) {
+        for (int i = 0; i < dates.length; i++) {
 
-            Date date = dateArray[i];
+            Date date = dates[i];
             Date nextDate = null;
-            if (i + 1 < dateArray.length) {
-                nextDate = dateArray[i + 1];
+            if (i + 1 < dates.length) {
+                nextDate = dates[i + 1];
             }
 
 
@@ -128,13 +124,13 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
                 continue;
             }
 
-            double[] inDoubles = new double[sequenceMap.size()];
-            double[] outDoubles = new double[sequenceMap.size()];
+            double[] inDoubles = new double[sequences.length];
+            double[] outDoubles = new double[sequences.length];
             int index = 0;
 
             for (int j = 0; j < tickerSymbols.length; j++) {
-                TimeSequence sequence = sequenceMap.get(tickerSymbols[j]);
-                if (sequence.getValue(date) != null) {
+                TimeSequence sequence = sequences[j];
+                if (!Double.isNaN(sequence.getValue(date))) {
                     Double inVal = (Double) sequence.getValue(date);
                     if (inVal == null) {
                         inDoubles[index] = 0.0;
@@ -165,6 +161,7 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
 
         }
     }
+
 
     public String[] getTickerSymbols() {
         return tickerSymbols;

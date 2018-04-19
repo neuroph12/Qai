@@ -55,7 +55,7 @@ import qube.qai.security.QaiSecurityTest;
 import qube.qai.services.implementation.ProcedureRunnerServiceTest;
 import qube.qai.services.implementation.UUIDGeneratorTest;
 import qube.qai.services.implementation.WikiSearchServiceTest;
-import qube.qai.services.sims.HowFairAreMarketsDistributedTest;
+import qube.qai.services.sims.HowFairAreMarketsTest;
 import qube.qai.services.sims.MDSimsOfBiochemicalReactions;
 import qube.qai.services.sims.TextTranslationDistributedTest;
 import qube.qai.services.sims.YouNMeNAllDistributedTest;
@@ -171,7 +171,7 @@ public class AllQaiTests extends TestCase {
 
         // these are more or less integration tests-
         // or rather the homework assignments expressed in code form
-        suite.addTestSuite(HowFairAreMarketsDistributedTest.class);
+        suite.addTestSuite(HowFairAreMarketsTest.class);
         suite.addTestSuite(YouNMeNAllDistributedTest.class);
         suite.addTestSuite(TextTranslationDistributedTest.class);
         suite.addTestSuite(MDSimsOfBiochemicalReactions.class);

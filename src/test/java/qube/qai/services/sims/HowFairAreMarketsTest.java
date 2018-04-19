@@ -16,13 +16,14 @@ package qube.qai.services.sims;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import qube.qai.main.QaiConstants;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.finance.FinanceNetworkBuilder;
+import qube.qai.network.finance.FinanceNetworkTrainer;
 import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
+import qube.qai.persistence.mapstores.PersistentModelMapStore;
 import qube.qai.procedure.Procedure;
 
 import javax.inject.Inject;
@@ -31,12 +32,14 @@ import java.util.*;
 /**
  * Created by zenpunk on 1/12/16.
  */
-public class HowFairAreMarketsDistributedTest extends QaiTestBase {
+public class HowFairAreMarketsTest extends QaiTestBase {
 
     @Inject
     private HazelcastInstance hazelcastInstance;
 
     private int numberOfStockToPick = 10;
+
+    private String procedureDirectory = "/media/rainbird/ALEPH/qai-persistence.db/model_persistence";
 
     /**
      *
@@ -45,6 +48,10 @@ public class HowFairAreMarketsDistributedTest extends QaiTestBase {
      * so that the can be displayed on the gui-layer.
      */
     public void testHowFairAreMarkets() throws Exception {
+
+        PersistentModelMapStore mapStore = new PersistentModelMapStore(procedureDirectory,
+                Procedure.class, FinanceNetworkBuilder.class, FinanceNetworkTrainer.class);
+        mapStore.init();
 
         // this is the beginning point of the proposed procedure
         int iteratioNumber = 0;
@@ -79,8 +86,7 @@ public class HowFairAreMarketsDistributedTest extends QaiTestBase {
             networkBuilder.execute();
 
             log("Procedure with uuid: '" + networkBuilder.getUuid() + "' of iteration " + iteratioNumber + " has completed excution- now saving it in map");
-            IMap<String, Procedure> procedureMap = hazelcastInstance.getMap(QaiConstants.PROCEDURES);
-            procedureMap.put(networkBuilder.getUuid(), networkBuilder);
+            mapStore.store(networkBuilder.getUuid(), networkBuilder);
 
             iteratioNumber++;
         }

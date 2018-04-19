@@ -85,7 +85,7 @@ public class NeuralNetworkForwardPropagation extends Procedure implements Proced
                 String key = names.get(j);
                 TimeSequence timeSequence = timeSeriesMap.get(key);
                 if (timeSequence == null) {
-                    timeSequence = new TimeSequence();
+                    timeSequence = new TimeSequence(key);
                     timeSeriesMap.put(key, timeSequence);
                 }
                 timeSequence.add(dates.get(i), outArray[j]);

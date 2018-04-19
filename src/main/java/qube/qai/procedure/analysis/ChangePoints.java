@@ -38,11 +38,12 @@ public class ChangePoints extends Procedure {
 
     public ChangePoints() {
         super("Change-Point Analysis");
+        markers = new ChangePointMarker[0];
     }
 
     private TimeSequence timeSequence;
 
-    private ArrayList<ChangePointMarker> markers;
+    private ChangePointMarker[] markers;
 
     @Override
     protected void buildArguments() {
@@ -79,7 +80,7 @@ public class ChangePoints extends Procedure {
             return;
         }
 
-        timeSequence = new TimeSequence();
+        timeSequence = new TimeSequence(entity.getTickerSymbol());
         for (StockQuote quote : quotes) {
             timeSequence.add(quote.getQuoteDate(), quote.adjustedClose);
         }
@@ -94,19 +95,30 @@ public class ChangePoints extends Procedure {
         }
 
         ArrayList<ChangepointAdapter.ChangePoint> resultChangepoints = changepointAdapter.collectChangePoints(data);
-        markers = new ArrayList<ChangePointMarker>();
 
         for (ChangepointAdapter.ChangePoint point : resultChangepoints) {
             int index = point.getIndex();
             Date date = dates[index];
             ChangePointMarker marker = new ChangePointMarker(index,
                     point.getY(), date, point.getProbability());
-            markers.add(marker);
+            addMarker(marker);
         }
 
-        info("finished '" + CHANGE_POINTS + "' analysis with " + markers.size() + " change-points detected");
+        info("finished '" + CHANGE_POINTS + "' analysis with " + markers.length + " change-points detected");
 
         hasExecuted = true;
+    }
+
+    private void addMarker(ChangePointMarker marker) {
+
+        ArrayList<ChangePointMarker> tempMarkers = new ArrayList<>();
+        for (ChangePointMarker m : markers) {
+            tempMarkers.add(m);
+        }
+        tempMarkers.add(marker);
+
+        markers = new ChangePointMarker[tempMarkers.size()];
+        tempMarkers.toArray(markers);
     }
 
     @Override
@@ -114,7 +126,7 @@ public class ChangePoints extends Procedure {
         return new ChangePoints();
     }
 
-    public ArrayList<ChangePointMarker> getMarkers() {
+    public ChangePointMarker[] getMarkers() {
         return markers;
     }
 

@@ -66,11 +66,13 @@ public class FinanceNetworkBuilderTest extends QaiTestBase {
 
         assertTrue("all must have gone well and execution complete", networkBuilder.hasExecuted());
 
-        ArrayList<FinanceNetworkTrainer> spawn = networkBuilder.getSpawn();
+        FinanceNetworkTrainer[] spawn = networkBuilder.getSpawn();
         assertNotNull("spawn may not be null", spawn);
-        assertTrue("there has to be some spawn", !spawn.isEmpty());
+        assertTrue("there has to be some spawn", spawn.length > 0);
 
         for (FinanceNetworkTrainer trainer : spawn) {
+
+            assertNotNull("trainer may not be null", trainer);
 
             NeuralNetwork network = trainer.getNetwork();
 

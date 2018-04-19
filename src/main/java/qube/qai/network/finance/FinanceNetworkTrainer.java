@@ -24,8 +24,6 @@ import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 
 import java.util.Date;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by rainbird on 12/25/15.
@@ -36,13 +34,16 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
 
     public String DESCRIPTION = "Creates and trains a neural-network out of the quotes of the stocks given";
 
-    private Map<String, TimeSequence> timeSequenceMap;
+    //private Map<String, TimeSequence> timeSequenceMap;
+
+    private TimeSequence[] sequences;
 
     private Date startDate;
 
     private Date endDate;
 
-    private Set<Date> allDates;
+    //private Set<Date> allDates;
+    private Date[] allDates;
 
     private BasicNetworkTrainer trainer;
 
@@ -54,17 +55,16 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
 
     @Override
     public void execute() {
-        if (timeSequenceMap == null
+        if (sequences == null
                 || startDate == null
-                || allDates == null
-                || endDate == null) {
+                || allDates == null) {
             throw new IllegalStateException("Procedure has not been initialized right- stopping execution!");
         }
 
         // well, here goes nothing
-        network = new NeuralNetwork(timeSequenceMap.size());
+        network = new NeuralNetwork(sequences.length);
         trainer = new BasicNetworkTrainer(network);
-        trainer.createTrainingSet(startDate, endDate, allDates, timeSequenceMap);
+        trainer.createTrainingSet(startDate, endDate, allDates, sequences);
         trainer.trainNetwork();
 
         info("Market-network builder ended with: " + TRAINED_NEURAL_NETWORK);
@@ -80,12 +80,12 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
 
     }
 
-    public Map<String, TimeSequence> getTimeSequenceMap() {
-        return timeSequenceMap;
+    public TimeSequence[] getSequences() {
+        return sequences;
     }
 
-    public void setTimeSequenceMap(Map<String, TimeSequence> timeSequenceMap) {
-        this.timeSequenceMap = timeSequenceMap;
+    public void setSequences(TimeSequence[] sequences) {
+        this.sequences = sequences;
     }
 
     public Date getStartDate() {
@@ -130,11 +130,11 @@ public class FinanceNetworkTrainer extends Procedure implements NetworkBuilder, 
         return trainer;
     }
 
-    public Set<Date> getAllDates() {
+    public Date[] getAllDates() {
         return allDates;
     }
 
-    public void setAllDates(Set<Date> allDates) {
+    public void setAllDates(Date[] allDates) {
         this.allDates = allDates;
     }
 

@@ -289,9 +289,10 @@ public abstract class Procedure extends ConcatenationNode
         return null;
     }
 
-    public void setInputs(Collection<QaiDataProvider> inputs) {
-        if (inputs != null) {
-            this.inputs = (QaiDataProvider[]) inputs.toArray();
+    public void setInputs(Collection<QaiDataProvider> inputcollections) {
+        if (inputcollections != null) {
+            this.inputs = new QaiDataProvider[inputcollections.size()];
+            inputcollections.toArray(this.inputs);
         }
     }
 

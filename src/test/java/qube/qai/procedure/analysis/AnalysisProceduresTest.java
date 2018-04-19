@@ -242,7 +242,7 @@ public class AnalysisProceduresTest extends ProcedureTestBase {
      */
     private String t2String(TimeSequence series) {
         StringBuffer buffer = new StringBuffer();
-        for (Iterator<Number> it = series.iterator(); it.hasNext(); ) {
+        for (Iterator<Double> it = series.iterator(); it.hasNext(); ) {
             Number number = it.next();
             buffer.append(number.doubleValue());
             buffer.append(",");

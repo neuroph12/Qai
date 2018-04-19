@@ -18,16 +18,16 @@ import junit.framework.TestCase;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.analysis.ChangePoints;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureTemplate;
+import qube.qai.procedure.utils.SelectForAll;
+import qube.qai.procedure.utils.SelectForEach;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by rainbird on 4/6/17.
@@ -164,10 +164,11 @@ public class ModelMapStoresTest extends TestCase {
      */
     public void testPersistentProcedureMapStore() throws Exception {
 
-        PersistentModelMapStore mapStore = new PersistentModelMapStore(procedureDirectory, ChangePoints.class);
+        PersistentModelMapStore mapStore = new PersistentModelMapStore(procedureDirectory,
+                Procedure.class, SelectForAll.class, SelectForEach.class);
         mapStore.init();
 
-        /*ProcedureLibrary procedureLibrary = new ProcedureLibrary();
+        ProcedureLibrary procedureLibrary = new ProcedureLibrary();
 
         Collection<String> uuids = new ArrayList<>();
         for (ProcedureTemplate template : procedureLibrary.getTemplateMap().values()) {
@@ -181,15 +182,15 @@ public class ModelMapStoresTest extends TestCase {
             String procedureName = template.getProcedureName();
             assertNotNull("there has to be a stored procedure for " + procedureName, storedProcedure);
 
-        }*/
+        }
 
-        ChangePoints changePoint = new ChangePoints();
+        /*ChangePoints changePoint = new ChangePoints();
         String uuid = changePoint.getUuid();
         mapStore.store(uuid, changePoint);
 
         log("loading procedure of type " + changePoint.getName());
         Procedure found = (Procedure) mapStore.load(uuid);
-        assertNotNull("there has to be a object stored", found);
+        assertNotNull("there has to be a object stored", found);*/
 
     }
 

@@ -14,32 +14,32 @@
 
 package qube.qai.network.finance;
 
-import com.hazelcast.core.IMap;
 import qube.qai.data.TimeSequence;
-import qube.qai.main.QaiConstants;
 import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.SpawningProcedure;
 import qube.qai.procedure.analysis.ChangePoints;
 import qube.qai.procedure.finance.AverageSequence;
 import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.QaiInjectorService;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
 
-public class FinanceNetworkBuilder extends Procedure implements SpawningProcedure {
+public class FinanceNetworkBuilder extends Procedure {
 
-    public static final String NAME = "Finance-Network Builder";
+    public String NAME = "Finance-Network Builder";
 
-    public static final String DESCRIPTION = "This creates finance networks out of given set of finance-entities";
+    public String DESCRIPTION = "This creates finance networks out of given set of finance-entities";
 
     private ChangePoints changePoint;
 
     private AverageSequence averager;
 
-    private ArrayList<FinanceNetworkTrainer> spawn;
+    private FinanceNetworkTrainer[] spawn;
 
     private boolean runChildren = true;
 
@@ -53,7 +53,8 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
      * found during the change-point analysis.
      */
     public FinanceNetworkBuilder() {
-        this.spawn = new ArrayList<>();
+        super("Finance-Network Builder");
+        this.spawn = new FinanceNetworkTrainer[0];
     }
 
     @Override
@@ -69,8 +70,8 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
         averager.addInputs(inputs);
         averager.execute();
 
-        Map<String, TimeSequence> timeSequenceMap = averager.getSequenceMap();
-        Set<Date> alldates = averager.getAllDates();
+        TimeSequence[] timeSequences = averager.getSequences();
+        Date[] alldates = averager.getAllDates();
 
         StockEntity averageEntity = averager.getChildEntity();
         changePoint = new ChangePoints();
@@ -78,28 +79,28 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
         QaiInjectorService.getInstance().injectMembers(changePoint);
 
         changePoint.execute();
-        Date start = new Date();
-        if (alldates != null && !alldates.isEmpty()) {
-            alldates.iterator().next();
-        }
+        Date start = alldates[0];
+        Date end = alldates[alldates.length - 1];
 
-        Collection<ChangePoints.ChangePointMarker> markers = null; //changePoint.getMarkers();
+
+        Collection<ChangePoints.ChangePointMarker> markers = Arrays.asList(changePoint.getMarkers());
 
         if (markers == null || markers.isEmpty()) {
             FinanceNetworkTrainer trainer = new FinanceNetworkTrainer();
             trainer.setParent(this);
             trainer.setStartDate(start);
             trainer.setAllDates(alldates);
-            trainer.setEndDate(null);
-            trainer.setTimeSequenceMap(timeSequenceMap);
+            trainer.setEndDate(end);
+            trainer.setSequences(timeSequences);
 
-            spawn.add(trainer);
             if (runChildren) {
                 QaiInjectorService.getInstance().injectMembers(trainer);
                 trainer.execute();
             } else {
                 procedureRunner.submitProcedure(trainer);
             }
+
+            addSpawn(trainer);
 
         } else {
 
@@ -110,9 +111,8 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
                 trainer.setStartDate(start);
                 trainer.setEndDate(marker.getDate());
                 trainer.setAllDates(alldates);
-                trainer.setTimeSequenceMap(timeSequenceMap);
+                trainer.setSequences(timeSequences);
 
-                spawn.add(trainer);
                 if (runChildren) {
                     QaiInjectorService.getInstance().injectMembers(trainer);
                     trainer.execute();
@@ -120,12 +120,26 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
                     procedureRunner.submitProcedure(trainer);
                 }
 
+                addSpawn(trainer);
+
                 start = marker.getDate();
             }
         }
 
         hasExecuted = true;
 
+    }
+
+    private void addSpawn(FinanceNetworkTrainer trainer) {
+
+        Collection<FinanceNetworkTrainer> tempSpawn = new ArrayList<>();
+        for (FinanceNetworkTrainer tr : spawn) {
+            tempSpawn.add(tr);
+        }
+        tempSpawn.add(trainer);
+
+        spawn = new FinanceNetworkTrainer[tempSpawn.size()];
+        tempSpawn.toArray(spawn);
     }
 
     @Override
@@ -138,7 +152,7 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
 
     }
 
-    @Override
+    /*@Override
     public boolean haveChildrenExceuted() {
         boolean isAllExec = true;
 
@@ -161,9 +175,9 @@ public class FinanceNetworkBuilder extends Procedure implements SpawningProcedur
         }
 
         return uuids;
-    }
+    }*/
 
-    public ArrayList<FinanceNetworkTrainer> getSpawn() {
+    public FinanceNetworkTrainer[] getSpawn() {
         return spawn;
     }
 

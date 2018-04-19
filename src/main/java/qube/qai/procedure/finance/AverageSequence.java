@@ -35,17 +35,13 @@ public class AverageSequence extends Procedure {
 
     private StockEntity childEntity;
 
-    //private SelectForEach select;
-
-    private TreeMap<String, TimeSequence> sequenceMap;
+    private TimeSequence[] sequences;
 
     private Date startDate;
 
     private Date endDate;
 
-    private TreeSet<Date> allDates;
-
-    private TreeSet<String> allUUIDs;
+    private Date[] allDates;
 
     @Inject
     private HazelcastInstance hazelcastInstance;
@@ -56,6 +52,9 @@ public class AverageSequence extends Procedure {
      * in each collection
      */
     public AverageSequence() {
+        super("AverageSequence");
+        this.sequences = new TimeSequence[0];
+        this.allDates = new Date[0];
     }
 
     @Override
@@ -66,15 +65,15 @@ public class AverageSequence extends Procedure {
             return;
         }
 
-        allUUIDs = new TreeSet<>();
-        allDates = new TreeSet<>();
+        TreeMap<String, TimeSequence> sequenceMap = new TreeMap<>();
+        TreeSet<Date> allDatesTmp = new TreeSet<>();
         childEntity = new StockEntity();
         //childEntity.setName(getDisplayName());
         childEntity.setTickerSymbol(getDisplayName());
         childEntity.setUuid(getUuid());
 
         // first collect all dates
-        sequenceMap = new TreeMap<>();
+        //sequenceMap = new TreeMap<>();
         StringBuffer tickersBuffer = new StringBuffer();
         for (Iterator<QaiDataProvider> it = getInputs().iterator(); it.hasNext(); ) {
 
@@ -83,30 +82,20 @@ public class AverageSequence extends Procedure {
             StockEntity entity = provider.getData();
 
             // first begin with noting the ticker symbol
-            allUUIDs.add(entity.getUuid());
+            //allUUIDs.add(entity.getUuid());
             tickersBuffer.append(entity.getTickerSymbol());
             if (it.hasNext()) {
                 tickersBuffer.append(", ");
             }
 
             // create the time-sequences which will be used
-            TimeSequence<Double> sequence = new TimeSequence<>();
+            TimeSequence sequence = new TimeSequence(entity.getTickerSymbol());
 
-            // this does troubles- first update the quotes
-            /*StockQuoteUpdater updater = new StockQuoteUpdater();
-            QaiInjectorService.getInstance().injectMembers(updater);
-            updater.addInputs(new DataProvider(entity));
-            updater.execute();
-            if (updater.getQuotes() == null || updater.getQuotes().isEmpty()) {
-                info("Quotes for: '" + entity.getTickerSymbol() + "' could not be updated- is symbol correct? Skipping.");
-                break;
-            }
-            Collection<StockQuote> quotes = updater.getQuotes();*/
             Collection<StockQuote> quotes = entity.getQuotes();
             for (StockQuote quote : quotes) {
                 sequence.add(quote.getQuoteDate(), quote.adjustedClose);
-                if (!allDates.contains(quote.getQuoteDate())) {
-                    allDates.add(quote.getQuoteDate());
+                if (!allDatesTmp.contains(quote.getQuoteDate())) {
+                    allDatesTmp.add(quote.getQuoteDate());
                 }
             }
 
@@ -119,8 +108,8 @@ public class AverageSequence extends Procedure {
 
             double count = 0.0;
             double sum = 0.0;
-            for (TimeSequence<Double> sequence : sequenceMap.values()) {
-                if (sequence.getValue(date) != null) {
+            for (TimeSequence sequence : sequenceMap.values()) {
+                if (!Double.isNaN(sequence.getValue(date))) {
                     sum += sequence.getValue(date);
                     count++;
                 }
@@ -152,6 +141,16 @@ public class AverageSequence extends Procedure {
         childEntity.setSecFilings(desc);
         IMap<String, StockEntity> entityIMap = hazelcastInstance.getMap(QaiConstants.STOCK_ENTITIES);
         entityIMap.put(getUuid(), childEntity);
+
+        allDates = new Date[allDatesTmp.size()];
+        allDatesTmp.toArray(allDates);
+
+        sequences = new TimeSequence[sequenceMap.size()];
+        int index = 0;
+        for (TimeSequence sequence : sequenceMap.values()) {
+            sequences[index] = sequence;
+            index++;
+        }
 
         hasExecuted = true;
     }
@@ -186,43 +185,28 @@ public class AverageSequence extends Procedure {
         this.endDate = endDate;
     }
 
-    public TreeSet<String> getAllUUIDs() {
-        return allUUIDs;
+    public Collection<Date> getAllDatesCollection() {
+        return Arrays.asList(allDates);
     }
 
-    public void setAllUUIDs(TreeSet<String> allUUIDs) {
-        this.allUUIDs = allUUIDs;
-    }
-
-    public TreeSet<Date> getAllDates() {
+    public Date[] getAllDates() {
         return allDates;
     }
 
-    public void setAllDates(TreeSet<Date> allDates) {
+    public TimeSequence[] getSequences() {
+        return sequences;
+    }
+
+    /*public void setSequences(TimeSequence[] sequences) {
+        this.sequences = sequences;
+    }
+
+    public void setAllDates(Date[] allDates) {
         this.allDates = allDates;
-    }
-
-    public TreeMap<String, TimeSequence> getSequenceMap() {
-        return sequenceMap;
-    }
-
-    public void setSequenceMap(TreeMap<String, TimeSequence> sequenceMap) {
-        this.sequenceMap = sequenceMap;
-    }
+    }*/
 
     public StockEntity getChildEntity() {
         return childEntity;
     }
 
-    public void setChildEntity(StockEntity childEntity) {
-        this.childEntity = childEntity;
-    }
-
-   /* public SelectForEach getSelect() {
-        return select;
-    }
-
-    public void setSelect(SelectForEach select) {
-        this.select = select;
-    }*/
 }
