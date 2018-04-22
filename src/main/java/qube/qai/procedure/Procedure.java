@@ -14,10 +14,7 @@
 
 package qube.qai.procedure;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.HazelcastInstanceAware;
-import com.hazelcast.core.IMap;
-import com.hazelcast.core.ITopic;
+import org.openrdf.annotations.Iri;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
@@ -33,11 +30,9 @@ import qube.qai.procedure.nodes.ProcedureDescription;
 import qube.qai.procedure.nodes.ProcedureInputs;
 import qube.qai.procedure.nodes.ProcedureResults;
 import qube.qai.procedure.nodes.ValueNode;
-import qube.qai.services.ProcedureRunnerInterface;
 import qube.qai.services.implementation.UUIDService;
 import qube.qai.user.User;
 
-import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,26 +40,36 @@ import java.util.Collection;
 /**
  * Created by zenpunk on 11/27/15.
  */
+@Iri(Procedure.NS + "Procedure")
 public abstract class Procedure extends ConcatenationNode
-        implements Serializable, Runnable, HazelcastInstanceAware, AcceptsVisitors, ProcedureConstants {
+        implements Serializable, Runnable, AcceptsVisitors, ProcedureConstants {
 
-    public static String NAME = "Procedure";
+    public static final String NS = "http://www.qoan.org/data#";
 
-    public static String DESCRIPTION = "Description of the procedure";
+    @Iri(NS + "NAME")
+    public String NAME = "Procedure";
+
+    @Iri(NS + "DESCRIPTION")
+    public String DESCRIPTION = "Description of the procedure";
 
     protected QaiDataProvider[] inputs;
 
-    @Inject
-    protected transient HazelcastInstance hazelcastInstance;
+//    @Inject
+//    protected transient HazelcastInstance hazelcastInstance;
 
+    @Iri(NS + "userUUID")
     protected String userUUID;
 
+    @Iri(NS + "duration")
     protected long duration;
 
+    @Iri(NS + "progressPercentage")
     protected double progressPercentage;
 
+    @Iri(NS + "hasExecuted")
     protected boolean hasExecuted = false;
 
+    @Iri(NS + "state")
     protected ProcedureState state = ProcedureState.TEMPLATE;
 
     public Procedure() {
@@ -113,7 +118,7 @@ public abstract class Procedure extends ConcatenationNode
             sendMessageOK();
 
             // and the hat-trick now
-            if (hazelcastInstance != null) {
+            /*if (hazelcastInstance != null) {
                 IMap procedures = hazelcastInstance.getMap(PROCEDURES);
                 if (procedures.get(uuid) != null) {
                     procedures.replace(uuid, this);
@@ -121,7 +126,7 @@ public abstract class Procedure extends ConcatenationNode
                 info("procedure has been serialized in map with uuid: " + uuid);
             } else {
                 error("no hazelcast-instance to add a copy to- procedure " + uuid + " has not been serialized...");
-            }
+            }*/
         } catch (Exception e) {
             hasExecuted = true;
             String message = "exception during execution of '" + uuid + "'. executed with error...";
@@ -131,13 +136,13 @@ public abstract class Procedure extends ConcatenationNode
     }
 
     private void sendMessage(ProcedureEvent event) {
-        if (hazelcastInstance != null) {
+        /*if (hazelcastInstance != null) {
             ITopic<ProcedureEvent> itopic = hazelcastInstance.getTopic(ProcedureRunnerInterface.TOPIC_NAME);
             itopic.publish(event);
             info("messageOf: '" + event.ofState() + "' event has been successfully sent");
         } else {
             error("no hazelcast-instance to send ok message to");
-        }
+        }*/
     }
 
     protected void sendMessageOK() {
@@ -195,9 +200,9 @@ public abstract class Procedure extends ConcatenationNode
         }
     }
 
-    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
+    /*public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
-    }
+    }*/
 
     @Override
     public boolean equals(BaseNode obj) {
@@ -219,7 +224,7 @@ public abstract class Procedure extends ConcatenationNode
     }
 
     public void setNAME(String name) {
-        Procedure.NAME = name;
+        NAME = name;
     }
 
     public String getDESCRIPTION() {
@@ -227,7 +232,7 @@ public abstract class Procedure extends ConcatenationNode
     }
 
     public void setDESCRIPTION(String description) {
-        Procedure.DESCRIPTION = description;
+        DESCRIPTION = description;
     }
 
     public double getProgressPercentage() {

@@ -15,25 +15,23 @@
 package qube.qai.persistence.search;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.ReadWrite;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.tdb.TDBFactory;
+import org.openrdf.model.Model;
+import org.openrdf.query.Dataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiConstants;
 import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
-import thewebsemantic.Bean2RDF;
-import thewebsemantic.RDF2Bean;
-import thewebsemantic.Sparql;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by rainbird on 1/20/17.
@@ -42,7 +40,7 @@ public class ModelSearchService implements SearchServiceInterface, QaiConstants 
 
     private static Logger logger = LoggerFactory.getLogger("ModelSearchService");
 
-    private String baseUrl = "http://www.qoan.org/data/";
+    private String baseUrl = "http://www.qoan.org";
 
     private String context;
 
@@ -54,9 +52,12 @@ public class ModelSearchService implements SearchServiceInterface, QaiConstants 
 
     private Model model;
 
-    private Bean2RDF writer;
+    //private Bean2RDF writer;
 
-    private RDF2Bean reader;
+    //private RDF2Bean reader;
+
+    //@Inject
+    //private ProcedureLibraryInterface procedureLibrary;
 
     public ModelSearchService() {
     }
@@ -73,24 +74,33 @@ public class ModelSearchService implements SearchServiceInterface, QaiConstants 
             throw new IllegalArgumentException(message);
         }
 
-        dataset = TDBFactory.createDataset(directoryName);
+        /*dataset = TDBFactory.createDataset(directoryName);
+
 
         dataset.begin(ReadWrite.WRITE);
         model = dataset.getNamedModel(baseUrl);
         writer = new Bean2RDF(model);
         reader = new RDF2Bean(model);
 
-        dataset.end();
+        //OntModel m = ModelFactory.createOntologyModel();
+        Jenabean.instance().bind(model);
+
+        dataset.abort();
+        dataset.end();*/
     }
 
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
 
+        //String statement = "SELECT ?s WHERE { ?s a <" + baseUrl + "> }";
+        //String statement = "SELECT ?s WHERE {  ?s a <http://www.qoan.org/User> }";
         ArrayList<SearchResult> results = new ArrayList<>();
-        dataset.begin(ReadWrite.WRITE);
+        //dataset.begin(ReadWrite.WRITE);
 
         if (USERS.equals(fieldName)) {
-            Collection<User> found = Sparql.exec(model, User.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/User> }");
+            String statement = "SELECT ?s WHERE {  ?s a <http://qube.qai.user/User> }";
+            Collection<User> found = null; //Sparql.exec(model, User.class, statement);
+            //Collection<User> found = reader.load(User.class);
             for (User user : found) {
                 if ("*".equals(searchString) || searchString.equals(user.getUsername())) {
                     SearchResult result = new SearchResult(USERS, user.getUsername(), user.getUuid(), "User", 1.0);
@@ -98,21 +108,29 @@ public class ModelSearchService implements SearchServiceInterface, QaiConstants 
                 }
             }
         } else if (PROCEDURES.equals(fieldName)) {
-            Collection<Procedure> found = Sparql.exec(model, Procedure.class, "SELECT ?s WHERE { ?s a <http://qube.qai.procedure/Procedure> }");
+            Class klazz = findSearchClass(searchString);
+            if (klazz == null) {
+                klazz = Procedure.class;
+            }
+            String statement = "SELECT ?s WHERE {  ?s a <http://" + klazz.getPackage().getName() + "/" + klazz.getSimpleName() + "> }";
+            Collection<Procedure> found = null; // Sparql.exec(model, klazz, statement);
+            //Collection<Procedure> found = reader.load(klazz);
             for (Procedure procedure : found) {
                 String uuid = procedure.getUuid();
                 SearchResult result = new SearchResult(PROCEDURES, procedure.getProcedureName(), uuid, procedure.getDescriptionText(), 1.0);
                 results.add(result);
             }
         } else if (USER_SESSIONS.equals(fieldName)) {
-            Collection<Session> found = Sparql.exec(model, Session.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/Session> }");
+            String statement = "SELECT ?s WHERE {  ?s a <http://qube.qai.user/Session> }";
+            Collection<Session> found = null; //Sparql.exec(model, Session.class, statement);
             for (Session session : found) {
                 String uuid = session.getUuid();
                 SearchResult result = new SearchResult(USER_SESSIONS, session.getName(), uuid, "User session", 1.0);
                 results.add(result);
             }
         } else if (USER_ROLES.equals(fieldName)) {
-            Collection<Role> found = Sparql.exec(model, Role.class, "SELECT ?s WHERE { ?s a <http://qube.qai.user/Role> }");
+            String statement = "SELECT ?s WHERE {  ?s a <http://qube.qai.user/Role> }";
+            Collection<Role> found = null; // Sparql.exec(model, Role.class, statement);
             for (Role role : found) {
                 String uuid = role.getUuid();
                 SearchResult result = new SearchResult(USER_ROLES, role.getName(), uuid, role.getDescription(), 1.0);
@@ -120,9 +138,26 @@ public class ModelSearchService implements SearchServiceInterface, QaiConstants 
             }
         }
 
-        dataset.end();
+//        dataset.abort();
+//        dataset.end();
 
         return results;
+    }
+
+    private Class findSearchClass(String searchString) {
+
+        Class templateClass = null;
+        ProcedureLibrary procedureLibrary = new ProcedureLibrary();
+        Map<Class, ProcedureTemplate> templateMap = procedureLibrary.getTemplateMap();
+        for (Class klazz : templateMap.keySet()) {
+            ProcedureTemplate template = templateMap.get(klazz);
+            if (template.getProcedureName().equalsIgnoreCase(searchString)) {
+                templateClass = klazz;
+                break;
+            }
+        }
+
+        return templateClass;
     }
 
     public Model createDefaultModel() {
@@ -130,17 +165,17 @@ public class ModelSearchService implements SearchServiceInterface, QaiConstants 
     }
 
     public void remove(Class baseClass, Object toRemove) {
-        dataset.begin(ReadWrite.WRITE);
+       /* dataset.begin(ReadWrite.WRITE);
         writer.delete(toRemove);
         dataset.commit();
-        dataset.end();
+        dataset.end();*/
     }
 
     public void save(Class baseCLass, Object data) {
-        dataset.begin(ReadWrite.WRITE);
+        /*dataset.begin(ReadWrite.WRITE);
         writer.save(data);
         dataset.commit();
-        dataset.end();
+        dataset.end();*/
     }
 
     @Override

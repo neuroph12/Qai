@@ -33,7 +33,6 @@ import java.util.Date;
 public class StockQuote implements Serializable, AcceptsVisitors {
 
     @Id
-    @thewebsemantic.Id
     @Column(name = "uuid")
     private String uuid;
 

@@ -14,14 +14,10 @@
 
 package qube.qai.parsers;
 
-import thewebsemantic.Id;
-import thewebsemantic.Namespace;
-import thewebsemantic.RdfProperty;
 
 /**
  * Created by rainbird on 3/29/17.
  */
-@Namespace("http://www.qoan.org/data/#")
 public class AppInfo {
 
     public static final String DEFAULT_CHARSET = "UTF-8";
@@ -29,12 +25,10 @@ public class AppInfo {
     private String serverBaseUri;
     private String serverBaseUrl;
 
-    @Id
     public String getId() {
         return null;
     }
 
-    @RdfProperty("serverBaseUri")
     public String getServerBaseUri() {
         return this.serverBaseUri;
     }
@@ -43,7 +37,6 @@ public class AppInfo {
         this.serverBaseUri = serverBaseUri;
     }
 
-    @RdfProperty("serverBaseUrl")
     public String getServerBaseUrl() {
         return this.serverBaseUrl;
     }

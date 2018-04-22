@@ -27,7 +27,6 @@ import java.util.Date;
 public class Session implements Serializable {
 
     @Id
-    @thewebsemantic.Id
     @Column(name = "uuid")
     private String uuid;
 

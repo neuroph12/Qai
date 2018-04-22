@@ -23,7 +23,6 @@ import java.io.Serializable;
 public class Permission implements Serializable, org.apache.shiro.authz.Permission {
 
     @Id
-    @thewebsemantic.Id
     @Column(name = "uuid")
     protected String uuid;
 

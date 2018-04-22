@@ -14,17 +14,14 @@
 
 package qube.qai.procedure.finance;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
 import qube.qai.data.TimeSequence;
-import qube.qai.main.QaiConstants;
+import qube.qai.persistence.MapDataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.services.QaiInjectorService;
 
-import javax.inject.Inject;
 import java.util.*;
 
 public class AverageSequence extends Procedure {
@@ -42,9 +39,6 @@ public class AverageSequence extends Procedure {
     private Date endDate;
 
     private Date[] allDates;
-
-    @Inject
-    private HazelcastInstance hazelcastInstance;
 
     /**
      * this class takes a collection of time-sequences and creates a new
@@ -139,8 +133,10 @@ public class AverageSequence extends Procedure {
         childEntity.setName(name);
         String desc = String.format(descTemplate, startDate, endDate, getUuid());
         childEntity.setSecFilings(desc);
-        IMap<String, StockEntity> entityIMap = hazelcastInstance.getMap(QaiConstants.STOCK_ENTITIES);
-        entityIMap.put(getUuid(), childEntity);
+        QaiDataProvider provider = new MapDataProvider(STOCK_ENTITY, childEntity.getUuid());
+        QaiInjectorService.getInstance().injectMembers(provider);
+        provider.putData(childEntity.getUuid(), childEntity);
+
 
         allDates = new Date[allDatesTmp.size()];
         allDatesTmp.toArray(allDates);
@@ -196,14 +192,6 @@ public class AverageSequence extends Procedure {
     public TimeSequence[] getSequences() {
         return sequences;
     }
-
-    /*public void setSequences(TimeSequence[] sequences) {
-        this.sequences = sequences;
-    }
-
-    public void setAllDates(Date[] allDates) {
-        this.allDates = allDates;
-    }*/
 
     public StockEntity getChildEntity() {
         return childEntity;

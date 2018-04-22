@@ -29,13 +29,12 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder {
 
     private boolean debug = true;
 
-    private Vector<String> titles;
+    private String[] titles;
 
     @Inject
     @Named("Wiktionary_en")
@@ -48,7 +47,7 @@ public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder 
 
     public SemanticNetworkBuilder() {
         super("WikiNetworkBuilder");
-        this.titles = new Vector<>();
+        this.titles = new String[0];
     }
 
     /**
@@ -101,7 +100,7 @@ public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder 
         WikiArticle wikiArticle = (WikiArticle) getInputs().iterator().next().getData();
 
         String wikiTitle = wikiArticle.getTitle();
-        titles.add(wikiTitle);
+        addTitle(wikiTitle);
         Network.Vertex baseVertex = new Network.Vertex(wikiTitle);
         network.addVertex(baseVertex);
 
@@ -170,6 +169,20 @@ public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder 
             existing.clear();
             count++;
         }
+    }
+
+    private void addTitle(String title) {
+
+        ArrayList<String> tmpTitles = new ArrayList<>();
+        for (String t : titles) {
+            tmpTitles.add(t);
+        }
+
+        tmpTitles.add(title);
+        titles = new String[tmpTitles.size()];
+        tmpTitles.toArray(titles);
+
+
     }
 
     @Override

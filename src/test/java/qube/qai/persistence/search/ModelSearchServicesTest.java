@@ -15,14 +15,29 @@
 package qube.qai.persistence.search;
 
 import junit.framework.TestCase;
+import org.openrdf.model.URI;
+import org.openrdf.model.ValueFactory;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.object.ObjectConnection;
+import org.openrdf.repository.object.ObjectRepository;
+import org.openrdf.repository.object.config.ObjectRepositoryFactory;
+import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.sail.memory.MemoryStore;
 import qube.qai.persistence.mapstores.DatabaseMapStoresTest;
+import qube.qai.procedure.Procedure;
+import qube.qai.procedure.ProcedureLibrary;
+import qube.qai.procedure.ProcedureLibraryInterface;
+import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.Role;
 import qube.qai.user.User;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
+import static qube.qai.main.QaiConstants.PROCEDURES;
 import static qube.qai.main.QaiConstants.USERS;
 
 /**
@@ -30,9 +45,53 @@ import static qube.qai.main.QaiConstants.USERS;
  */
 public class ModelSearchServicesTest extends TestCase {
 
-    public void testUserModelStore() throws Exception {
+    private ProcedureLibraryInterface procedureLibrary;
 
-        ModelSearchService modelSearchService = new ModelSearchService(USERS, "./test/dummy.model.directory");
+    private String directoryName = "./test/dummy.model.directory";
+
+    private String baseUrl = "http://www.qoan.org";
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        this.procedureLibrary = new ProcedureLibrary();
+    }
+
+    public void estProcedureModelStore() throws Exception {
+
+        ModelSearchService modelSearchService = new ModelSearchService(PROCEDURES, directoryName);
+        modelSearchService.init();
+
+        Collection<String> uuids = new ArrayList<>();
+        Map<Class, ProcedureTemplate> templateMap = procedureLibrary.getTemplateMap();
+        for (Class klazz : templateMap.keySet()) {
+            ProcedureTemplate template = templateMap.get(klazz);
+            Procedure procedure = (Procedure) klazz.newInstance();
+            procedure.setNAME(template.getProcedureName());
+            modelSearchService.save(klazz, procedure);
+            log("saved a copy of '" + template.getProcedureName() + "'");
+        }
+
+        for (Class klazz : templateMap.keySet()) {
+            ProcedureTemplate template = templateMap.get(klazz);
+            log("now searching for " + template.getProcedureName());
+            Collection<SearchResult> found = modelSearchService.searchInputString(template.getProcedureName(), PROCEDURES, 10);
+            assertNotNull("results may not be null", found);
+            assertTrue("there has to be results", !found.isEmpty());
+        }
+
+    }
+
+    /**
+     * since users will not be saved in rdf-models, this is not really
+     * very interesting- so leaving it aside simply.
+     *
+     * @throws Exception
+     */
+    public void estUserModelStore() throws Exception {
+
+        ModelSearchService modelSearchService = new ModelSearchService(USERS, directoryName);
         modelSearchService.init();
 
         Collection<String> uuids = new ArrayList<>();
@@ -63,28 +122,76 @@ public class ModelSearchServicesTest extends TestCase {
         }
     }
 
-    /**
-     * since we are now letting this be done by jenabeans, somewhat pointless test
-     * don't need to run it
-     *
-     * @throws Exception
-     */
-    public void estUserToModelConversion() throws Exception {
+    /*public void testJeanBeanReadWrite() throws Exception {
 
-        User user = new User("username", "password");
-        user.createSession().setName("User Session #One");
+        Dataset dataset = TDBFactory.createDataset(directoryName);
+        dataset.begin(ReadWrite.WRITE);
+        Model model = dataset.getNamedModel(baseUrl);
+        Bean2RDF writer = new Bean2RDF(model);
+        RDF2Bean reader = new RDF2Bean(model);
 
-        user.addRole(new Role(user, "user role", "just another role"));
-        user.addRole(new Role(user, "test role", "test role"));
+        Jenabean.instance().bind(model);
 
-        /*Model userModel = User.userAsModel(user);
-        assertNotNull("returned model may not be null", userModel);
+        Map<Class, ProcedureTemplate> templateMap =  procedureLibrary.getTemplateMap();
+        for (Class klazz : templateMap.keySet()) {
+            ProcedureTemplate template = templateMap.get(klazz);
+            Procedure procedure = (Procedure) klazz.newInstance();
+            procedure.setNAME(template.getProcedureName());
+            procedure.setDESCRIPTION(template.getProcedureDescription());
+            log("Now saving " + template.getProcedureName());
+            writer.save(procedure);
+        }
 
-        StringWriter writer = new StringWriter();
-        userModel.write(writer);
 
-        log(writer.toString());*/
+        for (Class klazz : templateMap.keySet()) {
+            //Collection<Procedure> procedures = reader.load(klazz);
+            ProcedureTemplate template = templateMap.get(klazz);
+            String query = "Select ?s WHERE { ?s a <http://" + klazz.getPackage().getName() + "/" + klazz.getSimpleName() + "> }";
+            log("Now searching for " + template.getProcedureName() + "with query: " + query);
+            Collection<Procedure> procedures = Sparql.exec(model, klazz, query);
+            assertNotNull("there has to be a procedure", procedures);
+            assertTrue("there has to be some results", !procedures.isEmpty());
+        }
+
+
+        dataset.commit();
+        dataset.end();
+
+    }*/
+
+    public void testAliBabaObjectStore() throws Exception {
+
+        // create a repository, for trying the things out
+        // a memory-store will be just fine. later move on
+        // to some directory solution, so that data can actually be
+        // persisted some place as well.
+        File dataDir = new File(directoryName);
+        //Repository store = new SailRepository(new MemoryStore(dataDir));
+        Repository repository = new SailRepository(new MemoryStore(dataDir));
+        repository.initialize();
+
+        // wrap in an object repository
+        ObjectRepositoryFactory factory = new ObjectRepositoryFactory();
+        ObjectRepository objectRepository = factory.createRepository(repository);
+
+        ObjectConnection connection = objectRepository.getConnection();
+
+        ValueFactory vf = connection.getValueFactory();
+        Map<Class, ProcedureTemplate> templateMap = procedureLibrary.getTemplateMap();
+
+        for (Class klazz : templateMap.keySet()) {
+            ProcedureTemplate template = templateMap.get(klazz);
+            Procedure procedure = (Procedure) klazz.newInstance();
+            procedure.setNAME(template.getProcedureName());
+            procedure.setDESCRIPTION(template.getProcedureDescription());
+            log("Now saving " + template.getProcedureName());
+            URI id = vf.createURI("http://www.qoan.org/procedures/" + procedure.getUuid());
+            connection.addObject(id, procedure);
+        }
+
+
     }
+
 
     private void log(String message) {
         System.out.println(message);

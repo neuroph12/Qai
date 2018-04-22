@@ -17,7 +17,6 @@ package qube.qai.procedure;
 
 import qube.qai.network.finance.FinanceNetworkBuilder;
 import qube.qai.network.semantic.SemanticNetworkBuilder;
-import qube.qai.network.syntax.SyntaxNetworkBuilder;
 import qube.qai.network.wiki.WikiNetworkBuilder;
 import qube.qai.procedure.analysis.ChangePoints;
 import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
@@ -201,7 +200,7 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
      */
     public static ProcedureTemplate<SelectForAll> financeNetworkBuilderTemplate = new ProcedureTemplate<SelectForAll>() {
 
-        private String name = "Finance-network Builder";
+        private String name = "Finance-Network Builder";
 
         private String desc = "Drop in the stock-entities from the finance menu here. " +
                 "The routines will take over the job creating and traning the neural-network with their quotes " +
@@ -350,7 +349,7 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
         templateMap.put(NeuralNetworkAnalysis.class, neuralNetworkAnalysisTemplate);
         templateMap.put(SemanticNetworkBuilder.class, semanticNetworkBuiderTemplate);
         templateMap.put(AverageSequence.class, averageSequenceTemplate);
-        templateMap.put(SyntaxNetworkBuilder.class, syntaxNetworkBuiderTemplate);
+        //templateMap.put(SyntaxNetworkBuilder.class, syntaxNetworkBuiderTemplate);
         templateMap.put(StockQuoteUpdater.class, stockQuoteUpdaterTemplate);
         templateMap.put(WikiNetworkBuilder.class, wikiNetworkBuilderTemplate);
 

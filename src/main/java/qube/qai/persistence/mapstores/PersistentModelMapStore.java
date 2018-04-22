@@ -16,17 +16,11 @@ package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.MapStore;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.ReadWrite;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.sparql.JenaTransactionException;
-import org.apache.jena.tdb.TDBFactory;
+import org.openrdf.model.Model;
+import org.openrdf.query.Dataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.procedure.ProcedureLibraryInterface;
-import thewebsemantic.Bean2RDF;
-import thewebsemantic.NotFoundException;
-import thewebsemantic.RDF2Bean;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -44,15 +38,15 @@ public class PersistentModelMapStore implements MapStore {
 
     private Class[] baseClasses;
 
-    private String baseUrl = "http://www.qoan.org/data/";
+    private String baseUrl = "http://www.qoan.org";
 
     private Model model;
 
     private Dataset dataset;
 
-    private Bean2RDF writer;
+    //private Bean2RDF writer;
 
-    private RDF2Bean reader;
+    //private RDF2Bean reader;
 
     @Inject
     private ProcedureLibraryInterface procedureLibrary;
@@ -71,7 +65,7 @@ public class PersistentModelMapStore implements MapStore {
             throw new IllegalArgumentException(message);
         }
 
-        dataset = TDBFactory.createDataset(directoryName);
+        /*dataset = TDBFactory.createDataset(directoryName);
 
         dataset.begin(ReadWrite.WRITE);
         model = dataset.getNamedModel(baseUrl);
@@ -79,7 +73,7 @@ public class PersistentModelMapStore implements MapStore {
         reader = new RDF2Bean(model);
 
         dataset.abort();
-        dataset.end();
+        dataset.end();*/
     }
 
     @Override
@@ -87,7 +81,7 @@ public class PersistentModelMapStore implements MapStore {
 
         logger.info("Storing object: " + value + " with key: " + key);
 
-        try {
+        /*try {
 
             dataset.begin(ReadWrite.WRITE);
             writer.save(baseClasses[0].cast(value));
@@ -98,7 +92,7 @@ public class PersistentModelMapStore implements MapStore {
         } finally {
 
             dataset.end();
-        }
+        }*/
     }
 
     @Override
@@ -115,7 +109,7 @@ public class PersistentModelMapStore implements MapStore {
 
         Object toDelete = load(key);
 
-        try {
+        /*try {
 
             dataset.begin(ReadWrite.WRITE);
             writer.delete(baseClasses[0].cast(toDelete));
@@ -127,7 +121,7 @@ public class PersistentModelMapStore implements MapStore {
         } finally {
 
             dataset.end();
-        }
+        }*/
     }
 
     @Override
@@ -142,7 +136,7 @@ public class PersistentModelMapStore implements MapStore {
 
         logger.info("Loading object with key: " + key);
 
-        try {
+        /*try {
             dataset.begin(ReadWrite.WRITE);
             Object found = null;
             for (int i = 0; i < baseClasses.length; i++) {
@@ -167,8 +161,9 @@ public class PersistentModelMapStore implements MapStore {
 
             dataset.abort();
             dataset.end();
-        }
+        }*/
 
+        return null;
     }
 
     /**
@@ -186,14 +181,14 @@ public class PersistentModelMapStore implements MapStore {
 
         for (Class klass : procedureLibrary.getTemplateMap().keySet()) {
 
-            try {
+            /*try {
 
                 found = reader.load(klass, key);
 
             } catch (NotFoundException e) {
 
                 continue;
-            }
+            }*/
 
             if (found != null) {
                 break;

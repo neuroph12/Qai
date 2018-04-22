@@ -148,7 +148,6 @@ public final class Name implements NodeSetElement, Serializable {
      *
      * @return Name represented by the instance.
      */
-    @thewebsemantic.Id
     public String getName() {
 
         return this.name;

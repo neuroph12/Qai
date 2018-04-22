@@ -15,6 +15,7 @@
 package qube.qai.persistence;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IMap;
 import org.apache.commons.lang3.StringUtils;
 import qube.qai.services.implementation.SearchResult;
@@ -24,14 +25,17 @@ import javax.inject.Inject;
 /**
  * Created by zenpunk on 6/28/17.
  */
-public class MapDataProvider implements QaiDataProvider {
+public class MapDataProvider implements QaiDataProvider, HazelcastInstanceAware {
 
     private String context;
 
     private String uuid;
 
     @Inject
-    private HazelcastInstance hazelcastInstance;
+    private transient HazelcastInstance hazelcastInstance;
+
+    public MapDataProvider() {
+    }
 
     public MapDataProvider(HazelcastInstance hazelcastInstance, String context, String uuid) {
         this.hazelcastInstance = hazelcastInstance;

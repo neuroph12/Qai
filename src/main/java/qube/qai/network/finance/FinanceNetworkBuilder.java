@@ -82,7 +82,6 @@ public class FinanceNetworkBuilder extends Procedure {
         Date start = alldates[0];
         Date end = alldates[alldates.length - 1];
 
-
         Collection<ChangePoints.ChangePointMarker> markers = Arrays.asList(changePoint.getMarkers());
 
         if (markers == null || markers.isEmpty()) {

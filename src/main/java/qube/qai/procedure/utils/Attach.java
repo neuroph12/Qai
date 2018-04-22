@@ -14,7 +14,6 @@
 
 package qube.qai.procedure.utils;
 
-import org.apache.jena.rdf.model.Statement;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.nodes.ValueNode;
@@ -60,7 +59,7 @@ public class Attach extends Procedure {
 //            throw new RuntimeException("No DataService: Procedure has not been properly initialized- aborting");
 //        }
 
-        Statement statement = createStatement();
+        //Statement statement = createStatement();
         //dataService.save(statement.getModel());
         //setResultValueOf(RELATION, statement);
     }
@@ -70,7 +69,7 @@ public class Attach extends Procedure {
         return new Attach();
     }
 
-    private Statement createStatement() {
+    /*private Statement createStatement() {
 
         if (attach == null || attachTo == null) {
             throw new RuntimeException("Resources to relate are not properly defined- have to abort!");
@@ -84,7 +83,7 @@ public class Attach extends Procedure {
 
         return null;
     }
-
+*/
     @Override
     public void buildArguments() {
 //        arguments = new Arguments();

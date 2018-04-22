@@ -28,7 +28,6 @@ import java.util.Set;
 public class User implements Serializable {
 
     @Id
-    @thewebsemantic.Id
     @Column(name = "uuid")
     protected String uuid;
 

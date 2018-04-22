@@ -44,7 +44,7 @@ public class StockQuoteUpdater extends Procedure {
     private Collection<StockQuote> quotes;
 
     @Inject
-    private HazelcastInstance hazelcastInstance;
+    private transient HazelcastInstance hazelcastInstance;
 
     public StockQuoteUpdater() {
         super("Stock-quote Updater");

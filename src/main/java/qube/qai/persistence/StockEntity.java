@@ -31,7 +31,6 @@ import java.util.Set;
 public class StockEntity implements Serializable, AcceptsVisitors {
 
     @Id
-    @thewebsemantic.Id
     @Column(name = "uuid", nullable = false)
     private String uuid;
 

@@ -15,13 +15,10 @@
 package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.MapStore;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
+import org.openrdf.model.Model;
+import org.openrdf.query.Dataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import thewebsemantic.Bean2RDF;
-import thewebsemantic.NotFoundException;
-import thewebsemantic.RDF2Bean;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -39,20 +36,22 @@ public class ModelMapStore implements MapStore {
 
     private Model model;
 
-    private Bean2RDF writer;
+    //private Bean2RDF writer;
 
-    private RDF2Bean reader;
+    //private RDF2Bean reader;
+
+    private Dataset dataset;
 
     public ModelMapStore(Class baseClass) {
         this.baseClass = baseClass;
-        model = ModelFactory.createDefaultModel();
-        writer = new Bean2RDF(model);
-        reader = new RDF2Bean(model);
+        //model = ModelFactory.createDefaultModel();
+
     }
 
     @Override
     public void store(Object key, Object value) {
-        writer.save(baseClass.cast(value));
+
+        //writer.save(baseClass.cast(value));
     }
 
     @Override
@@ -65,7 +64,7 @@ public class ModelMapStore implements MapStore {
     @Override
     public void delete(Object key) {
         Object toDelete = load(key);
-        writer.delete(baseClass.cast(toDelete));
+        //writer.delete(baseClass.cast(toDelete));
     }
 
     @Override
@@ -77,11 +76,12 @@ public class ModelMapStore implements MapStore {
 
     @Override
     public Object load(Object key) {
-        try {
+        /*try {
             return reader.load(baseClass, key);
         } catch (NotFoundException e) {
-            return null;
-        }
+
+        }*/
+        return null;
     }
 
     @Override

@@ -18,13 +18,12 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import qube.qai.main.QaiTestBase;
 import qube.qai.network.finance.FinanceNetworkBuilder;
-import qube.qai.network.finance.FinanceNetworkTrainer;
 import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
-import qube.qai.persistence.mapstores.PersistentModelMapStore;
-import qube.qai.procedure.Procedure;
+import qube.qai.persistence.search.ModelSearchService;
+import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -41,6 +40,8 @@ public class HowFairAreMarketsTest extends QaiTestBase {
 
     private String procedureDirectory = "/media/rainbird/ALEPH/qai-persistence.db/model_persistence";
 
+    private Collection<StockEntity> entities;
+
     /**
      *
      * here we want to see how the tests run on the grid
@@ -49,9 +50,11 @@ public class HowFairAreMarketsTest extends QaiTestBase {
      */
     public void testHowFairAreMarkets() throws Exception {
 
-        PersistentModelMapStore mapStore = new PersistentModelMapStore(procedureDirectory,
-                Procedure.class, FinanceNetworkBuilder.class, FinanceNetworkTrainer.class);
-        mapStore.init();
+        //PersistentModelMapStore mapStore = new PersistentModelMapStore(procedureDirectory,
+        //        Procedure.class, FinanceNetworkBuilder.class, FinanceNetworkTrainer.class);
+        //mapStore.init();
+        ModelSearchService modelService = new ModelSearchService(PROCEDURES, procedureDirectory);
+        modelService.init();
 
         // this is the beginning point of the proposed procedure
         int iteratioNumber = 0;
@@ -70,6 +73,7 @@ public class HowFairAreMarketsTest extends QaiTestBase {
             StringBuffer nameBuffer = new StringBuffer();
             // collect the names of the entites we thus far have
             for (QaiDataProvider<StockEntity> provider : entityProviders) {
+                injector.injectMembers(provider);
                 String tickerSymbol = provider.getData().getTickerSymbol();
                 log("iteration " + iteratioNumber + " adding: '" + tickerSymbol + "' to the entities to be analized");
                 nameBuffer.append(tickerSymbol).append(" ");
@@ -86,7 +90,12 @@ public class HowFairAreMarketsTest extends QaiTestBase {
             networkBuilder.execute();
 
             log("Procedure with uuid: '" + networkBuilder.getUuid() + "' of iteration " + iteratioNumber + " has completed excution- now saving it in map");
-            mapStore.store(networkBuilder.getUuid(), networkBuilder);
+            //mapStore.store(networkBuilder.getUuid(), networkBuilder);
+            modelService.save(FinanceNetworkBuilder.class, networkBuilder);
+
+            Collection<SearchResult> results = modelService.searchInputString(networkBuilder.getProcedureName(), PROCEDURES, 10);
+            assertNotNull("results may not be null", results);
+            assertTrue("there have to be some results to find", !results.isEmpty());
 
             iteratioNumber++;
         }
@@ -95,30 +104,41 @@ public class HowFairAreMarketsTest extends QaiTestBase {
 
     protected Collection<QaiDataProvider> pickStockProviders(Set<String> pickedTickerSymbols, int numberToPick) {
 
-        Collection<QaiDataProvider> searchResults = new ArrayList<>();
+        Collection<QaiDataProvider> searchResults = null;
 
-        IMap<String, StockGroup> stockGroupMap = hazelcastInstance.getMap(STOCK_GROUPS);
+        if (entities == null || entities.isEmpty()) {
+            IMap<String, StockGroup> stockGroupMap = hazelcastInstance.getMap(STOCK_GROUPS);
 
-        for (String key : stockGroupMap.keySet()) {
-            StockGroup group = stockGroupMap.get(key);
-            Collection<StockEntity> entities = group.getEntities();
-            if (entities == null || entities.isEmpty()) {
-                continue;
+            for (String key : stockGroupMap.keySet()) {
+                StockGroup group = stockGroupMap.get(key);
+                entities = group.getEntities();
             }
-            Iterator<StockEntity> iterator = entities.iterator();
-            for (int i = 0; i < numberToPick; i++) {
-                StockEntity entity = iterator.next();
-                if (!pickedTickerSymbols.contains(entity.getTickerSymbol())) {
-                    searchResults.add(new DataProvider(entity));
-                }
-                if (searchResults.size() == numberToPick) {
-                    break;
-                }
-            }
-            break;
         }
+
+        searchResults = pickOutOf(entities, pickedTickerSymbols, numberToPick);
+
 
         return searchResults;
     }
 
+    private Collection<QaiDataProvider> pickOutOf(Collection<StockEntity> entities, Set<String> pickedTickerSymbols, int numberToPick) {
+
+        Collection<QaiDataProvider> searchResults = new ArrayList<>();
+        if (entities == null || entities.isEmpty()) {
+            return searchResults;
+        }
+
+        for (Iterator<StockEntity> iterator = entities.iterator(); iterator.hasNext(); ) {
+            StockEntity entity = iterator.next();
+            if (!pickedTickerSymbols.contains(entity.getTickerSymbol())) {
+                searchResults.add(new DataProvider(STOCK_ENTITIES, entity));
+            }
+            if (searchResults.size() == numberToPick) {
+                break;
+            }
+        }
+
+        return searchResults;
+
+    }
 }

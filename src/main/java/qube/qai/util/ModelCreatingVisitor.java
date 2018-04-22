@@ -14,10 +14,7 @@
 
 package qube.qai.util;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Resource;
 import qube.qai.parsers.antimirov.nodes.*;
-import qube.qai.procedure.Procedure;
 import qube.qai.procedure.utils.SelectForAll;
 
 /**
@@ -29,11 +26,11 @@ public class ModelCreatingVisitor implements NodeVisitor {
 
     private String nameSpace = "file:/home/rainbird/projects/work/qai/test/"; //"http://qai.at/"; //http://www.qoan.at/" ;
 
-    private Model model;
+    //private Model model;
 
-    public ModelCreatingVisitor(Model model) {
+    /*public ModelCreatingVisitor(Model model) {
         this.model = model;
-    }
+    }*/
 
     @Override
     public Object visit(AlternationNode node, Object data) {
@@ -76,7 +73,7 @@ public class ModelCreatingVisitor implements NodeVisitor {
     }
 
     private Object allVisit(BaseNode node, Object data) {
-        Resource resource = model.createResource("http://www.qai.at/procedures:" + node.getUuid());
+        /*Resource resource = model.createResource("http://www.qai.at/procedures:" + node.getUuid());
         resource.addLiteral(model.createProperty(nameSpace, "uuid"), node.getUuid());
         resource.addLiteral(model.createProperty(nameSpace, "name"), node.getName().getName());
         resource.addLiteral(model.createProperty(nameSpace, "class"), node.getClass().getName());
@@ -84,7 +81,8 @@ public class ModelCreatingVisitor implements NodeVisitor {
         if (node.getParent() != null) {
             resource.addLiteral(model.createProperty(nameSpace, "parentUuid"), node.getParent().getUuid());
         }
-        return data;
+        return data;*/
+        return null;
     }
 
     public static BaseNode createNodeFromName(String name) {
@@ -141,11 +139,11 @@ public class ModelCreatingVisitor implements NodeVisitor {
         this.nameSpace = nameSpace;
     }
 
-    public Model getModel() {
+    /*public Model getModel() {
         return model;
     }
 
     public void setModel(Model model) {
         this.model = model;
-    }
+    }*/
 }

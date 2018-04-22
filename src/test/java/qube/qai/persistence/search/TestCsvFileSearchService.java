@@ -15,14 +15,7 @@
 package qube.qai.persistence.search;
 
 import junit.framework.TestCase;
-import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.*;
-import org.apache.jena.riot.RDFDataMgr;
 import qube.qai.services.implementation.UUIDService;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Created by rainbird on 10/21/16.
@@ -56,7 +49,7 @@ public class TestCsvFileSearchService extends TestCase {
 //        assertTrue("there must be results", !results.isEmpty());
 //    }
 
-    public void testCsvFileSparqlAndSelectors() throws Exception {
+    /*public void testCsvFileSparqlAndSelectors() throws Exception {
 
         String filename = pathToCsvFiles + sNp500File; //otherListedFile; //nyseFile ;
         Model csvModel = RDFDataMgr.loadModel(filename);
@@ -99,7 +92,7 @@ public class TestCsvFileSearchService extends TestCase {
         }
         // the count might seem strange, but this the 1 we started with
         log("printed " + (count - 1) + " rows from csv-file");
-    }
+    }*/
 
     public void restCsvFileModel() throws Exception {
 
@@ -128,7 +121,7 @@ public class TestCsvFileSearchService extends TestCase {
         }*/
     }
 
-    public void restCsvFileSparql() throws Exception {
+    /*public void restCsvFileSparql() throws Exception {
         String filename = pathToCsvFiles + sNp500File;
         Model csvModel = RDFDataMgr.loadModel(filename);
 
@@ -195,7 +188,7 @@ public class TestCsvFileSearchService extends TestCase {
             // so that we move on to reading the next row
             rowNumber++;
         }
-    }
+    }*/
 
     // the experiment below is no longer relevant- too primitive to work with
     /*

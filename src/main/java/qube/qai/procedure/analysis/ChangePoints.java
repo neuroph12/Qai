@@ -47,19 +47,7 @@ public class ChangePoints extends Procedure {
 
     @Override
     protected void buildArguments() {
-        /*getProcedureDescription().setDescription(DESCRIPTION);
-        getProcedureDescription().getProcedureInputs().addInput(new ValueNode<TimeSequence>(INPUT_TIME_SEQUENCE, MIMETYPE_TIME_SERIES) {
-            @Override
-            public void setValue(TimeSequence value) {
-                timeSequence = value;
-            }
-        });
-        getProcedureDescription().getProcedureResults().addResult(new ValueNode<Collection<ChangePointMarker>>(CHANGE_POINTS, MIMETYPE_CHANGE_POINT_MARKER) {
-            @Override
-            public Collection<ChangePointMarker> getValue() {
-                return markers;
-            }
-        });*/
+
     }
 
     @Override

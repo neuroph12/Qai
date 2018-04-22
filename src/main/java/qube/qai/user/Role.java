@@ -26,7 +26,6 @@ import java.io.Serializable;
 public class Role implements Serializable {
 
     @Id
-    @thewebsemantic.Id
     @Column(name = "uuid")
     private String uuid;
 

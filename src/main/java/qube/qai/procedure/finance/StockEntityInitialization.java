@@ -15,21 +15,17 @@
 package qube.qai.procedure.finance;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jena.rdf.model.*;
-import org.apache.jena.riot.RDFDataMgr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
-import qube.qai.persistence.StockQuote;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.nodes.ValueNode;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import java.util.Set;
 
 /**
  * Created by zenpunk on 1/21/17.
@@ -137,7 +133,7 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
     public void createCheckAndInsertStockEntitesFromFile() {
 
         String filename = pathToCsvFiles + selectedFile; //otherListedFile; //nyseFile ;
-        Model csvModel = RDFDataMgr.loadModel(filename);
+        //Model csvModel = RDFDataMgr.loadModel(filename);
         StockQuoteDataStore store = new StockQuoteDataStore();
 
         // begin the transaction in the database
@@ -148,10 +144,10 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
         // field names which come with the rows and rows start with 1...
         int count = 1;
         boolean done = false;
-        Property property = csvModel.createProperty(rowPropertyName);
+        //Property property = csvModel.createProperty(rowPropertyName);
 
         // start looping over the rows
-        while (!done) {
+        /*while (!done) {
 
             Literal countLiteral = csvModel.createTypedLiteral(count);
             ResIterator resIt = csvModel.listSubjectsWithProperty(property, countLiteral);
@@ -199,10 +195,10 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
                 // now increment the row-number to pick
                 count++;
             }
-        }
+        }*/
 
         // now save the group we have just created
-        try {
+        /*try {
             entityManager.persist(group);
             // write the rest of data- this writes the entries in relation-table
             // and commit the transaction
@@ -217,7 +213,7 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
 //            if (entityManager.getTransaction().isActive()) {
 //                entityManager.close();
 //            }
-        }
+        }*/
     }
 
     public StockEntity findStockEntityDatabaseCopy(StockEntity entity) {
@@ -244,7 +240,7 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
         return false;
     }
 
-    public StockEntity ripEntityFromRow(Resource rowResource) {
+    /*public StockEntity ripEntityFromRow(Resource rowResource) {
         StockEntity entity = new StockEntity();
         StmtIterator stmtIt = rowResource.listProperties();
 
@@ -295,7 +291,7 @@ public class StockEntityInitialization extends Procedure implements ProcedureCon
 
         }
         return entity;
-    }
+    }*/
 
 
     public String getCompleteNameSpace() {

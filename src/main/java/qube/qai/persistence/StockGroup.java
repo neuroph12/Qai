@@ -28,7 +28,6 @@ import java.util.Set;
 public class StockGroup implements Serializable {
 
     @Id
-    @thewebsemantic.Id
     @Column(name = "uuid")
     private String uuid;
 

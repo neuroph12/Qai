@@ -15,12 +15,12 @@
 package qube.qai.parsers.antimirov.nodes;
 
 
+import org.openrdf.annotations.Iri;
 import qube.qai.parsers.antimirov.IllegalConcatenationException;
 import qube.qai.parsers.antimirov.IncompleteTypeException;
 import qube.qai.parsers.antimirov.IrregularContentRequestException;
 import qube.qai.parsers.antimirov.NoWellformedTypeException;
 import qube.qai.services.implementation.UUIDService;
-import thewebsemantic.Namespace;
 
 import java.io.Serializable;
 import java.util.Hashtable;
@@ -35,17 +35,22 @@ import java.util.Hashtable;
  * @author Stefan Hohenadel
  * @version 1.0
  */
-@Namespace("http://www.qoan.org/nodes#")
+
+@Iri(BaseNode.NS + "BaseNode")
 public abstract class BaseNode implements VisitableNode, Serializable {
 
-    @thewebsemantic.Id
+    public static final String NS = "";
+
+    @Iri(NS + "uuid")
     protected String uuid;
 
+    @Iri(NS + "parent")
     protected BaseNode parent;
 
     /**
      * The name of the type.
      */
+    @Iri(NS + "name")
     protected Name name;
 
 
@@ -53,6 +58,7 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * The representation of the first inner type that is modified by
      * this type.
      */
+    @Iri(NS + "child1")
     protected BaseNode child1;
 
 
@@ -60,6 +66,7 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      * The representation of the second inner type that is modified by
      * this type.
      */
+    @Iri(NS + "child2")
     protected BaseNode child2;
 
     public BaseNode() {
