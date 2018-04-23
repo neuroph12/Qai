@@ -14,6 +14,7 @@
 
 package qube.qai.user;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
@@ -21,23 +22,30 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by rainbird on 12/2/15.
  */
 @Entity
+@Iri(BASE_URL + "User")
 public class User implements Serializable {
 
     @Id
     @Column(name = "uuid")
+    @Iri(BASE_URL + "uuid")
     protected String uuid;
 
     @Column(name = "username", nullable = false, unique = true)
+    @Iri(BASE_URL + "username")
     protected String username;
 
     @Column(name = "password")
+    @Iri(BASE_URL + "password")
     protected String password;
 
     @Column(name = "email")
+    @Iri(BASE_URL + "email")
     protected String email;
 
     @Column(name = "passwordSalt")

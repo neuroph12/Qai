@@ -14,6 +14,7 @@
 
 package qube.qai.procedure.analysis;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.data.TimeSequence;
 import qube.qai.data.analysis.ChangepointAdapter;
 import qube.qai.persistence.QaiDataProvider;
@@ -27,9 +28,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by zenpunk on 11/28/15.
  */
+@Iri(BASE_URL + "ChangePoints")
 public class ChangePoints extends Procedure {
 
     public String NAME = "Change-Point Analysis";

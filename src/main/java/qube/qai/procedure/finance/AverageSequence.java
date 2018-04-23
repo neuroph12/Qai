@@ -14,6 +14,7 @@
 
 package qube.qai.procedure.finance;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.data.TimeSequence;
 import qube.qai.persistence.MapDataProvider;
 import qube.qai.persistence.QaiDataProvider;
@@ -24,20 +25,28 @@ import qube.qai.services.QaiInjectorService;
 
 import java.util.*;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
+@Iri(BASE_URL + "AverageSequence")
 public class AverageSequence extends Procedure {
 
     private String descTemplate = "Dates from: %s to %s with childUUID: '%s'";
 
     private String nameTemplate = "(Avg: %s)";
 
+    @Iri(BASE_URL + "childEntity")
     private StockEntity childEntity;
 
+    @Iri(BASE_URL + "sequences")
     private TimeSequence[] sequences;
 
+    @Iri(BASE_URL + "startDate")
     private Date startDate;
 
+    @Iri(BASE_URL + "endDate")
     private Date endDate;
 
+    @Iri(BASE_URL + "allDates")
     private Date[] allDates;
 
     /**

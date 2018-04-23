@@ -16,6 +16,7 @@ package qube.qai.persistence;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.openrdf.annotations.Iri;
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 import qube.qai.services.implementation.UUIDService;
@@ -26,41 +27,54 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by rainbird on 11/19/15.
  */
 @Entity
+@Iri(BASE_URL + "StockQuote")
 public class StockQuote implements Serializable, AcceptsVisitors {
 
     @Id
     @Column(name = "uuid")
+    @Iri(BASE_URL + "uuid")
     private String uuid;
 
     @Column(name = "parentUUID", nullable = false)
+    @Iri(BASE_URL + "parentUUID")
     private String parentUUID;
 
     @Column(name = "tickerSymbol", nullable = false)
+    @Iri(BASE_URL + "tickerSymbol")
     private String tickerSymbol;
 
     @Column(name = "quoteDate", nullable = false)
+    @Iri(BASE_URL + "quoteDate")
     private Date quoteDate;
 
     @Column(name = "adjustedClose")
+    @Iri(BASE_URL + "adjuestedClose")
     public double adjustedClose;
 
     @Column(name = "close")
+    @Iri(BASE_URL + "close")
     public double close;
 
     @Column(name = "high")
+    @Iri(BASE_URL + "high")
     public double high;
 
     @Column(name = "low")
+    @Iri(BASE_URL + "low")
     public double low;
 
     @Column(name = "open")
+    @Iri(BASE_URL + "open")
     public double open;
 
     @Column(name = "volume")
+    @Iri(BASE_URL + "volume")
     public double volume;
 
     public StockQuote() {

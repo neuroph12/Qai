@@ -14,15 +14,19 @@
 
 package qube.qai.procedure.analysis;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.data.Metrics;
 import qube.qai.network.neural.NeuralNetwork;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
 import qube.qai.procedure.nodes.ValueNode;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by zenpunk on 11/28/15.
  */
+@Iri(BASE_URL + "NeuralNetworkAnalysis")
 public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstants {
 
     public String NAME = "Neural-Network Analysis";
@@ -31,8 +35,10 @@ public class NeuralNetworkAnalysis extends Procedure implements ProcedureConstan
             "does a statistical analysis of the weights, " +
             "their network structure, etc.";
 
+    @Iri(BASE_URL + "neuralNetwork")
     private NeuralNetwork neuralNetwork;
 
+    @Iri(BASE_URL + "metrics")
     private Metrics metrics;
 
     public NeuralNetworkAnalysis() {

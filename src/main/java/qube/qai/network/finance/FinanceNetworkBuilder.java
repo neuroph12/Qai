@@ -14,6 +14,7 @@
 
 package qube.qai.network.finance;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.data.TimeSequence;
 import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.StockEntity;
@@ -29,16 +30,22 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
+@Iri(BASE_URL + "FinanceNetworkBuilder")
 public class FinanceNetworkBuilder extends Procedure {
 
     public String NAME = "Finance-Network Builder";
 
     public String DESCRIPTION = "This creates finance networks out of given set of finance-entities";
 
-    private ChangePoints changePoint;
+    @Iri(BASE_URL + "changePoints")
+    private ChangePoints changePoints;
 
+    @Iri(BASE_URL + "averager")
     private AverageSequence averager;
 
+    @Iri(BASE_URL + "spawn")
     private FinanceNetworkTrainer[] spawn;
 
     private boolean runChildren = true;
@@ -74,15 +81,15 @@ public class FinanceNetworkBuilder extends Procedure {
         Date[] alldates = averager.getAllDates();
 
         StockEntity averageEntity = averager.getChildEntity();
-        changePoint = new ChangePoints();
-        changePoint.addInputs(new DataProvider<>(averageEntity));
-        QaiInjectorService.getInstance().injectMembers(changePoint);
+        changePoints = new ChangePoints();
+        changePoints.addInputs(new DataProvider<>(averageEntity));
+        QaiInjectorService.getInstance().injectMembers(changePoints);
 
-        changePoint.execute();
+        changePoints.execute();
         Date start = alldates[0];
         Date end = alldates[alldates.length - 1];
 
-        Collection<ChangePoints.ChangePointMarker> markers = Arrays.asList(changePoint.getMarkers());
+        Collection<ChangePoints.ChangePointMarker> markers = Arrays.asList(changePoints.getMarkers());
 
         if (markers == null || markers.isEmpty()) {
             FinanceNetworkTrainer trainer = new FinanceNetworkTrainer();
@@ -184,12 +191,12 @@ public class FinanceNetworkBuilder extends Procedure {
         this.spawn = spawn;
     }*/
 
-    public ChangePoints getChangePoint() {
-        return changePoint;
+    public ChangePoints getChangePoints() {
+        return changePoints;
     }
 
-    public void setChangePoint(ChangePoints changePoint) {
-        this.changePoint = changePoint;
+    public void setChangePoints(ChangePoints changePoints) {
+        this.changePoints = changePoints;
     }
 
     public AverageSequence getAverager() {

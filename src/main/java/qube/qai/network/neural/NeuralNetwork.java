@@ -17,19 +17,25 @@ package qube.qai.network.neural;
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
+import org.openrdf.annotations.Iri;
 import qube.qai.matrix.Matrix;
 import qube.qai.matrix.Vector;
 import qube.qai.network.Network;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by rainbird on 11/23/15.
  */
+@Iri(BASE_URL + "neuralNetwork")
 public class NeuralNetwork extends Network {
 
     protected boolean debug = true;
 
+    @Iri(BASE_URL + "size")
     protected int size;
 
+    @Iri(BASE_URL + "network")
     protected BasicNetwork network;
 
     private String description;

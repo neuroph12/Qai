@@ -17,6 +17,7 @@ package qube.qai.procedure.finance;
 import com.hazelcast.core.HazelcastInstance;
 import org.ojalgo.finance.data.YahooSymbol;
 import org.ojalgo.type.CalendarDateUnit;
+import org.openrdf.annotations.Iri;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockQuote;
@@ -29,9 +30,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by zenpunk on 11/19/15.
  */
+@Iri(BASE_URL + "StockQuoteUpdater")
 public class StockQuoteUpdater extends Procedure {
 
     public String NAME = "Stock-quote Updater";
@@ -39,8 +43,10 @@ public class StockQuoteUpdater extends Procedure {
     public String DESCRIPTION = "Drop the stock-quotes to be updated in the selection tab, " +
             "the procedure will retrieve the stock-quotes to the latest stand";
 
+    @Iri(BASE_URL + "numberOfInserts")
     public long numberOfInserts = 0;
 
+    @Iri(BASE_URL + "quotes")
     private Collection<StockQuote> quotes;
 
     @Inject

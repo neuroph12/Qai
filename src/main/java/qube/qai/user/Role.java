@@ -14,29 +14,37 @@
 
 package qube.qai.user;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by rainbird on 1/15/17.
  */
 @Entity
+@Iri(BASE_URL + "Role")
 public class Role implements Serializable {
 
     @Id
     @Column(name = "uuid")
+    @Iri(BASE_URL + "uuid")
     private String uuid;
 
     @Column(name = "name")
+    @Iri(BASE_URL + "name")
     private String name;
 
     @Column(name = "description")
+    @Iri(BASE_URL + "description")
     private String description;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user", nullable = false)
+    @Iri(BASE_URL + "user")
     private User user;
 
     public Role() {

@@ -14,15 +14,22 @@
 
 package qube.qai.network.wiki;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.procedure.Procedure;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
+@Iri(BASE_URL + "WikiNetworkBuilder")
 public class WikiNetworkBuilder extends Procedure implements NetworkBuilder {
 
-    public String NAME = "Wiki-network Builder";
+    public String NAME = "Wiki-Network Builder";
 
+    public WikiNetworkBuilder() {
+        super("Wiki-Network Builder");
+    }
 
     @Override
     public void execute() {
@@ -37,9 +44,6 @@ public class WikiNetworkBuilder extends Procedure implements NetworkBuilder {
     @Override
     protected void buildArguments() {
 
-    }
-
-    public WikiNetworkBuilder() {
     }
 
     @Override

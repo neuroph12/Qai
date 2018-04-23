@@ -17,17 +17,23 @@ package qube.qai.data;
 import org.joda.time.DateTime;
 import org.ojalgo.random.Normal;
 import org.ojalgo.random.RandomNumber;
+import org.openrdf.annotations.Iri;
 
 import java.io.Serializable;
 import java.util.*;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by zenpunk on 12/4/15.
  */
+@Iri(BASE_URL + "TimeSequence")
 public class TimeSequence implements Serializable {
 
+    @Iri(BASE_URL + "sequenceOf")
     private String sequenceOf;
 
+    @Iri(BASE_URL + "entries")
     private TimeEntry[] entries;
 
     public TimeSequence() {
@@ -63,8 +69,6 @@ public class TimeSequence implements Serializable {
         }
         return Double.NaN;
     }
-
-
 
     public Date[] toDates() {
 
@@ -115,17 +119,20 @@ public class TimeSequence implements Serializable {
         this.sequenceOf = sequenceOf;
     }
 
+   /* @Iri(BASE_URL + "TimeEntry")
     public static class TimeEntry implements Serializable {
 
+        @Iri(BASE_URL + "date")
         Date date;
 
+        @Iri(BASE_URL + "value")
         Double value;
 
         public TimeEntry(Date date, Double value) {
             this.date = date;
             this.value = value;
         }
-    }
+    }*/
 
     public static TimeSequence createTimeSeries(Date start, Date end) {
 

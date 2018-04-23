@@ -14,23 +14,30 @@
 
 package qube.qai.user;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 @Entity
+@Iri(BASE_URL + "Permission")
 public class Permission implements Serializable, org.apache.shiro.authz.Permission {
 
     @Id
     @Column(name = "uuid")
+    @Iri(BASE_URL + "uuid")
     protected String uuid;
 
     @Column(name = "name")
+    @Iri(BASE_URL + "name")
     protected String name;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user", nullable = false)
+    @Iri(BASE_URL + "user")
     private User user;
 
     public Permission() {

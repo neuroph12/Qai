@@ -1,0 +1,33 @@
+## Object Concepts
+
+qube.qai.user.User = http://www.qoan.org/data#User
+
+qube.qai.data.TimeSequence = http://www.qoan.org/data#TimeSequence
+qube.qai.data.TimeEntry = http://www.qoan.org/data#TimeEntry
+qube.qai.data.Metrics = http://www.qoan.org/data#Metrics
+
+##qube.qai.parsers.antimirov.nodes.BaseNode = http://www.qoan.org/data#BaseNode
+
+qube.qai.procedure.Procedure = http://www.qoan.org/data#Procedure
+
+qube.qai.procedure.analysis.ChangePoints = http://www.qoan.org/data#ChangePoints
+
+qube.qai.network.finance.FinanceNetwork =  http://www.qoan.org/data#FinanceNetwork
+qube.qai.network.finance.FinanceNetworkBuilder =  http://www.qoan.org/data#FinanceNetworkBuilder
+
+qube.qai.network.neural.NeuralNetwork = http://www.qoan.org/data#NeuralNetwork
+
+qube.qai.procedure.analysis.NeuralNetworkAnalysis = http://www.qoan.org/data#neuralNetworkAnalysis
+qube.qai.procedure.analysis.NeuralNetworkForwardPropagation = http://www.qoan.org/data#NeuralNetworkForwardPropagation
+
+qube.qai.procedure.finance.AverageSequence = http://www.qoan.org/data#AverageSequence
+qube.qai.procedure.finance.StockQuoteUpdater = http://www.qoan.org/data#StockQuoteUpdater
+
+qube.qai.network.wiki.WikiNetwork = http://www.qoan.org/data#WikiNetwork
+qube.qai.network.wiki.WikiNetworkBuilder = http://www.qoan.org/data#WikiNetworkBuilder
+
+qube.qai.network.semantic.SemanticNetwork = http://www.qoan.org/data#SemanticNetwork
+qube.qai.network.semantic.SemanticNetworkBuilder = http://www.qoan.org/data#SemanticNetworkBuilder
+
+qube.qai.persistence.StockEntity = http://www.qoan.org/data#StockEntity
+qube.qai.persistence.StockQuote = http://www.qoan.org/data#StockQuote

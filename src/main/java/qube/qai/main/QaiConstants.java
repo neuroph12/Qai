@@ -20,6 +20,8 @@ package qube.qai.main;
  */
 public interface QaiConstants {
 
+    public String BASE_URL = "http://www.qoan.org/data#";
+
     public String USERS = "Users";
 
     public String USER_SESSIONS = "UserSessions";

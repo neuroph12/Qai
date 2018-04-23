@@ -14,6 +14,7 @@
 
 package qube.qai.procedure.analysis;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.data.TimeSequence;
 import qube.qai.matrix.Vector;
 import qube.qai.network.neural.NeuralNetwork;
@@ -25,9 +26,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by zenpunk on 11/28/15.
  */
+@Iri(BASE_URL + "NeuralNetworkForwardPropagation")
 public class NeuralNetworkForwardPropagation extends Procedure implements ProcedureConstants {
 
     public String NAME = "Neural-network forward-propagation";

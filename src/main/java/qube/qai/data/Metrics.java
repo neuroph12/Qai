@@ -14,35 +14,41 @@
 
 package qube.qai.data;
 
+import org.openrdf.annotations.Iri;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by zenpunk on 12/4/15.
  */
+@Iri(BASE_URL + "map")
 public class Metrics implements MetricTyped {
 
-    private Map<String, Object> metrics;
+    @Iri(BASE_URL + "map")
+    private Map<String, Object> map;
 
     public Metrics() {
-        metrics = new TreeMap<String, Object>();
+        map = new TreeMap<String, Object>();
     }
 
     public Set<String> getNames() {
-        return metrics.keySet();
+        return map.keySet();
     }
 
     public Object getValue(String name) {
-        return metrics.get(name);
+        return map.get(name);
     }
 
     public void putValue(String name, double value) {
-        metrics.put(name, value);
+        map.put(name, value);
     }
 
     public void putValue(String name, Object value) {
-        metrics.put(name, value);
+        map.put(name, value);
     }
 
     public Metrics buildMetrics() {
@@ -53,10 +59,10 @@ public class Metrics implements MetricTyped {
     public String toString() {
 
         StringBuffer buffer = new StringBuffer();
-        for (String name : metrics.keySet()) {
+        for (String name : map.keySet()) {
             buffer.append("[");
             buffer.append(name).append(": ");
-            Object value = metrics.get(name);
+            Object value = map.get(name);
             buffer.append(value).append("]");
         }
 

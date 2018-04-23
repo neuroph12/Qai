@@ -18,6 +18,7 @@ import com.google.inject.name.Named;
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringUtils;
+import org.openrdf.annotations.Iri;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
 import qube.qai.persistence.QaiDataProvider;
@@ -30,10 +31,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
+@Iri(BASE_URL + "SemanticNetworkBuilder")
 public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder {
 
     private boolean debug = true;
 
+    @Iri(BASE_URL + "titles")
     private String[] titles;
 
     @Inject
@@ -43,6 +48,7 @@ public class SemanticNetworkBuilder extends Procedure implements NetworkBuilder 
     @Inject
     private QaiDataProvider<WikiArticle> dataProvider;
 
+    @Iri(BASE_URL + "semanticNetwork")
     private SemanticNetwork network;
 
     public SemanticNetworkBuilder() {

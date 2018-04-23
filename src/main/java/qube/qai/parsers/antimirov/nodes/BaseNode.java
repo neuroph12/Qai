@@ -25,6 +25,8 @@ import qube.qai.services.implementation.UUIDService;
 import java.io.Serializable;
 import java.util.Hashtable;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 
 /**
  * Abstract superclass for all intern type representation classes. Types
@@ -36,37 +38,33 @@ import java.util.Hashtable;
  * @version 1.0
  */
 
-@Iri(BaseNode.NS + "BaseNode")
+@Iri(BASE_URL + "BaseNode")
 public abstract class BaseNode implements VisitableNode, Serializable {
 
-    public static final String NS = "";
 
-    @Iri(NS + "uuid")
+    @Iri(BASE_URL + "uuid")
     protected String uuid;
 
-    @Iri(NS + "parent")
+    @Iri(BASE_URL + "parent")
     protected BaseNode parent;
 
     /**
      * The name of the type.
      */
-    @Iri(NS + "name")
     protected Name name;
-
 
     /**
      * The representation of the first inner type that is modified by
      * this type.
      */
-    @Iri(NS + "child1")
+    @Iri(BASE_URL + "child1")
     protected BaseNode child1;
-
 
     /**
      * The representation of the second inner type that is modified by
      * this type.
      */
-    @Iri(NS + "child2")
+    @Iri(BASE_URL + "child2")
     protected BaseNode child2;
 
     public BaseNode() {

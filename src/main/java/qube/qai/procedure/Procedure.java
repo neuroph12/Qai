@@ -37,39 +37,40 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by zenpunk on 11/27/15.
  */
-@Iri(Procedure.NS + "Procedure")
+@Iri(BASE_URL + "Procedure")
 public abstract class Procedure extends ConcatenationNode
         implements Serializable, Runnable, AcceptsVisitors, ProcedureConstants {
 
-    public static final String NS = "http://www.qoan.org/data#";
 
-    @Iri(NS + "NAME")
+    @Iri(BASE_URL + "NAME")
     public String NAME = "Procedure";
 
-    @Iri(NS + "DESCRIPTION")
+    @Iri(BASE_URL + "DESCRIPTION")
     public String DESCRIPTION = "Description of the procedure";
 
+    @Iri(BASE_URL + "inputs")
     protected QaiDataProvider[] inputs;
 
 //    @Inject
 //    protected transient HazelcastInstance hazelcastInstance;
 
-    @Iri(NS + "userUUID")
+    @Iri(BASE_URL + "userUUID")
     protected String userUUID;
 
-    @Iri(NS + "duration")
+
     protected long duration;
 
-    @Iri(NS + "progressPercentage")
     protected double progressPercentage;
 
-    @Iri(NS + "hasExecuted")
+    @Iri(BASE_URL + "hasExecuted")
     protected boolean hasExecuted = false;
 
-    @Iri(NS + "state")
+    @Iri(BASE_URL + "state")
     protected ProcedureState state = ProcedureState.TEMPLATE;
 
     public Procedure() {

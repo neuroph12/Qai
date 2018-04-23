@@ -14,11 +14,15 @@
 
 package qube.qai.network.semantic;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.network.Network;
+
+import static qube.qai.main.QaiConstants.BASE_URL;
 
 /**
  * Created by rainbird on 11/22/15.
  */
+@Iri(BASE_URL + "SemanticNetwork")
 public class SemanticNetwork extends Network {
 
     //private static Logger logger = LoggerFactory.getLogger("SemanticNetwork");

@@ -14,6 +14,7 @@
 
 package qube.qai.persistence;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 import qube.qai.services.implementation.UUIDService;
@@ -24,79 +25,104 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by rainbird on 11/19/15.
  */
 @Entity
+@Iri(BASE_URL + "StockEntity")
 public class StockEntity implements Serializable, AcceptsVisitors {
 
     @Id
     @Column(name = "uuid", nullable = false)
+    @Iri(BASE_URL + "uuid")
     private String uuid;
 
     @Column(name = "tickerSymbol", nullable = false, unique = true)
+    @Iri(BASE_URL + "tickerSymbol")
     private String tickerSymbol;
 
     @Column(name = "tradedIn")
+    @Iri(BASE_URL + "tradedIn")
     private String tradedIn;
 
     @Column(name = "name", nullable = false)
+    @Iri(BASE_URL + "name")
     private String name;
 
     @Column(name = "security")
+    @Iri(BASE_URL + "security")
     private String security;
 
     @Column(name = "secFilings")
+    @Iri(BASE_URL + "secFilings")
     private String secFilings;
 
     @Column(name = "gicsSector")
+    @Iri(BASE_URL + "gicsSector")
     private String gicsSector;
 
     @Column(name = "gicsSubIndustry")
+    @Iri(BASE_URL + "gicsSubIndustry")
     private String gicsSubIndustry;
 
     @Column(name = "address")
+    @Iri(BASE_URL + "address")
     private String address;
 
     @Column(name = "dateFirstAdded")
+    @Iri(BASE_URL + "dateFirstAdded")
     private Date dateFirstAdded;
 
     @Column(name = "CIK")
+    @Iri(BASE_URL + "CIK")
     private String CIK;
 
     @Column(name = "yield")
+    @Iri(BASE_URL + "yield")
     private double yield;
 
     @Column(name = "capital")
+    @Iri(BASE_URL + "capital")
     private double capital;
 
     @Column(name = "weeklyHigh")
+    @Iri(BASE_URL + "weeklyHigh")
     private double weeklyHigh;
 
     @Column(name = "bookingValue")
+    @Iri(BASE_URL + "bookingvalue")
     private double bookingValue;
 
     @Column(name = "weeklyLow")
+    @Iri(BASE_URL + "weeklyLow")
     private double weeklyLow;
 
     @Column(name = "share")
+    @Iri(BASE_URL + "share")
     private double share;
 
     @Column(name = "marketPrice")
+    @Iri(BASE_URL + "marketPrice")
     private double marketPrice;
 
     @Column(name = "EBITDA")
+    @Iri(BASE_URL + "EBITDA")
     private double ebitda;
 
     @Column(name = "earnings")
+    @Iri(BASE_URL + "earnings")
     private double earnings;
 
     @Column(name = "sales")
+    @Iri(BASE_URL + "sales")
     private double sales;
 
     // eager fetch so that they can be serialized along in the hazelcast-maps
     @OrderBy("quoteDate")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "parentUUID")
+    @Iri(BASE_URL + "quotes")
     private Set<StockQuote> quotes;
 
     public StockEntity() {

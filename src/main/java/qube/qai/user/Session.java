@@ -14,33 +14,42 @@
 
 package qube.qai.user;
 
+import org.openrdf.annotations.Iri;
 import qube.qai.services.implementation.UUIDService;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+import static qube.qai.main.QaiConstants.BASE_URL;
+
 /**
  * Created by rainbird on 1/8/17.
  */
 @Entity
+@Iri(BASE_URL + "Session")
 public class Session implements Serializable {
 
     @Id
     @Column(name = "uuid")
+    @Iri(BASE_URL + "uuid")
     private String uuid;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user", nullable = false)
+    @Iri(BASE_URL + "user")
     private User user;
 
     @Column(name = "name")
+    @Iri(BASE_URL + "name")
     private String name;
 
     @Column(name = "sessionDate")
+    @Iri(BASE_URL + "sessionsDate")
     private Date sessionDate;
 
     @Column(name = "active")
+    @Iri(BASE_URL + "active")
     private boolean active;
 
 
