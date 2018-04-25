@@ -187,7 +187,7 @@ public class ModelSearchServicesTest extends TestCase {
             procedure.setNAME(template.getProcedureName());
             procedure.setDESCRIPTION(template.getProcedureDescription());
             log("Now saving " + template.getProcedureName() + " with uuid: '" + procedure.getUuid());
-            String uriString = "http://www.qoan.org/data#" + klazz.getSimpleName() + "#uuid#";
+            String uriString = "http://www.qoan.org/data#Procedure##uuid#";
             URI id = vf.createURI(uriString, procedure.getUuid());
             connection.addObject(id, procedure);
             savedProcedures.put(procedure.getUuid(), procedure);
@@ -227,7 +227,7 @@ public class ModelSearchServicesTest extends TestCase {
         repository.shutDown();
     }
 
-    public void estAlibabaObjectStoreWithUsers() throws Exception {
+    public void testAlibabaObjectStoreWithUsers() throws Exception {
 
         File dataDir = new File(directoryName);
         //Repository store = new SailRepository(new MemoryStore(dataDir));
@@ -268,7 +268,7 @@ public class ModelSearchServicesTest extends TestCase {
 
     }
 
-    public void estAliBabaObjectStoreWithStocks() throws Exception {
+    public void testAliBabaObjectStoreWithStocks() throws Exception {
 
         File dataDir = new File(directoryName);
         //Repository store = new SailRepository(new MemoryStore(dataDir));
@@ -305,8 +305,8 @@ public class ModelSearchServicesTest extends TestCase {
         connection.addObject(id, entity);
 
         Object found = connection.getObject(StockEntity.class, id);
-        assertNotNull("there has to be a user", found);
-        log("found user-object: " + found.toString());
+        assertNotNull("there has to be a stock-entity", found);
+        log("found stock-entity: " + found.toString());
         try {
 
             StockEntity stock = (StockEntity) found;

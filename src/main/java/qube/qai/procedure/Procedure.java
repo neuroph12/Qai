@@ -46,6 +46,8 @@ import static qube.qai.main.QaiConstants.BASE_URL;
 public abstract class Procedure extends ConcatenationNode
         implements Serializable, Runnable, AcceptsVisitors, ProcedureConstants {
 
+    @Iri(BASE_URL + "uuid")
+    private String uuid;
 
     @Iri(BASE_URL + "NAME")
     public String NAME = "Procedure";
@@ -106,7 +108,7 @@ public abstract class Procedure extends ConcatenationNode
      */
     protected abstract void buildArguments();
 
-    public final void run() {
+    public void run() {
         try {
             long start = System.currentTimeMillis();
             info("Procedure " + getName() + " has been started, uuid: " + uuid);
@@ -316,4 +318,11 @@ public abstract class Procedure extends ConcatenationNode
         }
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 }

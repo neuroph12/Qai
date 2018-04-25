@@ -16,8 +16,12 @@
 package qube.qai.procedure;
 
 import qube.qai.network.finance.FinanceNetworkBuilder;
+import qube.qai.network.semantic.SemanticNetworkBuilder;
+import qube.qai.network.syntax.SyntaxNetworkBuilder;
 import qube.qai.network.wiki.WikiNetworkBuilder;
 import qube.qai.procedure.analysis.ChangePoints;
+import qube.qai.procedure.analysis.NeuralNetworkAnalysis;
+import qube.qai.procedure.analysis.NeuralNetworkForwardPropagation;
 import qube.qai.procedure.finance.AverageSequence;
 import qube.qai.procedure.finance.StockQuoteUpdater;
 import qube.qai.procedure.utils.SelectForAll;
@@ -340,15 +344,15 @@ public class ProcedureLibrary implements ProcedureLibraryInterface, ProcedureCon
 
         Map<Class, ProcedureTemplate> templateMap = new HashMap<>();
 
-        //templateMap.put(ChangePoints.class, changePointAnalysisTemplate);
-        //templateMap.put(FinanceNetworkBuilder.class, financeNetworkBuilderTemplate);
-        //templateMap.put(NeuralNetworkForwardPropagation.class, forwardPropagationTemplate);
-        //templateMap.put(NeuralNetworkAnalysis.class, neuralNetworkAnalysisTemplate);
-        //templateMap.put(SemanticNetworkBuilder.class, semanticNetworkBuiderTemplate);
-        //templateMap.put(AverageSequence.class, averageSequenceTemplate);
-        //templateMap.put(SyntaxNetworkBuilder.class, syntaxNetworkBuiderTemplate);
+        templateMap.put(ChangePoints.class, changePointAnalysisTemplate);
+        templateMap.put(FinanceNetworkBuilder.class, financeNetworkBuilderTemplate);
+        templateMap.put(NeuralNetworkForwardPropagation.class, forwardPropagationTemplate);
+        templateMap.put(NeuralNetworkAnalysis.class, neuralNetworkAnalysisTemplate);
+        templateMap.put(SemanticNetworkBuilder.class, semanticNetworkBuiderTemplate);
+        templateMap.put(AverageSequence.class, averageSequenceTemplate);
+        templateMap.put(SyntaxNetworkBuilder.class, syntaxNetworkBuiderTemplate);
         templateMap.put(StockQuoteUpdater.class, stockQuoteUpdaterTemplate);
-        //templateMap.put(WikiNetworkBuilder.class, wikiNetworkBuilderTemplate);
+        templateMap.put(WikiNetworkBuilder.class, wikiNetworkBuilderTemplate);
 
         return templateMap;
     }

@@ -392,13 +392,13 @@ public abstract class BaseNode implements VisitableNode, Serializable {
      */
     public abstract String toString();
 
-    public String getUuid() {
+    /*public String getUuid() {
         return this.uuid;
     }
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
+    }*/
 
     public BaseNode getParent() {
         return parent;

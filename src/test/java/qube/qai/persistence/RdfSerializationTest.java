@@ -104,8 +104,8 @@ public class RdfSerializationTest extends TestCase {
 
         // we make it easy for ourself creating the ast-tree
         BaseNode parsedNode = parseExpression("(foo baz[integer] bar[double])");
-        String uuid = parsedNode.getUuid();
-        logger.info("parsedNode with uuid: " + uuid + " " + parsedNode.toString());
+        //String uuid = parsedNode.getUuid();
+        //logger.info("parsedNode with uuid: " + uuid + " " + parsedNode.toString());
 
         /*Model model = ModelFactory.createDefaultModel();
         Bean2RDF writer = new Bean2RDF(model);
