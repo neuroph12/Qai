@@ -15,8 +15,16 @@
 package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.MapStore;
-import org.openrdf.model.Model;
-import org.openrdf.query.Dataset;
+import org.openrdf.model.URI;
+import org.openrdf.model.ValueFactory;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.config.RepositoryConfigException;
+import org.openrdf.repository.object.ObjectConnection;
+import org.openrdf.repository.object.ObjectRepository;
+import org.openrdf.repository.object.config.ObjectRepositoryFactory;
+import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,24 +42,46 @@ public class ModelMapStore implements MapStore {
 
     private Class baseClass;
 
-    private Model model;
+    private Repository repository;
 
-    //private Bean2RDF writer;
+    private ObjectRepository objectRepository;
 
-    //private RDF2Bean reader;
-
-    private Dataset dataset;
+    private String urlString;
 
     public ModelMapStore(Class baseClass) {
-        this.baseClass = baseClass;
-        //model = ModelFactory.createDefaultModel();
 
+        this.baseClass = baseClass;
+        this.urlString = "http://www.qoan.org/data#" + baseClass.getSimpleName() + "#uuid#";
+
+        try {
+            repository = new SailRepository(new MemoryStore());
+            repository.initialize();
+            ObjectRepositoryFactory factory = new ObjectRepositoryFactory();
+            objectRepository = factory.createRepository(repository);
+        } catch (RepositoryException e) {
+            logger.error("Exception while initialization", e);
+        } catch (RepositoryConfigException e) {
+            logger.error("Exception while initialization", e);
+        }
     }
 
     @Override
     public void store(Object key, Object value) {
 
-        //writer.save(baseClass.cast(value));
+        try {
+
+            ObjectConnection connection = objectRepository.getConnection();
+
+            ValueFactory vf = connection.getValueFactory();
+            URI id = vf.createURI(urlString, key.toString());
+
+            connection.addObject(id, value);
+
+            connection.commit();
+
+        } catch (RepositoryException e) {
+            logger.error("Exception while store", e);
+        }
     }
 
     @Override
@@ -63,8 +93,23 @@ public class ModelMapStore implements MapStore {
 
     @Override
     public void delete(Object key) {
-        Object toDelete = load(key);
-        //writer.delete(baseClass.cast(toDelete));
+
+        try {
+
+            ObjectConnection connection = objectRepository.getConnection();
+
+            ValueFactory vf = connection.getValueFactory();
+            URI id = vf.createURI(urlString, key.toString());
+            Object value = connection.getObject(id);
+            if (value != null) {
+                connection.removeDesignation(value, id);
+            }
+
+            connection.commit();
+
+        } catch (RepositoryException e) {
+            logger.error("Exception while delete", e);
+        }
     }
 
     @Override
@@ -76,12 +121,22 @@ public class ModelMapStore implements MapStore {
 
     @Override
     public Object load(Object key) {
-        /*try {
-            return reader.load(baseClass, key);
-        } catch (NotFoundException e) {
+        Object value = null;
+        try {
+            repository.initialize();
+            ObjectConnection connection = objectRepository.getConnection();
 
-        }*/
-        return null;
+            ValueFactory vf = connection.getValueFactory();
+            URI id = vf.createURI(urlString, key.toString());
+            value = connection.getObject(id);
+
+            connection.commit();
+
+        } catch (RepositoryException e) {
+            logger.error("Exception while load", e);
+        } finally {
+            return value;
+        }
     }
 
     @Override

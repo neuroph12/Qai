@@ -16,13 +16,22 @@ package qube.qai.persistence.mapstores;
 
 import com.hazelcast.core.MapStore;
 import org.apache.commons.lang3.StringUtils;
-import org.openrdf.model.Model;
-import org.openrdf.query.Dataset;
+import org.openrdf.model.URI;
+import org.openrdf.model.ValueFactory;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.config.RepositoryConfigException;
+import org.openrdf.repository.object.ObjectConnection;
+import org.openrdf.repository.object.ObjectRepository;
+import org.openrdf.repository.object.config.ObjectRepositoryFactory;
+import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.procedure.ProcedureLibraryInterface;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,15 +47,11 @@ public class PersistentModelMapStore implements MapStore {
 
     private Class[] baseClasses;
 
-    private String baseUrl = "http://www.qoan.org";
+    private String urlString = "http://www.qoan.org/data#";
 
-    private Model model;
+    private Repository repository;
 
-    private Dataset dataset;
-
-    //private Bean2RDF writer;
-
-    //private RDF2Bean reader;
+    private ObjectRepository objectRepository;
 
     @Inject
     private ProcedureLibraryInterface procedureLibrary;
@@ -54,6 +59,7 @@ public class PersistentModelMapStore implements MapStore {
     public PersistentModelMapStore(String directoryName, Class... baseClass) {
         this.baseClasses = baseClass;
         this.directoryName = directoryName;
+        this.urlString = "http://www.qoan.org/data#" + baseClass[0].getSimpleName() + "#uuid#";
     }
 
     public void init() {
@@ -61,19 +67,26 @@ public class PersistentModelMapStore implements MapStore {
         logger.info("Initializing PersistentModelMapStore for directory: " + directoryName);
 
         if (StringUtils.isEmpty(directoryName)) {
-            String message = "'" + directoryName + "' was not found. There has to be a diretory to settle in!";
+            String message = "'" + directoryName + "' was not found. There has to be a directory to settle in!";
             throw new IllegalArgumentException(message);
         }
 
-        /*dataset = TDBFactory.createDataset(directoryName);
+        File directory = new File(directoryName);
+        if (!directory.exists() || !directory.isDirectory()) {
+            String message = "'" + directoryName + "' was not found, or was not a directory. There has to be a directory to settle in!";
+            throw new IllegalArgumentException(message);
+        }
 
-        dataset.begin(ReadWrite.WRITE);
-        model = dataset.getNamedModel(baseUrl);
-        writer = new Bean2RDF(model);
-        reader = new RDF2Bean(model);
-
-        dataset.abort();
-        dataset.end();*/
+        try {
+            repository = new SailRepository(new MemoryStore(directory));
+            repository.initialize();
+            ObjectRepositoryFactory factory = new ObjectRepositoryFactory();
+            objectRepository = factory.createRepository(repository);
+        } catch (RepositoryException e) {
+            logger.error("Exception while initialization", e);
+        } catch (RepositoryConfigException e) {
+            logger.error("Exception while initialization", e);
+        }
     }
 
     @Override
@@ -81,18 +94,22 @@ public class PersistentModelMapStore implements MapStore {
 
         logger.info("Storing object: " + value + " with key: " + key);
 
-        /*try {
+        try {
+            repository.initialize();
+            ObjectConnection connection = objectRepository.getConnection();
 
-            dataset.begin(ReadWrite.WRITE);
-            writer.save(baseClasses[0].cast(value));
-            dataset.commit();
+            ValueFactory vf = connection.getValueFactory();
+            URI id = vf.createURI(urlString, key.toString());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+            connection.addObject(id, value);
 
-            dataset.end();
-        }*/
+            connection.commit();
+            connection.close();
+            repository.shutDown();
+
+        } catch (RepositoryException e) {
+            logger.error("Exception while store", e);
+        }
     }
 
     @Override
@@ -107,21 +124,24 @@ public class PersistentModelMapStore implements MapStore {
 
         logger.info("Deleting object with key: " + key);
 
-        Object toDelete = load(key);
+        try {
+            repository.initialize();
+            ObjectConnection connection = objectRepository.getConnection();
 
-        /*try {
+            ValueFactory vf = connection.getValueFactory();
+            URI id = vf.createURI(urlString, key.toString());
+            Object value = connection.getObject(id);
+            if (value != null) {
+                connection.removeDesignation(value, id);
+            }
 
-            dataset.begin(ReadWrite.WRITE);
-            writer.delete(baseClasses[0].cast(toDelete));
-            dataset.commit();
+            connection.commit();
+            connection.close();
+            repository.shutDown();
 
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        } finally {
-
-            dataset.end();
-        }*/
+        } catch (RepositoryException e) {
+            logger.error("Exception while delete", e);
+        }
     }
 
     @Override
@@ -136,66 +156,24 @@ public class PersistentModelMapStore implements MapStore {
 
         logger.info("Loading object with key: " + key);
 
-        /*try {
-            dataset.begin(ReadWrite.WRITE);
-            Object found = null;
-            for (int i = 0; i < baseClasses.length; i++) {
+        Object value = null;
+        try {
+            repository.initialize();
+            ObjectConnection connection = objectRepository.getConnection();
 
-                try {
-                    found = reader.load(baseClasses[i], key);
-                } catch (NotFoundException e) {
-                    continue;
-                }
-                if (found != null) {
-                    break;
-                }
-            }
+            ValueFactory vf = connection.getValueFactory();
+            URI id = vf.createURI(urlString, key.toString());
+            value = connection.getObject(id);
 
-            return found;
+            connection.commit();
+            connection.close();
+            repository.shutDown();
 
-        } catch (JenaTransactionException e) {
-
-            return null;
-
+        } catch (RepositoryException e) {
+            logger.error("Exception while load", e);
         } finally {
-
-            dataset.abort();
-            dataset.end();
-        }*/
-
-        return null;
-    }
-
-    /**
-     * i hate having to resort to such means but
-     * there really doesn't seem to be an altenrative
-     * as jenabeans can't deal with sub-classes and
-     * inheritance in general as it turns out
-     *
-     * @param key
-     * @return
-     */
-    private Object checkProcedureTypes(Object key) {
-
-        Object found = null;
-
-        for (Class klass : procedureLibrary.getTemplateMap().keySet()) {
-
-            /*try {
-
-                found = reader.load(klass, key);
-
-            } catch (NotFoundException e) {
-
-                continue;
-            }*/
-
-            if (found != null) {
-                break;
-            }
+            return value;
         }
-
-        return found;
     }
 
     @Override

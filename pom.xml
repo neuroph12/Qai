@@ -84,6 +84,19 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.anno4j</groupId>
+            <artifactId>anno4j-core</artifactId>
+            <version>2.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.anno4j</groupId>
+            <artifactId>anno4j-alibaba</artifactId>
+            <version>2.4</version>
+            <type>pom</type>
+        </dependency>
+
+        <dependency>
             <groupId>org.eclipse.rdf4j</groupId>
             <artifactId>rdf4j-runtime</artifactId>
             <version>${rdf4j-version}</version>
@@ -118,46 +131,6 @@
             <artifactId>rdf4j-repository-sparql</artifactId>
             <version>${rdf4j-version}</version>
         </dependency>
-
-
-        <dependency>
-            <groupId>com.github.anno4j</groupId>
-            <artifactId>anno4j-core</artifactId>
-            <version>2.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.anno4j</groupId>
-            <artifactId>anno4j-alibaba</artifactId>
-            <version>2.4</version>
-            <type>pom</type>
-        </dependency>
-
-
-        <!-- <dependency>
-           <groupId>com.thewebsemantic</groupId>
-           <artifactId>jenabean</artifactId>
-           <version>1.1</version>
-       </dependency>
-
-       <dependency>
-           <groupId>org.apache.jena</groupId>
-           <artifactId>jena-core</artifactId>
-           <version>${apache-jena-version}</version>
-       </dependency>
-
-       <dependency>
-           <groupId>org.apache.jena</groupId>
-           <artifactId>apache-jena-libs</artifactId>
-           <version>${apache-jena-version}</version>
-           <type>pom</type>
-       </dependency>
-
-       <dependency>
-           <groupId>org.apache.jena</groupId>
-           <artifactId>jena-tdb</artifactId>
-           <version>${apache-jena-version}</version>
-       </dependency> -->
 
         <dependency>
             <groupId>qube.samsroad</groupId>

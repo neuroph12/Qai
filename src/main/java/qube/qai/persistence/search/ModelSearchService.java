@@ -15,23 +15,29 @@
 package qube.qai.persistence.search;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openrdf.model.Model;
-import org.openrdf.query.Dataset;
+import org.openrdf.query.QueryEvaluationException;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.config.RepositoryConfigException;
+import org.openrdf.repository.object.ObjectConnection;
+import org.openrdf.repository.object.ObjectRepository;
+import org.openrdf.repository.object.config.ObjectRepositoryFactory;
+import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.result.Result;
+import org.openrdf.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.main.QaiConstants;
 import qube.qai.procedure.Procedure;
-import qube.qai.procedure.ProcedureLibrary;
-import qube.qai.procedure.ProcedureTemplate;
 import qube.qai.services.SearchServiceInterface;
 import qube.qai.services.implementation.SearchResult;
 import qube.qai.user.Role;
 import qube.qai.user.Session;
 import qube.qai.user.User;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * Created by rainbird on 1/20/17.
@@ -48,13 +54,13 @@ public class ModelSearchService implements SearchServiceInterface, QaiConstants 
 
     private Class objectClass;
 
-    private Dataset dataset;
+    private ObjectRepositoryFactory factory;
 
-    private Model model;
+    private ObjectRepository objectRepository;
 
-    //private Bean2RDF writer;
+    private ObjectConnection connection;
 
-    //private RDF2Bean reader;
+    private Repository repository;
 
     //@Inject
     //private ProcedureLibraryInterface procedureLibrary;
@@ -74,108 +80,116 @@ public class ModelSearchService implements SearchServiceInterface, QaiConstants 
             throw new IllegalArgumentException(message);
         }
 
-        /*dataset = TDBFactory.createDataset(directoryName);
+        try {
 
+            File dataDir = new File(directoryName);
+            if (!dataDir.exists() || !dataDir.isDirectory()) {
+                String message = "'" + directoryName + "' could not be found. There has to ba a directory to settle in!";
+                throw new IllegalArgumentException(message);
+            }
 
-        dataset.begin(ReadWrite.WRITE);
-        model = dataset.getNamedModel(baseUrl);
-        writer = new Bean2RDF(model);
-        reader = new RDF2Bean(model);
+            repository = new SailRepository(new MemoryStore(dataDir));
+            repository.initialize();
 
-        //OntModel m = ModelFactory.createOntologyModel();
-        Jenabean.instance().bind(model);
+            // wrap in an object repository
+            factory = new ObjectRepositoryFactory();
+            objectRepository = factory.createRepository(repository);
 
-        dataset.abort();
-        dataset.end();*/
+            connection = objectRepository.getConnection();
+            connection.close();
+            repository.shutDown();
+
+        } catch (RepositoryException e) {
+            logger.error("ModelSearchService initialization has failed with exception", e);
+        } catch (RepositoryConfigException e) {
+            logger.error("ModelSearchService initialization has failed with exception", e);
+        }
+
     }
 
     @Override
     public Collection<SearchResult> searchInputString(String searchString, String fieldName, int hitsPerPage) {
 
-        //String statement = "SELECT ?s WHERE { ?s a <" + baseUrl + "> }";
-        //String statement = "SELECT ?s WHERE {  ?s a <http://www.qoan.org/User> }";
         ArrayList<SearchResult> results = new ArrayList<>();
-        //dataset.begin(ReadWrite.WRITE);
 
-        if (USERS.equals(fieldName)) {
-            String statement = "SELECT ?s WHERE {  ?s a <http://qube.qai.user/User> }";
-            Collection<User> found = null; //Sparql.exec(model, User.class, statement);
-            //Collection<User> found = reader.load(User.class);
-            for (User user : found) {
-                if ("*".equals(searchString) || searchString.equals(user.getUsername())) {
-                    SearchResult result = new SearchResult(USERS, user.getUsername(), user.getUuid(), "User", 1.0);
+        try {
+
+            repository.initialize();
+            connection = objectRepository.getConnection();
+
+            if (USERS.equals(fieldName)) {
+                String statement = "SELECT ?s WHERE {  ?s a <http://qube.qai.user/User> }";
+                Result<User> found = connection.getObjects(User.class); //Sparql.exec(model, User.class, statement);
+                for (User user : found.asList()) {
+                    if ("*".equals(searchString) || searchString.equals(user.getUsername())) {
+                        SearchResult result = new SearchResult(USERS, user.getUsername(), user.getUuid(), "User", 1.0);
+                        results.add(result);
+                    }
+                }
+            } else if (PROCEDURES.equals(fieldName)) {
+                Result<Procedure> found = connection.getObjects(Procedure.class);
+                for (Procedure procedure : found.asList()) {
+                    String uuid = procedure.getUuid();
+                    SearchResult result = new SearchResult(PROCEDURES, procedure.getProcedureName(), uuid, procedure.getDescriptionText(), 1.0);
+                    results.add(result);
+                }
+            } else if (USER_SESSIONS.equals(fieldName)) {
+                Result<Session> found = connection.getObjects(Session.class);
+                for (Session session : found.asList()) {
+                    String uuid = session.getUuid();
+                    SearchResult result = new SearchResult(USER_SESSIONS, session.getName(), uuid, "User session", 1.0);
+                    results.add(result);
+                }
+            } else if (USER_ROLES.equals(fieldName)) {
+                Result<Role> found = connection.getObjects(Role.class);
+                for (Role role : found.asList()) {
+                    String uuid = role.getUuid();
+                    SearchResult result = new SearchResult(USER_ROLES, role.getName(), uuid, role.getDescription(), 1.0);
                     results.add(result);
                 }
             }
-        } else if (PROCEDURES.equals(fieldName)) {
-            Class klazz = findSearchClass(searchString);
-            if (klazz == null) {
-                klazz = Procedure.class;
-            }
-            String statement = "SELECT ?s WHERE {  ?s a <http://" + klazz.getPackage().getName() + "/" + klazz.getSimpleName() + "> }";
-            Collection<Procedure> found = null; // Sparql.exec(model, klazz, statement);
-            //Collection<Procedure> found = reader.load(klazz);
-            for (Procedure procedure : found) {
-                String uuid = procedure.getUuid();
-                SearchResult result = new SearchResult(PROCEDURES, procedure.getProcedureName(), uuid, procedure.getDescriptionText(), 1.0);
-                results.add(result);
-            }
-        } else if (USER_SESSIONS.equals(fieldName)) {
-            String statement = "SELECT ?s WHERE {  ?s a <http://qube.qai.user/Session> }";
-            Collection<Session> found = null; //Sparql.exec(model, Session.class, statement);
-            for (Session session : found) {
-                String uuid = session.getUuid();
-                SearchResult result = new SearchResult(USER_SESSIONS, session.getName(), uuid, "User session", 1.0);
-                results.add(result);
-            }
-        } else if (USER_ROLES.equals(fieldName)) {
-            String statement = "SELECT ?s WHERE {  ?s a <http://qube.qai.user/Role> }";
-            Collection<Role> found = null; // Sparql.exec(model, Role.class, statement);
-            for (Role role : found) {
-                String uuid = role.getUuid();
-                SearchResult result = new SearchResult(USER_ROLES, role.getName(), uuid, role.getDescription(), 1.0);
-                results.add(result);
-            }
-        }
 
-//        dataset.abort();
-//        dataset.end();
+            connection.close();
+            repository.shutDown();
+
+        } catch (RepositoryException e) {
+
+            logger.error("Exception during search", e);
+
+        } catch (QueryEvaluationException e) {
+
+            logger.error("Exception during search", e);
+
+        }
 
         return results;
     }
 
-    private Class findSearchClass(String searchString) {
-
-        Class templateClass = null;
-        ProcedureLibrary procedureLibrary = new ProcedureLibrary();
-        Map<Class, ProcedureTemplate> templateMap = procedureLibrary.getTemplateMap();
-        for (Class klazz : templateMap.keySet()) {
-            ProcedureTemplate template = templateMap.get(klazz);
-            if (template.getProcedureName().equalsIgnoreCase(searchString)) {
-                templateClass = klazz;
-                break;
-            }
-        }
-
-        return templateClass;
-    }
-
-    public Model createDefaultModel() {
-        return model;
-    }
-
     public void remove(Class baseClass, Object toRemove) {
-       /* dataset.begin(ReadWrite.WRITE);
-        writer.delete(toRemove);
-        dataset.commit();
-        dataset.end();*/
+
+        try {
+            repository.initialize();
+            connection = objectRepository.getConnection();
+            connection.removeDesignation(toRemove, baseClass);
+            connection.commit();
+            connection.close();
+            repository.shutDown();
+        } catch (RepositoryException e) {
+            logger.error("Exception during remove", e);
+        }
     }
 
     public void save(Class baseCLass, Object data) {
-        /*dataset.begin(ReadWrite.WRITE);
-        writer.save(data);
-        dataset.commit();
-        dataset.end();*/
+        try {
+            repository.initialize();
+            connection = objectRepository.getConnection();
+            connection.addObject(data);
+            connection.commit();
+            connection.close();
+            repository.shutDown();
+        } catch (RepositoryException e) {
+            logger.error("Exception during save", e);
+        }
     }
 
     @Override

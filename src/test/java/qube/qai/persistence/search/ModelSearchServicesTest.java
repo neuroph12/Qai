@@ -59,7 +59,7 @@ public class ModelSearchServicesTest extends TestCase {
         this.procedureLibrary = new ProcedureLibrary();
     }
 
-    public void estProcedureModelStore() throws Exception {
+    public void testProcedureModelStore() throws Exception {
 
         ModelSearchService modelSearchService = new ModelSearchService(PROCEDURES, directoryName);
         modelSearchService.init();
@@ -90,7 +90,7 @@ public class ModelSearchServicesTest extends TestCase {
      *
      * @throws Exception
      */
-    public void estUserModelStore() throws Exception {
+    public void testUserModelStore() throws Exception {
 
         ModelSearchService modelSearchService = new ModelSearchService(USERS, directoryName);
         modelSearchService.init();
@@ -111,55 +111,24 @@ public class ModelSearchServicesTest extends TestCase {
             assertTrue("there has to be the user", !results.isEmpty());
             String foundUuid = results.iterator().next().getUuid();
             assertTrue("uuids must be equal", foundUuid.equals(user.getUuid()));
-            modelSearchService.remove(User.class, user);
-            uuids.add(user.getUuid());
+            //modelSearchService.remove(User.class, user);
+            //uuids.add(user.getUuid());
         }
 
         // this way we can check that the leftover users are not one of those which we already deleted
         Collection<SearchResult> others = modelSearchService.searchInputString("*", ModelSearchService.USERS, 0);
-        for (SearchResult result : others) {
+        /*for (SearchResult result : others) {
             log("additionally found user with uuid: " + result.getUuid());
             assertTrue("the originals must have been deleted", !uuids.contains(result.getUuid()));
-        }
+        }*/
     }
 
-    /*public void testJeanBeanReadWrite() throws Exception {
-
-        Dataset dataset = TDBFactory.createDataset(directoryName);
-        dataset.begin(ReadWrite.WRITE);
-        Model model = dataset.getNamedModel(baseUrl);
-        Bean2RDF writer = new Bean2RDF(model);
-        RDF2Bean reader = new RDF2Bean(model);
-
-        Jenabean.instance().bind(model);
-
-        Map<Class, ProcedureTemplate> templateMap =  procedureLibrary.getTemplateMap();
-        for (Class klazz : templateMap.keySet()) {
-            ProcedureTemplate template = templateMap.get(klazz);
-            Procedure procedure = (Procedure) klazz.newInstance();
-            procedure.setNAME(template.getProcedureName());
-            procedure.setDESCRIPTION(template.getProcedureDescription());
-            log("Now saving " + template.getProcedureName());
-            writer.save(procedure);
-        }
-
-
-        for (Class klazz : templateMap.keySet()) {
-            //Collection<Procedure> procedures = reader.load(klazz);
-            ProcedureTemplate template = templateMap.get(klazz);
-            String query = "Select ?s WHERE { ?s a <http://" + klazz.getPackage().getName() + "/" + klazz.getSimpleName() + "> }";
-            log("Now searching for " + template.getProcedureName() + "with query: " + query);
-            Collection<Procedure> procedures = Sparql.exec(model, klazz, query);
-            assertNotNull("there has to be a procedure", procedures);
-            assertTrue("there has to be some results", !procedures.isEmpty());
-        }
-
-
-        dataset.commit();
-        dataset.end();
-
-    }*/
-
+    /**
+     * test with raw calls to alibaba object-store
+     * in order to see whether Procedures can be persisted
+     *
+     * @throws Exception
+     */
     public void testAliBabaObjectStoreWithProcedures() throws Exception {
 
         // create a repository, for trying the things out
@@ -227,6 +196,11 @@ public class ModelSearchServicesTest extends TestCase {
         repository.shutDown();
     }
 
+    /**
+     * test with raw calls to alibaba object-store
+     * in order to see whether Users can be persisted
+     * @throws Exception
+     */
     public void testAlibabaObjectStoreWithUsers() throws Exception {
 
         File dataDir = new File(directoryName);
@@ -268,6 +242,11 @@ public class ModelSearchServicesTest extends TestCase {
 
     }
 
+    /**
+     * test with raw calls to alibaba object-store
+     * in order to see whether StockEntity can be persisted
+     * @throws Exception
+     */
     public void testAliBabaObjectStoreWithStocks() throws Exception {
 
         File dataDir = new File(directoryName);
