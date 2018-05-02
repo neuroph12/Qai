@@ -22,8 +22,6 @@ import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.data.TimeSequence;
 import qube.qai.network.neural.NeuralNetwork;
 
@@ -35,7 +33,7 @@ import java.util.Date;
  */
 public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
 
-    private Logger logger = LoggerFactory.getLogger("BasicNetworkTrainer");
+    private boolean debug = false;
 
     private double ERROR_TOLERANCE = 0.3;
 
@@ -44,8 +42,6 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
     private String[] tickerSymbols;
 
     private NeuralNetwork network;
-
-    private ResilientPropagation train;
 
     private MLDataSet trainingSet;
 
@@ -66,20 +62,21 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
         }
 
         epoch = 1;
-        train = new ResilientPropagation(network.getNetwork(), trainingSet);
+        ResilientPropagation train = new ResilientPropagation(network.getNetwork(), trainingSet);
 
         do {
             train.iteration();
-            logger.debug("Epoch #" + epoch + " Error:" + train.getError());
+            log("Epoch #" + epoch + " Error:" + train.getError());
             epoch++;
             if (epoch >= MAXIMUM_EPOCH) {
-                logger.info("Maximum number of iterations have been arrived- stopping training");
+                log("Maximum number of iterations have been arrived- stopping training");
                 break;
             }
         } while (train.getError() > ERROR_TOLERANCE);
 
         train.finishTraining();
-
+        // so that network is ready to be persisted!
+        network.buildAdjacencyMatrix();
         // i don't know, is this really necessary...
         // well, can't really harm, i guess.
         Encog.getInstance().shutdown();
@@ -106,7 +103,7 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
 
         boolean ignoreDates = false;
         if (!startDate.before(endDate)) {
-            logger.info("Start date " + startDate.toString() + " is not before end date: " + endDate.toString() + " will ignore dates");
+            log("Start date " + startDate.toString() + " is not before end date: " + endDate.toString() + " will ignore dates");
             ignoreDates = true;
         }
 
@@ -162,6 +159,11 @@ public class BasicNetworkTrainer implements NeuralNetworkTrainer, Serializable {
         }
     }
 
+    private void log(String message) {
+        if (debug) {
+            System.out.println(message);
+        }
+    }
 
     public String[] getTickerSymbols() {
         return tickerSymbols;

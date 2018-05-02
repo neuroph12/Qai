@@ -58,12 +58,8 @@ public abstract class Procedure extends ConcatenationNode
     @Iri(BASE_URL + "inputs")
     protected QaiDataProvider[] inputs;
 
-//    @Inject
-//    protected transient HazelcastInstance hazelcastInstance;
-
     @Iri(BASE_URL + "userUUID")
     protected String userUUID;
-
 
     protected long duration;
 

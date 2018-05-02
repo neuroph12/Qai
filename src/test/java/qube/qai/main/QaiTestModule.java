@@ -138,6 +138,7 @@ public class QaiTestModule extends AbstractModule {
             return hazelcastInstance;
         }
 
+        provideHazelcastConfig();
         hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
 
         return hazelcastInstance;

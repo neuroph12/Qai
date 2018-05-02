@@ -24,7 +24,9 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
-import org.apache.lucene.store.*;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.NoLockFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import qube.qai.services.SearchServiceInterface;
@@ -166,7 +168,7 @@ public class WikiSearchService implements SearchServiceInterface {
         isInitialized = initialized;
     }
 
-    class AbsoluteDirectory extends Directory {
+    /*class AbsoluteDirectory extends Directory {
 
         private File file;
         private LockFactory factory;
@@ -231,6 +233,6 @@ public class WikiSearchService implements SearchServiceInterface {
 //        public IndexOutput createTempOutput(String s, String s1, IOContext ioContext) throws IOException {
 //            return null;
 //        }
-    }
+    }*/
 
 }

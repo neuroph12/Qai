@@ -14,16 +14,12 @@
 
 package qube.qai.procedure.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
 
 /**
  * Created by zenpunk on 12/27/15.
  */
 public class SimpleProcedure extends Procedure {
-
-    private Logger logger = LoggerFactory.getLogger("SimpleProcedure");
 
     public static String NAME = "Simple Procedure";
 
@@ -33,7 +29,7 @@ public class SimpleProcedure extends Procedure {
 
     @Override
     public void execute() {
-        logger.info("SimpleProcedure: '" + getUuid() + "' successfully executed!");
+        log("SimpleProcedure: '" + getUuid() + "' successfully executed!");
     }
 
     @Override
@@ -44,6 +40,10 @@ public class SimpleProcedure extends Procedure {
     @Override
     public void buildArguments() {
 //        arguments = new Arguments();
+    }
+
+    private void log(String message) {
+        System.out.println(message);
     }
 
 }

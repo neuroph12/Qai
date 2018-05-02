@@ -25,7 +25,6 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import qube.qai.persistence.WikiArticle;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.ProcedureConstants;
@@ -117,7 +116,8 @@ public class WikiArchiveIndexer extends Procedure implements ProcedureConstants 
 
             // create the analyzer
             Analyzer analyzer = new StandardAnalyzer();
-            analyzer.setVersion(Version.LUCENE_5_3_1);
+            // @TODO
+            //analyzer.setVersion(Version.LUCENE_5_3_1);
             IndexWriterConfig conf = new IndexWriterConfig(analyzer);
             IndexWriter writer = new IndexWriter(directory, conf);
             writer.deleteAll();

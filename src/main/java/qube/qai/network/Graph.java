@@ -17,15 +17,11 @@ package qube.qai.network;
 import grph.Grph;
 import grph.oo.ObjectGrph;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by rainbird on 12/20/15.
  */
 public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
-
-    private static Logger logger = LoggerFactory.getLogger("Graph");
 
     private static String directedOpen = "<directed=";
     private static String directedClose = ">";
@@ -36,6 +32,8 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
     private static String edgeSeperate = "§";
 
     private boolean directed = false;
+
+    private static boolean debug = false;
 
     public Grph getBackingGrph() {
         return backingGrph;
@@ -91,7 +89,7 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
         buffer.deleteCharAt(buffer.length() - 1);
         buffer.append(edgesClose);
 
-        logger.debug("encoded graph with #vertex: " + vertexCount + " #edges: " + edgeCount);
+        log("encoded graph with #vertex: " + vertexCount + " #edges: " + edgeCount);
 
         return buffer.toString();
     }
@@ -110,7 +108,7 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
 
         // check if there is anything to read at all
         if (StringUtils.isBlank(serialString)) {
-            logger.debug("Cannot parse an empty string- returning an empty graph");
+            log("Cannot parse an empty string- returning an empty graph");
             return graph;
         }
 
@@ -149,7 +147,7 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
                 String[] innerTokens = StringUtils.split(edgeToken, "|");
                 if (innerTokens == null || innerTokens.length != 3) {
                     skips++;
-                    logger.error("couldn't split: '" + edgeToken + "' token... skipping");
+                    log("couldn't split: '" + edgeToken + "' token... skipping");
                     continue;
                 }
                 String fromToken = innerTokens[0].trim();
@@ -158,7 +156,7 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
                 try {
                     weight = Double.parseDouble(innerTokens[2]);
                 } catch (NumberFormatException e) {
-                    logger.error("un-parsable token: " + innerTokens[2]);
+                    log("un-parsable token: " + innerTokens[2]);
                 }
 
                 Network.Vertex from = new Network.Vertex(fromToken);
@@ -173,9 +171,19 @@ public class Graph extends ObjectGrph<Network.Vertex, Network.Edge> {
             }
         }
 
-        logger.debug("decoded graph with #vertex: " + vertexCount + " #edge: " + edgeCount);
+        log("decoded graph with #vertex: " + vertexCount + " #edge: " + edgeCount);
 
         return graph;
+    }
+
+    private static void log(String message) {
+        if (debug) {
+            System.out.println(message);
+        }
+    }
+
+    public static void setDebug(boolean debug) {
+        Graph.debug = debug;
     }
 
     public boolean isDirected() {

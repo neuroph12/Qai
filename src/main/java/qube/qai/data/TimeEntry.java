@@ -16,12 +16,13 @@ package qube.qai.data;
 
 import org.openrdf.annotations.Iri;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import static qube.qai.main.QaiConstants.BASE_URL;
 
 @Iri(BASE_URL + "TimeEntry")
-public class TimeEntry {
+public class TimeEntry implements Serializable {
 
     @Iri(BASE_URL + "date")
     Date date;

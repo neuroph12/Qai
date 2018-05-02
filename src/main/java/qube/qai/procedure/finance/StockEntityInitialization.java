@@ -15,8 +15,6 @@
 package qube.qai.procedure.finance;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.data.stores.StockQuoteDataStore;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
@@ -31,8 +29,6 @@ import javax.persistence.EntityManager;
  * Created by zenpunk on 1/21/17.
  */
 public class StockEntityInitialization extends Procedure implements ProcedureConstants {
-
-    protected Logger logger = LoggerFactory.getLogger("StockEntityInitialization");
 
     public static String NAME = "Stock Entity Initialization Procedure";
 

@@ -25,8 +25,6 @@ import static qube.qai.main.QaiConstants.BASE_URL;
 @Iri(BASE_URL + "SemanticNetwork")
 public class SemanticNetwork extends Network {
 
-    //private static Logger logger = LoggerFactory.getLogger("SemanticNetwork");
-
     private boolean debug = false;
 
     /**

@@ -16,8 +16,6 @@ package qube.qai.procedure.wikiripper;
 
 import org.apache.commons.lang.StringUtils;
 import org.milyn.Smooks;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.procedure.Procedure;
 import qube.qai.procedure.nodes.ValueNode;
 
@@ -29,8 +27,6 @@ import java.util.zip.ZipOutputStream;
  * Created by zenpunk on 11/3/15.
  */
 public class WikiRipperProcedure extends Procedure {
-
-    private static Logger logger = LoggerFactory.getLogger("WikiRipperProcedure");
 
     public static String NAME = "WikiRipperProcedure";
     public static String DESCRIPTION = "Rips wiki-based archives to individual files which are easier to parse and to read";

@@ -27,7 +27,7 @@ import static qube.qai.main.QaiConstants.BASE_URL;
 /**
  * Created by rainbird on 11/23/15.
  */
-@Iri(BASE_URL + "neuralNetwork")
+@Iri(BASE_URL + "NeuralNetwork")
 public class NeuralNetwork extends Network {
 
     protected boolean debug = true;
@@ -35,8 +35,10 @@ public class NeuralNetwork extends Network {
     @Iri(BASE_URL + "size")
     protected int size;
 
+    protected double[] array;
+
     @Iri(BASE_URL + "network")
-    protected BasicNetwork network;
+    protected transient BasicNetwork network;
 
     private String description;
 
@@ -102,7 +104,7 @@ public class NeuralNetwork extends Network {
 
     public double[] propagate(double[] input) {
         double[] output = new double[input.length];
-        network.compute(input, output);
+        getNetwork().compute(input, output);
         return output;
     }
 
@@ -113,6 +115,13 @@ public class NeuralNetwork extends Network {
     }
 
     public BasicNetwork getNetwork() {
+
+        if (network == null) {
+            initializeNetwork(size);
+            if (array != null) {
+                network.decodeFromArray(array);
+            }
+        }
         return network;
     }
 
@@ -120,19 +129,9 @@ public class NeuralNetwork extends Network {
     public void buildAdjacencyMatrix() {
 
         int arrayLength = network.encodedArrayLength();
-        double[] array = new double[arrayLength];
+        array = new double[arrayLength];
         network.encodeToArray(array);
 
-        // @TODO encog updade related take a look
-        /*Access2D.Builder<PrimitiveMatrix> builder = PrimitiveMatrix.FACTORY.getBuilder(size, size);
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                int index = j * size + i;
-                builder.set(i, j, array[index]);
-            }
-        }
-
-        adjacencyMatrix = new Matrix(builder.build());*/
     }
 
     public void buildFromAdjacencyMatrix() {

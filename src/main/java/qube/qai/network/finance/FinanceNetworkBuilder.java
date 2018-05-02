@@ -35,6 +35,8 @@ import static qube.qai.main.QaiConstants.BASE_URL;
 @Iri(BASE_URL + "FinanceNetworkBuilder")
 public class FinanceNetworkBuilder extends Procedure {
 
+    private boolean debug = true;
+
     public String NAME = "Finance-Network Builder";
 
     public String DESCRIPTION = "This creates finance networks out of given set of finance-entities";
@@ -51,7 +53,7 @@ public class FinanceNetworkBuilder extends Procedure {
     private boolean runChildren = true;
 
     @Inject
-    private ProcedureRunnerInterface procedureRunner;
+    private transient ProcedureRunnerInterface procedureRunner;
 
     /**
      * this class does the necessary work of running the averaging
@@ -79,6 +81,10 @@ public class FinanceNetworkBuilder extends Procedure {
 
         TimeSequence[] timeSequences = averager.getSequences();
         Date[] alldates = averager.getAllDates();
+        if (alldates == null || alldates.length <= 0) {
+            log("Something has gone with the averaging routine- exiting");
+            return;
+        }
 
         StockEntity averageEntity = averager.getChildEntity();
         changePoints = new ChangePoints();
@@ -156,6 +162,12 @@ public class FinanceNetworkBuilder extends Procedure {
     @Override
     protected void buildArguments() {
 
+    }
+
+    private void log(String message) {
+        if (debug) {
+            System.out.println(message);
+        }
     }
 
     /*@Override

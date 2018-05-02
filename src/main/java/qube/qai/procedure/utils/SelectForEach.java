@@ -14,7 +14,6 @@
 
 package qube.qai.procedure.utils;
 
-import org.slf4j.Logger;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.SearchResultProvider;
 import qube.qai.procedure.Procedure;
@@ -29,9 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class SelectForEach extends Procedure implements SpawningProcedure {
-
-    @Inject
-    private Logger logger;
 
     public String NAME = "SelectForEach";
 
@@ -68,9 +64,8 @@ public class SelectForEach extends Procedure implements SpawningProcedure {
             Procedure procedure = template.createProcedure();
             procedure.addInputs(provider);
 
-            String message = String.format("Spawning '&s' with uuid: '%s' seeded with search context: '%s' and uuid: '%s'",
-                    procedure.getProcedureName(), procedure.getUuid(), result.getContext(), result.getTitle());
-            logger.info(message);
+            //String message = String.format("Spawning '&s' with uuid: '%s' seeded with search context: '%s' and uuid: '%s'",
+            //        procedure.getProcedureName(), procedure.getUuid(), result.getContext(), result.getTitle());
 
             // i am really not sure whether this is really neccessary or not... just in case, i guess....
             procedureRunner.submitProcedure(procedure);

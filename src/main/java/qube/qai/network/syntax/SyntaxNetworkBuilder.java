@@ -19,8 +19,6 @@ import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.network.Graph;
 import qube.qai.network.Network;
 import qube.qai.network.NetworkBuilder;
@@ -36,7 +34,7 @@ import java.io.InputStream;
  */
 public class SyntaxNetworkBuilder extends Procedure implements NetworkBuilder {
 
-    private static Logger logger = LoggerFactory.getLogger("SyntaxNetworkBuilder");
+    private boolean debug = false;
 
     private String opennlp_module_en = "/opennlp/en/en-token.bin";
 
@@ -54,7 +52,7 @@ public class SyntaxNetworkBuilder extends Procedure implements NetworkBuilder {
         try {
             plainText = wikiModel.render("This is a simple [[Hello World]] wiki tag");
         } catch (IOException e) {
-            logger.error("Exception during wiki-to-text conversion", e);
+            log("Exception during wiki-to-text conversion", e);
             return null;
         }
         //String plainText = WikiModel.toHtml(wikiContent);
@@ -127,7 +125,7 @@ public class SyntaxNetworkBuilder extends Procedure implements NetworkBuilder {
 //
         String message = "building semantic network ended #vertex: " + added + " #edges in adjacency matrix: " + increments
                 + " added edges: " + added + " incremented edges: " + increments;
-        logger.debug(message);
+        log(message);
 //        // record the changes, and we are done
 //        record(graph);
 
@@ -176,5 +174,17 @@ public class SyntaxNetworkBuilder extends Procedure implements NetworkBuilder {
     @Override
     protected void buildArguments() {
 
+    }
+
+    private void log(String message, Exception e) {
+        if (debug) {
+            log(message + ": " + e.getMessage());
+        }
+    }
+
+    private void log(String message) {
+        if (debug) {
+            System.out.println(message);
+        }
     }
 }

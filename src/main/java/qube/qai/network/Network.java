@@ -16,8 +16,6 @@ package qube.qai.network;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import qube.qai.data.AcceptsVisitors;
 import qube.qai.data.DataVisitor;
 import qube.qai.data.MetricTyped;
@@ -36,7 +34,7 @@ import java.util.Set;
  */
 public class Network implements Serializable, MetricTyped, AcceptsVisitors {
 
-    private Logger logger = LoggerFactory.getLogger("Network");
+    private boolean debug = false;
 
     protected boolean makeMatrix = true;
 
@@ -190,9 +188,15 @@ public class Network implements Serializable, MetricTyped, AcceptsVisitors {
             }
         }
         String message = "creating network from adjacency matrix completed #vertices:" + size + " #edges: " + added + " #skipped:" + skips + " #pruned: " + pruned;
-        logger.debug(message);
+        log(message);
 
         record(graph);
+    }
+
+    private void log(String message) {
+        if (debug) {
+            System.out.println(message);
+        }
     }
 
     protected Graph graph() {

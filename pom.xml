@@ -22,20 +22,15 @@
     <groupId>qube.qai</groupId>
     <artifactId>qai</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-beta-SNAPSHOT</version>
-
-    <name>qube.qai</name>
-
     <properties>
         <!--<javax.persistence.version>1.0.2</javax.persistence.version>-->
         <jdk.version>1.8</jdk.version>
         <project.encoding>UTF-8</project.encoding>
-        <lucene.version>5.3.1</lucene.version>
-        <tika.version>1.10</tika.version>
-        <!-- 3.6.3 seems not to work with map-stores, therefore stay with the 3.5.4 -->
-        <!--<hazelcast.version>3.6.3</hazelcast.version>-->
-        <hazelcast.version>3.9.3</hazelcast.version>
+        <!--<lucene.version>5.3.1</lucene.version>-->
+        <lucene.version>7.3.0</lucene.version>
+        <tika.version>1.18</tika.version>
         <!--<hazelcast.version>3.5.4</hazelcast.version>-->
+        <hazelcast.version>3.9.3</hazelcast.version>
 
         <guice.version>4.1.0</guice.version>
         <guice-conf.version>1.2.0</guice-conf.version>
@@ -62,6 +57,10 @@
         <alibaba-version>2.1</alibaba-version>
         <rdf4j-version>2.3.1</rdf4j-version>
     </properties>
+
+    <version>1.0-beta-SNAPSHOT</version>
+
+    <name>qube.qai</name>
 
     <dependencies>
 
