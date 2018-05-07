@@ -22,7 +22,8 @@ import qube.qai.persistence.DataProvider;
 import qube.qai.persistence.QaiDataProvider;
 import qube.qai.persistence.StockEntity;
 import qube.qai.persistence.StockGroup;
-import qube.qai.persistence.search.ModelSearchService;
+import qube.qai.persistence.search.EndpointModelSearchService;
+import qube.qai.procedure.Procedure;
 import qube.qai.services.implementation.SearchResult;
 
 import javax.inject.Inject;
@@ -53,9 +54,11 @@ public class HowFairAreMarketsTest extends QaiTestBase {
         //PersistentModelMapStore mapStore = new PersistentModelMapStore(procedureDirectory,
         //        Procedure.class, FinanceNetworkBuilder.class, FinanceNetworkTrainer.class);
         //mapStore.init();
-        ModelSearchService modelService = new ModelSearchService(PROCEDURES, procedureDirectory);
-        modelService.init();
-
+        //ModelSearchService modelService = new ModelSearchService(PROCEDURES, procedureDirectory);
+        EndpointModelSearchService modelService = new EndpointModelSearchService("http://www.qoan.org/data#", PROCEDURES, "192.168.0.109", Procedure.class);
+        ;
+        //modelService.init();
+        //fail("complete the rest of the test to work with the remote-endpoint model, i.e. virtuoso-server");
         // this is the beginning point of the proposed procedure
         int iteratioNumber = 0;
         Set<String> pickedTickerSymbols = new TreeSet<>();

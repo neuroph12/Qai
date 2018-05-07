@@ -80,6 +80,7 @@ public class AverageSequence extends Procedure {
         StringBuffer tickersBuffer = new StringBuffer();
         for (Iterator<QaiDataProvider> it = getInputs().iterator(); it.hasNext(); ) {
 
+            // @TODO update the stock-data first
             QaiDataProvider<StockEntity> provider = it.next();
             QaiInjectorService.getInstance().injectMembers(provider);
             StockEntity entity = provider.getData();

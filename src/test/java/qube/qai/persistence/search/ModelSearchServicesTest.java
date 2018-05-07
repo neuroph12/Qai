@@ -84,6 +84,32 @@ public class ModelSearchServicesTest extends TestCase {
 
     }
 
+    public void testProcedureEndpointModelStore() throws Exception {
+
+        EndpointModelSearchService modelSearchService = new EndpointModelSearchService("http://www.qoan.org/data#", USERS, "192.168.0.109", Procedure.class);
+        ;
+        //modelSearchService.init();
+
+        Collection<String> uuids = new ArrayList<>();
+        Map<Class, ProcedureTemplate> templateMap = procedureLibrary.getTemplateMap();
+        for (Class klazz : templateMap.keySet()) {
+            ProcedureTemplate template = templateMap.get(klazz);
+            Procedure procedure = (Procedure) klazz.newInstance();
+            procedure.setNAME(template.getProcedureName());
+            modelSearchService.save(klazz, procedure);
+            log("saved a copy of '" + template.getProcedureName() + "'");
+        }
+
+        for (Class klazz : templateMap.keySet()) {
+            ProcedureTemplate template = templateMap.get(klazz);
+            log("now searching for " + template.getProcedureName());
+            Collection<SearchResult> found = modelSearchService.searchInputString(template.getProcedureName(), PROCEDURES, 10);
+            assertNotNull("results may not be null", found);
+            assertTrue("there has to be results", !found.isEmpty());
+        }
+
+    }
+
     /**
      * since users will not be saved in rdf-models, this is not really
      * very interesting- so leaving it aside simply.
@@ -94,6 +120,45 @@ public class ModelSearchServicesTest extends TestCase {
 
         ModelSearchService modelSearchService = new ModelSearchService(USERS, directoryName);
         modelSearchService.init();
+
+        Collection<String> uuids = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            String userName = DatabaseMapStoresTest.randomWord(10);
+            User user = new User(userName, "dummy_password");
+            user.createSession().setName("dummy_user_session:_test_session");
+            user.addRole(new Role(user, "dummy_role", "this_is_a_test_role_for_the_user"));
+
+            modelSearchService.save(User.class, user);
+
+            String query = userName;
+            Collection<SearchResult> results = modelSearchService.searchInputString(query, ModelSearchService.USERS, 1);
+            assertNotNull("there must be results", results);
+            assertTrue("there has to be the user", !results.isEmpty());
+            String foundUuid = results.iterator().next().getUuid();
+            assertTrue("uuids must be equal", foundUuid.equals(user.getUuid()));
+            //modelSearchService.remove(User.class, user);
+            //uuids.add(user.getUuid());
+        }
+
+        // this way we can check that the leftover users are not one of those which we already deleted
+        Collection<SearchResult> others = modelSearchService.searchInputString("*", ModelSearchService.USERS, 0);
+        /*for (SearchResult result : others) {
+            log("additionally found user with uuid: " + result.getUuid());
+            assertTrue("the originals must have been deleted", !uuids.contains(result.getUuid()));
+        }*/
+    }
+
+    /**
+     * since users will not be saved in rdf-models, this is not really
+     * very interesting- so leaving it aside simply.
+     *
+     * @throws Exception
+     */
+    public void testUserEndpointModelStore() throws Exception {
+
+        EndpointModelSearchService modelSearchService = new EndpointModelSearchService("http://www.qoan.org/data#", USERS, "192.168.0.109", User.class);
+        //modelSearchService.init();
 
         Collection<String> uuids = new ArrayList<>();
 
@@ -138,6 +203,82 @@ public class ModelSearchServicesTest extends TestCase {
         File dataDir = new File(directoryName);
         //Repository store = new SailRepository(new MemoryStore(dataDir));
         Repository repository = new SailRepository(new MemoryStore(dataDir));
+        repository.initialize();
+
+        // wrap in an object repository
+        ObjectRepositoryFactory factory = new ObjectRepositoryFactory();
+        ObjectRepository objectRepository = factory.createRepository(repository);
+
+        ObjectConnection connection = objectRepository.getConnection();
+
+        ValueFactory vf = connection.getValueFactory();
+        Map<Class, ProcedureTemplate> templateMap = procedureLibrary.getTemplateMap();
+        Map<String, Procedure> savedProcedures = new HashMap<>();
+
+        for (Class klazz : templateMap.keySet()) {
+            ProcedureTemplate template = templateMap.get(klazz);
+            Procedure procedure = (Procedure) klazz.newInstance();
+            procedure.setNAME(template.getProcedureName());
+            procedure.setDESCRIPTION(template.getProcedureDescription());
+            log("Now saving " + template.getProcedureName() + " with uuid: '" + procedure.getUuid());
+            String uriString = "http://www.qoan.org/data#Procedure##uuid#";
+            URI id = vf.createURI(uriString, procedure.getUuid());
+            connection.addObject(id, procedure);
+            savedProcedures.put(procedure.getUuid(), procedure);
+        }
+
+        log("_______________________________so much to writing the values now starting to read them_______________________________");
+
+        for (String uuid : savedProcedures.keySet()) {
+            Procedure procedure = savedProcedures.get(uuid);
+            String procedureUrl = BASE_URL + "Procedure"; //procedure.getClass().getSimpleName();
+            log("Now searching for " + procedure.getProcedureName() + " with query");
+            URI uri = vf.createURI(procedureUrl, uuid);
+            Object found = connection.getObject(procedure.getClass(), uri);
+            assertNotNull("there has to be a procedure", found);
+            log("found object: " + found.toString());
+            //assertTrue("uuids have to be the same", uuid.equals(procedure.getUuid()));
+            try {
+                Procedure p = (Procedure) found;
+                log("Procedrue: " + p.getNAME() + " and uuid: " + p.getUuid());
+
+            } catch (ClassCastException e) {
+                //fail("this should really not happen");
+                log("Skipping class cast exception....");
+                continue;
+            }
+        }
+
+        Result<Procedure> procedures = connection.getObjects(Procedure.class);
+        assertNotNull("there have to be some results", procedures);
+        assertTrue("there have to some procedures", !procedures.asList().isEmpty());
+        for (Procedure procedure : procedures.asList()) {
+            log("found- " + procedure.getNAME());
+        }
+
+        connection.commit();
+        connection.close();
+        repository.shutDown();
+    }
+
+
+    /**
+     * test with raw calls to alibaba object-store
+     * in order to see whether Procedures can be persisted
+     *
+     * @throws Exception
+     */
+    public void testAliBabaObjectStoreWithEndpointProcedures() throws Exception {
+
+        // create a repository, for trying the things out
+        // a memory-store will be just fine. later move on
+        // to some directory solution, so that data can actually be
+        // persisted some place as well.
+        //File dataDir = new File(directoryName);
+        // @TODO make the test to use endpoint
+        fail("Make the test to work with remote endpoint");
+
+        Repository repository = new SailRepository(new MemoryStore());
         repository.initialize();
 
         // wrap in an object repository
@@ -252,6 +393,64 @@ public class ModelSearchServicesTest extends TestCase {
         File dataDir = new File(directoryName);
         //Repository store = new SailRepository(new MemoryStore(dataDir));
         Repository repository = new SailRepository(new MemoryStore(dataDir));
+        repository.initialize();
+
+        // wrap in an object repository
+        ObjectRepositoryFactory factory = new ObjectRepositoryFactory();
+        ObjectRepository objectRepository = factory.createRepository(repository);
+
+        ObjectConnection connection = objectRepository.getConnection();
+
+        String stockName = DatabaseMapStoresTest.randomWord(10);
+        String tickerSymbol = DatabaseMapStoresTest.randomWord(3).toUpperCase();
+        StockEntity entity = new StockEntity();
+        entity.setName(stockName);
+        entity.setTickerSymbol(tickerSymbol);
+        String uuid = entity.getUuid();
+        // add a few quotes for good measure
+        Random random = new Random();
+        DateTime date = new DateTime(new Date());
+        for (int i = 0; i < 10; i++) {
+            StockQuote quote = new StockQuote();
+            quote.setParentUUID(uuid);
+            quote.setTickerSymbol(tickerSymbol);
+            quote.setClose(100 * random.nextDouble());
+            quote.setQuoteDate(date.minusDays(i).toDate());
+            entity.addQuote(quote);
+        }
+
+
+        ValueFactory vf = connection.getValueFactory();
+        URI id = vf.createURI("http://www.qoan.org/data#StockEntity#uuid", entity.getUuid());
+        connection.addObject(id, entity);
+
+        Object found = connection.getObject(StockEntity.class, id);
+        assertNotNull("there has to be a stock-entity", found);
+        log("found stock-entity: " + found.toString());
+        try {
+
+            StockEntity stock = (StockEntity) found;
+            log("StockName: '" + stock.getName() + "' tickerSymbol: '" + stock.getTickerSymbol() + "'");
+            assertNotNull("there has to be quotes", stock.getQuotes());
+            assertTrue("quotes may not be empty", !stock.getQuotes().isEmpty());
+
+        } catch (Exception e) {
+            fail("there should be no class-cast-exception");
+        } finally {
+            connection.commit();
+            connection.close();
+            repository.shutDown();
+        }
+
+    }
+
+    public void testAliBabaObjectStoreWithEndpointStocks() throws Exception {
+
+        //File dataDir = new File(directoryName);
+        //Repository store = new SailRepository(new MemoryStore(dataDir));
+        // @TODO remote repository
+        fail("make the test work with remote repository");
+        Repository repository = new SailRepository(new MemoryStore());
         repository.initialize();
 
         // wrap in an object repository

@@ -89,6 +89,44 @@ public class ModelMapStoresTest extends TestCase {
 
     }
 
+    /**
+     * remote-endpoint model tests
+     *
+     * @throws Exception
+     */
+    public void testStockEntityModelMapStore() throws Exception {
+
+        EndpointModelMapStore mapStore = new EndpointModelMapStore(StockEntity.class, "192.168.0.109", "http://www.qoan.org");
+        mapStore.initialize();
+
+        int number = 10;
+        Map<String, StockEntity> entityMap = new HashMap<String, StockEntity>();
+        for (int i = 0; i < number; i++) {
+            String name = "entity(" + i + ")";
+            StockEntity entity = DatabaseMapStoresTest.createEntity(name);
+            String uuid = entity.getUuid();
+            if (uuid == null || "".equals(uuid)) {
+                uuid = UUIDService.uuidString();
+                entity.setUuid(uuid);
+            }
+            mapStore.store(uuid, entity);
+
+            // now we create and add the quotes
+            Collection<StockQuote> quotes = DatabaseMapStoresTest.generateQuotes(name, 10);
+            for (StockQuote quote : quotes) {
+                entity.addQuote(quote);
+            }
+            entityMap.put(uuid, entity);
+        }
+
+        for (String uuid : entityMap.keySet()) {
+            StockEntity storedEntity = (StockEntity) mapStore.load(uuid);
+            StockEntity cachedEntity = entityMap.get(uuid);
+//            assertTrue("stored and cached entites must be equal", cachedEntity.equals(storedEntity));
+        }
+
+    }
+
     public void testStockEntityMapStore() throws Exception {
 
         ModelMapStore mapStore = new ModelMapStore(StockEntity.class);
@@ -118,6 +156,34 @@ public class ModelMapStoresTest extends TestCase {
             StockEntity cachedEntity = entityMap.get(uuid);
 //            assertTrue("stored and cached entites must be equal", cachedEntity.equals(storedEntity));
         }
+    }
+
+    /**
+     * remote-endpoint model tests
+     *
+     * @throws Exception
+     */
+    public void testProcedureModelMapStore() throws Exception {
+
+        EndpointModelMapStore mapStore = new EndpointModelMapStore(StockEntity.class, "192.168.0.109", "http://www.qoan.org");
+        mapStore.initialize();
+
+        ProcedureLibrary procedureLibrary = new ProcedureLibrary();
+
+        Collection<String> uuids = new ArrayList<>();
+        for (ProcedureTemplate template : procedureLibrary.getTemplateMap().values()) {
+            Procedure procedure = template.createProcedure();
+            String uuid = procedure.getUuid();
+            uuids.add(uuid);
+            mapStore.store(uuid, procedure);
+
+            log("loading procedure of type " + procedure.getName());
+            Procedure storedProcedure = (Procedure) mapStore.load(uuid);
+            String procedureName = template.getProcedureName();
+            assertNotNull("there has to be a stored procedure for " + procedureName, storedProcedure);
+
+        }
+
     }
 
     /**
